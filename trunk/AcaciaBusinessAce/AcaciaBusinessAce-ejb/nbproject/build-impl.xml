@@ -254,9 +254,15 @@ is divided into following sections:
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="compile" name="library-inclusion-in-archive"/>
+    <target depends="compile" name="library-inclusion-in-archive">
+        <copy file="${libs.beans-binding.classpath}" todir="${build.classes.dir}"/>
+    </target>
     <target depends="compile" name="library-inclusion-in-manifest">
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <basename file="${libs.beans-binding.classpath}" property="included.lib.libs.beans-binding.classpath"/>
+        <copy file="${libs.beans-binding.classpath}" todir="${dist.ear.dir}"/>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Class-Path" value="${included.lib.libs.beans-binding.classpath} "/>
+        </manifest>
     </target>
     <target name="-copy-meta-inf">
         <copy todir="${classes.dir}">
