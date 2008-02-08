@@ -366,6 +366,7 @@
         <copy file="${libs.beans-binding.classpath}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${reference.SwingB.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${libs.SwingX.classpath}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copy file="${libs.junit_4.classpath}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <basename file="${reference.AcaciaBusinessAce-ejb.dist}" property="included.lib.reference.AcaciaBusinessAce-ejb.dist"/>
@@ -382,8 +383,10 @@
         <copy file="${reference.SwingB.jar}" todir="${dist.ear.dir}"/>
         <basename file="${libs.SwingX.classpath}" property="included.lib.libs.SwingX.classpath"/>
         <copy file="${libs.SwingX.classpath}" todir="${dist.ear.dir}"/>
+        <basename file="${libs.junit_4.classpath}" property="included.lib.libs.junit_4.classpath"/>
+        <copy file="${libs.junit_4.classpath}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.AcaciaBusinessAce-ejb.dist} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.libs.swing-app-framework.classpath.1} ${included.lib.libs.swing-app-framework.classpath.2} ${included.lib.libs.beans-binding.classpath} ${included.lib.reference.SwingB.jar} ${included.lib.libs.SwingX.classpath} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.AcaciaBusinessAce-ejb.dist} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.libs.swing-app-framework.classpath.1} ${included.lib.libs.swing-app-framework.classpath.2} ${included.lib.libs.beans-binding.classpath} ${included.lib.reference.SwingB.jar} ${included.lib.libs.SwingX.classpath} ${included.lib.libs.junit_4.classpath} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
