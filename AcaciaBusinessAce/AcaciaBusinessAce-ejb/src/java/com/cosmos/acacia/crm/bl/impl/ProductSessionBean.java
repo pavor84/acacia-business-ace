@@ -5,15 +5,15 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.test.Product;
+import com.cosmos.acacia.crm.data.Product;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.swing.JTable;
@@ -29,30 +29,11 @@ import org.jdesktop.swingbinding.SwingBindings;
  */
 @Stateless
 public class ProductSessionBean implements ProductSessionRemote, ProductSessionLocal {
-    //@PersistenceContext(unitName="AcaciaPU")
-    //@PersistenceContext(unitName="AcaciaBusinessLogicPU")
     @PersistenceContext
     private EntityManager em;
 
-    public void beginTransaction()
-    {
-        em.getTransaction().begin();
-    }
-
-    public void commitTransaction()
-    {
-        em.getTransaction().begin();
-    }
-
-    public void rollbackTransaction()
-    {
-        em.getTransaction().rollback();
-    }
-
-    public EntityTransaction getTransaction()
-    {
-        return em.getTransaction();
-    }
+    @EJB
+    private EntityStoreManagerLocal ems;
 
     @PostConstruct
     public void init()
@@ -63,55 +44,57 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
     @PreDestroy
     public void destroy()
     {
-        EntityTransaction tx = getTransaction();
-        System.out.println("tx.isActive(): " + tx.isActive());
-        if(tx.isActive())
-            tx.rollback();
-        System.out.println("destroy()");
     }
+
+    @EJB
+    private DataObjectTypeLocal dotLocal;
 
     public List<Product> getProducts() {
         System.out.println("em: " + em);
-        if(em != null)
+        System.out.println("ems: " + ems);
+        try
         {
-            //beginTransaction();
+            Query q = em.createQuery("select p from Product p");
+            List data = q.getResultList();
+            if(data != null)
+            {
+                System.out.println("data.className: " + data.getClass().getName());
+                if(data.isEmpty())
+                {
+                    Product product = Product.newTestProduct("1st Product", "p1");
+                    ems.persist(em, product);
+                    product = Product.newTestProduct("2nd Product", "p2");
+                    ems.persist(em, product);
+                    product = Product.newTestProduct("3rd Product", "p3");
+                    ems.persist(em, product);
+                    System.out.println("commitTransaction()");
+
+                    System.out.println("q.getResultList()");
+                    data = q.getResultList();
+
+                }
+            }
+
             try
             {
-                Query q = em.createQuery("select p from Product p");
-                List data = q.getResultList();
-                if(data != null)
-                {
-                    System.out.println("data.className: " + data.getClass().getName());
-                    if(data.isEmpty())
-                    {
-                        System.out.println("beginTransaction()");
-                        Product product = new Product(new BigDecimal(1), "1st Product");
-                        em.persist(product);
-                        product = new Product(new BigDecimal(2), "2nd Product");
-                        em.persist(product);
-                        product = new Product(new BigDecimal(3), "3rd Product");
-                        em.persist(product);
-                        System.out.println("commitTransaction()");
-                        //commitTransaction();
-
-                        //beginTransaction();
-                        System.out.println("q.getResultList()");
-                        data = q.getResultList();
-                    }
-                }
-
-                System.out.println("data: " + data);
-                return new ArrayList<Product>(data);
+                /*DataObjectType dot = new DataObjectType();
+                dot.setDataObjectTypeId(123);
+                dot.setDataObjectType("Miro");
+                em.persist(dot);
+                System.out.println("dot: " + dot);*/
             }
-            catch(Exception ex)
+            catch(Throwable ex)
             {
-                System.out.println("rollbackTransaction()");
-                //rollbackTransaction();
                 ex.printStackTrace();
             }
-        }
 
-        return null;
+            System.out.println("data: " + data);
+            return new ArrayList<Product>(data);
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
     public JTableBinding getProductTableBinding(JTable targetTable) {

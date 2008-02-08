@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.test.Product;
+import com.cosmos.acacia.crm.data.Product;
 import java.util.List;
 import javax.ejb.Remote;
 import javax.swing.JTable;

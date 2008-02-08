@@ -1,0 +1,29 @@
+# DEFAULT CACHE REGION (memory cache)
+jcs.default=DC
+jcs.default.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
+jcs.default.cacheattributes.MaxObjects=2000
+jcs.default.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+jcs.default.elementattributes=org.apache.jcs.engine.ElementAttributes
+jcs.default.elementattributes.IsEternal=false
+jcs.default.elementattributes.MaxLifeSeconds=600
+jcs.default.elementattributes.IdleTime=1800
+jcs.default.elementattributes.IsSpool=false
+jcs.default.elementattributes.IsRemote=false
+jcs.default.elementattributes.IsLateral=false
+
+#DataObjectType Cache
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name=DC
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.cacheattributes.MaxObjects=1000
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.cacheattributes.UseMemoryShrinker=true
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.cacheattributes.MaxMemoryIdleTimeSeconds=3600
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.cacheattributes.ShrinkerIntervalSeconds=60
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes=org.apache.jcs.engine.ElementAttributes
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes.IsEternal=false
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes.MaxLifeSeconds=300
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes.IdleTime=180
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes.IsSpool=false
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes.IsRemote=false
+jcs.region.com.cosmos.acacia.crm.data.DataObjectType.name.elementattributes.IsLateral=false
+
