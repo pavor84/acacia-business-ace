@@ -7,8 +7,7 @@
 package com.cosmos.acacia.crm.gui.test;
 
 import com.cosmos.acacia.crm.bl.impl.ProductSessionRemote;
-import com.cosmos.acacia.crm.data.test.Product;
-import com.cosmos.swingb.JBTable;
+import com.cosmos.acacia.crm.data.Product;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
