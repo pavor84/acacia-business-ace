@@ -243,8 +243,18 @@ is divided into following sections:
     <!--
                 COMPILATION SECTION
             -->
-    <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps"/>
-    <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps"/>
+    <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
+        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist"/>
+        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="jar"/>
+    </target>
+    <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
+        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist-ear">
+            <property location="${build.dir}" name="dist.ear.dir"/>
+        </ant>
+        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="jar"/>
+    </target>
     <target depends="init, -deps-module-jar, -deps-ear-jar" name="deps-jar"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
         <mkdir dir="${build.classes.dir}"/>
@@ -255,7 +265,6 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="compile" name="library-inclusion-in-archive">
-        <copy file="${libs.beans-binding.classpath}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.jcs-1.3.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.commons-logging-1.1.1.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.concurrent.jar}" todir="${build.classes.dir}"/>
@@ -278,10 +287,11 @@ is divided into following sections:
         <copy file="${libs.Hibernate.classpath.libfile.3}" todir="${build.classes.dir}"/>
         <copy file="${libs.Hibernate.classpath.libfile.2}" todir="${build.classes.dir}"/>
         <copy file="${libs.Hibernate.classpath.libfile.1}" todir="${build.classes.dir}"/>
+        <copy file="${reference.AcaciaAnnotations.jar}" todir="${build.classes.dir}"/>
+        <copy file="${reference.beansbinding.jar}" todir="${build.classes.dir}"/>
+        <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
-        <basename file="${libs.beans-binding.classpath}" property="included.lib.libs.beans-binding.classpath"/>
-        <copy file="${libs.beans-binding.classpath}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.jcs-1.3.jar}" property="included.lib.file.reference.jcs-1.3.jar"/>
         <copy file="${file.reference.jcs-1.3.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.commons-logging-1.1.1.jar}" property="included.lib.file.reference.commons-logging-1.1.1.jar"/>
@@ -326,8 +336,14 @@ is divided into following sections:
         <copy file="${libs.Hibernate.classpath.libfile.3}" todir="${dist.ear.dir}"/>
         <copy file="${libs.Hibernate.classpath.libfile.2}" todir="${dist.ear.dir}"/>
         <copy file="${libs.Hibernate.classpath.libfile.1}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
+        <copy file="${reference.AcaciaAnnotations.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.beansbinding.jar}" property="included.lib.reference.beansbinding.jar"/>
+        <copy file="${reference.beansbinding.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.AcaciaBusinessLogic.dist}" property="included.lib.reference.AcaciaBusinessLogic.dist"/>
+        <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.beans-binding.classpath} ${included.lib.file.reference.jcs-1.3.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.concurrent.jar} ${included.lib.libs.Hibernate.classpath.1} ${included.lib.libs.Hibernate.classpath.2} ${included.lib.libs.Hibernate.classpath.3} ${included.lib.libs.Hibernate.classpath.4} ${included.lib.libs.Hibernate.classpath.5} ${included.lib.libs.Hibernate.classpath.6} ${included.lib.libs.Hibernate.classpath.7} ${included.lib.libs.Hibernate.classpath.8} ${included.lib.libs.Hibernate.classpath.9} ${included.lib.libs.Hibernate.classpath.10} ${included.lib.libs.Hibernate.classpath.11} ${included.lib.libs.Hibernate.classpath.12} ${included.lib.libs.Hibernate.classpath.13} ${included.lib.libs.Hibernate.classpath.14} ${included.lib.libs.Hibernate.classpath.15} ${included.lib.libs.Hibernate.classpath.16} ${included.lib.libs.Hibernate.classpath.17} ${included.lib.libs.Hibernate.classpath.18} ${included.lib.libs.Hibernate.classpath.19} "/>
+            <attribute name="Class-Path" value="${included.lib.file.reference.jcs-1.3.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.concurrent.jar} ${included.lib.libs.Hibernate.classpath.1} ${included.lib.libs.Hibernate.classpath.2} ${included.lib.libs.Hibernate.classpath.3} ${included.lib.libs.Hibernate.classpath.4} ${included.lib.libs.Hibernate.classpath.5} ${included.lib.libs.Hibernate.classpath.6} ${included.lib.libs.Hibernate.classpath.7} ${included.lib.libs.Hibernate.classpath.8} ${included.lib.libs.Hibernate.classpath.9} ${included.lib.libs.Hibernate.classpath.10} ${included.lib.libs.Hibernate.classpath.11} ${included.lib.libs.Hibernate.classpath.12} ${included.lib.libs.Hibernate.classpath.13} ${included.lib.libs.Hibernate.classpath.14} ${included.lib.libs.Hibernate.classpath.15} ${included.lib.libs.Hibernate.classpath.16} ${included.lib.libs.Hibernate.classpath.17} ${included.lib.libs.Hibernate.classpath.18} ${included.lib.libs.Hibernate.classpath.19} ${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.beansbinding.jar} ${included.lib.reference.AcaciaBusinessLogic.dist} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -594,7 +610,11 @@ is divided into following sections:
     <!--
                 CLEANUP SECTION
             -->
-    <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps"/>
+    <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
+        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="clean"/>
+    </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>

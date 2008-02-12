@@ -31,18 +31,9 @@ import org.hibernate.annotations.Parameter;
 @Table(name = "data_objects")
 public class DataObject implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "data_object_id", nullable = false)
-    //@SequenceGenerator(name="DOSequenceGenerator", sequenceName="data_objects_seq", allocationSize=1)
-    //@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DOSequenceGenerator")
-    /*@TableGenerator(
-            name="DOSequenceGenerator", 
-            table="sequence_identifiers", 
-            pkColumnName="seq_id_key", 
-            valueColumnName="seq_id_name", 
-            pkColumnValue="seq_id_value", 
-            allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.TABLE, generator="DOSequenceGenerator")*/
     @GenericGenerator
     (
         name="DOSequenceGenerator",
@@ -54,35 +45,50 @@ public class DataObject implements Serializable {
     )
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "DOSequenceGenerator")
     private BigInteger dataObjectId;
+
     @Column(name = "data_object_version", nullable = false)
     private int dataObjectVersion;
+
     @Column(name = "data_object_type_id", nullable = false)
     private int dataObjectTypeId;
+
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime = new Date();
+
     @Column(name = "creator_id", nullable = false)
     private long creatorId;
+
     @Column(name = "owner_id", nullable = false)
     private long ownerId;
+
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
+
     @Column(name = "is_read_only", nullable = false)
     private boolean readOnly;
+
     @Column(name = "is_system", nullable = false)
     private boolean isSystem;
+
     @Column(name = "is_folder", nullable = false)
     private boolean isFolder;
+
     @Column(name = "is_link", nullable = false)
     private boolean isLink;
+
     @Column(name = "order_position")
     private String orderPosition;
+
     @Column(name = "child_counter")
     private Integer childCounter;
+
     @Column(name = "notes")
     private String notes;
+
     @Column(name = "small_image_uri")
     private String smallImageUri;
+
     //@Lob
     @Column(name = "small_image")
     private byte[] smallImage;
@@ -95,13 +101,17 @@ public class DataObject implements Serializable {
     private String dataObjectUri;
     @OneToMany(mappedBy = "personId")
     private Collection<User> userCollection;
-    @OneToMany(mappedBy = "parentDataObjectId")
+
+    @OneToMany(mappedBy = "parentDataObject")
     private Collection<DataObject> dataObjectCollection;
+
     @JoinColumn(name = "parent_data_object_id", referencedColumnName =
                                                 "data_object_id")
     @ManyToOne
-    private DataObject parentDataObjectId;
+
+    private DataObject parentDataObject;
     @OneToMany(mappedBy = "linkedDataObjectId")
+
     private Collection<DataObject> dataObjectCollection1;
     @JoinColumn(name = "linked_data_object_id", referencedColumnName =
                                                 "data_object_id")
@@ -300,12 +310,12 @@ public class DataObject implements Serializable {
         this.dataObjectCollection = dataObjectCollection;
     }
 
-    public DataObject getParentDataObjectId() {
-        return parentDataObjectId;
+    public DataObject getParentDataObject() {
+        return parentDataObject;
     }
 
-    public void setParentDataObjectId(DataObject parentDataObjectId) {
-        this.parentDataObjectId = parentDataObjectId;
+    public void setParentDataObject(DataObject parentDataObject) {
+        this.parentDataObject = parentDataObject;
     }
 
     public Collection<DataObject> getDataObjectCollection1() {

@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.beansbinding.EntityProperties;
 import javax.ejb.Local;
 import javax.persistence.EntityManager;
 
@@ -24,4 +25,6 @@ public interface EntityStoreManagerLocal
     void remove(EntityManager entityManager, Object entity);
 
     void remove(Object entity);
+
+    EntityProperties getEntityProperties(Class entityClass);
 }
