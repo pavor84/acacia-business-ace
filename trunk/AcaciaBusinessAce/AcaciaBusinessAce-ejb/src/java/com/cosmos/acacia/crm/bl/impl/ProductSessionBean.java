@@ -6,8 +6,10 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -33,7 +35,7 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
     private EntityManager em;
 
     @EJB
-    private EntityStoreManagerLocal ems;
+    private EntityStoreManagerLocal esm;
 
     @PostConstruct
     public void init()
@@ -51,41 +53,35 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
 
     public List<Product> getProducts() {
         System.out.println("em: " + em);
-        System.out.println("ems: " + ems);
+        System.out.println("ems: " + esm);
         try
         {
-            Query q = em.createQuery("select p from Product p");
-            List data = q.getResultList();
+            String sql = "select p from Product p where p.dataObject.parentDataObject = null and p.dataObject.deleted = false";
+            Query q = em.createQuery(sql);
+            List<Product> data = q.getResultList();
             if(data != null)
             {
                 System.out.println("data.className: " + data.getClass().getName());
                 if(data.isEmpty())
                 {
                     Product product = Product.newTestProduct("1st Product", "p1");
-                    ems.persist(em, product);
+                    esm.persist(em, product);
                     product = Product.newTestProduct("2nd Product", "p2");
-                    ems.persist(em, product);
+                    esm.persist(em, product);
                     product = Product.newTestProduct("3rd Product", "p3");
-                    ems.persist(em, product);
+                    esm.persist(em, product);
                     System.out.println("commitTransaction()");
 
                     System.out.println("q.getResultList()");
                     data = q.getResultList();
 
-                }
-            }
+                    product = data.get(0);
+                    product.setProductName(product.getProductName() + " - " + new Date());
+                    esm.persist(em, product);
 
-            try
-            {
-                /*DataObjectType dot = new DataObjectType();
-                dot.setDataObjectTypeId(123);
-                dot.setDataObjectType("Miro");
-                em.persist(dot);
-                System.out.println("dot: " + dot);*/
-            }
-            catch(Throwable ex)
-            {
-                ex.printStackTrace();
+                    product = data.get(1);
+                    esm.remove(em, product);
+                }
             }
 
             System.out.println("data: " + data);
@@ -97,28 +93,13 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
         }
     }
 
-    public JTableBinding getProductTableBinding(JTable targetTable) {
-        AutoBinding.UpdateStrategy updateStrategy = AutoBinding.UpdateStrategy.READ_WRITE;
-        JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, getProducts(), targetTable);
-
-        // Determine the access for the Table depending on user, role, current object and hidden columns
-        // Restore the columns state depending on the previous session (visible, size, position)
-
-        ColumnBinding columnBinding = tableBinding.addColumnBinding(ELProperty.create("${productId}"));
-        columnBinding.setColumnName("Product Id");
-        columnBinding.setColumnClass(BigDecimal.class);
-        columnBinding.setEditable(false);
-        //columnBinding.setVisible(false);
-
-        columnBinding = tableBinding.addColumnBinding(ELProperty.create("${productName}"));
-        columnBinding.setColumnName("Product Name");
-        columnBinding.setColumnClass(String.class);
-        columnBinding.setEditable(true);
-        //columnBinding.setVisible(true);
-
-        return tableBinding;
+    public EntityProperties getProductEntityProperties()
+    {
+        System.out.println("getProductEntityProperties()");
+        EntityProperties entityProperties = esm.getEntityProperties(Product.class);
+        System.out.println("entityProperties: " + entityProperties);
+        return entityProperties;
     }
-
 
     //public void persist(Object object) {
     //    em.persist(object);

@@ -5,19 +5,19 @@
 
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.crm.bl.impl.DataObjectsListeners;
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
 
 /**
  *
@@ -27,6 +27,11 @@ import javax.persistence.Table;
 @Table(name = "products")
 @NamedQueries(
     {
+        @NamedQuery
+            (
+                name = "Product.findByParentDataObjectAndDeleted",
+                query = "select p from Product p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+            ),
         @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId"), 
         @NamedQuery(name = "Product.findByParentId", query = "SELECT p FROM Product p WHERE p.parentId = :parentId"), 
         @NamedQuery(name = "Product.findByCategoryId", query = "SELECT p FROM Product p WHERE p.categoryId = :categoryId"), 
@@ -54,69 +59,135 @@ import javax.persistence.Table;
         @NamedQuery(name = "Product.findByDeliveryTime", query = "SELECT p FROM Product p WHERE p.deliveryTime = :deliveryTime"), 
         @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"), 
         @NamedQuery(name = "Product.findByProducerId", query = "SELECT p FROM Product p WHERE p.producerId = :producerId")})
-@EntityListeners(value={DataObjectsListeners.class})
 public class Product
     extends DataObjectBean
-    implements Serializable {
+    implements Serializable
+{
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "product_id", nullable = false)
+    @Property(title="Product Id", editable=false, readOnly=true, visible=false)
     private BigInteger productId;
+
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false)
     private BigInteger parentId;
+
     @Column(name = "category_id", nullable = false)
+    @Property(title="Category Id", editable=false, readOnly=true, visible=false)
     private BigInteger categoryId;
+
     @Column(name = "product_name", nullable = false)
+    @Property(title="Product Name")
     private String productName;
+
     @Column(name = "product_code", nullable = false)
+    @Property(title="Product Code")
     private String productCode;
+
     @Column(name = "measure_unit_id", nullable = false)
+    @Property(title="Measure Unit Id", editable=false, readOnly=true, visible=false)
     private int measureUnitId;
+
     @Column(name = "is_complex", nullable = false)
+    @Property(title="Is Complex")
     private boolean isComplex;
+
     @Column(name = "is_purchased", nullable = false)
+    @Property(title="Is Purchased")
     private boolean isPurchased;
+
     @Column(name = "is_salable", nullable = false)
+    @Property(title="Is Salable")
     private boolean isSalable = true;
+
     @Column(name = "is_obsolete", nullable = false)
+    @Property(title="Is Obsolete")
     private boolean isObsolete;
+
     @Column(name = "pattern_format_id")
+    @Property(title="Pattern Format Id", editable=false, readOnly=true, visible=false)
     private Integer patternFormatId;
+
     @Column(name = "product_color")
+    @Property(title="Product Color")
     private String productColor;
+
     @Column(name = "minimum_quantity", nullable = false)
+    @Property(title="Min. Quantity")
     private BigDecimal minimumQuantity = BigDecimal.ONE;
+
     @Column(name = "maximum_quantity")
+    @Property(title="Max. Quantity")
     private BigDecimal maximumQuantity;
+
     @Column(name = "default_quantity")
+    @Property(title="Default Quantity")
     private BigDecimal defaultQuantity;
+
     @Column(name = "purchase_price", nullable = false)
+    @Property(title="Purchase Price")
     private BigDecimal purchasePrice;
+
     @Column(name = "sale_price", nullable = false)
+    @Property(title="Sales Price")
     private BigDecimal salePrice;
+
     @Column(name = "list_price", nullable = false)
+    @Property(title="List Price")
     private BigDecimal listPrice;
+
     @Column(name = "quantity_per_package", nullable = false)
+    @Property(title="Qty per Package")
     private int quantityPerPackage = 1;
+
     @Column(name = "dimension_unit_id")
+    @Property(title="Dimension Unit Id", editable=false, readOnly=true, visible=false)
     private Integer dimensionUnitId;
+
     @Column(name = "dimension_width")
+    @Property(title="Dimension Width")
     private BigDecimal dimensionWidth;
+
+    @Column(name = "dimension_length")
+    @Property(title="Dimension Length")
+    private BigDecimal dimensionLength;
+
     @Column(name = "dimension_height")
+    @Property(title="Dimension Height")
     private BigDecimal dimensionHeight;
+
     @Column(name = "weight_unit_id")
+    @Property(title="Weight Unit Id", editable=false, readOnly=true, visible=false)
     private Integer weightUnitId;
+
     @Column(name = "weight")
+    @Property(title="Weight")
     private BigDecimal weight;
+
     @Column(name = "delivery_time")
+    @Property(title="Delivery time")
     private Integer deliveryTime;
+
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
+
     @Column(name = "producer_id")
+    @Property(title="Producer Id", editable=false, readOnly=true, visible=false)
     private BigInteger producerId;
-    @JoinColumn(name = "product_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+
     @OneToOne
+    /*@JoinColumn(
+        name = "product_id",
+        referencedColumnName = "data_object_id",
+        insertable = false,
+        updatable = false)*/
+    @PrimaryKeyJoinColumn
     private DataObject dataObject;
+
 
     public Product() {
     }
@@ -310,6 +381,14 @@ public class Product
         this.dimensionWidth = dimensionWidth;
     }
 
+    public BigDecimal getDimensionLength() {
+        return dimensionLength;
+    }
+
+    public void setDimensionLength(BigDecimal dimensionLength) {
+        this.dimensionLength = dimensionLength;
+    }
+
     public BigDecimal getDimensionHeight() {
         return dimensionHeight;
     }
@@ -388,7 +467,13 @@ public class Product
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test1.Product[productId=" + productId + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getName()).append("[productId=");
+        sb.append(productId).append("]");
+        DataObject dataObject = getDataObject();
+        if(dataObject != null)
+            sb.append(":v.").append(getDataObject().getDataObjectVersion());
+        return sb.toString();
     }
 
     // DataObjectBean

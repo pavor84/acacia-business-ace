@@ -8,7 +8,11 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
@@ -29,6 +33,9 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     @EJB
     private DataObjectTypeLocal dotLocal;
 
+    private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
+
+
     public void persist(Object entity) {
         persist(em, entity);
         
@@ -43,21 +50,22 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             DataObject dataObject = doBean.getDataObject();
             if(id == null)
             {
+                System.out.println("Insert Entity");
                 if(dataObject == null)
                 {
-                    dataObject = new DataObject();
-
                     DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
                     DataObjectType dot = dotLocal.getDataObjectType(entity.getClass().getName());
                     System.out.println("dotLocal: " + dotLocal);
                     System.out.println("dot: " + dot);
 
+                    dataObject = new DataObject();
                     dataObject.setDataObjectTypeId(dot.getDataObjectTypeId());
+                    dataObject.setDataObjectVersion(1);
                     em.persist(dataObject);
                 }
 
-                id = new BigInteger(dataObject.getDataObjectId().toByteArray());
-                //id = dataObject.getDataObjectId();
+                //id = new BigInteger(dataObject.getDataObjectId().toByteArray());
+                id = dataObject.getDataObjectId();
                 System.out.println("id: " + id);
                 System.out.println("1. doBean: " + doBean);
                 doBean.setId(id);
@@ -66,6 +74,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             }
             else
             {
+                System.out.println("Update Entity");
                 mustMerge = true;
                 if(dataObject == null)
                     dataObject = em.find(DataObject.class, id);
@@ -87,6 +96,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     public void remove(EntityManager entityManager, Object entity) {
         if(entity instanceof DataObjectBean)
         {
+            System.out.println("Delete Entity");
             DataObjectBean doBean = (DataObjectBean)entity;
             DataObject dataObject = doBean.getDataObject();
             if(dataObject == null)
@@ -126,4 +136,19 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     // Add business logic below. (Right-click in editor and choose
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
  
+
+    public EntityProperties getEntityProperties(Class entityClass)
+    {
+        String entityClassName = entityClass.getName();
+        EntityProperties entityProperties = entityPropertiesMap.get(entityClassName);
+        if(entityProperties == null)
+        {
+            entityProperties = new EntityProperties(Product.class);
+            entityPropertiesMap.put(entityClassName, entityProperties);
+        }
+
+        return (EntityProperties)entityProperties.clone();
+    }
+
+
 }
