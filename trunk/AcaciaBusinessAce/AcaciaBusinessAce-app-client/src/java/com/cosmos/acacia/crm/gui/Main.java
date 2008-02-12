@@ -71,6 +71,8 @@ public class Main {
             }
         });
 
+        AcaciaApplication.launch(AcaciaApplication.class, args);
+
     }
 
     public static void mainTest() {
