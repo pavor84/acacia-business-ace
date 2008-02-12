@@ -8,7 +8,9 @@ package com.cosmos.acacia.crm.gui.test;
 
 import com.cosmos.acacia.crm.bl.impl.ProductSessionRemote;
 import com.cosmos.acacia.crm.data.Product;
-import java.math.BigDecimal;
+import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -42,12 +44,15 @@ public class HelloWorldFrame extends javax.swing.JFrame {
         bindingGroup = new BindingGroup();
         List list = org.jdesktop.observablecollections.ObservableCollections.observableList(getProducts());
         JTableBinding jTableBinding = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ_WRITE, list, productsTable);
+        
         ColumnBinding columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${productId}"));
         columnBinding.setColumnName("Product Id");
-        columnBinding.setColumnClass(BigDecimal.class);
+        columnBinding.setColumnClass(BigInteger.class);
+
         columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${productName}"));
         columnBinding.setColumnName("Product Name");
         columnBinding.setColumnClass(String.class);
+
         bindingGroup.addBinding(jTableBinding);
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, productsTable, ELProperty.create("${selectedElement.productId}"), productIdTextField, BeanProperty.create("text"));
@@ -108,6 +113,7 @@ public class HelloWorldFrame extends javax.swing.JFrame {
         refreshButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         newButton = new javax.swing.JButton();
+        patternIdTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -174,6 +180,8 @@ public class HelloWorldFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        patternIdTextField.setText("jTextField1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -190,7 +198,10 @@ public class HelloWorldFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                            .addComponent(productIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(productIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(patternIdTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -201,7 +212,8 @@ public class HelloWorldFrame extends javax.swing.JFrame {
                 .addGap(177, 177, 177)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(productIdLabel)
-                    .addComponent(productIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(productIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patternIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(productNameLabel)
@@ -235,6 +247,7 @@ public class HelloWorldFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton newButton;
+    private javax.swing.JTextField patternIdTextField;
     private javax.swing.JLabel productIdLabel;
     private javax.swing.JTextField productIdTextField;
     private javax.swing.JLabel productNameLabel;
@@ -265,10 +278,21 @@ public class HelloWorldFrame extends javax.swing.JFrame {
         return productSession;
     }
 
+
     private List<Product> getProducts()
     {
         List<Product> products = getFormSession().getProducts();
         System.out.println("products: " + products);
+
+        try
+        {
+            EntityProperties entityProps = getFormSession().getProductEntityProperties();
+        }
+        catch(Throwable ex)
+        {
+            ex.printStackTrace();
+        }
+
         return products;
     }
 
