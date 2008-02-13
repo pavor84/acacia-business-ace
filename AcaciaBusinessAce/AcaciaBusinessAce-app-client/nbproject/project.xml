@@ -14,12 +14,11 @@
             <included-library files="1">reference.AcaciaBusinessAce-ejb.dist</included-library>
             <included-library files="1">reference.AcaciaBusinessLogic.dist</included-library>
             <included-library files="1">reference.AcaciaAnnotations.jar</included-library>
-            <included-library files="1">reference.beansbinding.jar</included-library>
-            <included-library files="2">libs.swing-app-framework.classpath</included-library>
             <included-library files="1">reference.SwingB.jar</included-library>
-            <included-library files="1">libs.SwingX.classpath</included-library>
+            <included-library files="1">file.reference.beansbinding.jar</included-library>
+            <included-library files="1">file.reference.swingx-2008_01_20.jar</included-library>
+            <included-library files="2">libs.swing-app-framework.classpath</included-library>
             <included-library files="1">libs.junit_4.classpath</included-library>
-            <included-library files="1">file.reference.javaee.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
@@ -48,14 +47,6 @@
             </reference>
             <reference>
                 <foreign-project>SwingB</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
-                <foreign-project>beansbinding</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

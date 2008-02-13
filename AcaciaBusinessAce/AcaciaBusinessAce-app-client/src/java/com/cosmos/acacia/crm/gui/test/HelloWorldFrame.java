@@ -8,9 +8,9 @@ package com.cosmos.acacia.crm.gui.test;
 
 import com.cosmos.acacia.crm.bl.impl.ProductSessionRemote;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.beansbinding.BeansBinding;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
-import java.util.Arrays;
+import com.cosmos.swingb.JBTable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -25,8 +25,6 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingbinding.JTableBinding;
-import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 
 /**
  *
@@ -43,15 +41,12 @@ public class HelloWorldFrame extends javax.swing.JFrame {
 
         bindingGroup = new BindingGroup();
         List list = org.jdesktop.observablecollections.ObservableCollections.observableList(getProducts());
-        JTableBinding jTableBinding = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ_WRITE, list, productsTable);
-        
-        ColumnBinding columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${productId}"));
-        columnBinding.setColumnName("Product Id");
-        columnBinding.setColumnClass(BigInteger.class);
 
-        columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${productName}"));
-        columnBinding.setColumnName("Product Name");
-        columnBinding.setColumnClass(String.class);
+        ProductSessionRemote formSession =  getFormSession();
+        EntityProperties entityProps = formSession.getProductEntityProperties();
+        System.out.println("entityProps: " + entityProps);
+
+        JTableBinding jTableBinding = BeansBinding.createTableBinding(productsTable, list, entityProps);
 
         bindingGroup.addBinding(jTableBinding);
 
@@ -104,7 +99,7 @@ public class HelloWorldFrame extends javax.swing.JFrame {
         bindingGroup1 = new org.jdesktop.beansbinding.BindingGroup();
         productIdLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        productsTable = new javax.swing.JTable();
+        productsTable = new JBTable();
         productIdTextField = new javax.swing.JTextField();
         productNameTextField = new javax.swing.JTextField();
         productNameLabel = new javax.swing.JLabel();
@@ -252,7 +247,7 @@ public class HelloWorldFrame extends javax.swing.JFrame {
     private javax.swing.JTextField productIdTextField;
     private javax.swing.JLabel productNameLabel;
     private javax.swing.JTextField productNameTextField;
-    private javax.swing.JTable productsTable;
+    private JBTable productsTable;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
@@ -283,15 +278,7 @@ public class HelloWorldFrame extends javax.swing.JFrame {
     {
         List<Product> products = getFormSession().getProducts();
         System.out.println("products: " + products);
-
-        try
-        {
-            EntityProperties entityProps = getFormSession().getProductEntityProperties();
-        }
-        catch(Throwable ex)
-        {
-            ex.printStackTrace();
-        }
+        System.out.println("products.get(0).isComplex(): " + products.get(0).isComplex());
 
         return products;
     }

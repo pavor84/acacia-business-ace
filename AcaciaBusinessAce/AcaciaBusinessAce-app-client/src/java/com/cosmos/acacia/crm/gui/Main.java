@@ -5,13 +5,11 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.bl.impl.DataObjectTypeRemote;
-import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.gui.test.HelloWorldFrame;
 import com.cosmos.test.bl.DataObjectTest;
 import java.awt.EventQueue;
+import java.rmi.RMISecurityManager;
 import java.util.Date;
-import javax.naming.InitialContext;
 import org.junit.runner.JUnitCore;
 
 /**
@@ -33,6 +31,11 @@ public class Main {
             "\n\t Hello World." +
             "\n\t Current time is: " + new Date() +
             "\n*********************************");
+
+        /*SecurityManager sm = System.getSecurityManager();
+        System.out.println("sm: " + sm);
+        if (sm == null)
+            System.setSecurityManager(new RMISecurityManager());*/
 
         /*try
         {
