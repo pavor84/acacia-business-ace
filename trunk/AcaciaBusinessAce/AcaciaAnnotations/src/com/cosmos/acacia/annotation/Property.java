@@ -27,5 +27,13 @@ public @interface Property
     boolean readOnly() default false;
     boolean editable() default true;
     boolean visible() default true;
+
+    /**
+     * hiden means is existing as ColumnBinding. If true, then that property
+     * will not exist as ColumnBinding. By default all @Id properties are hiden.
+     * @return
+     */
+    boolean hiden() default false;
+
     String sourceUnreadableValue() default NULL;
 }
