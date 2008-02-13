@@ -4,6 +4,7 @@
  */
 package com.cosmos.beansbinding;
 
+import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
 
 /**
@@ -16,12 +17,14 @@ public class PropertyDetails
 
     private String propertyName;
     private String propertyTitle;
-    private Class propertyClass;
-    private Boolean readOnly;
-    private Boolean editable;
-    private Boolean visible;
+    private String propertyClassName;
+    private boolean readOnly = false;
+    private boolean editable = true;
+    private boolean visible = true;
+    private boolean hiden = false;
     private Object sourceUnreadableValue;
     private String columnName;
+    private int orderPosition;
 
     public PropertyDetails() {
     }
@@ -29,50 +32,27 @@ public class PropertyDetails
     public PropertyDetails(
             String propertyName,
             String propertyTitle,
-            Class propertyClass) {
-        this(propertyName, propertyTitle, propertyClass, null);
+            String propertyClassName) {
+        this(propertyName, propertyTitle, propertyClassName, null);
     }
 
     public PropertyDetails(
             String propertyName,
             String propertyTitle,
-            Class propertyClass,
-            Boolean editable) {
-        this(propertyName, propertyTitle, propertyClass, editable, null);
-    }
-
-    public PropertyDetails(
-            String propertyName,
-            String propertyTitle,
-            Class propertyClass,
-            Boolean editable,
-            Boolean visible) {
-        this(propertyName, propertyTitle, propertyClass, editable, visible, null);
-    }
-
-    public PropertyDetails(
-            String propertyName,
-            String propertyTitle,
-            Class propertyClass,
-            Boolean editable,
-            Boolean visible,
+            String propertyClassName,
             Object sourceUnreadableValue) {
-        this(propertyName, propertyTitle, propertyClass, editable, visible, sourceUnreadableValue, null);
+        this(propertyName, propertyTitle, propertyClassName, sourceUnreadableValue, null);
     }
 
     public PropertyDetails(
             String propertyName,
             String propertyTitle,
-            Class propertyClass,
-            Boolean editable,
-            Boolean visible,
+            String propertyClassName,
             Object sourceUnreadableValue,
             String columnName) {
         this.propertyName = propertyName;
         this.propertyTitle = propertyTitle;
-        this.propertyClass = propertyClass;
-        this.editable = editable;
-        this.visible = visible;
+        this.propertyClassName = propertyClassName;
         this.sourceUnreadableValue = sourceUnreadableValue;
         this.columnName = columnName;
     }
@@ -85,19 +65,19 @@ public class PropertyDetails
         this.columnName = columnName;
     }
 
-    public Boolean isReadOnly() {
+    public boolean isReadOnly() {
         return readOnly;
     }
 
-    public void setReadOnly(Boolean readOnly) {
+    public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
 
-    public Boolean isEditable() {
+    public boolean isEditable() {
         return editable;
     }
 
-    public void setEditable(Boolean editable) {
+    public void setEditable(boolean editable) {
         this.editable = editable;
     }
 
@@ -110,11 +90,20 @@ public class PropertyDetails
     }
 
     public Class getPropertyClass() {
-        return propertyClass;
+        if(propertyClassName != null)
+        {
+            return ClassHelper.getClass(propertyClassName);
+        }
+
+        return null;
     }
 
-    public void setPropertyClass(Class propertyClass) {
-        this.propertyClass = propertyClass;
+    public String getPropertyClassName() {
+        return propertyClassName;
+    }
+
+    public void setPropertyClassName(String propertyClassName) {
+        this.propertyClassName = propertyClassName;
     }
 
     public String getPropertyTitle() {
@@ -133,12 +122,28 @@ public class PropertyDetails
         this.sourceUnreadableValue = sourceUnreadableValue;
     }
 
-    public Boolean isVisible() {
+    public boolean isVisible() {
         return visible;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public boolean isHiden() {
+        return hiden;
+    }
+
+    public void setHiden(boolean hiden) {
+        this.hiden = hiden;
+    }
+
+    public int getOrderPosition() {
+        return orderPosition;
+    }
+
+    public void setOrderPosition(int orderPosition) {
+        this.orderPosition = orderPosition;
     }
 
     @Override
@@ -146,13 +151,11 @@ public class PropertyDetails
         StringBuilder sb = new StringBuilder();
         sb.append("Property name='").append(propertyName);
         sb.append("', title='").append(propertyTitle).append('\'');
-        sb.append(", class=").append(propertyClass);
-        if(readOnly != null)
-            sb.append(", readOnly=").append(readOnly);
-        if(editable != null)
-            sb.append(", editable=").append(editable);
-        if(visible != null)
-            sb.append(", visible=").append(visible);
+        sb.append(", class=").append(getPropertyClass());
+        sb.append(", readOnly=").append(readOnly);
+        sb.append(", editable=").append(editable);
+        sb.append(", visible=").append(visible);
+        sb.append(", hiden=").append(hiden);
         if(sourceUnreadableValue != null)
             sb.append(", sourceUnreadableValue=").append(sourceUnreadableValue);
         if(columnName != null)
