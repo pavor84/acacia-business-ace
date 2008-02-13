@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -20,5 +21,5 @@ public interface ProductSessionRemote {
     List<Product> getProducts();
 
     EntityProperties getProductEntityProperties();
-    
+
 }

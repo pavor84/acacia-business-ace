@@ -31,34 +31,8 @@ import javax.persistence.Table;
             (
                 name = "Product.findByParentDataObjectAndDeleted",
                 query = "select p from Product p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
-            ),
-        @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId"), 
-        @NamedQuery(name = "Product.findByParentId", query = "SELECT p FROM Product p WHERE p.parentId = :parentId"), 
-        @NamedQuery(name = "Product.findByCategoryId", query = "SELECT p FROM Product p WHERE p.categoryId = :categoryId"), 
-        @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"), 
-        @NamedQuery(name = "Product.findByProductCode", query = "SELECT p FROM Product p WHERE p.productCode = :productCode"), 
-        @NamedQuery(name = "Product.findByMeasureUnitId", query = "SELECT p FROM Product p WHERE p.measureUnitId = :measureUnitId"), 
-        @NamedQuery(name = "Product.findByIsComplex", query = "SELECT p FROM Product p WHERE p.isComplex = :isComplex"), 
-        @NamedQuery(name = "Product.findByIsPurchased", query = "SELECT p FROM Product p WHERE p.isPurchased = :isPurchased"), 
-        @NamedQuery(name = "Product.findByIsSalable", query = "SELECT p FROM Product p WHERE p.isSalable = :isSalable"), 
-        @NamedQuery(name = "Product.findByIsObsolete", query = "SELECT p FROM Product p WHERE p.isObsolete = :isObsolete"), 
-        @NamedQuery(name = "Product.findByPatternFormatId", query = "SELECT p FROM Product p WHERE p.patternFormatId = :patternFormatId"), 
-        @NamedQuery(name = "Product.findByProductColor", query = "SELECT p FROM Product p WHERE p.productColor = :productColor"), 
-        @NamedQuery(name = "Product.findByMinimumQuantity", query = "SELECT p FROM Product p WHERE p.minimumQuantity = :minimumQuantity"), 
-        @NamedQuery(name = "Product.findByMaximumQuantity", query = "SELECT p FROM Product p WHERE p.maximumQuantity = :maximumQuantity"), 
-        @NamedQuery(name = "Product.findByDefaultQuantity", query = "SELECT p FROM Product p WHERE p.defaultQuantity = :defaultQuantity"), 
-        @NamedQuery(name = "Product.findByPurchasePrice", query = "SELECT p FROM Product p WHERE p.purchasePrice = :purchasePrice"), 
-        @NamedQuery(name = "Product.findBySalePrice", query = "SELECT p FROM Product p WHERE p.salePrice = :salePrice"), 
-        @NamedQuery(name = "Product.findByListPrice", query = "SELECT p FROM Product p WHERE p.listPrice = :listPrice"), 
-        @NamedQuery(name = "Product.findByQuantityPerPackage", query = "SELECT p FROM Product p WHERE p.quantityPerPackage = :quantityPerPackage"), 
-        @NamedQuery(name = "Product.findByDimensionUnitId", query = "SELECT p FROM Product p WHERE p.dimensionUnitId = :dimensionUnitId"), 
-        @NamedQuery(name = "Product.findByDimensionWidth", query = "SELECT p FROM Product p WHERE p.dimensionWidth = :dimensionWidth"), 
-        @NamedQuery(name = "Product.findByDimensionHeight", query = "SELECT p FROM Product p WHERE p.dimensionHeight = :dimensionHeight"), 
-        @NamedQuery(name = "Product.findByWeightUnitId", query = "SELECT p FROM Product p WHERE p.weightUnitId = :weightUnitId"), 
-        @NamedQuery(name = "Product.findByWeight", query = "SELECT p FROM Product p WHERE p.weight = :weight"), 
-        @NamedQuery(name = "Product.findByDeliveryTime", query = "SELECT p FROM Product p WHERE p.deliveryTime = :deliveryTime"), 
-        @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description"), 
-        @NamedQuery(name = "Product.findByProducerId", query = "SELECT p FROM Product p WHERE p.producerId = :producerId")})
+            )
+    })
 public class Product
     extends DataObjectBean
     implements Serializable
@@ -68,11 +42,11 @@ public class Product
 
     @Id
     @Column(name = "product_id", nullable = false)
-    @Property(title="Product Id", editable=false, readOnly=true, visible=false)
+    @Property(title="Product Id", editable=false, readOnly=true, visible=false, hiden=true)
     private BigInteger productId;
 
     @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false)
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hiden=true)
     private BigInteger parentId;
 
     @Column(name = "category_id", nullable = false)
@@ -93,19 +67,19 @@ public class Product
 
     @Column(name = "is_complex", nullable = false)
     @Property(title="Is Complex")
-    private boolean isComplex;
+    private boolean complex;
 
     @Column(name = "is_purchased", nullable = false)
     @Property(title="Is Purchased")
-    private boolean isPurchased;
+    private boolean purchased;
 
     @Column(name = "is_salable", nullable = false)
     @Property(title="Is Salable")
-    private boolean isSalable = true;
+    private boolean salable = true;
 
     @Column(name = "is_obsolete", nullable = false)
     @Property(title="Is Obsolete")
-    private boolean isObsolete;
+    private boolean obsolete;
 
     @Column(name = "pattern_format_id")
     @Property(title="Pattern Format Id", editable=false, readOnly=true, visible=false)
@@ -202,10 +176,10 @@ public class Product
         this.productName = productName;
         this.productCode = productCode;
         this.measureUnitId = measureUnitId;
-        this.isComplex = isComplex;
-        this.isPurchased = isPurchased;
-        this.isSalable = isSalable;
-        this.isObsolete = isObsolete;
+        this.complex = isComplex;
+        this.purchased = isPurchased;
+        this.salable = isSalable;
+        this.obsolete = isObsolete;
         this.minimumQuantity = minimumQuantity;
         this.purchasePrice = purchasePrice;
         this.salePrice = salePrice;
@@ -218,6 +192,7 @@ public class Product
     }
 
     public void setProductId(BigInteger productId) {
+        firePropertyChange("productId", this.productId, productId);
         this.productId = productId;
     }
 
@@ -226,6 +201,7 @@ public class Product
     }
 
     public void setParentId(BigInteger parentId) {
+        firePropertyChange("parentId", this.parentId, parentId);
         this.parentId = parentId;
     }
 
@@ -234,6 +210,7 @@ public class Product
     }
 
     public void setCategoryId(BigInteger categoryId) {
+        firePropertyChange("categoryId", this.categoryId, categoryId);
         this.categoryId = categoryId;
     }
 
@@ -242,6 +219,7 @@ public class Product
     }
 
     public void setProductName(String productName) {
+        firePropertyChange("productName", this.productName, productName);
         this.productName = productName;
     }
 
@@ -250,6 +228,7 @@ public class Product
     }
 
     public void setProductCode(String productCode) {
+        firePropertyChange("productCode", this.productCode, productCode);
         this.productCode = productCode;
     }
 
@@ -258,39 +237,44 @@ public class Product
     }
 
     public void setMeasureUnitId(int measureUnitId) {
+        firePropertyChange("measureUnitId", this.measureUnitId, measureUnitId);
         this.measureUnitId = measureUnitId;
     }
 
-    public boolean getIsComplex() {
-        return isComplex;
+    public boolean isComplex() {
+        return complex;
     }
 
-    public void setIsComplex(boolean isComplex) {
-        this.isComplex = isComplex;
+    public void setComplex(boolean isComplex) {
+        firePropertyChange("complex", this.complex, complex);
+        this.complex = isComplex;
     }
 
-    public boolean getIsPurchased() {
-        return isPurchased;
+    public boolean isPurchased() {
+        return purchased;
     }
 
-    public void setIsPurchased(boolean isPurchased) {
-        this.isPurchased = isPurchased;
+    public void setPurchased(boolean isPurchased) {
+        firePropertyChange("purchased", this.purchased, purchased);
+        this.purchased = isPurchased;
     }
 
-    public boolean getIsSalable() {
-        return isSalable;
+    public boolean isSalable() {
+        return salable;
     }
 
-    public void setIsSalable(boolean isSalable) {
-        this.isSalable = isSalable;
+    public void setSalable(boolean isSalable) {
+        firePropertyChange("salable", this.salable, salable);
+        this.salable = isSalable;
     }
 
-    public boolean getIsObsolete() {
-        return isObsolete;
+    public boolean isObsolete() {
+        return obsolete;
     }
 
-    public void setIsObsolete(boolean isObsolete) {
-        this.isObsolete = isObsolete;
+    public void setObsolete(boolean isObsolete) {
+        firePropertyChange("obsolete", this.obsolete, obsolete);
+        this.obsolete = isObsolete;
     }
 
     public Integer getPatternFormatId() {
@@ -298,6 +282,7 @@ public class Product
     }
 
     public void setPatternFormatId(Integer patternFormatId) {
+        firePropertyChange("patternFormatId", this.patternFormatId, patternFormatId);
         this.patternFormatId = patternFormatId;
     }
 
@@ -306,6 +291,7 @@ public class Product
     }
 
     public void setProductColor(String productColor) {
+        firePropertyChange("productColor", this.productColor, productColor);
         this.productColor = productColor;
     }
 
@@ -314,6 +300,7 @@ public class Product
     }
 
     public void setMinimumQuantity(BigDecimal minimumQuantity) {
+        firePropertyChange("minimumQuantity", this.minimumQuantity, minimumQuantity);
         this.minimumQuantity = minimumQuantity;
     }
 
@@ -322,6 +309,7 @@ public class Product
     }
 
     public void setMaximumQuantity(BigDecimal maximumQuantity) {
+        firePropertyChange("maximumQuantity", this.maximumQuantity, maximumQuantity);
         this.maximumQuantity = maximumQuantity;
     }
 
@@ -330,6 +318,7 @@ public class Product
     }
 
     public void setDefaultQuantity(BigDecimal defaultQuantity) {
+        firePropertyChange("defaultQuantity", this.defaultQuantity, defaultQuantity);
         this.defaultQuantity = defaultQuantity;
     }
 
@@ -338,6 +327,7 @@ public class Product
     }
 
     public void setPurchasePrice(BigDecimal purchasePrice) {
+        firePropertyChange("purchasePrice", this.purchasePrice, purchasePrice);
         this.purchasePrice = purchasePrice;
     }
 
@@ -346,6 +336,7 @@ public class Product
     }
 
     public void setSalePrice(BigDecimal salePrice) {
+        firePropertyChange("salePrice", this.salePrice, salePrice);
         this.salePrice = salePrice;
     }
 
@@ -354,6 +345,7 @@ public class Product
     }
 
     public void setListPrice(BigDecimal listPrice) {
+        firePropertyChange("listPrice", this.listPrice, listPrice);
         this.listPrice = listPrice;
     }
 
@@ -362,6 +354,7 @@ public class Product
     }
 
     public void setQuantityPerPackage(int quantityPerPackage) {
+        firePropertyChange("quantityPerPackage", this.quantityPerPackage, quantityPerPackage);
         this.quantityPerPackage = quantityPerPackage;
     }
 
@@ -370,6 +363,7 @@ public class Product
     }
 
     public void setDimensionUnitId(Integer dimensionUnitId) {
+        firePropertyChange("dimensionUnitId", this.dimensionUnitId, dimensionUnitId);
         this.dimensionUnitId = dimensionUnitId;
     }
 
@@ -378,6 +372,7 @@ public class Product
     }
 
     public void setDimensionWidth(BigDecimal dimensionWidth) {
+        firePropertyChange("dimensionWidth", this.dimensionWidth, dimensionWidth);
         this.dimensionWidth = dimensionWidth;
     }
 
@@ -386,6 +381,7 @@ public class Product
     }
 
     public void setDimensionLength(BigDecimal dimensionLength) {
+        firePropertyChange("dimensionLength", this.dimensionLength, dimensionLength);
         this.dimensionLength = dimensionLength;
     }
 
@@ -394,6 +390,7 @@ public class Product
     }
 
     public void setDimensionHeight(BigDecimal dimensionHeight) {
+        firePropertyChange("dimensionHeight", this.dimensionHeight, dimensionHeight);
         this.dimensionHeight = dimensionHeight;
     }
 
@@ -402,6 +399,7 @@ public class Product
     }
 
     public void setWeightUnitId(Integer weightUnitId) {
+        firePropertyChange("weightUnitId", this.weightUnitId, weightUnitId);
         this.weightUnitId = weightUnitId;
     }
 
@@ -410,6 +408,7 @@ public class Product
     }
 
     public void setWeight(BigDecimal weight) {
+        firePropertyChange("weight", this.weight, weight);
         this.weight = weight;
     }
 
@@ -418,6 +417,7 @@ public class Product
     }
 
     public void setDeliveryTime(Integer deliveryTime) {
+        firePropertyChange("deliveryTime", this.deliveryTime, deliveryTime);
         this.deliveryTime = deliveryTime;
     }
 
@@ -426,6 +426,7 @@ public class Product
     }
 
     public void setDescription(String description) {
+        firePropertyChange("description", this.description, description);
         this.description = description;
     }
 
@@ -434,6 +435,7 @@ public class Product
     }
 
     public void setProducerId(BigInteger producerId) {
+        firePropertyChange("producerId", this.producerId, producerId);
         this.producerId = producerId;
     }
 

@@ -246,14 +246,12 @@ is divided into following sections:
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist"/>
-        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
         </ant>
-        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init, -deps-module-jar, -deps-ear-jar" name="deps-jar"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
@@ -265,85 +263,94 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="compile" name="library-inclusion-in-archive">
+        <copy file="${reference.AcaciaAnnotations.jar}" todir="${build.classes.dir}"/>
+        <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.beansbinding.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.jcs-1.3.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.commons-logging-1.1.1.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.concurrent.jar}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.19}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.18}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.17}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.16}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.15}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.14}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.13}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.12}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.11}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.10}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.9}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.8}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.7}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.6}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.5}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.4}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.3}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.2}" todir="${build.classes.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.1}" todir="${build.classes.dir}"/>
-        <copy file="${reference.AcaciaAnnotations.jar}" todir="${build.classes.dir}"/>
-        <copy file="${reference.beansbinding.jar}" todir="${build.classes.dir}"/>
-        <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.antlr-2.7.6.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.asm-attrs.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.asm.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.c3p0-0.9.1.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.cglib-2.1.3.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.commons-collections-2.1.1.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.commons-logging-1.0.4.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.concurrent-1.3.2.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.dom4j-1.6.1.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.ehcache-1.2.3.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.ejb3-persistence.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.hibernate-annotations.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.hibernate-commons-annotations.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.hibernate-entitymanager.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.hibernate-validator.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.hibernate3.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.javassist.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.jboss-archive-browsing.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.jta.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.log4j-1.2.11.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.javaee.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.swingx-2008_01_20.jar}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
+        <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
+        <copy file="${reference.AcaciaAnnotations.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.AcaciaBusinessLogic.dist}" property="included.lib.reference.AcaciaBusinessLogic.dist"/>
+        <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.beansbinding.jar}" property="included.lib.file.reference.beansbinding.jar"/>
+        <copy file="${file.reference.beansbinding.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.jcs-1.3.jar}" property="included.lib.file.reference.jcs-1.3.jar"/>
         <copy file="${file.reference.jcs-1.3.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.commons-logging-1.1.1.jar}" property="included.lib.file.reference.commons-logging-1.1.1.jar"/>
         <copy file="${file.reference.commons-logging-1.1.1.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.concurrent.jar}" property="included.lib.file.reference.concurrent.jar"/>
         <copy file="${file.reference.concurrent.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${libs.Hibernate.classpath.libfile.19}" property="included.lib.libs.Hibernate.classpath.19"/>
-        <basename file="${libs.Hibernate.classpath.libfile.18}" property="included.lib.libs.Hibernate.classpath.18"/>
-        <basename file="${libs.Hibernate.classpath.libfile.17}" property="included.lib.libs.Hibernate.classpath.17"/>
-        <basename file="${libs.Hibernate.classpath.libfile.16}" property="included.lib.libs.Hibernate.classpath.16"/>
-        <basename file="${libs.Hibernate.classpath.libfile.15}" property="included.lib.libs.Hibernate.classpath.15"/>
-        <basename file="${libs.Hibernate.classpath.libfile.14}" property="included.lib.libs.Hibernate.classpath.14"/>
-        <basename file="${libs.Hibernate.classpath.libfile.13}" property="included.lib.libs.Hibernate.classpath.13"/>
-        <basename file="${libs.Hibernate.classpath.libfile.12}" property="included.lib.libs.Hibernate.classpath.12"/>
-        <basename file="${libs.Hibernate.classpath.libfile.11}" property="included.lib.libs.Hibernate.classpath.11"/>
-        <basename file="${libs.Hibernate.classpath.libfile.10}" property="included.lib.libs.Hibernate.classpath.10"/>
-        <basename file="${libs.Hibernate.classpath.libfile.9}" property="included.lib.libs.Hibernate.classpath.9"/>
-        <basename file="${libs.Hibernate.classpath.libfile.8}" property="included.lib.libs.Hibernate.classpath.8"/>
-        <basename file="${libs.Hibernate.classpath.libfile.7}" property="included.lib.libs.Hibernate.classpath.7"/>
-        <basename file="${libs.Hibernate.classpath.libfile.6}" property="included.lib.libs.Hibernate.classpath.6"/>
-        <basename file="${libs.Hibernate.classpath.libfile.5}" property="included.lib.libs.Hibernate.classpath.5"/>
-        <basename file="${libs.Hibernate.classpath.libfile.4}" property="included.lib.libs.Hibernate.classpath.4"/>
-        <basename file="${libs.Hibernate.classpath.libfile.3}" property="included.lib.libs.Hibernate.classpath.3"/>
-        <basename file="${libs.Hibernate.classpath.libfile.2}" property="included.lib.libs.Hibernate.classpath.2"/>
-        <basename file="${libs.Hibernate.classpath.libfile.1}" property="included.lib.libs.Hibernate.classpath.1"/>
-        <copy file="${libs.Hibernate.classpath.libfile.19}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.18}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.17}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.16}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.15}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.14}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.13}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.12}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.11}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.10}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.9}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.8}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.7}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.6}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.5}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.4}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.3}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.2}" todir="${dist.ear.dir}"/>
-        <copy file="${libs.Hibernate.classpath.libfile.1}" todir="${dist.ear.dir}"/>
-        <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
-        <copy file="${reference.AcaciaAnnotations.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${reference.beansbinding.jar}" property="included.lib.reference.beansbinding.jar"/>
-        <copy file="${reference.beansbinding.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${reference.AcaciaBusinessLogic.dist}" property="included.lib.reference.AcaciaBusinessLogic.dist"/>
-        <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.antlr-2.7.6.jar}" property="included.lib.file.reference.antlr-2.7.6.jar"/>
+        <copy file="${file.reference.antlr-2.7.6.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.asm-attrs.jar}" property="included.lib.file.reference.asm-attrs.jar"/>
+        <copy file="${file.reference.asm-attrs.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.asm.jar}" property="included.lib.file.reference.asm.jar"/>
+        <copy file="${file.reference.asm.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.c3p0-0.9.1.jar}" property="included.lib.file.reference.c3p0-0.9.1.jar"/>
+        <copy file="${file.reference.c3p0-0.9.1.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.cglib-2.1.3.jar}" property="included.lib.file.reference.cglib-2.1.3.jar"/>
+        <copy file="${file.reference.cglib-2.1.3.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.commons-collections-2.1.1.jar}" property="included.lib.file.reference.commons-collections-2.1.1.jar"/>
+        <copy file="${file.reference.commons-collections-2.1.1.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.commons-logging-1.0.4.jar}" property="included.lib.file.reference.commons-logging-1.0.4.jar"/>
+        <copy file="${file.reference.commons-logging-1.0.4.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.concurrent-1.3.2.jar}" property="included.lib.file.reference.concurrent-1.3.2.jar"/>
+        <copy file="${file.reference.concurrent-1.3.2.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.dom4j-1.6.1.jar}" property="included.lib.file.reference.dom4j-1.6.1.jar"/>
+        <copy file="${file.reference.dom4j-1.6.1.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.ehcache-1.2.3.jar}" property="included.lib.file.reference.ehcache-1.2.3.jar"/>
+        <copy file="${file.reference.ehcache-1.2.3.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.ejb3-persistence.jar}" property="included.lib.file.reference.ejb3-persistence.jar"/>
+        <copy file="${file.reference.ejb3-persistence.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.hibernate-annotations.jar}" property="included.lib.file.reference.hibernate-annotations.jar"/>
+        <copy file="${file.reference.hibernate-annotations.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.hibernate-commons-annotations.jar}" property="included.lib.file.reference.hibernate-commons-annotations.jar"/>
+        <copy file="${file.reference.hibernate-commons-annotations.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.hibernate-entitymanager.jar}" property="included.lib.file.reference.hibernate-entitymanager.jar"/>
+        <copy file="${file.reference.hibernate-entitymanager.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.hibernate-validator.jar}" property="included.lib.file.reference.hibernate-validator.jar"/>
+        <copy file="${file.reference.hibernate-validator.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.hibernate3.jar}" property="included.lib.file.reference.hibernate3.jar"/>
+        <copy file="${file.reference.hibernate3.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.javassist.jar}" property="included.lib.file.reference.javassist.jar"/>
+        <copy file="${file.reference.javassist.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.jboss-archive-browsing.jar}" property="included.lib.file.reference.jboss-archive-browsing.jar"/>
+        <copy file="${file.reference.jboss-archive-browsing.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.jta.jar}" property="included.lib.file.reference.jta.jar"/>
+        <copy file="${file.reference.jta.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.log4j-1.2.11.jar}" property="included.lib.file.reference.log4j-1.2.11.jar"/>
+        <copy file="${file.reference.log4j-1.2.11.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.javaee.jar}" property="included.lib.file.reference.javaee.jar"/>
+        <copy file="${file.reference.javaee.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.swingx-2008_01_20.jar}" property="included.lib.file.reference.swingx-2008_01_20.jar"/>
+        <copy file="${file.reference.swingx-2008_01_20.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.jcs-1.3.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.concurrent.jar} ${included.lib.libs.Hibernate.classpath.1} ${included.lib.libs.Hibernate.classpath.2} ${included.lib.libs.Hibernate.classpath.3} ${included.lib.libs.Hibernate.classpath.4} ${included.lib.libs.Hibernate.classpath.5} ${included.lib.libs.Hibernate.classpath.6} ${included.lib.libs.Hibernate.classpath.7} ${included.lib.libs.Hibernate.classpath.8} ${included.lib.libs.Hibernate.classpath.9} ${included.lib.libs.Hibernate.classpath.10} ${included.lib.libs.Hibernate.classpath.11} ${included.lib.libs.Hibernate.classpath.12} ${included.lib.libs.Hibernate.classpath.13} ${included.lib.libs.Hibernate.classpath.14} ${included.lib.libs.Hibernate.classpath.15} ${included.lib.libs.Hibernate.classpath.16} ${included.lib.libs.Hibernate.classpath.17} ${included.lib.libs.Hibernate.classpath.18} ${included.lib.libs.Hibernate.classpath.19} ${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.beansbinding.jar} ${included.lib.reference.AcaciaBusinessLogic.dist} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.jcs-1.3.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.concurrent.jar} ${included.lib.file.reference.antlr-2.7.6.jar} ${included.lib.file.reference.asm-attrs.jar} ${included.lib.file.reference.asm.jar} ${included.lib.file.reference.c3p0-0.9.1.jar} ${included.lib.file.reference.cglib-2.1.3.jar} ${included.lib.file.reference.commons-collections-2.1.1.jar} ${included.lib.file.reference.commons-logging-1.0.4.jar} ${included.lib.file.reference.concurrent-1.3.2.jar} ${included.lib.file.reference.dom4j-1.6.1.jar} ${included.lib.file.reference.ehcache-1.2.3.jar} ${included.lib.file.reference.ejb3-persistence.jar} ${included.lib.file.reference.hibernate-annotations.jar} ${included.lib.file.reference.hibernate-commons-annotations.jar} ${included.lib.file.reference.hibernate-entitymanager.jar} ${included.lib.file.reference.hibernate-validator.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.javassist.jar} ${included.lib.file.reference.jboss-archive-browsing.jar} ${included.lib.file.reference.jta.jar} ${included.lib.file.reference.log4j-1.2.11.jar} ${included.lib.file.reference.javaee.jar} ${included.lib.file.reference.swingx-2008_01_20.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -613,7 +620,6 @@ is divided into following sections:
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>

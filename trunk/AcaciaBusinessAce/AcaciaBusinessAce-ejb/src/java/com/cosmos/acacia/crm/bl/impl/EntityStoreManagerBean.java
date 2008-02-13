@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
 import java.util.Map;
@@ -143,7 +143,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         EntityProperties entityProperties = entityPropertiesMap.get(entityClassName);
         if(entityProperties == null)
         {
-            entityProperties = new EntityProperties(Product.class);
+            entityProperties = BeansBindingHelper.createEntityProperties(entityClass);
             entityPropertiesMap.put(entityClassName, entityProperties);
         }
 
