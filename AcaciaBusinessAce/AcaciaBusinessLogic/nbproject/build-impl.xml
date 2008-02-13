@@ -245,11 +245,9 @@ is divided into following sections:
             -->
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init, -deps-module-jar, -deps-ear-jar" name="deps-jar"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
@@ -262,15 +260,15 @@ is divided into following sections:
     </target>
     <target depends="compile" name="library-inclusion-in-archive">
         <copy file="${reference.AcaciaAnnotations.jar}" todir="${build.classes.dir}"/>
-        <copy file="${reference.beansbinding.jar}" todir="${build.classes.dir}"/>
+        <copy file="${file.reference.beansbinding.jar}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
         <copy file="${reference.AcaciaAnnotations.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${reference.beansbinding.jar}" property="included.lib.reference.beansbinding.jar"/>
-        <copy file="${reference.beansbinding.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.beansbinding.jar}" property="included.lib.file.reference.beansbinding.jar"/>
+        <copy file="${file.reference.beansbinding.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.beansbinding.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.file.reference.beansbinding.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -539,7 +537,6 @@ is divided into following sections:
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.beansbinding}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>

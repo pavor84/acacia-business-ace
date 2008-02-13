@@ -55,7 +55,8 @@ public class BeansBinding {
     {
         for(PropertyDetails property : properties)
         {
-            createColumnBinding(tableBinding, property);
+            if(!property.isHiden())
+                createColumnBinding(tableBinding, property);
         }
     }
 
