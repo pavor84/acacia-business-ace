@@ -289,8 +289,6 @@ is divided into following sections:
         <copy file="${file.reference.jboss-archive-browsing.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.jta.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.log4j-1.2.11.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.javaee.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.swingx-2008_01_20.jar}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
@@ -345,12 +343,8 @@ is divided into following sections:
         <copy file="${file.reference.jta.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.log4j-1.2.11.jar}" property="included.lib.file.reference.log4j-1.2.11.jar"/>
         <copy file="${file.reference.log4j-1.2.11.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.javaee.jar}" property="included.lib.file.reference.javaee.jar"/>
-        <copy file="${file.reference.javaee.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.swingx-2008_01_20.jar}" property="included.lib.file.reference.swingx-2008_01_20.jar"/>
-        <copy file="${file.reference.swingx-2008_01_20.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.jcs-1.3.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.concurrent.jar} ${included.lib.file.reference.antlr-2.7.6.jar} ${included.lib.file.reference.asm-attrs.jar} ${included.lib.file.reference.asm.jar} ${included.lib.file.reference.c3p0-0.9.1.jar} ${included.lib.file.reference.cglib-2.1.3.jar} ${included.lib.file.reference.commons-collections-2.1.1.jar} ${included.lib.file.reference.commons-logging-1.0.4.jar} ${included.lib.file.reference.concurrent-1.3.2.jar} ${included.lib.file.reference.dom4j-1.6.1.jar} ${included.lib.file.reference.ehcache-1.2.3.jar} ${included.lib.file.reference.ejb3-persistence.jar} ${included.lib.file.reference.hibernate-annotations.jar} ${included.lib.file.reference.hibernate-commons-annotations.jar} ${included.lib.file.reference.hibernate-entitymanager.jar} ${included.lib.file.reference.hibernate-validator.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.javassist.jar} ${included.lib.file.reference.jboss-archive-browsing.jar} ${included.lib.file.reference.jta.jar} ${included.lib.file.reference.log4j-1.2.11.jar} ${included.lib.file.reference.javaee.jar} ${included.lib.file.reference.swingx-2008_01_20.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.jcs-1.3.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.concurrent.jar} ${included.lib.file.reference.antlr-2.7.6.jar} ${included.lib.file.reference.asm-attrs.jar} ${included.lib.file.reference.asm.jar} ${included.lib.file.reference.c3p0-0.9.1.jar} ${included.lib.file.reference.cglib-2.1.3.jar} ${included.lib.file.reference.commons-collections-2.1.1.jar} ${included.lib.file.reference.commons-logging-1.0.4.jar} ${included.lib.file.reference.concurrent-1.3.2.jar} ${included.lib.file.reference.dom4j-1.6.1.jar} ${included.lib.file.reference.ehcache-1.2.3.jar} ${included.lib.file.reference.ejb3-persistence.jar} ${included.lib.file.reference.hibernate-annotations.jar} ${included.lib.file.reference.hibernate-commons-annotations.jar} ${included.lib.file.reference.hibernate-entitymanager.jar} ${included.lib.file.reference.hibernate-validator.jar} ${included.lib.file.reference.hibernate3.jar} ${included.lib.file.reference.javassist.jar} ${included.lib.file.reference.jboss-archive-browsing.jar} ${included.lib.file.reference.jta.jar} ${included.lib.file.reference.log4j-1.2.11.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
