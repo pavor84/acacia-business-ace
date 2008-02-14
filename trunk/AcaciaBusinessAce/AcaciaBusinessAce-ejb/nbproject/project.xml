@@ -31,6 +31,10 @@
             <included-library files="1">file.reference.jboss-archive-browsing.jar</included-library>
             <included-library files="1">file.reference.jta.jar</included-library>
             <included-library files="1">file.reference.log4j-1.2.11.jar</included-library>
+            <included-library files="1">file.reference.swing-worker-1.1.jar</included-library>
+            <included-library files="1">file.reference.javaee.jar</included-library>
+            <included-library files="1">file.reference.swingx-2008_01_20.jar</included-library>
+            <included-library files="1">file.reference.appframework-1.0.3.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
