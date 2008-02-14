@@ -31,6 +31,11 @@ import javax.persistence.Table;
             (
                 name = "Product.findByParentDataObjectAndDeleted",
                 query = "select p from Product p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "Product.findByParentDataObjectIsNullAndDeleted",
+                query = "select p from Product p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
             )
     })
 public class Product
