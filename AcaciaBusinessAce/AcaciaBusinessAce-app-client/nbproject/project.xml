@@ -14,12 +14,12 @@
             <included-library files="1">reference.AcaciaBusinessAce-ejb.dist</included-library>
             <included-library files="1">reference.AcaciaBusinessLogic.dist</included-library>
             <included-library files="1">reference.AcaciaAnnotations.jar</included-library>
+            <included-library files="1">file.reference.swingx-2008_01_20.jar</included-library>
+            <included-library files="1">file.reference.swing-worker-1.1.jar</included-library>
             <included-library files="1">reference.SwingB.jar</included-library>
             <included-library files="1">file.reference.beansbinding.jar</included-library>
-            <included-library files="1">file.reference.swingx-2008_01_20.jar</included-library>
-            <included-library files="1">libs.junit_4.classpath</included-library>
             <included-library files="1">file.reference.appframework-1.0.3.jar</included-library>
-            <included-library files="1">file.reference.swing-worker-1.1.jar</included-library>
+            <included-library files="1">libs.junit_4.classpath</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>

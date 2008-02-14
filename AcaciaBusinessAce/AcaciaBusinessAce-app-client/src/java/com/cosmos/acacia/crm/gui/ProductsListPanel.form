@@ -18,12 +18,9 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="productsListScrollPane" alignment="0" pref="470" max="32767" attributes="0"/>
-                  <Component id="myTestLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="jBTabbedPane1" pref="512" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -32,45 +29,184 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="productsListScrollPane" min="-2" pref="272" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="myTestLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="102" max="32767" attributes="0"/>
+              <Component id="jBTabbedPane1" pref="427" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JScrollPane" name="productsListScrollPane">
+    <Container class="com.cosmos.swingb.JBTabbedPane" name="jBTabbedPane1">
       <Properties>
-        <Property name="name" type="java.lang.String" value="productsListScrollPane" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="jBTabbedPane1" noResource="true"/>
       </Properties>
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
-        <Component class="com.cosmos.swingb.JBTable" name="productsListTable">
+        <Container class="com.cosmos.swingb.JBPanel" name="jBPanel1">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
-                <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                <Column editable="true" title="Title 4" type="java.lang.Object"/>
-              </Table>
-            </Property>
-            <Property name="name" type="java.lang.String" value="productsListTable" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="jBPanel1" noResource="true"/>
           </Properties>
-        </Component>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Products">
+                <Property name="tabTitle" type="java.lang.String" resourceKey="jBPanel1.TabConstraints.tabTitle"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="productsListScrollPane" alignment="0" pref="487" max="32767" attributes="0"/>
+                          <Component id="productButtonsPanel" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="productsListScrollPane" pref="314" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="productButtonsPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="javax.swing.JScrollPane" name="productsListScrollPane">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="productsListScrollPane" noResource="true"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="com.cosmos.swingb.JBTable" name="productsTable">
+                  <Properties>
+                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                      <TableColumnModel selectionModel="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="productsTable" noResource="true"/>
+                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="com.cosmos.swingb.JBPanel" name="productButtonsPanel">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="productButtonsPanel" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace pref="139" max="32767" attributes="0"/>
+                          <Component id="newProductButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="modifyProductButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="deleteProductButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="refreshProductsButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="refreshProductsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="deleteProductButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="modifyProductButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="newProductButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="com.cosmos.swingb.JBButton" name="refreshProductsButton">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="com.cosmos.acacia.crm.gui.ProductsListPanel" id="refreshProductsAction" methodName="refreshProductsAction"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="refreshProductsButton.text"/>
+                    <Property name="name" type="java.lang.String" value="refreshProductsButton" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBButton" name="deleteProductButton">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="com.cosmos.acacia.crm.gui.ProductsListPanel" id="deleteProductAction" methodName="deleteProductAction"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="deleteProductButton.text"/>
+                    <Property name="name" type="java.lang.String" value="deleteProductButton" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBButton" name="modifyProductButton">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="com.cosmos.acacia.crm.gui.ProductsListPanel" id="modifyProductAction" methodName="modifyProductAction"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="modifyProductButton.text"/>
+                    <Property name="name" type="java.lang.String" value="modifyProductButton" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBButton" name="newProductButton">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="com.cosmos.acacia.crm.gui.ProductsListPanel" id="newProductAction" methodName="newProductAction"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="newProductButton.text"/>
+                    <Property name="name" type="java.lang.String" value="newProductButton" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
+        <Container class="com.cosmos.swingb.JBPanel" name="jBPanel2">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jBPanel2" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Options/Filters">
+                <Property name="tabTitle" type="java.lang.String" resourceKey="jBPanel2.TabConstraints.tabTitle"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="507" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="399" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+        </Container>
       </SubComponents>
     </Container>
-    <Component class="com.cosmos.swingb.JBLabel" name="myTestLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="myTestLabel.text"/>
-        <Property name="name" type="java.lang.String" value="myTestLabel" noResource="true"/>
-      </Properties>
-    </Component>
   </SubComponents>
 </Form>

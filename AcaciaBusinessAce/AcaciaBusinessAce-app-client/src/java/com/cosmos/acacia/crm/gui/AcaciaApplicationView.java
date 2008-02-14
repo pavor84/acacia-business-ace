@@ -194,6 +194,8 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void productsListAction() {
         System.out.println("productsListAction");
+        ProductsListPanel productsListPanel = new ProductsListPanel(null);
+        productsListPanel.showFrame();
     }
     /*@Action(name="productsList")
     private void productsListAction()

@@ -8,7 +8,6 @@ package com.cosmos.acacia.crm.gui;
 import com.cosmos.acacia.crm.gui.test.HelloWorldFrame;
 import com.cosmos.test.bl.DataObjectTest;
 import java.awt.EventQueue;
-import java.rmi.RMISecurityManager;
 import java.util.Date;
 import org.junit.runner.JUnitCore;
 
@@ -68,11 +67,11 @@ public class Main {
 
         //mainTest();
 
-        EventQueue.invokeLater(new Runnable() {
+        /*EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new HelloWorldFrame().setVisible(true);
             }
-        });
+        });*/
 
         AcaciaApplication.launch(AcaciaApplication.class, args);
 
