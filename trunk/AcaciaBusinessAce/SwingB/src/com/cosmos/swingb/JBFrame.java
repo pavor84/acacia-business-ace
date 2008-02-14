@@ -14,5 +14,16 @@ import org.jdesktop.swingx.JXFrame;
 public class JBFrame
     extends JXFrame
 {
+    public JBFrame() {
+    }
 
+    public JBFrame(String title) {
+        super(title);
+    }
+
+    public JBFrame(String title, boolean exitOnClose) {
+        super(title, exitOnClose);
+    }
+
+    
 }
