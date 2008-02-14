@@ -97,9 +97,10 @@ public class HelloWorldFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         bindingGroup1 = new org.jdesktop.beansbinding.BindingGroup();
+        jTableAdapterProvider1 = new org.jdesktop.swingbinding.adapters.JTableAdapterProvider();
         productIdLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        productsTable = new JBTable();
+        productsTable = new javax.swing.JTable();
         productIdTextField = new javax.swing.JTextField();
         productNameTextField = new javax.swing.JTextField();
         productNameLabel = new javax.swing.JLabel();
@@ -241,13 +242,14 @@ public class HelloWorldFrame extends javax.swing.JFrame {
     private javax.swing.JButton deleteButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingbinding.adapters.JTableAdapterProvider jTableAdapterProvider1;
     private javax.swing.JButton newButton;
     private javax.swing.JTextField patternIdTextField;
     private javax.swing.JLabel productIdLabel;
     private javax.swing.JTextField productIdTextField;
     private javax.swing.JLabel productNameLabel;
     private javax.swing.JTextField productNameTextField;
-    private JBTable productsTable;
+    private javax.swing.JTable productsTable;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
