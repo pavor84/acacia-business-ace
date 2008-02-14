@@ -15,5 +15,4 @@ import javax.ejb.Local;
 public interface ProductsListLocal
     extends ProductsListRemote
 {
-
 }

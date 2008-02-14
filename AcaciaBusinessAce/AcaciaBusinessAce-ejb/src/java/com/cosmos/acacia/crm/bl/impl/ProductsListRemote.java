@@ -5,8 +5,9 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -17,6 +18,12 @@ import javax.ejb.Remote;
 @Remote
 public interface ProductsListRemote {
 
-    List<Product> getProducts(DataObjectBean parent);
+    List<Product> getProducts(DataObject parent);
+
+    EntityProperties getProductEntityProperties();
+
+    Product newProduct();
+
+    Product saveProduct(Product product);
     
 }
