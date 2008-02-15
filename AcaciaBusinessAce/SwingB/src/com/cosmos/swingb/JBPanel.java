@@ -6,9 +6,15 @@
 package com.cosmos.swingb;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.swingx.JXPanel;
@@ -21,9 +27,12 @@ public class JBPanel
     extends JXPanel
 {
     private Application application;
+    private ApplicationContext applicationContext;
+    private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
     private String title;
     private boolean resizable = true;
+    private Container mainContainer;
 
 
     public JBPanel()
@@ -72,7 +81,31 @@ public class JBPanel
                 JBPanel.this.windowClosed(event);
             }
         });
+        mainContainer = frame;
         frame.setVisible(true);
+    }
+
+    public void showDialog(Component parentComponent)
+    {
+        JOptionPane.showInternalMessageDialog(
+                parentComponent,
+                "Information message",
+                "Information Titme",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    public void close()
+    {
+        Container mainContainer = getMainContainer();
+        if(mainContainer != null)
+        {
+            mainContainer.setVisible(false);
+            if(mainContainer instanceof Window)
+                ((Window)mainContainer).dispose();
+            else if(mainContainer instanceof JInternalFrame)
+                ((JInternalFrame)mainContainer).dispose();
+        }
     }
 
     public String getTitle()
@@ -93,14 +126,42 @@ public class JBPanel
         this.title = title;
     }
 
-    public ResourceMap getResourceMap()
+    public ApplicationContext getContext()
     {
-        if(resourceMap == null)
+        if(applicationContext == null)
         {
             Application app = getApplication();
             if(app != null)
             {
-                resourceMap = app.getContext().getResourceMap(this.getClass());
+                applicationContext = app.getContext();
+            }
+        }
+
+        return applicationContext;
+    }
+
+    public ApplicationActionMap getApplicationActionMap()
+    {
+        if(applicationActionMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                applicationActionMap = context.getActionMap(this);
+            }
+        }
+
+        return applicationActionMap;
+    }
+
+    public ResourceMap getResourceMap()
+    {
+        if(resourceMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                resourceMap = context.getResourceMap(this.getClass());
             }
         }
 
@@ -119,6 +180,8 @@ public class JBPanel
         this.application = application;
     }
 
+    
+
     public boolean isResizable() {
         return resizable;
     }
@@ -127,8 +190,14 @@ public class JBPanel
         this.resizable = resizable;
     }
 
+    public Container getMainContainer() {
+        return mainContainer;
+    }
+
+
     public void windowClosed(WindowEvent event)
     {
+        mainContainer = null;
     }
 
 

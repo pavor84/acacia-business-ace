@@ -5,14 +5,15 @@
 
 package com.cosmos.swingb;
 
-import org.jdesktop.swingx.JXButton;
+import javax.swing.JButton;
 
 /**
  *
  * @author Miro
  */
 public class JBButton
-    extends JXButton
+    //extends JXButton
+    extends JButton
 {
 
 }
