@@ -476,7 +476,8 @@ public class Product
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getName()).append("[productId=");
-        sb.append(productId).append("]");
+        sb.append(productId);
+        sb.append(", productName=").append(productName).append("]");
         DataObject dataObject = getDataObject();
         if(dataObject != null)
             sb.append(":v.").append(getDataObject().getDataObjectVersion());
