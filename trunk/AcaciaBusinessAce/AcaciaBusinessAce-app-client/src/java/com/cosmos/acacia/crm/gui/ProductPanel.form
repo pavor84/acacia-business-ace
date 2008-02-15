@@ -59,7 +59,7 @@
                   <Component id="productCategoryComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="335" max="32767" attributes="0"/>
+              <EmptySpace pref="333" max="32767" attributes="0"/>
               <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -117,10 +117,10 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="347" max="32767" attributes="0"/>
+                  <EmptySpace pref="319" max="32767" attributes="0"/>
                   <Component id="saveButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="cancelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="closelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -130,8 +130,8 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="saveButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="closelButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="saveButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -139,13 +139,12 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.cosmos.swingb.JBButton" name="cancelButton">
+        <Component class="com.cosmos.swingb.JBButton" name="closelButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="cancelAction" methodName="cancelAction"/>
+              <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="closeAction" methodName="closeAction"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="cancelButton.text"/>
-            <Property name="name" type="java.lang.String" value="cancelButton" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="closelButton" noResource="true"/>
           </Properties>
         </Component>
         <Component class="com.cosmos.swingb.JBButton" name="saveButton">

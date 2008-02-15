@@ -10,8 +10,11 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import java.awt.Container;
+import java.awt.Window;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.swing.JInternalFrame;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -59,7 +62,7 @@ public class ProductPanel extends AcaciaPanel {
         productCategoryComboBox = new com.cosmos.swingb.JBComboBox();
         productCategoryLabel = new com.cosmos.swingb.JBLabel();
         buttonPanel = new com.cosmos.swingb.JBPanel();
-        cancelButton = new com.cosmos.swingb.JBButton();
+        closelButton = new com.cosmos.swingb.JBButton();
         saveButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
@@ -84,9 +87,8 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanel.setName("buttonPanel"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(ProductPanel.class, this);
-        cancelButton.setAction(actionMap.get("cancelAction")); // NOI18N
-        cancelButton.setText(resourceMap.getString("cancelButton.text")); // NOI18N
-        cancelButton.setName("cancelButton"); // NOI18N
+        closelButton.setAction(actionMap.get("closeAction")); // NOI18N
+        closelButton.setName("closelButton"); // NOI18N
 
         saveButton.setAction(actionMap.get("saveAction")); // NOI18N
         saveButton.setName("saveButton"); // NOI18N
@@ -96,24 +98,26 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(347, Short.MAX_VALUE)
+                .addContainerGap(319, Short.MAX_VALUE)
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(closelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, saveButton});
+        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closelButton, saveButton});
 
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(closelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        buttonPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closelButton, saveButton});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -151,7 +155,7 @@ public class ProductPanel extends AcaciaPanel {
                     .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 335, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 333, Short.MAX_VALUE)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -160,7 +164,7 @@ public class ProductPanel extends AcaciaPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonPanel;
-    private com.cosmos.swingb.JBButton cancelButton;
+    private com.cosmos.swingb.JBButton closelButton;
     private com.cosmos.swingb.JBComboBox productCategoryComboBox;
     private com.cosmos.swingb.JBLabel productCategoryLabel;
     private com.cosmos.swingb.JBLabel productCodeLabel;
@@ -218,9 +222,9 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     @Action
-    public void cancelAction() {
-        System.out.println("cancelAction");
-        
+    public void closeAction() {
+        System.out.println("closeAction");
+        close();
     }
 
 }

@@ -10,16 +10,16 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.beansbinding.BeansBinding;
+import com.cosmos.acacia.gui.CRUDButtonActionsListener;
+import com.cosmos.acacia.gui.CRUDButtonPanel;
+import com.cosmos.acacia.security.GUIAccessControl;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.swingbinding.JTableBinding;
 
 /**
@@ -43,115 +43,64 @@ public class ProductsListPanel extends AcaciaPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jBTabbedPane1 = new com.cosmos.swingb.JBTabbedPane();
-        jBPanel1 = new com.cosmos.swingb.JBPanel();
+        productsTabbedPane = new com.cosmos.swingb.JBTabbedPane();
+        productsTabPanel = new com.cosmos.swingb.JBPanel();
         productsListScrollPane = new javax.swing.JScrollPane();
-        productsTable = new com.cosmos.swingb.JBTable();
-        productButtonsPanel = new com.cosmos.swingb.JBPanel();
-        refreshProductsButton = new com.cosmos.swingb.JBButton();
-        deleteProductButton = new com.cosmos.swingb.JBButton();
-        modifyProductButton = new com.cosmos.swingb.JBButton();
-        newProductButton = new com.cosmos.swingb.JBButton();
-        jBPanel2 = new com.cosmos.swingb.JBPanel();
+        productsTable = new com.cosmos.acacia.gui.AcaciaTable();
+        buttonsPanel = new com.cosmos.acacia.gui.CRUDButtonPanel();
+        optionsTabPanel = new com.cosmos.swingb.JBPanel();
 
         setName("ProductsListPanel"); // NOI18N
 
-        jBTabbedPane1.setName("jBTabbedPane1"); // NOI18N
+        productsTabbedPane.setName("productsTabbedPane"); // NOI18N
 
-        jBPanel1.setName("jBPanel1"); // NOI18N
+        productsTabPanel.setName("productsTabPanel"); // NOI18N
 
         productsListScrollPane.setName("productsListScrollPane"); // NOI18N
 
         productsTable.setName("productsTable"); // NOI18N
         productsListScrollPane.setViewportView(productsTable);
 
-        productButtonsPanel.setName("productButtonsPanel"); // NOI18N
+        buttonsPanel.setName("buttonsPanel"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(ProductsListPanel.class, this);
-        refreshProductsButton.setAction(actionMap.get("refreshProductsAction")); // NOI18N
+        javax.swing.GroupLayout productsTabPanelLayout = new javax.swing.GroupLayout(productsTabPanel);
+        productsTabPanel.setLayout(productsTabPanelLayout);
+        productsTabPanelLayout.setHorizontalGroup(
+            productsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(productsTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(productsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(productsListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                    .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        productsTabPanelLayout.setVerticalGroup(
+            productsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productsTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(productsListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductsListPanel.class);
-        refreshProductsButton.setText(resourceMap.getString("refreshProductsButton.text")); // NOI18N
-        refreshProductsButton.setName("refreshProductsButton"); // NOI18N
+        productsTabbedPane.addTab(resourceMap.getString("productsTabPanel.TabConstraints.tabTitle"), productsTabPanel); // NOI18N
 
-        deleteProductButton.setAction(actionMap.get("deleteProductAction")); // NOI18N
-        deleteProductButton.setText(resourceMap.getString("deleteProductButton.text")); // NOI18N
-        deleteProductButton.setName("deleteProductButton"); // NOI18N
+        optionsTabPanel.setName("optionsTabPanel"); // NOI18N
 
-        modifyProductButton.setAction(actionMap.get("modifyProductAction")); // NOI18N
-        modifyProductButton.setText(resourceMap.getString("modifyProductButton.text")); // NOI18N
-        modifyProductButton.setName("modifyProductButton"); // NOI18N
-
-        newProductButton.setAction(actionMap.get("newProductAction")); // NOI18N
-        newProductButton.setText(resourceMap.getString("newProductButton.text")); // NOI18N
-        newProductButton.setName("newProductButton"); // NOI18N
-
-        javax.swing.GroupLayout productButtonsPanelLayout = new javax.swing.GroupLayout(productButtonsPanel);
-        productButtonsPanel.setLayout(productButtonsPanelLayout);
-        productButtonsPanelLayout.setHorizontalGroup(
-            productButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productButtonsPanelLayout.createSequentialGroup()
-                .addContainerGap(139, Short.MAX_VALUE)
-                .addComponent(newProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(modifyProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(deleteProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(refreshProductsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+        javax.swing.GroupLayout optionsTabPanelLayout = new javax.swing.GroupLayout(optionsTabPanel);
+        optionsTabPanel.setLayout(optionsTabPanelLayout);
+        optionsTabPanelLayout.setHorizontalGroup(
+            optionsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 588, Short.MAX_VALUE)
+        );
+        optionsTabPanelLayout.setVerticalGroup(
+            optionsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 415, Short.MAX_VALUE)
         );
 
-        productButtonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {deleteProductButton, modifyProductButton, newProductButton, refreshProductsButton});
-
-        productButtonsPanelLayout.setVerticalGroup(
-            productButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productButtonsPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(productButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(refreshProductsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(modifyProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
-        jBPanel1.setLayout(jBPanel1Layout);
-        jBPanel1Layout.setHorizontalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(productsListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
-                    .addComponent(productButtonsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jBPanel1Layout.setVerticalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(productsListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(productButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jBTabbedPane1.addTab(resourceMap.getString("jBPanel1.TabConstraints.tabTitle"), jBPanel1); // NOI18N
-
-        jBPanel2.setName("jBPanel2"); // NOI18N
-
-        javax.swing.GroupLayout jBPanel2Layout = new javax.swing.GroupLayout(jBPanel2);
-        jBPanel2.setLayout(jBPanel2Layout);
-        jBPanel2Layout.setHorizontalGroup(
-            jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 507, Short.MAX_VALUE)
-        );
-        jBPanel2Layout.setVerticalGroup(
-            jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
-        );
-
-        jBTabbedPane1.addTab(resourceMap.getString("jBPanel2.TabConstraints.tabTitle"), jBPanel2); // NOI18N
+        productsTabbedPane.addTab(resourceMap.getString("optionsTabPanel.TabConstraints.tabTitle"), optionsTabPanel); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -159,30 +108,26 @@ public class ProductsListPanel extends AcaciaPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                .addComponent(productsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                .addComponent(productsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBButton deleteProductButton;
-    private com.cosmos.swingb.JBPanel jBPanel1;
-    private com.cosmos.swingb.JBPanel jBPanel2;
-    private com.cosmos.swingb.JBTabbedPane jBTabbedPane1;
-    private com.cosmos.swingb.JBButton modifyProductButton;
-    private com.cosmos.swingb.JBButton newProductButton;
-    private com.cosmos.swingb.JBPanel productButtonsPanel;
+    private com.cosmos.acacia.gui.CRUDButtonPanel buttonsPanel;
+    private com.cosmos.swingb.JBPanel optionsTabPanel;
     private javax.swing.JScrollPane productsListScrollPane;
-    private com.cosmos.swingb.JBTable productsTable;
-    private com.cosmos.swingb.JBButton refreshProductsButton;
+    private com.cosmos.swingb.JBPanel productsTabPanel;
+    private com.cosmos.swingb.JBTabbedPane productsTabbedPane;
+    private com.cosmos.acacia.gui.AcaciaTable productsTable;
     // End of variables declaration//GEN-END:variables
 
     @EJB
@@ -191,9 +136,19 @@ public class ProductsListPanel extends AcaciaPanel {
     private BindingGroup productsBindingGroup;
     private JTableBinding productsTableBinding;
     private List<Product> products;
+    private ProductsAccessControl accessControl;
+    private ProductsButtonActionsListener buttonActionsListener;
 
     protected void initData()
     {
+        accessControl = new ProductsAccessControl();
+        buttonsPanel.setAccessControl(accessControl);
+        buttonActionsListener = new ProductsButtonActionsListener();
+        buttonsPanel.setButtonActionsListener(buttonActionsListener);
+        
+        buttonsPanel.setEnabled(CRUDButtonPanel.Button.Modify, false);
+        buttonsPanel.setEnabled(CRUDButtonPanel.Button.Delete, false);
+
         JTableBinding tableBinding = getProductsTableBinding();
 
         BindingGroup bindingGroup = getProductsBindingGroup();
@@ -212,6 +167,8 @@ public class ProductsListPanel extends AcaciaPanel {
         bindingGroup.addBinding(binding);*/
 
         bindingGroup.bind();
+
+        buttonsPanel.addListSelectionListener(productsTable);
     }
 
     protected BindingGroup getProductsBindingGroup()
@@ -228,9 +185,12 @@ public class ProductsListPanel extends AcaciaPanel {
     {
         if(productsTableBinding == null)
         {
-            List list = ObservableCollections.observableList(getProducts());
-            EntityProperties entityProps = getProductEntityProperties();
-            productsTableBinding = BeansBinding.createTableBinding(productsTable, list, entityProps);
+            productsTable.setData(getProducts());
+            productsTable.setEntityProperties(getProductEntityProperties());
+            productsTableBinding = productsTable.getTableBinding();
+//            List list = ObservableCollections.observableList(getProducts());
+//            EntityProperties entityProps = getProductEntityProperties();
+//            productsTableBinding = BeansBinding.createTableBinding(productsTable, list, entityProps);
         }
 
         return productsTableBinding;
@@ -268,39 +228,23 @@ public class ProductsListPanel extends AcaciaPanel {
         return formSession;
     }
 
-    @Action
-    public void newProductAction() {
-        System.out.println("newProductAction");
-        ProductPanel productPanel = new ProductPanel(getParentDataObject());
-        productPanel.showFrame();
-    }
-
-    @Action
-    public void modifyProductAction() {
-        System.out.println("modifyProductAction");
-        int selectedRow = productsTable.getSelectedRow();
-        if(selectedRow < 0)
-            return;
-
-        List<Product> products = getProducts();
-        if(products == null || products.size() == 0)
-            return;
-
-        Product product = products.get(productsTable.convertRowIndexToModel(selectedRow));
-        System.out.println("Modify product: " + product);
-        ProductPanel productPanel = new ProductPanel(product);
-        productPanel.showFrame();
-    }
-
-    @Action
-    public void deleteProductAction() {
-        System.out.println("deleteProductAction");
-    }
-
-    @Action
-    public Task refreshProductsAction() {
-        System.out.println("refreshProductsAction");
-        return new RefreshTask(getApplication());
+    private class RefreshProductsActionTask extends org.jdesktop.application.Task<Object, Void> {
+        RefreshProductsActionTask(org.jdesktop.application.Application app) {
+            // Runs on the EDT.  Copy GUI state that
+            // doInBackground() depends on from parameters
+            // to RefreshProductsActionTask fields, here.
+            super(app);
+        }
+        @Override protected Object doInBackground() {
+            // Your Task's code here.  This method runs
+            // on a background thread, so don't reference
+            // the Swing GUI from here.
+            return null;  // return your result
+        }
+        @Override protected void succeeded(Object result) {
+            // Runs on the EDT.  Update the GUI based on
+            // the result computed by doInBackground().
+        }
     }
 
     private class RefreshTask
@@ -341,6 +285,67 @@ public class ProductsListPanel extends AcaciaPanel {
         @Override protected void finished() {
             setMessage("Done.");
             //setSaveNeeded(false);
+        }
+    }
+
+
+
+    private class ProductsAccessControl
+        extends GUIAccessControl
+    {
+
+        @Override
+        public boolean canCreate(DataObject parentDataObject) {
+            System.out.println("canCreate: " + parentDataObject);
+            return true;
+        }
+
+        @Override
+        public boolean canModify(DataObject dataObject) {
+            System.out.println("canModify: " + dataObject);
+            return true;
+        }
+
+        @Override
+        public boolean canDelete(DataObject dataObject) {
+            System.out.println("canDelete: " + dataObject);
+            return true;
+        }
+    }
+
+    private class ProductsButtonActionsListener
+        implements CRUDButtonActionsListener
+    {
+
+        public void closeAction() {
+            System.out.println("closeAction");
+            ProductsListPanel.this.close();
+        }
+
+        public void refreshAction() {
+            System.out.println("refreshProductsAction");
+            new RefreshTask(ProductsListPanel.this.getApplication());
+        }
+
+        public void deleteAction() {
+            System.out.println("deleteProductAction");
+        }
+
+        public void modifyAction() {
+            System.out.println("modifyProductAction");
+            Product product = (Product)productsTable.getSelectedRowObject();
+            if(product != null)
+            {
+                System.out.println("Modify product: " + product);
+                ProductPanel productPanel = new ProductPanel(product);
+                productPanel.showFrame();
+            }
+        }
+
+        public void newAction() {
+            System.out.println("newProductAction");
+            ProductPanel productPanel = new ProductPanel(getParentDataObject());
+            productPanel.showFrame();
         }
     }
 }
