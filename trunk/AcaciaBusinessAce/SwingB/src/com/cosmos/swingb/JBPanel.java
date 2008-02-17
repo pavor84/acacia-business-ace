@@ -5,13 +5,18 @@
 
 package com.cosmos.swingb;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -33,7 +38,10 @@ public class JBPanel
     private String title;
     private boolean resizable = true;
     private Container mainContainer;
-
+    private Object selectedValue;
+    private Object[] selectedValues;
+    private DialogResponse response;
+    private Dialog.ModalityType modalityType = Dialog.ModalityType.APPLICATION_MODAL;
 
     public JBPanel()
     {
@@ -51,17 +59,22 @@ public class JBPanel
         this.application = application;
     }
 
-    public void showFrame()
+    protected JFrame getMainFrame()
     {
-        Component parentComponent = null;
+        JFrame mainFrame = null;
         Application app = getApplication();
         if(app != null)
         {
             if(app instanceof SingleFrameApplication)
-                parentComponent = ((SingleFrameApplication)app).getMainFrame();
+                mainFrame = ((SingleFrameApplication)app).getMainFrame();
         }
 
-        showFrame(parentComponent);
+        return mainFrame;
+    }
+
+    public void showFrame()
+    {
+        showFrame(getMainFrame());
     }
 
     public void showFrame(Component parentComponent)
@@ -85,15 +98,86 @@ public class JBPanel
         frame.setVisible(true);
     }
 
-    public void showDialog(Component parentComponent)
+    public DialogResponse showDialog()
     {
-        JOptionPane.showInternalMessageDialog(
-                parentComponent,
-                "Information message",
-                "Information Titme",
-                JOptionPane.INFORMATION_MESSAGE);
+        return showDialog(getMainFrame());
     }
 
+    public DialogResponse showDialog(Component parentComponent)
+    {
+        selectedValue = null;
+        selectedValues = null;
+        response = null;
+
+        Window window = null;
+        if(parentComponent != null)
+            window = SwingUtilities.getWindowAncestor(parentComponent);
+        JBDialog dialog = new JBDialog(window, getTitle());
+        mainContainer = dialog;
+
+        Container contentPane = dialog.getContentPane();
+        contentPane.removeAll();
+        contentPane.add(this, BorderLayout.CENTER);
+
+        Dialog.ModalityType modalityType = getModalityType();
+        if(modalityType != null)
+        {
+            dialog.setModalityType(modalityType);
+        }
+
+        dialog.pack();
+        dialog.setMinimumSize(dialog.getPreferredSize());
+        dialog.setMaximumSize(getMaximumSize());
+        dialog.setLocationRelativeTo(parentComponent);
+        dialog.setResizable(isResizable());
+
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new DialogWindowAdapter());
+
+        dialog.setVisible(true);
+        dialog.dispose();
+        dialog = null;
+
+        if(response == null)
+            response = DialogResponse.CLOSE;
+
+        return response;
+    }
+
+    protected DialogResponse getDialogResponse()
+    {
+        return response;
+    }
+
+    protected void setDialogResponse(DialogResponse response)
+    {
+        this.response = response;
+    }
+
+    public Object getSelectedValue()
+    {
+        return selectedValue;
+    }
+
+    protected void setSelectedValue(Object selectedValue)
+    {
+        this.selectedValue = selectedValue;
+    }
+
+    public Object[] getSelectedValues()
+    {
+        return selectedValues;
+    }
+
+    protected void setSelectedValues(Object[] selectedValues)
+    {
+        if(selectedValues != null && selectedValues.length > 0)
+        {
+            this.selectedValues = selectedValues.clone();
+        }
+        else
+            this.selectedValues = selectedValues;
+    }
 
     public void close()
     {
@@ -124,6 +208,16 @@ public class JBPanel
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Dialog.ModalityType getModalityType()
+    {
+        return modalityType;
+    }
+
+    public void setModalityType(Dialog.ModalityType modalityType)
+    {
+        this.modalityType = modalityType;
     }
 
     public ApplicationContext getContext()
@@ -200,75 +294,18 @@ public class JBPanel
         mainContainer = null;
     }
 
-
-    /*
-    public void showForm(Component parentComponent)
+    protected void dialogWindowClosing(WindowEvent event)
     {
-        frame = new JBFrame();
-        frame.setDefaultCloseOperation(JBFrame.DISPOSE_ON_CLOSE);
-        frame.setTitle(getTitle());
-        frame.getContentPane().add(this);
-        frame.pack();
-        frame.setMinimumSize(frame.getPreferredSize());
-        frame.setLocationRelativeTo(parentComponent);
-        frame.setResizable(isFormResizable());
-        frame.addWindowListener(new WindowAdapter()
-        {
-            public void windowClosed(WindowEvent event)
-            {
-                frame = null;
-            }
-        });
-        frame.setVisible(true);
+        JDialog dialog = (JDialog)event.getSource();
+        dialog.setVisible(false);
     }
 
-    public ResponseType showDialog(Component parentComponent)
+    private class DialogWindowAdapter
+        extends WindowAdapter
     {
-        selectedValue = null;
-        selectedValues = null;
-        dialogSelectedAction = null;
-        response = null;
-
-        Window window = null;
-        if(parentComponent != null)
-            window = SwingUtilities.getWindowAncestor(parentComponent);
-        dialog = new JBDialog(window, getTitle());
-
-        dialogPanel = new DialogPanel(this, dialog);
-
-        Container contentPane = dialog.getContentPane();
-        contentPane.removeAll();
-        contentPane.add(dialogPanel, BorderLayout.CENTER);
-
-        Dialog.ModalityType modalityType = getModalityType();
-        if(modalityType != null)
+        public void windowClosing(WindowEvent event)
         {
-            dialog.setModalityType(modalityType);
+            dialogWindowClosing(event);
         }
-
-        dialog.pack();
-        dialog.setMinimumSize(dialog.getPreferredSize());
-        dialog.setMaximumSize(getMaximumSize());
-        dialog.setLocationRelativeTo(parentComponent);
-        dialog.setResizable(isFormResizable());
-
-        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        dialog.addWindowListener(new DialogWindowAdapter());
-
-        dialog.setVisible(true);
-        dialog.dispose();
-        dialog = null;
-
-        Action action = getDialogSelectedAction();
-        if(action != null)
-        {
-            response = (ResponseType)action.getValue(PropertyAction.RESOURCE_RESPONSE_TYPE);
-            if(response != null)
-                return response;
-        }
-
-        response = ResponseType.CLOSE;
-        return response;
     }
-    */
 }

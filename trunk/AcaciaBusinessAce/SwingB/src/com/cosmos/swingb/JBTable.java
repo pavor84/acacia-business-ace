@@ -6,7 +6,6 @@
 package com.cosmos.swingb;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.ListSelectionModel;
@@ -29,6 +28,7 @@ public class JBTable
 
     protected void internalInitialization()
     {
+        setSelectionModel(new TableSelectionModel());
         setAutoResizeMode(AUTO_RESIZE_OFF);
         setColumnControlVisible(true);
         getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
