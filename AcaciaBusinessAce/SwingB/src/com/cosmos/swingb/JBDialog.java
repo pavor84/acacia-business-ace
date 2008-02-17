@@ -5,17 +5,47 @@
 
 package com.cosmos.swingb;
 
-import org.jdesktop.swingx.JXDialog;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
+import javax.swing.JDialog;
 
 /**
  *
  * @author Miro
  */
 public class JBDialog
-    extends JXDialog
+    //extends JXDialog
+    extends JDialog
 {
     public JBDialog()
     {
-        super(null);
+        super();
+        init();
+    }
+
+    public JBDialog(Frame owner, String title)
+    {
+        super(owner);
+        setTitle(title);
+        init();
+    }
+
+    public JBDialog(Dialog owner, String title)
+    {
+        super(owner);
+        setTitle(title);
+        init();
+    }
+
+    public JBDialog(Window owner, String title)
+    {
+        super(owner);
+        setTitle(title);
+        init();
+    }
+
+    protected void init()
+    {
     }
 }
