@@ -14,6 +14,7 @@ import com.cosmos.acacia.gui.CRUDButtonActionsListener;
 import com.cosmos.acacia.gui.CRUDButtonPanel;
 import com.cosmos.acacia.security.GUIAccessControl;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -228,6 +229,11 @@ public class ProductsListPanel extends AcaciaPanel {
         return formSession;
     }
 
+    protected int deleteProduct(Product product)
+    {
+        return getFormSession().deleteProduct(product);
+    }
+
     private class RefreshProductsActionTask extends org.jdesktop.application.Task<Object, Void> {
         RefreshProductsActionTask(org.jdesktop.application.Application app) {
             // Runs on the EDT.  Copy GUI state that
@@ -328,24 +334,37 @@ public class ProductsListPanel extends AcaciaPanel {
         }
 
         public void deleteAction() {
-            System.out.println("deleteProductAction");
+            Product product = (Product)productsTable.getSelectedRowObject();
+            if(product != null)
+            {
+                deleteProduct(product);
+                productsTable.removeSelectedRow();
+            }
         }
 
         public void modifyAction() {
-            System.out.println("modifyProductAction");
             Product product = (Product)productsTable.getSelectedRowObject();
             if(product != null)
             {
                 System.out.println("Modify product: " + product);
                 ProductPanel productPanel = new ProductPanel(product);
-                productPanel.showFrame();
+                DialogResponse response = productPanel.showDialog(ProductsListPanel.this);
+                if(DialogResponse.SAVE.equals(response))
+                {
+                    product = (Product)productPanel.getSelectedValue();
+                    productsTable.replaceSelectedRow(product);
+                }
             }
         }
 
         public void newAction() {
-            System.out.println("newProductAction");
             ProductPanel productPanel = new ProductPanel(getParentDataObject());
-            productPanel.showFrame();
+            DialogResponse response = productPanel.showDialog(ProductsListPanel.this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                Product product = (Product)productPanel.getSelectedValue();
+                productsTable.addRow(product);
+            }
         }
     }
 }
