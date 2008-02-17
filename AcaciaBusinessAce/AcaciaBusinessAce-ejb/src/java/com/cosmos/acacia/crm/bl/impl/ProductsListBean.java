@@ -76,6 +76,10 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         esm.persist(em, product);
         return product;
     }
+
+    public int deleteProduct(Product product) {
+        return esm.remove(em, product);
+    }
     
 
 

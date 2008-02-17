@@ -25,5 +25,7 @@ public interface ProductsListRemote {
     Product newProduct();
 
     Product saveProduct(Product product);
+
+    int deleteProduct(Product product);
     
 }
