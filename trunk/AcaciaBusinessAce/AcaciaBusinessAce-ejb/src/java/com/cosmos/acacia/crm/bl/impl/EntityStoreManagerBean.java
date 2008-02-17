@@ -78,6 +78,8 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 mustMerge = true;
                 if(dataObject == null)
                     dataObject = em.find(DataObject.class, id);
+                else
+                    dataObject = em.merge(dataObject);
                 int version = dataObject.getDataObjectVersion();
                 dataObject.setDataObjectVersion(version + 1);
                 em.persist(dataObject);
@@ -89,26 +91,29 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         em.persist(entity);
     }
 
-    public void remove(Object entity) {
-        remove(em, entity);
+    public int remove(Object entity) {
+        return remove(em, entity);
     }
 
-    public void remove(EntityManager entityManager, Object entity) {
+    public int remove(EntityManager entityManager, Object entity) {
+        int version = -1;
         if(entity instanceof DataObjectBean)
         {
-            System.out.println("Delete Entity");
             DataObjectBean doBean = (DataObjectBean)entity;
             DataObject dataObject = doBean.getDataObject();
             if(dataObject == null)
                 dataObject = em.find(DataObject.class, doBean.getId());
-            int version = dataObject.getDataObjectVersion();
-            dataObject.setDataObjectVersion(version + 1);
+            else
+                dataObject = em.merge(dataObject);
+            version = dataObject.getDataObjectVersion() + 1;
+            dataObject.setDataObjectVersion(version);
             dataObject.setDeleted(true);
             em.persist(dataObject);
         }
 
         entity = em.merge(entity);
         em.remove(entity);
+        return version;
     }
 
     private DataObjectTypeLocal getDataObjectTypeLocal()

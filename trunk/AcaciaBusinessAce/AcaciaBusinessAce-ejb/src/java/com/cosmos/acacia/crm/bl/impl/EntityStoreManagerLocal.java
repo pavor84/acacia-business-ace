@@ -22,9 +22,9 @@ public interface EntityStoreManagerLocal
 
     void persist(Object entity);
     
-    void remove(EntityManager entityManager, Object entity);
+    int remove(EntityManager entityManager, Object entity);
 
-    void remove(Object entity);
+    int remove(Object entity);
 
     EntityProperties getEntityProperties(Class entityClass);
 }
