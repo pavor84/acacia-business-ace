@@ -10,13 +10,15 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.security.GUIAccessControl;
 import com.cosmos.swingb.JBPanel;
-import javax.swing.JTable;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ResourceMap;
 
 /**
  *
@@ -157,7 +159,21 @@ public class CRUDButtonPanel
     @Action
     public void deleteAction() {
         if(buttonActionsListener != null)
-            buttonActionsListener.deleteAction();
+        {
+            ResourceMap resource = getResourceMap();
+            String title = resource.getString("deleteAction.ConfirmDialog.title");
+            String message = resource.getString("deleteAction.ConfirmDialog.message");
+            Icon icon = resource.getImageIcon("deleteAction.ConfirmDialog.icon");
+            int result = JOptionPane.showConfirmDialog(
+                    this.getParent(),
+                    message,
+                    title,
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    icon);
+            if(JOptionPane.YES_OPTION == result)
+                buttonActionsListener.deleteAction();
+        }
     }
 
     @Action
@@ -284,6 +300,9 @@ public class CRUDButtonPanel
         public void valueChanged(ListSelectionEvent event) {
             if(!event.getValueIsAdjusting())
             {
+                System.out.println("CRUDButtonPanel.TableSelectionListener.valueChanged.event: " + event);
+Throwable t = new Throwable();
+//t.printStackTrace();
                 ListSelectionModel selectionModel = (ListSelectionModel)event.getSource();
                 if(selectionModel.isSelectionEmpty())
                 {
@@ -312,3 +331,157 @@ public class CRUDButtonPanel
     }
 
 }
+
+/*
+
+Java Web Start 1.6.0_04
+Using JRE version 1.6.0_04 Java HotSpot(TM) Client VM
+User home directory = C:\Documents and Settings\miro
+----------------------------------------------------
+c:   clear console window
+f:   finalize objects on finalization queue
+g:   garbage collect
+h:   display this help message
+m:   print memory usage
+o:   trigger logging
+p:   reload proxy configuration
+q:   hide console
+r:   reload policy configuration
+s:   dump system and deployment properties
+t:   dump thread list
+v:   dump thread stack
+0-5: set trace level to <n>
+----------------------------------------------------
+CRUDButtonPanel.TableSelectionListener.valueChanged.event: javax.swing.event.ListSelectionEvent[ source=javax.swing.DefaultListSelectionModel 31811005 ={1} firstIndex= -1 lastIndex= 1 isAdjusting= false ]
+java.lang.Throwable
+	at com.cosmos.acacia.gui.CRUDButtonPanel$TableSelectionListener.valueChanged(CRUDButtonPanel.java:304)
+	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.setValueIsAdjusting(Unknown Source)
+	at org.jdesktop.swingx.decorator.DefaultSelectionMapper.setEnabled(DefaultSelectionMapper.java:149)
+	at org.jdesktop.swingx.decorator.DefaultSelectionMapper.mapTowardsView(DefaultSelectionMapper.java:139)
+	at org.jdesktop.swingx.decorator.DefaultSelectionMapper$1.contentsChanged(DefaultSelectionMapper.java:267)
+	at org.jdesktop.swingx.decorator.FilterPipeline.fireContentsChanged(FilterPipeline.java:556)
+	at org.jdesktop.swingx.decorator.FilterPipeline.filterChanged(FilterPipeline.java:374)
+	at org.jdesktop.swingx.decorator.Filter.fireFilterChanged(Filter.java:354)
+	at org.jdesktop.swingx.decorator.Filter.refresh(Filter.java:343)
+	at org.jdesktop.swingx.decorator.Filter.refresh(Filter.java:73)
+	at org.jdesktop.swingx.decorator.FilterPipeline.flush(FilterPipeline.java:499)
+	at org.jdesktop.swingx.JXTable.use(JXTable.java:1697)
+	at org.jdesktop.swingx.JXTable.tableChanged(JXTable.java:1510)
+	at org.jdesktop.swingbinding.JTableBinding$BindingTableModel.fireTableModelEvent(JTableBinding.java:876)
+	at org.jdesktop.swingbinding.JTableBinding$BindingTableModel.valueChanged(JTableBinding.java:829)
+	at org.jdesktop.swingbinding.impl.ListBindingManager$ColumnDescriptionManager.wrapperChanged(ListBindingManager.java:199)
+	at org.jdesktop.swingbinding.impl.ListBindingManager$ColumnDescriptionManager$EntryWrapper.propertyStateChanged(ListBindingManager.java:240)
+	at org.jdesktop.beansbinding.PropertyHelper.firePropertyStateChange(PropertyHelper.java:212)
+	at org.jdesktop.beansbinding.ELProperty.notifyListeners(ELProperty.java:688)
+	at org.jdesktop.beansbinding.ELProperty.access$800(ELProperty.java:155)
+	at org.jdesktop.beansbinding.ELProperty$SourceEntry.processSourceChanged(ELProperty.java:312)
+	at org.jdesktop.beansbinding.ELProperty$SourceEntry.sourceChanged(ELProperty.java:326)
+	at org.jdesktop.beansbinding.ELProperty$SourceEntry.propertyChange(ELProperty.java:333)
+	at java.beans.PropertyChangeSupport.firePropertyChange(Unknown Source)
+	at java.beans.PropertyChangeSupport.firePropertyChange(Unknown Source)
+	at com.cosmos.acacia.crm.data.DataObjectBean.firePropertyChange(DataObjectBean.java:39)
+	at com.cosmos.acacia.crm.data.Product.setProductName(Product.java:227)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.jdesktop.el.BeanELResolver.setValue(BeanELResolver.java:330)
+	at org.jdesktop.beansbinding.TempELContext$BeanDelegateELResolver.setValue(TempELContext.java:87)
+	at org.jdesktop.el.CompositeELResolver.setValue(CompositeELResolver.java:265)
+	at org.jdesktop.el.impl.parser.AstIdentifier.setValue(AstIdentifier.java:81)
+	at org.jdesktop.el.impl.ValueExpressionImpl.setValue(ValueExpressionImpl.java:262)
+	at org.jdesktop.beansbinding.ELProperty.setValue(ELProperty.java:505)
+	at org.jdesktop.beansbinding.Binding.saveUnmanaged(Binding.java:1275)
+	at org.jdesktop.beansbinding.Binding.save(Binding.java:1254)
+	at org.jdesktop.beansbinding.AutoBinding.trySaveThenRefresh(AutoBinding.java:176)
+	at org.jdesktop.beansbinding.AutoBinding.targetChangedImpl(AutoBinding.java:249)
+	at org.jdesktop.beansbinding.Binding.targetChanged(Binding.java:1433)
+	at org.jdesktop.beansbinding.Binding.access$1300(Binding.java:38)
+	at org.jdesktop.beansbinding.Binding$PSL.propertyStateChanged(Binding.java:1620)
+	at org.jdesktop.beansbinding.PropertyHelper.firePropertyStateChange(PropertyHelper.java:212)
+	at org.jdesktop.beansbinding.BeanProperty.notifyListeners(BeanProperty.java:707)
+	at org.jdesktop.beansbinding.BeanProperty.access$1000(BeanProperty.java:138)
+	at org.jdesktop.beansbinding.BeanProperty$SourceEntry.cachedValueChanged(BeanProperty.java:364)
+	at org.jdesktop.beansbinding.BeanProperty$SourceEntry.propertyValueChanged(BeanProperty.java:404)
+	at org.jdesktop.beansbinding.BeanProperty$SourceEntry.propertyChange(BeanProperty.java:409)
+	at java.beans.PropertyChangeSupport.firePropertyChange(Unknown Source)
+	at java.beans.PropertyChangeSupport.firePropertyChange(Unknown Source)
+	at org.jdesktop.swingbinding.adapters.BeanAdapterBase.firePropertyChange(BeanAdapterBase.java:112)
+	at org.jdesktop.swingbinding.adapters.JTextComponentAdapterProvider$Adapter$Handler.updateText(JTextComponentAdapterProvider.java:136)
+	at org.jdesktop.swingbinding.adapters.JTextComponentAdapterProvider$Adapter$Handler.textChanged(JTextComponentAdapterProvider.java:149)
+	at org.jdesktop.swingbinding.adapters.JTextComponentAdapterProvider$Adapter$Handler.replace(JTextComponentAdapterProvider.java:182)
+	at javax.swing.text.AbstractDocument.replace(Unknown Source)
+	at javax.swing.text.JTextComponent.replaceSelection(Unknown Source)
+	at javax.swing.text.DefaultEditorKit$DefaultKeyTypedAction.actionPerformed(Unknown Source)
+	at javax.swing.SwingUtilities.notifyAction(Unknown Source)
+	at javax.swing.JComponent.processKeyBinding(Unknown Source)
+	at javax.swing.JComponent.processKeyBindings(Unknown Source)
+	at javax.swing.JComponent.processKeyEvent(Unknown Source)
+	at java.awt.Component.processEvent(Unknown Source)
+	at java.awt.Container.processEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.KeyboardFocusManager.redispatchEvent(Unknown Source)
+	at java.awt.DefaultKeyboardFocusManager.dispatchKeyEvent(Unknown Source)
+	at java.awt.DefaultKeyboardFocusManager.preDispatchKeyEvent(Unknown Source)
+	at java.awt.DefaultKeyboardFocusManager.typeAheadAssertions(Unknown Source)
+	at java.awt.DefaultKeyboardFocusManager.dispatchEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Window.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.EventQueue.dispatchEvent(Unknown Source)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.Dialog$1.run(Unknown Source)
+	at java.awt.Dialog$3.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.awt.Dialog.show(Unknown Source)
+	at java.awt.Component.show(Unknown Source)
+	at java.awt.Component.setVisible(Unknown Source)
+	at java.awt.Window.setVisible(Unknown Source)
+	at java.awt.Dialog.setVisible(Unknown Source)
+	at com.cosmos.swingb.JBPanel.showDialog(JBPanel.java:137)
+	at com.cosmos.acacia.crm.gui.ProductsListPanel$ProductsButtonActionsListener.modifyAction(ProductsListPanel.java:351)
+	at com.cosmos.acacia.gui.CRUDButtonPanel.modifyAction(CRUDButtonPanel.java:182)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.jdesktop.application.ApplicationAction.noProxyActionPerformed(ApplicationAction.java:662)
+	at org.jdesktop.application.ApplicationAction.actionPerformed(ApplicationAction.java:698)
+	at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+	at javax.swing.AbstractButton$Handler.actionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Source)
+	at java.awt.AWTEventMulticaster.mouseReleased(Unknown Source)
+	at java.awt.Component.processMouseEvent(Unknown Source)
+	at javax.swing.JComponent.processMouseEvent(Unknown Source)
+	at java.awt.Component.processEvent(Unknown Source)
+	at java.awt.Container.processEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Window.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.EventQueue.dispatchEvent(Unknown Source)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.run(Unknown Source)
+selectedObject: com.cosmos.acacia.crm.data.Product[productId=1203257778172, productName=My 1st manual product & 2nd up]:v.3
+canModify: com.cosmos.acacia.crm.data.DataObject[dataObjectId=1203257778172]
+canDelete: com.cosmos.acacia.crm.data.DataObject[dataObjectId=1203257778172]
+
+*/

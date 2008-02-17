@@ -8,9 +8,12 @@ package com.cosmos.acacia.gui;
 import com.cosmos.beansbinding.BeansBinding;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.JBTable;
+import java.util.Arrays;
 import java.util.List;
 import org.jdesktop.observablecollections.ObservableCollections;
+import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingbinding.impl.ListBindingManager;
 
 /**
  *
@@ -53,6 +56,10 @@ public class AcaciaTable
             super.setData(null);
             initTableBinding();
         }
+        else if(!(data instanceof ObservableList))
+        {
+            data = ObservableCollections.observableList(data);
+        }
 
         super.setData(data);
         initTableBinding();
@@ -77,8 +84,7 @@ public class AcaciaTable
         }
         else
         {
-            List list = ObservableCollections.observableList(data);
-            tableBinding = BeansBinding.createTableBinding(this, list, entityProps);
+            tableBinding = BeansBinding.createTableBinding(this, data, entityProps);
         }
     }
 }

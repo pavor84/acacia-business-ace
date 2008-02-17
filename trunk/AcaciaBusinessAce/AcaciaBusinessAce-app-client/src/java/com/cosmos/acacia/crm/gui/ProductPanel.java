@@ -10,18 +10,22 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import java.awt.Container;
-import java.awt.Window;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBErrorPane;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import javax.swing.JInternalFrame;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  *
@@ -218,12 +222,34 @@ public class ProductPanel extends AcaciaPanel {
 
     @Action
     public void saveAction() {
-        System.out.println("saveAction");
+        try
+        {
+            product = getFormSession().saveProduct(product);
+            setDialogResponse(DialogResponse.SAVE);
+            setSelectedValue(product);
+            close();
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            // TODO: Log that error
+            ResourceMap resource = getResourceMap();
+            String title = resource.getString("saveAction.Action.error.title");
+            String basicMessage = resource.getString("saveAction.Action.error.basicMessage", ex.getMessage());
+            String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
+            String category = ProductPanel.class.getName() + ": saveAction.";
+            Level errorLevel = Level.WARNING;
+            Map<String, String> state = new HashMap();
+            state.put("productId", String.valueOf(product.getProductId()));
+            state.put("productName", String.valueOf(product.getProductName()));
+            state.put("productCode", String.valueOf(product.getProductCode()));
+            ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
+            JBErrorPane.showDialog(this, errorInfo);
+        }
     }
 
     @Action
     public void closeAction() {
-        System.out.println("closeAction");
         close();
     }
 
