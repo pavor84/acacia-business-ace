@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,16 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
 
     @EJB
     private EntityStoreManagerLocal esm;
+    @EJB
+    private DatabaseResourceLocal databaseResource;
 
     public List<Product> getProducts(DataObject parent) {
+        System.out.println("databaseResource: " + databaseResource);
+        if(databaseResource != null)
+            databaseResource.initDatabaseResource(MeasurementUnit.class);
+
+        System.out.println("MeasurementUnit.Piece: " + MeasurementUnit.Piece + ", resourceId: " + MeasurementUnit.Piece.getResourceId());
+
         Query q;
         if(parent != null)
         {
