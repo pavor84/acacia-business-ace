@@ -9,7 +9,10 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,12 +25,14 @@ import javax.persistence.Query;
  * @author miro
  */
 @Stateless
-public class DatabaseResourceBean implements DatabaseResourceLocal {
+public class DatabaseResourceBean
+    implements DatabaseResourceLocal, DatabaseResourceRemote
+{
 
     private static boolean initialized = false;
 
     private static Map<String, EnumClass> enumClassMap;
-    private static Map<String, DbResource> dbResourceMap;
+    private static Map<Enum, Map<String, DbResource>> dbResourceMap;
 
     @PersistenceContext
     private EntityManager em;
@@ -37,32 +42,33 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         if(!initialized)
         {
             System.out.println("initDatabaseResource()");
-            initDatabaseResource(MeasurementUnit.class);
+            getDbResources(MeasurementUnit.class);
             initialized = true;
         }
     }
 
-    public synchronized void initDatabaseResource(Class<? extends DatabaseResource> dbResourceClass) {
-        if(!(dbResourceClass.isEnum()))
-            throw new IllegalArgumentException("The DatabaseResource MUST be an Enum instance: " + dbResourceClass.getName());
+    public List<DbResource> getDbResources(Class<? extends DatabaseResource> dbResourceClass)
+    {
+        DatabaseResource[] dbResourcesArray = dbResourceClass.getEnumConstants();
+        int size;
+        if(dbResourcesArray == null || (size = dbResourcesArray.length) == 0)
+            return Collections.<DbResource>emptyList();
 
-        DatabaseResource[] dbResources = dbResourceClass.getEnumConstants();
-        if(dbResources == null || dbResources.length == 0)
-            return;
+        List<DbResource> dbResources = new ArrayList<DbResource>(size);
 
-        DatabaseResource dbResource = dbResources[0];
-        if(dbResource.isInitialized())
-            return;
-
-        for(DatabaseResource dbr : dbResources)
+        for(DatabaseResource dbr : dbResourcesArray)
         {
-            DbResource resource = getDbResource((Enum)dbr);
-            System.out.println("resource: " + resource);
-            dbr.setResourceId(resource.getResourceId());
+            Enum enumValue = (Enum)dbr;
+            DbResource resource = getDbResource(enumValue);
+            dbr.setDbResource(resource);
+            resource.setEnumValue(enumValue);
+            dbResources.add(resource);
         }
-        dbResource.setInitialized(true);
+
+        return dbResources;
     }
-    
+
+  
     // Add business logic below. (Right-click in editor and choose
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
 
@@ -101,14 +107,20 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     {
         if(dbResourceMap == null)
         {
-            dbResourceMap = new HashMap<String, DbResource>();
+            dbResourceMap = new HashMap<Enum, Map<String, DbResource>>();
         }
 
-        EnumClass enumClass = getEnumClass(dbEnum);
+        Map<String, DbResource> enumMap = dbResourceMap.get(dbEnum);
+        if(enumMap == null)
+        {
+            enumMap = new HashMap<String, DbResource>(dbEnum.getClass().getEnumConstants().length);
+        }
+
         String enumName = dbEnum.name();
-        DbResource dbResource = dbResourceMap.get(enumName);
+        DbResource dbResource = enumMap.get(enumName);
         if(dbResource == null)
         {
+            EnumClass enumClass = getEnumClass(dbEnum);
             Query q = em.createNamedQuery("DbResource.findByEnumClassAndName");
             q.setParameter("enumClass", enumClass);
             q.setParameter("enumName", enumName);
@@ -124,7 +136,7 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
                 em.persist(dbResource);
             }
 
-            dbResourceMap.put(enumName, dbResource);
+            enumMap.put(enumName, dbResource);
         }
 
         return dbResource;

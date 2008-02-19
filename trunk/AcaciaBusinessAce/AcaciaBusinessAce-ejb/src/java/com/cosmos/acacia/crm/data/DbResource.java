@@ -31,10 +31,16 @@ import javax.persistence.Table;
             query = "SELECT d FROM DbResource d WHERE d.resourceId = :resourceId"),
         @NamedQuery(
             name = "DbResource.findByEnumClassAndName",
-            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass and d.enumName = :enumName")
+            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass and d.enumName = :enumName"),
+        @NamedQuery(
+            name = "DbResource.findAllByEnumClass",
+            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass")
     }
 )
-public class DbResource implements Serializable {
+public class DbResource
+    extends EnumDbResource
+    implements Serializable
+{
 
     private static final long serialVersionUID = 1L;
 
@@ -50,6 +56,7 @@ public class DbResource implements Serializable {
     @JoinColumn(name = "enum_class_id", referencedColumnName = "enum_class_id")
     @ManyToOne
     private EnumClass enumClass;
+
 
     public DbResource() {
     }
@@ -77,6 +84,7 @@ public class DbResource implements Serializable {
     public void setEnumClass(EnumClass enumClass) {
         this.enumClass = enumClass;
     }
+
 
     @Override
     public int hashCode() {

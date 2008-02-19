@@ -6,12 +6,15 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -54,9 +57,10 @@ public class Product
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hiden=true)
     private BigInteger parentId;
 
-    @Column(name = "category_id", nullable = false)
-    @Property(title="Category Id", editable=false, readOnly=true, visible=false)
-    private BigInteger categoryId;
+    @JoinColumn(name = "category_id", nullable=false, referencedColumnName = "product_category_id")
+    @ManyToOne
+    @Property(title="Category")
+    private ProductCategory category;
 
     @Column(name = "product_name", nullable = false)
     @Property(title="Product Name")
@@ -66,9 +70,10 @@ public class Product
     @Property(title="Product Code")
     private String productCode;
 
-    @Column(name = "measure_unit_id", nullable = false)
-    @Property(title="Measure Unit Id", editable=false, readOnly=true, visible=false)
-    private int measureUnitId;
+    @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Measure Unit")
+    private DbResource measureUnit;
 
     @Column(name = "is_complex", nullable = false)
     @Property(title="Is Complex")
@@ -86,9 +91,10 @@ public class Product
     @Property(title="Is Obsolete")
     private boolean obsolete;
 
-    @Column(name = "pattern_format_id")
-    @Property(title="Pattern Format Id", editable=false, readOnly=true, visible=false)
-    private Integer patternFormatId;
+    @JoinColumn(name = "pattern_mask_format_id", referencedColumnName = "pattern_mask_format_id")
+    @ManyToOne
+    @Property(title="Pattern Mask Format")
+    private PatternMaskFormat patternMaskFormat;
 
     @Column(name = "product_color")
     @Property(title="Product Color")
@@ -122,9 +128,10 @@ public class Product
     @Property(title="Qty per Package")
     private int quantityPerPackage = 1;
 
-    @Column(name = "dimension_unit_id")
-    @Property(title="Dimension Unit Id", editable=false, readOnly=true, visible=false)
-    private Integer dimensionUnitId;
+    @JoinColumn(name = "dimension_unit_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Dimension Unit")
+    private DbResource dimensionUnit;
 
     @Column(name = "dimension_width")
     @Property(title="Dimension Width")
@@ -138,9 +145,10 @@ public class Product
     @Property(title="Dimension Height")
     private BigDecimal dimensionHeight;
 
-    @Column(name = "weight_unit_id")
-    @Property(title="Weight Unit Id", editable=false, readOnly=true, visible=false)
-    private Integer weightUnitId;
+    @JoinColumn(name = "weight_unit_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Weight Unit")
+    private DbResource weightUnit;
 
     @Column(name = "weight")
     @Property(title="Weight")
@@ -175,23 +183,6 @@ public class Product
         this.productId = productId;
     }
 
-    public Product(BigInteger productId, BigInteger categoryId, String productName, String productCode, int measureUnitId, boolean isComplex, boolean isPurchased, boolean isSalable, boolean isObsolete, BigDecimal minimumQuantity, BigDecimal purchasePrice, BigDecimal salePrice, BigDecimal listPrice, int quantityPerPackage) {
-        this.productId = productId;
-        this.categoryId = categoryId;
-        this.productName = productName;
-        this.productCode = productCode;
-        this.measureUnitId = measureUnitId;
-        this.complex = isComplex;
-        this.purchased = isPurchased;
-        this.salable = isSalable;
-        this.obsolete = isObsolete;
-        this.minimumQuantity = minimumQuantity;
-        this.purchasePrice = purchasePrice;
-        this.salePrice = salePrice;
-        this.listPrice = listPrice;
-        this.quantityPerPackage = quantityPerPackage;
-    }
-
     public BigInteger getProductId() {
         return productId;
     }
@@ -210,13 +201,13 @@ public class Product
         this.parentId = parentId;
     }
 
-    public BigInteger getCategoryId() {
-        return categoryId;
+    public ProductCategory getCategory() {
+        return category;
     }
 
-    public void setCategoryId(BigInteger categoryId) {
-        firePropertyChange("categoryId", this.categoryId, categoryId);
-        this.categoryId = categoryId;
+    public void setCategory(ProductCategory category) {
+        firePropertyChange("category", this.category, category);
+        this.category = category;
     }
 
     public String getProductName() {
@@ -237,13 +228,13 @@ public class Product
         this.productCode = productCode;
     }
 
-    public int getMeasureUnitId() {
-        return measureUnitId;
+    public DbResource getMeasureUnit() {
+        return measureUnit;
     }
 
-    public void setMeasureUnitId(int measureUnitId) {
-        firePropertyChange("measureUnitId", this.measureUnitId, measureUnitId);
-        this.measureUnitId = measureUnitId;
+    public void setMeasureUnit(DbResource measureUnit) {
+        firePropertyChange("measureUnit", this.measureUnit, measureUnit);
+        this.measureUnit = measureUnit;
     }
 
     public boolean isComplex() {
@@ -282,13 +273,20 @@ public class Product
         this.obsolete = isObsolete;
     }
 
-    public Integer getPatternFormatId() {
-        return patternFormatId;
+    public PatternMaskFormat getPatternMaskFormat() {
+        if(patternMaskFormat != null)
+            return patternMaskFormat;
+
+        ProductCategory pc;
+        if((pc = getCategory()) != null)
+            return pc.getPatternMaskFormat();
+
+        return null;
     }
 
-    public void setPatternFormatId(Integer patternFormatId) {
-        firePropertyChange("patternFormatId", this.patternFormatId, patternFormatId);
-        this.patternFormatId = patternFormatId;
+    public void setPatternMaskFormat(PatternMaskFormat patternMaskFormat) {
+        firePropertyChange("patternMaskFormat", this.patternMaskFormat, patternMaskFormat);
+        this.patternMaskFormat = patternMaskFormat;
     }
 
     public String getProductColor() {
@@ -363,13 +361,13 @@ public class Product
         this.quantityPerPackage = quantityPerPackage;
     }
 
-    public Integer getDimensionUnitId() {
-        return dimensionUnitId;
+    public DbResource getDimensionUnit() {
+        return dimensionUnit;
     }
 
-    public void setDimensionUnitId(Integer dimensionUnitId) {
-        firePropertyChange("dimensionUnitId", this.dimensionUnitId, dimensionUnitId);
-        this.dimensionUnitId = dimensionUnitId;
+    public void setDimensionUnit(DbResource dimensionUnit) {
+        firePropertyChange("dimensionUnit", this.dimensionUnit, dimensionUnit);
+        this.dimensionUnit = dimensionUnit;
     }
 
     public BigDecimal getDimensionWidth() {
@@ -399,13 +397,13 @@ public class Product
         this.dimensionHeight = dimensionHeight;
     }
 
-    public Integer getWeightUnitId() {
-        return weightUnitId;
+    public DbResource getWeightUnit() {
+        return weightUnit;
     }
 
-    public void setWeightUnitId(Integer weightUnitId) {
-        firePropertyChange("weightUnitId", this.weightUnitId, weightUnitId);
-        this.weightUnitId = weightUnitId;
+    public void setWeightUnitId(DbResource weightUnit) {
+        firePropertyChange("weightUnit", this.weightUnit, weightUnit);
+        this.weightUnit = weightUnit;
     }
 
     public BigDecimal getWeight() {
@@ -539,8 +537,8 @@ public class Product
         Product product = new Product();
         product.setProductName(productName);
         product.setProductCode(productCode);
-        product.setCategoryId(BigInteger.ONE);
-        product.setMeasureUnitId(1);
+        //product.setCategory(BigInteger.ONE);
+        product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         product.setPurchasePrice(BigDecimal.valueOf(100.20));
         product.setSalePrice(BigDecimal.valueOf(200.00));
         product.setListPrice(BigDecimal.valueOf(250.00));

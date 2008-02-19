@@ -5,15 +5,14 @@
 
 package com.cosmos.acacia.crm.enums;
 
+import com.cosmos.acacia.crm.data.DbResource;
+
 /**
  *
  * @author miro
  */
-public interface DatabaseResource<E extends Enum> {
+public interface DatabaseResource {
 
-    int getResourceId();
-    void setResourceId(int resourceId);
-    boolean isInitialized();
-    void setInitialized(boolean initialized);
-
+    DbResource getDbResource();
+    void setDbResource(DbResource resource);
 }
