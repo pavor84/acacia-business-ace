@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.crm.enums;
 
+import com.cosmos.acacia.crm.data.DbResource;
 import java.math.BigDecimal;
 
 /*
@@ -171,7 +172,7 @@ public enum MeasurementUnit
     private MeasurementUnit siUnit;
     private BigDecimal cgsUnitValue;
     private MeasurementUnit cgsUnit;
-    private int resourceId = -1;
+    private DbResource dbResource;
 
     public Category getCategory() {
         return category;
@@ -201,25 +202,20 @@ public enum MeasurementUnit
         return unitName;
     }
 
-    public int getResourceId() {
-        return resourceId;
+    public DbResource getDbResource() {
+        return dbResource;
     }
 
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public boolean isInitialized() {
-        return initialized;
-    }
-
-    public void setInitialized(boolean initialized) {
-        this.initialized = initialized;
+    public void setDbResource(DbResource dbResource) {
+        this.dbResource = dbResource;
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString() + ", " + dbResource;
+    }
 
-    private static boolean initialized = false;
 
     private static EnumMap<Category, EnumSet<MeasurementUnit>> measurementUnitsByCategory;
 

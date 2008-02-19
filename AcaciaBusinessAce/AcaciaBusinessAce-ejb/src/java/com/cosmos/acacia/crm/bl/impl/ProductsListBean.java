@@ -35,9 +35,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     public List<Product> getProducts(DataObject parent) {
         System.out.println("databaseResource: " + databaseResource);
         if(databaseResource != null)
-            databaseResource.initDatabaseResource(MeasurementUnit.class);
+            databaseResource.getDbResources(MeasurementUnit.class);
 
-        System.out.println("MeasurementUnit.Piece: " + MeasurementUnit.Piece + ", resourceId: " + MeasurementUnit.Piece.getResourceId());
+        System.out.println("MeasurementUnit.Piece: " + MeasurementUnit.Piece);
 
         Query q;
         if(parent != null)
