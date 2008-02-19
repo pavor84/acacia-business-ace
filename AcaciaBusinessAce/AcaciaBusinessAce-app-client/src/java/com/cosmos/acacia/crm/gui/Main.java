@@ -5,9 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.gui.test.HelloWorldFrame;
 import com.cosmos.test.bl.DataObjectTest;
-import java.awt.EventQueue;
 import java.util.Date;
 import org.junit.runner.JUnitCore;
 
