@@ -9,6 +9,7 @@ package com.cosmos.acacia.crm.gui;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.swing.ComboBoxModel;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -25,6 +27,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.combobox.EnumComboBoxModel;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
@@ -82,7 +85,7 @@ public class ProductPanel extends AcaciaPanel {
         productCodeLabel.setText(resourceMap.getString("productCodeLabel.text")); // NOI18N
         productCodeLabel.setName("productCodeLabel"); // NOI18N
 
-        productCategoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        productCategoryComboBox.setModel(getProductCategories());
         productCategoryComboBox.setName("productCategoryComboBox"); // NOI18N
 
         productCategoryLabel.setText(resourceMap.getString("productCategoryLabel.text")); // NOI18N
@@ -253,4 +256,18 @@ public class ProductPanel extends AcaciaPanel {
         close();
     }
 
+
+    private ComboBoxModel productCategories;
+    private ComboBoxModel getProductCategories()
+    {
+        if(productCategories == null)
+        {
+            
+            //productCategories = new MapComboBoxModel();
+            //productCategories = new ListComboBoxModel();
+            productCategories = new EnumComboBoxModel(MeasurementUnit.class);
+        }
+
+        return productCategories;
+    }
 }
