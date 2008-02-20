@@ -13,12 +13,10 @@ import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -27,21 +25,13 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    @EJB
-    private DataObjectTypeLocal dotLocal;
+    //@EJB
+    //private DataObjectTypeLocal dotLocal;
+    private static DataObjectTypeLocal dotLocal;
 
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
 
-
-    public void persist(Object entity) {
-        persist(em, entity);
-        
-    }
-
-    public void persist(EntityManager entityManager, Object entity) {
+    public void persist(EntityManager em, Object entity) {
         boolean mustMerge = false;
         if(entity instanceof DataObjectBean)
         {
@@ -91,11 +81,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         em.persist(entity);
     }
 
-    public int remove(Object entity) {
-        return remove(em, entity);
-    }
-
-    public int remove(EntityManager entityManager, Object entity) {
+    public int remove(EntityManager em, Object entity) {
         int version = -1;
         if(entity instanceof DataObjectBean)
         {

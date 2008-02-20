@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
@@ -89,7 +90,14 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     public int deleteProduct(Product product) {
         return esm.remove(em, product);
     }
+
+    public List<DbResource> getMeasureUnits() {
+        return MeasurementUnit.getDbResources();
+    }
     
+    public List<DbResource> getMeasureUnits(MeasurementUnit.Category category) {
+        return MeasurementUnit.getDbResourcesByCategory(category);
+    }
 
 
 }

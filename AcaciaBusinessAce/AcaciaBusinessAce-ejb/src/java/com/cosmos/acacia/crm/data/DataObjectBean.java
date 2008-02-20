@@ -24,6 +24,9 @@ public abstract class DataObjectBean {
     public abstract BigInteger getId();
     public abstract void setId(BigInteger id);
     
+    public abstract BigInteger getParentId();
+    public abstract void setParentId(BigInteger parentId);
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }

@@ -218,8 +218,7 @@ public enum MeasurementUnit
 
 
     private static EnumMap<Category, EnumSet<MeasurementUnit>> measurementUnitsByCategory;
-
-    public EnumSet<MeasurementUnit> getMeasurementUnitsByCategory(Category category)
+    public static EnumSet<MeasurementUnit> getMeasurementUnitsByCategory(Category category)
     {
         if(measurementUnitsByCategory == null)
         {
@@ -246,4 +245,43 @@ public enum MeasurementUnit
         return measurementUnitsByCategory.get(category);
     }
 
+    private static EnumMap<Category, List<DbResource>> dbResourcesByCategory;
+    public static List<DbResource> getDbResourcesByCategory(Category category)
+    {
+        if(dbResourcesByCategory == null)
+        {
+            dbResourcesByCategory = new EnumMap<MeasurementUnit.Category, List<DbResource>>(Category.class);
+            getMeasurementUnitsByCategory(Category.Integer);
+
+            for(Category key : measurementUnitsByCategory.keySet())
+            {
+                EnumSet<MeasurementUnit> measureUnits = measurementUnitsByCategory.get(key);
+                List<DbResource> resources = new ArrayList<DbResource>(measureUnits.size());
+                for(MeasurementUnit measureUnit : measureUnits)
+                {
+                    resources.add(measureUnit.getDbResource());
+                }
+
+                dbResourcesByCategory.put(key, resources);
+            }
+        }
+
+        return dbResourcesByCategory.get(category);
+    }
+
+    private static List<DbResource> dbResources;
+    public static List<DbResource> getDbResources()
+    {
+        if(dbResources == null)
+        {
+            dbResources = new ArrayList<DbResource>(MeasurementUnit.values().length);
+
+            for(MeasurementUnit unit : MeasurementUnit.values())
+            {
+                dbResources.add(unit.getDbResource());
+            }
+        }
+
+        return dbResources;
+    }
 }
