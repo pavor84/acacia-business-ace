@@ -14,6 +14,7 @@
             <included-library files="1">reference.AcaciaBusinessAce-ejb.dist</included-library>
             <included-library files="1">reference.AcaciaBusinessLogic.dist</included-library>
             <included-library files="1">reference.AcaciaAnnotations.jar</included-library>
+            <included-library files="1">reference.AcaciaBeansBinding.jar</included-library>
             <included-library files="1">file.reference.swingx-2008_01_20.jar</included-library>
             <included-library files="1">file.reference.swing-worker-1.1.jar</included-library>
             <included-library files="1">reference.SwingB.jar</included-library>
@@ -24,6 +25,14 @@
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
                 <foreign-project>AcaciaAnnotations</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>AcaciaBeansBinding</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

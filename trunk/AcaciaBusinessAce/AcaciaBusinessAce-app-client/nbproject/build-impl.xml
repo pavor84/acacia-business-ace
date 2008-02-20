@@ -337,12 +337,14 @@
     </target>
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.AcaciaBusinessAce-ejb}/build.xml" inheritall="false" target="dist"/>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist"/>
         <ant antfile="${project.SwingB}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.AcaciaBusinessAce-ejb}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
         </ant>
@@ -364,6 +366,7 @@
         <copy file="${reference.AcaciaBusinessAce-ejb.dist}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${reference.AcaciaAnnotations.jar}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copy file="${reference.AcaciaBeansBinding.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${file.reference.swingx-2008_01_20.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${file.reference.swing-worker-1.1.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${reference.SwingB.jar}" todir="${build.classes.dir}/META-INF/lib"/>
@@ -378,6 +381,8 @@
         <copy file="${reference.AcaciaBusinessLogic.dist}" todir="${dist.ear.dir}"/>
         <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
         <copy file="${reference.AcaciaAnnotations.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.AcaciaBeansBinding.jar}" property="included.lib.reference.AcaciaBeansBinding.jar"/>
+        <copy file="${reference.AcaciaBeansBinding.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.swingx-2008_01_20.jar}" property="included.lib.file.reference.swingx-2008_01_20.jar"/>
         <copy file="${file.reference.swingx-2008_01_20.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.swing-worker-1.1.jar}" property="included.lib.file.reference.swing-worker-1.1.jar"/>
@@ -391,7 +396,7 @@
         <basename file="${libs.junit_4.classpath}" property="included.lib.libs.junit_4.classpath"/>
         <copy file="${libs.junit_4.classpath}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.AcaciaBusinessAce-ejb.dist} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.file.reference.swingx-2008_01_20.jar} ${included.lib.file.reference.swing-worker-1.1.jar} ${included.lib.reference.SwingB.jar} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.appframework-1.0.3.jar} ${included.lib.libs.junit_4.classpath} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.AcaciaBusinessAce-ejb.dist} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.AcaciaBeansBinding.jar} ${included.lib.file.reference.swingx-2008_01_20.jar} ${included.lib.file.reference.swing-worker-1.1.jar} ${included.lib.reference.SwingB.jar} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.appframework-1.0.3.jar} ${included.lib.libs.junit_4.classpath} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -821,6 +826,7 @@
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
         <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.AcaciaBusinessAce-ejb}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SwingB}/build.xml" inheritall="false" target="clean"/>
