@@ -8,17 +8,21 @@ package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
+import java.awt.Component;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import javax.swing.ComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -27,7 +31,9 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.combobox.EnumComboBoxModel;
+import org.jdesktop.observablecollections.ObservableCollections;
+import org.jdesktop.swingbinding.JComboBoxBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
@@ -66,7 +72,7 @@ public class ProductPanel extends AcaciaPanel {
         productNameTextField = new com.cosmos.swingb.JBTextField();
         productCodeTextField = new com.cosmos.swingb.JBTextField();
         productCodeLabel = new com.cosmos.swingb.JBLabel();
-        productCategoryComboBox = new com.cosmos.swingb.JBComboBox();
+        measureUnitComboBox = new com.cosmos.swingb.JBComboBox();
         productCategoryLabel = new com.cosmos.swingb.JBLabel();
         buttonPanel = new com.cosmos.swingb.JBPanel();
         closelButton = new com.cosmos.swingb.JBButton();
@@ -85,8 +91,7 @@ public class ProductPanel extends AcaciaPanel {
         productCodeLabel.setText(resourceMap.getString("productCodeLabel.text")); // NOI18N
         productCodeLabel.setName("productCodeLabel"); // NOI18N
 
-        productCategoryComboBox.setModel(getProductCategories());
-        productCategoryComboBox.setName("productCategoryComboBox"); // NOI18N
+        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
 
         productCategoryLabel.setText(resourceMap.getString("productCategoryLabel.text")); // NOI18N
         productCategoryLabel.setName("productCategoryLabel"); // NOI18N
@@ -140,13 +145,13 @@ public class ProductPanel extends AcaciaPanel {
                             .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
-                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE))))
+                                .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -160,7 +165,7 @@ public class ProductPanel extends AcaciaPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(measureUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 333, Short.MAX_VALUE)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,7 +177,7 @@ public class ProductPanel extends AcaciaPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonPanel;
     private com.cosmos.swingb.JBButton closelButton;
-    private com.cosmos.swingb.JBComboBox productCategoryComboBox;
+    private com.cosmos.swingb.JBComboBox measureUnitComboBox;
     private com.cosmos.swingb.JBLabel productCategoryLabel;
     private com.cosmos.swingb.JBLabel productCodeLabel;
     private com.cosmos.swingb.JBTextField productCodeTextField;
@@ -184,7 +189,7 @@ public class ProductPanel extends AcaciaPanel {
     @EJB
     private ProductsListRemote formSession;
 
-    private BindingGroup bindingGroup;
+    private BindingGroup productBindingGroup;
     private Product product;
 
     protected void initData()
@@ -195,15 +200,13 @@ public class ProductPanel extends AcaciaPanel {
             product = getFormSession().newProduct();
         }
 
-        bindingGroup = new BindingGroup();
+        productBindingGroup = new BindingGroup();
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, product, ELProperty.create("${productName}"), productNameTextField, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        productNameTextField.createBinding(productBindingGroup, product, "productName");
+        productNameTextField.createBinding(productBindingGroup, product, "productCode");
+        measureUnitComboBox.createBinding(productBindingGroup, getMeasureUnits(), product, "measureUnit");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, product, ELProperty.create("${productCode}"), productCodeTextField, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        bindingGroup.bind();
+        productBindingGroup.bind();
     }
 
     protected ProductsListRemote getFormSession()
@@ -227,6 +230,11 @@ public class ProductPanel extends AcaciaPanel {
     public void saveAction() {
         try
         {
+            System.out.println("Save product: " + product);
+            System.out.println("product.getMeasureUnit(): " + product.getMeasureUnit());
+            if(true)
+                return;
+
             product = getFormSession().saveProduct(product);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(product);
@@ -257,17 +265,44 @@ public class ProductPanel extends AcaciaPanel {
     }
 
 
-    private ComboBoxModel productCategories;
-    private ComboBoxModel getProductCategories()
+    private List<DbResource> getMeasureUnits()
     {
-        if(productCategories == null)
+        return getFormSession().getMeasureUnits();
+    }
+
+    private List<DbResource> getMeasureUnits(MeasurementUnit.Category category)
+    {
+        return getFormSession().getMeasureUnits(category);
+    }
+
+    //private class BeanComboBoxModel
+    //    extends ListComboBoxModel
+
+/*
+list: javax.swing.plaf.basic.BasicComboPopup$1[ComboBox.list,0,0,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=,flags=50331944,maximumSize=,minimumSize=,preferredSize=,fixedCellHeight=-1,fixedCellWidth=-1,horizontalScrollIncrement=-1,selectionBackground=javax.swing.plaf.ColorUIResource[r=49,g=106,b=197],selectionForeground=javax.swing.plaf.ColorUIResource[r=255,g=255,b=255],visibleRowCount=8,layoutOrientation=0], class: javax.swing.plaf.basic.BasicComboPopup$1
+value: Piece, com.cosmos.acacia.crm.data.DbResource[resourceId=1], value: com.cosmos.acacia.crm.enums.MeasurementUnit
+index: -1, isSelected: false, cellHasFocus: false
+component: com.cosmos.acacia.crm.gui.ProductPanel$BeanListCellRenderer[,-372,-14,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=javax.swing.border.EmptyBorder@ca548b,flags=25165832,maximumSize=,minimumSize=,preferredSize=,defaultIcon=,disabledIcon=,horizontalAlignment=LEADING,horizontalTextPosition=TRAILING,iconTextGap=4,labelFor=,text=Piece, com.cosmos.acacia.crm.data.DbResource[resourceId=1],verticalAlignment=CENTER,verticalTextPosition=CENTER]
+*/
+    private class BeanListCellRenderer
+        extends DefaultListCellRenderer
+    {
+
+        @Override
+        public Component getListCellRendererComponent(
+                JList list,
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus)
         {
-            
-            //productCategories = new MapComboBoxModel();
-            //productCategories = new ListComboBoxModel();
-            productCategories = new EnumComboBoxModel(MeasurementUnit.class);
+            //System.out.println("list: " + list + ", class: " + (list != null ? list.getClass().getName() : null));
+            //System.out.println("value: " + value + ", value: " + (value != null ? value.getClass().getName() : null));
+            //System.out.println("index: " + index + ", isSelected: " + isSelected + ", cellHasFocus: " + cellHasFocus);
+            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            //System.out.println("component: " + component);
+            return component;
         }
 
-        return productCategories;
     }
 }

@@ -135,7 +135,6 @@ public class ProductsListPanel extends AcaciaPanel {
     private ProductsListRemote formSession;
 
     private BindingGroup productsBindingGroup;
-    private JTableBinding productsTableBinding;
     private List<Product> products;
     private ProductsAccessControl accessControl;
     private ProductsButtonActionsListener buttonActionsListener;
@@ -150,24 +149,45 @@ public class ProductsListPanel extends AcaciaPanel {
         buttonsPanel.setEnabled(CRUDButtonPanel.Button.Modify, false);
         buttonsPanel.setEnabled(CRUDButtonPanel.Button.Delete, false);
 
-        JTableBinding tableBinding = getProductsTableBinding();
+        productsBindingGroup = new BindingGroup();
+        productsTable.createBinding(productsBindingGroup, getProducts(), getProductEntityProperties());
 
-        BindingGroup bindingGroup = getProductsBindingGroup();
-        bindingGroup.addBinding(tableBinding);
-
-        /*Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, productsTable, ELProperty.create("${selectedElement.productId}"), productIdTextField, BeanProperty.create("text"));
+        /*
+        Binding binding = Bindings.createAutoBinding(
+            AutoBinding.UpdateStrategy.READ_WRITE,
+            productsTable,
+            ELProperty.create("${selectedElement.productId}"),
+            productIdTextField, BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ, productsTable, ELProperty.create("${selectedElement != null}"), productIdTextField, BeanProperty.create("enabled"));
+
+        binding = Bindings.createAutoBinding(
+            AutoBinding.UpdateStrategy.READ,
+            productsTable,
+            ELProperty.create("${selectedElement != null}"),
+            productIdTextField,
+            BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, productsTable, ELProperty.create("${selectedElement.productName}"), productNameTextField, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+            AutoBinding.UpdateStrategy.READ_WRITE,
+            productsTable,
+            ELProperty.create("${selectedElement.productName}"),
+            productNameTextField,
+            BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ, productsTable, ELProperty.create("${selectedElement != null}"), productNameTextField, BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);*/
 
-        bindingGroup.bind();
+        binding = Bindings.createAutoBinding(
+            AutoBinding.UpdateStrategy.READ,
+            productsTable,
+            ELProperty.create("${selectedElement != null}"),
+            productNameTextField,
+            BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+        */
+
+        productsBindingGroup.bind();
 
         buttonsPanel.addListSelectionListener(productsTable);
     }
@@ -180,21 +200,6 @@ public class ProductsListPanel extends AcaciaPanel {
         }
 
         return productsBindingGroup;
-    }
-
-    protected JTableBinding getProductsTableBinding()
-    {
-        if(productsTableBinding == null)
-        {
-            productsTable.setData(getProducts());
-            productsTable.setEntityProperties(getProductEntityProperties());
-            productsTableBinding = productsTable.getTableBinding();
-//            List list = ObservableCollections.observableList(getProducts());
-//            EntityProperties entityProps = getProductEntityProperties();
-//            productsTableBinding = BeansBinding.createTableBinding(productsTable, list, entityProps);
-        }
-
-        return productsTableBinding;
     }
 
     protected List<Product> getProducts()

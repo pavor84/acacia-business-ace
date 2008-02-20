@@ -45,7 +45,6 @@ public class AcaciaApplication extends SingleFrameApplication {
             {
                 MeasurementUnit unit = MeasurementUnit.valueOf(dbResource.getEnumName());
                 unit.setDbResource(dbResource);
-                System.out.println("dbResource: " + dbResource + ", dbResource.getEnumValue(): " + dbResource.getEnumValue());
             }
         }
         catch(Exception ex)
