@@ -188,7 +188,6 @@ public class Product
     }
 
     public void setProductId(BigInteger productId) {
-        firePropertyChange("productId", this.productId, productId);
         this.productId = productId;
     }
 
@@ -197,7 +196,6 @@ public class Product
     }
 
     public void setParentId(BigInteger parentId) {
-        firePropertyChange("parentId", this.parentId, parentId);
         this.parentId = parentId;
     }
 

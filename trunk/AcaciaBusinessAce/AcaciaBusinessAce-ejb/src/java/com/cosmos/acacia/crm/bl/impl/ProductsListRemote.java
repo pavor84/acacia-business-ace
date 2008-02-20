@@ -6,7 +6,9 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
 import javax.ejb.Remote;
@@ -27,5 +29,8 @@ public interface ProductsListRemote {
     Product saveProduct(Product product);
 
     int deleteProduct(Product product);
+
+    List<DbResource> getMeasureUnits();
+    List<DbResource> getMeasureUnits(MeasurementUnit.Category category);
     
 }

@@ -19,12 +19,8 @@ public interface EntityStoreManagerLocal
 {
 
     void persist(EntityManager entityManager, Object entity);
-
-    void persist(Object entity);
     
     int remove(EntityManager entityManager, Object entity);
-
-    int remove(Object entity);
 
     EntityProperties getEntityProperties(Class entityClass);
 }
