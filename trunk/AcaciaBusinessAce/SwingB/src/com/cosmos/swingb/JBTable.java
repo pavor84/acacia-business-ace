@@ -5,11 +5,22 @@
 
 package com.cosmos.swingb;
 
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.observablecollections.ObservableCollections;
+import org.jdesktop.observablecollections.ObservableList;
+import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTable;
 
 /**
@@ -19,7 +30,10 @@ import org.jdesktop.swingx.JXTable;
 public class JBTable
     extends JXTable
 {
-    private List data;
+    private BindingGroup bindingGroup;
+    private ObservableList data;
+    private EntityProperties entityProperties;
+    private JTableBinding tableBinding;
 
     public JBTable()
     {
@@ -55,14 +69,19 @@ public class JBTable
     }
 
     public void setData(List data) {
-        if(this.data != null)
+        List oldData = getData();
+        if(oldData != null && data != null)
         {
             this.data.clear();
             this.data.addAll(data);
         }
+        else if(!(data instanceof ObservableList))
+        {
+            data = ObservableCollections.observableList(data);
+        }
         else
         {
-            this.data = data;
+            data = (ObservableList)data;
         }
     }
 
@@ -173,5 +192,87 @@ public class JBTable
         return null;
     }
 
+    public JTableBinding createBinding(
+            BindingGroup bindingGroup,
+            List data,
+            EntityProperties entityProperties) {
+        AutoBinding.UpdateStrategy updateStrategy = entityProperties.getUpdateStrategy();
+        if(updateStrategy == null)
+            updateStrategy = AutoBinding.UpdateStrategy.READ;
+        return createBinding(bindingGroup, data, entityProperties, updateStrategy);
+    }
+
+    public JTableBinding createBinding(
+            BindingGroup bindingGroup,
+            List data,
+            EntityProperties entityProperties,
+            AutoBinding.UpdateStrategy updateStrategy) {
+        this.bindingGroup = bindingGroup;
+        if(!(data instanceof ObservableList))
+            this.data = ObservableCollections.observableList(data);
+        else
+            this.data = (ObservableList)data;
+        this.entityProperties = entityProperties;
+
+        tableBinding = SwingBindings.createJTableBinding(updateStrategy, data, this);
+        createColumnsBinding(tableBinding, entityProperties);
+
+        bindingGroup.addBinding(tableBinding);
+
+        return tableBinding;
+    }
+
+
+    protected void createColumnsBinding(JTableBinding tableBinding, EntityProperties entityProperties)
+    {
+        createColumnsBinding(tableBinding, entityProperties.getValues());
+    }
+
+    protected void createColumnsBinding(JTableBinding tableBinding, Collection<PropertyDetails> properties)
+    {
+        for(PropertyDetails property : properties)
+        {
+            if(!property.isHiden())
+                createColumnBinding(tableBinding, property);
+        }
+    }
+
+    protected ColumnBinding createColumnBinding(JTableBinding tableBinding, PropertyDetails propertyDetails)
+    {
+        String expression = "${" + propertyDetails.getPropertyName() + "}";
+        ELProperty elProperty = ELProperty.create(expression);
+        ColumnBinding columnBinding = tableBinding.addColumnBinding(elProperty);
+        columnBinding.setColumnName(propertyDetails.getPropertyTitle());
+        columnBinding.setColumnClass(propertyDetails.getPropertyClass());
+
+        Boolean b = propertyDetails.isEditable();
+        if(b != null)
+            columnBinding.setEditable(b.booleanValue());
+
+        b = propertyDetails.isVisible();
+        if(b != null)
+            columnBinding.setVisible(b.booleanValue());
+
+        Object obj = propertyDetails.getSourceUnreadableValue();
+        if(obj != null)
+            columnBinding.setSourceUnreadableValue(obj);
+
+        //columnBinding.setConverter()
+        //columnBinding.setValidator(arg0)
+
+        return columnBinding;
+    }
+
+    public BindingGroup getBindingGroup() {
+        return bindingGroup;
+    }
+
+    public EntityProperties getEntityProperties() {
+        return entityProperties;
+    }
+
+    public JTableBinding getTableBinding() {
+        return tableBinding;
+    }
 
 }
