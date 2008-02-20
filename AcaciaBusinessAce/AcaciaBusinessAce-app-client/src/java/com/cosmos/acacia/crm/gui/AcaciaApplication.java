@@ -34,7 +34,7 @@ public class AcaciaApplication extends SingleFrameApplication {
      * builder, so this additional configuration is not needed.
      */
     @Override protected void configureWindow(java.awt.Window root) {
-        System.out.println("configureWindow()");
+        /*System.out.println("configureWindow()");
         try
         {
             if(databaseResource == null)
@@ -50,7 +50,7 @@ public class AcaciaApplication extends SingleFrameApplication {
         catch(Exception ex)
         {
             throw new RuntimeException(ex);
-        }
+        }*/
     }
 
     /**

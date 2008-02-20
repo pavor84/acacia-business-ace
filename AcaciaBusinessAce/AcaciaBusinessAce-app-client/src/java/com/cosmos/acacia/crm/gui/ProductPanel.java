@@ -10,8 +10,10 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.BeanResource;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
 import java.awt.Component;
@@ -25,15 +27,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.observablecollections.ObservableCollections;
-import org.jdesktop.swingbinding.JComboBoxBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
@@ -204,6 +198,8 @@ public class ProductPanel extends AcaciaPanel {
 
         productNameTextField.createBinding(productBindingGroup, product, "productName");
         productNameTextField.createBinding(productBindingGroup, product, "productCode");
+
+        measureUnitComboBox.setRenderer(new BeanListCellRenderer());
         measureUnitComboBox.createBinding(productBindingGroup, getMeasureUnits(), product, "measureUnit");
 
         productBindingGroup.bind();
@@ -275,18 +271,10 @@ public class ProductPanel extends AcaciaPanel {
         return getFormSession().getMeasureUnits(category);
     }
 
-    //private class BeanComboBoxModel
-    //    extends ListComboBoxModel
-
-/*
-list: javax.swing.plaf.basic.BasicComboPopup$1[ComboBox.list,0,0,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=,flags=50331944,maximumSize=,minimumSize=,preferredSize=,fixedCellHeight=-1,fixedCellWidth=-1,horizontalScrollIncrement=-1,selectionBackground=javax.swing.plaf.ColorUIResource[r=49,g=106,b=197],selectionForeground=javax.swing.plaf.ColorUIResource[r=255,g=255,b=255],visibleRowCount=8,layoutOrientation=0], class: javax.swing.plaf.basic.BasicComboPopup$1
-value: Piece, com.cosmos.acacia.crm.data.DbResource[resourceId=1], value: com.cosmos.acacia.crm.enums.MeasurementUnit
-index: -1, isSelected: false, cellHasFocus: false
-component: com.cosmos.acacia.crm.gui.ProductPanel$BeanListCellRenderer[,-372,-14,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=javax.swing.border.EmptyBorder@ca548b,flags=25165832,maximumSize=,minimumSize=,preferredSize=,defaultIcon=,disabledIcon=,horizontalAlignment=LEADING,horizontalTextPosition=TRAILING,iconTextGap=4,labelFor=,text=Piece, com.cosmos.acacia.crm.data.DbResource[resourceId=1],verticalAlignment=CENTER,verticalTextPosition=CENTER]
-*/
     private class BeanListCellRenderer
         extends DefaultListCellRenderer
     {
+        private BeanResource beanResource = new BeanResource(AcaciaApplication.class);
 
         @Override
         public Component getListCellRendererComponent(
@@ -296,13 +284,93 @@ component: com.cosmos.acacia.crm.gui.ProductPanel$BeanListCellRenderer[,-372,-14
                 boolean isSelected,
                 boolean cellHasFocus)
         {
-            //System.out.println("list: " + list + ", class: " + (list != null ? list.getClass().getName() : null));
-            //System.out.println("value: " + value + ", value: " + (value != null ? value.getClass().getName() : null));
-            //System.out.println("index: " + index + ", isSelected: " + isSelected + ", cellHasFocus: " + cellHasFocus);
-            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            //System.out.println("component: " + component);
+            Component component;
+            if(value instanceof DbResource)
+            {
+                String valueName = beanResource.getFullName((DbResource)value);
+                component = super.getListCellRendererComponent(list, valueName, index, isSelected, cellHasFocus);
+            }
+            else
+                component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
             return component;
         }
 
     }
 }
+
+/*
+
+	at com.cosmos.acacia.crm.data.DbResource.toString(DbResource.java:111)
+	at javax.swing.plaf.basic.BasicComboBoxRenderer.getListCellRendererComponent(Unknown Source)
+	at javax.swing.plaf.basic.BasicListUI.updateLayoutState(Unknown Source)
+	at javax.swing.plaf.basic.BasicListUI.maybeUpdateLayoutState(Unknown Source)
+	at javax.swing.plaf.basic.BasicListUI$Handler.valueChanged(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.changeSelection(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.changeSelection(Unknown Source)
+	at javax.swing.DefaultListSelectionModel.setSelectionInterval(Unknown Source)
+	at javax.swing.JList.setSelectedIndex(Unknown Source)
+	at javax.swing.plaf.basic.BasicComboPopup.setListSelection(Unknown Source)
+	at javax.swing.plaf.basic.BasicComboPopup.access$300(Unknown Source)
+	at javax.swing.plaf.basic.BasicComboPopup$Handler.itemStateChanged(Unknown Source)
+	at javax.swing.JComboBox.fireItemStateChanged(Unknown Source)
+	at javax.swing.JComboBox.selectedItemChanged(Unknown Source)
+	at javax.swing.JComboBox.contentsChanged(Unknown Source)
+	at org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel.contentsChanged(JComboBoxBinding.java:372)
+	at org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel.allChanged(JComboBoxBinding.java:324)
+	at org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel.updateElements(JComboBoxBinding.java:294)
+	at org.jdesktop.swingbinding.JComboBoxBinding$Handler.propertyStateChanged(JComboBoxBinding.java:260)
+	at org.jdesktop.beansbinding.PropertyHelper.firePropertyStateChange(PropertyHelper.java:212)
+	at org.jdesktop.swingbinding.ElementsProperty.setValue0(ElementsProperty.java:98)
+	at org.jdesktop.swingbinding.ElementsProperty.setValue(ElementsProperty.java:103)
+	at org.jdesktop.swingbinding.ElementsProperty.setValue(ElementsProperty.java:16)
+	at org.jdesktop.beansbinding.Binding.refreshUnmanaged(Binding.java:1229)
+	at org.jdesktop.beansbinding.Binding.refresh(Binding.java:1207)
+	at org.jdesktop.beansbinding.Binding.refreshAndNotify(Binding.java:1143)
+	at org.jdesktop.beansbinding.AutoBinding.bindImpl(AutoBinding.java:197)
+	at org.jdesktop.swingbinding.JComboBoxBinding.bindImpl(JComboBoxBinding.java:200)
+	at org.jdesktop.beansbinding.Binding.bindUnmanaged(Binding.java:959)
+	at org.jdesktop.beansbinding.Binding.bind(Binding.java:944)
+	at org.jdesktop.beansbinding.BindingGroup.bind(BindingGroup.java:143)
+	at com.cosmos.acacia.crm.gui.ProductPanel.initData(ProductPanel.java:209)
+	at com.cosmos.acacia.crm.gui.ProductPanel.init(ProductPanel.java:60)
+	at com.cosmos.acacia.crm.gui.ProductPanel.<init>(ProductPanel.java:54)
+	at com.cosmos.acacia.crm.gui.ProductsListPanel$ProductsButtonActionsListener.newAction(ProductsListPanel.java:366)
+	at com.cosmos.acacia.gui.CRUDButtonPanel.newAction(CRUDButtonPanel.java:188)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.jdesktop.application.ApplicationAction.noProxyActionPerformed(ApplicationAction.java:662)
+	at org.jdesktop.application.ApplicationAction.actionPerformed(ApplicationAction.java:698)
+	at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+	at javax.swing.AbstractButton$Handler.actionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
+	at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Source)
+	at java.awt.AWTEventMulticaster.mouseReleased(Unknown Source)
+	at java.awt.Component.processMouseEvent(Unknown Source)
+	at javax.swing.JComponent.processMouseEvent(Unknown Source)
+	at java.awt.Component.processEvent(Unknown Source)
+	at java.awt.Container.processEvent(Unknown Source)
+	at java.awt.Component.dispatchEventImpl(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
+	at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
+	at java.awt.Container.dispatchEventImpl(Unknown Source)
+	at java.awt.Window.dispatchEventImpl(Unknown Source)
+	at java.awt.Component.dispatchEvent(Unknown Source)
+	at java.awt.EventQueue.dispatchEvent(Unknown Source)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+	at java.awt.EventDispatchThread.run(Unknown Source)
+
+*/
