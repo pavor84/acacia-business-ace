@@ -210,6 +210,16 @@ public enum MeasurementUnit
         this.dbResource = dbResource;
     }
 
+    public String getShortName()
+    {
+        return getShortUnitName();
+    }
+
+    public String getName()
+    {
+        return getUnitName();
+    }
+
 
     @Override
     public String toString() {

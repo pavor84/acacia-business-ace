@@ -15,4 +15,6 @@ public interface DatabaseResource {
 
     DbResource getDbResource();
     void setDbResource(DbResource resource);
+    String getShortName();
+    String getName();
 }
