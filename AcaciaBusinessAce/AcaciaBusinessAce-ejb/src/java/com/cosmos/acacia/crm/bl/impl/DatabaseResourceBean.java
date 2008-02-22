@@ -61,7 +61,6 @@ public class DatabaseResourceBean
             Enum enumValue = (Enum)dbr;
             DbResource resource = getDbResource(enumValue);
             dbr.setDbResource(resource);
-            resource.setEnumValue(enumValue);
             dbResources.add(resource);
         }
 

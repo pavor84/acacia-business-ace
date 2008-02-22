@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.resource.EnumResource;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,8 +39,7 @@ import javax.persistence.Table;
     }
 )
 public class DbResource
-    extends EnumDbResource
-    implements Serializable
+    implements Serializable, EnumResource
 {
 
     private static final long serialVersionUID = 1L;
@@ -111,4 +111,16 @@ public class DbResource
         return "com.cosmos.acacia.crm.data.DbResource[resourceId=" + resourceId + "]";
     }
 
+    public Enum getEnumValue()
+    {
+        try
+        {
+            Class enumClass = Class.forName(getEnumClass().getEnumClassName());
+            return Enum.valueOf(enumClass, getEnumName());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
+    }
 }
