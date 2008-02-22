@@ -6,7 +6,7 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.data.TextResource;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -125,12 +125,12 @@ public class BeanResource
             }
         }
 
-        return getShortName((DatabaseResource)dbResource.getEnumValue());
+        return getShortName((TextResource)dbResource.getEnumValue());
     }
 
-    public String getShortName(DatabaseResource databaseResource)
+    public String getShortName(TextResource TextResource)
     {
-        return databaseResource.getShortName();
+        return TextResource.getShortName();
     }
 
     public String getName(DbResource dbResource)
@@ -145,12 +145,12 @@ public class BeanResource
             }
         }
 
-        return getName((DatabaseResource)dbResource.getEnumValue());
+        return getName((TextResource)dbResource.getEnumValue());
     }
 
-    public String getName(DatabaseResource databaseResource)
+    public String getName(TextResource TextResource)
     {
-        return databaseResource.getName();
+        return TextResource.getName();
     }
 
     public String getFullName(DbResource dbResource)
@@ -162,13 +162,13 @@ public class BeanResource
             return getFullName(shortName, name);
         }
 
-        return getFullName((DatabaseResource)dbResource.getEnumValue());
+        return getFullName((TextResource)dbResource.getEnumValue());
     }
 
-    public String getFullName(DatabaseResource databaseResource)
+    public String getFullName(TextResource TextResource)
     {
-        String shortName = getShortName(databaseResource);
-        String name = getName(databaseResource);
+        String shortName = getShortName(TextResource);
+        String name = getName(TextResource);
         return getFullName(shortName, name);
     }
 

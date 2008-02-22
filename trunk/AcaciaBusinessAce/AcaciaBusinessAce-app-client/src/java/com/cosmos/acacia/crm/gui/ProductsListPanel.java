@@ -9,6 +9,8 @@ package com.cosmos.acacia.crm.gui;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.CRUDButtonActionsListener;
 import com.cosmos.acacia.gui.CRUDButtonPanel;
@@ -22,6 +24,8 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
+import org.jdesktop.swingx.table.TableColumnExt;
 
 /**
  *
@@ -150,7 +154,15 @@ public class ProductsListPanel extends AcaciaPanel {
         buttonsPanel.setEnabled(CRUDButtonPanel.Button.Delete, false);
 
         productsBindingGroup = new BindingGroup();
-        productsTable.createBinding(productsBindingGroup, getProducts(), getProductEntityProperties());
+        JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), getProductEntityProperties());
+        tableBinding.bind();
+
+        TableColumnExt categoryColumn = productsTable.getColumnExt("Category");
+        AcaciaComboBox categoryComboBox = new AcaciaComboBox();
+        categoryComboBox.bind(productsBindingGroup, getProductsCategories(), productsTable, "category");
+        ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(categoryComboBox);
+        categoryColumn.setCellEditor(cellEditor);
+
 
         /*
         Binding binding = Bindings.createAutoBinding(
@@ -190,6 +202,32 @@ public class ProductsListPanel extends AcaciaPanel {
         productsBindingGroup.bind();
 
         buttonsPanel.addListSelectionListener(productsTable);
+
+        try
+        {
+            TableColumnExt column1 = (TableColumnExt)productsTable.getColumn("Category");
+            System.out.println("column1: " + column1);
+            System.out.println("column1(2).Title: " + column1.getTitle());
+            System.out.println("column1(2).getCellEditor: " + column1.getCellEditor());
+            System.out.println("column1(2).getCellRenderer: " + column1.getCellRenderer());
+            System.out.println("column1(2).getClass: " + column1.getClass());
+            System.out.println("column1(2).getHeaderRenderer: " + column1.getHeaderRenderer());
+            System.out.println("column1(2).getHeaderValue: " + column1.getHeaderValue());
+            System.out.println("column1(2).getIdentifier: " + column1.getIdentifier() + ", idClass: " + column1.getIdentifier().getClass().getName());
+            Object value = column1.getPrototypeValue();
+            if(value != null)
+                System.out.println("column1(2).getPrototypeValue: " + value + ", idClass: " + value.getClass().getName());
+            else
+                System.out.println("column1(2).getPrototypeValue: " + value);
+            System.out.println("productsTable.getColumnModel(): " + productsTable.getColumnModel());
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        productsTable.setEditable(true);
+        //productsTable.setCellEditor();
     }
 
     protected BindingGroup getProductsBindingGroup()
@@ -210,6 +248,11 @@ public class ProductsListPanel extends AcaciaPanel {
         }
 
         return products;
+    }
+
+    private List<ProductCategory> getProductsCategories()
+    {
+        return getFormSession().getProductsCategories(getParentDataObject());
     }
 
     protected EntityProperties getProductEntityProperties()
