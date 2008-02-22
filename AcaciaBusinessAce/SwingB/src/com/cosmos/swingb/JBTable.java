@@ -13,6 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.ELProperty;
@@ -22,6 +26,8 @@ import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
+import org.jdesktop.swingx.table.TableColumnExt;
 
 /**
  *
@@ -30,12 +36,28 @@ import org.jdesktop.swingx.JXTable;
 public class JBTable
     extends JXTable
 {
+    private Application application;
+    private ApplicationContext applicationContext;
+    private ApplicationActionMap applicationActionMap;
+    private ResourceMap resourceMap;
+
     private ObservableList data;
     private EntityProperties entityProperties;
 
     public JBTable()
     {
         internalInitialization();
+    }
+
+    public JBTable(Class<? extends Application> applicationClass)
+    {
+        this(Application.getInstance(applicationClass));
+    }
+
+    public JBTable(Application application)
+    {
+        this();
+        this.application = application;
     }
 
     protected void internalInitialization()
@@ -87,8 +109,9 @@ public class JBTable
     {
         if(data == null)
             return -1;
+        System.out.println("data: " + data + ", class: " + data.getClass().getName());
 
-        data.add(bean);
+        data.add(data.size(), bean);
         return data.size() - 1;
     }
 
@@ -213,6 +236,7 @@ public class JBTable
 
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, data, this);
         createColumnsBinding(tableBinding, entityProperties);
+        tableBinding.bind();
 
         bindingGroup.addBinding(tableBinding);
 
@@ -262,6 +286,112 @@ public class JBTable
 
     public EntityProperties getEntityProperties() {
         return entityProperties;
+    }
+
+    public void bindComboBoxCellEditor(
+            BindingGroup bindingGroup,
+            List comboBoxValues,
+            String propertyName)
+    {
+        Application app = getApplication();
+        JBComboBox comboBox;
+        if(app != null)
+            comboBox = new JBComboBox(app);
+        else
+            comboBox = new JBComboBox();
+
+        comboBox.bind(bindingGroup, comboBoxValues, this, propertyName);
+        ComboBoxCellEditor comboBoxCellEditor = new ComboBoxCellEditor(comboBox);
+        TableColumnExt column;
+        try
+        {
+            column = getColumnExt(propertyName);
+        }
+        catch(Exception ex)
+        {
+            column = null;
+        }
+
+        if(column == null)
+        {
+            EntityProperties entityProps = getEntityProperties();
+            if(entityProps == null)
+                throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
+            PropertyDetails propertyDetails = entityProps.getPropertyDetails(propertyName);
+            if(propertyDetails != null)
+            {
+                String columnName = propertyDetails.getPropertyTitle();
+                column = getColumnExt(columnName);
+            }
+        }
+
+        if(column == null)
+            throw new IllegalArgumentException("Can not find table column for property name: " + propertyName);
+
+        column.setCellEditor(comboBoxCellEditor);
+        if(app != null && column.getCellRenderer() == null)
+            column.setCellRenderer(new BeanTableCellRenderer(app.getClass()));
+    }
+    
+  /*      AcaciaComboBox categoryComboBox = new AcaciaComboBox();
+        categoryComboBox.bind(productsBindingGroup, getProductsCategories(), productsTable, "category");
+        ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(categoryComboBox);
+        TableColumnExt categoryColumn = productsTable.getColumnExt("Category");
+        categoryColumn.setCellEditor(cellEditor);
+  */
+
+    public ApplicationContext getContext()
+    {
+        if(applicationContext == null)
+        {
+            Application app = getApplication();
+            if(app != null)
+            {
+                applicationContext = app.getContext();
+            }
+        }
+
+        return applicationContext;
+    }
+
+    public ApplicationActionMap getApplicationActionMap()
+    {
+        if(applicationActionMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                applicationActionMap = context.getActionMap(this);
+            }
+        }
+
+        return applicationActionMap;
+    }
+
+    public ResourceMap getResourceMap()
+    {
+        if(resourceMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                resourceMap = context.getResourceMap(this.getClass());
+            }
+        }
+
+        return resourceMap;
+    }
+
+    public void setResourceMap(ResourceMap resourceMap) {
+        this.resourceMap = resourceMap;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
 }
