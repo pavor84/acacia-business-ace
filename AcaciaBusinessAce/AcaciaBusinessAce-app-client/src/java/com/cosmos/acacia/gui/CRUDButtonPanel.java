@@ -25,7 +25,7 @@ import org.jdesktop.application.ResourceMap;
  * @author  miro
  */
 public class CRUDButtonPanel
-    extends JBPanel
+    extends AcaciaPanel
 {
     public enum Button
     {
@@ -50,7 +50,7 @@ public class CRUDButtonPanel
     
     /** Creates new form CRUDButtonPanel */
     public CRUDButtonPanel() {
-        super(AcaciaApplication.class);
+        super();
         initComponents();
         initData();
     }

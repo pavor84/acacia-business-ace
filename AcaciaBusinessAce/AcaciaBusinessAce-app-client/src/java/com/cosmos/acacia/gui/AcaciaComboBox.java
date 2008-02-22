@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.swingb.JBComboBox;
 
 /**
@@ -17,6 +18,6 @@ public class AcaciaComboBox
 
     public AcaciaComboBox()
     {
-        setRenderer(new BeanListCellRenderer());
+        super(AcaciaApplication.class);
     }
 }

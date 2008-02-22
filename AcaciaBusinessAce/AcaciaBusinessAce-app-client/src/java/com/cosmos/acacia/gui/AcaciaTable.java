@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.swingb.JBTable;
 
 /**
@@ -16,7 +17,7 @@ public class AcaciaTable
 {
     public AcaciaTable()
     {
-        super();
+        super(AcaciaApplication.class);
     }
 
 }

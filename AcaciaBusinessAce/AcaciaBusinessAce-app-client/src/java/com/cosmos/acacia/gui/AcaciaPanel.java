@@ -19,9 +19,13 @@ public abstract class AcaciaPanel
 
     private DataObject parentDataObject;
 
-    /** Creates new form ProductPanel */
-    public AcaciaPanel(DataObject parentDataObject) {
+
+    AcaciaPanel() {
         super(AcaciaApplication.class);
+    }
+ 
+    public AcaciaPanel(DataObject parentDataObject) {
+        this();
         this.parentDataObject = parentDataObject;
     }
 
