@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;

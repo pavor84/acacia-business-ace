@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.TextResource;
+import com.cosmos.resource.TextResource;
 
 /**
  *
