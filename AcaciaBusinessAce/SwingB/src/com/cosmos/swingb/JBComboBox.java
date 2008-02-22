@@ -25,28 +25,25 @@ import org.jdesktop.swingbinding.SwingBindings;
 public class JBComboBox
     extends JComboBox
 {
-    private BindingGroup bindingGroup;
-    private JComboBoxBinding comboBoxBinding;
     private ObservableList data;
     private String propertyName;
     private Object beanEntity;
 
 
-    public JComboBoxBinding createBinding(BindingGroup bindingGroup,
+    public JComboBoxBinding bind(BindingGroup bindingGroup,
             List data,
             Object beanEntity,
             String propertyName)
     {
-        return createBinding(bindingGroup, data, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
+        return bind(bindingGroup, data, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
-    public JComboBoxBinding createBinding(BindingGroup bindingGroup,
+    public JComboBoxBinding bind(BindingGroup bindingGroup,
             List data,
             Object beanEntity,
             String propertyName,
             AutoBinding.UpdateStrategy updateStrategy)
     {
-        this.bindingGroup = bindingGroup;
         if(!(data instanceof ObservableList))
             this.data = ObservableCollections.observableList(data);
         else
@@ -54,7 +51,7 @@ public class JBComboBox
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
-        comboBoxBinding = SwingBindings.createJComboBoxBinding(updateStrategy, this.data, this);
+        JComboBoxBinding comboBoxBinding = SwingBindings.createJComboBoxBinding(updateStrategy, this.data, this);
         bindingGroup.addBinding(comboBoxBinding);
 
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
@@ -62,14 +59,6 @@ public class JBComboBox
         Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
 
-        return comboBoxBinding;
-    }
-
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    public JComboBoxBinding getComboBoxBinding() {
         return comboBoxBinding;
     }
 

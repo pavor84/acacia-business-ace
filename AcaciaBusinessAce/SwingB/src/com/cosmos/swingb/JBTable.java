@@ -30,10 +30,8 @@ import org.jdesktop.swingx.JXTable;
 public class JBTable
     extends JXTable
 {
-    private BindingGroup bindingGroup;
     private ObservableList data;
     private EntityProperties entityProperties;
-    private JTableBinding tableBinding;
 
     public JBTable()
     {
@@ -192,29 +190,28 @@ public class JBTable
         return null;
     }
 
-    public JTableBinding createBinding(
+    public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
             EntityProperties entityProperties) {
         AutoBinding.UpdateStrategy updateStrategy = entityProperties.getUpdateStrategy();
         if(updateStrategy == null)
             updateStrategy = AutoBinding.UpdateStrategy.READ;
-        return createBinding(bindingGroup, data, entityProperties, updateStrategy);
+        return bind(bindingGroup, data, entityProperties, updateStrategy);
     }
 
-    public JTableBinding createBinding(
+    public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
             EntityProperties entityProperties,
             AutoBinding.UpdateStrategy updateStrategy) {
-        this.bindingGroup = bindingGroup;
         if(!(data instanceof ObservableList))
             this.data = ObservableCollections.observableList(data);
         else
             this.data = (ObservableList)data;
         this.entityProperties = entityProperties;
 
-        tableBinding = SwingBindings.createJTableBinding(updateStrategy, data, this);
+        JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, data, this);
         createColumnsBinding(tableBinding, entityProperties);
 
         bindingGroup.addBinding(tableBinding);
@@ -263,16 +260,8 @@ public class JBTable
         return columnBinding;
     }
 
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
     public EntityProperties getEntityProperties() {
         return entityProperties;
-    }
-
-    public JTableBinding getTableBinding() {
-        return tableBinding;
     }
 
 }
