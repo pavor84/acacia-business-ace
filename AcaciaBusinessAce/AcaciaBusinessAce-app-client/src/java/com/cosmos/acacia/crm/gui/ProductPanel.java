@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.BeanResource;
@@ -71,6 +71,8 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanel = new com.cosmos.swingb.JBPanel();
         closelButton = new com.cosmos.swingb.JBButton();
         saveButton = new com.cosmos.swingb.JBButton();
+        productCategoryComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        measureUnitLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -104,7 +106,7 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(319, Short.MAX_VALUE)
+                .addContainerGap(339, Short.MAX_VALUE)
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(closelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -125,6 +127,12 @@ public class ProductPanel extends AcaciaPanel {
 
         buttonPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closelButton, saveButton});
 
+        productCategoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        productCategoryComboBox.setName("productCategoryComboBox"); // NOI18N
+
+        measureUnitLabel.setText(resourceMap.getString("measureUnitLabel.text")); // NOI18N
+        measureUnitLabel.setName("measureUnitLabel"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -136,16 +144,19 @@ public class ProductPanel extends AcaciaPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(productNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(measureUnitComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                                    .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)))))
+                                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -159,9 +170,13 @@ public class ProductPanel extends AcaciaPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(measureUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 333, Short.MAX_VALUE)
+                    .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 304, Short.MAX_VALUE)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -172,6 +187,8 @@ public class ProductPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBPanel buttonPanel;
     private com.cosmos.swingb.JBButton closelButton;
     private com.cosmos.swingb.JBComboBox measureUnitComboBox;
+    private com.cosmos.swingb.JBLabel measureUnitLabel;
+    private com.cosmos.acacia.gui.AcaciaComboBox productCategoryComboBox;
     private com.cosmos.swingb.JBLabel productCategoryLabel;
     private com.cosmos.swingb.JBLabel productCodeLabel;
     private com.cosmos.swingb.JBTextField productCodeTextField;
@@ -196,11 +213,13 @@ public class ProductPanel extends AcaciaPanel {
 
         productBindingGroup = new BindingGroup();
 
-        productNameTextField.createBinding(productBindingGroup, product, "productName");
-        productNameTextField.createBinding(productBindingGroup, product, "productCode");
+        productNameTextField.bind(productBindingGroup, product, "productName");
+        productNameTextField.bind(productBindingGroup, product, "productCode");
 
         measureUnitComboBox.setRenderer(new BeanListCellRenderer());
-        measureUnitComboBox.createBinding(productBindingGroup, getMeasureUnits(), product, "measureUnit");
+        measureUnitComboBox.bind(productBindingGroup, getMeasureUnits(), product, "measureUnit");
+
+        productCategoryComboBox.bind(productBindingGroup, getProductsCategories(), product, "category");
 
         productBindingGroup.bind();
     }
@@ -226,11 +245,6 @@ public class ProductPanel extends AcaciaPanel {
     public void saveAction() {
         try
         {
-            System.out.println("Save product: " + product);
-            System.out.println("product.getMeasureUnit(): " + product.getMeasureUnit());
-            if(true)
-                return;
-
             product = getFormSession().saveProduct(product);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(product);
@@ -260,6 +274,11 @@ public class ProductPanel extends AcaciaPanel {
         close();
     }
 
+
+    private List<ProductCategory> getProductsCategories()
+    {
+        return getFormSession().getProductsCategories(getParentDataObject());
+    }
 
     private List<DbResource> getMeasureUnits()
     {

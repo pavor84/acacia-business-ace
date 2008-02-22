@@ -197,10 +197,13 @@ public class AcaciaApplicationView extends FrameView {
         ProductsListPanel productsListPanel = new ProductsListPanel(null);
         productsListPanel.showFrame();
     }
-    /*@Action(name="productsList")
-    private void productsListAction()
+
+    @Action
+    public void productCategoriesAction()
     {
-    }*/
+        ProductCategoriesPanel productCategories = new ProductCategoriesPanel(null);
+        productCategories.showFrame();
+    }
 
     private ActionMap getActionMap()
     {
@@ -220,7 +223,6 @@ public class AcaciaApplicationView extends FrameView {
         JBSeparator jSeparator2 = new JBSeparator();
         JBMenuItem exitMenuItem = new JBMenuItem();
         JBMenu productsMenu = new JBMenu();
-        JBMenuItem productsListMenuItem = new JBMenuItem();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
 
@@ -264,9 +266,15 @@ public class AcaciaApplicationView extends FrameView {
         productsMenu.setText(resourceMap.getString("productsMenu.text")); // NOI18N
         productsMenu.setName("productsMenu"); // NOI18N
 
-        productsListMenuItem.setAction(actionMap.get("productsListAction")); // NOI18N
-        productsListMenuItem.setName("productsListMenuItem"); // NOI18N
-        productsMenu.add(productsListMenuItem);
+        JBMenuItem menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("productsListAction")); // NOI18N
+        menuItem.setName("productsListMenuItem"); // NOI18N
+        productsMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
+        menuItem.setName("productCategoriesMenuItem"); // NOI18N
+        productsMenu.add(menuItem);
 
         menuBar.add(productsMenu);
 

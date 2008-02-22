@@ -6,6 +6,7 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.TextResource;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
@@ -33,6 +34,11 @@ public class BeanListCellRenderer
         if(value instanceof DbResource)
         {
             String valueName = beanResource.getFullName((DbResource)value);
+            component = super.getListCellRendererComponent(list, valueName, index, isSelected, cellHasFocus);
+        }
+        else if(value instanceof TextResource)
+        {
+            String valueName = beanResource.getFullName((TextResource)value);
             component = super.getListCellRendererComponent(list, valueName, index, isSelected, cellHasFocus);
         }
         else
