@@ -6,15 +6,15 @@
 package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.TextResource;
 
 /**
  *
  * @author miro
  */
-public interface DatabaseResource {
-
+public interface DatabaseResource
+    extends TextResource
+{
     DbResource getDbResource();
     void setDbResource(DbResource resource);
-    String getShortName();
-    String getName();
 }

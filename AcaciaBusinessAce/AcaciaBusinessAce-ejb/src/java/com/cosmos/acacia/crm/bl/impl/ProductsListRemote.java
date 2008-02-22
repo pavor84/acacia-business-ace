@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
@@ -21,6 +22,7 @@ import javax.ejb.Remote;
 public interface ProductsListRemote {
 
     List<Product> getProducts(DataObject parent);
+    List<ProductCategory> getProductsCategories(DataObject parent);
 
     EntityProperties getProductEntityProperties();
 

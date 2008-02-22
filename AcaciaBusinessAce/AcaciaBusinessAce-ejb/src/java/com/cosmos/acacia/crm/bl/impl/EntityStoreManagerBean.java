@@ -13,6 +13,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -25,9 +26,8 @@ import javax.persistence.EntityManager;
 @Stateless
 public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
-    //@EJB
-    //private DataObjectTypeLocal dotLocal;
-    private static DataObjectTypeLocal dotLocal;
+    @EJB
+    private DataObjectTypeLocal dotLocal;
 
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
 

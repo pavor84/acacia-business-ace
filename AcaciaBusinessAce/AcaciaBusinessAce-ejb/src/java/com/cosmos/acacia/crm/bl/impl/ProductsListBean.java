@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
  *
@@ -54,9 +56,29 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return new ArrayList<Product>(q.getResultList());
     }
 
+    public List<ProductCategory> getProductsCategories(DataObject parent) {
+        System.out.println("databaseResource: " + databaseResource);
+        if(databaseResource != null)
+            databaseResource.getDbResources(MeasurementUnit.class);
+
+        Query q;
+        if(parent != null)
+        {
+            q = em.createNamedQuery("ProductCategory.findByParentDataObjectAndDeleted");
+            q.setParameter("parentDataObject", parent);
+        }
+        else
+        {
+            q = em.createNamedQuery("ProductCategory.findByParentDataObjectIsNullAndDeleted");
+        }
+        q.setParameter("deleted", false);
+        return new ArrayList<ProductCategory>(q.getResultList());
+    }
+
     public EntityProperties getProductEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(Product.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         // TODO: Check which columns to be shown, visible, editable, etc.
         // depending of User Roles, Current Object, etc.
         /*for(Object key : entityProperties.getKeys().toArray())
