@@ -20,41 +20,30 @@ import org.jdesktop.beansbinding.ELProperty;
 public class JBTextField
     extends JTextField
 {
-    private BindingGroup bindingGroup;
-    private Binding binding;
     private String propertyName;
     private Object beanEntity;
 
 
-    public Binding createBinding(BindingGroup bindingGroup,
+    public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName)
     {
-        return createBinding(bindingGroup, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
+        return bind(bindingGroup, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
-    public Binding createBinding(BindingGroup bindingGroup,
+    public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName,
             AutoBinding.UpdateStrategy updateStrategy)
     {
-        this.bindingGroup = bindingGroup;
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("text");
-        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
+        Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
 
-        return binding;
-    }
-
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    public Binding getBinding() {
         return binding;
     }
 
