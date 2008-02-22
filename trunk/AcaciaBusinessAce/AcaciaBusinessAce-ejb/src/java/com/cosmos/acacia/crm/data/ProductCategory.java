@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -24,10 +25,22 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "product_categories")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "ProductCategory.findByParentDataObjectAndDeleted",
+                query = "select p from ProductCategory p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "ProductCategory.findByParentDataObjectIsNullAndDeleted",
+                query = "select p from ProductCategory p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+            )
+    })
 public class ProductCategory
     extends DataObjectBean
-    implements Serializable
+    implements Serializable, TextResource
 {
 
     private static final long serialVersionUID = 1L;
@@ -165,6 +178,14 @@ public class ProductCategory
     @Override
     public void setId(BigInteger id) {
         setProductCategoryId(id);
+    }
+
+    public String getShortName() {
+        return null;
+    }
+
+    public String getName() {
+        return getCategoryName();
     }
 
 }
