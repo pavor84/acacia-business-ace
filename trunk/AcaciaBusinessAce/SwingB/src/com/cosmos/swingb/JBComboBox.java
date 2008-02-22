@@ -7,6 +7,10 @@ package com.cosmos.swingb;
 
 import java.util.List;
 import javax.swing.JComboBox;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -25,10 +29,31 @@ import org.jdesktop.swingbinding.SwingBindings;
 public class JBComboBox
     extends JComboBox
 {
+    private Application application;
+    private ApplicationContext applicationContext;
+    private ApplicationActionMap applicationActionMap;
+    private ResourceMap resourceMap;
+
     private ObservableList data;
     private String propertyName;
     private Object beanEntity;
 
+    public JBComboBox()
+    {
+        super();
+    }
+
+    public JBComboBox(Class<? extends Application> applicationClass)
+    {
+        this(Application.getInstance(applicationClass));
+    }
+
+    public JBComboBox(Application application)
+    {
+        this();
+        this.application = application;
+        setRenderer(new BeanListCellRenderer(application.getClass()));
+    }
 
     public JComboBoxBinding bind(BindingGroup bindingGroup,
             List data,
@@ -74,5 +99,58 @@ public class JBComboBox
         return beanEntity;
     }
 
+    public ApplicationContext getContext()
+    {
+        if(applicationContext == null)
+        {
+            Application app = getApplication();
+            if(app != null)
+            {
+                applicationContext = app.getContext();
+            }
+        }
+
+        return applicationContext;
+    }
+
+    public ApplicationActionMap getApplicationActionMap()
+    {
+        if(applicationActionMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                applicationActionMap = context.getActionMap(this);
+            }
+        }
+
+        return applicationActionMap;
+    }
+
+    public ResourceMap getResourceMap()
+    {
+        if(resourceMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                resourceMap = context.getResourceMap(this.getClass());
+            }
+        }
+
+        return resourceMap;
+    }
+
+    public void setResourceMap(ResourceMap resourceMap) {
+        this.resourceMap = resourceMap;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
 
 }

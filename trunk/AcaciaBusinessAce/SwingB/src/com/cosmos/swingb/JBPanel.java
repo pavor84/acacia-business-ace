@@ -55,7 +55,7 @@ public class JBPanel
 
     public JBPanel(Application application)
     {
-        super();
+        this();
         this.application = application;
     }
 
