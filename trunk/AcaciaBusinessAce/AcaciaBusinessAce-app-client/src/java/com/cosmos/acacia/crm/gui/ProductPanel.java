@@ -13,7 +13,7 @@ import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.gui.BeanResource;
+import com.cosmos.resource.BeanResource;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
 import java.awt.Component;

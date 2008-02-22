@@ -8,9 +8,10 @@ package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.gui.AcaciaComboBox;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.CRUDButtonActionsListener;
 import com.cosmos.acacia.gui.CRUDButtonPanel;
@@ -24,7 +25,6 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
-import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
 import org.jdesktop.swingx.table.TableColumnExt;
 
 /**
@@ -155,13 +155,14 @@ public class ProductsListPanel extends AcaciaPanel {
 
         productsBindingGroup = new BindingGroup();
         JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), getProductEntityProperties());
-        tableBinding.bind();
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getProductsCategories(), "category");
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), "measureUnit");
 
-        TableColumnExt categoryColumn = productsTable.getColumnExt("Category");
-        AcaciaComboBox categoryComboBox = new AcaciaComboBox();
+        /*AcaciaComboBox categoryComboBox = new AcaciaComboBox();
         categoryComboBox.bind(productsBindingGroup, getProductsCategories(), productsTable, "category");
         ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(categoryComboBox);
-        categoryColumn.setCellEditor(cellEditor);
+        TableColumnExt categoryColumn = productsTable.getColumnExt("Category");
+        categoryColumn.setCellEditor(cellEditor);*/
 
 
         /*
@@ -253,6 +254,16 @@ public class ProductsListPanel extends AcaciaPanel {
     private List<ProductCategory> getProductsCategories()
     {
         return getFormSession().getProductsCategories(getParentDataObject());
+    }
+
+    private List<DbResource> getMeasureUnits()
+    {
+        return getFormSession().getMeasureUnits();
+    }
+
+    private List<DbResource> getMeasureUnits(MeasurementUnit.Category category)
+    {
+        return getFormSession().getMeasureUnits(category);
     }
 
     protected EntityProperties getProductEntityProperties()
@@ -408,10 +419,13 @@ public class ProductsListPanel extends AcaciaPanel {
         public void newAction() {
             ProductPanel productPanel = new ProductPanel(getParentDataObject());
             DialogResponse response = productPanel.showDialog(ProductsListPanel.this);
+            System.out.println("response: " + response);
             if(DialogResponse.SAVE.equals(response))
             {
                 Product product = (Product)productPanel.getSelectedValue();
-                productsTable.addRow(product);
+                System.out.println("New product: " + product);
+                int newRowIndex = productsTable.addRow(product);
+                System.out.println("newRowIndex: " + newRowIndex);
             }
         }
     }
