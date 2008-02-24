@@ -49,7 +49,6 @@ public class BeanTableCellRenderer
         }
         else
         {
-            System.out.println("value: " + value + ", class: " + (value != null ? value.getClass().getName() : "null"));
             component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
 
