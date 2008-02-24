@@ -96,9 +96,10 @@ public class Product
     @Property(title="Pattern Mask Format")
     private PatternMaskFormat patternMaskFormat;
 
-    @Column(name = "product_color")
+    @JoinColumn(name = "product_color_id", nullable=true, referencedColumnName = "resource_id")
+    @ManyToOne
     @Property(title="Product Color")
-    private String productColor;
+    private DbResource productColor;
 
     @Column(name = "minimum_quantity", nullable = false)
     @Property(title="Min. Quantity")
@@ -287,11 +288,11 @@ public class Product
         this.patternMaskFormat = patternMaskFormat;
     }
 
-    public String getProductColor() {
+    public DbResource getProductColor() {
         return productColor;
     }
 
-    public void setProductColor(String productColor) {
+    public void setProductColor(DbResource productColor) {
         firePropertyChange("productColor", this.productColor, productColor);
         this.productColor = productColor;
     }
