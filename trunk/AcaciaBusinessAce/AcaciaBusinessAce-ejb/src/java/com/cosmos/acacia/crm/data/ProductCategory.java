@@ -181,11 +181,11 @@ public class ProductCategory
         setProductCategoryId(id);
     }
 
-    public String getShortName() {
+    public String toShortText() {
         return null;
     }
 
-    public String getName() {
+    public String toText() {
         return getCategoryName();
     }
 
