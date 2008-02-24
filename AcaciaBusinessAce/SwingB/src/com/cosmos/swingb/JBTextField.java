@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.swingb.validation.TextFieldValidator;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.validation.Validator;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -31,12 +31,31 @@ public class JBTextField
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            String propertyName)
+            PropertyDetails propertyDetails)
     {
-        return bind(bindingGroup, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
+        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
     public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy)
+    {
+        if(propertyDetails.isHiden())
+        {
+            setEditable(false);
+            setEnabled(false);
+            return null;
+        }
+
+        Binding binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        setEditable(propertyDetails.isEditable());
+        setEnabled(!propertyDetails.isReadOnly());
+
+        return binding;
+    }
+
+    private Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName,
             AutoBinding.UpdateStrategy updateStrategy)
