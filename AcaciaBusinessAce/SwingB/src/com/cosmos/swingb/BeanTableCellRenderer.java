@@ -48,7 +48,10 @@ public class BeanTableCellRenderer
             component = super.getTableCellRendererComponent(table, valueName, isSelected, hasFocus, row, column);
         }
         else
+        {
+            System.out.println("value: " + value + ", class: " + (value != null ? value.getClass().getName() : "null"));
             component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
 
         return component;
     }
