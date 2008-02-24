@@ -110,7 +110,7 @@ public class BeanResource
         if(resource != null)
         {
             String value;
-            if((value = resource.getString(key + ".shortName")) != null)
+            if((value = resource.getString(key + ".shortText")) != null)
             {
                 return value;
             }
@@ -121,7 +121,7 @@ public class BeanResource
 
     public String getShortName(TextResource TextResource)
     {
-        return TextResource.getShortName();
+        return TextResource.toShortText();
     }
 
     public String getName(EnumResource enumResource)
@@ -136,7 +136,7 @@ public class BeanResource
         if(resource != null)
         {
             String value;
-            if((value = resource.getString(key + ".name")) != null)
+            if((value = resource.getString(key + ".text")) != null)
             {
                 return value;
             }
@@ -147,7 +147,7 @@ public class BeanResource
 
     public String getName(TextResource TextResource)
     {
-        return TextResource.getName();
+        return TextResource.toText();
     }
 
     public String getFullName(EnumResource enumResource)
