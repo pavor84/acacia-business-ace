@@ -1,2 +1,3 @@
-set pgsql_path=C:\Program Files (x86)\PostgreSQL\8.3\bin
-%pgsql_path%\pg_dump -i -h localhost -p 5432 -U PostgreSQL -F p -O -D -v -f acacia-%1.sql acacia
+set pgsql_path="C:\Program Files\pgAdmin III\1.8"
+set pgsql_host=10.1.1.11
+%pgsql_path%\pg_dump -i -h %pgsql_host% -p 5432 -U PostgreSQL -F p -O -D -v -f acacia-ddl-%1.sql acacia
