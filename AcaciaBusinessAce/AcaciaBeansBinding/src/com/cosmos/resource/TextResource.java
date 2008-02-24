@@ -10,6 +10,6 @@ package com.cosmos.resource;
  * @author Miro
  */
 public interface TextResource {
-    String getShortName();
-    String getName();
+    String toShortText();
+    String toText();
 }
