@@ -158,77 +158,11 @@ public class ProductsListPanel extends AcaciaPanel {
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getProductsCategories(), "category");
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), "measureUnit");
 
-        /*AcaciaComboBox categoryComboBox = new AcaciaComboBox();
-        categoryComboBox.bind(productsBindingGroup, getProductsCategories(), productsTable, "category");
-        ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(categoryComboBox);
-        TableColumnExt categoryColumn = productsTable.getColumnExt("Category");
-        categoryColumn.setCellEditor(cellEditor);*/
-
-
-        /*
-        Binding binding = Bindings.createAutoBinding(
-            AutoBinding.UpdateStrategy.READ_WRITE,
-            productsTable,
-            ELProperty.create("${selectedElement.productId}"),
-            productIdTextField, BeanProperty.create("text"));
-        binding.setSourceUnreadableValue(null);
-        bindingGroup.addBinding(binding);
-
-        binding = Bindings.createAutoBinding(
-            AutoBinding.UpdateStrategy.READ,
-            productsTable,
-            ELProperty.create("${selectedElement != null}"),
-            productIdTextField,
-            BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        binding = Bindings.createAutoBinding(
-            AutoBinding.UpdateStrategy.READ_WRITE,
-            productsTable,
-            ELProperty.create("${selectedElement.productName}"),
-            productNameTextField,
-            BeanProperty.create("text"));
-        binding.setSourceUnreadableValue(null);
-        bindingGroup.addBinding(binding);
-
-        binding = Bindings.createAutoBinding(
-            AutoBinding.UpdateStrategy.READ,
-            productsTable,
-            ELProperty.create("${selectedElement != null}"),
-            productNameTextField,
-            BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-        */
-
         productsBindingGroup.bind();
 
         buttonsPanel.addListSelectionListener(productsTable);
 
-        try
-        {
-            TableColumnExt column1 = (TableColumnExt)productsTable.getColumn("Category");
-            System.out.println("column1: " + column1);
-            System.out.println("column1(2).Title: " + column1.getTitle());
-            System.out.println("column1(2).getCellEditor: " + column1.getCellEditor());
-            System.out.println("column1(2).getCellRenderer: " + column1.getCellRenderer());
-            System.out.println("column1(2).getClass: " + column1.getClass());
-            System.out.println("column1(2).getHeaderRenderer: " + column1.getHeaderRenderer());
-            System.out.println("column1(2).getHeaderValue: " + column1.getHeaderValue());
-            System.out.println("column1(2).getIdentifier: " + column1.getIdentifier() + ", idClass: " + column1.getIdentifier().getClass().getName());
-            Object value = column1.getPrototypeValue();
-            if(value != null)
-                System.out.println("column1(2).getPrototypeValue: " + value + ", idClass: " + value.getClass().getName());
-            else
-                System.out.println("column1(2).getPrototypeValue: " + value);
-            System.out.println("productsTable.getColumnModel(): " + productsTable.getColumnModel());
-
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
         productsTable.setEditable(true);
-        //productsTable.setCellEditor();
     }
 
     protected BindingGroup getProductsBindingGroup()

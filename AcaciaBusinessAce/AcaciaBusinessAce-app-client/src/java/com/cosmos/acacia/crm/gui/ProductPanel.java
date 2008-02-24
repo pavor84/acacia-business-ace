@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.resource.BeanResource;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
@@ -668,8 +669,10 @@ public class ProductPanel extends AcaciaPanel {
 
         productBindingGroup = new BindingGroup();
 
-        productNameTextField.bind(productBindingGroup, product, "productName");
-        productCodeTextField.bind(productBindingGroup, product, "productCode");
+        EntityProperties entityProps = getProductEntityProperties();
+
+        productNameTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("productName"));
+        productCodeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("productCode"));
 
         measureUnitComboBox.bind(productBindingGroup, getMeasureUnits(), product, "measureUnit");
         productCategoryComboBox.bind(productBindingGroup, getProductsCategories(), product, "category");
@@ -682,33 +685,33 @@ public class ProductPanel extends AcaciaPanel {
         patternMaskFormatComboBox.bind(productBindingGroup, Collections.emptyList(), product, "patternMaskFormat");
         productColorComboBox.bind(productBindingGroup, Collections.emptyList(), product, "productColor");
 
-        minQuantityTextField.bind(productBindingGroup, product, "minimumQuantity");
-        maxQuantityTextField.bind(productBindingGroup, product, "maximumQuantity");
-        defaultQuantityTextField.bind(productBindingGroup, product, "defaultQuantity");
+        minQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("minimumQuantity"));
+        maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"));
+        defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"));
 
-        purchasePriceTextField.bind(productBindingGroup, product, "purchasePrice");
-        salesPriceTextField.bind(productBindingGroup, product, "salePrice");
-        listPriceTextField.bind(productBindingGroup, product, "listPrice");
+        purchasePriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("purchasePrice"));
+        salesPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"));
+        listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"));
 
-        quantityPerPackageTextField.bind(productBindingGroup, product, "quantityPerPackage");
+        quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"));
 
         dimensionUnitComboBox.bind(
                 productBindingGroup,
                 getMeasureUnits(MeasurementUnit.Category.Volume),
                 product,
                 "dimensionUnit");
-        dimensionWidthTextField.bind(productBindingGroup, product, "dimensionWidth");
-        dimensionLengthTextField.bind(productBindingGroup, product, "dimensionLength");
-        dimensionHeightTextField.bind(productBindingGroup, product, "dimensionHeight");
+        dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionWidth"));
+        dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionLength"));
+        dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionHeight"));
 
         weightUnitComboBox.bind(
                 productBindingGroup,
                 getMeasureUnits(MeasurementUnit.Category.MassWeight),
                 product,
                 "weightUnit");
-        weightTextField.bind(productBindingGroup, product, "weight");
+        weightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("weight"));
 
-        deliveryTimeTextField.bind(productBindingGroup, product, "deliveryTime");
+        deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"));
 
         //producerComboBox.bind(productBindingGroup, data, HEIGHT, TOOL_TIP_TEXT_KEY)
 
@@ -767,6 +770,10 @@ public class ProductPanel extends AcaciaPanel {
         close();
     }
 
+    protected EntityProperties getProductEntityProperties()
+    {
+        return getFormSession().getProductEntityProperties();
+    }
 
     private List<ProductCategory> getProductsCategories()
     {
