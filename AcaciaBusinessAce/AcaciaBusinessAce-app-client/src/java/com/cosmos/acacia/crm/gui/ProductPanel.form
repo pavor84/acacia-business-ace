@@ -18,59 +18,178 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="buttonPanel" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="descriptionPanel" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="buttonPanel" max="32767" attributes="0"/>
+                      <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="productNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="productCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="measureUnitLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="productCategoryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="patternMaskFormatLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="productColorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="productNameTextField" alignment="0" pref="446" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="measureUnitComboBox" alignment="0" pref="184" max="32767" attributes="0"/>
-                                  <Component id="productCodeTextField" alignment="1" pref="184" max="32767" attributes="0"/>
-                              </Group>
+                          <Component id="productNameTextField" alignment="0" pref="547" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="productCodeTextField" pref="297" max="32767" attributes="0"/>
                               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                              <Component id="productCategoryLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="measureUnitLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="measureUnitComboBox" linkSize="5" min="-2" pref="148" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="complexProductCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="purchasedProductCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="salableProductCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="obsoleteProductCheckBox" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="productCategoryComboBox" pref="392" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="productCategoryComboBox" min="-2" pref="136" max="-2" attributes="0"/>
+                              <Component id="newProductCategoryButton" linkSize="5" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="productColorComboBox" pref="392" max="32767" attributes="2"/>
+                                  <Component id="patternMaskFormatComboBox" pref="392" max="32767" attributes="2"/>
+                              </Group>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="newPatternMaskFormatButton" linkSize="5" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="newProductColorButton" linkSize="5" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="quantityPerPackageLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="quantityPerPackageTextField" min="-2" pref="88" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="dimensionPanel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pricesPanel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="quantitiesOnStockPanel" alignment="1" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="weightUnitLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="producerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="weightUnitComboBox" pref="136" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="weightLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="weightTextField" pref="83" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
+                              <Component id="deliveryTimeLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="deliveryTimeTextField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="producerComboBox" pref="445" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="newProducerButton" linkSize="5" min="-2" pref="134" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="productNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="productCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="productCategoryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="measureUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="measureUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="productCategoryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="newProductCategoryButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productCategoryComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="measureUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="measureUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="complexProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="purchasedProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="salableProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="obsoleteProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="304" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="patternMaskFormatLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="newPatternMaskFormatButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="patternMaskFormatComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="productColorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="newProductColorButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="productColorComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="quantitiesOnStockPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="pricesPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="quantityPerPackageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="quantityPerPackageTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="dimensionPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="weightUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="weightUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="weightTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="weightLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="deliveryTimeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="deliveryTimeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="producerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="newProducerButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="producerComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Component id="descriptionPanel" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -98,7 +217,7 @@
         <Property name="name" type="java.lang.String" value="productCodeLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBComboBox" name="measureUnitComboBox">
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="measureUnitComboBox">
       <Properties>
         <Property name="name" type="java.lang.String" value="measureUnitComboBox" noResource="true"/>
       </Properties>
@@ -118,7 +237,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="339" max="32767" attributes="0"/>
+                  <EmptySpace pref="480" max="32767" attributes="0"/>
                   <Component id="saveButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="closelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -160,14 +279,6 @@
     </Container>
     <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="productCategoryComboBox">
       <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
         <Property name="name" type="java.lang.String" value="productCategoryComboBox" noResource="true"/>
       </Properties>
     </Component>
@@ -177,5 +288,471 @@
         <Property name="name" type="java.lang.String" value="measureUnitLabel" noResource="true"/>
       </Properties>
     </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="patternMaskFormatLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="patternMaskFormatLabel.text"/>
+        <Property name="name" type="java.lang.String" value="patternMaskFormatLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="complexProductCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="complexProductCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="complexProductCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="purchasedProductCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="purchasedProductCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="purchasedProductCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="salableProductCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="salableProductCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="salableProductCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="obsoleteProductCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="obsoleteProductCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="obsoleteProductCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="patternMaskFormatComboBox">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="patternMaskFormatComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="productColorLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="productColorLabel.text"/>
+        <Property name="name" type="java.lang.String" value="productColorLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="productColorComboBox">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="productColorComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="newProductCategoryButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="newProductCategory" methodName="newProductCategory"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="newProductCategoryButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="newPatternMaskFormatButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="newPatternMaskFormat" methodName="newPatternMaskFormat"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="newPatternMaskFormatButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="newProductColorButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="newProductColor" methodName="newProductColor"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="newProductColorButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="quantitiesOnStockPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Quantities On Stock">
+              <Property name="titleX" resourceKey="quantitiesOnStockPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="quantitiesOnStockPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="minQuantityLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="45" max="-2" attributes="1"/>
+                  <Component id="minQuantityTextField" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                  <Component id="defaultQuantityLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="defaultQuantityTextField" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                  <Component id="maxQuantityLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="maxQuantityTextField" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="maxQuantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="maxQuantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="minQuantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="minQuantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="defaultQuantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="defaultQuantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBTextField" name="maxQuantityTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="maxQuantityTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="maxQuantityLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="maxQuantityLabel.text"/>
+            <Property name="name" type="java.lang.String" value="maxQuantityLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="defaultQuantityTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="defaultQuantityTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="defaultQuantityLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="defaultQuantityLabel.text"/>
+            <Property name="name" type="java.lang.String" value="defaultQuantityLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="minQuantityTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="minQuantityTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="minQuantityLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="minQuantityLabel.text"/>
+            <Property name="name" type="java.lang.String" value="minQuantityLabel" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="com.cosmos.swingb.JBPanel" name="pricesPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Prices">
+              <Property name="titleX" resourceKey="pricesPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="pricesPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="purchasePriceLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <Component id="purchasePriceTextField" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="63" max="-2" attributes="1"/>
+                  <Component id="salesPriceLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="salesPriceTextField" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
+                  <Component id="listPriceLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="listPriceTextField" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="listPriceTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="listPriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="purchasePriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="purchasePriceTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="salesPriceTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="salesPriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBTextField" name="listPriceTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="listPriceTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="listPriceLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="listPriceLabel.text"/>
+            <Property name="name" type="java.lang.String" value="listPriceLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="salesPriceTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="salesPriceTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="salesPriceLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="salesPriceLabel.text"/>
+            <Property name="name" type="java.lang.String" value="salesPriceLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="purchasePriceTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="purchasePriceTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="purchasePriceLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="purchasePriceLabel.text"/>
+            <Property name="name" type="java.lang.String" value="purchasePriceLabel" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="com.cosmos.swingb.JBTextField" name="quantityPerPackageTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="quantityPerPackageTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="quantityPerPackageLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="quantityPerPackageLabel.text"/>
+        <Property name="name" type="java.lang.String" value="quantityPerPackageLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="dimensionPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Dimensions">
+              <Property name="titleX" resourceKey="dimensionPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="dimensionPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionUnitLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                  <Component id="dimensionUnitComboBox" pref="147" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                  <Component id="dimensionWidthLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionWidthTextField" pref="80" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionLengthLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionLengthTextField" pref="80" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionHeightLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionHeightTextField" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="dimensionUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionHeightTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionHeightLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionLengthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionLengthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionWidthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dimensionWidthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="dimensionUnitComboBox">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="dimensionUnitComboBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="dimensionHeightTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="dimensionHeightTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="dimensionLengthTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="dimensionLengthTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="dimensionWidthTextField">
+          <Properties>
+            <Property name="columns" type="int" value="7"/>
+            <Property name="name" type="java.lang.String" value="dimensionWidthTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="dimensionUnitLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="dimensionUnitLabel.text"/>
+            <Property name="name" type="java.lang.String" value="dimensionUnitLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="dimensionWidthLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="dimensionWidthLabel.text"/>
+            <Property name="name" type="java.lang.String" value="dimensionWidthLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="dimensionLengthLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="dimensionLengthLabel.text"/>
+            <Property name="name" type="java.lang.String" value="dimensionLengthLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="dimensionHeightLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="dimensionHeightLabel.text"/>
+            <Property name="name" type="java.lang.String" value="dimensionHeightLabel" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="weightUnitComboBox">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="weightUnitComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="weightUnitLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="weightUnitLabel.text"/>
+        <Property name="name" type="java.lang.String" value="weightUnitLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="weightLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="weightLabel.text"/>
+        <Property name="name" type="java.lang.String" value="weightLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="weightTextField">
+      <Properties>
+        <Property name="columns" type="int" value="7"/>
+        <Property name="name" type="java.lang.String" value="weightTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="deliveryTimeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="deliveryTimeLabel.text"/>
+        <Property name="name" type="java.lang.String" value="deliveryTimeLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="deliveryTimeTextField">
+      <Properties>
+        <Property name="columns" type="int" value="7"/>
+        <Property name="name" type="java.lang.String" value="deliveryTimeTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="producerComboBox">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="producerComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="producerLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="producerLabel.text"/>
+        <Property name="name" type="java.lang.String" value="producerLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="newProducerButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="newProducer" methodName="newProducer"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="newProducerButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Description">
+              <Property name="titleX" resourceKey="descriptionPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="descriptionPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="descriptionScrollPane" pref="640" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="descriptionScrollPane" pref="87" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JScrollPane" name="descriptionScrollPane">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="descriptionScrollPane" noResource="true"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBTextPane" name="descriptionTextPane">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="descriptionTextPane" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
