@@ -41,7 +41,7 @@ public class JBTable
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
 
-    private ObservableList data;
+    private ObservableList observableData;
     private EntityProperties entityProperties;
 
     public JBTable()
@@ -85,40 +85,38 @@ public class JBTable
     }
 
     public List getData() {
-        return data;
+        return observableData;
     }
 
     public void setData(List data) {
         List oldData = getData();
         if(oldData != null && data != null)
         {
-            this.data.clear();
-            this.data.addAll(data);
+            observableData.clear();
+            observableData.addAll(data);
         }
         else if(!(data instanceof ObservableList))
         {
-            data = ObservableCollections.observableList(data);
+            observableData = ObservableCollections.observableList(data);
         }
         else
         {
-            data = (ObservableList)data;
+            observableData = (ObservableList)data;
         }
     }
 
     public int addRow(Object bean)
     {
-        if(data == null)
+        if(observableData == null)
             return -1;
-        System.out.println("data: " + data + ", class: " + data.getClass().getName());
-
-        data.add(data.size(), bean);
-        return data.size() - 1;
+        observableData.add(bean);
+        return observableData.size() - 1;
     }
 
     public void setRow(int rowIndex, Object bean)
     {
-        if(data != null)
-            data.set(convertRowIndexToModel(rowIndex), bean);
+        if(observableData != null)
+            observableData.set(convertRowIndexToModel(rowIndex), bean);
     }
 
     public void replaceSelectedRow(Object bean)
@@ -129,9 +127,9 @@ public class JBTable
 
     public int getRowIndex(Object bean)
     {
-        if(data != null)
+        if(observableData != null)
         {
-            int rowIndex = data.indexOf(bean);
+            int rowIndex = observableData.indexOf(bean);
             if(rowIndex >= 0)
             {
                 return convertRowIndexToView(rowIndex);
@@ -177,9 +175,9 @@ public class JBTable
     public Object getSelectedRowObject()
     {
         int rowIndex = getSelectedModelRowIndex();
-        if(rowIndex >= 0 && data != null && data.size() > rowIndex)
+        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
         {
-            return data.get(rowIndex);
+            return observableData.get(rowIndex);
         }
         
         return null;
@@ -189,12 +187,12 @@ public class JBTable
     {
         int[] rowIndexes = getSelectedModelRowIndexes();
         int size;
-        if(rowIndexes != null && (size = rowIndexes.length) > 0 && data != null)
+        if(rowIndexes != null && (size = rowIndexes.length) > 0 && observableData != null)
         {
             ArrayList rows = new ArrayList(size);
             for(int rowIndex : rowIndexes)
             {
-                rows.add(data.get(rowIndex));
+                rows.add(observableData.get(rowIndex));
             }
             return rows;
         }
@@ -205,9 +203,9 @@ public class JBTable
     public Object removeSelectedRow()
     {
         int rowIndex = getSelectedModelRowIndex();
-        if(rowIndex >= 0 && data != null && data.size() > rowIndex)
+        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
         {
-            return data.remove(rowIndex);
+            return observableData.remove(rowIndex);
         }
 
         return null;
@@ -229,12 +227,12 @@ public class JBTable
             EntityProperties entityProperties,
             AutoBinding.UpdateStrategy updateStrategy) {
         if(!(data instanceof ObservableList))
-            this.data = ObservableCollections.observableList(data);
+            observableData = ObservableCollections.observableList(data);
         else
-            this.data = (ObservableList)data;
+            observableData = (ObservableList)data;
         this.entityProperties = entityProperties;
 
-        JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, data, this);
+        JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, observableData, this);
         createColumnsBinding(tableBinding, entityProperties);
         tableBinding.bind();
 

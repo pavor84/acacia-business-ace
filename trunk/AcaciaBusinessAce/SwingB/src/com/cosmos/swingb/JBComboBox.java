@@ -34,7 +34,7 @@ public class JBComboBox
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
 
-    private ObservableList data;
+    private ObservableList observableData;
     private String propertyName;
     private Object beanEntity;
 
@@ -70,13 +70,13 @@ public class JBComboBox
             AutoBinding.UpdateStrategy updateStrategy)
     {
         if(!(data instanceof ObservableList))
-            this.data = ObservableCollections.observableList(data);
+            observableData = ObservableCollections.observableList(data);
         else
-            this.data = (ObservableList)data;
+            observableData = (ObservableList)data;
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
-        JComboBoxBinding comboBoxBinding = SwingBindings.createJComboBoxBinding(updateStrategy, this.data, this);
+        JComboBoxBinding comboBoxBinding = SwingBindings.createJComboBoxBinding(updateStrategy, observableData, this);
         bindingGroup.addBinding(comboBoxBinding);
 
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
@@ -88,7 +88,7 @@ public class JBComboBox
     }
 
     public ObservableList getData() {
-        return data;
+        return observableData;
     }
 
     public String getPropertyName() {
