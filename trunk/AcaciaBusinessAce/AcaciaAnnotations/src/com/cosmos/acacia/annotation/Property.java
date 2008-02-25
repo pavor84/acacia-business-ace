@@ -12,6 +12,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jdesktop.beansbinding.Validator;
 
 /**
  *
@@ -37,10 +38,13 @@ public @interface Property
     boolean hidden() default false;
 
     String sourceUnreadableValue() default NULL;
+
+    PropertyValidator validator() default @PropertyValidator;
   
     int validationType() default ValidationType.NONE;
     int validationEevent() default Event.KEY_ACTION;
     int validationRangeStart() default 0;
     int validationRangeEnd() default 1000;
     String validationCustomMethod() default "";
+
 }
