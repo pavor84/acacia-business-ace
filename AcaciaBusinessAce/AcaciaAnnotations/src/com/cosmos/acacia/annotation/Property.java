@@ -7,6 +7,7 @@ package com.cosmos.acacia.annotation;
 
 
 
+import java.awt.Event;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -29,11 +30,17 @@ public @interface Property
     boolean visible() default true;
 
     /**
-     * hiden means is existing as ColumnBinding. If true, then that property
-     * will not exist as ColumnBinding. By default all @Id properties are hiden.
+     * hidden means is existing as ColumnBinding. If true, then that property
+     * will not exist as ColumnBinding. By default all @Id properties are hidden.
      * @return
      */
-    boolean hiden() default false;
+    boolean hidden() default false;
 
     String sourceUnreadableValue() default NULL;
+  
+    int validationType() default ValidationType.NONE;
+    int validationEevent() default Event.KEY_ACTION;
+    int validationRangeStart() default 0;
+    int validationRangeEnd() default 1000;
+    String validationCustomMethod() default "";
 }

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.swingb.validation;
+package com.cosmos.acacia.annotation;
 
 /**
  *
