@@ -5,9 +5,10 @@
 
 package com.cosmos.swingb.validation;
 
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBTextField;
-import java.lang.reflect.Field;
 
+    
 /**
  *
  * @author Bozhidar Bozhanov
@@ -17,17 +18,14 @@ public class TextFieldValidator implements Validator {
     private int event;
     private boolean isValidationRequired = false;
     
-    public TextFieldValidator(Object entity, String property, JBTextField textField)
-            throws NoSuchFieldException {
-        Field field = entity.getClass().getDeclaredField(property);
-        if (field.isAnnotationPresent(Validation.class)){
-            Validation validation = field.getAnnotation(Validation.class);
-            setEvent(validation.event());
-            if (validation.type() == ValidationType.REQUIRED)
-                setValidationRequired(true);
+    public TextFieldValidator(PropertyDetails details, JBTextField textField) {
+        if (true){
+        //setEvent(validation.event());
+        //if (details.type() == ValidationType.REQUIRED)
+            setValidationRequired(true);
         }
     }
-    
+
     public boolean isValid() {
         return true;
     }

@@ -61,7 +61,7 @@ public class BeansBindingHelper {
                 pd.setReadOnly(property.readOnly());
                 pd.setEditable(property.editable());
                 pd.setVisible(property.visible());
-                pd.setHiden(property.hiden());
+                pd.setHiden(property.hidden());
                 Object value = property.sourceUnreadableValue();
                 if(!Property.NULL.equals(value))
                     pd.setSourceUnreadableValue(value);

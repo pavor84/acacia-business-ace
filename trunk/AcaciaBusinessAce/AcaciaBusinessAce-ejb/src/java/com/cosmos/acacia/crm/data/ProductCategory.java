@@ -48,7 +48,7 @@ public class ProductCategory
 
     @Id
     @Column(name = "product_category_id", nullable = false)
-    @Property(title="Product Category Id", editable=false, readOnly=true, visible=false, hiden=true)
+    @Property(title="Product Category Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger productCategoryId;
 
     @Column(name = "parent_id")
