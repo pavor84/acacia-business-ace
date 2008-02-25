@@ -36,24 +36,8 @@ public class BeanTableCellRenderer
             int row,
             int column)
     {
-        Component component;
-        if(value instanceof EnumResource)
-        {
-            String valueName = beanResource.getFullName((EnumResource)value);
-            component = super.getTableCellRendererComponent(table, valueName, isSelected, hasFocus, row, column);
-        }
-        else if(value instanceof TextResource)
-        {
-            String valueName = beanResource.getFullName((TextResource)value);
-            component = super.getTableCellRendererComponent(table, valueName, isSelected, hasFocus, row, column);
-        }
-        else
-        {
-            component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        }
-
-        return component;
+        value = beanResource.getValue(value);
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     }
 
-    
 }

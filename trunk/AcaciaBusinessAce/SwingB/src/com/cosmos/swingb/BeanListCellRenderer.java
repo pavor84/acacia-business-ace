@@ -36,21 +36,8 @@ public class BeanListCellRenderer
             boolean isSelected,
             boolean cellHasFocus)
     {
-        Component component;
-        if(value instanceof EnumResource)
-        {
-            String valueName = beanResource.getFullName((EnumResource)value);
-            component = super.getListCellRendererComponent(list, valueName, index, isSelected, cellHasFocus);
-        }
-        else if(value instanceof TextResource)
-        {
-            String valueName = beanResource.getFullName((TextResource)value);
-            component = super.getListCellRendererComponent(list, valueName, index, isSelected, cellHasFocus);
-        }
-        else
-            component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-        return component;
+        value = beanResource.getValue(value);
+        return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
     }
 
 }
