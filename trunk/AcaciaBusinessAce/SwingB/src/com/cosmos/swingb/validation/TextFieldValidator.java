@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb.validation;
 
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBTextField;
 
@@ -15,34 +16,60 @@ import com.cosmos.swingb.JBTextField;
  */
 public class TextFieldValidator implements Validator {
     
-    private int event;
     private boolean isValidationRequired = false;
+    private JBTextField component;
+    private PropertyDetails details;
     
     public TextFieldValidator(PropertyDetails details, JBTextField textField) {
-        if (true){
-        //setEvent(validation.event());
-        //if (details.type() == ValidationType.REQUIRED)
+        if (details.getValidationType() != ValidationType.NONE)
             setValidationRequired(true);
-        }
+        
+        this.details = details;
+        this.component = textField;
     }
 
     public boolean isValid() {
-        return true;
+
+        switch (details.getValidationType()){
+            case ValidationType.NONE:
+                return true;
+                
+            case ValidationType.REQUIRED:
+                return component.getText().trim().length() > 0;
+            
+            case ValidationType.REGEX:
+                return component.getText().matches(details.getValidationRegex());
+             
+            case ValidationType.RANGE:
+                try {
+                    int value = Integer.parseInt(component.getText());
+                    return (value >= details.getValidationRangeStart()
+                            && value <= details.getValidationRangeEnd());
+                } catch (NumberFormatException ex){
+                    return false;
+                }
+                
+            case ValidationType.CUSTOM:
+                return false;
+            
+            default:
+                return false;
+        }
     }
 
     public int getEvent() {
-        return event;
+        return details.getValidationEvent();
     }
     
-     public void setEvent(int event) {
-        this.event = event;
-    }
-
     public void setValidationRequired(boolean required){
         isValidationRequired = required;
     }
     
     public boolean isValidationRequired() {
         return isValidationRequired;
+    }
+    
+    public JBTextField getComponent(){
+        return component;
     }
 }

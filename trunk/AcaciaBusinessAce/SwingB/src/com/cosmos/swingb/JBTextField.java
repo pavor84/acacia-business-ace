@@ -6,10 +6,13 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.validation.TextFieldValidator;
 import com.cosmos.swingb.validation.Validator;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JTextField;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -27,7 +30,7 @@ public class JBTextField
 {
     private String propertyName;
     private Object beanEntity;
-    //private Set<Validator> validators = new HashSet<Validator>();
+    private Set<Validator> validators = new HashSet<Validator>();
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
@@ -52,6 +55,9 @@ public class JBTextField
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
+        Validator validator = new TextFieldValidator(propertyDetails, this);
+        addValidator(validator);
+        
         return binding;
     }
 
@@ -63,10 +69,6 @@ public class JBTextField
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
-        // Validation. Still not working, hence the comments.
-        //Validator validator = new TextFieldValidator(beanEntity, propertyName, this);
-        //addValidator(validator);
-        
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("text");
         Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
@@ -84,17 +86,30 @@ public class JBTextField
     }
     
     private void addValidator(final Validator validator){
-        if (validator.isValidationRequired())
+        
+        if (validator.isValidationRequired()){
+            validators.add(validator);
             invalid();
-        addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-               //! check event type
-               if (validator.isValid())
-                   valid();
-               else
-                   invalid();
-            }
-        });
+            //TODO: check for event type!
+            addKeyListener(new KeyAdapter(){
+                
+                @Override
+                public void keyReleased(KeyEvent e){
+                    if (validator.isValid())
+                       valid();
+                   else
+                       invalid();
+                }
+            });
+        }
+    }
+    
+    public boolean isValid(){
+        for (Validator validator: validators){
+            if (!validator.isValid())
+                return false;
+        }
+        return true;
     }
     
     protected void valid(){
@@ -102,6 +117,6 @@ public class JBTextField
     }
     
     protected void invalid(){
-        setBackground(Color.RED);
+        setBackground(Color.PINK);
     }
 }

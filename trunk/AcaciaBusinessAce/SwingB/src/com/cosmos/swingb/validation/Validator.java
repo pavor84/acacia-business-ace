@@ -5,6 +5,8 @@
 
 package com.cosmos.swingb.validation;
 
+import java.awt.Component;
+
 /**
  *
  * @author Bozhidar Bozhanov
