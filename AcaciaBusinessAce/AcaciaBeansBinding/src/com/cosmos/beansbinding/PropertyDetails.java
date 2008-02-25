@@ -22,6 +22,7 @@ public class PropertyDetails
     private boolean editable = true;
     private boolean visible = true;
     private boolean hiden = false;
+    private boolean required = false;
     private Object sourceUnreadableValue;
     private String columnName;
     private int orderPosition;

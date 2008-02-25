@@ -186,4 +186,17 @@ public class BeanResource
         return shortName + ", " + name;
     }
 
+    public Object getValue(Object sourceValue)
+    {
+        if(sourceValue instanceof EnumResource)
+        {
+            return getFullName((EnumResource)sourceValue);
+        }
+        else if(sourceValue instanceof TextResource)
+        {
+            return getFullName((TextResource)sourceValue);
+        }
+
+        return sourceValue;
+    }
 }
