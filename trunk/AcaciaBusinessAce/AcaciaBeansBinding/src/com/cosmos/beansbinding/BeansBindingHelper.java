@@ -62,6 +62,15 @@ public class BeansBindingHelper {
                 pd.setEditable(property.editable());
                 pd.setVisible(property.visible());
                 pd.setHiden(property.hidden());
+                /* Setting validation-related values */
+                pd.setValidationType(property.validationType());
+                pd.setValidationEvent(property.validationEvent());
+                pd.setValidationRangeStart(property.validationRangeStart());
+                pd.setValidationRangeEnd(property.validationRangeEnd());
+                pd.setValidationCustomMethod(property.validationCustomMethod());
+                pd.setValidationRegex(property.validationRegex());
+                
+                
                 Object value = property.sourceUnreadableValue();
                 if(!Property.NULL.equals(value))
                     pd.setSourceUnreadableValue(value);
