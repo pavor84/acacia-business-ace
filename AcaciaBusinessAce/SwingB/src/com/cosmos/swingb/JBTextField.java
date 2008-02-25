@@ -41,7 +41,7 @@ public class JBTextField
             PropertyDetails propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy)
     {
-        if(propertyDetails.isHiden())
+        if(propertyDetails == null || propertyDetails.isHiden())
         {
             setEditable(false);
             setEnabled(false);
