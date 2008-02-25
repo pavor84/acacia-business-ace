@@ -29,7 +29,11 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.BindingListener;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
@@ -741,6 +745,7 @@ public class ProductPanel extends AcaciaPanel {
     public void saveAction() {
         try
         {
+            System.out.println("Save: product: " + product);
             product = getFormSession().saveProduct(product);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(product);
