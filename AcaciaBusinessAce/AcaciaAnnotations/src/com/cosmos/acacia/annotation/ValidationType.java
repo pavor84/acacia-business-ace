@@ -13,5 +13,6 @@ public interface ValidationType {
     public static final int NONE = 0;
     public static final int REQUIRED = 1;
     public static final int RANGE = 2;
-    public static final int CUSTOM = 3;
+    public static final int REGEX = 3;
+    public static final int CUSTOM = 4;
 }

@@ -42,9 +42,10 @@ public @interface Property
     PropertyValidator validator() default @PropertyValidator;
   
     int validationType() default ValidationType.NONE;
-    int validationEevent() default Event.KEY_ACTION;
+    int validationEvent() default Event.KEY_ACTION;
     int validationRangeStart() default 0;
     int validationRangeEnd() default 1000;
+    String validationRegex() default "";
     String validationCustomMethod() default "";
-
+    
 }

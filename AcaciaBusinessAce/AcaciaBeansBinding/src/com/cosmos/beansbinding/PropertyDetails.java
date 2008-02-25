@@ -27,6 +27,14 @@ public class PropertyDetails
     private String columnName;
     private int orderPosition;
 
+    /* Validation fields */
+    private int validationType;
+    private int validationRangeStart;
+    private int validationEvent;
+    private int validationRangeEnd;
+    private String validationCustomMethod;
+    private String validationRegex;
+    
     public PropertyDetails() {
     }
 
@@ -147,6 +155,54 @@ public class PropertyDetails
         this.orderPosition = orderPosition;
     }
 
+    public String getValidationCustomMethod() {
+        return validationCustomMethod;
+    }
+
+    public void setValidationCustomMethod(String validationCustomMethod) {
+        this.validationCustomMethod = validationCustomMethod;
+    }
+
+    public String getValidationRegex() {
+        return validationRegex;
+    }
+
+    public void setValidationRegex(String validationRegex) {
+        this.validationRegex = validationRegex;
+    }
+    
+    public int getValidationEvent() {
+        return validationEvent;
+    }
+
+    public void setValidationEvent(int validationEvent) {
+        this.validationEvent = validationEvent;
+    }
+
+    public int getValidationRangeEnd() {
+        return validationRangeEnd;
+    }
+
+    public void setValidationRangeEnd(int validationRangeEnd) {
+        this.validationRangeEnd = validationRangeEnd;
+    }
+
+    public int getValidationRangeStart() {
+        return validationRangeStart;
+    }
+
+    public void setValidationRangeStart(int validationRangeStart) {
+        this.validationRangeStart = validationRangeStart;
+    }
+
+    public int getValidationType() {
+        return validationType;
+    }
+
+    public void setValidationType(int validationType) {
+        this.validationType = validationType;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
