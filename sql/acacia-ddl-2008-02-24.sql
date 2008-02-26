@@ -15,7 +15,7 @@ SET escape_string_warning = off;
 -- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: -
 --
 
-CREATE PROCEDURAL LANGUAGE plpgsql;
+/*CREATE PROCEDURAL LANGUAGE plpgsql;
 
 
 SET search_path = public, pg_catalog;
@@ -35,7 +35,7 @@ CREATE TYPE breakpoint AS (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_with_oids = false;*/
 
 --
 -- TOC entry 1526 (class 1259 OID 16672)
@@ -96,7 +96,7 @@ CREATE TABLE enum_classes (
     enum_class_name character varying(255) NOT NULL
 );
 
-
+/*
 --
 -- TOC entry 275 (class 1247 OID 16408)
 -- Dependencies: 6 1522
@@ -110,7 +110,7 @@ CREATE TYPE frame AS (
 	linenumber integer,
 	args text
 );
-
+*/
 
 --
 -- TOC entry 1529 (class 1259 OID 16692)
@@ -191,7 +191,7 @@ CREATE TABLE products (
     producer_id numeric(18,0)
 );
 
-
+/*
 --
 -- TOC entry 317 (class 1247 OID 16417)
 -- Dependencies: 6 1525
@@ -204,7 +204,7 @@ CREATE TYPE proxyinfo AS (
 	proxyapiver integer,
 	serverprocessid integer
 );
-
+*/
 
 --
 -- TOC entry 1531 (class 1259 OID 16716)
@@ -231,7 +231,7 @@ CREATE TABLE sequence_identifiers (
     seq_id_value numeric(38,0) DEFAULT 0 NOT NULL
 );
 
-
+/*
 --
 -- TOC entry 313 (class 1247 OID 16411)
 -- Dependencies: 6 1523
@@ -251,7 +251,7 @@ CREATE TYPE targetinfo AS (
 	returnsset boolean,
 	returntype oid
 );
-
+*/
 
 --
 -- TOC entry 1533 (class 1259 OID 16723)
@@ -281,7 +281,7 @@ CREATE TABLE users (
     next_action_after_login character varying(1024)
 );
 
-
+/*
 --
 -- TOC entry 315 (class 1247 OID 16414)
 -- Dependencies: 6 1524
@@ -518,7 +518,7 @@ CREATE FUNCTION pldbg_wait_for_target(session integer) RETURNS integer
 CREATE FUNCTION plpgsql_oid_debug(functionoid oid) RETURNS integer
     AS '$libdir/plugins/plugin_debugger', 'plpgsql_oid_debug'
     LANGUAGE c STRICT;
-
+*/
 
 --
 -- TOC entry 1534 (class 1259 OID 16731)
