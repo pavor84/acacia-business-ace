@@ -145,7 +145,7 @@ public class ClassifierGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.ClassifierGroup[classifierGroupId=" + classifierGroupId + "]";
+        return "com.cosmos.acacia.crm.data.ClassifierGroup[classifierGroupId=" + classifierGroupId + "]";
     }
 
 }

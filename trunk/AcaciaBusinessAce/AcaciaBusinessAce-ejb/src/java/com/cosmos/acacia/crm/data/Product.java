@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -63,7 +64,7 @@ public class Product
     private ProductCategory category;
 
     @Column(name = "product_name", nullable = false)
-    @Property(title="Product Name")
+    @Property(title="Product Name", validationType=ValidationType.REGEX, validationRegex="[a-zA-z]+")
     private String productName;
 
     @Column(name = "product_code", nullable = false)

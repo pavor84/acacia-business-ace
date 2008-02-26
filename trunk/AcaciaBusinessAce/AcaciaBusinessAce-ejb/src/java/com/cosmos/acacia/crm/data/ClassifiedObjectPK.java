@@ -73,7 +73,7 @@ public class ClassifiedObjectPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.ClassifiedObjectPK[classifierId=" + classifierId + ", classifiedObjectId=" + classifiedObjectId + "]";
+        return "com.cosmos.acacia.crm.data.ClassifiedObjectPK[classifierId=" + classifierId + ", classifiedObjectId=" + classifiedObjectId + "]";
     }
 
 }

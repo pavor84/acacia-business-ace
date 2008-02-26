@@ -159,7 +159,7 @@ public class Classifier implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.Classifier[classifierId=" + classifierId + "]";
+        return "com.cosmos.acacia.crm.data.Classifier[classifierId=" + classifierId + "]";
     }
 
 }
