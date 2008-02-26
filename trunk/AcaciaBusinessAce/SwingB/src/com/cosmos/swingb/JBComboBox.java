@@ -5,6 +5,9 @@
 
 package com.cosmos.swingb;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JComboBox;
 import org.jdesktop.application.Application;
@@ -38,6 +41,9 @@ public class JBComboBox
     private String propertyName;
     private Object beanEntity;
 
+    private boolean required;
+    private ActionListener validationListener;
+    
     public JBComboBox()
     {
         super();
@@ -153,4 +159,25 @@ public class JBComboBox
         this.application = application;
     }
 
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+        if (required){
+            setBackground(Color.PINK);
+            validationListener = new ActionListener(){
+
+                public void actionPerformed(ActionEvent e) {
+                    setBackground(Color.GREEN);
+                }
+                
+            };
+            addActionListener(validationListener);
+            
+        } else if (validationListener != null) {
+            removeActionListener(validationListener);
+        }
+    }
 }

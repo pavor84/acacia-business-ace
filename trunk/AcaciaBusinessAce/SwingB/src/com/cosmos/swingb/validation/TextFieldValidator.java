@@ -19,7 +19,7 @@ public class TextFieldValidator implements Validator {
     private boolean isValidationRequired = false;
     private JBTextField component;
     private PropertyDetails details;
-    
+    private String tooltipText;
     public TextFieldValidator(PropertyDetails details, JBTextField textField) {
         if (details.getValidationType() != ValidationType.NONE)
             setValidationRequired(true);
@@ -65,11 +65,17 @@ public class TextFieldValidator implements Validator {
         isValidationRequired = required;
     }
     
-    public boolean isValidationRequired() {
+    public boolean isValidationRequired(){
         return isValidationRequired;
     }
-    
-    public JBTextField getComponent(){
-        return component;
+        
+    public String getTooltipText(){
+        return tooltipText;
     }
+    
+    public void setTooltipText(String tooltipText){
+        this.tooltipText = tooltipText;
+    }
+    
+    
 }

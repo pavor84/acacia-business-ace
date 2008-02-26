@@ -9,6 +9,9 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.validation.TextFieldValidator;
 import com.cosmos.swingb.validation.Validator;
 import java.awt.Color;
+import java.awt.Event;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -50,7 +53,7 @@ public class JBTextField
             setEnabled(false);
             return null;
         }
-
+        
         Binding binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
@@ -89,18 +92,28 @@ public class JBTextField
         
         if (validator.isValidationRequired()){
             validators.add(validator);
-            invalid();
-            //TODO: check for event type!
-            addKeyListener(new KeyAdapter(){
+            invalidate();
+            
+            switch (validator.getEvent()){
+            
+                case Event.KEY_RELEASE:
+                    addKeyListener(new KeyAdapter(){
+                        @Override
+                        public void keyReleased(KeyEvent e){
+                          checkValidity(validator);
+                        }
+                    });
+                    break;
                 
-                @Override
-                public void keyReleased(KeyEvent e){
-                    if (validator.isValid())
-                       valid();
-                   else
-                       invalid();
-                }
-            });
+                case Event.LOST_FOCUS:
+                    addFocusListener(new FocusAdapter(){
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            checkValidity(validator);
+                        }
+                    });
+                    break;
+            }
         }
     }
     
@@ -112,11 +125,26 @@ public class JBTextField
         return true;
     }
     
-    protected void valid(){
+    protected void setValid(){
         setBackground(Color.GREEN);
     }
     
-    protected void invalid(){
+    protected void setInvalid(){
         setBackground(Color.PINK);
+        StringBuffer tooltipText = new StringBuffer();
+        for (Validator validator: validators){
+            if (validator.getTooltipText().length() > 0) {
+                tooltipText.append(validator.getTooltipText());
+                tooltipText.append("; ");
+            }
+        }
+        setToolTipText(tooltipText.toString());
+    }
+    
+    private void checkValidity(Validator validator){
+        if (validator.isValid())
+            setValid();
+        else
+            setInvalid();
     }
 }
