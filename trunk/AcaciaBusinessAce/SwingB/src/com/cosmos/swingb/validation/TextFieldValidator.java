@@ -75,7 +75,8 @@ public class TextFieldValidator implements Validator {
     }
         
     public String getTooltipText(){
-        return details.getValidationTooltip();
+        //return details.getValidationTooltip();
+        return "Bozhidar Bozhanov ima oshte dosta hliab da iade.";
     }
     
     public int getValidationType(){
