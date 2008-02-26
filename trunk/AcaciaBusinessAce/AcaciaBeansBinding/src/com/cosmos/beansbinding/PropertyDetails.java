@@ -6,6 +6,7 @@ package com.cosmos.beansbinding;
 
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
+import java.util.Formatter;
 
 /**
  *
@@ -34,6 +35,7 @@ public class PropertyDetails
     private int validationRangeEnd;
     private String validationCustomMethod;
     private String validationRegex;
+    private String validationTooltip;
     
     public PropertyDetails() {
     }
@@ -201,6 +203,14 @@ public class PropertyDetails
 
     public void setValidationType(int validationType) {
         this.validationType = validationType;
+    }
+
+    public String getValidationTooltip() {
+        return validationTooltip;
+    }
+
+    public void setValidationTooltip(String validationTooltip) {
+        this.validationTooltip = validationTooltip;
     }
     
     @Override

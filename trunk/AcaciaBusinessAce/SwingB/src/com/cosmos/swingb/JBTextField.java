@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb;
 
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.validation.TextFieldValidator;
 import com.cosmos.swingb.validation.Validator;
@@ -88,11 +89,11 @@ public class JBTextField
         return beanEntity;
     }
     
-    private void addValidator(final Validator validator){
+    private void addValidator(Validator validator){
         
         if (validator.isValidationRequired()){
             validators.add(validator);
-            invalidate();
+            checkValidity(validator);
             
             switch (validator.getEvent()){
             
@@ -100,7 +101,8 @@ public class JBTextField
                     addKeyListener(new KeyAdapter(){
                         @Override
                         public void keyReleased(KeyEvent e){
-                          checkValidity(validator);
+                          for (Validator validator: validators)
+                            checkValidity(validator);
                         }
                     });
                     break;
@@ -109,6 +111,7 @@ public class JBTextField
                     addFocusListener(new FocusAdapter(){
                         @Override
                         public void focusLost(FocusEvent e) {
+                           for (Validator validator: validators)
                             checkValidity(validator);
                         }
                     });
@@ -123,6 +126,10 @@ public class JBTextField
                 return false;
         }
         return true;
+    }
+
+    protected void setNormal(){
+        setBackground(Color.WHITE);
     }
     
     protected void setValid(){
@@ -142,9 +149,13 @@ public class JBTextField
     }
     
     private void checkValidity(Validator validator){
-        if (validator.isValid())
+        if (validator == null) return;
+        
+        if (!validator.isValid())
+            setInvalid();
+        else if (validator.getValidationType() != ValidationType.REGEX)
             setValid();
         else
-            setInvalid();
+            setNormal();
     }
 }

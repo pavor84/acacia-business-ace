@@ -6,6 +6,7 @@
 package com.cosmos.beansbinding;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.util.ClassHelper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -69,7 +70,18 @@ public class BeansBindingHelper {
                 pd.setValidationRangeEnd(property.validationRangeEnd());
                 pd.setValidationCustomMethod(property.validationCustomMethod());
                 pd.setValidationRegex(property.validationRegex());
+                pd.setValidationTooltip(property.validationTooltip());
                 
+                /* Automatic regex validation for integer and floating fields */
+                String type = field.getType().getName();
+                if (isInteger(type)){
+                    pd.setValidationType(ValidationType.REGEX);
+                    pd.setValidationRegex("[0-9]+");
+                }
+                if (isDecimal(type)){
+                    pd.setValidationType(ValidationType.REGEX);
+                    pd.setValidationRegex("[0-9\\.]+");
+                }
                 
                 Object value = property.sourceUnreadableValue();
                 if(!Property.NULL.equals(value))
@@ -106,4 +118,16 @@ public class BeansBindingHelper {
         return entityProperties;
     }
 
+    private static boolean isInteger(String type){
+        return (type.contains("int") || type.contains("Integer")
+                    || type.contains("long") || type.contains("Long") 
+                    || type.contains("short") || type.contains("Short")
+                    || type.contains("byte") || type.contains("Byte"));
+    }
+    
+    private static boolean isDecimal(String type){
+        return (type.contains("float") || type.contains("Float")
+                    || type.contains("double") || type.contains("double") 
+                    || type.contains("Decimal"));
+    }
 }
