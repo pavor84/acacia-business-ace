@@ -16,4 +16,5 @@ public interface Validator {
    public boolean isValid();
    public boolean isValidationRequired();
    public int getEvent();
+   public String getTooltipText();
 }
