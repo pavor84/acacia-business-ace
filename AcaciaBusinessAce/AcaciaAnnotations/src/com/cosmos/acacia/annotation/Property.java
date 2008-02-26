@@ -39,7 +39,7 @@ public @interface Property
 
     String sourceUnreadableValue() default NULL;
 
-    PropertyValidator validator() default @PropertyValidator;
+    //PropertyValidator validator() default @PropertyValidator;
   
     int validationType() default ValidationType.NONE;
     int validationEvent() default Event.KEY_RELEASE;
