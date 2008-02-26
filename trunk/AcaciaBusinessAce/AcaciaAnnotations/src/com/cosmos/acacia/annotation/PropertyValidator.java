@@ -13,7 +13,7 @@ import org.jdesktop.beansbinding.Validator;
  */
 public @interface PropertyValidator {
 
-    Class<? extends Validator> validatorClass() default Validator.class;
+    //Class<? extends Validator> validatorClass() default Validator.class;
     int minValue() default Integer.MIN_VALUE;
     int maxValue() default Integer.MAX_VALUE;
 }
