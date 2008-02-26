@@ -50,11 +50,11 @@ public class Product
 
     @Id
     @Column(name = "product_id", nullable = false)
-    @Property(title="Product Id", editable=false, readOnly=true, visible=false, hiden=true)
+    @Property(title="Product Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger productId;
 
     @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hiden=true)
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @JoinColumn(name = "category_id", nullable=false, referencedColumnName = "product_category_id")
