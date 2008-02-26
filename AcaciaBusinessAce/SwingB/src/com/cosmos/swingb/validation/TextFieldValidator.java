@@ -38,11 +38,16 @@ public class TextFieldValidator implements Validator {
                 return component.getText().trim().length() > 0;
             
             case ValidationType.REGEX:
-                return component.getText().matches(details.getValidationRegex());
+                return (component.getText().length() == 0 ||
+                        component.getText().matches(details.getValidationRegex()));
              
+
+            case ValidationType.REGEX_REQUIRED:
+                return component.getText().matches(details.getValidationRegex());
+                
             case ValidationType.RANGE:
                 try {
-                    int value = Integer.parseInt(component.getText());
+                    double value = Double.parseDouble(component.getText());
                     return (value >= details.getValidationRangeStart()
                             && value <= details.getValidationRangeEnd());
                 } catch (NumberFormatException ex){
@@ -71,6 +76,10 @@ public class TextFieldValidator implements Validator {
         
     public String getTooltipText(){
         return details.getValidationTooltip();
+    }
+    
+    public int getValidationType(){
+        return details.getValidationType();
     }
     
 }
