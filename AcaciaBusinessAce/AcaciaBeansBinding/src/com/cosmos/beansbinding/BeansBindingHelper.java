@@ -75,11 +75,9 @@ public class BeansBindingHelper {
                 /* Automatic regex validation for integer and floating fields */
                 String type = field.getType().getName();
                 if (isInteger(type)){
-                    pd.setValidationType(ValidationType.REGEX);
                     pd.setValidationRegex("[0-9]+");
                 }
                 if (isDecimal(type)){
-                    pd.setValidationType(ValidationType.REGEX);
                     pd.setValidationRegex("[0-9\\.]+");
                 }
                 
