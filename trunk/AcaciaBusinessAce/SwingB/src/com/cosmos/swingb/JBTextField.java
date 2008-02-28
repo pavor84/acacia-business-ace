@@ -130,10 +130,12 @@ public class JBTextField
 
     protected void setNormal(){
         setBackground(Color.WHITE);
+        setToolTipText(null);
     }
     
     protected void setValid(){
         setBackground(Color.GREEN);
+        setToolTipText(null);
     }
     
     protected void setInvalid(){
