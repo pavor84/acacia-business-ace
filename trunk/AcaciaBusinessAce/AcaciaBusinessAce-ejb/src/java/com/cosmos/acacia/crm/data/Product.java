@@ -64,7 +64,7 @@ public class Product
     private ProductCategory category;
 
     @Column(name = "product_name", nullable = false)
-    @Property(title="Product Name", validationType=ValidationType.REGEX, validationRegex="[a-zA-z]+")
+    @Property(title="Product Name", validationType=ValidationType.REQUIRED, validationRegex="[a-zA-Z]+")
     private String productName;
 
     @Column(name = "product_code", nullable = false)
