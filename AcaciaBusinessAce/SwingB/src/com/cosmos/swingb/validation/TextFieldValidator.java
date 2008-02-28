@@ -37,14 +37,6 @@ public class TextFieldValidator implements Validator {
             case ValidationType.REQUIRED:
                 return component.getText().trim().length() > 0;
             
-            case ValidationType.REGEX:
-                return (component.getText().length() == 0 ||
-                        component.getText().matches(details.getValidationRegex()));
-             
-
-            case ValidationType.REGEX_REQUIRED:
-                return component.getText().matches(details.getValidationRegex());
-                
             case ValidationType.RANGE:
                 try {
                     double value = Double.parseDouble(component.getText());
@@ -56,10 +48,12 @@ public class TextFieldValidator implements Validator {
                 
             case ValidationType.CUSTOM:
                 return false;
-            
-            default:
-                return false;
         }
+        
+        if (details.getValidationRegex() != null && details.getValidationRegex().length() > 0)
+            return component.getText().matches(details.getValidationRegex());
+        
+        return false;
     }
 
     public int getEvent() {
