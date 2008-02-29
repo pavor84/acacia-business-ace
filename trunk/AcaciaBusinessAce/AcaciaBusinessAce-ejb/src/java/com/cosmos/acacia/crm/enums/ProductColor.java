@@ -6,50 +6,6 @@ package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
 import java.awt.Color;
-import java.math.BigDecimal;
-
-/*
-Scientists have adopted the metric system to simplify their calculations and
-promote communication across national boundaries. However, there have been two
-ideas as to which metric units should be preferred in science. Scientists
-working in laboratories, dealing with small quantities and distances, preferred
-to measure distance in centimeters and mass in grams. Scientists and engineers
-working in larger contexts preferred larger units: meters for distance and
-kilograms for mass. Everyone agreed that units of other quantities such as
-force, pressure, work, power, and so on should be related in a simple way to the
-basic units, but which basic units should be used?
-The result was two clusterings of metric units in science and engineering. One
-cluster, based on the centimeter, the gram, and the second, is called the CGS
-system. The other, based on the meter, kilogram, and second, is called the MKS
-system.
-When we say, for example, that the dyne is the CGS unit of force, this
-determines its definition: it is the force which accelerates a mass of one gram
-at the rate of one centimeter per second per second. The MKS unit of force, the
-newton, is the force which accelerates a mass of one kilogram at the rate of one
-meter per second per second. The ratio between a CGS unit and the corresponding
-MKS unit is usually a power of 10. A newton accelerates a mass 1000 times
-greater than a dyne does, and it does so at a rate 100 times greater, so there
-are 100 000 = 105 dynes in a newton.
-The CGS system was introduced formally by the British Association for the
-Advancement of Science in 1874. It found almost immediate favor with working
-scientists, and it was the system most commonly used in scientific work for many
-years. Meanwhile, the further development of the metric system was based on
-meter and kilogram standards created and distributed in 1889 by the
-International Bureau of Weights and Measures (BIPM). During the 20th century,
-metric units based on the meter and kilogram--the MKS units--were used more and
-more in commercial transactions, engineering, and other practical areas. By 1950
-there was some discomfort among users of metric units, because the need to
-translate between CGS and MKS units went against the metric ideal of a universal
-measuring system. In other words, a choice needed to be made.
-In 1954, the Tenth General Conference on Weights and Measures (CGPM) adopted the
-meter, kilogram, second, ampere, degree Kelvin, and candela as the basic units
-for all international weights and measures, and in 1960 the Eleventh General
-Conference adopted the name International System of Units (SI) for this
-collection of units. (The "degree Kelvin" became the kelvin in 1967.) In effect,
-these decisions gave the central core of the MKS system preference over the CGS
-system. Although some of the CGS units remain in use for a variety of purposes,
-they are being replaced gradually by the SI units selected from the MKS system.
-*/
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;

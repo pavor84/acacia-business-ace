@@ -56,5 +56,15 @@ public abstract class DataObjectBean {
         firePropertyChange(propertyName, Boolean.valueOf(oldValue), Boolean.valueOf(newValue));
     }
 
+    protected DataObjectBean getDataObject(ClassifiedObject classifiedObject)
+    {
+        // TODO: Retreive the classified object from LinkedDataObjectId
+        if(classifiedObject != null)
+        {
+            
+        }
+
+        return null;
+    }
 
 }
