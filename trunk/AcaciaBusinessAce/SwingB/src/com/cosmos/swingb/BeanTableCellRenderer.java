@@ -6,8 +6,6 @@
 package com.cosmos.swingb;
 
 import com.cosmos.resource.BeanResource;
-import com.cosmos.resource.EnumResource;
-import com.cosmos.resource.TextResource;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
