@@ -42,33 +42,43 @@ public class PurchaseOrder implements Serializable {
 
     @Column(name = "supplier_order_number")
     private String supplierOrderNumber;
+
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date creationTime;
+
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
     private Date sentTime;
+
     @Column(name = "first_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date firstDeliveryTime;
+
     @Column(name = "last_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date lastDeliveryTime;
+
     @Column(name = "finalizing_time")
     @Temporal(TemporalType.DATE)
     private Date finalizingTime;
+
     @JoinColumn(name = "purchase_order_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
+
     @JoinColumn(name = "supplier_contact_id", referencedColumnName = "person_id")
     @ManyToOne
     private Person supplierContactId;
+
     @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
     @ManyToOne
     private Person creatorId;
+
     @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
     @ManyToOne
     private Person senderId;
+
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource statusId;
