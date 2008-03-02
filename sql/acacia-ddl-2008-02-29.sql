@@ -15,7 +15,7 @@ SET escape_string_warning = off;
 -- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: -
 --
 
-CREATE PROCEDURAL LANGUAGE plpgsql;
+--CREATE PROCEDURAL LANGUAGE plpgsql;
 
 
 SET search_path = public, pg_catalog;
@@ -48,11 +48,11 @@ CREATE TABLE addresses (
 -- Name: breakpoint; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE breakpoint AS (
+/*CREATE TYPE breakpoint AS (
 	func oid,
 	linenumber integer,
 	targetname text
-);
+);*/
 
 
 --
@@ -228,13 +228,13 @@ CREATE TABLE enum_classes (
 -- Name: frame; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE frame AS (
+/*CREATE TYPE frame AS (
 	level integer,
 	targetname text,
 	func oid,
 	linenumber integer,
 	args text
-);
+);*/
 
 
 --
@@ -382,12 +382,12 @@ CREATE TABLE products (
 -- Name: proxyinfo; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE proxyinfo AS (
+/*CREATE TYPE proxyinfo AS (
 	serverversionstr text,
 	serverversionnum integer,
 	proxyapiver integer,
 	serverprocessid integer
-);
+);*/
 
 
 --
@@ -446,7 +446,7 @@ CREATE TABLE sequence_identifiers (
 -- Name: targetinfo; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE targetinfo AS (
+/*CREATE TYPE targetinfo AS (
 	target oid,
 	schema oid,
 	nargs integer,
@@ -458,7 +458,7 @@ CREATE TYPE targetinfo AS (
 	fqname text,
 	returnsset boolean,
 	returntype oid
-);
+);*/
 
 
 --
@@ -496,7 +496,7 @@ CREATE TABLE users (
 -- Name: var; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE var AS (
+/*CREATE TYPE var AS (
 	name text,
 	varclass character(1),
 	linenumber integer,
@@ -505,7 +505,7 @@ CREATE TYPE var AS (
 	isnotnull boolean,
 	dtype oid,
 	value text
-);
+);*/
 
 
 --
