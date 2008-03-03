@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -39,6 +40,11 @@ public class InvoiceItem implements Serializable {
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
     private Product product;
+
+    @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Measure Unit")
+    private DbResource measureUnit;
 
     @Column(name = "ordered_quantity", nullable = false)
     private BigDecimal orderedQuantity;
@@ -164,6 +170,15 @@ public class InvoiceItem implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public DbResource getMeasureUnit() {
+        return measureUnit;
+    }
+
+    public void setMeasureUnit(DbResource measureUnit) {
+        //firePropertyChange("measureUnit", this.measureUnit, measureUnit);
+        this.measureUnit = measureUnit;
     }
 
     public Warehouse getWarehouse() {
