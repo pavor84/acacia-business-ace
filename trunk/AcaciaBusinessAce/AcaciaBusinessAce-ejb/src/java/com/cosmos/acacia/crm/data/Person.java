@@ -51,12 +51,6 @@ public class Person implements Serializable {
     private Date birthDate;
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy = "supplierContactId")
-    private Collection<PurchaseOrder> purchaseOrderCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creatorId")
-    private Collection<PurchaseOrder> purchaseOrderCollection1;
-    @OneToMany(mappedBy = "senderId")
-    private Collection<PurchaseOrder> purchaseOrderCollection2;
     @JoinColumn(name = "birth_place_city_id", referencedColumnName = "city_id")
     @ManyToOne
     private City birthPlaceCityId;
@@ -153,30 +147,6 @@ public class Person implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Collection<PurchaseOrder> getPurchaseOrderCollection() {
-        return purchaseOrderCollection;
-    }
-
-    public void setPurchaseOrderCollection(Collection<PurchaseOrder> purchaseOrderCollection) {
-        this.purchaseOrderCollection = purchaseOrderCollection;
-    }
-
-    public Collection<PurchaseOrder> getPurchaseOrderCollection1() {
-        return purchaseOrderCollection1;
-    }
-
-    public void setPurchaseOrderCollection1(Collection<PurchaseOrder> purchaseOrderCollection1) {
-        this.purchaseOrderCollection1 = purchaseOrderCollection1;
-    }
-
-    public Collection<PurchaseOrder> getPurchaseOrderCollection2() {
-        return purchaseOrderCollection2;
-    }
-
-    public void setPurchaseOrderCollection2(Collection<PurchaseOrder> purchaseOrderCollection2) {
-        this.purchaseOrderCollection2 = purchaseOrderCollection2;
     }
 
     public City getBirthPlaceCityId() {
