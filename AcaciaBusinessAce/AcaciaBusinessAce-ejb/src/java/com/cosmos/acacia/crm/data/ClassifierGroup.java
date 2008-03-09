@@ -7,15 +7,10 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,7 +20,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "classifier_groups")
-@NamedQueries({@NamedQuery(name = "ClassifierGroup.findByClassifierGroupId", query = "SELECT c FROM ClassifierGroup c WHERE c.classifierGroupId = :classifierGroupId"), @NamedQuery(name = "ClassifierGroup.findByParentId", query = "SELECT c FROM ClassifierGroup c WHERE c.parentId = :parentId"), @NamedQuery(name = "ClassifierGroup.findByIsSystemGroup", query = "SELECT c FROM ClassifierGroup c WHERE c.isSystemGroup = :isSystemGroup"), @NamedQuery(name = "ClassifierGroup.findByClassifierGroupCode", query = "SELECT c FROM ClassifierGroup c WHERE c.classifierGroupCode = :classifierGroupCode"), @NamedQuery(name = "ClassifierGroup.findByClassifierGroupName", query = "SELECT c FROM ClassifierGroup c WHERE c.classifierGroupName = :classifierGroupName"), @NamedQuery(name = "ClassifierGroup.findByDescription", query = "SELECT c FROM ClassifierGroup c WHERE c.description = :description")})
 public class ClassifierGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;

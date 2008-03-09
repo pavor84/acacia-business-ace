@@ -10,8 +10,6 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,24 +19,26 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "currencies")
-@NamedQueries({@NamedQuery(name = "Currency.findByCurrencyId", query = "SELECT c FROM Currency c WHERE c.currencyId = :currencyId"), @NamedQuery(name = "Currency.findByCurrencyName", query = "SELECT c FROM Currency c WHERE c.currencyName = :currencyName"), @NamedQuery(name = "Currency.findByCurrencyCodeA3", query = "SELECT c FROM Currency c WHERE c.currencyCodeA3 = :currencyCodeA3"), @NamedQuery(name = "Currency.findByCurrencyCodeN3", query = "SELECT c FROM Currency c WHERE c.currencyCodeN3 = :currencyCodeN3"), @NamedQuery(name = "Currency.findByDescription", query = "SELECT c FROM Currency c WHERE c.description = :description")})
 public class Currency implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "currency_id", nullable = false)
     private Integer currencyId;
+
     @Column(name = "currency_name", nullable = false)
     private String currencyName;
+
     @Column(name = "currency_code_a3")
     private String currencyCodeA3;
+
     @Column(name = "currency_code_n3")
     private String currencyCodeN3;
+
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy = "currencyId")
-    private Collection<Organization> organizationCollection;
-    @OneToMany(mappedBy = "currencyId")
-    private Collection<Country> countryCollection;
+
 
     public Currency() {
     }
@@ -92,21 +92,6 @@ public class Currency implements Serializable {
         this.description = description;
     }
 
-    public Collection<Organization> getOrganizationCollection() {
-        return organizationCollection;
-    }
-
-    public void setOrganizationCollection(Collection<Organization> organizationCollection) {
-        this.organizationCollection = organizationCollection;
-    }
-
-    public Collection<Country> getCountryCollection() {
-        return countryCollection;
-    }
-
-    public void setCountryCollection(Collection<Country> countryCollection) {
-        this.countryCollection = countryCollection;
-    }
 
     @Override
     public int hashCode() {

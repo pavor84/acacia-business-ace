@@ -12,8 +12,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -22,7 +20,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "product_suppliers")
-@NamedQueries({@NamedQuery(name = "ProductSupplier.findByProductId", query = "SELECT p FROM ProductSupplier p WHERE p.productSupplierPK.productId = :productId"), @NamedQuery(name = "ProductSupplier.findBySupplierId", query = "SELECT p FROM ProductSupplier p WHERE p.productSupplierPK.supplierId = :supplierId"), @NamedQuery(name = "ProductSupplier.findByDescription", query = "SELECT p FROM ProductSupplier p WHERE p.description = :description")})
 public class ProductSupplier
     extends DataObjectBean
     implements Serializable

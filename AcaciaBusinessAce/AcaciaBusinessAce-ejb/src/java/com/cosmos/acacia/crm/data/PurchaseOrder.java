@@ -6,14 +6,13 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,29 +25,72 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "purchase_orders")
 public class PurchaseOrder implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "purchase_order_id", nullable = false)
-    private Long purchaseOrderId;
+    private BigInteger purchaseOrderId;
+
     @Column(name = "parent_id")
-    private Long parentId;
+    private BigInteger parentId;
+
+    @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
+    @ManyToOne
+    private Address branch;
+
+    @Column(name = "branch_name", nullable = false)
+    private String branchName;
+
     @Column(name = "order_number", nullable = false)
-    private int orderNumber;
+    private long orderNumber;
 
     @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
     private ClassifiedObject supplierClassifier;
 
+    @Column(name = "supplier_name", nullable = false)
+    private String supplierName;
+
     @Column(name = "supplier_order_number")
     private String supplierOrderNumber;
+
+    @JoinColumn(name = "supplier_contact_id", referencedColumnName = "person_id")
+    @ManyToOne
+    private Person supplierContact;
+
+    @Column(name = "supplier_contact_name")
+    private String supplierContactName;
+
+    @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    private DbResource status;
 
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date creationTime;
 
+    @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
+    @ManyToOne
+    private Person creator;
+
+    @Column(name = "creator_name", nullable = false)
+    private String creatorName;
+
+    @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    private DbResource documentDeliveryMethod;
+
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
     private Date sentTime;
+
+    @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
+    @ManyToOne
+    private Person sender;
+
+    @Column(name = "sender_name")
+    private String senderName;
 
     @Column(name = "first_delivery_time")
     @Temporal(TemporalType.DATE)
@@ -66,50 +108,35 @@ public class PurchaseOrder implements Serializable {
     @OneToOne
     private DataObject dataObject;
 
-    @JoinColumn(name = "supplier_contact_id", referencedColumnName = "person_id")
-    @ManyToOne
-    private Person supplierContactId;
-
-    @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
-    @ManyToOne
-    private Person creatorId;
-
-    @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
-    @ManyToOne
-    private Person senderId;
-
-    @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
-    @ManyToOne
-    private DbResource statusId;
 
     public PurchaseOrder() {
     }
 
-    public PurchaseOrder(Long purchaseOrderId) {
+    public PurchaseOrder(BigInteger purchaseOrderId) {
         this.purchaseOrderId = purchaseOrderId;
     }
 
-    public Long getPurchaseOrderId() {
+    public BigInteger getPurchaseOrderId() {
         return purchaseOrderId;
     }
 
-    public void setPurchaseOrderId(Long purchaseOrderId) {
+    public void setPurchaseOrderId(BigInteger purchaseOrderId) {
         this.purchaseOrderId = purchaseOrderId;
     }
 
-    public Long getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
-    public int getOrderNumber() {
+    public long getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(int orderNumber) {
+    public void setOrderNumber(long orderNumber) {
         this.orderNumber = orderNumber;
     }
 
@@ -119,6 +146,14 @@ public class PurchaseOrder implements Serializable {
 
     public void setSupplierClassifier(ClassifiedObject supplierClassifier) {
         this.supplierClassifier = supplierClassifier;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     public String getSupplierOrderNumber() {
@@ -177,37 +212,86 @@ public class PurchaseOrder implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public Person getSupplierContactId() {
-        return supplierContactId;
+    public Person getSupplierContact() {
+        return supplierContact;
     }
 
-    public void setSupplierContactId(Person supplierContactId) {
-        this.supplierContactId = supplierContactId;
+    public void setSupplierContact(Person supplierContact) {
+        this.supplierContact = supplierContact;
     }
 
-    public Person getCreatorId() {
-        return creatorId;
+    public String getSupplierContactName() {
+        return supplierContactName;
     }
 
-    public void setCreatorId(Person creatorId) {
-        this.creatorId = creatorId;
+    public void setSupplierContactName(String supplierContactName) {
+        this.supplierContactName = supplierContactName;
     }
 
-    public Person getSenderId() {
-        return senderId;
+    public Person getCreator() {
+        return creator;
     }
 
-    public void setSenderId(Person senderId) {
-        this.senderId = senderId;
+    public void setCreator(Person creator) {
+        this.creator = creator;
     }
 
-    public DbResource getStatusId() {
-        return statusId;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setStatusId(DbResource statusId) {
-        this.statusId = statusId;
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
+
+    public Person getSender() {
+        return sender;
+    }
+
+    public void setSender(Person sender) {
+        this.sender = sender;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public DbResource getStatus() {
+        return status;
+    }
+
+    public void setStatus(DbResource status) {
+        this.status = status;
+    }
+
+    public DbResource getDocumentDeliveryMethod() {
+        return documentDeliveryMethod;
+    }
+
+    public void setDocumentDeliveryMethod(DbResource documentDeliveryMethod) {
+        this.documentDeliveryMethod = documentDeliveryMethod;
+    }
+
+    public Address getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Address branch) {
+        this.branch = branch;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
 
     @Override
     public int hashCode() {

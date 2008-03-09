@@ -7,13 +7,12 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -22,29 +21,57 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "warehouse_products")
-@NamedQueries({@NamedQuery(name = "WarehouseProduct.findByWarehouseId", query = "SELECT w FROM WarehouseProduct w WHERE w.warehouseProductPK.warehouseId = :warehouseId"), @NamedQuery(name = "WarehouseProduct.findByProductId", query = "SELECT w FROM WarehouseProduct w WHERE w.warehouseProductPK.productId = :productId"), @NamedQuery(name = "WarehouseProduct.findByQuantityInStock", query = "SELECT w FROM WarehouseProduct w WHERE w.quantityInStock = :quantityInStock"), @NamedQuery(name = "WarehouseProduct.findByOrderedQuantity", query = "SELECT w FROM WarehouseProduct w WHERE w.orderedQuantity = :orderedQuantity"), @NamedQuery(name = "WarehouseProduct.findByReservedQuantity", query = "SELECT w FROM WarehouseProduct w WHERE w.reservedQuantity = :reservedQuantity"), @NamedQuery(name = "WarehouseProduct.findBySoldQuantity", query = "SELECT w FROM WarehouseProduct w WHERE w.soldQuantity = :soldQuantity"), @NamedQuery(name = "WarehouseProduct.findByQuantityDue", query = "SELECT w FROM WarehouseProduct w WHERE w.quantityDue = :quantityDue"), @NamedQuery(name = "WarehouseProduct.findByNotes", query = "SELECT w FROM WarehouseProduct w WHERE w.notes = :notes")})
 public class WarehouseProduct implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @EmbeddedId
     protected WarehouseProductPK warehouseProductPK;
-    @Column(name = "quantity_in_stock")
-    private BigDecimal quantityInStock;
-    @Column(name = "ordered_quantity")
-    private BigDecimal orderedQuantity;
-    @Column(name = "reserved_quantity")
-    private BigDecimal reservedQuantity;
-    @Column(name = "sold_quantity")
-    private BigDecimal soldQuantity;
-    @Column(name = "quantity_due")
-    private BigDecimal quantityDue;
-    @Column(name = "notes")
-    private String notes;
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
-    @ManyToOne
-    private Product product;
+
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id", insertable = false, updatable = false)
     @ManyToOne
     private Warehouse warehouse;
+
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    @ManyToOne
+    private Product product;
+
+    @Column(name = "quantity_in_stock")
+    private BigDecimal quantityInStock;
+
+    @Column(name = "ordered_quantity")
+    private BigDecimal orderedQuantity;
+
+    @Column(name = "reserved_quantity")
+    private BigDecimal reservedQuantity;
+
+    @Column(name = "sold_quantity")
+    private BigDecimal soldQuantity;
+
+    @Column(name = "quantity_due")
+    private BigDecimal quantityDue;
+
+    @Column(name = "minimum_quantity")
+    private BigDecimal minimumQuantity;
+
+    @Column(name = "maximum_quantity")
+    private BigDecimal maximumQuantity;
+
+    @Column(name = "default_quantity")
+    private BigDecimal defaultQuantity;
+
+    @Column(name = "purchase_price")
+    private BigDecimal purchasePrice;
+
+    @Column(name = "sale_price")
+    private BigDecimal salePrice;
+
+    @Column(name = "delivery_time")
+    private Integer deliveryTime;
+
+    @Column(name = "notes")
+    private String notes;
+
 
     public WarehouseProduct() {
     }
@@ -53,7 +80,7 @@ public class WarehouseProduct implements Serializable {
         this.warehouseProductPK = warehouseProductPK;
     }
 
-    public WarehouseProduct(long warehouseId, long productId) {
+    public WarehouseProduct(BigInteger warehouseId, BigInteger productId) {
         this.warehouseProductPK = new WarehouseProductPK(warehouseId, productId);
     }
 
@@ -105,6 +132,23 @@ public class WarehouseProduct implements Serializable {
         this.quantityDue = quantityDue;
     }
 
+    public BigDecimal getFreeQuantity()
+    {
+        BigDecimal freeQuantity;
+        if(quantityInStock != null)
+            freeQuantity = quantityInStock;
+        else
+            freeQuantity = BigDecimal.ZERO;
+
+        if(reservedQuantity != null)
+            freeQuantity = freeQuantity.subtract(reservedQuantity);
+
+        if(soldQuantity != null)
+            freeQuantity = freeQuantity.subtract(soldQuantity);
+
+        return freeQuantity;
+    }
+
     public String getNotes() {
         return notes;
     }
@@ -128,6 +172,91 @@ public class WarehouseProduct implements Serializable {
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
     }
+
+    public BigDecimal getDefaultQuantity() {
+        if(defaultQuantity != null)
+            return defaultQuantity;
+
+        if(product != null)
+            return product.getDefaultQuantity();
+
+        return BigDecimal.ZERO;
+    }
+
+    public void setDefaultQuantity(BigDecimal defaultQuantity) {
+        this.defaultQuantity = defaultQuantity;
+    }
+
+    public Integer getDeliveryTime() {
+        if(deliveryTime != null)
+            return deliveryTime;
+
+        if(product != null)
+            return product.getDeliveryTime();
+
+        return 0;
+    }
+
+    public void setDeliveryTime(Integer deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public BigDecimal getMaximumQuantity() {
+        if(maximumQuantity != null)
+            return maximumQuantity;
+
+        if(product != null)
+            return product.getMaximumQuantity();
+
+        return BigDecimal.ZERO;
+    }
+
+    public void setMaximumQuantity(BigDecimal maximumQuantity) {
+        this.maximumQuantity = maximumQuantity;
+    }
+
+    public BigDecimal getMinimumQuantity() {
+        if(minimumQuantity != null)
+            return minimumQuantity;
+
+        if(product != null)
+            return product.getMinimumQuantity();
+
+        return BigDecimal.ZERO;
+    }
+
+    public void setMinimumQuantity(BigDecimal minimumQuantity) {
+        this.minimumQuantity = minimumQuantity;
+    }
+
+    public BigDecimal getPurchasePrice() {
+        if(purchasePrice != null)
+            return purchasePrice;
+
+        if(product != null)
+            return product.getPurchasePrice();
+
+        return BigDecimal.ZERO;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public BigDecimal getSalePrice() {
+        if(salePrice != null)
+            return salePrice;
+
+        if(product != null)
+            return product.getSalePrice();
+
+        return BigDecimal.ZERO;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+
 
     @Override
     public int hashCode() {

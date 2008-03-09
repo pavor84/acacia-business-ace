@@ -41,14 +41,16 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             if(id == null)
             {
                 System.out.println("Insert Entity");
-                if(dataObject == null)
+                if(dataObject == null || dataObject.getDataObjectId() == null)
                 {
                     DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
                     DataObjectType dot = dotLocal.getDataObjectType(entity.getClass().getName());
                     System.out.println("dotLocal: " + dotLocal);
                     System.out.println("dot: " + dot);
 
-                    dataObject = new DataObject();
+                    if(dataObject == null)
+                        dataObject = new DataObject();
+
                     dataObject.setDataObjectTypeId(dot.getDataObjectTypeId());
                     dataObject.setDataObjectVersion(1);
                     em.persist(dataObject);

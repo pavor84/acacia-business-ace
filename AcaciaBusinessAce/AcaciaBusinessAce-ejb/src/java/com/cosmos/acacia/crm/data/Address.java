@@ -6,16 +6,12 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.CascadeType;
+import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,34 +21,37 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "addresses")
-@NamedQueries({@NamedQuery(name = "Address.findByAddressId", query = "SELECT a FROM Address a WHERE a.addressId = :addressId"), @NamedQuery(name = "Address.findByParentId", query = "SELECT a FROM Address a WHERE a.parentId = :parentId"), @NamedQuery(name = "Address.findByAddressName", query = "SELECT a FROM Address a WHERE a.addressName = :addressName"), @NamedQuery(name = "Address.findByPostalCode", query = "SELECT a FROM Address a WHERE a.postalCode = :postalCode"), @NamedQuery(name = "Address.findByPostalAddress", query = "SELECT a FROM Address a WHERE a.postalAddress = :postalAddress"), @NamedQuery(name = "Address.findByDescription", query = "SELECT a FROM Address a WHERE a.description = :description")})
 public class Address implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "address_id", nullable = false)
-    private Long addressId;
+    private BigInteger addressId;
+
     @Column(name = "parent_id")
-    private Long parentId;
+    private BigInteger parentId;
+
     @Column(name = "address_name", nullable = false)
     private String addressName;
-    @Column(name = "postal_code")
-    private String postalCode;
-    @Column(name = "postal_address")
-    private String postalAddress;
-    @Column(name = "description")
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "addressId")
-    private Collection<Warehouse> warehouseCollection;
-    @OneToMany(mappedBy = "registrationAddressId")
-    private Collection<Organization> organizationCollection;
-    @OneToMany(mappedBy = "administrationAddressId")
-    private Collection<Organization> organizationCollection1;
-    @JoinColumn(name = "city_id", referencedColumnName = "city_id")
-    @ManyToOne
-    private City cityId;
+
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
-    private Country countryId;
+    private Country country;
+
+    @JoinColumn(name = "city_id", referencedColumnName = "city_id")
+    @ManyToOne
+    private City city;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "postal_address")
+    private String postalAddress;
+
+    @Column(name = "description")
+    private String description;
+
     @JoinColumn(name = "address_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -60,28 +59,23 @@ public class Address implements Serializable {
     public Address() {
     }
 
-    public Address(Long addressId) {
+    public Address(BigInteger addressId) {
         this.addressId = addressId;
     }
 
-    public Address(Long addressId, String addressName) {
-        this.addressId = addressId;
-        this.addressName = addressName;
-    }
-
-    public Long getAddressId() {
+    public BigInteger getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(Long addressId) {
+    public void setAddressId(BigInteger addressId) {
         this.addressId = addressId;
     }
 
-    public Long getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
@@ -117,44 +111,20 @@ public class Address implements Serializable {
         this.description = description;
     }
 
-    public Collection<Warehouse> getWarehouseCollection() {
-        return warehouseCollection;
+    public City getCity() {
+        return city;
     }
 
-    public void setWarehouseCollection(Collection<Warehouse> warehouseCollection) {
-        this.warehouseCollection = warehouseCollection;
+    public void setCity(City city) {
+        this.city = city;
     }
 
-    public Collection<Organization> getOrganizationCollection() {
-        return organizationCollection;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setOrganizationCollection(Collection<Organization> organizationCollection) {
-        this.organizationCollection = organizationCollection;
-    }
-
-    public Collection<Organization> getOrganizationCollection1() {
-        return organizationCollection1;
-    }
-
-    public void setOrganizationCollection1(Collection<Organization> organizationCollection1) {
-        this.organizationCollection1 = organizationCollection1;
-    }
-
-    public City getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(City cityId) {
-        this.cityId = cityId;
-    }
-
-    public Country getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Country countryId) {
-        this.countryId = countryId;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
     public DataObject getDataObject() {
