@@ -6,17 +6,13 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,68 +24,76 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "persons")
-@NamedQueries({@NamedQuery(name = "Person.findByPersonId", query = "SELECT p FROM Person p WHERE p.personId = :personId"), @NamedQuery(name = "Person.findByParentId", query = "SELECT p FROM Person p WHERE p.parentId = :parentId"), @NamedQuery(name = "Person.findByFirstName", query = "SELECT p FROM Person p WHERE p.firstName = :firstName"), @NamedQuery(name = "Person.findBySecondName", query = "SELECT p FROM Person p WHERE p.secondName = :secondName"), @NamedQuery(name = "Person.findByLastName", query = "SELECT p FROM Person p WHERE p.lastName = :lastName"), @NamedQuery(name = "Person.findByExtraName", query = "SELECT p FROM Person p WHERE p.extraName = :extraName"), @NamedQuery(name = "Person.findByPersonalUniqueId", query = "SELECT p FROM Person p WHERE p.personalUniqueId = :personalUniqueId"), @NamedQuery(name = "Person.findByBirthDate", query = "SELECT p FROM Person p WHERE p.birthDate = :birthDate"), @NamedQuery(name = "Person.findByDescription", query = "SELECT p FROM Person p WHERE p.description = :description")})
 public class Person implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "person_id", nullable = false)
-    private Long personId;
+    private BigInteger personId;
+
     @Column(name = "parent_id")
-    private Long parentId;
+    private BigInteger parentId;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
+
     @Column(name = "second_name")
     private String secondName;
+
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
     @Column(name = "extra_name")
     private String extraName;
+
     @Column(name = "personal_unique_id")
     private String personalUniqueId;
+
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
-    @Column(name = "description")
-    private String description;
-    @JoinColumn(name = "birth_place_city_id", referencedColumnName = "city_id")
-    @ManyToOne
-    private City birthPlaceCityId;
+
     @JoinColumn(name = "birth_place_country_id", referencedColumnName = "country_id")
     @ManyToOne
-    private Country birthPlaceCountryId;
+    private Country birthPlaceCountry;
+
+    @JoinColumn(name = "birth_place_city_id", referencedColumnName = "city_id")
+    @ManyToOne
+    private City birthPlaceCity;
+
+    @JoinColumn(name = "gender_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    private DbResource gender;
+
+    @Column(name = "description")
+    private String description;
+
     @JoinColumn(name = "person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-    @JoinColumn(name = "gender_id", referencedColumnName = "resource_id")
-    @ManyToOne
-    private DbResource genderId;
+
 
     public Person() {
     }
 
-    public Person(Long personId) {
+    public Person(BigInteger personId) {
         this.personId = personId;
     }
 
-    public Person(Long personId, String firstName, String lastName) {
-        this.personId = personId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Long getPersonId() {
+    public BigInteger getPersonId() {
         return personId;
     }
 
-    public void setPersonId(Long personId) {
+    public void setPersonId(BigInteger personId) {
         this.personId = personId;
     }
 
-    public Long getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
@@ -149,20 +153,20 @@ public class Person implements Serializable {
         this.description = description;
     }
 
-    public City getBirthPlaceCityId() {
-        return birthPlaceCityId;
+    public City getBirthPlaceCity() {
+        return birthPlaceCity;
     }
 
-    public void setBirthPlaceCityId(City birthPlaceCityId) {
-        this.birthPlaceCityId = birthPlaceCityId;
+    public void setBirthPlaceCity(City birthPlaceCity) {
+        this.birthPlaceCity = birthPlaceCity;
     }
 
-    public Country getBirthPlaceCountryId() {
-        return birthPlaceCountryId;
+    public Country getBirthPlaceCountry() {
+        return birthPlaceCountry;
     }
 
-    public void setBirthPlaceCountryId(Country birthPlaceCountryId) {
-        this.birthPlaceCountryId = birthPlaceCountryId;
+    public void setBirthPlaceCountry(Country birthPlaceCountry) {
+        this.birthPlaceCountry = birthPlaceCountry;
     }
 
     public DataObject getDataObject() {
@@ -173,12 +177,12 @@ public class Person implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public DbResource getGenderId() {
-        return genderId;
+    public DbResource getGender() {
+        return gender;
     }
 
-    public void setGenderId(DbResource genderId) {
-        this.genderId = genderId;
+    public void setGender(DbResource gender) {
+        this.gender = gender;
     }
 
     @Override
