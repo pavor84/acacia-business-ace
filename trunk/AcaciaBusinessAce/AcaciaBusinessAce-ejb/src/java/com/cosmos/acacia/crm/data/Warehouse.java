@@ -6,16 +6,13 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.CascadeType;
+import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -24,53 +21,62 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "warehouses")
-@NamedQueries({@NamedQuery(name = "Warehouse.findByWarehouseId", query = "SELECT w FROM Warehouse w WHERE w.warehouseId = :warehouseId"), @NamedQuery(name = "Warehouse.findByParentId", query = "SELECT w FROM Warehouse w WHERE w.parentId = :parentId"), @NamedQuery(name = "Warehouse.findByWarehousemanId", query = "SELECT w FROM Warehouse w WHERE w.warehousemanId = :warehousemanId"), @NamedQuery(name = "Warehouse.findByDescription", query = "SELECT w FROM Warehouse w WHERE w.description = :description")})
 public class Warehouse implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "warehouse_id", nullable = false)
-    private Long warehouseId;
+    private BigInteger warehouseId;
+
     @Column(name = "parent_id")
-    private Long parentId;
-    @Column(name = "warehouseman_id")
-    private Long warehousemanId;
+    private BigInteger parentId;
+
+    @JoinColumn(name = "warehouseman_id", referencedColumnName = "person_id")
+    @ManyToOne
+    private Person warehouseman;
+
     @Column(name = "description")
     private String description;
+
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     @ManyToOne
-    private Address addressId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "warehouse")
-    private Collection<WarehouseProduct> warehouseProductCollection;
+    private Address address;
+
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @OneToOne
+    private DataObject dataObject;
+
 
     public Warehouse() {
     }
 
-    public Warehouse(Long warehouseId) {
+    public Warehouse(BigInteger warehouseId) {
         this.warehouseId = warehouseId;
     }
 
-    public Long getWarehouseId() {
+    public BigInteger getWarehouseId() {
         return warehouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
+    public void setWarehouseId(BigInteger warehouseId) {
         this.warehouseId = warehouseId;
     }
 
-    public Long getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
-    public Long getWarehousemanId() {
-        return warehousemanId;
+    public Person getWarehouseman() {
+        return warehouseman;
     }
 
-    public void setWarehousemanId(Long warehousemanId) {
-        this.warehousemanId = warehousemanId;
+    public void setWarehouseman(Person warehouseman) {
+        this.warehouseman = warehouseman;
     }
 
     public String getDescription() {
@@ -81,20 +87,20 @@ public class Warehouse implements Serializable {
         this.description = description;
     }
 
-    public Address getAddressId() {
-        return addressId;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddressId(Address addressId) {
-        this.addressId = addressId;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public Collection<WarehouseProduct> getWarehouseProductCollection() {
-        return warehouseProductCollection;
+    public DataObject getDataObject() {
+        return dataObject;
     }
 
-    public void setWarehouseProductCollection(Collection<WarehouseProduct> warehouseProductCollection) {
-        this.warehouseProductCollection = warehouseProductCollection;
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
     }
 
     @Override

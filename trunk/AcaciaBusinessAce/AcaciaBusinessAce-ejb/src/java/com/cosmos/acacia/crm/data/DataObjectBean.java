@@ -5,9 +5,17 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.util.ImageUtils;
+import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.persistence.Transient;
 
 /**
@@ -17,6 +25,11 @@ import javax.persistence.Transient;
 public abstract class DataObjectBean {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+
+    private URI smallImageURI;
+    private Image smallImage;
+    private URI mediumImageURI;
+    private Image mediumImage;
 
     public abstract DataObject getDataObject();
     public abstract void setDataObject(DataObject dataObject);
@@ -65,6 +78,239 @@ public abstract class DataObjectBean {
         }
 
         return null;
+    }
+
+    private DataObject getEntityDataObject()
+    {
+        DataObject dataObject = getDataObject();
+        if(dataObject == null)
+            setDataObject(new DataObject());
+
+        return dataObject;
+    }
+
+    public String getNotes()
+    {
+        return getEntityDataObject().getNotes();
+    }
+
+    public void setNotes(String notes)
+    {
+        getEntityDataObject().setNotes(notes);
+    }
+
+    public URI getSmallImageURI()
+    {
+        if(smallImageURI == null)
+        {
+            String uriString;
+            if((uriString = getEntityDataObject().getSmallImageUri()) != null &&
+                    (uriString = uriString.trim()).length() > 0)
+            {
+                try
+                {
+                    smallImageURI = new URI(uriString);
+                }
+                catch(URISyntaxException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+
+        return smallImageURI;
+    }
+
+    public void setSmallImageURL(URL imageURL)
+    {
+        try
+        {
+            if(imageURL != null)
+                setSmallImageURI(imageURL.toURI());
+            else
+                setSmallImageURI(null);
+        }
+        catch(URISyntaxException ex)
+        {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void setSmallImageURI(URI smallImageURI)
+    {
+        this.smallImageURI = smallImageURI;
+        if(smallImageURI != null)
+        {
+            getEntityDataObject().setSmallImageUri(smallImageURI.toASCIIString());
+        }
+        else
+        {
+            getEntityDataObject().setSmallImageUri(null);
+        }
+    }
+
+    public Image getSmallImage()
+    {
+        if(smallImage == null)
+        {
+            byte[] ba;
+            if((ba = getEntityDataObject().getSmallImage()) != null && ba.length > 0)
+            {
+                try
+                {
+                    smallImage = ImageIO.read(new ByteArrayInputStream(ba));
+                }
+                catch(IOException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
+            }
+            else
+            {
+                URI imageURI;
+                if((imageURI = getSmallImageURI()) != null)
+                {
+                    try
+                    {
+                        smallImage = ImageIO.read(imageURI.toURL());
+                    }
+                    catch(IOException ex)
+                    {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        }
+
+        return smallImage;
+    }
+
+    public void setSmallImage(Image smallImage)
+    {
+        this.smallImage = smallImage;
+        if(smallImage != null)
+        {
+            try
+            {
+                byte[] ba = ImageUtils.toByteArray(smallImage);
+                getEntityDataObject().setSmallImage(ba);
+            }
+            catch(IOException ex)
+            {
+                throw new RuntimeException(ex);
+            }
+        }
+        else
+        {
+            getEntityDataObject().setSmallImage(null);
+        }
+    }
+
+    public URI getMediumImageURI()
+    {
+        if(mediumImageURI == null)
+        {
+            String uriString;
+            if((uriString = getEntityDataObject().getMediumImageUri()) != null &&
+                    (uriString = uriString.trim()).length() > 0)
+            {
+                try
+                {
+                    mediumImageURI = new URI(uriString);
+                }
+                catch(URISyntaxException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+
+        return mediumImageURI;
+    }
+
+    public void setMediumImageURL(URL imageURL)
+    {
+        try
+        {
+            if(imageURL != null)
+                setMediumImageURI(imageURL.toURI());
+            else
+                setMediumImageURI(null);
+        }
+        catch(URISyntaxException ex)
+        {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void setMediumImageURI(URI mediumImageURI)
+    {
+        this.mediumImageURI = mediumImageURI;
+        if(mediumImageURI != null)
+        {
+            getEntityDataObject().setMediumImageUri(mediumImageURI.toASCIIString());
+        }
+        else
+        {
+            getEntityDataObject().setMediumImageUri(null);
+        }
+    }
+
+    public Image getMediumImage()
+    {
+        if(mediumImage == null)
+        {
+            byte[] ba;
+            if((ba = getEntityDataObject().getMediumImage()) != null && ba.length > 0)
+            {
+                try
+                {
+                    mediumImage = ImageIO.read(new ByteArrayInputStream(ba));
+                }
+                catch(IOException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
+            }
+            else
+            {
+                URI imageURI;
+                if((imageURI = getMediumImageURI()) != null)
+                {
+                    try
+                    {
+                        mediumImage = ImageIO.read(imageURI.toURL());
+                    }
+                    catch(IOException ex)
+                    {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        }
+
+        return mediumImage;
+    }
+
+    public void setMediumImage(Image mediumImage)
+    {
+        this.mediumImage = mediumImage;
+        if(mediumImage != null)
+        {
+            try
+            {
+                byte[] ba = ImageUtils.toByteArray(mediumImage);
+                getEntityDataObject().setMediumImage(ba);
+            }
+            catch(IOException ex)
+            {
+                throw new RuntimeException(ex);
+            }
+        }
+        else
+        {
+            getEntityDataObject().setMediumImage(null);
+        }
     }
 
 }

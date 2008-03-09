@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -15,40 +16,43 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class WarehouseProductPK implements Serializable {
+
     @Column(name = "warehouse_id", nullable = false)
-    private long warehouseId;
+    private BigInteger warehouseId;
+
     @Column(name = "product_id", nullable = false)
-    private long productId;
+    private BigInteger productId;
+
 
     public WarehouseProductPK() {
     }
 
-    public WarehouseProductPK(long warehouseId, long productId) {
+    public WarehouseProductPK(BigInteger warehouseId, BigInteger productId) {
         this.warehouseId = warehouseId;
         this.productId = productId;
     }
 
-    public long getWarehouseId() {
+    public BigInteger getWarehouseId() {
         return warehouseId;
     }
 
-    public void setWarehouseId(long warehouseId) {
+    public void setWarehouseId(BigInteger warehouseId) {
         this.warehouseId = warehouseId;
     }
 
-    public long getProductId() {
+    public BigInteger getProductId() {
         return productId;
     }
 
-    public void setProductId(long productId) {
+    public void setProductId(BigInteger productId) {
         this.productId = productId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) warehouseId;
-        hash += (int) productId;
+        hash += warehouseId.intValue();
+        hash += productId.intValue();
         return hash;
     }
 

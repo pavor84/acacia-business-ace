@@ -22,7 +22,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "classified_objects")
-@NamedQueries({@NamedQuery(name = "ClassifiedObject.findByClassifierId", query = "SELECT c FROM ClassifiedObject c WHERE c.classifiedObjectPK.classifierId = :classifierId"), @NamedQuery(name = "ClassifiedObject.findByClassifiedObjectId", query = "SELECT c FROM ClassifiedObject c WHERE c.classifiedObjectPK.classifiedObjectId = :classifiedObjectId"), @NamedQuery(name = "ClassifiedObject.findByDescription", query = "SELECT c FROM ClassifiedObject c WHERE c.description = :description")})
 public class ClassifiedObject implements Serializable {
 
     private static final long serialVersionUID = 1L;

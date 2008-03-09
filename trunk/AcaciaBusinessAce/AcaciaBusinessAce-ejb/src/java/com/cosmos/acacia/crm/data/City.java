@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,29 +21,33 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "cities")
-@NamedQueries({@NamedQuery(name = "City.findByCityId", query = "SELECT c FROM City c WHERE c.cityId = :cityId"), @NamedQuery(name = "City.findByCityName", query = "SELECT c FROM City c WHERE c.cityName = :cityName"), @NamedQuery(name = "City.findByPostalCode", query = "SELECT c FROM City c WHERE c.postalCode = :postalCode"), @NamedQuery(name = "City.findByCityCode", query = "SELECT c FROM City c WHERE c.cityCode = :cityCode"), @NamedQuery(name = "City.findByCityPhoneCode", query = "SELECT c FROM City c WHERE c.cityPhoneCode = :cityPhoneCode"), @NamedQuery(name = "City.findByDescription", query = "SELECT c FROM City c WHERE c.description = :description")})
 public class City implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "city_id", nullable = false)
     private Integer cityId;
-    @Column(name = "city_name", nullable = false)
-    private String cityName;
-    @Column(name = "postal_code")
-    private String postalCode;
-    @Column(name = "city_code")
-    private String cityCode;
-    @Column(name = "city_phone_code")
-    private String cityPhoneCode;
-    @Column(name = "description")
-    private String description;
-    @OneToMany(mappedBy = "birthPlaceCityId")
-    private Collection<Person> personCollection;
+
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
-    private Country countryId;
-    @OneToMany(mappedBy = "cityId")
-    private Collection<Address> addressCollection;
+    private Country country;
+
+    @Column(name = "city_name", nullable = false)
+    private String cityName;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "city_code")
+    private String cityCode;
+
+    @Column(name = "city_phone_code")
+    private String cityPhoneCode;
+
+    @Column(name = "description")
+    private String description;
+
 
     public City() {
     }
@@ -107,29 +109,14 @@ public class City implements Serializable {
         this.description = description;
     }
 
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
-    public Country getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Country countryId) {
-        this.countryId = countryId;
-    }
-
-    public Collection<Address> getAddressCollection() {
-        return addressCollection;
-    }
-
-    public void setAddressCollection(Collection<Address> addressCollection) {
-        this.addressCollection = addressCollection;
-    }
 
     @Override
     public int hashCode() {
