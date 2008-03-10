@@ -49,9 +49,12 @@ public class ReceiptCertificate implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date receiptCertificateDate;
 
+    /**
+     * The Deliverer can be both Person or Organization
+     */
     @JoinColumn(name = "deliverer_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject delivererClassifier;
+    private DataObjectBean deliverer;
 
     @Column(name = "deliverer_name", nullable = false)
     private String delivererName;
@@ -84,7 +87,7 @@ public class ReceiptCertificate implements Serializable {
 
     @JoinColumn(name = "forwarder_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject forwarderClassifier;
+    private Organization forwarder;
 
     @JoinColumn(name = "forwarder_contact_id", referencedColumnName = "person_id")
     @ManyToOne
@@ -148,12 +151,12 @@ public class ReceiptCertificate implements Serializable {
         this.receiptCertificateDate = receiptCertificateDate;
     }
 
-    public ClassifiedObject getDelivererClassifier() {
-        return delivererClassifier;
+    public DataObjectBean getDeliverer() {
+        return deliverer;
     }
 
-    public void setDelivererClassifier(ClassifiedObject delivererClassifier) {
-        this.delivererClassifier = delivererClassifier;
+    public void setDeliverer(DataObjectBean deliverer) {
+        this.deliverer = deliverer;
     }
 
     public String getDelivererName() {
@@ -196,12 +199,12 @@ public class ReceiptCertificate implements Serializable {
         this.creatorName = creatorName;
     }
 
-    public ClassifiedObject getForwarderClassifier() {
-        return forwarderClassifier;
+    public Organization getForwarder() {
+        return forwarder;
     }
 
-    public void setForwarderClassifier(ClassifiedObject forwarderClassifier) {
-        this.forwarderClassifier = forwarderClassifier;
+    public void setForwarder(Organization forwarder) {
+        this.forwarder = forwarder;
     }
 
     public String getForwarderName() {

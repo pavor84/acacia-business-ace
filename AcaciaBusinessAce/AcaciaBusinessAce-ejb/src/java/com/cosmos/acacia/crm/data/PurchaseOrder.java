@@ -45,9 +45,12 @@ public class PurchaseOrder implements Serializable {
     @Column(name = "order_number", nullable = false)
     private long orderNumber;
 
+    /**
+     * The Supplier can be both Person or Organization
+     */
     @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject supplierClassifier;
+    private DataObjectBean supplier;
 
     @Column(name = "supplier_name", nullable = false)
     private String supplierName;
@@ -140,12 +143,12 @@ public class PurchaseOrder implements Serializable {
         this.orderNumber = orderNumber;
     }
 
-    public ClassifiedObject getSupplierClassifier() {
-        return supplierClassifier;
+    public DataObjectBean getSupplier() {
+        return supplier;
     }
 
-    public void setSupplierClassifier(ClassifiedObject supplierClassifier) {
-        this.supplierClassifier = supplierClassifier;
+    public void setSupplier(DataObjectBean supplier) {
+        this.supplier = supplier;
     }
 
     public String getSupplierName() {

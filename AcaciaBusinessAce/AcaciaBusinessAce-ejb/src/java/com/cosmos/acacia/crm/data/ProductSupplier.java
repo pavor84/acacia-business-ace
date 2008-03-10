@@ -34,9 +34,12 @@ public class ProductSupplier
     @ManyToOne
     private Product product;
 
+    /**
+     * The Supplier can be both Person or Organization
+     */
     @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject supplierClassifier;
+    private DataObjectBean supplier;
 
     @Column(name = "description")
     private String description;
@@ -77,21 +80,12 @@ public class ProductSupplier
         this.product = product;
     }
 
-    public ClassifiedObject getSupplierClassifier() {
-        return supplierClassifier;
-    }
-
-    public void setSupplierClassifier(ClassifiedObject supplierClassifier) {
-        this.supplierClassifier = supplierClassifier;
-    }
-
-    // The supplier can be Organization or Person
     public DataObjectBean getSupplier() {
-        return getDataObject(getSupplierClassifier());
+        return supplier;
     }
 
     public void setSupplier(DataObjectBean supplier) {
-        // TODO
+        this.supplier = supplier;
     }
 
     @Override
