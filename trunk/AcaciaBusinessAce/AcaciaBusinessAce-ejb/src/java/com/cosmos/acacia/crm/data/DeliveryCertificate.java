@@ -7,7 +7,6 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,9 +49,12 @@ public class DeliveryCertificate implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date deliveryCertificateDate;
 
+    /**
+     * The Recipient can be both Person or Organization
+     */
     @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject recipientClassifier;
+    private DataObjectBean recipient;
 
     @Column(name = "recipient_name", nullable = false)
     private String recipientName;
@@ -85,7 +87,7 @@ public class DeliveryCertificate implements Serializable {
 
     @JoinColumn(name = "forwarder_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject forwarderClassifier;
+    private Organization forwarder;
 
     @JoinColumn(name = "forwarder_contact_id", referencedColumnName = "person_id")
     @ManyToOne
@@ -149,12 +151,12 @@ public class DeliveryCertificate implements Serializable {
         this.deliveryCertificateDate = deliveryCertificateDate;
     }
 
-    public ClassifiedObject getRecipientClassifier() {
-        return recipientClassifier;
+    public DataObjectBean getRecipient() {
+        return recipient;
     }
 
-    public void setRecipientClassifier(ClassifiedObject recipientClassifier) {
-        this.recipientClassifier = recipientClassifier;
+    public void setRecipient(DataObjectBean recipient) {
+        this.recipient = recipient;
     }
 
     public String getRecipientName() {
@@ -197,12 +199,12 @@ public class DeliveryCertificate implements Serializable {
         this.creatorName = creatorName;
     }
 
-    public ClassifiedObject getForwarderClassifier() {
-        return forwarderClassifier;
+    public Organization getForwarder() {
+        return forwarder;
     }
 
-    public void setForwarderClassifier(ClassifiedObject forwarderClassifier) {
-        this.forwarderClassifier = forwarderClassifier;
+    public void setForwarder(Organization forwarder) {
+        this.forwarder = forwarder;
     }
 
     public String getForwarderName() {

@@ -52,7 +52,7 @@ public class Passport implements Serializable {
 
     @JoinColumn(name = "issuer_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    private ClassifiedObject issuerClassifier;
+    private Organization issuer;
 
     @JoinColumn(name = "issuer_branch_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -113,12 +113,12 @@ public class Passport implements Serializable {
         this.expirationDate = expirationDate;
     }
 
-    public ClassifiedObject getIssuerClassifier() {
-        return issuerClassifier;
+    public Organization getIssuer() {
+        return issuer;
     }
 
-    public void setIssuerClassifier(ClassifiedObject issuerClassifier) {
-        this.issuerClassifier = issuerClassifier;
+    public void setIssuer(Organization issuer) {
+        this.issuer = issuer;
     }
 
     public String getAdditionalInfo() {
