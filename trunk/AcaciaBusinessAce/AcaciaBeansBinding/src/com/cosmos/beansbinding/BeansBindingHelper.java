@@ -6,7 +6,6 @@
 package com.cosmos.beansbinding;
 
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.util.ClassHelper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

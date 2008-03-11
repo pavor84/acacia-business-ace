@@ -4,9 +4,9 @@
  */
 package com.cosmos.beansbinding;
 
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
-import java.util.Formatter;
 
 /**
  *
@@ -29,7 +29,7 @@ public class PropertyDetails
     private int orderPosition;
 
     /* Validation fields */
-    private int validationType;
+    private ValidationType validationType;
     private int validationRangeStart;
     private int validationEvent;
     private int validationRangeEnd;
@@ -197,11 +197,11 @@ public class PropertyDetails
         this.validationRangeStart = validationRangeStart;
     }
 
-    public int getValidationType() {
+    public ValidationType getValidationType() {
         return validationType;
     }
 
-    public void setValidationType(int validationType) {
+    public void setValidationType(ValidationType validationType) {
         this.validationType = validationType;
     }
 

@@ -155,7 +155,7 @@ public class JBTextField
         
         if (!validator.isValid())
             setInvalid();
-        else if (validator.getValidationType() != ValidationType.REGEX)
+        else if (!ValidationType.REGEX.equals(validator.getValidationType()))
             setValid();
         else
             setNormal();
