@@ -15,4 +15,5 @@ public interface ValidationType {
     public static final int RANGE = 2;
     public static final int REGEX = 3;
     public static final int CUSTOM = 4;
+    public static final int DATE = 5;
 }

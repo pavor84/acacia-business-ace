@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,147 +27,186 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "invoices")
-public class Invoice implements Serializable {
+public class Invoice extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "invoice_id", nullable = false)
+    @Property(title="Invoice Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger invoiceId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
+    @Property(title="Branch")
     private Address branch;
 
     @Column(name = "branch_name", nullable = false)
+    @Property(title="Branch Name")
     private String branchName;
 
     @Column(name = "invoice_number", nullable = false)
+    @Property(title="Number", validationType=ValidationType.REQUIRED, validationRegex="[1-9]+")
     private long invoiceNumber;
 
     @Column(name = "invoice_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Property(title="Date", validationType=ValidationType.DATE, validationRegex="[1-9]+")
     private Date invoiceDate;
 
     @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
+    @Property(title="Recipient classifier")
     private ClassifiedObject recipientClassifier;
 
     @Column(name = "recipient_name", nullable = false)
+    @Property(title="Recipient name")
     private String recipientName;
 
     @JoinColumn(name = "recipient_contact_id", referencedColumnName = "person_id")
     @ManyToOne
+    @Property(title="Recipient")
     private Person recipientContactId;
 
     @Column(name = "recipient_contact_name", nullable = false)
+    @Property(title="Recipient contact name")
     private String recipientContactName;
 
     @JoinColumn(name = "invoice_type_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Type")
     private DbResource invoiceType;
 
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Status")
     private DbResource statusId;
 
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Property(title="Creation date")
     private Date creationTime;
 
     @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
     @ManyToOne
+    @Property(title="Created by")
     private Person creator;
 
     @Column(name = "creator_name", nullable = false)
+    @Property(title="Created by name")
     private String creatorName;
 
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Delivery method")
     private DbResource documentDeliveryMethod;
 
     @JoinColumn(name = "transportation_method_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Transportation method")
     private DbResource transportationMethod;
 
     @JoinColumn(name = "shipping_agent_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
+    @Property(title="Shiping agent classifier")
     private ClassifiedObject shippingAgentClassifier;
 
     @Column(name = "transportation_price")
+    @Property(title="Transportation Price")
     private BigDecimal transportationPrice;
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Currency")
     private DbResource currency;
 
     @Column(name = "invoice_sub_value", nullable = false)
+    @Property(title="Sub value")
     private BigDecimal invoiceSubValue;
 
     @Column(name = "discount_percent")
+    @Property(title="Discount percent")
     private BigDecimal discountPercent;
 
     @Column(name = "discount_value")
+    @Property(title="Discount value")
     private BigDecimal discountValue;
 
     @Column(name = "invoice_value", nullable = false)
+    @Property(title="Value")
     private BigDecimal invoiceValue;
 
     @Column(name = "excise_duty_percent")
+    @Property(title="Excise duty percent")
     private BigDecimal exciseDutyPercent;
 
     @Column(name = "excise_duty_value")
+    @Property(title="Excise duty value")
     private BigDecimal exciseDutyValue;
 
     @JoinColumn(name = "vat_condition_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Vat condition")
     private DbResource vatCondition;
 
     @Column(name = "vat_percent", nullable = false)
+    @Property(title="Vat percent")
     private BigDecimal vatPercent;
 
     @Column(name = "vat_value", nullable = false)
+    @Property(title="Vat value")
     private BigDecimal vatValue;
 
     @Column(name = "total_invoice_value", nullable = false)
+    @Property(title="Total")
     private BigDecimal totalInvoiceValue;
 
     @JoinColumn(name = "payment_type_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Payment method")
     private DbResource paymentType;
 
     @JoinColumn(name = "payment_terms_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Payment terms")
     private DbResource paymentTerms;
 
     @Column(name = "payment_due_date")
     @Temporal(TemporalType.DATE)
+    @Property(title="Payment due date")
     private Date paymentDueDate;
 
     @JoinColumn(name = "delivery_type_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Delivery type")
     private DbResource deliveryType;
 
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
+    @Property(title="Sent time")
     private Date sentTime;
 
     @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
     @ManyToOne
+    @Property(title="Sender")
     private Person sender;
 
     @Column(name = "sender_name")
+    @Property(title="Sender name")
     private String senderName;
 
     @Column(name = "first_ship_date")
     @Temporal(TemporalType.DATE)
+    @Property(title="First ship date")
     private Date firstShipDate;
 
     @Column(name = "last_ship_date")
     @Temporal(TemporalType.DATE)
+    @Property(title="Last ship date")
     private Date lastShipDate;
 
     @Column(name = "finalizing_date")
@@ -174,6 +215,7 @@ public class Invoice implements Serializable {
 
     @JoinColumn(name = "invoice_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
+    @Property(title="Invoice ID", editable=false, readOnly=true, visible=false)
     private DataObject dataObject;
 
 
@@ -206,6 +248,7 @@ public class Invoice implements Serializable {
     }
 
     public void setBranchName(String branchName) {
+        firePropertyChange("branchName", this.branchName, branchName);
         this.branchName = branchName;
     }
 
@@ -214,6 +257,7 @@ public class Invoice implements Serializable {
     }
 
     public void setInvoiceNumber(long invoiceNumber) {
+        firePropertyChange("invoiceNumber", this.invoiceNumber, invoiceNumber);
         this.invoiceNumber = invoiceNumber;
     }
 
@@ -222,6 +266,7 @@ public class Invoice implements Serializable {
     }
 
     public void setInvoiceDate(Date invoiceDate) {
+        firePropertyChange("invoiceDate", this.invoiceDate, invoiceDate);
         this.invoiceDate = invoiceDate;
     }
 
@@ -230,6 +275,7 @@ public class Invoice implements Serializable {
     }
 
     public void setSupplierClassifier(ClassifiedObject recipientClassifier) {
+        firePropertyChange("recipientClassifier", this.recipientClassifier, recipientClassifier);
         this.recipientClassifier = recipientClassifier;
     }
 
@@ -238,6 +284,7 @@ public class Invoice implements Serializable {
     }
 
     public void setRecipientName(String recipientName) {
+        firePropertyChange("recipientName", this.recipientName, recipientName);
         this.recipientName = recipientName;
     }
 
@@ -246,6 +293,7 @@ public class Invoice implements Serializable {
     }
 
     public void setRecipientContactName(String recipientContactName) {
+        firePropertyChange("recipientContactName", this.recipientContactName, recipientContactName);
         this.recipientContactName = recipientContactName;
     }
 
@@ -254,6 +302,7 @@ public class Invoice implements Serializable {
     }
 
     public void setCreationTime(Date creationTime) {
+        firePropertyChange("creationTime", this.creationTime, creationTime);
         this.creationTime = creationTime;
     }
 
@@ -262,6 +311,7 @@ public class Invoice implements Serializable {
     }
 
     public void setCreatorName(String creatorName) {
+        firePropertyChange("creatorName", this.creatorName, creatorName);
         this.creatorName = creatorName;
     }
 
@@ -270,6 +320,7 @@ public class Invoice implements Serializable {
     }
 
     public void setShippingAgentClassifier(ClassifiedObject shippingAgentClassifier) {
+        firePropertyChange("shippingAgentClassifier", this.shippingAgentClassifier, shippingAgentClassifier);
         this.shippingAgentClassifier = shippingAgentClassifier;
     }
 
@@ -278,6 +329,7 @@ public class Invoice implements Serializable {
     }
 
     public void setTransportationPrice(BigDecimal transportationPrice) {
+        firePropertyChange("transportationPrice", this.transportationPrice, transportationPrice);
         this.transportationPrice = transportationPrice;
     }
 
@@ -286,6 +338,7 @@ public class Invoice implements Serializable {
     }
 
     public void setInvoiceSubValue(BigDecimal invoiceSubValue) {
+        firePropertyChange("invoiceSubValue", this.invoiceSubValue, invoiceSubValue);
         this.invoiceSubValue = invoiceSubValue;
     }
 
@@ -294,6 +347,7 @@ public class Invoice implements Serializable {
     }
 
     public void setDiscountPercent(BigDecimal discountPercent) {
+        firePropertyChange("discountPercent", this.discountPercent, discountPercent);
         this.discountPercent = discountPercent;
     }
 
@@ -302,6 +356,7 @@ public class Invoice implements Serializable {
     }
 
     public void setDiscountValue(BigDecimal discountValue) {
+        firePropertyChange("discountValue", this.discountValue, discountValue);
         this.discountValue = discountValue;
     }
 
@@ -310,6 +365,7 @@ public class Invoice implements Serializable {
     }
 
     public void setInvoiceValue(BigDecimal invoiceValue) {
+        firePropertyChange("invoiceValue", this.invoiceValue, invoiceValue);
         this.invoiceValue = invoiceValue;
     }
 
@@ -318,6 +374,7 @@ public class Invoice implements Serializable {
     }
 
     public void setExciseDutyPercent(BigDecimal exciseDutyPercent) {
+        firePropertyChange("exciseDutyPercent", this.exciseDutyPercent, exciseDutyPercent);
         this.exciseDutyPercent = exciseDutyPercent;
     }
 
@@ -326,6 +383,7 @@ public class Invoice implements Serializable {
     }
 
     public void setExciseDutyValue(BigDecimal exciseDutyValue) {
+        firePropertyChange("exciseDutyValue", this.exciseDutyValue, exciseDutyValue);
         this.exciseDutyValue = exciseDutyValue;
     }
 
@@ -334,6 +392,7 @@ public class Invoice implements Serializable {
     }
 
     public void setVatPercent(BigDecimal vatPercent) {
+        firePropertyChange("vatPercent", this.vatPercent, vatPercent);
         this.vatPercent = vatPercent;
     }
 
@@ -342,6 +401,7 @@ public class Invoice implements Serializable {
     }
 
     public void setVatValue(BigDecimal vatValue) {
+        firePropertyChange("vatValue", this.vatValue, vatValue);
         this.vatValue = vatValue;
     }
 
@@ -350,6 +410,7 @@ public class Invoice implements Serializable {
     }
 
     public void setTotalInvoiceValue(BigDecimal totalInvoiceValue) {
+        firePropertyChange("totalInvoiceValue", this.totalInvoiceValue, totalInvoiceValue);
         this.totalInvoiceValue = totalInvoiceValue;
     }
 
@@ -358,6 +419,7 @@ public class Invoice implements Serializable {
     }
 
     public void setPaymentDueDate(Date paymentDueDate) {
+        firePropertyChange("paymentDueDate", this.paymentDueDate, paymentDueDate);
         this.paymentDueDate = paymentDueDate;
     }
 
@@ -366,6 +428,7 @@ public class Invoice implements Serializable {
     }
 
     public void setSentTime(Date sentTime) {
+        firePropertyChange("sentTime", this.sentTime, sentTime);
         this.sentTime = sentTime;
     }
 
@@ -374,6 +437,7 @@ public class Invoice implements Serializable {
     }
 
     public void setSenderName(String senderName) {
+        firePropertyChange("senderName", this.senderName, senderName);
         this.senderName = senderName;
     }
 
@@ -382,6 +446,7 @@ public class Invoice implements Serializable {
     }
 
     public void setFirstShipDate(Date firstShipDate) {
+        firePropertyChange("firstShipDate", this.firstShipDate, firstShipDate);
         this.firstShipDate = firstShipDate;
     }
 
@@ -390,6 +455,7 @@ public class Invoice implements Serializable {
     }
 
     public void setLastShipDate(Date lastShipDate) {
+        firePropertyChange("lastShipDate", this.lastShipDate, lastShipDate);
         this.lastShipDate = lastShipDate;
     }
 
@@ -398,6 +464,7 @@ public class Invoice implements Serializable {
     }
 
     public void setFinalizingDate(Date finalizingDate) {
+        firePropertyChange("finalizingDate", this.finalizingDate, finalizingDate);
         this.finalizingDate = finalizingDate;
     }
 
@@ -406,6 +473,7 @@ public class Invoice implements Serializable {
     }
 
     public void setBranch(Address branch) {
+        firePropertyChange("branch", this.branch, branch);
         this.branch = branch;
     }
 
@@ -414,6 +482,7 @@ public class Invoice implements Serializable {
     }
 
     public void setDataObject(DataObject dataObject) {
+        firePropertyChange("dataObject", this.dataObject, dataObject);
         this.dataObject = dataObject;
     }
 
@@ -422,6 +491,7 @@ public class Invoice implements Serializable {
     }
 
     public void setRecipientContactId(Person recipientContactId) {
+        firePropertyChange("recipientContactId", this.recipientContactId, recipientContactId);
         this.recipientContactId = recipientContactId;
     }
 
@@ -430,6 +500,7 @@ public class Invoice implements Serializable {
     }
 
     public void setSender(Person sender) {
+        firePropertyChange("sender", this.sender, sender);
         this.sender = sender;
     }
 
@@ -438,6 +509,7 @@ public class Invoice implements Serializable {
     }
 
     public void setCreator(Person creator) {
+        firePropertyChange("creator", this.creator, creator);
         this.creator = creator;
     }
 
@@ -446,6 +518,7 @@ public class Invoice implements Serializable {
     }
 
     public void setPaymentTerms(DbResource paymentTerms) {
+        firePropertyChange("paymentTerms", this.paymentTerms, paymentTerms);
         this.paymentTerms = paymentTerms;
     }
 
@@ -454,6 +527,7 @@ public class Invoice implements Serializable {
     }
 
     public void setPaymentType(DbResource paymentType) {
+        firePropertyChange("paymentType", this.paymentType, paymentType);
         this.paymentType = paymentType;
     }
 
@@ -462,6 +536,7 @@ public class Invoice implements Serializable {
     }
 
     public void setStatusId(DbResource statusId) {
+        firePropertyChange("statusId", this.statusId, statusId);
         this.statusId = statusId;
     }
 
@@ -470,6 +545,7 @@ public class Invoice implements Serializable {
     }
 
     public void setTransportationMethod(DbResource transportationMethod) {
+        firePropertyChange("transportationMethod", this.transportationMethod, transportationMethod);
         this.transportationMethod = transportationMethod;
     }
 
@@ -478,6 +554,7 @@ public class Invoice implements Serializable {
     }
 
     public void setVatCondition(DbResource vatCondition) {
+        firePropertyChange("vatCondition", this.vatCondition, vatCondition);
         this.vatCondition = vatCondition;
     }
 
@@ -486,6 +563,7 @@ public class Invoice implements Serializable {
     }
 
     public void setCurrency(DbResource currency) {
+        firePropertyChange("currency", this.currency, currency);
         this.currency = currency;
     }
 
@@ -494,6 +572,7 @@ public class Invoice implements Serializable {
     }
 
     public void setDeliveryType(DbResource deliveryType) {
+        firePropertyChange("deliveryType", this.deliveryType, deliveryType);
         this.deliveryType = deliveryType;
     }
 
@@ -502,6 +581,7 @@ public class Invoice implements Serializable {
     }
 
     public void setDocumentDeliveryMethod(DbResource documentDeliveryMethod) {
+        firePropertyChange("documentDeliveryMethod", this.documentDeliveryMethod, documentDeliveryMethod);
         this.documentDeliveryMethod = documentDeliveryMethod;
     }
 
@@ -510,6 +590,7 @@ public class Invoice implements Serializable {
     }
 
     public void setInvoiceType(DbResource invoiceType) {
+        firePropertyChange("invoiceType", this.invoiceType, invoiceType);
         this.invoiceType = invoiceType;
     }
 
@@ -536,6 +617,16 @@ public class Invoice implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Invoice[invoiceId=" + invoiceId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getInvoiceId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setInvoiceId(id);
     }
 
 }
