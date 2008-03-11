@@ -60,8 +60,8 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    @Property(title="Recipient classifier")
-    private ClassifiedObject recipientClassifier;
+    @Property(title="Recipient")
+    private DataObjectBean recipient;
 
     @Column(name = "recipient_name", nullable = false)
     @Property(title="Recipient name")
@@ -112,8 +112,8 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "shipping_agent_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
     @ManyToOne
-    @Property(title="Shiping agent classifier")
-    private ClassifiedObject shippingAgentClassifier;
+    @Property(title="Shiping agent")
+    private DataObjectBean shippingAgent;
 
     @Column(name = "transportation_price")
     @Property(title="Transportation Price")
@@ -270,13 +270,13 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.invoiceDate = invoiceDate;
     }
 
-    public ClassifiedObject getRecipientClassifier() {
-        return recipientClassifier;
+    public DataObjectBean getRecipient() {
+        return recipient;
     }
 
-    public void setSupplierClassifier(ClassifiedObject recipientClassifier) {
-        firePropertyChange("recipientClassifier", this.recipientClassifier, recipientClassifier);
-        this.recipientClassifier = recipientClassifier;
+    public void setSupplier(DataObjectBean recipient) {
+        firePropertyChange("recipient", this.recipient, recipient);
+        this.recipient = recipient;
     }
 
     public String getRecipientName() {
@@ -315,13 +315,13 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.creatorName = creatorName;
     }
 
-    public ClassifiedObject getShippingAgentClassifier() {
-        return shippingAgentClassifier;
+    public DataObjectBean getShippingAgent() {
+        return shippingAgent;
     }
 
-    public void setShippingAgentClassifier(ClassifiedObject shippingAgentClassifier) {
-        firePropertyChange("shippingAgentClassifier", this.shippingAgentClassifier, shippingAgentClassifier);
-        this.shippingAgentClassifier = shippingAgentClassifier;
+    public void setShippingAgent(DataObjectBean shippingAgent) {
+        firePropertyChange("shippingAgent", this.shippingAgent, shippingAgent);
+        this.shippingAgent = shippingAgent;
     }
 
     public BigDecimal getTransportationPrice() {
