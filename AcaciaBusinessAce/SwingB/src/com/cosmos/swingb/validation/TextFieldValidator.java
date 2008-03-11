@@ -21,7 +21,7 @@ public class TextFieldValidator implements Validator {
     private PropertyDetails details;
     
     public TextFieldValidator(PropertyDetails details, JBTextField textField) {
-        if (details.getValidationType() != ValidationType.NONE)
+        if (!ValidationType.NONE.equals(details.getValidationType()))
             setValidationRequired(true);
         
         this.details = details;
@@ -31,13 +31,13 @@ public class TextFieldValidator implements Validator {
     public boolean isValid() {
 
         switch (details.getValidationType()){
-            case ValidationType.NONE:
+            case NONE:
                 return true;
                 
-            case ValidationType.REQUIRED:
+            case REQUIRED:
                 return component.getText().trim().length() > 0;
             
-            case ValidationType.RANGE:
+            case RANGE:
                 try {
                     double value = Double.parseDouble(component.getText());
                     return (value >= details.getValidationRangeStart()
@@ -46,7 +46,7 @@ public class TextFieldValidator implements Validator {
                     return false;
                 }
                 
-            case ValidationType.CUSTOM:
+            case CUSTOM:
                 return false;
         }
         
@@ -73,7 +73,7 @@ public class TextFieldValidator implements Validator {
         return "Bozhidar Bozhanov ima oshte dosta hliab da iade.";
     }
     
-    public int getValidationType(){
+    public ValidationType getValidationType(){
         return details.getValidationType();
     }
     

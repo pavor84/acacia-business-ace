@@ -41,7 +41,7 @@ public @interface Property
 
     //PropertyValidator validator() default @PropertyValidator;
   
-    int validationType() default ValidationType.NONE;
+    ValidationType validationType() default ValidationType.NONE;
     int validationEvent() default Event.KEY_RELEASE;
     int validationRangeStart() default 0;
     int validationRangeEnd() default 1000;

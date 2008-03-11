@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb.validation;
 
-import java.awt.Component;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -17,5 +17,5 @@ public interface Validator {
    public boolean isValidationRequired();
    public int getEvent();
    public String getTooltipText();
-   public int getValidationType();
+   public ValidationType getValidationType();
 }
