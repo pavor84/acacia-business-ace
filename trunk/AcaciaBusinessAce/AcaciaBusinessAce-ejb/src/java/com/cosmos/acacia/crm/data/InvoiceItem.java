@@ -79,10 +79,6 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Property(title="Warehouse")
     private Warehouse warehouse;
 
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     @Property(title="Date object")
@@ -164,15 +160,6 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     public void setShipDate(Date shipDate) {
         firePropertyChange("shipDate", this.shipDate, shipDate);
         this.shipDate = shipDate;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        firePropertyChange("notes", this.notes, notes);
-        this.notes = notes;
     }
 
     public DataObject getDataObject() {
