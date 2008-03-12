@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -52,11 +53,10 @@ public class DeliveryCertificate implements Serializable {
     /**
      * The Recipient can be both Person or Organization
      */
-//    @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-//    @ManyToOne
-//    private DataObjectBean recipient;
     @Column(name = "recipient_id")
     private BigInteger recipientId;
+    @Transient
+    private DataObjectBean recipient;
 
     @Column(name = "recipient_name", nullable = false)
     private String recipientName;
@@ -153,13 +153,17 @@ public class DeliveryCertificate implements Serializable {
         this.deliveryCertificateDate = deliveryCertificateDate;
     }
 
-//    public DataObjectBean getRecipient() {
-//        return recipient;
-//    }
-//
-//    public void setRecipient(DataObjectBean recipient) {
-//        this.recipient = recipient;
-//    }
+    public DataObjectBean getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(DataObjectBean recipient) {
+        this.recipient = recipient;
+        if(recipient != null)
+            setRecipientId(recipient.getId());
+        else
+            setRecipientId(null);
+    }
 
     public BigInteger getRecipientId() {
         return recipientId;

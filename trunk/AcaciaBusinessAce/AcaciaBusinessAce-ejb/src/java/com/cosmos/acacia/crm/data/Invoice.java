@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -58,13 +59,11 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Date", validationType=ValidationType.DATE, validationRegex="[1-9]+")
     private Date invoiceDate;
 
-//    @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-//    @ManyToOne
-//    @Property(title="Recipient")
-//    private DataObjectBean recipient;
     @Column(name = "recipient_id")
-    @Property(title="Recipient")
     private BigInteger recipientId;
+    @Transient
+    @Property(title="Recipient")
+    private DataObjectBean recipient;
 
     @Column(name = "recipient_name", nullable = false)
     @Property(title="Recipient name")
@@ -113,13 +112,11 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Transportation method")
     private DbResource transportationMethod;
 
-//    @JoinColumn(name = "shipping_agent_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-//    @ManyToOne
-//    @Property(title="Shiping agent")
-//    private DataObjectBean shippingAgent;
     @Column(name = "shipping_agent_id")
-    @Property(title="Shiping agent")
     private BigInteger shippingAgentId;
+    @Transient
+    @Property(title="Shipping agent")
+    private DataObjectBean shippingAgent;
 
     @Column(name = "transportation_price")
     @Property(title="Transportation Price")
@@ -276,14 +273,18 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.invoiceDate = invoiceDate;
     }
 
-//    public DataObjectBean getRecipient() {
-//        return recipient;
-//    }
-//
-//    public void setRecipient(DataObjectBean recipient) {
-//        firePropertyChange("recipient", this.recipient, recipient);
-//        this.recipient = recipient;
-//    }
+    public DataObjectBean getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(DataObjectBean recipient) {
+        firePropertyChange("recipient", this.recipient, recipient);
+        this.recipient = recipient;
+        if(recipient != null)
+            setRecipientId(recipient.getId());
+        else
+            setRecipientId(null);
+    }
 
     public BigInteger getRecipientId() {
         return recipientId;
@@ -330,14 +331,18 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.creatorName = creatorName;
     }
 
-//    public DataObjectBean getShippingAgent() {
-//        return shippingAgent;
-//    }
-//
-//    public void setShippingAgent(DataObjectBean shippingAgent) {
-//        firePropertyChange("shippingAgent", this.shippingAgent, shippingAgent);
-//        this.shippingAgent = shippingAgent;
-//    }
+    public DataObjectBean getShippingAgent() {
+        return shippingAgent;
+    }
+
+    public void setShippingAgent(DataObjectBean shippingAgent) {
+        firePropertyChange("shippingAgent", this.shippingAgent, shippingAgent);
+        this.shippingAgent = shippingAgent;
+        if(shippingAgent != null)
+            setShippingAgentId(shippingAgent.getId());
+        else
+            setShippingAgentId(null);
+    }
 
     public BigInteger getShippingAgentId() {
         return shippingAgentId;
