@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -37,11 +38,10 @@ public class ProductSupplier
     /**
      * The Supplier can be both Person or Organization
      */
-//    @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-//    @ManyToOne
-//    private DataObjectBean supplier;
     @Column(name = "supplier_id", insertable=false, updatable=false)
     private BigInteger supplierId;
+    @Transient
+    private DataObjectBean supplier;
 
     @Column(name = "description")
     private String description;
@@ -82,13 +82,17 @@ public class ProductSupplier
         this.product = product;
     }
 
-//    public DataObjectBean getSupplier() {
-//        return supplier;
-//    }
-//
-//    public void setSupplier(DataObjectBean supplier) {
-//        this.supplier = supplier;
-//    }
+    public DataObjectBean getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(DataObjectBean supplier) {
+        this.supplier = supplier;
+        if(supplier != null)
+            setSupplierId(supplier.getId());
+        else
+            setSupplierId(null);
+    }
 
     public BigInteger getSupplierId() {
         return supplierId;

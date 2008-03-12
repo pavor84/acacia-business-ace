@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -48,11 +49,10 @@ public class PurchaseOrder implements Serializable {
     /**
      * The Supplier can be both Person or Organization
      */
-//    @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-//    @ManyToOne
-//    private DataObjectBean supplier;
     @Column(name = "supplier_id")
     private BigInteger supplierId;
+    @Transient
+    private DataObjectBean supplier;
 
     @Column(name = "supplier_name", nullable = false)
     private String supplierName;
@@ -145,13 +145,17 @@ public class PurchaseOrder implements Serializable {
         this.orderNumber = orderNumber;
     }
 
-//    public DataObjectBean getSupplier() {
-//        return supplier;
-//    }
-//
-//    public void setSupplier(DataObjectBean supplier) {
-//        this.supplier = supplier;
-//    }
+    public DataObjectBean getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(DataObjectBean supplier) {
+        this.supplier = supplier;
+        if(supplier != null)
+            setSupplierId(supplier.getId());
+        else
+            setSupplierId(null);
+    }
 
     public BigInteger getSupplierId() {
         return supplierId;
