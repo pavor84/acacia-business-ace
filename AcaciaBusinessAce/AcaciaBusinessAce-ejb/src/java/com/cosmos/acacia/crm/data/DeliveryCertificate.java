@@ -52,9 +52,11 @@ public class DeliveryCertificate implements Serializable {
     /**
      * The Recipient can be both Person or Organization
      */
-    @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-    @ManyToOne
-    private DataObjectBean recipient;
+//    @JoinColumn(name = "recipient_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
+//    @ManyToOne
+//    private DataObjectBean recipient;
+    @Column(name = "recipient_id")
+    private BigInteger recipientId;
 
     @Column(name = "recipient_name", nullable = false)
     private String recipientName;
@@ -85,7 +87,7 @@ public class DeliveryCertificate implements Serializable {
     @Column(name = "creator_name", nullable = false)
     private String creatorName;
 
-    @JoinColumn(name = "forwarder_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "forwarder_id", referencedColumnName = "organization_id", insertable = false, updatable = false)
     @ManyToOne
     private Organization forwarder;
 
@@ -151,12 +153,20 @@ public class DeliveryCertificate implements Serializable {
         this.deliveryCertificateDate = deliveryCertificateDate;
     }
 
-    public DataObjectBean getRecipient() {
-        return recipient;
+//    public DataObjectBean getRecipient() {
+//        return recipient;
+//    }
+//
+//    public void setRecipient(DataObjectBean recipient) {
+//        this.recipient = recipient;
+//    }
+
+    public BigInteger getRecipientId() {
+        return recipientId;
     }
 
-    public void setRecipient(DataObjectBean recipient) {
-        this.recipient = recipient;
+    public void setRecipientId(BigInteger recipientId) {
+        this.recipientId = recipientId;
     }
 
     public String getRecipientName() {
