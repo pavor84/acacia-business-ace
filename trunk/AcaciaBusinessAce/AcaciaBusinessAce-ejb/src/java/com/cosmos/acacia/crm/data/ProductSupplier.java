@@ -37,9 +37,11 @@ public class ProductSupplier
     /**
      * The Supplier can be both Person or Organization
      */
-    @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
-    @ManyToOne
-    private DataObjectBean supplier;
+//    @JoinColumn(name = "supplier_id", referencedColumnName = "classified_object_id", insertable = false, updatable = false)
+//    @ManyToOne
+//    private DataObjectBean supplier;
+    @Column(name = "supplier_id", insertable=false, updatable=false)
+    private BigInteger supplierId;
 
     @Column(name = "description")
     private String description;
@@ -80,13 +82,22 @@ public class ProductSupplier
         this.product = product;
     }
 
-    public DataObjectBean getSupplier() {
-        return supplier;
+//    public DataObjectBean getSupplier() {
+//        return supplier;
+//    }
+//
+//    public void setSupplier(DataObjectBean supplier) {
+//        this.supplier = supplier;
+//    }
+
+    public BigInteger getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplier(DataObjectBean supplier) {
-        this.supplier = supplier;
+    public void setSupplierId(BigInteger supplierId) {
+        this.supplierId = supplierId;
     }
+
 
     @Override
     public int hashCode() {
