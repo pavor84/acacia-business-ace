@@ -286,11 +286,11 @@ public class Invoice extends DataObjectBean implements Serializable {
             setRecipientId(null);
     }
 
-    public BigInteger getRecipientId() {
+    protected BigInteger getRecipientId() {
         return recipientId;
     }
 
-    public void setRecipientId(BigInteger recipientId) {
+    protected void setRecipientId(BigInteger recipientId) {
         firePropertyChange("recipientId", this.recipientId, recipientId);
         this.recipientId = recipientId;
     }
@@ -344,11 +344,11 @@ public class Invoice extends DataObjectBean implements Serializable {
             setShippingAgentId(null);
     }
 
-    public BigInteger getShippingAgentId() {
+    protected BigInteger getShippingAgentId() {
         return shippingAgentId;
     }
 
-    public void setShippingAgentId(BigInteger shippingAgentId) {
+    protected void setShippingAgentId(BigInteger shippingAgentId) {
         firePropertyChange("shippingAgentId", this.shippingAgentId, shippingAgentId);
         this.shippingAgentId = shippingAgentId;
     }

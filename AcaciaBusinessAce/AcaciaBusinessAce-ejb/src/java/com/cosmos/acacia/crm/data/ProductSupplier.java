@@ -54,10 +54,6 @@ public class ProductSupplier
         this.productSupplierPK = productSupplierPK;
     }
 
-    public ProductSupplier(BigInteger productId, BigInteger supplierId) {
-        this.productSupplierPK = new ProductSupplierPK(productId, supplierId);
-    }
-
     public ProductSupplierPK getProductSupplierPK() {
         return productSupplierPK;
     }
@@ -94,11 +90,11 @@ public class ProductSupplier
             setSupplierId(null);
     }
 
-    public BigInteger getSupplierId() {
+    protected BigInteger getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(BigInteger supplierId) {
+    protected void setSupplierId(BigInteger supplierId) {
         this.supplierId = supplierId;
     }
 

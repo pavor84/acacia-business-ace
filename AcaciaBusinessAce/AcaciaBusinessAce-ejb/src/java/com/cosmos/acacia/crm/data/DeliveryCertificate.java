@@ -165,11 +165,11 @@ public class DeliveryCertificate implements Serializable {
             setRecipientId(null);
     }
 
-    public BigInteger getRecipientId() {
+    protected BigInteger getRecipientId() {
         return recipientId;
     }
 
-    public void setRecipientId(BigInteger recipientId) {
+    protected void setRecipientId(BigInteger recipientId) {
         this.recipientId = recipientId;
     }
 

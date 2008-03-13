@@ -157,11 +157,11 @@ public class PurchaseOrder implements Serializable {
             setSupplierId(null);
     }
 
-    public BigInteger getSupplierId() {
+    protected BigInteger getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(BigInteger supplierId) {
+    protected void setSupplierId(BigInteger supplierId) {
         this.supplierId = supplierId;
     }
 
