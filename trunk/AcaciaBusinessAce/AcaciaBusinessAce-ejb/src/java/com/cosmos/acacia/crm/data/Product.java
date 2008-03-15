@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -533,6 +534,11 @@ public class Product
         System.out.println("PostRemove");
     }*/
 
+    @PostLoad
+    public void postLoad()
+    {
+        System.out.println("PostLoad()");
+    }
 
     public static Product newTestProduct(String productName, String productCode)
     {

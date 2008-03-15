@@ -7,12 +7,14 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,6 +36,13 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private EntityStoreManagerLocal esm;
     @EJB
     private DatabaseResourceLocal databaseResource;
+
+    @PostConstruct
+    private void postConstruct()
+    {
+        System.out.println("postConstruct()");
+        Organization company = new Organization();
+    }
 
     public List<Product> getProducts(DataObject parent) {
         System.out.println("databaseResource: " + databaseResource);

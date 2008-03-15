@@ -16,15 +16,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import javax.imageio.ImageIO;
-import javax.persistence.Transient;
 
 /**
  *
  * @author Miro
  */
 public abstract class DataObjectBean {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+    private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private URI smallImageURI;
     private Image smallImage;

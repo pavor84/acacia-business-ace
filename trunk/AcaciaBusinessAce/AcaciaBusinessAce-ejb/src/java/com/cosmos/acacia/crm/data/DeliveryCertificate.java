@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -17,7 +18,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *
@@ -53,10 +53,10 @@ public class DeliveryCertificate implements Serializable {
     /**
      * The Recipient can be both Person or Organization
      */
-    @Column(name = "recipient_id")
-    private BigInteger recipientId;
-    @Transient
-    private DataObjectBean recipient;
+    @JoinColumn(name = "recipient_id", referencedColumnName = "data_object_link_id")
+    @ManyToOne
+    @Property(title="Recipient")
+    private DataObjectLink recipientLink;
 
     @Column(name = "recipient_name", nullable = false)
     private String recipientName;
@@ -153,24 +153,13 @@ public class DeliveryCertificate implements Serializable {
         this.deliveryCertificateDate = deliveryCertificateDate;
     }
 
-    public DataObjectBean getRecipient() {
-        return recipient;
+    public DataObjectLink getRecipientLink() {
+        return recipientLink;
     }
 
-    public void setRecipient(DataObjectBean recipient) {
-        this.recipient = recipient;
-        if(recipient != null)
-            setRecipientId(recipient.getId());
-        else
-            setRecipientId(null);
-    }
-
-    protected BigInteger getRecipientId() {
-        return recipientId;
-    }
-
-    protected void setRecipientId(BigInteger recipientId) {
-        this.recipientId = recipientId;
+    public void setRecipientLink(DataObjectLink recipientLink) {
+        //firePropertyChange("recipientLink", this.recipientLink, recipientLink);
+        this.recipientLink = recipientLink;
     }
 
     public String getRecipientName() {

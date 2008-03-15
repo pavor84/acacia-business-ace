@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  *
@@ -38,10 +37,9 @@ public class ProductSupplier
     /**
      * The Supplier can be both Person or Organization
      */
-    @Column(name = "supplier_id", insertable=false, updatable=false)
-    private BigInteger supplierId;
-    @Transient
-    private DataObjectBean supplier;
+    @JoinColumn(name = "supplier_id", referencedColumnName = "data_object_link_id", insertable = false, updatable = false)
+    @ManyToOne
+    private DataObjectLink supplierLink;
 
     @Column(name = "description")
     private String description;
@@ -78,24 +76,12 @@ public class ProductSupplier
         this.product = product;
     }
 
-    public DataObjectBean getSupplier() {
-        return supplier;
+    public DataObjectLink getSupplierLink() {
+        return supplierLink;
     }
 
-    public void setSupplier(DataObjectBean supplier) {
-        this.supplier = supplier;
-        if(supplier != null)
-            setSupplierId(supplier.getId());
-        else
-            setSupplierId(null);
-    }
-
-    protected BigInteger getSupplierId() {
-        return supplierId;
-    }
-
-    protected void setSupplierId(BigInteger supplierId) {
-        this.supplierId = supplierId;
+    public void setSupplierLink(DataObjectLink supplierLink) {
+        this.supplierLink = supplierLink;
     }
 
 
