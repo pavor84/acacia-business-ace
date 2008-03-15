@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *
@@ -53,9 +52,9 @@ public class ReceiptCertificate implements Serializable {
     /**
      * The Deliverer can be both Person or Organization
      */
-    private BigInteger delivererId;
-    @Transient
-    private DataObjectBean deliverer;
+    @JoinColumn(name = "deliverer_id", referencedColumnName = "data_object_link_id")
+    @ManyToOne
+    private DataObjectLink delivererLink;
 
     @Column(name = "deliverer_name", nullable = false)
     private String delivererName;
@@ -152,24 +151,12 @@ public class ReceiptCertificate implements Serializable {
         this.receiptCertificateDate = receiptCertificateDate;
     }
 
-    public DataObjectBean getDeliverer() {
-        return deliverer;
+    public DataObjectLink getDelivererLink() {
+        return delivererLink;
     }
 
-    public void setDeliverer(DataObjectBean deliverer) {
-        this.deliverer = deliverer;
-        if(deliverer != null)
-            setDelivererId(deliverer.getId());
-        else
-            setDelivererId(null);
-    }
-
-    protected BigInteger getDelivererId() {
-        return delivererId;
-    }
-
-    protected void setDelivererId(BigInteger delivererId) {
-        this.delivererId = delivererId;
+    public void setDelivererLink(DataObjectLink delivererLink) {
+        this.delivererLink = delivererLink;
     }
 
     public String getDelivererName() {

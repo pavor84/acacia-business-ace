@@ -20,7 +20,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *
@@ -59,11 +58,10 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Date", validationType=ValidationType.DATE, validationRegex="[1-9]+")
     private Date invoiceDate;
 
-    @Column(name = "recipient_id")
-    private BigInteger recipientId;
-    @Transient
+    @JoinColumn(name = "recipient_id", referencedColumnName = "data_object_link_id")
+    @ManyToOne
     @Property(title="Recipient")
-    private DataObjectBean recipient;
+    private DataObjectLink recipientLink;
 
     @Column(name = "recipient_name", nullable = false)
     @Property(title="Recipient name")
@@ -71,7 +69,7 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "recipient_contact_id", referencedColumnName = "person_id")
     @ManyToOne
-    @Property(title="Recipient")
+    @Property(title="Recipient contact")
     private Person recipientContactId;
 
     @Column(name = "recipient_contact_name", nullable = false)
@@ -112,11 +110,10 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Transportation method")
     private DbResource transportationMethod;
 
-    @Column(name = "shipping_agent_id")
-    private BigInteger shippingAgentId;
-    @Transient
+    @JoinColumn(name = "shipping_agent_id", referencedColumnName = "data_object_link_id")
+    @ManyToOne
     @Property(title="Shipping agent")
-    private DataObjectBean shippingAgent;
+    private DataObjectLink shippingAgentLink;
 
     @Column(name = "transportation_price")
     @Property(title="Transportation Price")
@@ -273,26 +270,13 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.invoiceDate = invoiceDate;
     }
 
-    public DataObjectBean getRecipient() {
-        return recipient;
+    public DataObjectLink getRecipientLink() {
+        return recipientLink;
     }
 
-    public void setRecipient(DataObjectBean recipient) {
-        firePropertyChange("recipient", this.recipient, recipient);
-        this.recipient = recipient;
-        if(recipient != null)
-            setRecipientId(recipient.getId());
-        else
-            setRecipientId(null);
-    }
-
-    protected BigInteger getRecipientId() {
-        return recipientId;
-    }
-
-    protected void setRecipientId(BigInteger recipientId) {
-        firePropertyChange("recipientId", this.recipientId, recipientId);
-        this.recipientId = recipientId;
+    public void setRecipientLink(DataObjectLink recipientLink) {
+        firePropertyChange("recipientLink", this.recipientLink, recipientLink);
+        this.recipientLink = recipientLink;
     }
 
     public String getRecipientName() {
@@ -331,26 +315,13 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.creatorName = creatorName;
     }
 
-    public DataObjectBean getShippingAgent() {
-        return shippingAgent;
+    public DataObjectLink getShippingAgentLink() {
+        return shippingAgentLink;
     }
 
-    public void setShippingAgent(DataObjectBean shippingAgent) {
-        firePropertyChange("shippingAgent", this.shippingAgent, shippingAgent);
-        this.shippingAgent = shippingAgent;
-        if(shippingAgent != null)
-            setShippingAgentId(shippingAgent.getId());
-        else
-            setShippingAgentId(null);
-    }
-
-    protected BigInteger getShippingAgentId() {
-        return shippingAgentId;
-    }
-
-    protected void setShippingAgentId(BigInteger shippingAgentId) {
-        firePropertyChange("shippingAgentId", this.shippingAgentId, shippingAgentId);
-        this.shippingAgentId = shippingAgentId;
+    public void setShippingAgentLink(DataObjectLink shippingAgentLink) {
+        firePropertyChange("shippingAgentLink", this.shippingAgentLink, shippingAgentLink);
+        this.shippingAgentLink = shippingAgentLink;
     }
 
     public BigDecimal getTransportationPrice() {

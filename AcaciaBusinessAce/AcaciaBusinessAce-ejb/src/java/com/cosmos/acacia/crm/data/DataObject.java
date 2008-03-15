@@ -7,7 +7,6 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -49,8 +47,9 @@ public class DataObject implements Serializable {
     @Column(name = "data_object_version", nullable = false)
     private int dataObjectVersion;
 
-    @Column(name = "data_object_type_id", nullable = false)
-    private int dataObjectTypeId;
+    @JoinColumn(name = "data_object_type_id", referencedColumnName = "data_object_type_id")
+    @ManyToOne
+    private DataObjectType dataObjectType;
 
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -92,54 +91,35 @@ public class DataObject implements Serializable {
     //@Lob
     @Column(name = "small_image")
     private byte[] smallImage;
+
     @Column(name = "medium_image_uri")
     private String mediumImageUri;
+
     //@Lob
     @Column(name = "medium_image")
     private byte[] mediumImage;
+
     @Column(name = "data_object_uri")
     private String dataObjectUri;
-    @OneToMany(mappedBy = "personId")
-    private Collection<User> userCollection;
 
-    @OneToMany(mappedBy = "parentDataObject")
-    private Collection<DataObject> dataObjectCollection;
-
-    @JoinColumn(name = "parent_data_object_id", referencedColumnName =
-                                                "data_object_id")
+    @JoinColumn(
+            name = "parent_data_object_id",
+            referencedColumnName = "data_object_id")
     @ManyToOne
-
     private DataObject parentDataObject;
-    @OneToMany(mappedBy = "linkedDataObjectId")
 
-    private Collection<DataObject> dataObjectCollection1;
-    @JoinColumn(name = "linked_data_object_id", referencedColumnName =
-                                                "data_object_id")
+    @JoinColumn(
+            name = "linked_data_object_id",
+            referencedColumnName = "data_object_id")
     @ManyToOne
-    private DataObject linkedDataObjectId;
+    private DataObject linkedDataObject;
+
 
     public DataObject() {
     }
 
     public DataObject(BigInteger dataObjectId) {
         this.dataObjectId = dataObjectId;
-    }
-
-    public DataObject(BigInteger dataObjectId, int version, int dataObjectTypeId,
-                      Date creationTime, long creatorId, long ownerId,
-                      boolean deleted, boolean isReadOnly, boolean isSystem,
-                      boolean isFolder, boolean isLink) {
-        this.dataObjectId = dataObjectId;
-        this.dataObjectVersion = version;
-        this.dataObjectTypeId = dataObjectTypeId;
-        this.creationTime = creationTime;
-        this.creatorId = creatorId;
-        this.ownerId = ownerId;
-        this.deleted = deleted;
-        this.readOnly = isReadOnly;
-        this.isSystem = isSystem;
-        this.isFolder = isFolder;
-        this.isLink = isLink;
     }
 
     public BigInteger getDataObjectId() {
@@ -158,12 +138,12 @@ public class DataObject implements Serializable {
         this.dataObjectVersion = version;
     }
 
-    public int getDataObjectTypeId() {
-        return dataObjectTypeId;
+    public DataObjectType getDataObjectType() {
+        return dataObjectType;
     }
 
-    public void setDataObjectTypeId(int dataObjectTypeId) {
-        this.dataObjectTypeId = dataObjectTypeId;
+    public void setDataObjectType(DataObjectType dataObjectType) {
+        this.dataObjectType = dataObjectType;
     }
 
     public Date getCreationTime() {
@@ -294,22 +274,6 @@ public class DataObject implements Serializable {
         this.dataObjectUri = dataObjectUri;
     }
 
-    public Collection<User> getUserCollection() {
-        return userCollection;
-    }
-
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
-    }
-
-    public Collection<DataObject> getDataObjectCollection() {
-        return dataObjectCollection;
-    }
-
-    public void setDataObjectCollection(Collection<DataObject> dataObjectCollection) {
-        this.dataObjectCollection = dataObjectCollection;
-    }
-
     public DataObject getParentDataObject() {
         return parentDataObject;
     }
@@ -318,20 +282,12 @@ public class DataObject implements Serializable {
         this.parentDataObject = parentDataObject;
     }
 
-    public Collection<DataObject> getDataObjectCollection1() {
-        return dataObjectCollection1;
+    public DataObject getLinkedDataObject() {
+        return linkedDataObject;
     }
 
-    public void setDataObjectCollection1(Collection<DataObject> dataObjectCollection1) {
-        this.dataObjectCollection1 = dataObjectCollection1;
-    }
-
-    public DataObject getLinkedDataObjectId() {
-        return linkedDataObjectId;
-    }
-
-    public void setLinkedDataObjectId(DataObject linkedDataObjectId) {
-        this.linkedDataObjectId = linkedDataObjectId;
+    public void setLinkedDataObject(DataObject linkedDataObject) {
+        this.linkedDataObject = linkedDataObject;
     }
 
     @Override

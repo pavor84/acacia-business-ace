@@ -8,19 +8,10 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.Invoice;
-import com.cosmos.acacia.crm.data.ProductSupplier;
-import com.cosmos.acacia.crm.data.PurchaseOrder;
-import com.cosmos.acacia.crm.data.ReceiptCertificate;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
-import java.lang.Object;
-import java.lang.Object;
-import java.lang.reflect.Method;
+
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.ejb.EJB;
@@ -61,7 +52,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     if(dataObject == null)
                         dataObject = new DataObject();
 
-                    dataObject.setDataObjectTypeId(dot.getDataObjectTypeId());
+                    dataObject.setDataObjectType(dot);
                     dataObject.setDataObjectVersion(1);
                     em.persist(dataObject);
                 }
@@ -151,66 +142,6 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         }
 
         return (EntityProperties)entityProperties.clone();
-    }
-
-    private static final Class[] noParameterTypes = new Class[] {};
-    private static final Object[] noParameters = new Object[] {};
-    private static TreeMap<String, List<String>> manySidedProperties;
-    static
-    {
-        manySidedProperties = new TreeMap<String, List<String>>();
-
-        List<String> properties = Arrays.asList("Deliverer");
-        manySidedProperties.put(ReceiptCertificate.class.getName(), properties);
-
-        properties = Arrays.asList("Recipient");
-        manySidedProperties.put(DeliveryCertificate.class.getName(), properties);
-
-        properties = Arrays.asList("Recipient", "ShippingAgent");
-        manySidedProperties.put(Invoice.class.getName(), properties);
-
-        properties = Arrays.asList("Supplier");
-        manySidedProperties.put(PurchaseOrder.class.getName(), properties);
-
-        manySidedProperties.put(ProductSupplier.class.getName(), properties);
-    }
-
-    public void populate(EntityManager em, DataObjectBean dob)
-    {
-        List<String> properties = manySidedProperties.get(dob.getClass().getName());
-        if(properties != null && properties.size() > 0)
-        {
-            for(String property : properties)
-            {
-                try
-                {
-                    Class cls = dob.getClass();
-                    String methodName = "get" + property + "Id";
-                    Method method = cls.getMethod(methodName, noParameterTypes);
-                    BigInteger id = (BigInteger)method.invoke(dob, noParameters);
-                    if(id != null)
-                    {
-                        DataObject dataObject = em.find(DataObject.class, id);
-                        if(dataObject == null)
-                            continue;
-                        DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
-                        DataObjectType dot = dotLocal.getDataObjectType(dataObject.getDataObjectTypeId());
-                        Class valueClass = Class.forName(dot.getDataObjectType());
-                        Object entity = em.find(valueClass, id);
-                        if(entity == null)
-                            continue;
-
-                        methodName = "set" + property;
-                        method = cls.getMethod(methodName, noParameterTypes);
-                        method.invoke(dob, new Object[] {entity});
-                    }
-                }
-                catch(Exception ex)
-                {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
     }
 
 }
