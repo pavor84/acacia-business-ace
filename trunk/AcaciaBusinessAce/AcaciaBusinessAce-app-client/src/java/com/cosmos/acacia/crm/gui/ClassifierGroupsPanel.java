@@ -11,8 +11,8 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
-import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Miro
  */
-public class ProductsListPanel
+public class ClassifierGroupsPanel
     extends AbstractTablePanel
 {
     @EJB
@@ -34,7 +34,7 @@ public class ProductsListPanel
     private BindingGroup productsBindingGroup;
     private List<Product> products;
 
-    public ProductsListPanel(DataObject parentDataObject)
+    public ClassifierGroupsPanel(DataObject parentDataObject)
     {
         super(parentDataObject);
     }
@@ -161,4 +161,5 @@ public class ProductsListPanel
     {
         return getFormSession().deleteProduct(product);
     }
+
 }

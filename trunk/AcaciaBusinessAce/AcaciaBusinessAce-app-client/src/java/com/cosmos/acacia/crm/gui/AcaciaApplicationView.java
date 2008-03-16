@@ -4,6 +4,8 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -195,7 +197,12 @@ public class AcaciaApplicationView extends FrameView {
     public void productsListAction() {
         System.out.println("productsListAction");
         ProductsListPanel productsListPanel = new ProductsListPanel(null);
-        productsListPanel.showFrame();
+        //productsListPanel.showFrame();
+        DialogResponse response = productsListPanel.showDialog();
+        if(DialogResponse.SELECT.equals(response))
+        {
+            System.out.println("Selected object: " + productsListPanel.getSelectedRowObject());
+        }
     }
 
     @Action
@@ -203,6 +210,13 @@ public class AcaciaApplicationView extends FrameView {
     {
         ProductCategoriesPanel productCategories = new ProductCategoriesPanel(null);
         productCategories.showFrame();
+    }
+
+    @Action
+    public void classifierGroupsAction()
+    {
+        ClassifierGroupsPanel classifierGroups = new ClassifierGroupsPanel(null);
+        classifierGroups.showFrame();
     }
 
     private ActionMap getActionMap()
@@ -274,6 +288,11 @@ public class AcaciaApplicationView extends FrameView {
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
         menuItem.setName("productCategoriesMenuItem"); // NOI18N
+        productsMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("classifierGroupsAction")); // NOI18N
+        menuItem.setName("classifierGroupsMenuItem"); // NOI18N
         productsMenu.add(menuItem);
 
         menuBar.add(productsMenu);

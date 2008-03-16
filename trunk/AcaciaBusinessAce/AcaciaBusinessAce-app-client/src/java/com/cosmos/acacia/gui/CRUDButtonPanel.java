@@ -9,16 +9,17 @@ package com.cosmos.acacia.gui;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.security.GUIAccessControl;
-import com.cosmos.swingb.JBPanel;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -29,6 +30,7 @@ public class CRUDButtonPanel
 {
     public enum Button
     {
+        Select("selectAction"),
         New("newAction"),
         Modify("modifyAction"),
         Delete("deleteAction"),
@@ -68,6 +70,7 @@ public class CRUDButtonPanel
         deleteButton = new com.cosmos.swingb.JBButton();
         modifyButton = new com.cosmos.swingb.JBButton();
         newButton = new com.cosmos.swingb.JBButton();
+        selectButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -87,12 +90,17 @@ public class CRUDButtonPanel
         newButton.setAction(actionMap.get("newAction")); // NOI18N
         newButton.setName("newButton"); // NOI18N
 
+        selectButton.setAction(actionMap.get("selectAction")); // NOI18N
+        selectButton.setName("selectButton"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(45, Short.MAX_VALUE)
+                .addContainerGap(43, Short.MAX_VALUE)
+                .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -105,7 +113,7 @@ public class CRUDButtonPanel
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closeButton, deleteButton, modifyButton, newButton, refreshButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closeButton, deleteButton, modifyButton, newButton, refreshButton, selectButton});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,11 +124,12 @@ public class CRUDButtonPanel
                     .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, deleteButton, modifyButton, newButton, refreshButton});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, deleteButton, modifyButton, newButton, refreshButton, selectButton});
 
     }// </editor-fold>//GEN-END:initComponents
    
@@ -130,6 +139,7 @@ public class CRUDButtonPanel
     private com.cosmos.swingb.JBButton modifyButton;
     private com.cosmos.swingb.JBButton newButton;
     private com.cosmos.swingb.JBButton refreshButton;
+    private com.cosmos.swingb.JBButton selectButton;
     // End of variables declaration//GEN-END:variables
 
     private TableSelectionListener tableSelectionListener;
@@ -139,10 +149,14 @@ public class CRUDButtonPanel
 
     protected void initData()
     {
+        setEnabled(CRUDButtonPanel.Button.Select, false);
         setEnabled(CRUDButtonPanel.Button.Modify, false);
         setEnabled(CRUDButtonPanel.Button.Delete, false);
     }
 
+    @Action
+    public void selectAction() {
+    }
 
     @Action
     public void closeAction() {
@@ -151,9 +165,38 @@ public class CRUDButtonPanel
     }
 
     @Action
-    public void refreshAction() {
-        if(buttonActionsListener != null)
-            buttonActionsListener.refreshAction();
+    public Task refreshAction() {
+        return new RefreshActionTask(Application.getInstance(AcaciaApplication.class));
+    }
+
+    private class RefreshActionTask
+        extends Task<Object, Void>
+    {
+        RefreshActionTask(Application app)
+        {
+            // Runs on the EDT.  Copy GUI state that
+            // doInBackground() depends on from parameters
+            // to RefreshActionTask fields, here.
+            super(app);
+            if(buttonActionsListener != null)
+                buttonActionsListener.refreshAction();
+        }
+
+        @Override
+        protected Object doInBackground()
+        {
+            // Your Task's code here.  This method runs
+            // on a background thread, so don't reference
+            // the Swing GUI from here.
+            return null;  // return your result
+        }
+
+        @Override
+        protected void succeeded(Object result)
+        {
+            // Runs on the EDT.  Update the GUI based on
+            // the result computed by doInBackground().
+        }
     }
 
     @Action
@@ -218,6 +261,9 @@ public class CRUDButtonPanel
     public void setVisible(Button button, boolean visible) {
         switch(button)
         {
+            case Select:
+                selectButton.setVisible(visible);
+
             case New:
                 newButton.setVisible(visible);
                 break;
@@ -243,6 +289,9 @@ public class CRUDButtonPanel
     public boolean isVisible(Button button) {
         switch(button)
         {
+            case Select:
+                return selectButton.isVisible();
+
             case New:
                 return newButton.isVisible();
 
@@ -301,13 +350,13 @@ public class CRUDButtonPanel
             if(!event.getValueIsAdjusting())
             {
                 System.out.println("CRUDButtonPanel.TableSelectionListener.valueChanged.event: " + event);
-Throwable t = new Throwable();
-//t.printStackTrace();
+
                 ListSelectionModel selectionModel = (ListSelectionModel)event.getSource();
                 if(selectionModel.isSelectionEmpty())
                 {
                     setEnabled(CRUDButtonPanel.Button.Modify, false);
                     setEnabled(CRUDButtonPanel.Button.Delete, false);
+                    setEnabled(CRUDButtonPanel.Button.Select, false);
                 }
                 else
                 {
@@ -325,10 +374,12 @@ Throwable t = new Throwable();
                         setEnabled(CRUDButtonPanel.Button.Modify, true);
                         setEnabled(CRUDButtonPanel.Button.Delete, true);
                     }
+                    setEnabled(CRUDButtonPanel.Button.Select, true);
                 }
             }
         }
     }
+
 
 }
 
