@@ -7,6 +7,7 @@ package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -338,6 +339,61 @@ public class JBTable
         categoryColumn.setCellEditor(cellEditor);
   */
 
+    
+    /**
+     * Changes the default cell editor to a DatePicker and binds it
+     * 
+     * @param bindingGroup
+     * @param comboBoxValues
+     * @param propertyName
+     */
+    public void bindDatePickerCellEditor(
+            BindingGroup bindingGroup,
+            PropertyDetails propertyDetails,
+            DateFormat dateFormat)
+    {
+        Application app = getApplication();
+        JBDatePicker datePicker;
+        //if(app != null)
+        //    datePicker = new JBDatePicker(app);
+        //else
+            datePicker = new JBDatePicker();
+
+        datePicker.setFormats(dateFormat);
+        datePicker.bind(bindingGroup, this, propertyDetails);
+        JBDatePickerCellEditor datePickerCellEditor = new JBDatePickerCellEditor(datePicker);
+        
+        // TODO: set Formatting of not-edited date
+        
+        
+        TableColumnExt column;
+        try
+        {
+            column = getColumnExt(propertyDetails.getPropertyName());
+        }
+        catch(Exception ex)
+        {
+            column = null;
+        }
+        
+        if(column == null)
+        {
+            if(propertyDetails != null)
+            {
+                String columnName = propertyDetails.getPropertyTitle();
+                column = getColumnExt(columnName);
+            }
+        }
+        
+        if(column == null)
+            throw new IllegalArgumentException("Can not find table column for property name: " + propertyDetails.getPropertyName());
+
+        column.setCellEditor(datePickerCellEditor);
+        
+        if(app != null && column.getCellRenderer() == null)
+            column.setCellRenderer(new BeanTableCellRenderer(app.getClass()));
+    }
+    
     public ApplicationContext getContext()
     {
         if(applicationContext == null)
