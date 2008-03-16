@@ -11,6 +11,8 @@ package com.cosmos.acacia.gui;
  */
 public interface CRUDButtonActionsListener {
 
+    public void selectAction();
+
     public void closeAction();
 
     public void refreshAction();

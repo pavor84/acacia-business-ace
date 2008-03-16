@@ -661,6 +661,8 @@ public class ProductPanel extends AcaciaPanel {
 
     protected void initData()
     {
+        setDialogResponse(DialogResponse.CLOSE);
+
         System.out.println("initData().product: " + product);
         if(product == null)
         {
@@ -768,6 +770,7 @@ public class ProductPanel extends AcaciaPanel {
 
     @Action
     public void closeAction() {
+        setDialogResponse(DialogResponse.CLOSE);
         close();
     }
 
