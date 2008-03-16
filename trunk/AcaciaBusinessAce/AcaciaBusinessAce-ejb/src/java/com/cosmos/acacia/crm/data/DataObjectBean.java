@@ -21,7 +21,10 @@ import javax.imageio.ImageIO;
  *
  * @author Miro
  */
-public abstract class DataObjectBean {
+public abstract class DataObjectBean
+    implements Cloneable
+{
+
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private URI smallImageURI;
@@ -311,4 +314,16 @@ public abstract class DataObjectBean {
         }
     }
 
+    @Override
+    public Object clone()
+    {
+        try
+        {
+            return super.clone();
+        }
+        catch(CloneNotSupportedException ex)
+        {
+            throw new RuntimeException(ex);
+        }
+    }
 }
