@@ -21,9 +21,12 @@ import javax.swing.JTextField;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -33,6 +36,7 @@ public class JBTextField
     extends JTextField
 {
     private String propertyName;
+    private PropertyDetails propertyDetails;
     private Object beanEntity;
     private Set<Validator> validators = new HashSet<Validator>();
 
@@ -54,13 +58,12 @@ public class JBTextField
             setEnabled(false);
             return null;
         }
+        this.propertyDetails = propertyDetails;
         
         Binding binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
-
-        Validator validator = new TextFieldValidator(propertyDetails, this);
-        addValidator(validator);
+        
         
         return binding;
     }
@@ -77,6 +80,36 @@ public class JBTextField
         BeanProperty beanProperty = BeanProperty.create("text");
         Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
+        
+        binding.addBindingListener(new BindingListener(){
+
+            // Checking validity after field becomes bound
+            public void bindingBecameBound(Binding binding) {
+                Validator validator = new TextFieldValidator(propertyDetails, JBTextField.this);
+                addValidator(validator);
+            }
+
+            public void bindingBecameUnbound(Binding binding) {
+               
+            }
+
+            public void syncFailed(Binding binding, SyncFailure failure) {
+               
+            }
+
+            public void synced(Binding binding) {
+                
+            }
+
+            public void sourceChanged(Binding binding, PropertyStateEvent event) {
+               
+            }
+
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                
+            }
+            
+        });
 
         return binding;
     }
