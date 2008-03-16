@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,6 +23,20 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "addresses")
+@NamedQueries(
+	{
+		@NamedQuery
+         	(
+         		name = "Address.findByParentDataObjectAndDeleted",
+         		query = "select a from Address a where a.dataObject.parentDataObject = :parentDataObject and a.dataObject.deleted = :deleted"
+         	),
+                @NamedQuery
+                (
+        		name = "Address.findByParentDataObjectIsNullAndDeleted",
+        		query = "select a from Address a where a.dataObject.parentDataObject is null and a.dataObject.deleted = :deleted"
+                )
+	}
+)
 public class Address implements Serializable {
 
     private static final long serialVersionUID = 1L;

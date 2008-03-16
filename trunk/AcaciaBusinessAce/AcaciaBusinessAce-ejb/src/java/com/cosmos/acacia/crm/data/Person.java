@@ -5,14 +5,19 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,49 +29,78 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "persons")
-public class Person implements Serializable {
+@NamedQueries(
+	{
+		@NamedQuery
+         	(
+         		name = "Person.findByParentDataObjectAndDeleted",
+         		query = "select p from Person p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+         	),
+                @NamedQuery
+                (
+        		name = "Person.findByParentDataObjectIsNullAndDeleted",
+        		query = "select p from Person p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+                )
+	}
+)
+public class Person
+        extends  DataObjectBean
+        implements Serializable
+{
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "person_id", nullable = false)
+    @Property(title="Person Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger personId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @Column(name = "first_name", nullable = false)
+    @Property(title="First Name", validationType=ValidationType.REQUIRED)
     private String firstName;
 
     @Column(name = "second_name")
+    @Property(title="Second Name", validationType=ValidationType.REQUIRED)
     private String secondName;
 
     @Column(name = "last_name", nullable = false)
+    @Property(title="Last Name", validationType=ValidationType.REQUIRED)
     private String lastName;
 
     @Column(name = "extra_name")
+    @Property(title="Extra Name")
     private String extraName;
 
     @Column(name = "personal_unique_id")
+    @Property(title="Unique Id", validationType=ValidationType.REQUIRED)
     private String personalUniqueId;
 
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
+    @Property(title="Birth Date")
     private Date birthDate;
 
     @JoinColumn(name = "birth_place_country_id", referencedColumnName = "country_id")
     @ManyToOne
+    @Property(title="Country")
     private Country birthPlaceCountry;
 
     @JoinColumn(name = "birth_place_city_id", referencedColumnName = "city_id")
     @ManyToOne
+    @Property(title="City")
     private City birthPlaceCity;
 
     @JoinColumn(name = "gender_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Gender")
     private DbResource gender;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
     @JoinColumn(name = "person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -208,6 +242,16 @@ public class Person implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Person[personId=" + personId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getPersonId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setPersonId(id);
     }
 
 }
