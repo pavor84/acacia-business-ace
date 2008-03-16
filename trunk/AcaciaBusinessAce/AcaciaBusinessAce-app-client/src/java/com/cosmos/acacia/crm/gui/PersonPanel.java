@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
@@ -188,6 +189,7 @@ public class PersonPanel extends AcaciaPanel {
         birthPlaceCityComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         birthPlaceCityComboBox.setName("birthPlaceCityComboBox"); // NOI18N
 
+        birthdateDatePicker.setFormats(GeneralSettings.getDateFormat());
         birthdateDatePicker.setName("birthdateDatePicker"); // NOI18N
 
         javax.swing.GroupLayout birthDataPanelLayout = new javax.swing.GroupLayout(birthDataPanel);
@@ -421,31 +423,22 @@ public class PersonPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private javax.swing.JLabel extraNameLabel;
-    private javax.swing.JLabel extraNameLabel1;
     private com.cosmos.swingb.JBTextField extraNameTextField;
-    private com.cosmos.swingb.JBTextField extraNameTextField1;
     private javax.swing.JLabel firstNameLabel;
-    private javax.swing.JLabel firstNameLabel1;
     private com.cosmos.swingb.JBTextField firstNameTextField;
-    private com.cosmos.swingb.JBTextField firstNameTextField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lastNameLabel;
-    private javax.swing.JLabel lastNameLabel1;
     private com.cosmos.swingb.JBTextField lastNameTextField;
-    private com.cosmos.swingb.JBTextField lastNameTextField1;
     private com.cosmos.swingb.JBPanel passportsPanel;
     private com.cosmos.acacia.gui.AcaciaTable passportsTable;
     private com.cosmos.swingb.JBPanel personalDataPanel;
-    private com.cosmos.swingb.JBPanel personalDataPanel1;
     private javax.swing.JLabel personalUniqueIdLabel;
     private com.cosmos.swingb.JBTextField personalUniqueIdTextField;
     private com.cosmos.swingb.JBButton saveButton;
     private javax.swing.JLabel secondNameLabel;
-    private javax.swing.JLabel secondNameLabel1;
     private com.cosmos.swingb.JBTextField secondNameTextField;
-    private com.cosmos.swingb.JBTextField secondNameTextField1;
     // End of variables declaration//GEN-END:variables
 
     @EJB
@@ -472,7 +465,7 @@ public class PersonPanel extends AcaciaPanel {
         extraNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("extraName"));
 
         personalUniqueIdTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("personalUniqueId"));
-        //birthdateDatePicker.bind(..);
+        birthdateDatePicker.bind(personBindingGroup, person, entityProps.getPropertyDetails("birthDate"));
         birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, "birthPlaceCountry");
         birthPlaceCityComboBox.bind(personBindingGroup, getCities(), person, "birthPlaceCity");
         
