@@ -18,7 +18,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.gui.CRUDButtonPanel;
+import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
@@ -48,7 +48,11 @@ public class PersonsListPanel extends AbstractTablePanel {
         personsBindingGroup = new BindingGroup();
         AcaciaTable personsTable = getDataTable();
         JTableBinding tableBinding = personsTable.bind(personsBindingGroup, getPersons(), getPersonEntityProperties());
-
+        personsTable.bindDatePickerCellEditor(
+                personsBindingGroup,
+                getPersonEntityProperties().getPropertyDetails("birthDate"),
+                GeneralSettings.getDateFormat());
+        
         personsBindingGroup.bind();
 
         personsTable.setEditable(true);
