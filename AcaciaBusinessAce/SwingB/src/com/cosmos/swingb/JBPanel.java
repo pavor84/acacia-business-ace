@@ -12,6 +12,8 @@ import java.awt.Dialog;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -38,8 +40,7 @@ public class JBPanel
     private String title;
     private boolean resizable = true;
     private Container mainContainer;
-    private Object selectedValue;
-    private Object[] selectedValues;
+    private List selectedValues;
     private DialogResponse response;
     private Dialog.ModalityType modalityType = Dialog.ModalityType.APPLICATION_MODAL;
 
@@ -105,9 +106,8 @@ public class JBPanel
 
     public DialogResponse showDialog(Component parentComponent)
     {
-        selectedValue = null;
         selectedValues = null;
-        response = null;
+        response = DialogResponse.CLOSE;
 
         Window window = null;
         if(parentComponent != null)
@@ -154,30 +154,35 @@ public class JBPanel
         this.response = response;
     }
 
-    public Object getSelectedValue()
-    {
-        return selectedValue;
-    }
-
-    protected void setSelectedValue(Object selectedValue)
-    {
-        this.selectedValue = selectedValue;
-    }
-
-    public Object[] getSelectedValues()
+    public List getSelectedValues()
     {
         return selectedValues;
     }
 
     protected void setSelectedValues(Object[] selectedValues)
     {
-        if(selectedValues != null && selectedValues.length > 0)
-        {
-            this.selectedValues = selectedValues.clone();
-        }
-        else
-            this.selectedValues = selectedValues;
+        setSelectedValues(Arrays.asList(selectedValues));
     }
+
+    protected void setSelectedValues(List selectedValues)
+    {
+        this.selectedValues = selectedValues;
+    }
+
+    public Object getSelectedValue()
+    {
+        List values;
+        if((values = getSelectedValues()) != null && values.size() > 0)
+            return values.get(0);
+
+        return null;
+    }
+
+    protected void setSelectedValue(Object selectedValue)
+    {
+        setSelectedValues(Arrays.asList(selectedValue));
+    }
+
 
     public void close()
     {
@@ -248,6 +253,16 @@ public class JBPanel
         return applicationActionMap;
     }
 
+    protected Class getResourceStartClass()
+    {
+        return this.getClass();
+    }
+
+    protected Class getResourceStopClass()
+    {
+        return this.getClass();
+    }
+
     public ResourceMap getResourceMap()
     {
         if(resourceMap == null)
@@ -255,7 +270,7 @@ public class JBPanel
             ApplicationContext context = getContext();
             if(context != null)
             {
-                resourceMap = context.getResourceMap(this.getClass());
+                resourceMap = context.getResourceMap(getResourceStartClass(), getResourceStopClass());
             }
         }
 

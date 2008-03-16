@@ -16,7 +16,9 @@ public enum DialogResponse {
     CANCEL("Cancel"),
     CLOSE("Close"),
     SAVE("Save"),
-    LOGIN("Login");
+    LOGIN("Login"),
+    SELECT("Select"),
+    ;
 
     private DialogResponse(String response)
     {
