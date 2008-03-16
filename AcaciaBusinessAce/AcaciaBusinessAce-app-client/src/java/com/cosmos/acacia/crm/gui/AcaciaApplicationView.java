@@ -32,13 +32,30 @@ import javax.swing.JFrame;
 import javax.swing.JSeparator;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
+
 import org.jdesktop.application.Action;
+import org.jdesktop.application.FrameView;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskMonitor;
+
+import com.cosmos.swingb.JBDesktopPane;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBMenu;
+import com.cosmos.swingb.JBMenuBar;
+import com.cosmos.swingb.JBMenuItem;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBProgressBar;
+import com.cosmos.swingb.JBSeparator;
+import com.cosmos.swingb.JBToolBar;
 
 /**
  * The application's main frame.
  */
 public class AcaciaApplicationView extends FrameView {
-    
+
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         initComponents();
@@ -78,12 +95,12 @@ public class AcaciaApplicationView extends FrameView {
         }
     }
 
-    
+
     public boolean isRecordSelected() {
         //return masterTable.getSelectedRow() != -1;
         return false;
     }
-    
+
 
     @Action
     public void newRecord() {
@@ -112,7 +129,7 @@ public class AcaciaApplicationView extends FrameView {
         setSaveNeeded(true);
         */
     }
-    
+
 
     @Action(enabledProperty = "saveNeeded")
     public Task save() {
@@ -213,6 +230,19 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void personsListAction(){
+    	System.out.println("personsListAction");
+    	PersonsListPanel personsListPanel = new PersonsListPanel(null);
+    	personsListPanel.showFrame();
+    }
+
+    @Action
+    public void newPersonAction(){
+    	//PersonPanel personPanel = new PersonPanel(null);
+    	//personPanel.showFrame();
+    }
+
+    @Action
     public void classifierGroupsAction()
     {
         ClassifierGroupsPanel classifierGroups = new ClassifierGroupsPanel(null);
@@ -239,6 +269,9 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu productsMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
+        JBMenu personsMenu = new JBMenu();
+        JBMenuItem personsListMenuItem = new JBMenuItem();
+        JBMenuItem newPersonMenuItem = new JBMenuItem();
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -296,6 +329,19 @@ public class AcaciaApplicationView extends FrameView {
         productsMenu.add(menuItem);
 
         menuBar.add(productsMenu);
+
+        personsMenu.setName("personsMenu");
+        personsMenu.setText(resourceMap.getString("personsMenu.text"));
+
+        newPersonMenuItem.setAction(actionMap.get("newPersonAction"));
+        newPersonMenuItem.setName("newPersonMenuItem");
+        personsMenu.add(newPersonMenuItem);
+
+        personsListMenuItem.setAction(actionMap.get("personsListAction"));
+        personsListMenuItem.setName("personsListMenuItem");
+        personsMenu.add(personsListMenuItem);
+
+        menuBar.add(personsMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
@@ -397,7 +443,7 @@ public class AcaciaApplicationView extends FrameView {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
             }
-        }); 
+        });
         idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
         statusAnimationLabel.setIcon(idleIcon);
         progressBar.setVisible(false);
