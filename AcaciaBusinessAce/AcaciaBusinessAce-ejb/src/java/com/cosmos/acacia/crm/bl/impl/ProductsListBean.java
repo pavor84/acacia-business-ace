@@ -7,7 +7,6 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -41,7 +40,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private void postConstruct()
     {
         System.out.println("postConstruct()");
-        Organization company = new Organization();
+//        DataObject dataObject = em.find(DataObject.class, BigInteger.ONE);
+//        Organization company = new Organization();
+//        company.setDataObject(dataObject);
+//        company.setOrganizationId(BigInteger.ONE);
+//        company.setOrganizationType();
     }
 
     public List<Product> getProducts(DataObject parent) {

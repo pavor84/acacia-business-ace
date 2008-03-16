@@ -7,16 +7,13 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,75 +25,92 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "organizations")
-@NamedQueries({@NamedQuery(name = "Organization.findByOrganizationId", query = "SELECT o FROM Organization o WHERE o.organizationId = :organizationId"), @NamedQuery(name = "Organization.findByParentId", query = "SELECT o FROM Organization o WHERE o.parentId = :parentId"), @NamedQuery(name = "Organization.findByOrganizationName", query = "SELECT o FROM Organization o WHERE o.organizationName = :organizationName"), @NamedQuery(name = "Organization.findByNickname", query = "SELECT o FROM Organization o WHERE o.nickname = :nickname"), @NamedQuery(name = "Organization.findByVatNumber", query = "SELECT o FROM Organization o WHERE o.vatNumber = :vatNumber"), @NamedQuery(name = "Organization.findByUniqueIdentifierCode", query = "SELECT o FROM Organization o WHERE o.uniqueIdentifierCode = :uniqueIdentifierCode"), @NamedQuery(name = "Organization.findByRegistrationDate", query = "SELECT o FROM Organization o WHERE o.registrationDate = :registrationDate"), @NamedQuery(name = "Organization.findByShareCapital", query = "SELECT o FROM Organization o WHERE o.shareCapital = :shareCapital"), @NamedQuery(name = "Organization.findByDescription", query = "SELECT o FROM Organization o WHERE o.description = :description")})
-public class Organization implements Serializable {
+public class Organization
+    extends DataObjectBean
+    implements Serializable
+{
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "organization_id", nullable = false)
-    private Long organizationId;
+    private BigInteger organizationId;
+
     @Column(name = "parent_id")
-    private Long parentId;
+    private BigInteger parentId;
+
     @Column(name = "organization_name", nullable = false)
     private String organizationName;
+
     @Column(name = "nickname")
     private String nickname;
+
     @Column(name = "vat_number")
     private String vatNumber;
+
     @Column(name = "unique_identifier_code")
     private String uniqueIdentifierCode;
+
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
     private Date registrationDate;
+
     @Column(name = "share_capital")
     private BigDecimal shareCapital;
+
     @Column(name = "description")
     private String description;
+
     @JoinColumn(name = "registration_address_id", referencedColumnName = "address_id")
     @ManyToOne
-    private Address registrationAddressId;
+    private Address registrationAddress;
+
     @JoinColumn(name = "administration_address_id", referencedColumnName = "address_id")
     @ManyToOne
-    private Address administrationAddressId;
+    private Address administrationAddress;
+
     @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
     @ManyToOne
-    private Currency currencyId;
+    private Currency currency;
+
     @JoinColumn(name = "organization_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-    @OneToMany(mappedBy = "registrationOrganizationId")
-    private Collection<Organization> organizationCollection;
+
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
     @ManyToOne
-    private Organization registrationOrganizationId;
+    private Organization registrationOrganization;
+
     @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    private DbResource organizationTypeId;
+    private DbResource organizationType;
+
 
     public Organization() {
     }
 
-    public Organization(Long organizationId) {
+    public Organization(BigInteger organizationId) {
         this.organizationId = organizationId;
     }
 
-    public Organization(Long organizationId, String organizationName) {
+    public Organization(BigInteger organizationId, String organizationName) {
         this.organizationId = organizationId;
         this.organizationName = organizationName;
     }
 
-    public Long getOrganizationId() {
+    public BigInteger getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(Long organizationId) {
+    public void setOrganizationId(BigInteger organizationId) {
         this.organizationId = organizationId;
     }
 
-    public Long getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
@@ -156,28 +170,28 @@ public class Organization implements Serializable {
         this.description = description;
     }
 
-    public Address getRegistrationAddressId() {
-        return registrationAddressId;
+    public Address getRegistrationAddress() {
+        return registrationAddress;
     }
 
-    public void setRegistrationAddressId(Address registrationAddressId) {
-        this.registrationAddressId = registrationAddressId;
+    public void setRegistrationAddress(Address registrationAddress) {
+        this.registrationAddress = registrationAddress;
     }
 
-    public Address getAdministrationAddressId() {
-        return administrationAddressId;
+    public Address getAdministrationAddress() {
+        return administrationAddress;
     }
 
-    public void setAdministrationAddressId(Address administrationAddressId) {
-        this.administrationAddressId = administrationAddressId;
+    public void setAdministrationAddress(Address administrationAddress) {
+        this.administrationAddress = administrationAddress;
     }
 
-    public Currency getCurrencyId() {
-        return currencyId;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public void setCurrencyId(Currency currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public DataObject getDataObject() {
@@ -188,29 +202,22 @@ public class Organization implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public Collection<Organization> getOrganizationCollection() {
-        return organizationCollection;
+    public Organization getRegistrationOrganization() {
+        return registrationOrganization;
     }
 
-    public void setOrganizationCollection(Collection<Organization> organizationCollection) {
-        this.organizationCollection = organizationCollection;
+    public void setRegistrationOrganization(Organization registrationOrganization) {
+        this.registrationOrganization = registrationOrganization;
     }
 
-    public Organization getRegistrationOrganizationId() {
-        return registrationOrganizationId;
+    public DbResource getOrganizationType() {
+        return organizationType;
     }
 
-    public void setRegistrationOrganizationId(Organization registrationOrganizationId) {
-        this.registrationOrganizationId = registrationOrganizationId;
+    public void setOrganizationType(DbResource organizationType) {
+        this.organizationType = organizationType;
     }
 
-    public DbResource getOrganizationTypeId() {
-        return organizationTypeId;
-    }
-
-    public void setOrganizationTypeId(DbResource organizationTypeId) {
-        this.organizationTypeId = organizationTypeId;
-    }
 
     @Override
     public int hashCode() {
@@ -237,4 +244,13 @@ public class Organization implements Serializable {
         return "com.cosmos.acacia.crm.data.Organization[organizationId=" + organizationId + "]";
     }
 
+    @Override
+    public BigInteger getId() {
+        return getOrganizationId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setOrganizationId(id);
+    }
 }
