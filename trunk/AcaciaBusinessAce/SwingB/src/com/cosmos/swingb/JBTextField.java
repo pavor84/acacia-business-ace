@@ -147,7 +147,10 @@ public class JBTextField
                 tooltipText.append("; ");
             }
         }
-        setToolTipText(tooltipText.toString());
+        if (tooltipText.length() > 0)
+            setToolTipText(tooltipText.toString());
+        else
+            setToolTipText(null);
     }
     
     private void checkValidity(Validator validator){
