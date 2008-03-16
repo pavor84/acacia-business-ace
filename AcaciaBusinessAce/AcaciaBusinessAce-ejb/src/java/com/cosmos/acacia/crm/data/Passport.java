@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,6 +26,20 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "passports")
+@NamedQueries(
+	{
+		@NamedQuery
+         	(
+         		name = "Passport.findByParentDataObjectAndDeleted",
+         		query = "select p from Passport p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+         	),
+                @NamedQuery
+                (
+        		name = "Passport.findByParentDataObjectIsNullAndDeleted",
+        		query = "select p from Passport p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+                )
+	}
+)
 public class Passport implements Serializable {
 
     private static final long serialVersionUID = 1L;
