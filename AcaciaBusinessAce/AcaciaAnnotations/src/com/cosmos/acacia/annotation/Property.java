@@ -7,19 +7,16 @@ package com.cosmos.acacia.annotation;
 
 
 
-import java.awt.Event;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.jdesktop.beansbinding.Validator;
 
 /**
  *
  * @author Miro
  */
 @Target(ElementType.FIELD)
-//@Retention(RetentionPolicy.SOURCE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property
 {
@@ -39,13 +36,5 @@ public @interface Property
 
     String sourceUnreadableValue() default NULL;
 
-    //PropertyValidator validator() default @PropertyValidator;
-  
-    ValidationType validationType() default ValidationType.NONE;
-    int validationEvent() default Event.KEY_RELEASE;
-    int validationRangeStart() default 0;
-    int validationRangeEnd() default 1000;
-    String validationRegex() default "";
-    String validationCustomMethod() default "";
-    String validationTooltip() default "";
+    PropertyValidator propertyValidator() default @PropertyValidator;
 }
