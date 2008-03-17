@@ -35,7 +35,7 @@ public abstract class AbstractTablePanel
         initComponents();
         initData();
     }
-
+    
     
     
     /** This method is called from within the constructor to
@@ -246,7 +246,7 @@ public abstract class AbstractTablePanel
         }
     }
 
-    public void setVisible(Button button, boolean visible) {
+    public void setVisible(Button button, boolean visible) {       
         switch(button)
         {
             case Select:
@@ -300,7 +300,43 @@ public abstract class AbstractTablePanel
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
 
-
+    /**
+     * Sets the visible buttons:
+     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32
+     * Sum the buttons you want to show and pass the result to the method
+     * 
+     * @param visibleButtons
+     */
+    public void setVisibleButtons(int visibleButtons){
+        for (ButtonVisibility bv: ButtonVisibility.values())
+        {
+            if ((bv.getVisibilityIndex() & visibleButtons) != 0)
+                setVisible(bv.getButton(), true);
+            else
+                setVisible(bv.getButton(), false);
+        }
+    }
+    
+    public void setButtonsTextVisibility(boolean visible){
+        selectButton.setToolTipText(selectButton.getText());
+        selectButton.setText("");
+        
+        newButton.setToolTipText(newButton.getText());
+        newButton.setText("");
+        
+        modifyButton.setToolTipText(modifyButton.getText());
+        modifyButton.setText("");
+        
+        deleteButton.setToolTipText(deleteButton.getText());
+        deleteButton.setText("");
+        
+        refreshButton.setToolTipText(refreshButton.getText());
+        refreshButton.setText("");
+        
+        closeButton.setToolTipText(closeButton.getText());
+        closeButton.setText("");
+    }
+    
     @Action
     public void selectAction() {
         selectedRowObject = dataTable.getSelectedRowObject();
@@ -412,6 +448,38 @@ public abstract class AbstractTablePanel
 
     };
 
+    /**
+     * Enumeration for visibility indices of buttons, used for the bitwise
+     * operation in setVisibleButtons
+     */
+    public enum ButtonVisibility
+    {
+        Select(1, Button.Select),
+        New(2, Button.New),
+        Modify(4, Button.Modify),
+        Delete(8, Button.Delete),
+        Refresh(16, Button.Refresh),
+        Close(32, Button.Close);
+        
+        ButtonVisibility(int visibilityIndex, Button button)
+        {
+            this.visibilityIndex = visibilityIndex;
+            this.button = button;
+        }
+        private int visibilityIndex;
+        private Button button;
+        
+        public int getVisibilityIndex()
+        {
+            return visibilityIndex;
+        }
+        
+        public Button getButton()
+        {
+            return button;
+        }
+    }
+    
     public class TableSelectionListener
         implements ListSelectionListener
     {
