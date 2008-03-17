@@ -4,9 +4,9 @@
  */
 package com.cosmos.beansbinding;
 
-import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
+import org.jdesktop.beansbinding.Validator;
 
 /**
  *
@@ -27,15 +27,7 @@ public class PropertyDetails
     private Object sourceUnreadableValue;
     private String columnName;
     private int orderPosition;
-
-    /* Validation fields */
-    private ValidationType validationType;
-    private int validationRangeStart;
-    private int validationEvent;
-    private int validationRangeEnd;
-    private String validationCustomMethod;
-    private String validationRegex;
-    private String validationTooltip;
+    private Validator validator;
     
     public PropertyDetails() {
     }
@@ -157,62 +149,24 @@ public class PropertyDetails
         this.orderPosition = orderPosition;
     }
 
-    public String getValidationCustomMethod() {
-        return validationCustomMethod;
+    public boolean isRequired() {
+        return required;
     }
 
-    public void setValidationCustomMethod(String validationCustomMethod) {
-        this.validationCustomMethod = validationCustomMethod;
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
-    public String getValidationRegex() {
-        return validationRegex;
+    public Validator getValidator() {
+        return validator;
     }
 
-    public void setValidationRegex(String validationRegex) {
-        this.validationRegex = validationRegex;
-    }
-    
-    public int getValidationEvent() {
-        return validationEvent;
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 
-    public void setValidationEvent(int validationEvent) {
-        this.validationEvent = validationEvent;
-    }
 
-    public int getValidationRangeEnd() {
-        return validationRangeEnd;
-    }
 
-    public void setValidationRangeEnd(int validationRangeEnd) {
-        this.validationRangeEnd = validationRangeEnd;
-    }
-
-    public int getValidationRangeStart() {
-        return validationRangeStart;
-    }
-
-    public void setValidationRangeStart(int validationRangeStart) {
-        this.validationRangeStart = validationRangeStart;
-    }
-
-    public ValidationType getValidationType() {
-        return validationType;
-    }
-
-    public void setValidationType(ValidationType validationType) {
-        this.validationType = validationType;
-    }
-
-    public String getValidationTooltip() {
-        return validationTooltip;
-    }
-
-    public void setValidationTooltip(String validationTooltip) {
-        this.validationTooltip = validationTooltip;
-    }
-    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
