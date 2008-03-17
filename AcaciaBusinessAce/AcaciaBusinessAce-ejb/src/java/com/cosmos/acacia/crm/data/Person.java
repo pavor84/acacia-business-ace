@@ -6,7 +6,9 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.beansbinding.validation.RequiredValidator;
+import com.cosmos.beansbinding.validation.TextLengthValidator;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -60,15 +62,16 @@ public class Person
     private BigInteger parentId;
 
     @Column(name = "first_name", nullable = false)
-    @Property(title="First Name", validationType=ValidationType.REQUIRED)
+    @Property(title="First Name",
+            propertyValidator=@PropertyValidator(validator=TextLengthValidator.class, minLength=2))
     private String firstName;
 
     @Column(name = "second_name")
-    @Property(title="Second Name", validationType=ValidationType.REQUIRED)
+    @Property(title="Second Name")
     private String secondName;
 
     @Column(name = "last_name", nullable = false)
-    @Property(title="Last Name", validationType=ValidationType.REQUIRED)
+    @Property(title="Last Name")
     private String lastName;
 
     @Column(name = "extra_name")
@@ -76,7 +79,7 @@ public class Person
     private String extraName;
 
     @Column(name = "personal_unique_id")
-    @Property(title="Unique Id", validationType=ValidationType.REQUIRED)
+    @Property(title="Unique Id")
     private String personalUniqueId;
 
     @Column(name = "birth_date")
