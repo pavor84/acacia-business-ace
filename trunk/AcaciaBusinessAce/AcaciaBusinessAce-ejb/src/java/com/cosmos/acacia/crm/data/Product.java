@@ -6,8 +6,9 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.beansbinding.validation.RequiredValidator;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -65,7 +66,8 @@ public class Product
     private ProductCategory category;
 
     @Column(name = "product_name", nullable = false)
-    @Property(title="Product Name", validationType=ValidationType.REQUIRED, validationRegex="[a-zA-Z]+")
+    @Property(title="Product Name",
+            propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private String productName;
 
     @Column(name = "product_code", nullable = false)

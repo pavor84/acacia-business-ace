@@ -6,7 +6,8 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.beansbinding.validation.RequiredValidator;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -50,12 +51,14 @@ public class Invoice extends DataObjectBean implements Serializable {
     private String branchName;
 
     @Column(name = "invoice_number", nullable = false)
-    @Property(title="Number", validationType=ValidationType.REQUIRED, validationRegex="[1-9]+")
+    @Property(title="Number",
+            propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private long invoiceNumber;
 
     @Column(name = "invoice_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    @Property(title="Date", validationType=ValidationType.DATE, validationRegex="[1-9]+")
+    @Property(title="Date",
+            propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private Date invoiceDate;
 
     @JoinColumn(name = "recipient_id", referencedColumnName = "data_object_link_id")
