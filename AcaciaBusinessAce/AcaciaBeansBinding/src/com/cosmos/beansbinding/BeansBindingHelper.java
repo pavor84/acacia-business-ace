@@ -6,10 +6,19 @@
 package com.cosmos.beansbinding;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.beansbinding.validation.DateRangeValidator;
+import com.cosmos.beansbinding.validation.DateValidator;
+import com.cosmos.beansbinding.validation.NoneValidator;
+import com.cosmos.beansbinding.validation.NumericRangeValidator;
+import com.cosmos.beansbinding.validation.RegexValidator;
+import com.cosmos.beansbinding.validation.RequiredValidator;
+import com.cosmos.beansbinding.validation.TextLengthValidator;
 import com.cosmos.util.ClassHelper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -17,6 +26,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import org.jdesktop.beansbinding.Validator;
 
 
 /**
@@ -62,24 +72,79 @@ public class BeansBindingHelper {
                 pd.setEditable(property.editable());
                 pd.setVisible(property.visible());
                 pd.setHiden(property.hidden());
+
                 /* Setting validation-related values */
-                pd.setValidationType(property.validationType());
-                pd.setValidationEvent(property.validationEvent());
-                pd.setValidationRangeStart(property.validationRangeStart());
-                pd.setValidationRangeEnd(property.validationRangeEnd());
-                pd.setValidationCustomMethod(property.validationCustomMethod());
-                pd.setValidationRegex(property.validationRegex());
-                pd.setValidationTooltip(property.validationTooltip());
-                
-                /* Automatic regex validation for integer and floating fields */
-                String type = field.getType().getName();
-                if (isInteger(type)){
-                    pd.setValidationRegex("[0-9]+");
+                PropertyValidator propertyValidator = property.propertyValidator();
+                Class validatorClass = propertyValidator.validator();
+                if(!NoneValidator.class.equals(validatorClass))
+                {
+                    Validator validator;
+                    try
+                    {
+                        validator = (Validator)validatorClass.newInstance();
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new RuntimeException(ex);
+                    }
+                    if(validator instanceof DateValidator)
+                    {
+                        String strValue = propertyValidator.datePattern();
+                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                            ((DateValidator)validator).setDatePattern(strValue);
+
+                        if(validator instanceof DateRangeValidator)
+                        {
+                            DateRangeValidator rangeValidator = (DateRangeValidator)validator;
+                            strValue = propertyValidator.fromDate();
+                            if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                            {
+                                Date date = now(strValue);
+                                if(date != null)
+                                    rangeValidator.setFromDate(date);
+                                else
+                                    rangeValidator.setFromDate(strValue);
+                            }
+
+                            strValue = propertyValidator.toDate();
+                            if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                            {
+                                Date date = now(strValue);
+                                if(date != null)
+                                    rangeValidator.setToDate(date);
+                                else
+                                    rangeValidator.setToDate(strValue);
+                            }
+                        }
+                    }
+                    else if(validator instanceof NumericRangeValidator)
+                    {
+                        NumericRangeValidator rangeValidator = (NumericRangeValidator)validator;
+                        rangeValidator.setMaxValue(propertyValidator.maxValue());
+                        rangeValidator.setMinValue(propertyValidator.minValue());
+                    }
+                    else if(validator instanceof TextLengthValidator)
+                    {
+                        TextLengthValidator rangeValidator = (TextLengthValidator)validator;
+                        rangeValidator.setMaxLength(propertyValidator.maxLength());
+                        rangeValidator.setMinLength(propertyValidator.minLength());
+                    }
+                    else if(validator instanceof RegexValidator)
+                    {
+                        String strValue = propertyValidator.regex();
+                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                        {
+                            ((RegexValidator)validator).setPattern(strValue);
+                        }
+                    }
+
+                    String strValue = propertyValidator.tooltip();
+                    if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                        ((RequiredValidator)validator).setTooltip(strValue);
+
+                    pd.setValidator(validator);
                 }
-                if (isDecimal(type)){
-                    pd.setValidationRegex("[0-9\\.]+");
-                }
-                
+
                 Object value = property.sourceUnreadableValue();
                 if(!Property.NULL.equals(value))
                     pd.setSourceUnreadableValue(value);
@@ -104,7 +169,16 @@ public class BeansBindingHelper {
                     pd.setEditable(false);
                     pd.setVisible(false);
                     pd.setHiden(true);
+                    pd.setRequired(true);
                 }
+
+                if(!pd.isRequired() && column != null && !column.nullable())
+                {
+                    pd.setRequired(true);
+                }
+
+                if(pd.getValidator() == null && pd.isRequired())
+                    pd.setValidator(new RequiredValidator());
 
                 properties.add(pd);
             }
@@ -115,16 +189,11 @@ public class BeansBindingHelper {
         return entityProperties;
     }
 
-    private static boolean isInteger(String type){
-        return (type.contains("int") || type.contains("Integer")
-                    || type.contains("long") || type.contains("Long") 
-                    || type.contains("short") || type.contains("Short")
-                    || type.contains("byte") || type.contains("Byte"));
-    }
-    
-    private static boolean isDecimal(String type){
-        return (type.contains("float") || type.contains("Float")
-                    || type.contains("double") || type.contains("double") 
-                    || type.contains("Decimal"));
+    private static Date now(String now)
+    {
+        if("now".equalsIgnoreCase(now) || "now()".equalsIgnoreCase(now))
+            return new Date();
+
+        return null;
     }
 }
