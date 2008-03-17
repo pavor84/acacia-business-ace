@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb;
 
+import com.cosmos.beansbinding.PropertyDetails;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,7 +62,38 @@ public class JBComboBox
         setRenderer(new BeanListCellRenderer(application.getClass()));
     }
 
-    public JComboBoxBinding bind(BindingGroup bindingGroup,
+    public Binding bind(
+            BindingGroup bindingGroup,
+            List data,
+            Object beanEntity,
+            PropertyDetails propertyDetails)
+    {
+        return bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+
+    public Binding bind(
+            BindingGroup bindingGroup,
+            List data,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy)
+    {
+        if(propertyDetails == null || propertyDetails.isHiden())
+        {
+            setEditable(false);
+            setEnabled(false);
+            return null;
+        }
+        
+        Binding binding = bind(bindingGroup, data, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        setEditable(propertyDetails.isEditable());
+        setEnabled(!propertyDetails.isReadOnly());
+
+        return binding;
+    }
+
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
             List data,
             Object beanEntity,
             String propertyName)
@@ -69,7 +101,8 @@ public class JBComboBox
         return bind(bindingGroup, data, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
-    public JComboBoxBinding bind(BindingGroup bindingGroup,
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
             List data,
             Object beanEntity,
             String propertyName,
