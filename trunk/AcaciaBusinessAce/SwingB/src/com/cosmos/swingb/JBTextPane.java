@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb;
 
+import com.cosmos.beansbinding.PropertyDetails;
 import javax.swing.JTextPane;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -23,6 +24,34 @@ public class JBTextPane
     private String propertyName;
     private Object beanEntity;
 
+
+    public Binding bind(
+            BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails)
+    {
+        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+
+    public Binding bind(
+            BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy)
+    {
+        if(propertyDetails == null || propertyDetails.isHiden())
+        {
+            setEditable(false);
+            setEnabled(false);
+            return null;
+        }
+        
+        Binding binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        setEditable(propertyDetails.isEditable());
+        setEnabled(!propertyDetails.isReadOnly());
+
+        return binding;
+    }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,

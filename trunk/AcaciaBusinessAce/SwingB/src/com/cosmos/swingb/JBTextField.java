@@ -5,33 +5,131 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.swingb.validation.TextFieldValidator;
-import com.cosmos.swingb.validation.Validator;
 import java.awt.Color;
-import java.awt.Event;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JTextField;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.beansbinding.Validator;
 
 /**
  *
  * @author Miro
  */
+public class JBTextField
+    extends JTextField
+{
+    private Binding binding;
+    private String propertyName;
+    private Object beanEntity;
+
+    public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails)
+    {
+        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+
+    public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy)
+    {
+        if(propertyDetails == null || propertyDetails.isHiden())
+        {
+            setEditable(false);
+            setEnabled(false);
+            return null;
+        }
+        
+        bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        setEditable(propertyDetails.isEditable());
+        setEnabled(!propertyDetails.isReadOnly());
+
+        Validator validator = propertyDetails.getValidator();
+        if(validator != null)
+        {
+            binding.setValidator(validator);
+            binding.addBindingListener(new BindingValidationListener());
+        }
+        
+        return binding;
+    }
+
+    private Binding bind(
+            BindingGroup bindingGroup,
+            Object beanEntity,
+            String propertyName,
+            AutoBinding.UpdateStrategy updateStrategy)
+    {
+        this.propertyName = propertyName;
+        this.beanEntity = beanEntity;
+
+        ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
+        BeanProperty beanProperty = BeanProperty.create("text");
+        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
+        bindingGroup.addBinding(binding);
+
+        return binding;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public Object getBeanEntity() {
+        return beanEntity;
+    }
+
+    public class BindingValidationListener
+        extends AbstractBindingListener
+    {
+
+        @Override
+        public void bindingBecameBound(Binding binding) {
+            System.out.println("bindingBecameBound.binding: " + binding);
+            isValid(binding);
+        }
+
+        @Override
+        public void targetChanged(Binding binding, PropertyStateEvent event) {
+            super.targetChanged(binding, event);
+            System.out.println("targetChanged.binding: " + binding + ", event: " + event);
+            isValid(binding);
+        }
+
+        public boolean isValid(Binding binding)
+        {
+            Validator validator = binding.getValidator();
+            if(validator != null)
+            {
+                JBTextField textField = (JBTextField)binding.getTargetObject();
+
+                Validator.Result validateResult = validator.validate(textField.getText());
+                if(validateResult != null)
+                {
+                    setBackground(Color.PINK);
+                    System.out.println("validateResult: " + validateResult);
+                    return false;
+                }
+                else
+                {
+                    setBackground(Color.GREEN);
+                }
+            }
+
+            return true;
+        }
+    }
+}
+
+/* r176, 2008-03-16, Bozhidar Bozhanov
 public class JBTextField
     extends JTextField
 {
@@ -197,3 +295,5 @@ public class JBTextField
             setNormal();
     }
 }
+
+ */
