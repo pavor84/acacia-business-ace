@@ -90,41 +90,26 @@ public class JBTextField
     public class BindingValidationListener
         extends AbstractBindingListener
     {
-
         @Override
         public void bindingBecameBound(Binding binding) {
-            System.out.println("bindingBecameBound.binding: " + binding);
-            isValid(binding);
+            validate(binding);
         }
 
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
-            super.targetChanged(binding, event);
-            System.out.println("targetChanged.binding: " + binding + ", event: " + event);
-            isValid(binding);
+            validate(binding);
         }
 
-        public boolean isValid(Binding binding)
+        public void validate(Binding binding)
         {
-            Validator validator = binding.getValidator();
-            if(validator != null)
+            if(binding.isContentValid())
             {
-                JBTextField textField = (JBTextField)binding.getTargetObject();
-
-                Validator.Result validateResult = validator.validate(textField.getText());
-                if(validateResult != null)
-                {
-                    setBackground(Color.PINK);
-                    System.out.println("validateResult: " + validateResult);
-                    return false;
-                }
-                else
-                {
-                    setBackground(Color.GREEN);
-                }
+                setBackground(Color.GREEN);
             }
-
-            return true;
+            else
+            {
+                setBackground(Color.PINK);
+            }
         }
     }
 }
