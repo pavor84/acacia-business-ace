@@ -24,7 +24,6 @@ public class RequiredValidator
     @Override
     public Result validate(Object value)
     {
-        System.out.println("RequiredValidator.validate: " + value);
         if(value == null)
             return EMPTY_VALUE;
 
