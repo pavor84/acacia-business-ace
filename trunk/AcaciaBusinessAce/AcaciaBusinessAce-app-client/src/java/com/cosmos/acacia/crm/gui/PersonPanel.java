@@ -7,27 +7,27 @@
 package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.bl.impl.PersonsListRemote;
-import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.swing.plaf.DimensionUIResource;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
@@ -73,6 +73,10 @@ public class PersonPanel extends AcaciaPanel {
         secondNameTextField = new com.cosmos.swingb.JBTextField();
         lastNameTextField = new com.cosmos.swingb.JBTextField();
         extraNameTextField = new com.cosmos.swingb.JBTextField();
+        genderLabel = new javax.swing.JLabel();
+        genderRadioGroup = new com.cosmos.swingb.JBRadioGroup();
+        maleRadioButton = new com.cosmos.swingb.JBRadioButton();
+        femaleRadioButton = new com.cosmos.swingb.JBRadioButton();
         birthDataPanel = new com.cosmos.swingb.JBPanel();
         personalUniqueIdLabel = new javax.swing.JLabel();
         birthdateLabel = new javax.swing.JLabel();
@@ -83,8 +87,6 @@ public class PersonPanel extends AcaciaPanel {
         birthPlaceCityComboBox = new com.cosmos.swingb.JBComboBox();
         birthdateDatePicker = new com.cosmos.swingb.JBDatePicker();
         addressesPanel = new com.cosmos.swingb.JBPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        addressesTable = new com.cosmos.acacia.gui.AcaciaTable();
         passportsPanel = new com.cosmos.swingb.JBPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         passportsTable = new com.cosmos.acacia.gui.AcaciaTable();
@@ -122,6 +124,35 @@ public class PersonPanel extends AcaciaPanel {
 
         extraNameTextField.setName("extraNameTextField"); // NOI18N
 
+        genderLabel.setText(resourceMap.getString("genderLabel.text")); // NOI18N
+        genderLabel.setName("genderLabel"); // NOI18N
+
+        genderRadioGroup.setName("genderRadioGroup"); // NOI18N
+
+        maleRadioButton.setText(resourceMap.getString("maleRadioButton.text")); // NOI18N
+        maleRadioButton.setName("maleRadioButton"); // NOI18N
+
+        femaleRadioButton.setText(resourceMap.getString("femaleRadioButton.text")); // NOI18N
+        femaleRadioButton.setName("femaleRadioButton"); // NOI18N
+
+        javax.swing.GroupLayout genderRadioGroupLayout = new javax.swing.GroupLayout(genderRadioGroup);
+        genderRadioGroup.setLayout(genderRadioGroupLayout);
+        genderRadioGroupLayout.setHorizontalGroup(
+            genderRadioGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(genderRadioGroupLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(maleRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(femaleRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(63, Short.MAX_VALUE))
+        );
+        genderRadioGroupLayout.setVerticalGroup(
+            genderRadioGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(genderRadioGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(femaleRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(maleRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout personalDataPanelLayout = new javax.swing.GroupLayout(personalDataPanel);
         personalDataPanel.setLayout(personalDataPanelLayout);
         personalDataPanelLayout.setHorizontalGroup(
@@ -132,13 +163,15 @@ public class PersonPanel extends AcaciaPanel {
                     .addComponent(firstNameLabel)
                     .addComponent(secondNameLabel)
                     .addComponent(lastNameLabel)
-                    .addComponent(extraNameLabel))
+                    .addComponent(extraNameLabel)
+                    .addComponent(genderLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(secondNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(extraNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(genderRadioGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(firstNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(secondNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                    .addComponent(lastNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
+                    .addComponent(extraNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -146,7 +179,11 @@ public class PersonPanel extends AcaciaPanel {
 
         personalDataPanelLayout.setVerticalGroup(
             personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(personalDataPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, personalDataPanelLayout.createSequentialGroup()
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(genderLabel)
+                    .addComponent(genderRadioGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(firstNameLabel)
                     .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -161,8 +198,7 @@ public class PersonPanel extends AcaciaPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(extraNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(extraNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(extraNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         birthDataPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("birthDataPanel.border.title"))); // NOI18N
@@ -209,7 +245,7 @@ public class PersonPanel extends AcaciaPanel {
                     .addGroup(birthDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(cityLabel)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(personalUniqueIdTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                     .addComponent(birthPlaceCountryComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
@@ -238,43 +274,22 @@ public class PersonPanel extends AcaciaPanel {
                 .addGroup(birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(birthPlaceCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         addressesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("addressesPanel.border.title"))); // NOI18N
         addressesPanel.setName("addressesPanel"); // NOI18N
         addressesPanel.setTitle(resourceMap.getString("addressesPanel.title")); // NOI18N
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        addressesTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        addressesTable.setName("addressesTable"); // NOI18N
-        jScrollPane1.setViewportView(addressesTable);
-
         javax.swing.GroupLayout addressesPanelLayout = new javax.swing.GroupLayout(addressesPanel);
         addressesPanel.setLayout(addressesPanelLayout);
         addressesPanelLayout.setHorizontalGroup(
             addressesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addressesPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 325, Short.MAX_VALUE)
         );
         addressesPanelLayout.setVerticalGroup(
             addressesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addressesPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 161, Short.MAX_VALUE)
         );
 
         passportsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("passportsPanel.border.title"))); // NOI18N
@@ -309,7 +324,7 @@ public class PersonPanel extends AcaciaPanel {
         passportsPanelLayout.setVerticalGroup(
             passportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(passportsPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -338,7 +353,7 @@ public class PersonPanel extends AcaciaPanel {
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -358,7 +373,7 @@ public class PersonPanel extends AcaciaPanel {
         descriptionPanel.setLayout(descriptionPanelLayout);
         descriptionPanelLayout.setHorizontalGroup(
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(descriptionPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, descriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
                 .addContainerGap())
@@ -366,7 +381,7 @@ public class PersonPanel extends AcaciaPanel {
         descriptionPanelLayout.setVerticalGroup(
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(descriptionPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -377,16 +392,16 @@ public class PersonPanel extends AcaciaPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(personalDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(addressesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(personalDataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(11, 11, 11)
-                        .addComponent(birthDataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(addressesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(passportsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(passportsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                            .addComponent(birthDataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -394,23 +409,23 @@ public class PersonPanel extends AcaciaPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(personalDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(birthDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(personalDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(birthDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addressesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passportsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passportsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addressesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel addressesPanel;
-    private com.cosmos.acacia.gui.AcaciaTable addressesTable;
     private com.cosmos.swingb.JBPanel birthDataPanel;
     private com.cosmos.swingb.JBComboBox birthPlaceCityComboBox;
     private com.cosmos.swingb.JBComboBox birthPlaceCountryComboBox;
@@ -424,13 +439,16 @@ public class PersonPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private javax.swing.JLabel extraNameLabel;
     private com.cosmos.swingb.JBTextField extraNameTextField;
+    private com.cosmos.swingb.JBRadioButton femaleRadioButton;
     private javax.swing.JLabel firstNameLabel;
     private com.cosmos.swingb.JBTextField firstNameTextField;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel genderLabel;
+    private com.cosmos.swingb.JBRadioGroup genderRadioGroup;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lastNameLabel;
     private com.cosmos.swingb.JBTextField lastNameTextField;
+    private com.cosmos.swingb.JBRadioButton maleRadioButton;
     private com.cosmos.swingb.JBPanel passportsPanel;
     private com.cosmos.acacia.gui.AcaciaTable passportsTable;
     private com.cosmos.swingb.JBPanel personalDataPanel;
@@ -459,6 +477,8 @@ public class PersonPanel extends AcaciaPanel {
 
         EntityProperties entityProps = getPersonEntityProperties();
 
+        //genderRadioGroup.bind..
+        
         firstNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("firstName"));
         secondNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("secondName"));
         lastNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("lastName"));
@@ -471,8 +491,19 @@ public class PersonPanel extends AcaciaPanel {
         
         descriptionTextPane.bind(personBindingGroup, person, "desceription");
         
-        JTableBinding addressesTableBinding = addressesTable.bind(personBindingGroup, getAddresses(), getAddressEntityProperties());
-        JTableBinding passportsTableBinding = passportsTable.bind(personBindingGroup, getPassports(), getPassportEntityProperties());
+        // Using an AbstractTablePanel implementation
+        AddressListPanel addressesTable = new AddressListPanel(getParentDataObject());
+        addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
+        addressesTable.setButtonsTextVisibility(false);
+
+        int offset = 3;
+        addressesPanel.setPreferredSize(new Dimension(
+                (int) addressesPanel.getPreferredSize().getWidth() - offset, 
+                (int) addressesPanel.getPreferredSize().getHeight() - offset));
+        addressesPanel.setLayout(new BorderLayout());
+        addressesPanel.add(addressesTable);
+        
+        //JTableBinding passportsTableBinding = passportsTable.bind(personBindingGroup, getPassports(), getPassportEntityProperties());
         personBindingGroup.bind();
     }
 
@@ -554,15 +585,5 @@ public class PersonPanel extends AcaciaPanel {
     private List<City> getCities()
     {
         return getFormSession().getCities();
-    }
-
-    public List<Address> getAddresses()
-    {
-        return getFormSession().getAddresses(getParentDataObject());
-    }
-
-    public List<Passport> getPassports()
-    {
-        return getFormSession().getPassports(getParentDataObject());
     }
 }
