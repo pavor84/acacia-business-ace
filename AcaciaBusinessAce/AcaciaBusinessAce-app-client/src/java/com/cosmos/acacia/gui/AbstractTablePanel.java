@@ -317,7 +317,7 @@ public abstract class AbstractTablePanel
         }
     }
     
-    public void setButtonsTextVisibility(boolean visible){
+    /*public void setButtonsTextVisibility(boolean visible){
         selectButton.setToolTipText(selectButton.getText());
         selectButton.setText("");
         
@@ -335,7 +335,7 @@ public abstract class AbstractTablePanel
         
         closeButton.setToolTipText(closeButton.getText());
         closeButton.setText("");
-    }
+    }*/
     
     @Action
     public void selectAction() {

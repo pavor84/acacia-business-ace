@@ -27,10 +27,17 @@ import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.ApplicationAction;
+import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
@@ -72,7 +79,7 @@ public class ProductPanel extends AcaciaPanel {
         measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         productCategoryLabel = new com.cosmos.swingb.JBLabel();
         buttonPanel = new com.cosmos.swingb.JBPanel();
-        closelButton = new com.cosmos.swingb.JBButton();
+        closeButton = new com.cosmos.swingb.JBButton();
         saveButton = new com.cosmos.swingb.JBButton();
         productCategoryComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         measureUnitLabel = new com.cosmos.swingb.JBLabel();
@@ -146,8 +153,8 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanel.setName("buttonPanel"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(ProductPanel.class, this);
-        closelButton.setAction(actionMap.get("closeAction")); // NOI18N
-        closelButton.setName("closelButton"); // NOI18N
+        closeButton.setAction(actionMap.get("closeAction")); // NOI18N
+        closeButton.setName("closeButton"); // NOI18N
 
         saveButton.setAction(actionMap.get("saveAction")); // NOI18N
         saveButton.setName("saveButton"); // NOI18N
@@ -157,26 +164,26 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(480, Short.MAX_VALUE)
+                .addContainerGap(536, Short.MAX_VALUE)
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(closelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closelButton, saveButton});
+        buttonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closeButton, saveButton});
 
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        buttonPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closelButton, saveButton});
+        buttonPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, saveButton});
 
         productCategoryComboBox.setName("productCategoryComboBox"); // NOI18N
 
@@ -243,15 +250,15 @@ public class ProductPanel extends AcaciaPanel {
                 .addContainerGap()
                 .addComponent(minQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
-                .addComponent(minQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(minQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                 .addGap(54, 54, 54)
                 .addComponent(defaultQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(defaultQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(defaultQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                 .addGap(74, 74, 74)
                 .addComponent(maxQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(maxQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(maxQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                 .addContainerGap())
         );
         quantitiesOnStockPanelLayout.setVerticalGroup(
@@ -297,15 +304,15 @@ public class ProductPanel extends AcaciaPanel {
                 .addContainerGap()
                 .addComponent(purchasePriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(purchasePriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(purchasePriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                 .addGap(63, 63, 63)
                 .addComponent(salesPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(salesPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(salesPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                 .addGap(81, 81, 81)
                 .addComponent(listPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(listPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(listPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pricesPanelLayout.setVerticalGroup(
@@ -369,7 +376,7 @@ public class ProductPanel extends AcaciaPanel {
                 .addGap(18, 18, 18)
                 .addComponent(dimensionLengthLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionLengthTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                .addComponent(dimensionLengthTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(dimensionHeightLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -430,7 +437,7 @@ public class ProductPanel extends AcaciaPanel {
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(descriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(descriptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                .addComponent(descriptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionPanelLayout.setVerticalGroup(
@@ -462,9 +469,9 @@ public class ProductPanel extends AcaciaPanel {
                             .addComponent(productColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                                .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -478,13 +485,13 @@ public class ProductPanel extends AcaciaPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(obsoleteProductCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(newProductCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(productColorComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
-                                    .addComponent(patternMaskFormatComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
+                                    .addComponent(productColorComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                                    .addComponent(patternMaskFormatComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(newPatternMaskFormatButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -518,7 +525,7 @@ public class ProductPanel extends AcaciaPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(deliveryTimeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(producerComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                                .addComponent(producerComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(newProducerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
@@ -594,7 +601,7 @@ public class ProductPanel extends AcaciaPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonPanel;
-    private com.cosmos.swingb.JBButton closelButton;
+    private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBCheckBox complexProductCheckBox;
     private com.cosmos.swingb.JBLabel defaultQuantityLabel;
     private com.cosmos.swingb.JBTextField defaultQuantityTextField;
@@ -738,6 +745,22 @@ public class ProductPanel extends AcaciaPanel {
         descriptionTextPane.bind(productBindingGroup, product, propDetails);
 
         productBindingGroup.bind();
+
+        setSaveActionState();
+
+        productBindingGroup.addBindingListener(new AbstractBindingListener()
+        {
+
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                setSaveActionState();
+            }
+        });
+    }
+
+    protected void setSaveActionState()
+    {
+        setEnabled(Button.Save, productBindingGroup.isContentValid());
     }
 
     protected ProductsListRemote getFormSession()
@@ -788,6 +811,25 @@ public class ProductPanel extends AcaciaPanel {
 
     @Action
     public void closeAction() {
+        if(productBindingGroup.isContentChanged())
+        {
+            ResourceMap resource = getResourceMap();
+            String title = resource.getString("closeAction.ConfirmDialog.unsavedData.title");
+            String message = resource.getString("closeAction.ConfirmDialog.unsavedData.message");
+            Icon icon = resource.getImageIcon("closeAction.ConfirmDialog.unsavedData.icon");
+            int result = JOptionPane.showConfirmDialog(
+                    this.getParent(),
+                    message,
+                    title,
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    icon);
+            if(JOptionPane.YES_OPTION != result)
+            {
+                return;
+            }
+        }
+
         setDialogResponse(DialogResponse.CLOSE);
         close();
     }
@@ -853,6 +895,84 @@ public class ProductPanel extends AcaciaPanel {
 
     @Action
     public void newProducer() {
+    }
+
+
+
+    public enum Button
+    {
+        Save("saveAction"),
+        Close("closeAction");
+
+        private Button(String actionName)
+        {
+            this.actionName = actionName;
+        }
+
+        private String actionName;
+
+        public String getActionName() {
+            return actionName;
+        }
+    };
+
+    public javax.swing.Action getAction(Button button)
+    {
+        ApplicationActionMap actionMap = getApplicationActionMap();
+        if(actionMap != null && button != null)
+        {
+            return actionMap.get(button.getActionName());
+        }
+
+        return null;
+    }
+
+    public void setEnabled(Button button, boolean enabled) {
+        ApplicationAction action = (ApplicationAction)getAction(button);
+        if(action != null)
+        {
+            action.setEnabled(enabled);
+        }
+    }
+
+    public void setSelected(Button button, boolean enabled) {
+        ApplicationAction action = (ApplicationAction)getAction(button);
+        if(action != null)
+        {
+            action.setSelected(enabled);
+        }
+    }
+
+    public void setVisible(Button button, boolean visible) {       
+        switch(button)
+        {
+            case Save:
+                saveButton.setVisible(visible);
+                break;
+
+            case Close:
+                closeButton.setVisible(visible);
+                break;
+        }
+    }
+
+    public boolean isVisible(Button button) {
+        switch(button)
+        {
+            case Save:
+                return saveButton.isVisible();
+
+            case Close:
+                return closeButton.isVisible();
+        }
+
+        throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
+    }
+
+    @Override
+    protected Class getResourceStopClass()
+    {
+        return ProductPanel.class;
     }
 }
 

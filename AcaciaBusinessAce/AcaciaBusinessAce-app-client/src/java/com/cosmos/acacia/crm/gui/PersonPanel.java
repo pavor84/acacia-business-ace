@@ -494,7 +494,7 @@ public class PersonPanel extends AcaciaPanel {
         // Using an AbstractTablePanel implementation
         AddressListPanel addressesTable = new AddressListPanel(getParentDataObject());
         addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
-        addressesTable.setButtonsTextVisibility(false);
+        //addressesTable.setButtonsTextVisibility(false);
 
         int offset = 3;
         addressesPanel.setPreferredSize(new Dimension(

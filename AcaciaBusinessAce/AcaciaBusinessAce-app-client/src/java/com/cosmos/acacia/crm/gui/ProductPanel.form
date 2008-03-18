@@ -240,7 +240,7 @@
                   <EmptySpace pref="536" max="32767" attributes="0"/>
                   <Component id="saveButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="closelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="closeButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -250,7 +250,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="closelButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="closeButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="saveButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -259,12 +259,12 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.cosmos.swingb.JBButton" name="closelButton">
+        <Component class="com.cosmos.swingb.JBButton" name="closeButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="closeAction" methodName="closeAction"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="closelButton" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="closeButton" noResource="true"/>
           </Properties>
         </Component>
         <Component class="com.cosmos.swingb.JBButton" name="saveButton">
