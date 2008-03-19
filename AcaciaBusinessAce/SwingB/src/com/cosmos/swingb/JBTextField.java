@@ -108,9 +108,13 @@ public class JBTextField
             }
             else
             {
-                setBackground(Color.PINK);
+                setStyleInvalid();
             }
         }
+    }
+
+    public void setStyleInvalid() {
+        setBackground(Color.PINK);
     }
 }
 
