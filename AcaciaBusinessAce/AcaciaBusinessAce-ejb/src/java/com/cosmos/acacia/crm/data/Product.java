@@ -42,6 +42,24 @@ import javax.persistence.Table;
             (
                 name = "Product.findByParentDataObjectIsNullAndDeleted",
                 query = "select p from Product p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                /**
+                 * Parameters:
+                 * - productName - find all undeleted products with the same name (at most one should exist)
+                 */
+                name = "Product.findByProductName",
+                query = "select p from Product p where p.productName like :productName and p.dataObject.deleted = false"
+            ),
+        @NamedQuery
+            (
+                /**
+                 * Parameters:
+                 * - productCode - find all undeleted products with the same code (at most one should exist)
+                 */
+                name = "Product.findByProductCode",
+                query = "select p from Product p where p.productCode like :productCode and p.dataObject.deleted = false"
             )
     })
 public class Product
