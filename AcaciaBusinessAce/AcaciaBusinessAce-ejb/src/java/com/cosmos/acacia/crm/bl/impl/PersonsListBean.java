@@ -111,7 +111,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
 
     public EntityProperties getAddressEntityProperties() {
-       return locationsManager.getAddressesEntityProperties();
+       return locationsManager.getAddressEntityProperties();
     }
 
     public EntityProperties getPassportEntityProperties() {

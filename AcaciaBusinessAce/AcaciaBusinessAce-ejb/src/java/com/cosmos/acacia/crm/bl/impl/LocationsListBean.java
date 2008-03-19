@@ -44,7 +44,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return new ArrayList<Country>(q.getResultList());
     }
 
-    public EntityProperties getCountriesEntityProperties()
+    public EntityProperties getCountryEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(Country.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
@@ -71,7 +71,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return new ArrayList<City>(q.getResultList());
     }
 
-    public EntityProperties getCitiesEntityProperties() {
+    public EntityProperties getCityEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(City.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
@@ -95,7 +95,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return new ArrayList<Address>();
     }
 
-    public EntityProperties getAddressesEntityProperties() {
+    public EntityProperties getAddressEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(Address.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
