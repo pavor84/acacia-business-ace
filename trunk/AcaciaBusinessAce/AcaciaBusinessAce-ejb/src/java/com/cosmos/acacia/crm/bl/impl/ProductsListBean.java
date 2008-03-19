@@ -5,21 +5,26 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.crm.enums.MeasurementUnit;
-import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.validation.impl.ProductValidatorLocal;
+import com.cosmos.beansbinding.EntityProperties;
 
 /**
  *
@@ -35,6 +40,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private EntityStoreManagerLocal esm;
     @EJB
     private DatabaseResourceLocal databaseResource;
+    @EJB
+    private ProductValidatorLocal productValidator;
 
     @PostConstruct
     private void postConstruct()
@@ -117,8 +124,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     }
 
     public Product saveProduct(Product product) {
+         
+        productValidator.validate(product); 
+           
         esm.persist(em, product);
-        return product;
+        return product; 
     }
 
     public int deleteProduct(Product product) {
@@ -132,6 +142,4 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     public List<DbResource> getMeasureUnits(MeasurementUnit.Category category) {
         return MeasurementUnit.getDbResourcesByCategory(category);
     }
-
-
 }

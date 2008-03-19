@@ -199,7 +199,7 @@ public class JBComboBox
     public void setRequired(boolean required) {
         this.required = required;
         if (required){
-            setBackground(Color.PINK);
+            setStyleInvalid();
             validationListener = new ActionListener(){
 
                 public void actionPerformed(ActionEvent e) {
@@ -212,5 +212,9 @@ public class JBComboBox
         } else if (validationListener != null) {
             removeActionListener(validationListener);
         }
+    }
+
+    public void setStyleInvalid() {
+        setBackground(Color.PINK);
     }
 }
