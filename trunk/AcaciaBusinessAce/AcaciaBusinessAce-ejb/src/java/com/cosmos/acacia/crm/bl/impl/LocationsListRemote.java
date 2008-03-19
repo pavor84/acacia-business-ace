@@ -27,7 +27,7 @@ public interface LocationsListRemote {
     // Methods for handling countries
     List<Country> getCountries();
 
-    EntityProperties getCountriesEntityProperties();
+    EntityProperties getCountryEntityProperties();
 
     Country newCountry();
 
@@ -39,7 +39,7 @@ public interface LocationsListRemote {
     // Methods for handling cities
     List<City> getCities();
 
-    EntityProperties getCitiesEntityProperties();
+    EntityProperties getCityEntityProperties();
 
     City newCity();
 
@@ -51,7 +51,7 @@ public interface LocationsListRemote {
     // Methods for handling addresses/branches
     List<Address> getAddresses(DataObject parent);
 
-    EntityProperties getAddressesEntityProperties();
+    EntityProperties getAddressEntityProperties();
 
     Address newAddress();
 
