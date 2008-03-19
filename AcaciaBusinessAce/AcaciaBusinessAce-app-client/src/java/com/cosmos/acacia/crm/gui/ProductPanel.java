@@ -6,30 +6,22 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.crm.enums.MeasurementUnit;
-import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.resource.BeanResource;
-import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBErrorPane;
-import java.awt.Component;
+import java.rmi.RemoteException;
+import java.rmi.ServerException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
+
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.naming.InitialContext;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
+
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
@@ -39,6 +31,22 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingx.error.ErrorInfo;
+
+import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBErrorPane;
+import com.cosmos.swingb.JBTextField;
 
 /**
  *
@@ -751,6 +759,7 @@ public class ProductPanel extends AcaciaPanel {
         productBindingGroup.addBindingListener(new AbstractBindingListener()
         {
 
+            @SuppressWarnings("unchecked")
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
                 setSaveActionState();
@@ -792,21 +801,116 @@ public class ProductPanel extends AcaciaPanel {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
-            // TODO: Log that error
-            ResourceMap resource = getResourceMap();
-            String title = resource.getString("saveAction.Action.error.title");
-            String basicMessage = resource.getString("saveAction.Action.error.basicMessage", ex.getMessage());
-            String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
-            String category = ProductPanel.class.getName() + ": saveAction.";
-            Level errorLevel = Level.WARNING;
-            Map<String, String> state = new HashMap();
-            state.put("productId", String.valueOf(product.getProductId()));
-            state.put("productName", String.valueOf(product.getProductName()));
-            state.put("productCode", String.valueOf(product.getProductCode()));
-            ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
-            JBErrorPane.showDialog(this, errorInfo);
+            ValidationException ve = extractValidationException(ex);
+            if ( ve!=null ){
+                updateFieldsStyle(ve.getMessages());
+                String message = getValidationErrorsMessage(ve);
+                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
+            }else{
+                ex.printStackTrace();
+                // TODO: Log that error
+                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
+                ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
+                JBErrorPane.showDialog(this, errorInfo);
+            }
         }
+    }
+
+    /**
+     * Iterates through all fields and updates there appearance to error state if 
+     * some of the messages is related to their respective property.
+     * 
+     * Note: currently - test support.
+     * @param messages
+     */
+    @SuppressWarnings("unchecked")
+    private void updateFieldsStyle(List<ValidationMessage> messages) {
+        //compose a set for easier and faster lookup
+        productBindingGroup.getBindings();
+        Set<String> errorProperties = new HashSet<String>();
+        for (ValidationMessage msg : messages) {
+            if ( msg.getTarget()!=null ){
+                String el = msg.getTarget();
+                errorProperties.add(el);
+            }
+        }
+        
+        for (Binding binding : productBindingGroup.getBindings()) {
+            if ( binding.getTargetObject() instanceof JBTextField ){
+                JBTextField textField = (JBTextField)binding.getTargetObject();
+                if ( errorProperties.contains(textField.getPropertyName()) )
+                    textField.setStyleInvalid();
+            }else if ( binding.getTargetObject() instanceof JBComboBox){
+                JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
+                if ( errorProperties.contains(comboBox.getPropertyName()) )
+                    comboBox.setStyleInvalid(); 
+            }
+        }
+    }
+
+    /**
+     * Iterate over all validation messages and compose one string - message per line.
+     * @param ve
+     * @return
+     */
+    private String getValidationErrorsMessage(ValidationException ve) {
+        StringBuilder msg = new StringBuilder();
+        for (ValidationMessage validationMessage : ve.getMessages()) {
+            String currentMsg = null;
+            if ( validationMessage.getArguments()!=null )
+                currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
+            else
+                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
+            msg.append(currentMsg+"\n");
+        }
+        return msg.toString();
+    }
+
+    /**
+     * @param basicMessage
+     * @param ex - may be null
+     * @return
+     */
+    private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("saveAction.Action.error.title");
+        
+        String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
+        String category = ProductPanel.class.getName() + ": saveAction.";
+        Level errorLevel = Level.WARNING;
+        
+        Map<String, String> state = new HashMap<String, String>();
+        state.put("productId", String.valueOf(product.getProductId()));
+        state.put("productName", String.valueOf(product.getProductName()));
+        state.put("productCode", String.valueOf(product.getProductCode()));
+        
+        ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
+        return errorInfo;
+    }
+
+    /**
+     * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
+     * an EJB exception. That is way it is a little bit tricky to get it. This method implements this
+     * logic by checking if some of the causes for the main exception is actually a {@link ValidationException}
+     * @param ex
+     * @return - the ValidationException if some 'caused by' exception is {@link ValidationException},
+     * null otherwise
+     */
+    private ValidationException extractValidationException(Exception ex) {
+        Throwable e = ex;
+        while ( e!=null ){
+            if ( e instanceof ValidationException ){
+                return (ValidationException) e;
+            }
+            else if ( e instanceof ServerException || e instanceof RemoteException ){
+                e = e.getCause();
+            }
+            else if ( e instanceof EJBException )
+                e = ((EJBException)e).getCausedByException();
+            else
+                break;
+        }
+        return null;
     }
 
     @Action
@@ -852,33 +956,6 @@ public class ProductPanel extends AcaciaPanel {
     private List<DbResource> getMeasureUnits(MeasurementUnit.Category category)
     {
         return getFormSession().getMeasureUnits(category);
-    }
-
-    private class BeanListCellRenderer
-        extends DefaultListCellRenderer
-    {
-        private BeanResource beanResource = new BeanResource(AcaciaApplication.class);
-
-        @Override
-        public Component getListCellRendererComponent(
-                JList list,
-                Object value,
-                int index,
-                boolean isSelected,
-                boolean cellHasFocus)
-        {
-            Component component;
-            if(value instanceof DbResource)
-            {
-                String valueName = beanResource.getFullName((DbResource)value);
-                component = super.getListCellRendererComponent(list, valueName, index, isSelected, cellHasFocus);
-            }
-            else
-                component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-            return component;
-        }
-
     }
 
     @Action
@@ -969,85 +1046,10 @@ public class ProductPanel extends AcaciaPanel {
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Class getResourceStopClass()
     {
         return ProductPanel.class;
     }
 }
-
-/*
-
-	at com.cosmos.acacia.crm.data.DbResource.toString(DbResource.java:111)
-	at javax.swing.plaf.basic.BasicComboBoxRenderer.getListCellRendererComponent(Unknown Source)
-	at javax.swing.plaf.basic.BasicListUI.updateLayoutState(Unknown Source)
-	at javax.swing.plaf.basic.BasicListUI.maybeUpdateLayoutState(Unknown Source)
-	at javax.swing.plaf.basic.BasicListUI$Handler.valueChanged(Unknown Source)
-	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
-	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
-	at javax.swing.DefaultListSelectionModel.fireValueChanged(Unknown Source)
-	at javax.swing.DefaultListSelectionModel.changeSelection(Unknown Source)
-	at javax.swing.DefaultListSelectionModel.changeSelection(Unknown Source)
-	at javax.swing.DefaultListSelectionModel.setSelectionInterval(Unknown Source)
-	at javax.swing.JList.setSelectedIndex(Unknown Source)
-	at javax.swing.plaf.basic.BasicComboPopup.setListSelection(Unknown Source)
-	at javax.swing.plaf.basic.BasicComboPopup.access$300(Unknown Source)
-	at javax.swing.plaf.basic.BasicComboPopup$Handler.itemStateChanged(Unknown Source)
-	at javax.swing.JComboBox.fireItemStateChanged(Unknown Source)
-	at javax.swing.JComboBox.selectedItemChanged(Unknown Source)
-	at javax.swing.JComboBox.contentsChanged(Unknown Source)
-	at org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel.contentsChanged(JComboBoxBinding.java:372)
-	at org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel.allChanged(JComboBoxBinding.java:324)
-	at org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel.updateElements(JComboBoxBinding.java:294)
-	at org.jdesktop.swingbinding.JComboBoxBinding$Handler.propertyStateChanged(JComboBoxBinding.java:260)
-	at org.jdesktop.beansbinding.PropertyHelper.firePropertyStateChange(PropertyHelper.java:212)
-	at org.jdesktop.swingbinding.ElementsProperty.setValue0(ElementsProperty.java:98)
-	at org.jdesktop.swingbinding.ElementsProperty.setValue(ElementsProperty.java:103)
-	at org.jdesktop.swingbinding.ElementsProperty.setValue(ElementsProperty.java:16)
-	at org.jdesktop.beansbinding.Binding.refreshUnmanaged(Binding.java:1229)
-	at org.jdesktop.beansbinding.Binding.refresh(Binding.java:1207)
-	at org.jdesktop.beansbinding.Binding.refreshAndNotify(Binding.java:1143)
-	at org.jdesktop.beansbinding.AutoBinding.bindImpl(AutoBinding.java:197)
-	at org.jdesktop.swingbinding.JComboBoxBinding.bindImpl(JComboBoxBinding.java:200)
-	at org.jdesktop.beansbinding.Binding.bindUnmanaged(Binding.java:959)
-	at org.jdesktop.beansbinding.Binding.bind(Binding.java:944)
-	at org.jdesktop.beansbinding.BindingGroup.bind(BindingGroup.java:143)
-	at com.cosmos.acacia.crm.gui.ProductPanel.initData(ProductPanel.java:209)
-	at com.cosmos.acacia.crm.gui.ProductPanel.init(ProductPanel.java:60)
-	at com.cosmos.acacia.crm.gui.ProductPanel.<init>(ProductPanel.java:54)
-	at com.cosmos.acacia.crm.gui.ProductsListPanel$ProductsButtonActionsListener.newAction(ProductsListPanel.java:366)
-	at com.cosmos.acacia.gui.CRUDButtonPanel.newAction(CRUDButtonPanel.java:188)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.jdesktop.application.ApplicationAction.noProxyActionPerformed(ApplicationAction.java:662)
-	at org.jdesktop.application.ApplicationAction.actionPerformed(ApplicationAction.java:698)
-	at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
-	at javax.swing.AbstractButton$Handler.actionPerformed(Unknown Source)
-	at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
-	at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
-	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Source)
-	at java.awt.AWTEventMulticaster.mouseReleased(Unknown Source)
-	at java.awt.Component.processMouseEvent(Unknown Source)
-	at javax.swing.JComponent.processMouseEvent(Unknown Source)
-	at java.awt.Component.processEvent(Unknown Source)
-	at java.awt.Container.processEvent(Unknown Source)
-	at java.awt.Component.dispatchEventImpl(Unknown Source)
-	at java.awt.Container.dispatchEventImpl(Unknown Source)
-	at java.awt.Component.dispatchEvent(Unknown Source)
-	at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
-	at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
-	at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
-	at java.awt.Container.dispatchEventImpl(Unknown Source)
-	at java.awt.Window.dispatchEventImpl(Unknown Source)
-	at java.awt.Component.dispatchEvent(Unknown Source)
-	at java.awt.EventQueue.dispatchEvent(Unknown Source)
-	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
-	at java.awt.EventDispatchThread.run(Unknown Source)
-
-*/
