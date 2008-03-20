@@ -13,7 +13,7 @@ import org.jdesktop.beansbinding.Validator;
  * @author Miro
  */
 public class TextLengthValidator
-    extends RequiredValidator
+    extends BaseValidator
     implements Serializable
 {
 
@@ -48,9 +48,6 @@ public class TextLengthValidator
 
     @Override
     public Validator.Result validate(Object value) {
-        Validator.Result result = super.validate(value);
-        if(result != null)
-            return result;
 
         int length = toString(value).length();
         if(length < minLength)

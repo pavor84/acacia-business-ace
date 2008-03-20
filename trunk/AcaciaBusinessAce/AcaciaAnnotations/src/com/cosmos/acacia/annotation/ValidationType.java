@@ -11,9 +11,11 @@ package com.cosmos.acacia.annotation;
  */
 public enum ValidationType {
     NONE,
-    REQUIRED,
-    RANGE,
+    LENGTH,
     REGEX,
-    CUSTOM,
-    DATE;
+    NUMBER,
+    NUMBER_RANGE,
+    DATE,
+    DATE_RANGE,
+    CUSTOM;
 }

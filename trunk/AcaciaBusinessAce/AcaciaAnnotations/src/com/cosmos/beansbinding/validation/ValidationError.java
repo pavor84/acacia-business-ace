@@ -22,6 +22,7 @@ public enum ValidationError
     NotNumericValue("1101", "The value is not Numeric type (byte, short, integer, long, float and double)."),
     NumericValueIsLessThanMin("1102", "The value is less than the required minimum value."),
     NumericValueIsGreaterThanMax("1103", "The value is greater than the required maximum value."),
+    NotIntegerValue("1104", "The value is not Integer type (byte, short, integer, long)."),
 
     NotDateValue("1201", "The value is not Date type."),
     DateValueIsLessThanMin("1202", "The date value is less than the required minimum value."),
