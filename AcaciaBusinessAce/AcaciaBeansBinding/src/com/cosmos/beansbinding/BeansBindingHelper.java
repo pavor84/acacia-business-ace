@@ -14,7 +14,6 @@ import com.cosmos.beansbinding.validation.DateValidator;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
 import com.cosmos.beansbinding.validation.NumericValidator;
 import com.cosmos.beansbinding.validation.RegexValidator;
-import com.cosmos.beansbinding.validation.RequiredValidator;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
 import com.cosmos.util.ClassHelper;
 import java.lang.annotation.Annotation;
@@ -78,12 +77,11 @@ public class BeansBindingHelper {
                 /* Setting validation-related values */
                 PropertyValidator propertyValidator = property.propertyValidator();
                 
-                if(propertyValidator.validationType() != ValidationType.NONE)
+                if(propertyValidator.validationType() != ValidationType.NONE || propertyValidator.required())
                 {
                     BaseValidator validator = new BaseValidator();
-                    
-                    if (propertyValidator.required())
-                        validator.addValidator(new RequiredValidator());
+                  
+                    validator.setRequired(propertyValidator.required());
                     
                     if (propertyValidator.validator() != com.cosmos.beansbinding.validation.NoneValidator.class) {
                         try {
@@ -200,8 +198,14 @@ public class BeansBindingHelper {
                     pd.setRequired(true);
                 }
 
-                if(pd.getValidator() == null && pd.isRequired())
-                    pd.setValidator(new RequiredValidator());
+                if(pd.isRequired()){
+                    BaseValidator validator = (BaseValidator) pd.getValidator();
+                    if (validator == null)
+                        validator = new BaseValidator();
+                    
+                    validator.setRequired(true);
+                    pd.setValidator(validator);
+                }
 
                 properties.add(pd);
             }

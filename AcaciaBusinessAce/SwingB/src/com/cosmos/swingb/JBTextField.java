@@ -6,6 +6,7 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.validation.BaseValidator;
 import java.awt.Color;
 import javax.swing.JTextField;
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -97,24 +98,51 @@ public class JBTextField
 
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
-            validate(binding);
+            validate(binding);  
         }
 
+        @Override
+        public void syncFailed(Binding binding, Binding.SyncFailure failure){
+            validate(binding);
+        }
+         
         public void validate(Binding binding)
         {
-            if(binding.isContentValid())
+
+            System.out.println(((JBTextField) binding.getTargetObject()).getText());
+            
+            BaseValidator validator = (BaseValidator) binding.getValidator();
+            String tooltip = validator.getTooltip();
+            boolean required = validator.isRequired();
+            
+            if(!binding.isContentValid())
             {
-                setBackground(Color.GREEN);
+                setStyleInvalid(tooltip);
+            }
+            else if (required)
+            {
+                setStyleValid();
             }
             else
             {
-                setStyleInvalid();
+                setStyleNormal();
             }
         }
     }
 
-    public void setStyleInvalid() {
+    public void setStyleInvalid(String tooltip) {
         setBackground(Color.PINK);
+        setToolTipText(tooltip);
+    }
+    
+    public void setStyleValid() {
+        setBackground(Color.GREEN);
+        setToolTipText(null);
+    }
+    
+    public void setStyleNormal() {
+        setBackground(Color.WHITE);   
+        setToolTipText(null);
     }
 }
 
