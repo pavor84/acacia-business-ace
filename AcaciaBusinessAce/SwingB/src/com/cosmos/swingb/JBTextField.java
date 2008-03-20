@@ -113,7 +113,11 @@ public class JBTextField
             
             BaseValidator validator = (BaseValidator) binding.getValidator();
             String tooltip = validator.getTooltip();
+            
             boolean required = validator.isRequired();
+            
+            if (((JBTextField) binding.getTargetObject()).getText().trim().length() == 0 && binding.isContentValid())
+                System.out.println("Abnormal behaviour");
             
             if(!binding.isContentValid())
             {
