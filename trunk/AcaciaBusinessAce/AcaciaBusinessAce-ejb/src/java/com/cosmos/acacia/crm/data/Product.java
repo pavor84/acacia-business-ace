@@ -8,6 +8,8 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.beansbinding.validation.NumericRangeValidator;
+import com.cosmos.beansbinding.validation.NumericValidator;
 import com.cosmos.beansbinding.validation.RequiredValidator;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -124,7 +126,8 @@ public class Product
     private DbResource productColor;
 
     @Column(name = "minimum_quantity", nullable = false)
-    @Property(title="Min. Quantity")
+    @Property(title="Min. Quantity", propertyValidator=@PropertyValidator(
+        validator=NumericRangeValidator.class, minValue=0d))
     private BigDecimal minimumQuantity = BigDecimal.ONE;
 
     @Column(name = "maximum_quantity")
@@ -136,19 +139,23 @@ public class Product
     private BigDecimal defaultQuantity;
 
     @Column(name = "purchase_price", nullable = false)
-    @Property(title="Purchase Price")
+    @Property(title="Purchase Price", propertyValidator=@PropertyValidator(
+        validator=NumericRangeValidator.class, minValue=0d))
     private BigDecimal purchasePrice;
 
     @Column(name = "sale_price", nullable = false)
-    @Property(title="Sales Price")
+    @Property(title="Sales Price", propertyValidator=@PropertyValidator(
+        validator=NumericRangeValidator.class, minValue=0d))
     private BigDecimal salePrice;
 
     @Column(name = "list_price", nullable = false)
-    @Property(title="List Price")
+    @Property(title="List Price", propertyValidator=@PropertyValidator(
+        validator=NumericRangeValidator.class, minValue=0d))
     private BigDecimal listPrice;
 
     @Column(name = "quantity_per_package", nullable = false)
-    @Property(title="Qty per Package")
+    @Property(title="Qty per Package", propertyValidator=@PropertyValidator(
+        validator=NumericRangeValidator.class, minValue=0d))
     private int quantityPerPackage = 1;
 
     @JoinColumn(name = "dimension_unit_id", referencedColumnName = "resource_id")
@@ -157,15 +164,18 @@ public class Product
     private DbResource dimensionUnit;
 
     @Column(name = "dimension_width")
-    @Property(title="Dimension Width")
+    @Property(title="Dimension Width", propertyValidator=@PropertyValidator(
+        validator=NumericValidator.class))
     private BigDecimal dimensionWidth;
 
     @Column(name = "dimension_length")
-    @Property(title="Dimension Length")
+    @Property(title="Dimension Length", propertyValidator=@PropertyValidator(
+        validator=NumericValidator.class))
     private BigDecimal dimensionLength;
 
     @Column(name = "dimension_height")
-    @Property(title="Dimension Height")
+    @Property(title="Dimension Height", propertyValidator=@PropertyValidator(
+        validator=NumericValidator.class))
     private BigDecimal dimensionHeight;
 
     @JoinColumn(name = "weight_unit_id", referencedColumnName = "resource_id")
@@ -174,11 +184,13 @@ public class Product
     private DbResource weightUnit;
 
     @Column(name = "weight")
-    @Property(title="Weight")
+    @Property(title="Weight", propertyValidator=@PropertyValidator(
+        validator=NumericValidator.class))
     private BigDecimal weight;
 
     @Column(name = "delivery_time")
-    @Property(title="Delivery time")
+    @Property(title="Delivery time", propertyValidator=@PropertyValidator(
+        validator=NumericValidator.class))
     private Integer deliveryTime;
 
     @Column(name = "description")
