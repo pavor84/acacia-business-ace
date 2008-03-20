@@ -119,6 +119,8 @@ public class JBTextField
             if (((JBTextField) binding.getTargetObject()).getText().trim().length() == 0 && binding.isContentValid())
                 System.out.println("Abnormal behaviour");
             
+            System.out.println(validator.validate(((JBTextField) binding.getTargetObject()).getText()));
+            
             if(!binding.isContentValid())
             {
                 setStyleInvalid(tooltip);
