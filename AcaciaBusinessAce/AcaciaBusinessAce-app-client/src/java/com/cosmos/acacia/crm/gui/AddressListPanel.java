@@ -61,8 +61,7 @@ class AddressListPanel extends AbstractTablePanel {
 
     protected EntityProperties getAddressEntityProperties()
     {
-        //return getFormSession().getAddressEntityProperties();
-        return null;
+        return getFormSession().getAddressEntityProperties();
     }
     
     protected LocationsListRemote getFormSession()
