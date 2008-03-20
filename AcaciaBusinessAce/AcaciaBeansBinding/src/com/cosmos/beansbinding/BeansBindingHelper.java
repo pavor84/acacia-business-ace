@@ -141,7 +141,7 @@ public class BeansBindingHelper {
                         NumericRangeValidator numericRangeValidator = new NumericRangeValidator();
                         numericRangeValidator.setMaxValue(propertyValidator.maxValue());
                         numericRangeValidator.setMinValue(propertyValidator.minValue());
-                        validator.addValidator(validator);
+                        validator.addValidator(numericRangeValidator);
                     }
                     else if(propertyValidator.validationType() == ValidationType.LENGTH)
                     {
