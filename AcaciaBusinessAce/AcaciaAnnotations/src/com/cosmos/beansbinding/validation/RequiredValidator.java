@@ -6,20 +6,17 @@
 package com.cosmos.beansbinding.validation;
 
 import java.io.Serializable;
-import org.jdesktop.beansbinding.Validator;
 
 /**
  *
  * @author Miro
  */
 public class RequiredValidator
-    extends Validator
+    extends BaseValidator
     implements Serializable
 {
     private static final Result EMPTY_VALUE =
             ValidationError.EmptyValue.getValidatorResult();
-
-    private String tooltip;
 
     @Override
     public Result validate(Object value)
@@ -32,32 +29,5 @@ public class RequiredValidator
             return EMPTY_VALUE;
 
         return null;
-    }
-
-    public String getTooltip() {
-        return tooltip;
-    }
-
-    public void setTooltip(String tooltip) {
-        this.tooltip = tooltip;
-    }
-
-    protected String toString(Object value)
-    {
-        return toString(value, true);
-    }
-
-    private String toString(Object value, boolean useValueOf)
-    {
-        if(value == null)
-            return null;
-
-        if(value instanceof CharSequence)
-            return ((CharSequence)value).toString();
-
-        if(useValueOf)
-            return String.valueOf(value);
-
-        return value.toString();
     }
 }

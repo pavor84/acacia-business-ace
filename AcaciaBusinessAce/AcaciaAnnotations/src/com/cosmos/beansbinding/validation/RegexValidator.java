@@ -14,7 +14,7 @@ import org.jdesktop.beansbinding.Validator;
  * @author Miro
  */
 public class RegexValidator
-    extends RequiredValidator
+    extends BaseValidator
     implements Serializable
 {
     private static final Result TEXT_NOT_MATCH =
@@ -41,10 +41,7 @@ public class RegexValidator
 
     @Override
     public Validator.Result validate(Object value) {
-        Validator.Result result = super.validate(value);
-        if(result != null)
-            return result;
-
+        
         if(pattern == null)
             new IllegalArgumentException("The pattern for regular expression is not set.");
 

@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.beansbinding.validation.RequiredValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -63,11 +63,12 @@ public class Person
 
     @Column(name = "first_name", nullable = false)
     @Property(title="First Name",
-            propertyValidator=@PropertyValidator(validator=TextLengthValidator.class, minLength=2))
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2))
     private String firstName;
 
     @Column(name = "second_name")
-    @Property(title="Second Name")
+    @Property(title="Second Name",
+            propertyValidator=@PropertyValidator(validationType=ValidationType.REGEX, regex="[a-z]"))
     private String secondName;
 
     @Column(name = "last_name", nullable = false)

@@ -19,7 +19,13 @@ import java.lang.annotation.Target;
 public @interface PropertyValidator {
 
     Class validator() default com.cosmos.beansbinding.validation.NoneValidator.class;
-
+    
+    ValidationType validationType() default ValidationType.NONE;
+    
+    boolean required() default false;
+    
+    boolean floating() default true;
+    
     double minValue() default Double.MIN_VALUE;
     double maxValue() default Double.MAX_VALUE;
 

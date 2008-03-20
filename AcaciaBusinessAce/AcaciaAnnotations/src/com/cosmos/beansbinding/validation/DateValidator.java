@@ -15,7 +15,7 @@ import org.jdesktop.beansbinding.Validator;
  * @author Miro
  */
 public class DateValidator
-    extends RequiredValidator
+    extends BaseValidator
     implements Serializable
 {
     private static final Result NOT_DATE_VALUE =
@@ -51,9 +51,6 @@ public class DateValidator
 
     @Override
     public Validator.Result validate(Object value) {
-        Validator.Result result = super.validate(value);
-        if(result != null)
-            return result;
 
         if(value instanceof Date)
             return null;

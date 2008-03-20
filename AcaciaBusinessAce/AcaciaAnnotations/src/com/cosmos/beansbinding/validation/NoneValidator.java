@@ -13,7 +13,7 @@ import org.jdesktop.beansbinding.Validator;
  * @author Miro
  */
 public class NoneValidator
-    extends Validator
+    extends BaseValidator
     implements Serializable
 {
 

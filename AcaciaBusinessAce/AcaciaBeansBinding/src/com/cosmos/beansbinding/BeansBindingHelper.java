@@ -7,10 +7,12 @@ package com.cosmos.beansbinding;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.beansbinding.validation.DateRangeValidator;
 import com.cosmos.beansbinding.validation.DateValidator;
-import com.cosmos.beansbinding.validation.NoneValidator;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
+import com.cosmos.beansbinding.validation.NumericValidator;
 import com.cosmos.beansbinding.validation.RegexValidator;
 import com.cosmos.beansbinding.validation.RequiredValidator;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
@@ -75,72 +77,93 @@ public class BeansBindingHelper {
 
                 /* Setting validation-related values */
                 PropertyValidator propertyValidator = property.propertyValidator();
-                Class validatorClass = propertyValidator.validator();
-                if(!NoneValidator.class.equals(validatorClass))
+                
+                if(propertyValidator.validationType() != ValidationType.NONE)
                 {
-                    Validator validator;
-                    try
-                    {
-                        validator = (Validator)validatorClass.newInstance();
-                    }
-                    catch(Exception ex)
-                    {
-                        throw new RuntimeException(ex);
-                    }
-                    if(validator instanceof DateValidator)
-                    {
-                        String strValue = propertyValidator.datePattern();
-                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                            ((DateValidator)validator).setDatePattern(strValue);
-
-                        if(validator instanceof DateRangeValidator)
-                        {
-                            DateRangeValidator rangeValidator = (DateRangeValidator)validator;
-                            strValue = propertyValidator.fromDate();
-                            if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                            {
-                                Date date = now(strValue);
-                                if(date != null)
-                                    rangeValidator.setFromDate(date);
-                                else
-                                    rangeValidator.setFromDate(strValue);
-                            }
-
-                            strValue = propertyValidator.toDate();
-                            if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                            {
-                                Date date = now(strValue);
-                                if(date != null)
-                                    rangeValidator.setToDate(date);
-                                else
-                                    rangeValidator.setToDate(strValue);
-                            }
+                    BaseValidator validator = new BaseValidator();
+                    
+                    if (propertyValidator.required())
+                        validator.addValidator(new RequiredValidator());
+                    
+                    if (propertyValidator.validator() != com.cosmos.beansbinding.validation.NoneValidator.class) {
+                        try {
+                            validator.addValidator((Validator) propertyValidator.validator().newInstance());
+                        } catch (Exception ex){
+                            // Log it!
+                            ex.printStackTrace();
                         }
                     }
-                    else if(validator instanceof NumericRangeValidator)
+                    
+                    if(propertyValidator.validationType() == ValidationType.DATE)
                     {
-                        NumericRangeValidator rangeValidator = (NumericRangeValidator)validator;
-                        rangeValidator.setMaxValue(propertyValidator.maxValue());
-                        rangeValidator.setMinValue(propertyValidator.minValue());
+                        String strValue = propertyValidator.datePattern();
+                        if(strValue != null && (strValue = strValue.trim()).length() > 0){
+                            DateValidator dateValidator = new DateValidator();
+                            
+                            dateValidator.setDatePattern(strValue);
+                            validator.addValidator(dateValidator);
+                        }
                     }
-                    else if(validator instanceof TextLengthValidator)
+                    
+                    if (propertyValidator.validationType() == ValidationType.DATE_RANGE)
                     {
-                        TextLengthValidator rangeValidator = (TextLengthValidator)validator;
+                        DateRangeValidator dateRangeValidator = new DateRangeValidator();
+                        String strValue = propertyValidator.fromDate();
+                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                        {
+                            Date date = now(strValue);
+                            if(date != null)
+                                dateRangeValidator.setFromDate(date);
+                            else
+                                dateRangeValidator.setFromDate(strValue);
+                        }
+
+                        strValue = propertyValidator.toDate();
+                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                        {
+                            Date date = now(strValue);
+                            if(date != null)
+                                dateRangeValidator.setToDate(date);
+                            else
+                                dateRangeValidator.setToDate(strValue);
+                        }
+                        
+                        validator.addValidator(dateRangeValidator);
+                    }
+                    else if(propertyValidator.validationType() == ValidationType.NUMBER)
+                    {
+                        NumericValidator numericValidator = new NumericValidator();
+                        validator.addValidator(numericValidator);
+                        
+                    }
+                    else if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
+                    {
+                        NumericRangeValidator numericRangeValidator = new NumericRangeValidator();
+                        numericRangeValidator.setMaxValue(propertyValidator.maxValue());
+                        numericRangeValidator.setMinValue(propertyValidator.minValue());
+                        validator.addValidator(validator);
+                    }
+                    else if(propertyValidator.validationType() == ValidationType.LENGTH)
+                    {
+                        TextLengthValidator rangeValidator = new TextLengthValidator();
                         rangeValidator.setMaxLength(propertyValidator.maxLength());
                         rangeValidator.setMinLength(propertyValidator.minLength());
+                        validator.addValidator(rangeValidator);
                     }
-                    else if(validator instanceof RegexValidator)
+                    else if(propertyValidator.validationType() == ValidationType.REGEX)
                     {
                         String strValue = propertyValidator.regex();
                         if(strValue != null && (strValue = strValue.trim()).length() > 0)
                         {
-                            ((RegexValidator)validator).setPattern(strValue);
+                            RegexValidator regexValidator = new RegexValidator();
+                            regexValidator.setPattern(strValue);
+                            validator.addValidator(regexValidator);
                         }
                     }
 
                     String strValue = propertyValidator.tooltip();
                     if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                        ((RequiredValidator)validator).setTooltip(strValue);
+                        validator.setTooltip(strValue);
 
                     pd.setValidator(validator);
                 }
