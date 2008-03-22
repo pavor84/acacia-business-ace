@@ -151,10 +151,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         Query qPersons = em.createNamedQuery("Person.getAllNotDeleted");
         Query qOrganizations = em.createNamedQuery("Organization.getAllNotDeleted");
         
-        List<?> result = new ArrayList<Object>();
-        
-        result.addAll(qPersons.getResultList());
-        result.addAll(qOrganizations.getResultList());
-        return result;
+        return new ArrayList<Object>();
+//        List<?> result = new ArrayList<Object>();
+//        
+//        result.addAll(qPersons.getResultList());
+//        result.addAll(qOrganizations.getResultList());
+//        return result;
     }
 }
