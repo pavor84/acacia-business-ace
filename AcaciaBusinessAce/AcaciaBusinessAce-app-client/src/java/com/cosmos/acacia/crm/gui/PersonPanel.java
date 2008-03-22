@@ -6,6 +6,21 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
+
+import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.error.ErrorInfo;
+
 import com.cosmos.acacia.crm.bl.impl.PersonsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
@@ -16,19 +31,6 @@ import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.swing.plaf.DimensionUIResource;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * A form for adding and editing persons
@@ -545,7 +547,7 @@ public class PersonPanel extends AcaciaPanel {
             String category = PersonPanel.class.getName() + ": saveAction.";
             Level errorLevel = Level.WARNING;
             Map<String, String> state = new HashMap();
-            state.put("personId", String.valueOf(person.getPersonId()));
+            state.put("personId", String.valueOf(person.getPartnerId()));
             state.put("firstName", String.valueOf(person.getFirstName()));
             state.put("secondName", String.valueOf(person.getSecondName()));
             state.put("lastName", String.valueOf(person.getLastName()));

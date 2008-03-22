@@ -70,7 +70,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Recipient name")
     private String recipientName;
 
-    @JoinColumn(name = "recipient_contact_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "recipient_contact_id")
     @ManyToOne
     @Property(title="Recipient contact")
     private Person recipientContactId;
@@ -94,7 +94,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Creation date")
     private Date creationTime;
 
-    @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "creator_id")
     @ManyToOne
     @Property(title="Created by")
     private Person creator;
@@ -193,7 +193,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Sent time")
     private Date sentTime;
 
-    @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "sender_id")
     @ManyToOne
     @Property(title="Sender")
     private Person sender;

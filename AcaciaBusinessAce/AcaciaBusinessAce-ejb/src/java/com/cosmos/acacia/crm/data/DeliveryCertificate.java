@@ -61,7 +61,7 @@ public class DeliveryCertificate implements Serializable {
     @Column(name = "recipient_name", nullable = false)
     private String recipientName;
 
-    @JoinColumn(name = "recipient_contact_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "recipient_contact_id")
     @ManyToOne
     private Person recipientContact;
 
@@ -80,18 +80,18 @@ public class DeliveryCertificate implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date creationTime;
 
-    @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "creator_id")
     @ManyToOne
     private Person creator;
 
     @Column(name = "creator_name", nullable = false)
     private String creatorName;
 
-    @JoinColumn(name = "forwarder_id", referencedColumnName = "organization_id", insertable = false, updatable = false)
+    @JoinColumn(name = "forwarder_id", insertable = false, updatable = false)
     @ManyToOne
     private Organization forwarder;
 
-    @JoinColumn(name = "forwarder_contact_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "forwarder_contact_id")
     @ManyToOne
     private Person forwarderContact;
 

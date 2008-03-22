@@ -40,7 +40,7 @@ public class ContactPerson implements Serializable {
     @ManyToOne
     private PositionType positionType;
 
-    @JoinColumn(name = "contact_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "contact_id")
     @ManyToOne
     private Person contact;
 

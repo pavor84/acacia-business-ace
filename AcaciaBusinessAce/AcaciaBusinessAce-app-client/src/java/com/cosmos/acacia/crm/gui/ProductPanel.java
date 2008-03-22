@@ -9,6 +9,7 @@ package com.cosmos.acacia.crm.gui;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,8 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -747,7 +750,8 @@ public class ProductPanel extends AcaciaPanel {
 
         deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"));
 
-        //producerComboBox.bind(productBindingGroup, data, HEIGHT, TOOL_TIP_TEXT_KEY)
+        propDetails = entityProps.getPropertyDetails("producerId");
+//        productCategoryComboBox.bind(productBindingGroup, getProducers(), product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("description");
         descriptionTextPane.bind(productBindingGroup, product, propDetails);
@@ -765,6 +769,36 @@ public class ProductPanel extends AcaciaPanel {
                 setSaveActionState();
             }
         });
+    }
+
+    /**
+     * Returns producers (both persons and companies).
+     * Sorted by name.
+     * @return
+     */
+    private List<?> getProducers() {
+        List<?> producers = getFormSession().getProducers();
+        Collections.sort(producers, new Comparator<Object>() {
+
+            @Override
+            public int compare(Object o1, Object o2) {
+                String s1 = null;
+                String s2 = null;
+                if ( o1 instanceof Person )
+                    s1 = ((Person)o1).getFirstName();
+                else if ( o1 instanceof Organization )
+                    s1 = ((Organization)o1).getOrganizationName();
+                
+                if ( o2 instanceof Person )
+                    s2 = ((Person)o2).getFirstName();
+                else if ( o1 instanceof Organization )
+                    s2 = ((Organization)o2).getOrganizationName();
+                
+                return s2.compareTo(s1);
+            }
+        
+        });
+        return producers;
     }
 
     protected void setSaveActionState()
@@ -839,7 +873,7 @@ public class ProductPanel extends AcaciaPanel {
             if ( binding.getTargetObject() instanceof JBTextField ){
                 JBTextField textField = (JBTextField)binding.getTargetObject();
                 if ( errorProperties.contains(textField.getPropertyName()) )
-                    textField.setStyleInvalid();
+                    textField.setStyleInvalid("");//temporary code, TODO fix
             }else if ( binding.getTargetObject() instanceof JBComboBox){
                 JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
                 if ( errorProperties.contains(comboBox.getPropertyName()) )

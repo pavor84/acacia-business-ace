@@ -48,7 +48,7 @@ public class BankDetail implements Serializable {
     @JoinColumn(name = "bank_detail_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-    @JoinColumn(name = "bank_contact_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "bank_contact_id")
     @ManyToOne
     private Person bankContactId;
 
