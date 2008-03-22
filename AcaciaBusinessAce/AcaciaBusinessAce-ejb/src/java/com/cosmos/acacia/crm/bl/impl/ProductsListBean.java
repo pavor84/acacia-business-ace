@@ -6,7 +6,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -141,5 +140,21 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     
     public List<DbResource> getMeasureUnits(MeasurementUnit.Category category) {
         return MeasurementUnit.getDbResourcesByCategory(category);
+    }
+
+    /**
+     * @see com.cosmos.acacia.crm.bl.impl.ProductsListRemote#getProducers()
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<?> getProducers() {
+        Query qPersons = em.createNamedQuery("Person.getAllNotDeleted");
+        Query qOrganizations = em.createNamedQuery("Organization.getAllNotDeleted");
+        
+        List<?> result = new ArrayList<Object>();
+        
+        result.addAll(qPersons.getResultList());
+        result.addAll(qOrganizations.getResultList());
+        return result;
     }
 }
