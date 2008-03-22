@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,20 +27,27 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "organizations")
+/** Will duplicate the primary key from superclass with this name in the 'organizations' table */
+@PrimaryKeyJoinColumn(name="organization_id")
+@NamedQueries(
+    {
+        /**
+         * All not deleted organizations.
+         */
+        @NamedQuery
+            (
+            name = "Organization.getAllNotDeleted",
+            query = "select o from Organization o where o.dataObject.deleted = false"
+            )
+    }
+)
 public class Organization
-    extends DataObjectBean
+    extends BusinessPartner
     implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @Column(name = "organization_id", nullable = false)
-    private BigInteger organizationId;
-
-    @Column(name = "parent_id")
-    private BigInteger parentId;
-
+    
     @Column(name = "organization_name", nullable = false)
     private String organizationName;
 
@@ -73,10 +82,6 @@ public class Organization
     @ManyToOne
     private Currency currency;
 
-    @JoinColumn(name = "organization_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
-    private DataObject dataObject;
-
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
     @ManyToOne
     private Organization registrationOrganization;
@@ -85,33 +90,16 @@ public class Organization
     @ManyToOne
     private DbResource organizationType;
 
-
     public Organization() {
     }
 
-    public Organization(BigInteger organizationId) {
-        this.organizationId = organizationId;
+    public Organization(BigInteger id) {
+        setPartnerId(id);
     }
 
     public Organization(BigInteger organizationId, String organizationName) {
-        this.organizationId = organizationId;
-        this.organizationName = organizationName;
-    }
-
-    public BigInteger getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(BigInteger organizationId) {
-        this.organizationId = organizationId;
-    }
-
-    public BigInteger getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
+        setPartnerId(organizationId);
+        setOrganizationName(organizationName);
     }
 
     public String getOrganizationName() {
@@ -194,14 +182,6 @@ public class Organization
         this.currency = currency;
     }
 
-    public DataObject getDataObject() {
-        return dataObject;
-    }
-
-    public void setDataObject(DataObject dataObject) {
-        this.dataObject = dataObject;
-    }
-
     public Organization getRegistrationOrganization() {
         return registrationOrganization;
     }
@@ -222,7 +202,7 @@ public class Organization
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (organizationId != null ? organizationId.hashCode() : 0);
+        hash += (getPartnerId() != null ? getPartnerId().hashCode() : 0);
         return hash;
     }
 
@@ -233,7 +213,7 @@ public class Organization
             return false;
         }
         Organization other = (Organization) object;
-        if ((this.organizationId == null && other.organizationId != null) || (this.organizationId != null && !this.organizationId.equals(other.organizationId))) {
+        if ((this.getPartnerId() == null && other.getPartnerId() != null) || (this.getPartnerId() != null && !this.getPartnerId().equals(other.getPartnerId()))) {
             return false;
         }
         return true;
@@ -241,16 +221,6 @@ public class Organization
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.Organization[organizationId=" + organizationId + "]";
-    }
-
-    @Override
-    public BigInteger getId() {
-        return getOrganizationId();
-    }
-
-    @Override
-    public void setId(BigInteger id) {
-        setOrganizationId(id);
+        return "com.cosmos.acacia.crm.data.Organization[organizationId=" + getPartnerId() + "]";
     }
 }

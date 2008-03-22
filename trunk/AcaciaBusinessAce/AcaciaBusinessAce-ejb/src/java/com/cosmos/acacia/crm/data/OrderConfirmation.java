@@ -54,7 +54,7 @@ public class OrderConfirmation implements Serializable {
     @ManyToOne
     private DbResource status;
 
-    @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "sender_id")
     @ManyToOne
     private Person sender;
 

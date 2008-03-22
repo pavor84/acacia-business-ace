@@ -5,25 +5,24 @@
 
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.beansbinding.validation.TextLengthValidator;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -31,6 +30,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "persons")
+/** Will duplicate the primary key from superclass with this name in the 'persons' table */ 
+@PrimaryKeyJoinColumn(name="partner_id")
 @NamedQueries(
 	{
 		@NamedQuery
@@ -38,28 +39,26 @@ import javax.persistence.TemporalType;
          		name = "Person.findByParentDataObjectAndDeleted",
          		query = "select p from Person p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
          	),
-                @NamedQuery
-                (
-        		name = "Person.findByParentDataObjectIsNullAndDeleted",
-        		query = "select p from Person p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
-                )
+        @NamedQuery
+            (
+    		name = "Person.findByParentDataObjectIsNullAndDeleted",
+    		query = "select p from Person p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+            ),
+        /**
+         * All not deleted persons.
+         */
+        @NamedQuery
+            (
+            name = "Person.getAllNotDeleted",
+            query = "select p from Person p where p.dataObject.deleted = false"
+            )  
 	}
 )
-public class Person
-        extends  DataObjectBean
+public class Person extends BusinessPartner
         implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @Column(name = "person_id", nullable = false)
-    @Property(title="Person Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger personId;
-
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
 
     @Column(name = "first_name", nullable = false)
     @Property(title="First Name",
@@ -107,33 +106,20 @@ public class Person
     @Property(title="Description")
     private String description;
 
-    @JoinColumn(name = "person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
-    private DataObject dataObject;
-
-
     public Person() {
     }
 
-    public Person(BigInteger personId) {
-        this.personId = personId;
+    public Person(BigInteger id) {
+        setPartnerId(id);
     }
 
-    public BigInteger getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(BigInteger personId) {
-        this.personId = personId;
-    }
-
-    public BigInteger getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
-    }
+//    public BigInteger getPersonId() {
+//        return personId;
+//    }
+//
+//    public void setPersonId(BigInteger personId) {
+//        this.personId = personId;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -207,14 +193,6 @@ public class Person
         this.birthPlaceCountry = birthPlaceCountry;
     }
 
-    public DataObject getDataObject() {
-        return dataObject;
-    }
-
-    public void setDataObject(DataObject dataObject) {
-        this.dataObject = dataObject;
-    }
-
     public DbResource getGender() {
         return gender;
     }
@@ -226,7 +204,7 @@ public class Person
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (personId != null ? personId.hashCode() : 0);
+        hash += (getPartnerId()!= null ? getPartnerId().hashCode() : 0);
         return hash;
     }
 
@@ -237,7 +215,7 @@ public class Person
             return false;
         }
         Person other = (Person) object;
-        if ((this.personId == null && other.personId != null) || (this.personId != null && !this.personId.equals(other.personId))) {
+        if ((this.getPartnerId() == null && other.getPartnerId() != null) || (this.getPartnerId() != null && !this.getPartnerId().equals(other.getPartnerId()))) {
             return false;
         }
         return true;
@@ -245,17 +223,6 @@ public class Person
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.Person[personId=" + personId + "]";
+        return "com.cosmos.acacia.crm.data.Person[parentId=" + getParentId() + "]";
     }
-
-    @Override
-    public BigInteger getId() {
-        return getPersonId();
-    }
-
-    @Override
-    public void setId(BigInteger id) {
-        setPersonId(id);
-    }
-
 }

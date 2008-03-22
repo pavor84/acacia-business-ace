@@ -66,7 +66,7 @@ public class Passport implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date expirationDate;
 
-    @JoinColumn(name = "issuer_id", referencedColumnName = "organization_id", insertable = false, updatable = false)
+    @JoinColumn(name = "issuer_id", insertable = false, updatable = false)
     @ManyToOne
     private Organization issuer;
 

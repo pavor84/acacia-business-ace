@@ -32,7 +32,7 @@ public class Warehouse implements Serializable {
     @Column(name = "parent_id")
     private BigInteger parentId;
 
-    @JoinColumn(name = "warehouseman_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "warehouseman_id")
     @ManyToOne
     private Person warehouseman;
 

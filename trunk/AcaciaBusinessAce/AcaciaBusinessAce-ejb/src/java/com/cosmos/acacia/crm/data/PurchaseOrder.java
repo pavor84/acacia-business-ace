@@ -58,7 +58,7 @@ public class PurchaseOrder implements Serializable {
     @Column(name = "supplier_order_number")
     private String supplierOrderNumber;
 
-    @JoinColumn(name = "supplier_contact_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "supplier_contact_id")
     @ManyToOne
     private Person supplierContact;
 
@@ -73,7 +73,7 @@ public class PurchaseOrder implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date creationTime;
 
-    @JoinColumn(name = "creator_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "creator_id")
     @ManyToOne
     private Person creator;
 
@@ -88,7 +88,7 @@ public class PurchaseOrder implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date sentTime;
 
-    @JoinColumn(name = "sender_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "sender_id")
     @ManyToOne
     private Person sender;
 
