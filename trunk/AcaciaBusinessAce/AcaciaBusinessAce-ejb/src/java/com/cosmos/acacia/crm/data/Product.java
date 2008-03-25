@@ -5,15 +5,10 @@
 
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.acacia.crm.enums.MeasurementUnit;
-import com.cosmos.beansbinding.validation.NumericRangeValidator;
-import com.cosmos.beansbinding.validation.NumericValidator;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,6 +20,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 
 
 /**

@@ -13,8 +13,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -22,7 +27,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "pattern_mask_formats")
-@NamedQueries({})
+@NamedQueries({ 
+    @NamedQuery
+    (
+        /**
+         * Parameters:
+         * - productCode - find all undeleted products with the same code (at most one should exist)
+         */
+        name = "PatternMaskFormat.findForParentByName",
+        query = "select p from PatternMaskFormat p order by p.patternName"
+    )
+})
 public class PatternMaskFormat implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,21 +48,28 @@ public class PatternMaskFormat implements Serializable {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PatternMaskFormatSequenceGenerator")
     private Integer patternMaskFormatId;
 
-    @Column(name = "owner_id")
-    private BigInteger ownerId;
-
     @Column(name = "pattern_name", nullable = false)
+    @Property(title="Name",
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2))
     private String patternName;
-
-    @Column(name = "format_type", nullable = false)
-    private char formatType;
-
+    
+    @Property(title="Format",
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2))
     @Column(name = "format", nullable = false)
     private String format;
 
+    @Property(title="Type",
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=1))
+    @Column(name = "format_type", nullable = false)
+    private char formatType;
+
+    @Property(title="Description")
     @Column(name = "description")
     private String description;
-
+    
+    @Column(name = "owner_id")
+    @Property(title="Owner")
+    private BigInteger ownerId;
 
     public PatternMaskFormat() {
     }
