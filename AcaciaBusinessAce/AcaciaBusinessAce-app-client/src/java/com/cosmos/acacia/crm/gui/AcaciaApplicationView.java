@@ -4,27 +4,11 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.gui.AbstractTablePanel;
-import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBDesktopPane;
-import com.cosmos.swingb.JBLabel;
-import com.cosmos.swingb.JBMenu;
-import com.cosmos.swingb.JBMenuBar;
-import com.cosmos.swingb.JBMenuItem;
-import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBProgressBar;
-import com.cosmos.swingb.JBSeparator;
-import com.cosmos.swingb.JBToolBar;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
-import org.jdesktop.application.Task;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
-import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -33,6 +17,7 @@ import javax.swing.JSeparator;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.JPopupMenu.Separator;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.FrameView;
@@ -41,6 +26,7 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -221,6 +207,12 @@ public class AcaciaApplicationView extends FrameView {
             System.out.println("Selected object: " + productsListPanel.getSelectedRowObject());
         }
     }
+    
+    @Action
+    public void patternMaskListAction(){
+        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
+        listPanel.showFrame();
+    }
 
     @Action
     public void productCategoriesAction()
@@ -269,9 +261,10 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu productsMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
-        JBMenu personsMenu = new JBMenu();
+        JBMenu businessPartners = new JBMenu();
         JBMenuItem personsListMenuItem = new JBMenuItem();
         JBMenuItem newPersonMenuItem = new JBMenuItem();
+        JBMenuItem patternMasksItem = new JBMenuItem();
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -330,18 +323,26 @@ public class AcaciaApplicationView extends FrameView {
 
         menuBar.add(productsMenu);
 
-        personsMenu.setName("personsMenu");
-        personsMenu.setText(resourceMap.getString("personsMenu.text"));
+        businessPartners.setName("businessPartnersMenu");
+        businessPartners.setText(resourceMap.getString("businessPartnersMenu.text"));
 
         newPersonMenuItem.setAction(actionMap.get("newPersonAction"));
         newPersonMenuItem.setName("newPersonMenuItem");
-        personsMenu.add(newPersonMenuItem);
+        businessPartners.add(newPersonMenuItem);
 
         personsListMenuItem.setAction(actionMap.get("personsListAction"));
         personsListMenuItem.setName("personsListMenuItem");
-        personsMenu.add(personsListMenuItem);
+        businessPartners.add(personsListMenuItem);
+        
+        Separator partnersSectionSeparator = new Separator();
+        businessPartners.add(partnersSectionSeparator);
+        
+        patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
+        patternMasksItem.setName("patternMasksItem");
+        patternMasksItem.setText(resourceMap.getString("patternMasksItem.text"));
+        businessPartners.add(patternMasksItem);
 
-        menuBar.add(personsMenu);
+        menuBar.add(businessPartners);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
