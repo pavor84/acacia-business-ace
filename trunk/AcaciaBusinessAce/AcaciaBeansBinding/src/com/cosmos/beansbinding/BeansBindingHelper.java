@@ -203,8 +203,11 @@ public class BeansBindingHelper {
                     if (validator == null)
                         validator = new BaseValidator();
                     
-                    validator.setRequired(true);
-                    pd.setValidator(validator);
+                    if (!validator.isRequired())
+                    {
+                        validator.setRequired(true);
+                        pd.setValidator(validator);
+                    }
                 }
 
                 properties.add(pd);
