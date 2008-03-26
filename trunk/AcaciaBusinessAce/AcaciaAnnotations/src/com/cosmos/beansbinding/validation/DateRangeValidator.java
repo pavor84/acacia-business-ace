@@ -62,6 +62,9 @@ public class DateRangeValidator
         if(result != null)
             return result;
 
+        if(!isRequired() && isEmptyString(value))
+            return null;
+
         Date date = (Date)value;
 
         if(fromDate != null && date.before(fromDate))

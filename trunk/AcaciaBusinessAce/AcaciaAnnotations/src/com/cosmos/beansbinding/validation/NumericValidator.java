@@ -30,7 +30,9 @@ public class NumericValidator
 
     @Override
     public Validator.Result validate(Object value) {
-        
+        if(!isRequired() && isEmptyString(value))
+            return null;
+
         if (isFloating()) {
             Double doubleValue = toDouble(value);
             if(doubleValue == null)

@@ -5,8 +5,8 @@
 
 package com.cosmos.beansbinding.validation;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import org.jdesktop.beansbinding.Validator;
 
 /**
@@ -16,7 +16,7 @@ import org.jdesktop.beansbinding.Validator;
  * @author Bozhidar Bozhanov
  */
 public class BaseValidator extends Validator {
-    protected Set<Validator> validators = new HashSet<Validator>();
+    protected List<Validator> validators = new ArrayList<Validator>();
     private String tooltip;
     private boolean required;
 
@@ -67,7 +67,7 @@ public class BaseValidator extends Validator {
         return toString(value, true);
     }
 
-    private String toString(Object value, boolean useValueOf)
+    protected String toString(Object value, boolean useValueOf)
     {
         if(value == null)
             return null;
@@ -79,5 +79,29 @@ public class BaseValidator extends Validator {
             return String.valueOf(value);
 
         return value.toString();
+    }
+
+    protected boolean isEmptyString(Object value)
+    {
+        if(value == null)
+            return true;
+
+        String stringValue = toString(value, false);
+        if(stringValue == null || (stringValue = stringValue.trim()).length() == 0)
+            return true;
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        String toString = super.toString();
+
+        if(BaseValidator.class.equals(this.getClass()))
+        {
+            return toString + ", validators: " + validators;
+        }
+
+        return toString;
     }
 }

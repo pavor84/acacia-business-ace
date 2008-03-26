@@ -52,6 +52,9 @@ public class NumericRangeValidator
         if(result != null)
             return result;
 
+        if(!isRequired() && isEmptyString(value))
+            return null;
+
         double doubleValue = toDouble(value);
         if(doubleValue < minValue)
             return VALUE_IS_LESS_THAN_MIN_VALUE;

@@ -49,6 +49,9 @@ public class TextLengthValidator
     @Override
     public Validator.Result validate(Object value) {
 
+        if(!isRequired() && isEmptyString(value))
+            return null;
+
         int length = toString(value).length();
         if(length < minLength)
             return TEXT_VALUE_LENGTH_IS_LESS_THAN_MIN_VALUE;
