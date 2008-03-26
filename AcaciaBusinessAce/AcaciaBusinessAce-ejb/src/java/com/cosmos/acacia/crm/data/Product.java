@@ -165,17 +165,17 @@ public class Product
 
     @Column(name = "dimension_width")
     @Property(title="Dimension Width", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
     private BigDecimal dimensionWidth;
 
     @Column(name = "dimension_length")
     @Property(title="Dimension Length", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
     private BigDecimal dimensionLength;
 
     @Column(name = "dimension_height")
     @Property(title="Dimension Height", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
     private BigDecimal dimensionHeight;
 
     @JoinColumn(name = "weight_unit_id", referencedColumnName = "resource_id")
@@ -185,12 +185,12 @@ public class Product
 
     @Column(name = "weight")
     @Property(title="Weight", propertyValidator=@PropertyValidator(
-       validationType=ValidationType.NUMBER))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
     private BigDecimal weight;
 
     @Column(name = "delivery_time")
     @Property(title="Delivery time", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
     private Integer deliveryTime;
 
     @Column(name = "description")
