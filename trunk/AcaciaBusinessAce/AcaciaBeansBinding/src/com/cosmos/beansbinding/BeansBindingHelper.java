@@ -132,7 +132,7 @@ public class BeansBindingHelper {
                     {
                         NumericValidator numericValidator = new NumericValidator();
                         validator.addValidator(numericValidator);
-                        
+                        numericValidator.setFloating(propertyValidator.floating());
                     }
                     else if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
                     {
@@ -140,6 +140,7 @@ public class BeansBindingHelper {
                         numericRangeValidator.setMaxValue(propertyValidator.maxValue());
                         numericRangeValidator.setMinValue(propertyValidator.minValue());
                         validator.addValidator(numericRangeValidator);
+                        numericRangeValidator.setFloating(propertyValidator.floating());
                     }
                     else if(propertyValidator.validationType() == ValidationType.LENGTH)
                     {
