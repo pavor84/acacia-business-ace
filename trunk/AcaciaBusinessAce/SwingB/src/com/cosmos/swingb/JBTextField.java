@@ -13,6 +13,7 @@ import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
@@ -57,9 +58,10 @@ public class JBTextField
         if(validator != null)
         {
             binding.setValidator(validator);
-            binding.addBindingListener(new BindingValidationListener());
         }
-        
+
+        binding.addBindingListener(new BindingValidationListener());
+
         return binding;
     }
 
@@ -98,46 +100,44 @@ public class JBTextField
 
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
-            validate(binding);  
-        }
-
-        @Override
-        public void syncFailed(Binding binding, Binding.SyncFailure failure){
             validate(binding);
         }
-         
+
         public void validate(Binding binding)
         {
+            boolean required = false;
+            String tooltip = null;
+            BaseValidator validator = (BaseValidator)binding.getValidator();
+            if(validator != null)
+            {
+                tooltip = validator.getTooltip();
+                required = validator.isRequired();
+            }
 
-            System.out.println(((JBTextField) binding.getTargetObject()).getText());
-            
-            BaseValidator validator = (BaseValidator) binding.getValidator();
-            String tooltip = validator.getTooltip();
-            
-            boolean required = validator.isRequired();
-            
-            if (((JBTextField) binding.getTargetObject()).getText().trim().length() == 0 && binding.isContentValid())
-                System.out.println("Abnormal behaviour");
-            
-            System.out.println(validator.validate(((JBTextField) binding.getTargetObject()).getText()));
-            
             if(!binding.isContentValid())
             {
-                setStyleInvalid(tooltip);
-            }
-            else if (required)
-            {
-                setStyleValid();
+                if(required)
+                    setStyleRequired(tooltip);
+                else
+                    setStyleInvalid(tooltip);
             }
             else
             {
-                setStyleNormal();
+                if(required)
+                    setStyleValid();
+                else
+                    setStyleNormal();
             }
         }
     }
 
-    public void setStyleInvalid(String tooltip) {
+    public void setStyleRequired(String tooltip) {
         setBackground(Color.PINK);
+        setToolTipText(tooltip);
+    }
+
+    public void setStyleInvalid(String tooltip) {
+        setBackground(Color.YELLOW);
         setToolTipText(tooltip);
     }
     
