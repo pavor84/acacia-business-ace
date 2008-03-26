@@ -55,6 +55,9 @@ public class DateValidator
         if(value instanceof Date)
             return null;
         
+        if(!isRequired() && isEmptyString(value))
+            return null;
+
         Date dateValue = toDate(value);
         if(dateValue == null)
             return NOT_DATE_VALUE;

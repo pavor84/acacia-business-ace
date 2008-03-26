@@ -45,6 +45,9 @@ public class RegexValidator
         if(pattern == null)
             new IllegalArgumentException("The pattern for regular expression is not set.");
 
+        if(!isRequired() && isEmptyString(value))
+            return null;
+
         if(!pattern.matcher(toString(value)).matches())
             return TEXT_NOT_MATCH;
 
