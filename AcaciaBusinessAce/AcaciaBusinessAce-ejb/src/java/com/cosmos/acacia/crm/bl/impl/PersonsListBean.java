@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -119,5 +121,9 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;
+    }
+
+    public List<DbResource> getGenders() {
+        return Gender.getDbResources();
     }
 }

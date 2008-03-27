@@ -25,6 +25,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "contact_persons")
+@NamedQueries(
+	{
+		@NamedQuery
+         	(
+         		name = "ContactPerson.findByAddressId",
+         		query = "select cp from ContactPerson cp where cp.parentId = :parentId"
+         	)
+	}
+)
 public class ContactPerson implements Serializable {
 
     private static final long serialVersionUID = 1L;
