@@ -79,20 +79,23 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public City newCity() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	return new City();
     }
 
     public City saveCity(City city) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        esm.persist(em, city);
+        return city;
     }
 
     public int deleteCity(City city) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return esm.remove(em, city);
     }
 
     public List<Address> getAddresses(DataObject parent) {
-        // TODO : implement
-        return new ArrayList<Address>();
+    	Query query = em.createNamedQuery("Address.findByParentId");
+    	query.setParameter("parentId", parent.getDataObjectId());
+
+    	return new ArrayList<Address>(query.getResultList());
     }
 
     public EntityProperties getAddressEntityProperties() {
@@ -103,14 +106,15 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public Address newAddress() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new Address();
     }
 
     public Address saveAddress(Address address) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        esm.persist(em, address);
+        return address;
     }
 
     public int deleteAddress(Address address) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return esm.remove(em, address);
     }
 }

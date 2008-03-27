@@ -30,16 +30,16 @@ import javax.persistence.Table;
          		name = "Address.findByParentDataObjectAndDeleted",
          		query = "select a from Address a where a.dataObject.parentDataObject = :parentDataObject and a.dataObject.deleted = :deleted"
          	),
-                @NamedQuery
-                (
+        @NamedQuery
+           	(
         		name = "Address.findByParentDataObjectIsNullAndDeleted",
         		query = "select a from Address a where a.dataObject.parentDataObject is null and a.dataObject.deleted = :deleted"
-                ),
-                @NamedQuery
-                (
-                        name = "Address.findByParentId",
-                        query = "select a from Address a where a.parentId = :parentId"
-                )
+           	),
+       @NamedQuery
+           	(
+           		name = "Address.findByParentId",
+                query = "select a from Address a where a.parentId = :parentId"
+            )
 	}
 )
 public class Address implements Serializable {
