@@ -27,7 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "communication_contacts")
-@NamedQueries(
+/*@NamedQueries(
 	{
 		@NamedQuery
          	(
@@ -36,6 +36,7 @@ import javax.persistence.Table;
          	)
 	}
 )
+*/
 public class CommunicationContact implements Serializable {
 
     private static final long serialVersionUID = 1L;
