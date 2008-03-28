@@ -27,7 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "communication_contacts")
-/*@NamedQueries(
+@NamedQueries(
 	{
 		@NamedQuery
          	(
@@ -36,7 +36,6 @@ import javax.persistence.Table;
          	)
 	}
 )
-*/
 public class CommunicationContact implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,13 +54,12 @@ public class CommunicationContact implements Serializable {
     @Column(name = "communication_value", nullable = false)
     private String communicationValue;
 
-    @OneToMany(mappedBy = "communicationContact")
-    private List<ContactPerson> contactPersons;
-
+    @Column(name = "contact_person_id")
+    private BigInteger contactPersonId;
+        
     @JoinColumn(name = "communication_contact_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-
 
     public CommunicationContact() {
     }
@@ -86,6 +84,14 @@ public class CommunicationContact implements Serializable {
         this.communicationValue = communicationValue;
     }
 
+    public BigInteger getContactPersonId() {
+        return contactPersonId;
+    }
+
+    public void setContactPersonId(BigInteger contactPersonId) {
+        this.contactPersonId = contactPersonId;
+    }
+    
     public BigInteger getParentId() {
         return parentId;
     }
@@ -108,14 +114,6 @@ public class CommunicationContact implements Serializable {
 
     public void setCommunicationType(DbResource communicationType) {
         this.communicationType = communicationType;
-    }
-
-    public List<ContactPerson> getContactPersons() {
-        return contactPersons;
-    }
-
-    public void setContactPersons(List<ContactPerson> contactPersons) {
-        this.contactPersons = contactPersons;
     }
 
     @Override
