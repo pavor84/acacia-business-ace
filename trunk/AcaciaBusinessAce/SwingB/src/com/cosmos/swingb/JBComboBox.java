@@ -6,21 +6,23 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.validation.BaseValidator;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JComboBox;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JComboBoxBinding;
@@ -42,9 +44,6 @@ public class JBComboBox
     private String propertyName;
     private Object beanEntity;
 
-    private boolean required;
-    private ActionListener validationListener;
-    
     public JBComboBox()
     {
         super();
@@ -88,6 +87,8 @@ public class JBComboBox
         Binding binding = bind(bindingGroup, data, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
+
+        binding.addBindingListener(new BindingValidationListener());
 
         return binding;
     }
@@ -192,29 +193,112 @@ public class JBComboBox
         this.application = application;
     }
 
-    public boolean isRequired() {
-        return required;
-    }
 
-    public void setRequired(boolean required) {
-        this.required = required;
-        if (required){
-            setStyleInvalid();
-            validationListener = new ActionListener(){
+    public class BindingValidationListener
+        extends AbstractBindingListener
+    {
+        @Override
+        public void bindingBecameBound(Binding binding) {
+            System.out.println("bindingBecameBound");
+            validate(binding);
+        }
 
-                public void actionPerformed(ActionEvent e) {
-                    setBackground(Color.GREEN);
-                }
-                
-            };
-            addActionListener(validationListener);
-            
-        } else if (validationListener != null) {
-            removeActionListener(validationListener);
+        @Override
+        public void targetChanged(Binding binding, PropertyStateEvent event) {
+            System.out.println("targetChanged");
+            validate(binding);
+        }
+
+        @Override
+        public void bindingBecameUnbound(Binding arg0) {
+            System.out.println("bindingBecameUnbound");
+        }
+
+        @Override
+        public void sourceChanged(Binding arg0, PropertyStateEvent arg1) {
+            System.out.println("sourceChanged");
+        }
+
+        @Override
+        public void sourceEdited(Binding arg0) {
+            System.out.println("sourceEdited");
+        }
+
+        @Override
+        public void syncFailed(Binding arg0, SyncFailure arg1) {
+            System.out.println("syncFailed");
+        }
+
+        @Override
+        public void synced(Binding arg0) {
+            System.out.println("synced");
+        }
+
+        @Override
+        public void targetEdited(Binding arg0) {
+            System.out.println("targetEdited");
+        }
+
+
+        public void validate(Binding binding)
+        {
+            System.out.println("ComboBox.binding: " + binding);
+            System.out.println("binding.getName(): " + binding.getName());
+            System.out.println("getSourceObject: " + binding.getSourceObject());
+            System.out.println("getSourceProperty: " + binding.getSourceProperty());
+            System.out.println("getSourceValueForTarget: " + binding.getSourceValueForTarget());
+            JComboBox comboBox = (JComboBox)binding.getTargetObject();
+            System.out.println("getTargetObject: " + comboBox);
+            System.out.println("comboBox.getSelectedItem(): " + comboBox.getSelectedItem());
+            System.out.println("getTargetProperty: " + binding.getTargetProperty());
+            System.out.println("getTargetValueForSource: " + binding.getTargetValueForSource());
+            boolean required = false;
+            String tooltip = null;
+            BaseValidator validator = (BaseValidator)binding.getValidator();
+            if(validator != null)
+            {
+                tooltip = validator.getTooltip();
+                required = validator.isRequired();
+            }
+
+            if(!binding.isContentValid())
+            {
+                if(required)
+                    setStyleRequired(tooltip);
+                else
+                    setStyleInvalid(tooltip);
+            }
+            else
+            {
+                if(required)
+                    setStyleValid();
+                else
+                    setStyleNormal();
+            }
         }
     }
 
-    public void setStyleInvalid() {
+    public void setStyleRequired(String tooltip) {
+        System.out.println("setStyleRequired");
         setBackground(Color.PINK);
+        setToolTipText(tooltip);
+    }
+
+    public void setStyleInvalid(String tooltip) {
+        System.out.println("setStyleInvalid");
+        setBackground(Color.YELLOW);
+        setToolTipText(tooltip);
+    }
+    
+    public void setStyleValid() {
+        System.out.println("setStyleValid");
+        setBackground(Color.GREEN);
+        setToolTipText(null);
+    }
+    
+    public void setStyleNormal() {
+        System.out.println("setStyleNormal");
+        setBackground(Color.WHITE);   
+        setToolTipText(null);
     }
 }
