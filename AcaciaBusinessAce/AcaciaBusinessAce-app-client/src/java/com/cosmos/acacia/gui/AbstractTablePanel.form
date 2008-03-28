@@ -69,7 +69,9 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="selectButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="188" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="unselectButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="130" max="32767" attributes="0"/>
                   <Component id="newButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="modifyButton" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -94,6 +96,7 @@
                       <Component id="deleteButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="modifyButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="newButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="unselectButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -144,9 +147,17 @@
         <Component class="com.cosmos.swingb.JBButton" name="selectButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="com.cosmos.acacia.gui.TablePanel" id="selectAction" methodName="selectAction"/>
+              <action class="com.cosmos.acacia.gui.AbstractTablePanel" id="selectAction" methodName="selectAction"/>
             </Property>
             <Property name="name" type="java.lang.String" value="selectButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBButton" name="unselectButton">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="com.cosmos.acacia.gui.AbstractTablePanel" id="unselectAction" methodName="unselectAction"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="unselectButton" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

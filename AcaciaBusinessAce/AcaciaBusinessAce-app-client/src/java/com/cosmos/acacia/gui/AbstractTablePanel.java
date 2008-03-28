@@ -55,6 +55,7 @@ public abstract class AbstractTablePanel
         modifyButton = new com.cosmos.swingb.JBButton();
         newButton = new com.cosmos.swingb.JBButton();
         selectButton = new com.cosmos.swingb.JBButton();
+        unselectButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -84,6 +85,9 @@ public abstract class AbstractTablePanel
         selectButton.setAction(actionMap.get("selectAction")); // NOI18N
         selectButton.setName("selectButton"); // NOI18N
 
+        unselectButton.setAction(actionMap.get("unselectAction")); // NOI18N
+        unselectButton.setName("unselectButton"); // NOI18N
+
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
         buttonsPanelLayout.setHorizontalGroup(
@@ -91,7 +95,9 @@ public abstract class AbstractTablePanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
                 .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -116,11 +122,12 @@ public abstract class AbstractTablePanel
                     .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, deleteButton, modifyButton, newButton, refreshButton, selectButton});
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, deleteButton, modifyButton, newButton, refreshButton, selectButton, unselectButton});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -129,7 +136,7 @@ public abstract class AbstractTablePanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dataScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 802, Short.MAX_VALUE)
+                    .addComponent(dataScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE)
                     .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -155,6 +162,7 @@ public abstract class AbstractTablePanel
     private com.cosmos.swingb.JBButton newButton;
     private com.cosmos.swingb.JBButton refreshButton;
     private com.cosmos.swingb.JBButton selectButton;
+    private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
     
 
@@ -164,6 +172,7 @@ public abstract class AbstractTablePanel
     protected void initData()
     {
         setEnabled(Button.Select, false);
+        setEnabled(Button.Unselect, false);
         setEnabled(Button.Modify, false);
         setEnabled(Button.Delete, false);
 
@@ -253,6 +262,10 @@ public abstract class AbstractTablePanel
                 selectButton.setVisible(visible);
                 break;
 
+            case Unselect:
+                unselectButton.setVisible(visible);
+                break;
+
             case New:
                 newButton.setVisible(visible);
                 break;
@@ -280,6 +293,9 @@ public abstract class AbstractTablePanel
         {
             case Select:
                 return selectButton.isVisible();
+
+            case Unselect:
+                return unselectButton.isVisible();
 
             case New:
                 return newButton.isVisible();
@@ -344,6 +360,10 @@ public abstract class AbstractTablePanel
         close();
     }
 
+    @Action
+    public void unselectAction() {
+        dataTable.getSelectionModel().clearSelection();
+    }
 
     @Action
     public void newAction() {
@@ -429,6 +449,7 @@ public abstract class AbstractTablePanel
     public enum Button
     {
         Select("selectAction"),
+        Unselect("unselectAction"),
         New("newAction"),
         Modify("modifyAction"),
         Delete("deleteAction"),
@@ -546,6 +567,7 @@ public abstract class AbstractTablePanel
             // the result computed by doInBackground().
         }
     }
+
 
 
 }
