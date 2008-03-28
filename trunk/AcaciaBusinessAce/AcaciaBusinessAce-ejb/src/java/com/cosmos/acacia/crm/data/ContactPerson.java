@@ -53,10 +53,6 @@ public class ContactPerson implements Serializable {
     @ManyToOne
     private Person contact;
 
-    @JoinColumn(name = "communication_contact_id", referencedColumnName = "communication_contact_id")
-    @ManyToOne
-    private CommunicationContact communicationContact;
-
     @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -85,14 +81,6 @@ public class ContactPerson implements Serializable {
 
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
-    }
-
-    public CommunicationContact getCommunicationContact() {
-        return communicationContact;
-    }
-
-    public void setCommunicationContact(CommunicationContact communicationContact) {
-        this.communicationContact = communicationContact;
     }
 
     public DataObject getDataObject() {
