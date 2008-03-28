@@ -171,6 +171,9 @@ public abstract class AbstractTablePanel
 
     protected void initData()
     {
+        setVisible(Button.Select, false);
+        setVisible(Button.Unselect, false);
+
         setEnabled(Button.Select, false);
         setEnabled(Button.Unselect, false);
         setEnabled(Button.Modify, false);
@@ -439,6 +442,7 @@ public abstract class AbstractTablePanel
     public DialogResponse showDialog(Component parentComponent)
     {
         setVisible(Button.Select, true);
+        setVisible(Button.Unselect, true);
         return super.showDialog(parentComponent);
     }
 
