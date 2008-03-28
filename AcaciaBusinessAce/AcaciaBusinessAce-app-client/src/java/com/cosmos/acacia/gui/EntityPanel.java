@@ -6,15 +6,25 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.data.DataObject;
+import org.jdesktop.application.Action;
+import org.jdesktop.application.ApplicationAction;
+import org.jdesktop.application.ApplicationActionMap;
+
 /**
  *
  * @author  Miro
  */
-public class EntityPanel extends javax.swing.JPanel {
+public class EntityPanel
+    extends AcaciaPanel
+{
     
     /** Creates new form EntityPanel */
-    public EntityPanel() {
+    public EntityPanel(DataObject parentDataObject)
+    {
+        super(parentDataObject);
         initComponents();
+        initData();
     }
     
     /** This method is called from within the constructor to
@@ -25,22 +35,177 @@ public class EntityPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonsPanel = new com.cosmos.swingb.JBPanel();
+        closeButton = new com.cosmos.swingb.JBButton();
+        saveButton = new com.cosmos.swingb.JBButton();
+        entityPanel = new com.cosmos.swingb.JBPanel();
+
         setName("Form"); // NOI18N
+
+        buttonsPanel.setName("buttonsPanel"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(EntityPanel.class, this);
+        closeButton.setAction(actionMap.get("closeAction")); // NOI18N
+        closeButton.setName("closeButton"); // NOI18N
+
+        saveButton.setAction(actionMap.get("saveAction")); // NOI18N
+        saveButton.setName("saveButton"); // NOI18N
+
+        javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
+        buttonsPanel.setLayout(buttonsPanelLayout);
+        buttonsPanelLayout.setHorizontalGroup(
+            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closeButton, saveButton});
+
+        buttonsPanelLayout.setVerticalGroup(
+            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, saveButton});
+
+        entityPanel.setName("entityPanel"); // NOI18N
+
+        javax.swing.GroupLayout entityPanelLayout = new javax.swing.GroupLayout(entityPanel);
+        entityPanel.setLayout(entityPanelLayout);
+        entityPanelLayout.setHorizontalGroup(
+            entityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 370, Short.MAX_VALUE)
+        );
+        entityPanelLayout.setVerticalGroup(
+            entityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 198, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(entityPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(entityPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBPanel buttonsPanel;
+    private com.cosmos.swingb.JBButton closeButton;
+    private com.cosmos.swingb.JBPanel entityPanel;
+    private com.cosmos.swingb.JBButton saveButton;
     // End of variables declaration//GEN-END:variables
-    
+
+
+    protected void initData()
+    {
+    }
+
+    @Action
+    public void closeAction() {
+    }
+
+    @Action
+    public void saveAction() {
+    }
+
+    public enum Button
+    {
+        Save("saveAction"),
+        Close("closeAction");
+
+        private Button(String actionName)
+        {
+            this.actionName = actionName;
+        }
+
+        private String actionName;
+
+        public String getActionName() {
+            return actionName;
+        }
+    };
+
+    public javax.swing.Action getAction(Button button)
+    {
+        ApplicationActionMap actionMap = getApplicationActionMap();
+        if(actionMap != null && button != null)
+        {
+            return actionMap.get(button.getActionName());
+        }
+
+        return null;
+    }
+
+    public void setEnabled(Button button, boolean enabled) {
+        ApplicationAction action = (ApplicationAction)getAction(button);
+        if(action != null)
+        {
+            action.setEnabled(enabled);
+        }
+    }
+
+    public void setSelected(Button button, boolean enabled) {
+        ApplicationAction action = (ApplicationAction)getAction(button);
+        if(action != null)
+        {
+            action.setSelected(enabled);
+        }
+    }
+
+    public void setVisible(Button button, boolean visible) {       
+        switch(button)
+        {
+            case Save:
+                saveButton.setVisible(visible);
+                break;
+
+            case Close:
+                closeButton.setVisible(visible);
+                break;
+        }
+    }
+
+    public boolean isVisible(Button button) {
+        switch(button)
+        {
+            case Save:
+                return saveButton.isVisible();
+
+            case Close:
+                return closeButton.isVisible();
+        }
+
+        throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
+    }
+
+    @Override
+    protected Class getResourceStopClass()
+    {
+        return EntityPanel.class;
+    }
 }
