@@ -284,6 +284,10 @@ public class JBComboBox
         setToolTipText(tooltip);
     }
 
+    public void setStyleInvalid() {
+        setStyleInvalid(null);
+    }
+
     public void setStyleInvalid(String tooltip) {
         System.out.println("setStyleInvalid");
         setBackground(Color.YELLOW);
