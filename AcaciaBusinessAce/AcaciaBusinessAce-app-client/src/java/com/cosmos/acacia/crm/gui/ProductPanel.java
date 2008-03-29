@@ -688,87 +688,100 @@ public class ProductPanel extends AcaciaPanel {
             product = getFormSession().newProduct();
         }
 
-        productBindingGroup = new BindingGroup();
-
-        EntityProperties entityProps = getProductEntityProperties();
-
-        PropertyDetails propDetails = entityProps.getPropertyDetails("productName");
-        productNameTextField.bind(productBindingGroup, product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("productCode");
-        productCodeTextField.bind(productBindingGroup, product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("measureUnit");
-        measureUnitComboBox.bind(productBindingGroup, getMeasureUnits(), product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("category");
-        productCategoryComboBox.bind(productBindingGroup, getProductsCategories(), product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("complex");
-        complexProductCheckBox.bind(productBindingGroup, product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("purchased");
-        purchasedProductCheckBox.bind(productBindingGroup, product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("salable");
-        salableProductCheckBox.bind(productBindingGroup, product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("obsolete");
-        obsoleteProductCheckBox.bind(productBindingGroup, product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("patternMaskFormat");
-        patternMaskFormatComboBox.bind(productBindingGroup, Collections.emptyList(), product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("productColor");
-        productColorComboBox.bind(productBindingGroup, Collections.emptyList(), product, propDetails);
-
-        minQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("minimumQuantity"));
-        maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"));
-        defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"));
-
-        purchasePriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("purchasePrice"));
-        salesPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"));
-        listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"));
-
-        quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"));
-
-        dimensionUnitComboBox.bind(
-                productBindingGroup,
-                getMeasureUnits(MeasurementUnit.Category.Volume),
-                product,
-                entityProps.getPropertyDetails("dimensionUnit"));
-        dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionWidth"));
-        dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionLength"));
-        dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionHeight"));
-
-        weightUnitComboBox.bind(
-                productBindingGroup,
-                getMeasureUnits(MeasurementUnit.Category.MassWeight),
-                product,
-                entityProps.getPropertyDetails("weightUnit"));
-        weightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("weight"));
-
-        deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"));
-
-        propDetails = entityProps.getPropertyDetails("producerId");
-//        productCategoryComboBox.bind(productBindingGroup, getProducers(), product, propDetails);
-
-        propDetails = entityProps.getPropertyDetails("description");
-        descriptionTextPane.bind(productBindingGroup, product, propDetails);
-
-        productBindingGroup.bind();
+        BindingGroup bindingGroup = getBindingGroup();
 
         setSaveActionState();
 
-        productBindingGroup.addBindingListener(new AbstractBindingListener()
+        if(bindingGroup != null)
         {
+            bindingGroup.addBindingListener(new AbstractBindingListener()
+            {
 
-            @SuppressWarnings("unchecked")
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                setSaveActionState();
-            }
-        });
+                @SuppressWarnings("unchecked")
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    setSaveActionState();
+                }
+            });
+        }
+    }
+
+    protected BindingGroup getBindingGroup()
+    {
+        if(productBindingGroup == null)
+        {
+            productBindingGroup = new BindingGroup();
+
+            EntityProperties entityProps = getProductEntityProperties();
+
+            PropertyDetails propDetails = entityProps.getPropertyDetails("productName");
+            productNameTextField.bind(productBindingGroup, product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("productCode");
+            productCodeTextField.bind(productBindingGroup, product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("measureUnit");
+            measureUnitComboBox.bind(productBindingGroup, getMeasureUnits(), product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("category");
+            productCategoryComboBox.bind(productBindingGroup, getProductsCategories(), product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("complex");
+            complexProductCheckBox.bind(productBindingGroup, product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("purchased");
+            purchasedProductCheckBox.bind(productBindingGroup, product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("salable");
+            salableProductCheckBox.bind(productBindingGroup, product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("obsolete");
+            obsoleteProductCheckBox.bind(productBindingGroup, product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("patternMaskFormat");
+            patternMaskFormatComboBox.bind(productBindingGroup, Collections.emptyList(), product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("productColor");
+            productColorComboBox.bind(productBindingGroup, Collections.emptyList(), product, propDetails);
+
+            minQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("minimumQuantity"));
+            maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"));
+            defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"));
+
+            purchasePriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("purchasePrice"));
+            salesPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"));
+            listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"));
+
+            quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"));
+
+            dimensionUnitComboBox.bind(
+                    productBindingGroup,
+                    getMeasureUnits(MeasurementUnit.Category.Volume),
+                    product,
+                    entityProps.getPropertyDetails("dimensionUnit"));
+            dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionWidth"));
+            dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionLength"));
+            dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionHeight"));
+
+            weightUnitComboBox.bind(
+                    productBindingGroup,
+                    getMeasureUnits(MeasurementUnit.Category.MassWeight),
+                    product,
+                    entityProps.getPropertyDetails("weightUnit"));
+            weightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("weight"));
+
+            deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"));
+
+            propDetails = entityProps.getPropertyDetails("producerId");
+    //        productCategoryComboBox.bind(productBindingGroup, getProducers(), product, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("description");
+            descriptionTextPane.bind(productBindingGroup, product, propDetails);
+
+            productBindingGroup.bind();
+        }
+
+        return productBindingGroup;
     }
 
     /**
