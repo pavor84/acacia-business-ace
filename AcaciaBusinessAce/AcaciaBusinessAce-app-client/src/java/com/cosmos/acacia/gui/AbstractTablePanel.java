@@ -525,6 +525,7 @@ public abstract class AbstractTablePanel
                     setEnabled(Button.Modify, false);
                     setEnabled(Button.Delete, false);
                     setEnabled(Button.Select, false);
+                    setEnabled(Button.Unselect, false);
                 }
                 else
                 {
@@ -532,6 +533,7 @@ public abstract class AbstractTablePanel
                     setEnabled(Button.Modify, canModify(selectedObject));
                     setEnabled(Button.Delete, canDelete(selectedObject));
                     setEnabled(Button.Select, true);
+                    setEnabled(Button.Unselect, true);
                 }
                 setEnabled(Button.New, canCreate());
                 selectedRowObject = null;
