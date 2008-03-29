@@ -1,5 +1,5 @@
 /*
- * EntityPanel.java
+ * AbstractEntityPanel.java
  *
  * Created on Четвъртък, 2008, Март 27, 21:42
  */
@@ -7,20 +7,31 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.swingb.DialogResponse;
+import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
  * @author  Miro
  */
-public class EntityPanel
+public abstract class AbstractEntityPanel
     extends AcaciaPanel
 {
     
-    /** Creates new form EntityPanel */
-    public EntityPanel(DataObject parentDataObject)
+    /** Creates new form AbstractEntityPanel */
+    public AbstractEntityPanel(DataObject parentDataObject)
     {
         super(parentDataObject);
         initComponents();
@@ -38,13 +49,13 @@ public class EntityPanel
         buttonsPanel = new com.cosmos.swingb.JBPanel();
         closeButton = new com.cosmos.swingb.JBButton();
         saveButton = new com.cosmos.swingb.JBButton();
-        entityPanel = new com.cosmos.swingb.JBPanel();
+        entityPanelHolder = new com.cosmos.swingb.JBPanel();
 
         setName("Form"); // NOI18N
 
         buttonsPanel.setName("buttonsPanel"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(EntityPanel.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(AbstractEntityPanel.class, this);
         closeButton.setAction(actionMap.get("closeAction")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
@@ -77,18 +88,8 @@ public class EntityPanel
 
         buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, saveButton});
 
-        entityPanel.setName("entityPanel"); // NOI18N
-
-        javax.swing.GroupLayout entityPanelLayout = new javax.swing.GroupLayout(entityPanel);
-        entityPanel.setLayout(entityPanelLayout);
-        entityPanelLayout.setHorizontalGroup(
-            entityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 370, Short.MAX_VALUE)
-        );
-        entityPanelLayout.setVerticalGroup(
-            entityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 198, Short.MAX_VALUE)
-        );
+        entityPanelHolder.setName("entityPanelHolder"); // NOI18N
+        entityPanelHolder.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -97,7 +98,7 @@ public class EntityPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(entityPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(entityPanelHolder, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                     .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -105,7 +106,7 @@ public class EntityPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(entityPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(entityPanelHolder, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -116,17 +117,62 @@ public class EntityPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonsPanel;
     private com.cosmos.swingb.JBButton closeButton;
-    private com.cosmos.swingb.JBPanel entityPanel;
+    private com.cosmos.swingb.JBPanel entityPanelHolder;
     private com.cosmos.swingb.JBButton saveButton;
     // End of variables declaration//GEN-END:variables
 
 
+    protected abstract BindingGroup getBindingGroup();
+    protected abstract JPanel getEntityPanel();
+
     protected void initData()
     {
+        setDialogResponse(DialogResponse.CLOSE);
+
+        JPanel entityPanel;
+        if((entityPanel = getEntityPanel()) != null)
+        {
+            entityPanelHolder.add(entityPanel, BorderLayout.CENTER);
+        }
+
+        setSaveActionState();
+
+        BindingGroup bindingGroup;
+        if((bindingGroup = getBindingGroup()) != null)
+        {
+            bindingGroup.addBindingListener(new AbstractBindingListener()
+            {
+
+                @SuppressWarnings("unchecked")
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    setSaveActionState();
+                }
+            });
+        }
+    }
+
+    protected void setSaveActionState()
+    {
+        BindingGroup bindingGroup;
+        if((bindingGroup = getBindingGroup()) != null)
+        {
+            setEnabled(Button.Save, bindingGroup.isContentValid());
+        }
     }
 
     @Action
-    public void closeAction() {
+    public void closeAction()
+    {
+        BindingGroup bindingGroup;
+        if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
+        {
+            if(!closeDialogConfirmation())
+                return;
+        }
+
+        setDialogResponse(DialogResponse.CLOSE);
+        close();
     }
 
     @Action
@@ -206,6 +252,37 @@ public class EntityPanel
     @Override
     protected Class getResourceStopClass()
     {
-        return EntityPanel.class;
+        return AbstractEntityPanel.class;
     }
+
+    @Override
+    protected void dialogWindowClosing(WindowEvent event)
+    {
+        BindingGroup bindingGroup;
+        if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
+        {
+            if(!closeDialogConfirmation())
+                return;
+        }
+
+        setDialogResponse(DialogResponse.CLOSE);
+        super.dialogWindowClosing(event);
+    }
+
+    protected boolean closeDialogConfirmation()
+    {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("closeAction.ConfirmDialog.unsavedData.title");
+        String message = resource.getString("closeAction.ConfirmDialog.unsavedData.message");
+        Icon icon = resource.getImageIcon("closeAction.ConfirmDialog.unsavedData.icon");
+        int result = JOptionPane.showConfirmDialog(
+                this.getParent(),
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                icon);
+        return JOptionPane.YES_OPTION == result;
+    }
+
 }
