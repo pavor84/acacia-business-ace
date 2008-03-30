@@ -10,11 +10,12 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -35,10 +36,24 @@ class AddressListPanel extends AbstractTablePanel {
 
     private BindingGroup addressesBindingGroup;
     private List<Address> addresses;
-
+    private String typeTitle;
+    
     @Override
     protected void initData() {
+        
         super.initData();
+        
+        if (getParentDataObject() != null){
+            String parentObjectType = getParentDataObject().getDataObjectType().getDataObjectType();
+            ResourceMap resourceMap = getResourceMap();
+
+            if (parentObjectType.indexOf("Person") != -1){
+                setTypeTitle(resourceMap.getString("address.text"));
+            } else if (parentObjectType.indexOf("Organization") != -1) {
+               setTypeTitle(resourceMap.getString("branch.text"));
+            }
+        }
+        
         setVisible(Button.Select, false);
         addressesBindingGroup = new BindingGroup();
         AcaciaTable addressesTable = getDataTable();
@@ -81,9 +96,9 @@ class AddressListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    protected int deleteAddress(Address addresse)
+    protected int deleteAddress(Address addresses)
     {
-        return getFormSession().deleteAddress(addresse);
+        return getFormSession().deleteAddress(addresses);
     }
 
     @Override
@@ -115,14 +130,16 @@ class AddressListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        /*
-        AddressPanel addressePanel = new AddressPanel(getParentDataObject());
-        DialogResponse response = addressePanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
+        if (canNestedOperationProceed())
         {
-            return addressePanel.getSelectedValue();
+            AddressPanel addressPanel = new AddressPanel(getParentDataObject());
+            addressPanel.setTitle(typeTitle);
+            DialogResponse response = addressPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return addressPanel.getSelectedValue();
+            }
         }
-        */
         return null;
     }
 
@@ -140,4 +157,13 @@ class AddressListPanel extends AbstractTablePanel {
     public boolean canDelete(Object rowObject) {
         return true;
     }
+
+    public String getTypeTitle() {
+        return typeTitle;
+    }
+
+    public void setTypeTitle(String typeTitle) {
+        this.typeTitle = typeTitle;
+    }
+    
 }

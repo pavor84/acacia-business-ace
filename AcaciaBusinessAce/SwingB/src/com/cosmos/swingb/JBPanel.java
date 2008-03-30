@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb;
 
+import com.cosmos.swingb.listeners.NestedFormListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -13,7 +14,9 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -43,7 +46,8 @@ public class JBPanel
     private List selectedValues;
     private DialogResponse response;
     private Dialog.ModalityType modalityType = Dialog.ModalityType.APPLICATION_MODAL;
-
+    private Set<NestedFormListener> nestedFormListeners = new HashSet<NestedFormListener>();
+    
     public JBPanel()
     {
         super();
@@ -322,5 +326,26 @@ public class JBPanel
         {
             dialogWindowClosing(event);
         }
+    }
+    
+    public void addNestedFormListener(NestedFormListener listener)
+    {
+        nestedFormListeners.add(listener);
+    }
+    
+    /**
+     * Asks all listeners to perform their actions and returns 
+     * whether all of them allow the nested operation to proceed
+     * 
+     * @return boolean whether the nested operation can proceed
+     */
+    public boolean canNestedOperationProceed()
+    {
+        for (NestedFormListener listener: nestedFormListeners)
+        {
+            if (listener.actionPerformed() == false)
+                return false;
+        }
+        return true;
     }
 }

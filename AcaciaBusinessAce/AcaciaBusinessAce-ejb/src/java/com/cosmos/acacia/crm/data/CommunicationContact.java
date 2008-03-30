@@ -9,7 +9,6 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,15 +26,25 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "communication_contacts")
 @NamedQueries(
-	{
-		@NamedQuery
-         	(
-         		name = "CommunicationContact.findByContactPersonId",
-         		query = "select cc from CommunicationContact cc where cc.contactPersonId = :contactPersonId"
-         	)
-	}
+    {
+        @NamedQuery
+             (
+                 name = "CommunicationContact.findByParentDataObjectAndDeleted",
+                 query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObject = :parentDataObject and cc.dataObject.deleted = :deleted"
+             ),
+       @NamedQuery
+            (
+                name = "CommunicationContact.findByParentDataObjectIsNullAndDeleted",
+                query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObject is null and cc.dataObject.deleted = :deleted"
+             ),
+        @NamedQuery
+             (
+                 name = "CommunicationContact.findByContactPerson",
+                 query = "select cc from CommunicationContact cc where cc.contactPerson = :contactPerson and cc.dataObject.deleted = :deleted"
+             )
+    }
 )
-public class CommunicationContact implements Serializable {
+public class CommunicationContact extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,9 +62,10 @@ public class CommunicationContact implements Serializable {
     @Column(name = "communication_value", nullable = false)
     private String communicationValue;
 
-    @Column(name = "contact_person_id")
-    private BigInteger contactPersonId;
-        
+    @JoinColumn(name = "contact_person_id", referencedColumnName = "contact_person_id")
+    @ManyToOne
+    private ContactPerson contactPerson;
+
     @JoinColumn(name = "communication_contact_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -84,26 +93,30 @@ public class CommunicationContact implements Serializable {
         this.communicationValue = communicationValue;
     }
 
-    public BigInteger getContactPersonId() {
-        return contactPersonId;
+    public ContactPerson getContactPerson() {
+        return contactPerson;
     }
 
-    public void setContactPersonId(BigInteger contactPersonId) {
-        this.contactPersonId = contactPersonId;
+    public void setContactPerson(ContactPerson contactPerson) {
+        this.contactPerson = contactPerson;
     }
-    
+
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -139,6 +152,16 @@ public class CommunicationContact implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.CommunicationContact[communicationContactId=" + communicationContactId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getCommunicationContactId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setCommunicationContactId(id);
     }
 
 }
