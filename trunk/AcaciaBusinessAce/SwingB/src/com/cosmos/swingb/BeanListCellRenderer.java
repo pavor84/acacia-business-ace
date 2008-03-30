@@ -34,7 +34,7 @@ public class BeanListCellRenderer
             boolean isSelected,
             boolean cellHasFocus)
     {
-        value = beanResource.getValue(value);
+        value = beanResource.getFullNameValue(value);
         return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
     }
 
