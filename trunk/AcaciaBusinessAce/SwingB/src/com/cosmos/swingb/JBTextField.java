@@ -7,8 +7,11 @@ package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.BaseValidator;
-import java.awt.Color;
 import javax.swing.JTextField;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -26,6 +29,11 @@ import org.jdesktop.beansbinding.Validator;
 public class JBTextField
     extends JTextField
 {
+    private Application application;
+    private ApplicationContext applicationContext;
+    private ApplicationActionMap applicationActionMap;
+    private ResourceMap resourceMap;
+
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
@@ -89,6 +97,63 @@ public class JBTextField
         return beanEntity;
     }
 
+    public ApplicationContext getContext()
+    {
+        if(applicationContext == null)
+        {
+            Application app = getApplication();
+            if(app != null)
+            {
+                applicationContext = app.getContext();
+            }
+        }
+
+        return applicationContext;
+    }
+
+    public ApplicationActionMap getApplicationActionMap()
+    {
+        if(applicationActionMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                applicationActionMap = context.getActionMap(this);
+            }
+        }
+
+        return applicationActionMap;
+    }
+
+    public ResourceMap getResourceMap()
+    {
+        if(resourceMap == null)
+        {
+            ApplicationContext context = getContext();
+            if(context != null)
+            {
+                resourceMap = context.getResourceMap(this.getClass());
+            }
+        }
+
+        return resourceMap;
+    }
+
+    public void setResourceMap(ResourceMap resourceMap) {
+        this.resourceMap = resourceMap;
+    }
+
+    public Application getApplication() {
+        if(application == null)
+            application = Application.getInstance();
+
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
     public class BindingValidationListener
         extends AbstractBindingListener
     {
@@ -131,22 +196,22 @@ public class JBTextField
     }
 
     public void setStyleRequired(String tooltip) {
-        setBackground(Color.PINK);
         setToolTipText(tooltip);
+        setBackground(getResourceMap().getColor("validation.field.required.background"));
     }
 
     public void setStyleInvalid(String tooltip) {
-        setBackground(Color.YELLOW);
         setToolTipText(tooltip);
+        setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
     
     public void setStyleValid() {
-        setBackground(Color.GREEN);
         setToolTipText(null);
+        setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
     
     public void setStyleNormal() {
-        setBackground(Color.WHITE);   
         setToolTipText(null);
+        setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
 }
