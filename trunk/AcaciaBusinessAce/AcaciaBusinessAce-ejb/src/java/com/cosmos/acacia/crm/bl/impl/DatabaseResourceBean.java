@@ -10,6 +10,8 @@ import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.enums.OrganizationType;
+import com.cosmos.acacia.crm.enums.ProductColor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class DatabaseResourceBean
-    implements DatabaseResourceLocal, DatabaseResourceRemote
+    implements DatabaseResourceLocal
 {
 
     private static boolean initialized = false;
@@ -43,8 +45,10 @@ public class DatabaseResourceBean
         if(!initialized)
         {
             System.out.println("initDatabaseResource()");
+            getDbResources(Gender.class);
             getDbResources(MeasurementUnit.class);
-            //getDbResources(Gender.class);
+            getDbResources(OrganizationType.class);
+            getDbResources(ProductColor.class);
             initialized = true;
         }
     }

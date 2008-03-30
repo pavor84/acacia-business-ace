@@ -5,14 +5,15 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
- * @author miro
+ * @author Miro
  */
-@Local
-public interface DatabaseResourceLocal
-{
-    void initDatabaseResource();
+@Remote
+public interface AcaciaEjbInitRemote {
+
+    void init();
+    
 }

@@ -53,13 +53,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
 //        company.setOrganizationType();
     }
 
-    public List<Product> getProducts(DataObject parent) {
-        System.out.println("databaseResource: " + databaseResource);
-        if(databaseResource != null)
-            databaseResource.getDbResources(MeasurementUnit.class);
-
-        System.out.println("MeasurementUnit.Piece: " + MeasurementUnit.Piece);
-
+    public List<Product> getProducts(DataObject parent)
+    {
         Query q;
         if(parent != null)
         {
@@ -74,11 +69,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return new ArrayList<Product>(q.getResultList());
     }
 
-    public List<ProductCategory> getProductsCategories(DataObject parent) {
-        System.out.println("databaseResource: " + databaseResource);
-        if(databaseResource != null)
-            databaseResource.getDbResources(MeasurementUnit.class);
-
+    public List<ProductCategory> getProductsCategories(DataObject parent)
+    {
         Query q;
         if(parent != null)
         {
