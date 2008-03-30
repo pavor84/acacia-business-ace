@@ -6,6 +6,7 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.DialogResponse;
@@ -48,8 +49,6 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     
     public abstract BindingGroup getBindingGroup();
     
-    public abstract DataObject getDataObject();
-    
     public abstract Object getEntity();
     
     public abstract EntityFormButtonPanel getButtonPanel();
@@ -73,6 +72,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             return false;
         }
     }
+    
     
     public void saveAction()
     {
@@ -99,6 +99,15 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         close();
     }
      
+    public DataObject getDataObject()
+    {
+        if (getEntity() instanceof DataObjectBean)
+        {
+            return ((DataObjectBean) getEntity()).getDataObject();
+        }
+        
+        return null;
+    }
      /**
      * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
      * an EJB exception. That is way it is a little bit tricky to get it. This method implements this

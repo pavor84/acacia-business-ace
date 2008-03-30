@@ -351,11 +351,6 @@ public class AddressPanel extends BaseEntityPanel {
     }
 
     @Override
-    public DataObject getDataObject() {
-        return address.getDataObject();
-    }
-
-    @Override
     public Object getEntity() {
         return address;
     }
