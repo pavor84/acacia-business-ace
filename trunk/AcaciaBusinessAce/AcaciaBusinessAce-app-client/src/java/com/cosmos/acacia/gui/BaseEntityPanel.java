@@ -56,6 +56,10 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     
     public abstract EntityFormButtonPanel getButtonPanel();
         
+    protected void init()
+    {
+        initSaveStateListener();
+    }
     protected void initSaveStateListener()
     {
         getButtonPanel().initSaveStateListener();

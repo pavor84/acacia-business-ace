@@ -54,11 +54,12 @@ public class PersonPanel extends BaseEntityPanel {
         init();
     }
     
-    private void init()
+    @Override
+    protected void init()
     {
         initComponents();
         initData();
-        initSaveStateListener();
+        super.init();
     }
 
     /** This method is called from within the constructor to
