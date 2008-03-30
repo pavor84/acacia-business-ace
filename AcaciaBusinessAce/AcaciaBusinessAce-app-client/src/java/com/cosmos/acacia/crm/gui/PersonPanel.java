@@ -50,7 +50,6 @@ public class PersonPanel extends BaseEntityPanel {
     protected void init()
     {
         initComponents();
-        initData();
         super.init();
     }
 
