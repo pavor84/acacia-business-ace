@@ -55,7 +55,7 @@ public enum Gender implements DatabaseResource {
     {
         if(dbResources == null)
         {
-            dbResources = new ArrayList<DbResource>(ProductColor.values().length);
+            dbResources = new ArrayList<DbResource>(Gender.values().length);
 
             for(Gender gender : Gender.values())
             {

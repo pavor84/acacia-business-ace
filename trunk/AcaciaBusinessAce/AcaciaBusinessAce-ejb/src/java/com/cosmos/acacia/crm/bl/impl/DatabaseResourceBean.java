@@ -8,8 +8,8 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
-import com.cosmos.resource.TextResource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,6 +44,7 @@ public class DatabaseResourceBean
         {
             System.out.println("initDatabaseResource()");
             getDbResources(MeasurementUnit.class);
+            //getDbResources(Gender.class);
             initialized = true;
         }
     }

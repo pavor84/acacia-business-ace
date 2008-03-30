@@ -124,6 +124,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
 
     public List<DbResource> getGenders() {
-        return Gender.getDbResources();
+        //return Gender.getDbResources();
+        return new ArrayList<DbResource>();
     }
 }

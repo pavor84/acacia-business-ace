@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
-    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+    <Property name="opaque" type="boolean" value="false"/>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
@@ -18,24 +18,20 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="buttonPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="addressesPanel" max="32767" attributes="3"/>
-                          <Component id="personalDataPanel" alignment="0" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="passportsPanel" alignment="1" pref="328" max="32767" attributes="2"/>
-                          <Component id="birthDataPanel" alignment="0" max="32767" attributes="0"/>
-                      </Group>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="personalDataPanel" min="-2" max="-2" attributes="1"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="birthDataPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="passportsPanel" alignment="0" max="32767" attributes="3"/>
+                  <Component id="descriptionPanel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="addressesPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel1" alignment="0" pref="674" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -47,16 +43,14 @@
                   <Component id="personalDataPanel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="birthDataPanel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="passportsPanel" alignment="3" max="32767" attributes="0"/>
-                  <Component id="addressesPanel" alignment="3" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="addressesPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="passportsPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -66,7 +60,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Personal Data">
+            <TitledBorder title="Personal Info">
               <Property name="titleX" resourceKey="personalDataPanel.border.title"/>
             </TitledBorder>
           </Border>
@@ -89,7 +83,7 @@
                   </Group>
                   <EmptySpace pref="18" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="genderRadioGroup" max="32767" attributes="1"/>
+                      <Component id="genderComboBox" max="32767" attributes="1"/>
                       <Component id="firstNameTextField" linkSize="1" alignment="0" pref="217" max="32767" attributes="1"/>
                       <Component id="secondNameTextField" linkSize="1" alignment="0" pref="219" max="32767" attributes="1"/>
                       <Component id="lastNameTextField" linkSize="1" alignment="0" pref="218" max="32767" attributes="1"/>
@@ -102,9 +96,9 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="genderLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="genderRadioGroup" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="genderLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="genderComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="9" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -181,54 +175,26 @@
             <Property name="name" type="java.lang.String" value="genderLabel" noResource="true"/>
           </Properties>
         </Component>
-        <Container class="com.cosmos.swingb.JBRadioGroup" name="genderRadioGroup">
+        <Component class="com.cosmos.swingb.JBComboBox" name="genderComboBox">
           <Properties>
-            <Property name="name" type="java.lang.String" value="genderRadioGroup" noResource="true"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="genderComboBox" noResource="true"/>
           </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="maleRadioButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="femaleRadioButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="63" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="femaleRadioButton" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
-                      <Component id="maleRadioButton" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="com.cosmos.swingb.JBRadioButton" name="maleRadioButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="maleRadioButton.text"/>
-                <Property name="name" type="java.lang.String" value="maleRadioButton" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBRadioButton" name="femaleRadioButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="femaleRadioButton.text"/>
-                <Property name="name" type="java.lang.String" value="femaleRadioButton" noResource="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="com.cosmos.swingb.JBPanel" name="birthDataPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Birth data">
+            <TitledBorder title="Birth Place">
               <Property name="titleX" resourceKey="birthDataPanel.border.title"/>
             </TitledBorder>
           </Border>
@@ -258,7 +224,7 @@
                           <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="24" max="32767" attributes="0"/>
+                  <EmptySpace pref="19" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="personalUniqueIdTextField" linkSize="2" alignment="1" pref="217" max="32767" attributes="1"/>
                       <Component id="birthPlaceCountryComboBox" linkSize="2" alignment="1" pref="179" max="32767" attributes="1"/>
@@ -362,32 +328,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="com.cosmos.swingb.JBPanel" name="addressesPanel">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Addresses">
-              <Property name="titleX" resourceKey="addressesPanel.border.title"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-        <Property name="name" type="java.lang.String" value="addressesPanel" noResource="true"/>
-        <Property name="title" type="java.lang.String" resourceKey="addressesPanel.title"/>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="325" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="161" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-    </Container>
     <Container class="com.cosmos.swingb.JBPanel" name="passportsPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -404,9 +344,8 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jScrollPane2" min="-2" pref="301" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jScrollPane2" pref="648" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -414,7 +353,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane2" pref="150" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="132" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -448,57 +387,6 @@
         </Container>
       </SubComponents>
     </Container>
-    <Container class="com.cosmos.swingb.JBPanel" name="buttonPanel">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="buttonPanel" noResource="true"/>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="544" max="32767" attributes="0"/>
-                  <Component id="saveButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="closelButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="15" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="closelButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="saveButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="com.cosmos.swingb.JBButton" name="closelButton">
-          <Properties>
-            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="com.cosmos.acacia.crm.gui.ProductPanel" id="closeAction" methodName="closeAction"/>
-            </Property>
-            <Property name="text" type="java.lang.String" resourceKey="closelButton.text"/>
-            <Property name="name" type="java.lang.String" value="closelButton" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBButton" name="saveButton">
-          <Properties>
-            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="com.cosmos.acacia.crm.gui.PersonPanel" id="saveAction" methodName="saveAction"/>
-            </Property>
-            <Property name="text" type="java.lang.String" resourceKey="saveButton.text"/>
-            <Property name="name" type="java.lang.String" value="saveButton" noResource="true"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
     <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -516,7 +404,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="644" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="638" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -551,5 +439,35 @@
         </Container>
       </SubComponents>
     </Container>
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="addressesPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Addresses">
+              <Property name="titleX" resourceKey="addressesPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="addressesPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="658" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="160" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel1" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

@@ -8,10 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.cosmos.acacia.annotation.Property;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * Created	:	21.03.2008
@@ -32,10 +32,16 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
     
+    /*
     @JoinColumn(name = "id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
+    */
     
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private DataObject dataObject;
+        
     /**
      * Getter for parentId
      * @return BigInteger
