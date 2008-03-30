@@ -45,7 +45,6 @@ public class AddressPanel extends BaseEntityPanel {
     protected void init()
     {
         initComponents();
-        initData();
         super.init();
     }
 

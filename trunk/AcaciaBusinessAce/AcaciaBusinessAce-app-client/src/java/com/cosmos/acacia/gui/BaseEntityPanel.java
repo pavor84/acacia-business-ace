@@ -55,6 +55,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         
     protected void init()
     {
+        initData();
         initSaveStateListener();
     }
     protected void initSaveStateListener()
