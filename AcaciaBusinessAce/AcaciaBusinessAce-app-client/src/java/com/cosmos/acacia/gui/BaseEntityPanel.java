@@ -54,11 +54,19 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     
     public abstract Object getEntity();
     
+    public abstract EntityFormButtonPanel getButtonPanel();
+        
+    protected void initSaveStateListener()
+    {
+        getButtonPanel().initSaveStateListener();
+    }
+        
     public boolean checkFormValidity()
     {
         if (getBindingGroup().isContentValid()){
                 return true;
         } else {
+            // TODO : Detailed message?
             JOptionPane.showMessageDialog(this, getResourceMap().getString("save.invalid"));
             return false;
         }
@@ -83,7 +91,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             }
         }
     }
-        
+    
      /**
      * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
      * an EJB exception. That is way it is a little bit tricky to get it. This method implements this
