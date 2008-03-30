@@ -26,9 +26,9 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="birthDataPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="passportsPanel" alignment="0" max="32767" attributes="3"/>
-                  <Component id="descriptionPanel" alignment="1" max="32767" attributes="0"/>
                   <Component id="addressesPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="passportsPanel" alignment="1" max="32767" attributes="3"/>
+                  <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="entityFormButtonPanel1" alignment="0" pref="674" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -38,18 +38,18 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="personalDataPanel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="birthDataPanel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="addressesPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="passportsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -257,7 +257,7 @@
                       <Component id="cityLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
                       <Component id="birthPlaceCityComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="21" max="32767" attributes="0"/>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

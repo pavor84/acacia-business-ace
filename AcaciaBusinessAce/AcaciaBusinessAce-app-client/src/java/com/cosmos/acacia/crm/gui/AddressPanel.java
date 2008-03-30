@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.bl.impl.LocationsListRemote;
+import com.cosmos.acacia.crm.bl.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
@@ -70,7 +70,7 @@ public class AddressPanel extends BaseEntityPanel {
         postalCodeTextField = new com.cosmos.swingb.JBTextField();
         addressPanel = new com.cosmos.swingb.JBPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        addressTextPane = new com.cosmos.swingb.JBTextPane();
+        postalAddressTextPane = new com.cosmos.swingb.JBTextPane();
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
@@ -107,8 +107,8 @@ public class AddressPanel extends BaseEntityPanel {
         jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
-        addressTextPane.setName("addressTextPane"); // NOI18N
-        jScrollPane3.setViewportView(addressTextPane);
+        postalAddressTextPane.setName("postalAddressTextPane"); // NOI18N
+        jScrollPane3.setViewportView(postalAddressTextPane);
 
         javax.swing.GroupLayout addressPanelLayout = new javax.swing.GroupLayout(addressPanel);
         addressPanel.setLayout(addressPanelLayout);
@@ -122,7 +122,7 @@ public class AddressPanel extends BaseEntityPanel {
         addressPanelLayout.setVerticalGroup(
             addressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addressPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -147,7 +147,7 @@ public class AddressPanel extends BaseEntityPanel {
         descriptionPanelLayout.setVerticalGroup(
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(descriptionPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -158,11 +158,11 @@ public class AddressPanel extends BaseEntityPanel {
         contactPersonsPanel.setLayout(contactPersonsPanelLayout);
         contactPersonsPanelLayout.setHorizontalGroup(
             contactPersonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGap(0, 566, Short.MAX_VALUE)
         );
         contactPersonsPanelLayout.setVerticalGroup(
             contactPersonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 193, Short.MAX_VALUE)
+            .addGap(0, 142, Short.MAX_VALUE)
         );
 
         communicationContactsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("communicationContactsPanel.border.title"))); // NOI18N
@@ -172,11 +172,11 @@ public class AddressPanel extends BaseEntityPanel {
         communicationContactsPanel.setLayout(communicationContactsPanelLayout);
         communicationContactsPanelLayout.setHorizontalGroup(
             communicationContactsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+            .addGap(0, 566, Short.MAX_VALUE)
         );
         communicationContactsPanelLayout.setVerticalGroup(
             communicationContactsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 193, Short.MAX_VALUE)
+            .addGap(0, 104, Short.MAX_VALUE)
         );
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
@@ -191,8 +191,10 @@ public class AddressPanel extends BaseEntityPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(communicationContactsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(countryLabel)
                             .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -207,14 +209,20 @@ public class AddressPanel extends BaseEntityPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nameLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postalCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
-                    .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(postalCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(contactPersonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(communicationContactsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(addressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(contactPersonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,24 +239,22 @@ public class AddressPanel extends BaseEntityPanel {
                     .addComponent(countryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(postalCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(addressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(contactPersonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(communicationContactsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(contactPersonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(communicationContactsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel addressPanel;
-    private com.cosmos.swingb.JBTextPane addressTextPane;
     private com.cosmos.swingb.JBComboBox cityComboBox;
     private javax.swing.JLabel cityLabel;
     private com.cosmos.acacia.gui.TableHolderPanel communicationContactsPanel;
@@ -263,11 +269,12 @@ public class AddressPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel nameLabel;
     private com.cosmos.swingb.JBLabel nameLabel1;
     private com.cosmos.swingb.JBTextField nameTextField;
+    private com.cosmos.swingb.JBTextPane postalAddressTextPane;
     private com.cosmos.swingb.JBTextField postalCodeTextField;
     // End of variables declaration//GEN-END:variables
 
     @EJB
-    private LocationsListRemote formSession;
+    private AddressesListRemote formSession;
 
     private BindingGroup addressBindingGroup;
     private Address address;
@@ -286,8 +293,9 @@ public class AddressPanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getAddressEntityProperties();
 
-        nameTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("addressNme"));
+        nameTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("addressName"));
         postalCodeTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalCode"));
+        postalAddressTextPane.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalAddress"));
 
         countryComboBox.bind(addressBindingGroup, getCountries(), address, "country");
         cityComboBox.bind(addressBindingGroup, getCities(), address, "city");
@@ -301,13 +309,13 @@ public class AddressPanel extends BaseEntityPanel {
         addressBindingGroup.bind();
     }
 
-        protected LocationsListRemote getFormSession()
+        protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
         {
             try
             {
-                formSession = InitialContext.doLookup(LocationsListRemote.class.getName());
+                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
             }
             catch(Exception ex)
             {
@@ -347,35 +355,21 @@ public class AddressPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        try
-        {
-            System.out.println("Save: address: " + address);
-            address = getFormSession().saveAddress(address);
-            setDialogResponse(DialogResponse.SAVE);
-            setSelectedValue(address);
-            if (closeAfter)
-                close();
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-            // TODO: Log that error
-            ResourceMap resource = getResourceMap();
-            String title = resource.getString("saveAction.Action.error.title");
-            String basicMessage = resource.getString("saveAction.Action.error.basicMessage", ex.getMessage());
-            String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
-            String category = PersonPanel.class.getName() + ": saveAction.";
-            Level errorLevel = Level.WARNING;
-            Map<String, String> state = new HashMap();
-            state.put("personId", String.valueOf(address.getAddressId()));
-            state.put("firstName", String.valueOf(address.getAddressName()));
-            ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
-            JBErrorPane.showDialog(this, errorInfo);
-        }
+        System.out.println("Save: address: " + address);
+        address = getFormSession().saveAddress(address, getParentDataObject());
+        setDialogResponse(DialogResponse.SAVE);
+        setSelectedValue(address);
+        if (closeAfter)
+            close();
     }
 
     @Override
     public DataObject getDataObject() {
         return address.getDataObject();
+    }
+
+    @Override
+    public Object getEntity() {
+        return address;
     }
 }

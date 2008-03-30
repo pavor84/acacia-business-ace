@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -15,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -43,32 +47,41 @@ public class Address extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "address_id", nullable = false)
+    @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger addressId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @Column(name = "address_name", nullable = false)
+    @Property(title="First Name",
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, required = true))
     private String addressName;
 
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
+    @Property(title="Country")
     private Country country;
 
     @JoinColumn(name = "city_id", referencedColumnName = "city_id")
     @ManyToOne
+    @Property(title="City")
     private City city;
 
     @Column(name = "postal_code")
+    @Property(title="Postcal Code")
     private String postalCode;
 
     @Column(name = "postal_address")
+    @Property(title="Postal Address")
     private String postalAddress;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
-    @JoinColumn(name = "address_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @PrimaryKeyJoinColumn
     @OneToOne
     private DataObject dataObject;
 

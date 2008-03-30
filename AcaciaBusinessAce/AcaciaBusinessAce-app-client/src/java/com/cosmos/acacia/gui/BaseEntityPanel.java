@@ -8,10 +8,14 @@ package com.cosmos.acacia.gui;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.listeners.NestedFormListener;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.util.HashMap;
@@ -21,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import javax.ejb.EJBException;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
@@ -47,6 +52,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     
     public abstract DataObject getDataObject();
     
+    public abstract Object getEntity();
+    
     public boolean checkFormValidity()
     {
         if (getBindingGroup().isContentValid()){
@@ -62,7 +69,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         try {
             performSave(true);
         } catch (Exception ex){
-         ValidationException ve = extractValidationException(ex);
+            ValidationException ve = extractValidationException(ex);
             if ( ve!=null ){
                 updateFieldsStyle(ve.getMessages());
                 String message = getValidationErrorsMessage(ve);
@@ -90,6 +97,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         Throwable e = ex;
         while(e != null)
         {
+            System.out.println("VException is: " + e.getClass());
             if(e instanceof ValidationException)
             {
                 return (ValidationException)e;
@@ -184,15 +192,30 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         String category = getClass().getName() + ": saveAction.";
         Level errorLevel = Level.WARNING;
         
-        Map<String, String> state = new HashMap<String, String>();
-        //state.put("productId", String.valueOf(product.getProductId()));
-        //state.put("productName", String.valueOf(product.getProductName()));
-        //state.put("productCode", String.valueOf(product.getProductCode()));
+        Map<String, String> state = populateState();
         
         ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
         return errorInfo;
     }
     
+    protected Map<String, String> populateState()
+    {
+        Map <String, String> state = new HashMap<String, String>();
+        Class clazz = getEntity().getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        
+        for (Field field: fields)
+        {
+            try {
+                field.setAccessible(true);
+                if (!Modifier.isTransient(field.getModifiers()))
+                    state.put(field.getName(), String.valueOf(field.get(getEntity())));
+            } catch (Exception ex) {
+                // Log?
+            }
+        }
+        return state;
+    }
     
     protected void addNestedFormListener(AbstractTablePanel table)
     {
@@ -223,4 +246,42 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         
         return listener;
     }
+    
+    
+    @Override
+    protected Class getResourceStopClass()
+    {
+        return BaseEntityPanel.class;
+    }
+
+    @Override
+    protected void dialogWindowClosing(WindowEvent event)
+    {
+        BindingGroup bindingGroup;
+        if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
+        {
+            if(!closeDialogConfirmation())
+                return;
+        }
+
+        setDialogResponse(DialogResponse.CLOSE);
+        super.dialogWindowClosing(event);
+    }
+
+    protected boolean closeDialogConfirmation()
+    {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("closeAction.ConfirmDialog.unsavedData.title");
+        String message = resource.getString("closeAction.ConfirmDialog.unsavedData.message");
+        Icon icon = resource.getImageIcon("closeAction.ConfirmDialog.unsavedData.icon");
+        int result = JOptionPane.showConfirmDialog(
+                this.getParent(),
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                icon);
+        return JOptionPane.YES_OPTION == result;
+    }
+
 }
