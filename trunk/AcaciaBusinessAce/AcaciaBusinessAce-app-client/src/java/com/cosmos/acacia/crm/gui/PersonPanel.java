@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ public class PersonPanel extends BaseEntityPanel {
     {
         initComponents();
         initData();
+        initSaveStateListener();
     }
 
     /** This method is called from within the constructor to
@@ -94,7 +96,7 @@ public class PersonPanel extends BaseEntityPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         addressesPanel = new com.cosmos.acacia.gui.TableHolderPanel();
-        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
 
         setOpaque(false);
 
@@ -327,7 +329,7 @@ public class PersonPanel extends BaseEntityPanel {
             .addGap(0, 160, Short.MAX_VALUE)
         );
 
-        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
+        entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -343,7 +345,7 @@ public class PersonPanel extends BaseEntityPanel {
                     .addComponent(addressesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(passportsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE))
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -360,7 +362,7 @@ public class PersonPanel extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -376,7 +378,7 @@ public class PersonPanel extends BaseEntityPanel {
     private javax.swing.JLabel countryLabel;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
-    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
+    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private javax.swing.JLabel extraNameLabel;
     private com.cosmos.swingb.JBTextField extraNameTextField;
     private javax.swing.JLabel firstNameLabel;
@@ -522,5 +524,10 @@ public class PersonPanel extends BaseEntityPanel {
     private List<DbResource> getGenders()
     {
         return getFormSession().getGenders();
+    }
+
+    @Override
+    public EntityFormButtonPanel getButtonPanel() {
+       return entityFormButtonPanel;
     }
 }

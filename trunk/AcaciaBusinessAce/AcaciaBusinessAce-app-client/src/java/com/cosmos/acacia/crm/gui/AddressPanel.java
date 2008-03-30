@@ -12,6 +12,7 @@ import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.BaseEntityPanel;
+import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBErrorPane;
@@ -50,6 +51,7 @@ public class AddressPanel extends BaseEntityPanel {
     {
         initComponents();
         initData();
+        initSaveStateListener();
     }
 
 
@@ -371,5 +373,10 @@ public class AddressPanel extends BaseEntityPanel {
     @Override
     public Object getEntity() {
         return address;
+    }
+
+    @Override
+    public EntityFormButtonPanel getButtonPanel() {
+        return getButtonPanel();
     }
 }
