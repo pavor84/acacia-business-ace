@@ -10,8 +10,7 @@ import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Passport;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,16 +74,20 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     public Address newAddress() {
-        return new Address();
+        return locationsManager.newAddress();
     }
 
-    public Address saveAddress(Address address) {
-        esm.persist(em, address);
-        return address;
+    public Address saveAddress(Address address, DataObject parentDataObject) {
+        
+        address.setParentId(parentDataObject.getDataObjectId());
+        DataObject dataObject = new DataObject();
+        dataObject.setParentDataObject(parentDataObject);
+        address.setDataObject(dataObject);
+        return locationsManager.saveAddress(address);
     }
 
     public int deleteAddress(Address address) {
-        return esm.remove(em, address);
+        return locationsManager.deleteAddress(address);
     }
 
     public List<Address> getAddresses(DataObject parent) {

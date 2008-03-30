@@ -7,7 +7,6 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.swingb.JBPanel;
-import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 
 /**

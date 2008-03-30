@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.bl.impl.LocationsListRemote;
+import com.cosmos.acacia.crm.bl.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -32,7 +32,7 @@ class AddressListPanel extends AbstractTablePanel {
     }
 
     @EJB
-    private LocationsListRemote formSession;
+    private AddressesListRemote formSession;
 
     private BindingGroup addressesBindingGroup;
     private List<Address> addresses;
@@ -79,13 +79,13 @@ class AddressListPanel extends AbstractTablePanel {
         return getFormSession().getAddressEntityProperties();
     }
     
-    protected LocationsListRemote getFormSession()
+    protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
         {
             try
             {
-                formSession = InitialContext.doLookup(LocationsListRemote.class.getName());
+                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
             }
             catch(Exception ex)
             {
@@ -114,7 +114,7 @@ class AddressListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        /*
+        
         if(rowObject != null)
         {
             AddressPanel addressePanel = new AddressPanel((Address)rowObject);
@@ -124,7 +124,6 @@ class AddressListPanel extends AbstractTablePanel {
                 return addressePanel.getSelectedValue();
             }
         }
-        */
         return null;
     }
 

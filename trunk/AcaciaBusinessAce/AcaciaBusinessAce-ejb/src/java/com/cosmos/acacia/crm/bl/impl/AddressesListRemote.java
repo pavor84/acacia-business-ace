@@ -25,20 +25,22 @@ import com.cosmos.beansbinding.EntityProperties;
 @Remote
 public interface AddressesListRemote {
 
-    /* Handlign addresses */
-
     List<Country> getCountries();
 
     List<City> getCities();
 
+    /* Handlign addresses */
+    
     EntityProperties getAddressEntityProperties();
 
     Address newAddress();
 
-    Address saveAddress(Address address);
+    Address saveAddress(Address address, DataObject parentDataObject);
 
     int deleteAddress(Address address);
 
+    List<Address> getAddresses(DataObject parentDataObject);
+    
     /* Handling contact persons */
 
     List<ContactPerson> getContactPersons(DataObject parent);
