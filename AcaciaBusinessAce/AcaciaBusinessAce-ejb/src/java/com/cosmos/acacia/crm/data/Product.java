@@ -82,7 +82,8 @@ public class Product
 
     @JoinColumn(name = "category_id", nullable=false, referencedColumnName = "product_category_id")
     @ManyToOne
-    @Property(title="Category")
+    @Property(title="Category",
+            propertyValidator=@PropertyValidator(required=true))
     private ProductCategory category;
 
     @Column(name = "product_name", nullable = false)
