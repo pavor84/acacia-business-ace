@@ -27,6 +27,8 @@ public enum ValidationError
     NotDateValue("1201", "The value is not Date type."),
     DateValueIsLessThanMin("1202", "The date value is less than the required minimum value."),
     DateValueIsGreaterThanMax("1203", "The date value is greater than the required maximum value."),
+    
+    InvalidMaskFormatterString("1301", "The value is not valid mask formatter string.");
     ;
 
     private ValidationError(String errorCode, String description)

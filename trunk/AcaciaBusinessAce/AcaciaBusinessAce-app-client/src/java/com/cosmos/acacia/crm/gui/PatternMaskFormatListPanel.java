@@ -68,13 +68,26 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected Object modifyRow(Object rowObject)
+    {
+        if(rowObject instanceof PatternMaskFormat)
+        {
+            PatternMaskFormatPanel panel = new PatternMaskFormatPanel((PatternMaskFormat) rowObject);
+            DialogResponse response = panel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return panel.getSelectedValue();
+            }
+        }
+
+        return null;
     }
 
     @Override
     protected Object newRow() {
-        PatternMaskFormatPanel formatPanel = new PatternMaskFormatPanel();
+        PatternMaskFormat newFormat = getFormSession().newPatternMaskFormat();
+        
+        PatternMaskFormatPanel formatPanel = new PatternMaskFormatPanel(newFormat);
         DialogResponse response = formatPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {

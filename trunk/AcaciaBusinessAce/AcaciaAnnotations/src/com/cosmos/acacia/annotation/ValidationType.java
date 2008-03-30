@@ -17,5 +17,6 @@ public enum ValidationType {
     NUMBER_RANGE,
     DATE,
     DATE_RANGE,
+    MASK_FORMATTER,
     CUSTOM;
 }

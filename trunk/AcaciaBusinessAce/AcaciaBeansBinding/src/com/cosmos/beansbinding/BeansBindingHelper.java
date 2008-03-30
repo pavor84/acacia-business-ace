@@ -5,29 +5,33 @@
 
 package com.cosmos.beansbinding;
 
-import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.beansbinding.validation.BaseValidator;
-import com.cosmos.beansbinding.validation.DateRangeValidator;
-import com.cosmos.beansbinding.validation.DateValidator;
-import com.cosmos.beansbinding.validation.NumericRangeValidator;
-import com.cosmos.beansbinding.validation.NumericValidator;
-import com.cosmos.beansbinding.validation.RegexValidator;
-import com.cosmos.beansbinding.validation.TextLengthValidator;
-import com.cosmos.util.ClassHelper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+
 import org.jdesktop.beansbinding.Validator;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.beansbinding.validation.BaseValidator;
+import com.cosmos.beansbinding.validation.DateRangeValidator;
+import com.cosmos.beansbinding.validation.DateValidator;
+import com.cosmos.beansbinding.validation.MaskFormatterValidator;
+import com.cosmos.beansbinding.validation.NumericRangeValidator;
+import com.cosmos.beansbinding.validation.NumericValidator;
+import com.cosmos.beansbinding.validation.RegexValidator;
+import com.cosmos.beansbinding.validation.TextLengthValidator;
+import com.cosmos.util.ClassHelper;
 
 
 /**
@@ -158,6 +162,11 @@ public class BeansBindingHelper {
                             regexValidator.setPattern(strValue);
                             validator.addValidator(regexValidator);
                         }
+                    }
+                    else if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
+                    {
+                        MaskFormatterValidator v = new MaskFormatterValidator();
+                        validator.addValidator(v);
                     }
 
                     String strValue = propertyValidator.tooltip();
