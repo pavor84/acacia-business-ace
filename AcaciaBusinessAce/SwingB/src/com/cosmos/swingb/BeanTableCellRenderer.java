@@ -34,7 +34,7 @@ public class BeanTableCellRenderer
             int row,
             int column)
     {
-        value = beanResource.getValue(value);
+        value = beanResource.getFullNameValue(value);
         return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     }
 

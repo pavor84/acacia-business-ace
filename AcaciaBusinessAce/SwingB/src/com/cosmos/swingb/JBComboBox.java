@@ -8,8 +8,11 @@ package com.cosmos.swingb;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.BaseValidator;
 import java.awt.Color;
+import java.awt.Component;
 import java.util.List;
+import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -18,11 +21,11 @@ import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.beansbinding.Validator;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JComboBoxBinding;
@@ -44,6 +47,8 @@ public class JBComboBox
     private String propertyName;
     private Object beanEntity;
 
+    private JComboBoxBinding comboBoxBinding;
+
     public JBComboBox()
     {
         super();
@@ -61,7 +66,7 @@ public class JBComboBox
         setRenderer(new BeanListCellRenderer(application.getClass()));
     }
 
-    public Binding bind(
+    public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
@@ -70,7 +75,7 @@ public class JBComboBox
         return bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
-    public Binding bind(
+    public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
@@ -83,46 +88,40 @@ public class JBComboBox
             setEnabled(false);
             return null;
         }
-        
-        Binding binding = bind(bindingGroup, data, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
-        setEditable(propertyDetails.isEditable());
-        setEnabled(!propertyDetails.isReadOnly());
 
-        binding.addBindingListener(new BindingValidationListener());
-
-        return binding;
-    }
-
-    public JComboBoxBinding bind(
-            BindingGroup bindingGroup,
-            List data,
-            Object beanEntity,
-            String propertyName)
-    {
-        return bind(bindingGroup, data, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
-    }
-
-    public JComboBoxBinding bind(
-            BindingGroup bindingGroup,
-            List data,
-            Object beanEntity,
-            String propertyName,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
         if(!(data instanceof ObservableList))
             observableData = ObservableCollections.observableList(data);
         else
             observableData = (ObservableList)data;
-        this.propertyName = propertyName;
+        this.propertyName = propertyDetails.getPropertyName();
         this.beanEntity = beanEntity;
 
-        JComboBoxBinding comboBoxBinding = SwingBindings.createJComboBoxBinding(updateStrategy, observableData, this);
+        comboBoxBinding = SwingBindings.createJComboBoxBinding(
+                updateStrategy,
+                observableData,
+                this);
         bindingGroup.addBinding(comboBoxBinding);
 
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
-        Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
+        Binding binding = Bindings.createAutoBinding(
+                updateStrategy,
+                beanEntity,
+                elProperty,
+                this,
+                beanProperty);
+
+        Validator validator = propertyDetails.getValidator();
+        if(validator != null)
+        {
+            binding.setValidator(validator);
+        }
+        binding.addBindingListener(new BindingValidationListener());
+
         bindingGroup.addBinding(binding);
+
+        setEditable(propertyDetails.isEditable());
+        setEnabled(!propertyDetails.isReadOnly());
 
         return comboBoxBinding;
     }
@@ -137,6 +136,11 @@ public class JBComboBox
 
     public Object getBeanEntity() {
         return beanEntity;
+    }
+
+    public JComboBoxBinding getComboBoxBinding()
+    {
+        return comboBoxBinding;
     }
 
     public ApplicationContext getContext()
@@ -209,7 +213,7 @@ public class JBComboBox
             validate(binding);
         }
 
-        @Override
+        /*@Override
         public void bindingBecameUnbound(Binding arg0) {
             System.out.println("bindingBecameUnbound");
         }
@@ -237,24 +241,16 @@ public class JBComboBox
         @Override
         public void targetEdited(Binding arg0) {
             System.out.println("targetEdited");
-        }
+        }*/
 
 
         public void validate(Binding binding)
         {
-            System.out.println("ComboBox.binding: " + binding);
-            System.out.println("binding.getName(): " + binding.getName());
-            System.out.println("getSourceObject: " + binding.getSourceObject());
-            System.out.println("getSourceProperty: " + binding.getSourceProperty());
-            System.out.println("getSourceValueForTarget: " + binding.getSourceValueForTarget());
-            JComboBox comboBox = (JComboBox)binding.getTargetObject();
-            System.out.println("getTargetObject: " + comboBox);
-            System.out.println("comboBox.getSelectedItem(): " + comboBox.getSelectedItem());
-            System.out.println("getTargetProperty: " + binding.getTargetProperty());
-            System.out.println("getTargetValueForSource: " + binding.getTargetValueForSource());
+            System.out.println("\nComboBox.binding: " + binding);
             boolean required = false;
             String tooltip = null;
             BaseValidator validator = (BaseValidator)binding.getValidator();
+            //System.out.println("validator: " + validator);
             if(validator != null)
             {
                 tooltip = validator.getTooltip();
@@ -275,6 +271,8 @@ public class JBComboBox
                 else
                     setStyleNormal();
             }
+
+            //System.out.println("\n");
         }
     }
 
@@ -282,6 +280,14 @@ public class JBComboBox
         System.out.println("setStyleRequired");
         setBackground(Color.PINK);
         setToolTipText(tooltip);
+        ComboBoxEditor editor = getEditor();
+        System.out.println("editor: " + editor + ", class: " + editor.getClass().getName());
+        Component comp = editor.getEditorComponent();
+        System.out.println("editor.getEditorComponent(): " + comp);
+        JTextField textField = (JTextField)comp;
+        System.out.println("textField.getBackground(): " + textField.getBackground());
+        comp.setBackground(Color.PINK);
+        System.out.println("textField.getBackground(): " + textField.getBackground());
     }
 
     public void setStyleInvalid() {

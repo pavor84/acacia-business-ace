@@ -243,12 +243,16 @@ public class JBTable
     }
 
 
-    protected void createColumnsBinding(JTableBinding tableBinding, EntityProperties entityProperties)
+    protected void createColumnsBinding(
+            JTableBinding tableBinding,
+            EntityProperties entityProperties)
     {
         createColumnsBinding(tableBinding, entityProperties.getValues());
     }
 
-    protected void createColumnsBinding(JTableBinding tableBinding, Collection<PropertyDetails> properties)
+    protected void createColumnsBinding(
+            JTableBinding tableBinding,
+            Collection<PropertyDetails> properties)
     {
         for(PropertyDetails property : properties)
         {
@@ -257,7 +261,9 @@ public class JBTable
         }
     }
 
-    protected ColumnBinding createColumnBinding(JTableBinding tableBinding, PropertyDetails propertyDetails)
+    protected ColumnBinding createColumnBinding(
+        JTableBinding tableBinding,
+        PropertyDetails propertyDetails)
     {
         String expression = "${" + propertyDetails.getPropertyName() + "}";
         ELProperty elProperty = ELProperty.create(expression);
@@ -290,7 +296,7 @@ public class JBTable
     public void bindComboBoxCellEditor(
             BindingGroup bindingGroup,
             List comboBoxValues,
-            String propertyName)
+            PropertyDetails propertyDetails)
     {
         Application app = getApplication();
         JBComboBox comboBox;
@@ -299,9 +305,10 @@ public class JBTable
         else
             comboBox = new JBComboBox();
 
-        comboBox.bind(bindingGroup, comboBoxValues, this, propertyName);
+        comboBox.bind(bindingGroup, comboBoxValues, this, propertyDetails);
         ComboBoxCellEditor comboBoxCellEditor = new ComboBoxCellEditor(comboBox);
         TableColumnExt column;
+        String propertyName = propertyDetails.getPropertyName();
         try
         {
             column = getColumnExt(propertyName);
@@ -316,10 +323,10 @@ public class JBTable
             EntityProperties entityProps = getEntityProperties();
             if(entityProps == null)
                 throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
-            PropertyDetails propertyDetails = entityProps.getPropertyDetails(propertyName);
-            if(propertyDetails != null)
+            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
+            if(pd != null)
             {
-                String columnName = propertyDetails.getPropertyTitle();
+                String columnName = pd.getPropertyTitle();
                 column = getColumnExt(columnName);
             }
         }
