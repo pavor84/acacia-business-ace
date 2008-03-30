@@ -46,8 +46,6 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         
     public abstract void performSave(boolean closeAfter);
     
-    public abstract void closeAction();
-    
     public abstract BindingGroup getBindingGroup();
     
     public abstract DataObject getDataObject();
@@ -96,6 +94,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         }
     }
     
+    public void closeAction() {
+        setDialogResponse(DialogResponse.CLOSE);
+        close();
+    }
+     
      /**
      * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
      * an EJB exception. That is way it is a little bit tricky to get it. This method implements this
