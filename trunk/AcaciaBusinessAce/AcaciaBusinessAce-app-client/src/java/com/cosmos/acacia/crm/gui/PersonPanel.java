@@ -461,11 +461,6 @@ public class PersonPanel extends BaseEntityPanel {
     {
         return personBindingGroup;
     }
-    
-    public DataObject getDataObject()
-    {
-        return person.getDataObject();
-    }
 
     public Object getEntity()
     {
@@ -482,13 +477,6 @@ public class PersonPanel extends BaseEntityPanel {
             close();
     }
     
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-
     protected EntityProperties getPersonEntityProperties()
     {
         return getFormSession().getPersonEntityProperties();
