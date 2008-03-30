@@ -186,8 +186,11 @@ public class BeanResource
         return shortName + ", " + name;
     }
 
-    public Object getValue(Object sourceValue)
+    public String getFullNameValue(Object sourceValue)
     {
+        if(sourceValue == null)
+            return null;
+
         if(sourceValue instanceof EnumResource)
         {
             return getFullName((EnumResource)sourceValue);
@@ -197,6 +200,40 @@ public class BeanResource
             return getFullName((TextResource)sourceValue);
         }
 
-        return sourceValue;
+        return sourceValue.toString();
+    }
+
+    public String getShortNameValue(Object sourceValue)
+    {
+        if(sourceValue == null)
+            return null;
+
+        if(sourceValue instanceof EnumResource)
+        {
+            return getShortName((EnumResource)sourceValue);
+        }
+        else if(sourceValue instanceof TextResource)
+        {
+            return getShortName((TextResource)sourceValue);
+        }
+
+        return sourceValue.toString();
+    }
+
+    public String getNameValue(Object sourceValue)
+    {
+        if(sourceValue == null)
+            return null;
+
+        if(sourceValue instanceof EnumResource)
+        {
+            return getName((EnumResource)sourceValue);
+        }
+        else if(sourceValue instanceof TextResource)
+        {
+            return getName((TextResource)sourceValue);
+        }
+
+        return sourceValue.toString();
     }
 }
