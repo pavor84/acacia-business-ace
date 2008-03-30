@@ -44,12 +44,14 @@ import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -681,6 +683,15 @@ public class ProductPanel extends AcaciaPanel {
     protected void initData()
     {
         setDialogResponse(DialogResponse.CLOSE);
+
+        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+        AutoCompleteDecorator.decorate(dimensionUnitComboBox, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(measureUnitComboBox, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(patternMaskFormatComboBox, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(producerComboBox, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(productCategoryComboBox, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(productColorComboBox, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(weightUnitComboBox, resourceToStringConverter);
 
         System.out.println("initData().product: " + product);
         if(product == null)
