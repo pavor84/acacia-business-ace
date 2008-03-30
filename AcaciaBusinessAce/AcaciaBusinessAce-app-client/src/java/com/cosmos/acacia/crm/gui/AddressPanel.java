@@ -294,8 +294,8 @@ public class AddressPanel extends BaseEntityPanel {
         postalCodeTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalCode"));
         postalAddressTextPane.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalAddress"));
 
-        countryComboBox.bind(addressBindingGroup, getCountries(), address, "country");
-        cityComboBox.bind(addressBindingGroup, getCities(), address, "city");
+        countryComboBox.bind(addressBindingGroup, getCountries(), address, entityProps.getPropertyDetails("country"));
+        cityComboBox.bind(addressBindingGroup, getCities(), address, entityProps.getPropertyDetails("city"));
 
         descriptionTextPane.bind(addressBindingGroup, address, "description");
 

@@ -47,9 +47,10 @@ public class ProductsListPanel
 
         productsBindingGroup = new BindingGroup();
         AcaciaTable productsTable = getDataTable();
-        JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), getProductEntityProperties());
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getProductsCategories(), "category");
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), "measureUnit");
+        EntityProperties entityProps = getProductEntityProperties();
+        JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps);
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getProductsCategories(), entityProps.getPropertyDetails("category"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), entityProps.getPropertyDetails("measureUnit"));
 
         productsBindingGroup.bind();
 

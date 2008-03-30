@@ -7,18 +7,13 @@
 package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.PersonsListRemote;
 import com.cosmos.acacia.crm.data.City;
@@ -30,9 +25,6 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBErrorPane;
-import com.cosmos.swingb.listeners.NestedFormListener;
-import javax.swing.JOptionPane;
 
 /**
  * A form for adding and editing persons
@@ -428,8 +420,8 @@ public class PersonPanel extends BaseEntityPanel {
 
         personalUniqueIdTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("personalUniqueId"));
         birthdateDatePicker.bind(personBindingGroup, person, entityProps.getPropertyDetails("birthDate"));
-        birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, "birthPlaceCountry");
-        birthPlaceCityComboBox.bind(personBindingGroup, getCities(), person, "birthPlaceCity");
+        birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
+        birthPlaceCityComboBox.bind(personBindingGroup, getCities(), person, entityProps.getPropertyDetails("birthPlaceCity"));
 
         descriptionTextPane.bind(personBindingGroup, person, "description");
 
