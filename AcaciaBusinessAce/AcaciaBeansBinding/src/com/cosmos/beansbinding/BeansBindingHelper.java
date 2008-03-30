@@ -12,10 +12,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.jdesktop.beansbinding.Validator;
@@ -181,11 +184,25 @@ public class BeansBindingHelper {
                     pd.setSourceUnreadableValue(value);
 
                 String columnName = null;
-                Column column = field.getAnnotation(Column.class);
+                boolean nullable = true;
+                
+                Annotation column = field.getAnnotation(Column.class);
+                if (column == null) column = field.getAnnotation(JoinColumn.class);
+                if (column == null) column = field.getAnnotation(PrimaryKeyJoinColumn.class);
+                if (column == null) column = field.getAnnotation(DiscriminatorColumn.class);
+                
                 if(column != null)
                 {
-                    columnName = column.name();
+                    try {
+                        columnName = (String) column.getClass().getDeclaredMethod("name").invoke(column);
+                        nullable = (Boolean) column.getClass().getDeclaredMethod("nullable").invoke(column);
+                    } catch (NoSuchMethodException ex){
+                        nullable = false;
+                    } catch (Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
+                
                 if(columnName != null)
                     pd.setColumnName(columnName);
                 else
@@ -203,8 +220,9 @@ public class BeansBindingHelper {
                     pd.setRequired(true);
                 }
 
-                if(!pd.isRequired() && column != null && !column.nullable())
+                if(!pd.isRequired() && column != null && !nullable)
                 {
+                    System.out.println("Auto-required: " + columnName);
                     pd.setRequired(true);
                 }
 
