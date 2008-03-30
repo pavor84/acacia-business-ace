@@ -15,18 +15,12 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBErrorPane;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  *
@@ -47,11 +41,12 @@ public class AddressPanel extends BaseEntityPanel {
         init();
     }
 
-    private void init()
+    @Override
+    protected void init()
     {
         initComponents();
         initData();
-        initSaveStateListener();
+        super.init();
     }
 
 
