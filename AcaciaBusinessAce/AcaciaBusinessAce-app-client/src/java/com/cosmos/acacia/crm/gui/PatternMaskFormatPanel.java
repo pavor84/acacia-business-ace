@@ -6,18 +6,24 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.rmi.RemoteException;
+import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.error.ErrorInfo;
 
@@ -25,10 +31,13 @@ import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
+import com.cosmos.swingb.JBTextField;
 
 /**
  *
@@ -40,8 +49,9 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
     private PatternMaskListRemote formSession;
     
     /** Creates new form PatternMaskFormatPanel */
-    public PatternMaskFormatPanel() {
+    public PatternMaskFormatPanel(PatternMaskFormat modelObject) {
         super(null);
+        this.format = modelObject;
         init();
     }
     
@@ -72,6 +82,8 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
         descriptionField = new com.cosmos.swingb.JBTextArea();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
         ownerField = new com.cosmos.acacia.gui.AcaciaComboBox();
+        saveButton = new com.cosmos.swingb.JBButton();
+        closeButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -143,13 +155,22 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ownerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33))
+                .addContainerGap())
         );
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(PatternMaskFormatPanel.class, this);
+        saveButton.setAction(actionMap.get("saveAction")); // NOI18N
+        saveButton.setText(resourceMap.getString("saveButton.text")); // NOI18N
+        saveButton.setName("saveButton"); // NOI18N
+
+        closeButton.setAction(actionMap.get("closeAction")); // NOI18N
+        closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
+        closeButton.setName("closeButton"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -157,15 +178,24 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jBPanel1.getAccessibleContext().setAccessibleName(resourceMap.getString("formatterDetailsPanel.AccessibleContext.accessibleName")); // NOI18N
@@ -173,8 +203,6 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
 
     @Override
     protected void initData() {
-        format = getFormSession().newPatternMaskFormat();
-        
         bindGroup = new BindingGroup();
 
         EntityProperties entityProps = getFormSession().getPatternMaskEntityProperties();
@@ -192,6 +220,7 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBTextArea descriptionField;
     private com.cosmos.swingb.JBTextField formatField;
     private com.cosmos.swingb.JBLabel jBLabel1;
@@ -202,6 +231,7 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.swingb.JBTextField nameField;
     private com.cosmos.acacia.gui.AcaciaComboBox ownerField;
+    private com.cosmos.swingb.JBButton saveButton;
     // End of variables declaration//GEN-END:variables
     
     
@@ -231,20 +261,129 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
             close();
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            // TODO: Log that error
-            String basicMessage = getResourceMap().getString(
-                "saveAction.Action.error.basicMessage", ex.getMessage());
-            ResourceMap resource = getResourceMap();
-            String title = resource.getString("saveAction.Action.error.title");
-
-            String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
-            String category = ProductPanel.class.getName() + ": saveAction.";
-            Level errorLevel = Level.WARNING;
-
-            ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex,
-                errorLevel, new HashMap<String, String>());
-            JBErrorPane.showDialog(this, errorInfo);
+            ValidationException ve = extractValidationException(ex);
+            if ( ve!=null ){
+                updateFieldsStyle(ve.getMessages(), bindGroup);
+                String message = getValidationErrorsMessage(ve);
+                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
+            }else{
+                ex.printStackTrace();
+                // TODO: Log that error
+                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
+                ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
+                JBErrorPane.showDialog(this, errorInfo);
+            }
         }
+    }
+    
+    /**
+     * @param basicMessage
+     * @param ex - may be null
+     * @return
+     */
+    private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("saveAction.Action.error.title");
+        
+        String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
+        String category = ProductPanel.class.getName() + ": saveAction.";
+        Level errorLevel = Level.WARNING;
+        
+        Map<String, String> state = new HashMap<String, String>();
+        
+        ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
+        return errorInfo;
+    }
+    
+    /**
+     * Iterate over all validation messages and compose one string - message per line.
+     * @param ve
+     * @return
+     */
+    private String getValidationErrorsMessage(ValidationException ve) {
+        String errorMessagesHeader = getResourceMap().getString("ValidationException.errorsListFollow");
+        StringBuilder msg = new StringBuilder(errorMessagesHeader);
+        msg.append("\n\n");
+        int i = 1;
+        for (ValidationMessage validationMessage : ve.getMessages()) {
+            String currentMsg = null;
+            if ( validationMessage.getArguments()!=null )
+                currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
+            else
+                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
+            
+            msg.append(i).append(": ").append(currentMsg).append("\n\n");
+            i++;
+        }
+        return msg.toString();
+    }
+    
+    /**
+     * Iterates through all fields and updates there appearance to error state if 
+     * some of the messages is related to their respective property.
+     * 
+     * Note: currently - test support.
+     * @param messages
+     */
+    @SuppressWarnings("unchecked")
+    private void updateFieldsStyle(List<ValidationMessage> messages, BindingGroup bindingGroup) {
+        //compose a set for easier and faster lookup
+        bindingGroup.getBindings();
+        Set<String> errorProperties = new HashSet<String>();
+        for (ValidationMessage msg : messages) {
+            if ( msg.getTarget()!=null ){
+                String el = msg.getTarget();
+                errorProperties.add(el);
+            }
+        }
+        
+        for (Binding binding : bindingGroup.getBindings()) {
+            if ( binding.getTargetObject() instanceof JBTextField ){
+                JBTextField textField = (JBTextField)binding.getTargetObject();
+                if ( errorProperties.contains(textField.getPropertyName()) )
+                    textField.setStyleInvalid("");//temporary code, TODO fix
+            }else if ( binding.getTargetObject() instanceof JBComboBox){
+                JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
+                if ( errorProperties.contains(comboBox.getPropertyName()) )
+                    comboBox.setStyleInvalid(); 
+            }
+        }
+    }
+    
+    /**
+     * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
+     * an EJB exception. That is way it is a little bit tricky to get it. This method implements this
+     * logic by checking if some of the causes for the main exception is actually a {@link ValidationException}
+     * @param ex
+     * @return - the ValidationException if some 'caused by' exception is {@link ValidationException},
+     * null otherwise
+     */
+    private ValidationException extractValidationException(Exception ex) {
+        Throwable e = ex;
+        while ( e!=null ){
+            if ( e instanceof ValidationException ){
+                return (ValidationException) e;
+            }
+            else if ( e instanceof ServerException || e instanceof RemoteException ){
+                e = e.getCause();
+            }
+            else if ( e instanceof EJBException )
+                e = ((EJBException)e).getCausedByException();
+            else
+                break;
+        }
+        return null;
+    }
+    
+    @Action
+    public void closeAction() {
+        setDialogResponse(DialogResponse.CLOSE);
+        close();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Class getResourceStopClass() {
+        return AcaciaPanel.class;
     }
 }

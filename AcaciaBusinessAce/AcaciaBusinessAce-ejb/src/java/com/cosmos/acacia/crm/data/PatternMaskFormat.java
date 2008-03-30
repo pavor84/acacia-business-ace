@@ -36,6 +36,16 @@ import com.cosmos.acacia.annotation.ValidationType;
          */
         name = "PatternMaskFormat.findForParentByName",
         query = "select p from PatternMaskFormat p order by p.patternName"
+    ),
+    @NamedQuery
+    (
+        /**
+         * Get all mask formats for a given name - at most one should exist
+         * Parameters:
+         * - name - the name of the pattern mask
+         */
+        name = "PatternMaskFormat.findByName",
+        query = "select p from PatternMaskFormat p where p.patternName like :patternName"
     )
 })
 public class PatternMaskFormat implements Serializable {
@@ -50,16 +60,14 @@ public class PatternMaskFormat implements Serializable {
 
     @Column(name = "pattern_name", nullable = false)
     @Property(title="Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2))
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=128))
     private String patternName;
     
     @Property(title="Format",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.MASK_FORMATTER))
     @Column(name = "format", nullable = false)
     private String format;
 
-    @Property(title="Type",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=1))
     @Column(name = "format_type", nullable = false)
     private char formatType;
 
