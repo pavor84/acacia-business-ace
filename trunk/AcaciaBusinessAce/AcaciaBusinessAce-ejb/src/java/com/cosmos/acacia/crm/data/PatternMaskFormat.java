@@ -38,7 +38,7 @@ import com.cosmos.acacia.annotation.ValidationType;
         query = "select p from PatternMaskFormat p order by p.patternName"
     ),
     @NamedQuery
-    (
+    ( 
         /**
          * Get all mask formats for a given name - at most one should exist
          * Parameters:
