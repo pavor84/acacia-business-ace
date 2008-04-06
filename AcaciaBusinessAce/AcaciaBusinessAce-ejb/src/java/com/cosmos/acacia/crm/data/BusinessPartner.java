@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -19,8 +22,21 @@ import javax.persistence.PrimaryKeyJoinColumn;
  * @version $Id: $
  *
  */
-@Entity(name="business_partners")
+@Entity
+@Table(name="business_partners")
 @Inheritance(strategy=InheritanceType.JOINED)
+@NamedQueries(
+    {
+        /**
+         * Get all not deleted business partners
+         */
+        @NamedQuery
+        (
+            name = "BusinessPartner.getAllNotDeleted",
+            query = "select bp from BusinessPartner bp where bp.dataObject.deleted = false"
+        )  
+    }
+)
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {
     
     @Id

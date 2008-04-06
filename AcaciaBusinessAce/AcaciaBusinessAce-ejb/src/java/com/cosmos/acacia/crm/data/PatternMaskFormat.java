@@ -6,12 +6,14 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -75,9 +77,14 @@ public class PatternMaskFormat implements Serializable {
     @Column(name = "description")
     private String description;
     
-    @Column(name = "owner_id")
+//    @Column(name = "owner_id")
+//    @Property(title="Owner")
+//    private BigInteger ownerId;
+    
+    @ManyToOne
+    @JoinColumn (name="owner_id")
     @Property(title="Owner")
-    private BigInteger ownerId;
+    private BusinessPartner owner;
 
     public PatternMaskFormat() {
     }
@@ -99,14 +106,6 @@ public class PatternMaskFormat implements Serializable {
 
     public void setPatternMaskFormatId(Integer patternMaskFormatId) {
         this.patternMaskFormatId = patternMaskFormatId;
-    }
-
-    public BigInteger getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(BigInteger ownerId) {
-        this.ownerId = ownerId;
     }
 
     public String getPatternName() {
@@ -167,4 +166,19 @@ public class PatternMaskFormat implements Serializable {
         return "com.cosmos.acacia.crm.data.PatternMaskFormat[patternMaskFormatId=" + patternMaskFormatId + "]";
     }
 
+    /**
+     * Getter for owner
+     * @return BusinessPartner
+     */
+    public BusinessPartner getOwner() {
+        return owner;
+    }
+
+    /**
+     * Setter for owner
+     * @param owner - BusinessPartner
+     */
+    public void setOwner(BusinessPartner owner) {
+        this.owner = owner;
+    }
 }

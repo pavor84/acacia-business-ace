@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
@@ -18,6 +19,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -40,19 +42,18 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     
     private BindingGroup formatsBindingGroup;
     private List<PatternMaskFormat> formats;
+    private EntityProperties entityProperties;
     
+    @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
         super.initData();
+        
         setVisible(Button.Select, false);
-        formatsBindingGroup = new BindingGroup();
-        AcaciaTable formatsTable = getDataTable();
-        formatsTable.bind(formatsBindingGroup, getFormats(), 
-            getFormSession().getPatternMaskEntityProperties());
-
-        formatsBindingGroup.bind();
-
-        formatsTable.setEditable(true);
+        
+        entityProperties = getFormSession().getPatternMaskEntityProperties();
+        
+        refreshDataTable(entityProperties);
     }
     
     protected List<PatternMaskFormat> getFormats()
@@ -61,10 +62,38 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
         return formats;
     }
     
+    private void refreshDataTable(EntityProperties entProps){
+        if ( formatsBindingGroup != null )
+            formatsBindingGroup.unbind();
+        formatsBindingGroup = new BindingGroup();
+        
+        List<PatternMaskFormat> formatsList = getFormats();
+        
+        AcaciaTable formatsTable = getDataTable();
+        formatsTable.bind(formatsBindingGroup, formatsList,
+            entityProperties
+            ); 
+        
+        formatsTable.bindComboBoxCellEditor(formatsBindingGroup, formatsList, entityProperties.getPropertyDetails("owner"));
+
+        formatsBindingGroup.bind();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        refreshDataTable(entityProperties);
+        
+        return t;
+    }
+    
     
     @Override
     protected boolean deleteRow(Object rowObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return
+            getFormSession().deletePatternMaskFormat((PatternMaskFormat) rowObject);
     }
 
     @Override
@@ -135,5 +164,4 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     public void setFormSession(PatternMaskListRemote formSession) {
         this.formSession = formSession;
     }
-
 }

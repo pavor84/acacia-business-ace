@@ -5,9 +5,11 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.test.bl.DataObjectTest;
 import java.util.Date;
+
 import org.junit.runner.JUnitCore;
+
+import com.cosmos.test.bl.PatternMaskListTest;
 
 /**
  *
@@ -70,6 +72,8 @@ public class Main {
                 new HelloWorldFrame().setVisible(true);
             }
         });*/
+        
+//        mainTest();
 
         AcaciaApplication.launch(AcaciaApplication.class, args);
 
@@ -78,7 +82,8 @@ public class Main {
     public static void mainTest() {
         String[] tests = new String[]
         {
-            DataObjectTest.class.getName()
+//            DataObjectTest.class.getName(),
+            PatternMaskListTest.class.getName()
         };
 
         JUnitCore.main(tests);
