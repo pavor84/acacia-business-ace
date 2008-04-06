@@ -8,7 +8,6 @@ package com.cosmos.acacia.crm.gui;
 
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,17 +21,24 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.jdesktop.application.Action;
+import org.jdesktop.application.ApplicationAction;
+import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
+import com.cosmos.acacia.crm.gui.ProductPanel.Button;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
@@ -110,6 +116,7 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
 
         descriptionField.setColumns(20);
         descriptionField.setRows(5);
+        descriptionField.setFont(resourceMap.getFont("descriptionField.font")); // NOI18N
         descriptionField.setName("descriptionField"); // NOI18N
         jScrollPane1.setViewportView(descriptionField);
 
@@ -169,6 +176,8 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
         saveButton.setName("saveButton"); // NOI18N
 
         closeButton.setAction(actionMap.get("closeAction")); // NOI18N
+        closeButton.setForeground(resourceMap.getColor("closeButton.foreground")); // NOI18N
+        closeButton.setIcon(resourceMap.getIcon("closeButton.icon")); // NOI18N
         closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
@@ -183,7 +192,7 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -193,8 +202,8 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
                 .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -203,20 +212,65 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
 
     @Override
     protected void initData() {
-        bindGroup = new BindingGroup();
+        bindGroup = new BindingGroup(); 
+        
+        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+        AutoCompleteDecorator.decorate(ownerField, resourceToStringConverter);
 
         EntityProperties entityProps = getFormSession().getPatternMaskEntityProperties();
         
         nameField.bind(bindGroup, format, entityProps.getPropertyDetails("patternName") );
         formatField.bind(bindGroup, format, entityProps.getPropertyDetails("format") );
         descriptionField.bind(bindGroup, format, "description");
-        ownerField.bind(bindGroup, getPossibleOwners(), format, entityProps.getPropertyDetails("ownerId") );
+        ownerField.bind(bindGroup, getPossibleOwners(), format, entityProps.getPropertyDetails("owner"));
+//        ownerField.bind(bindGroup, getPossibleOwners(), format, "ownerId", "partnerId", true,
+//            false, false, null, UpdateStrategy.READ_WRITE);
 
         bindGroup.bind();
+        
+        setSaveActionState();
+
+        if(bindGroup != null)
+        {
+            bindGroup.addBindingListener(new AbstractBindingListener()
+            {
+
+                @SuppressWarnings("unchecked")
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    setSaveActionState();
+                }
+            });
+        }
+    }
+    
+    protected void setSaveActionState()
+    {
+        setEnabled(Button.Save, bindGroup.isContentValid());
+    }
+    
+    public void setEnabled(Button button, boolean enabled) {
+        ApplicationAction action = (ApplicationAction)getAction(button);
+        if(action != null)
+        {
+            action.setEnabled(enabled);
+        }
+    }
+    
+    public javax.swing.Action getAction(Button button)
+    {
+        ApplicationActionMap actionMap = getApplicationActionMap();
+        if(actionMap != null && button != null)
+        {
+            return actionMap.get(button.getActionName());
+        }
+
+        return null;
     }
     
     private List<BusinessPartner> getPossibleOwners() {
-        return new ArrayList<BusinessPartner>();
+        List<BusinessPartner> possibleOwners = getFormSession().getOwnersList();
+        return possibleOwners;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -283,7 +337,7 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
      */
     private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
         ResourceMap resource = getResourceMap();
-        String title = resource.getString("saveAction.Action.error.title");
+        String title = resource.getString("ValidationException.errorPanel.title");
         
         String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
         String category = ProductPanel.class.getName() + ": saveAction.";

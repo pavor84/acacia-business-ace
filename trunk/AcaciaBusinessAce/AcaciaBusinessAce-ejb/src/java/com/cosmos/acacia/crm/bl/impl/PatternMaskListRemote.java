@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -40,4 +41,18 @@ public interface PatternMaskListRemote {
      * @return
      */
     PatternMaskFormat savePatternMaskFormat(PatternMaskFormat format);
+    
+    /**
+     * Get list of the possible business partner that can be assigned
+     * as owners of a given mask format
+     * @return 
+     */
+    List<BusinessPartner> getOwnersList();
+
+    /**
+     * Removes the specified format from the database
+     * @param rowObject
+     * @return
+     */
+    boolean deletePatternMaskFormat(PatternMaskFormat formatObject);
 }

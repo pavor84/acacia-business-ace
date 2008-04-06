@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.resource.TextResource;
 
 /**
  *
@@ -55,7 +56,7 @@ import com.cosmos.acacia.annotation.ValidationType;
 	}
 )
 public class Person extends BusinessPartner
-        implements Serializable
+        implements Serializable, TextResource
 {
 
     private static final long serialVersionUID = 1L;
@@ -224,5 +225,15 @@ public class Person extends BusinessPartner
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Person[parentId=" + getParentId() + "]";
+    }
+    
+    @Override
+    public String toShortText() {
+        return getFirstName() + " " + getLastName();
+    }
+
+    @Override
+    public String toText() {
+        return getFirstName() + " " + getLastName();
     }
 }

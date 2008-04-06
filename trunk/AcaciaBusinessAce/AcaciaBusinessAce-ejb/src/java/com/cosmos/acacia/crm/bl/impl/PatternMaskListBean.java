@@ -1,5 +1,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -10,7 +12,10 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -21,7 +26,7 @@ import com.cosmos.beansbinding.EntityProperties;
  */
 @Stateless
 public class PatternMaskListBean implements PatternMaskListRemote {
-    
+     
     @PersistenceContext
     private EntityManager em;
     
@@ -51,7 +56,9 @@ public class PatternMaskListBean implements PatternMaskListRemote {
         
         Query q = em.createNamedQuery("PatternMaskFormat.findForParentByName");
         
-        return q.getResultList();
+        List<PatternMaskFormat> result = q.getResultList();
+        
+        return result;
     }
 
     @Override
@@ -70,5 +77,57 @@ public class PatternMaskListBean implements PatternMaskListRemote {
         format = em.merge(format);
         esm.persist(em, format);
         return format; 
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<BusinessPartner> getOwnersList() {
+        
+        try{
+            Query q = em.createNamedQuery("BusinessPartner.getAllNotDeleted");
+            List<BusinessPartner> result = q.getResultList();
+            
+            /**
+             * Sort by name
+             */
+            Collections.sort(result, new Comparator<BusinessPartner>() {
+            
+                @Override
+                public int compare(BusinessPartner o1, BusinessPartner o2) {
+                    String name1 = "";
+                    if ( o1 instanceof Person )
+                        name1 = ((Person)o1).getFirstName()+" "+((Person)o1).getLastName();
+                    else if ( o1 instanceof Organization )
+                        name1 = ((Organization)o1).getOrganizationName();
+                    
+                    String name2 = "";
+                    if ( o2 instanceof Person )
+                        name2 = ((Person)o2).getFirstName()+" "+((Person)o2).getLastName();
+                    else if ( o2 instanceof Organization )
+                        name2 = ((Organization)o2).getOrganizationName();
+                    
+                    return name1.compareTo(name2);
+                }
+            
+            });
+            
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    @Override
+    public boolean deletePatternMaskFormat(PatternMaskFormat formatObject) {
+        try{
+            formatObject = em.merge(formatObject);
+            em.remove(formatObject);
+            return true;
+        }catch ( Exception e ){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
