@@ -19,9 +19,13 @@ public class MaskFormatterValidator
     extends BaseValidator
     implements Serializable
 {
+    
+    private TextLengthValidator textLengthValidator;
+    boolean validateTextLength = false;
 
     public MaskFormatterValidator()
     {
+        textLengthValidator = new TextLengthValidator();
     }
 
     @Override
@@ -32,6 +36,12 @@ public class MaskFormatterValidator
             return ValidationError.InvalidMaskFormatterString.getValidatorResult();
         }
         
+        if ( validateTextLength ){
+            Result lengthValidation = textLengthValidator.validate(value);
+            if ( lengthValidation!=null )
+                return lengthValidation;
+        }
+        
         try{
             new MaskFormatter((String) value);
         }catch (Exception e){
@@ -39,5 +49,23 @@ public class MaskFormatterValidator
         }
         
         return null;
+    }
+
+    /**
+     * 
+     * @param maxLength
+     */
+    public void setMaxLength(int maxLength) {
+        validateTextLength = true;
+        textLengthValidator.setMaxLength(maxLength);
+    }
+
+    /**
+     * 
+     * @param minLength
+     */
+    public void setMinLength(int minLength) {
+        validateTextLength = true;
+        textLengthValidator.setMinLength(minLength);
     }
 }
