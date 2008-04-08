@@ -62,18 +62,19 @@ public class PatternMaskFormat implements Serializable {
 
     @Column(name = "pattern_name", nullable = false)
     @Property(title="Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=128))
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=64))
     private String patternName;
     
     @Property(title="Format",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.MASK_FORMATTER))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.MASK_FORMATTER, maxLength=128))
     @Column(name = "format", nullable = false)
     private String format;
 
     @Column(name = "format_type", nullable = false)
     private char formatType;
 
-    @Property(title="Description")
+    @Property(title="Description", 
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, maxLength=4000))
     @Column(name = "description")
     private String description;
     
