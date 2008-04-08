@@ -169,6 +169,8 @@ public class BeansBindingHelper {
                     else if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
                     {
                         MaskFormatterValidator v = new MaskFormatterValidator();
+                        v.setMaxLength(propertyValidator.maxLength());
+                        v.setMinLength(propertyValidator.minLength());
                         validator.addValidator(v);
                     }
 
