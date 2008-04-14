@@ -122,6 +122,17 @@ class CommunicationContactsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
+        if(rowObject != null)
+        {
+            CommunicationContactPanel communicationContactPanel = 
+                    new CommunicationContactPanel((CommunicationContact) rowObject);
+            DialogResponse response = communicationContactPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return communicationContactPanel.getSelectedValue();
+            }
+        }
+         
         return null;
     }
 

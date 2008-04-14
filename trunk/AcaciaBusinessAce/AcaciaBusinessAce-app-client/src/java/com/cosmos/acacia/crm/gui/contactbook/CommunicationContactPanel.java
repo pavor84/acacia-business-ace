@@ -11,7 +11,6 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -29,6 +28,7 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     public CommunicationContactPanel(CommunicationContact communicationContact) {
         super(communicationContact.getDataObject().getParentDataObject());
         this.communicationContact = communicationContact;
+        this.contactPerson = communicationContact.getContactPerson();
         init();
     }
 
@@ -194,7 +194,8 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         System.out.println("Save: communicationContact: " + communicationContact);
-        communicationContact = getFormSession().saveCommunicationContact(communicationContact, getParentDataObject());
+        communicationContact = getFormSession().saveCommunicationContact(
+                communicationContact, getParentDataObject(), contactPerson);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(communicationContact);
         if (closeAfter)

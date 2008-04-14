@@ -198,8 +198,11 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @Override
     public CommunicationContact saveCommunicationContact(
-            CommunicationContact communicationContact, DataObject parentDataObject)
+            CommunicationContact communicationContact,
+            DataObject parentDataObject,
+            ContactPerson contactPerson)
     {
+        communicationContact.setContactPerson(contactPerson);
         if (parentDataObject != null)
         {
             communicationContact.setParentId(parentDataObject.getDataObjectId());
