@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data;
 
 
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -50,20 +51,25 @@ public class CommunicationContact extends DataObjectBean implements Serializable
 
     @Id
     @Column(name = "communication_contact_id", nullable = false)
+    @Property(title="Communication Contact Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger communicationContactId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
-    @JoinColumn(name = "communication_type_id", referencedColumnName = "resource_id")
+    @JoinColumn(name = "communication_type_id", referencedColumnName = "resource_id", nullable=false)
     @ManyToOne
+    @Property(title="Communication Type")
     private DbResource communicationType;
 
     @Column(name = "communication_value", nullable = false)
+    @Property(title="Communication Value")
     private String communicationValue;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "contact_person_id")
     @ManyToOne
+    @Property(title="Contact Person")
     private ContactPerson contactPerson;
 
     @JoinColumn(name = "communication_contact_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

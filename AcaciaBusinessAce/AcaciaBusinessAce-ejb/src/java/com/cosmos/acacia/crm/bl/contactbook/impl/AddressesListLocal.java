@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.bl.impl;
+package com.cosmos.acacia.crm.bl.contactbook.impl;
 
 import javax.ejb.Local;
 

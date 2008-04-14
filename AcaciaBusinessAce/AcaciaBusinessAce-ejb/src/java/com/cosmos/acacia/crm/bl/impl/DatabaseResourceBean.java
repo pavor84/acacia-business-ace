@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
+import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -49,6 +50,7 @@ public class DatabaseResourceBean
             getDbResources(MeasurementUnit.class);
             getDbResources(OrganizationType.class);
             getDbResources(ProductColor.class);
+            getDbResources(CommunicationType.class);
             initialized = true;
         }
     }
@@ -89,6 +91,7 @@ public class DatabaseResourceBean
         EnumClass enumClass = enumClassMap.get(className);
         if(enumClass == null)
         {
+            System.out.println("Enum Class Name: " + className);
             Query q = em.createNamedQuery("EnumClass.findByEnumClassName");
             q.setParameter("enumClassName", className);
             try

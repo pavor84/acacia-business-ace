@@ -13,20 +13,22 @@ import java.util.List;
  *
  * @author Bozhidar Bozhanov
  */
-public enum Gender implements DatabaseResource {
+public enum CommunicationType implements DatabaseResource {
 
-    Male("male"),
-    Female("female");
+    Phone("Phone"),
+    Mobile("Mobile"),
+    ICQ("ICQ"),
+    Skype("Skype");
     
-    private String gender;
+    private String communicationType;
     private DbResource dbResource;
      
-    private Gender(String gender){
-        this.gender = gender;
+    private CommunicationType(String communicationType){
+        this.communicationType = communicationType;
     }
     
-    public String getGender(){
-        return gender;
+    public String getCommunicationType(){
+        return communicationType;
     }
     
     public DbResource getDbResource() {
@@ -42,7 +44,7 @@ public enum Gender implements DatabaseResource {
     }
 
     public String toText() {
-        return getGender();
+        return getCommunicationType();
     }
     
     @Override
@@ -55,11 +57,11 @@ public enum Gender implements DatabaseResource {
     {
         if(dbResources == null)
         {
-            dbResources = new ArrayList<DbResource>(Gender.values().length);
+            dbResources = new ArrayList<DbResource>(CommunicationType.values().length);
 
-            for(Gender gender : Gender.values())
+            for(CommunicationType communicationType : CommunicationType.values())
             {
-                dbResources.add(gender.getDbResource());
+                dbResources.add(communicationType.getDbResource());
             }
         }
 

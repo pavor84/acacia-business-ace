@@ -3,14 +3,16 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.bl.impl;
+package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import com.cosmos.acacia.crm.bl.impl.*;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.PositionType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,9 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -42,6 +46,9 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @EJB
     private LocationsListLocal locationsManager;
+    
+    @EJB
+    private PersonsListLocal personManager;
 
     /**
      * A method for listing all existing countries
@@ -80,9 +87,13 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     public Address saveAddress(Address address, DataObject parentDataObject) {
         
         address.setParentId(parentDataObject.getDataObjectId());
-        DataObject dataObject = new DataObject();
-        dataObject.setParentDataObject(parentDataObject);
-        address.setDataObject(dataObject);
+       
+        if (address.getDataObject() == null){
+            DataObject dataObject = new DataObject();
+            dataObject.setParentDataObject(parentDataObject);
+            address.setDataObject(dataObject);
+        } 
+        
         return locationsManager.saveAddress(address);
     }
 
@@ -187,15 +198,60 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @Override
     public CommunicationContact saveCommunicationContact(
-            CommunicationContact communicationContact) {
+            CommunicationContact communicationContact, DataObject parentDataObject)
+    {
+        if (parentDataObject != null)
+        {
+            communicationContact.setParentId(parentDataObject.getDataObjectId());
+            if (communicationContact.getDataObject() == null){
+                DataObject dataObject = new DataObject();
+                dataObject.setParentDataObject(parentDataObject);
+                communicationContact.setDataObject(dataObject);
+            }
+        }
 
         esm.persist(em, communicationContact);
         return communicationContact;
     }
 
     @Override
-    public ContactPerson saveContactPerson(ContactPerson contactPerson) {
+    public ContactPerson saveContactPerson(ContactPerson contactPerson, DataObject parentDataObject) {
+        contactPerson.setParentId(parentDataObject.getDataObjectId());
+        if (contactPerson.getDataObject() == null){
+            DataObject dataObject = new DataObject();
+            dataObject.setParentDataObject(parentDataObject);
+            contactPerson.setDataObject(dataObject);
+        } 
         esm.persist(em, contactPerson);
+        
         return contactPerson;
     }
+
+    public List<PositionType> getPositionTypes(DataObject parent) {
+        Query q = null;
+        if(parent != null)
+        {
+            if (parent.getDataObjectType().getDataObjectType().equals(Person.class.getName())) {
+                q = em.createNamedQuery("PositionType.findPersonPositionTypes");
+            }
+            if (parent.getDataObjectType().getDataObjectType().equals(Organization.class.getName())) {
+                q = em.createNamedQuery("PositionType.findOrganizationPositionTypes");
+            }
+            if (q != null){
+                q.setParameter("deleted", false);
+                return new ArrayList<PositionType>(q.getResultList());
+            }
+        }
+        return new ArrayList<PositionType>();
+    }
+
+    public List<Person> getPersons() {
+        return personManager.getPersons(null);
+    }
+
+    public List<DbResource> getCommunicationTypes() {
+        return CommunicationType.getDbResources();
+    }
+    
+    
 }

@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.bl.impl;
+package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import com.cosmos.acacia.crm.bl.impl.*;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
@@ -124,7 +125,6 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
 
     public List<DbResource> getGenders() {
-        //return Gender.getDbResources();
-        return new ArrayList<DbResource>();
+        return Gender.getDbResources();
     }
 }
