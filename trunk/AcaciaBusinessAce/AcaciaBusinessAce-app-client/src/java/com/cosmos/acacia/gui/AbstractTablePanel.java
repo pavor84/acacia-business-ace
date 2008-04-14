@@ -166,7 +166,7 @@ public abstract class AbstractTablePanel
 
     private Object selectedRowObject;
     private TableSelectionListener tableSelectionListener;
-
+    
     protected void initData()
     {
         setVisible(Button.Select, false);
@@ -319,7 +319,7 @@ public abstract class AbstractTablePanel
 
     /**
      * Sets the visible buttons:
-     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32
+     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32, Unselect=64
      * Sum the buttons you want to show and pass the result to the method
      * 
      * @param visibleButtons

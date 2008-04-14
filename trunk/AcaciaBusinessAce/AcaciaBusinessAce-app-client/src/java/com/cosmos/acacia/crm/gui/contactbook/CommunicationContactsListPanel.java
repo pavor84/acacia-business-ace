@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.util.List;
 
@@ -13,22 +13,24 @@ import javax.naming.InitialContext;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 import org.jdesktop.application.Action;
 
 /**
  *
  * @author Bozhidar Bozhanov
  */
-class ContactPersonsListPanel extends AbstractTablePanel {
+class CommunicationContactsListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
-    public ContactPersonsListPanel(DataObject parentDataObject)
+    public CommunicationContactsListPanel(DataObject parentDataObject)
     {
         super(parentDataObject);
     }
@@ -36,8 +38,9 @@ class ContactPersonsListPanel extends AbstractTablePanel {
     @EJB
     private AddressesListRemote formSession;
 
-    private BindingGroup contactPersonsBindingGroup;
-    private List<ContactPerson> contactPersons;
+    private BindingGroup communicationContactsBindingGroup;
+    private List<CommunicationContact> communicationContacts;
+    private ContactPerson contactPerson;
 
     @Override
     protected void initData() {
@@ -45,28 +48,28 @@ class ContactPersonsListPanel extends AbstractTablePanel {
         super.initData();
 
         setVisible(Button.Select, false);
-        contactPersonsBindingGroup = new BindingGroup();
-        AcaciaTable contactPersonsTable = getDataTable();
-        JTableBinding tableBinding = contactPersonsTable.bind(contactPersonsBindingGroup, getContactPersons(), getContactPersonEntityProperties());
+        communicationContactsBindingGroup = new BindingGroup();
+        AcaciaTable communicationContactsTable = getDataTable();
+        JTableBinding tableBinding = communicationContactsTable.bind(communicationContactsBindingGroup, getCommunicationContacts(), getCommunicationContactEntityProperties());
 
-        contactPersonsBindingGroup.bind();
+        communicationContactsBindingGroup.bind();
 
-        contactPersonsTable.setEditable(true);
+        communicationContactsTable.setEditable(true);
     }
 
-    protected List<ContactPerson> getContactPersons()
+    protected List<CommunicationContact> getCommunicationContacts()
     {
-        if(contactPersons == null)
+        if(communicationContacts == null)
         {
-            contactPersons = getFormSession().getContactPersons(getParentDataObject());
+            communicationContacts = getFormSession().getCommunicationContacts(getParentDataObject());
         }
 
-        return contactPersons;
+        return communicationContacts;
     }
 
-    protected EntityProperties getContactPersonEntityProperties()
+    protected EntityProperties getCommunicationContactEntityProperties()
     {
-        return getFormSession().getContactPersonEntityProperties();
+        return getFormSession().getCommunicationContactEntityProperties();
     }
 
     protected AddressesListRemote getFormSession()
@@ -86,11 +89,19 @@ class ContactPersonsListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    protected int deleteContactPerson(ContactPerson contactPerson)
+    protected int deleteCommunicationContact(CommunicationContact communicationContact)
     {
-        return getFormSession().deleteContactPerson(contactPerson);
+        return getFormSession().deleteCommunicationContact(communicationContact);
     }
 
+     public ContactPerson getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(ContactPerson contactPerson) {
+        this.contactPerson = contactPerson;
+    }
+    
     @Override
     @Action
     public void selectAction(){
@@ -102,7 +113,7 @@ class ContactPersonsListPanel extends AbstractTablePanel {
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
         {
-            deleteContactPerson((ContactPerson) rowObject);
+            deleteCommunicationContact((CommunicationContact) rowObject);
             return true;
         }
 
@@ -116,15 +127,14 @@ class ContactPersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        /*
-        ContactPersonPanel addressPanel = new AddressPanel(getParentDataObject());
-        addressPanel.setTitle(typeTitle);
-        DialogResponse response = addressPanel.showDialog(this);
+        CommunicationContactPanel communicationContactPanel = new CommunicationContactPanel(getParentDataObject(),
+                    getContactPerson());
+        
+        DialogResponse response = communicationContactPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return addressPanel.getSelectedValue();
+            return communicationContactPanel.getSelectedValue();
         }
-        */
         return null;
     }
     

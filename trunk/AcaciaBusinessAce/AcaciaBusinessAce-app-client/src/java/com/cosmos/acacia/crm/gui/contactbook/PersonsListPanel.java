@@ -3,7 +3,7 @@
  *
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import javax.naming.InitialContext;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.impl.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AbstractTablePanel;

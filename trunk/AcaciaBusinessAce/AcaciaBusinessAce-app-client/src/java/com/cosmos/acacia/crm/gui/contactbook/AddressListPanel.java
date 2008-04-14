@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.gui.AbstractTablePanel;

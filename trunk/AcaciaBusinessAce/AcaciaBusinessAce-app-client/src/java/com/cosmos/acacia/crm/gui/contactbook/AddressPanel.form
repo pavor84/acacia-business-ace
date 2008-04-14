@@ -97,7 +97,7 @@
         <Property name="name" type="java.lang.String" value="cityLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBComboBox" name="countryComboBox">
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="countryComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
@@ -110,7 +110,7 @@
         <Property name="name" type="java.lang.String" value="countryComboBox" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBComboBox" name="cityComboBox">
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="cityComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
@@ -284,7 +284,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="104" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="157" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
