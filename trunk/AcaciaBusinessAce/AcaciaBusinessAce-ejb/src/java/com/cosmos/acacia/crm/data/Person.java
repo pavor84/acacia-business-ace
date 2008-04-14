@@ -224,16 +224,19 @@ public class Person extends BusinessPartner
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.Person[parentId=" + getParentId() + "]";
-    }
-    
-    @Override
-    public String toShortText() {
-        return getFirstName() + " " + getLastName();
+        return toText();
     }
 
-    @Override
+    public String toShortText() {
+        return null;
+    }
+
     public String toText() {
-        return getFirstName() + " " + getLastName();
+        String firstName = getFirstName() != null ? getFirstName() : "";
+        String secondName = getSecondName() != null ? getSecondName() : "";
+        String lastName = getLastName() != null ? getLastName() : "";
+        String extraName = getExtraName() != null ? getExtraName() : "";
+        
+        return firstName + " " + secondName + " " + lastName + " " + extraName;
     }
 }

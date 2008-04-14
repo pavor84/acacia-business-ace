@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.bl.impl;
+package com.cosmos.acacia.crm.bl.contactbook.impl;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
@@ -15,6 +15,9 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -49,11 +52,14 @@ public interface AddressesListRemote {
 
     ContactPerson newContactPerson();
 
-    ContactPerson saveContactPerson(ContactPerson contactPerson);
+    ContactPerson saveContactPerson(ContactPerson contactPerson, DataObject parentDataObject);
 
     int deleteContactPerson(ContactPerson contactPerson);
 
-
+    List<PositionType> getPositionTypes(DataObject parentDataObject);
+    
+    List<Person> getPersons();
+    
     /* Handling communication contacts */
 
     List<CommunicationContact> getCommunicationContacts(DataObject parent);
@@ -64,7 +70,9 @@ public interface AddressesListRemote {
 
     CommunicationContact newCommunicationContact();
 
-    CommunicationContact saveCommunicationContact(CommunicationContact communicationContact);
+    CommunicationContact saveCommunicationContact(CommunicationContact communicationContact, DataObject parent);
 
     int deleteCommunicationContact(CommunicationContact communicationContact);
+    
+    List<DbResource> getCommunicationTypes();
 }

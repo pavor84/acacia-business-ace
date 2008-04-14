@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data;
 
 
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -39,23 +40,27 @@ import javax.persistence.Table;
          )
     }
 )
-public class ContactPerson implements Serializable {
+public class ContactPerson extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "contact_person_id", nullable = false)
+    @Property(title="Contact Person Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger contactPersonId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "position_type_id")
     @ManyToOne
+    @Property(title="Position Type")
     private PositionType positionType;
 
     @JoinColumn(name = "contact_id")
     @ManyToOne
+    @Property(title="Person")
     private Person contact;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -135,6 +140,16 @@ public class ContactPerson implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.ContactPerson[contactPersonId=" + contactPersonId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getContactPersonId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        contactPersonId = id;
     }
 
 }
