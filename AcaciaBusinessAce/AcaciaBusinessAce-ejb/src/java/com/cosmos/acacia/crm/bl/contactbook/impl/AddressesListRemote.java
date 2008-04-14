@@ -70,7 +70,10 @@ public interface AddressesListRemote {
 
     CommunicationContact newCommunicationContact();
 
-    CommunicationContact saveCommunicationContact(CommunicationContact communicationContact, DataObject parent);
+    CommunicationContact saveCommunicationContact(
+            CommunicationContact communicationContact,
+            DataObject parent,
+            ContactPerson contactPerson);
 
     int deleteCommunicationContact(CommunicationContact communicationContact);
     

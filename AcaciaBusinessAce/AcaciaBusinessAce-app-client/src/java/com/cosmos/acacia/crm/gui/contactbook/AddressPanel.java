@@ -336,7 +336,7 @@ public class AddressPanel extends BaseEntityPanel {
     {
         List<CommunicationContact> communicationContacts =
                 getFormSession().getCommunicationContacts(contactPerson);
-        communicationContactsTable.setContactPerson(contactPerson);
+        communicationContactsTable.setContactPerson(contactPerson);        
         updateCommunicationContactsTable(communicationContacts);
     }
     
