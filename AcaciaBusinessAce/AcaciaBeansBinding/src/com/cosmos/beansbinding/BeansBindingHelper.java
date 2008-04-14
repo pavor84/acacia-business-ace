@@ -135,13 +135,15 @@ public class BeansBindingHelper {
                         
                         validator.addValidator(dateRangeValidator);
                     }
-                    else if(propertyValidator.validationType() == ValidationType.NUMBER)
+                    
+                    if(propertyValidator.validationType() == ValidationType.NUMBER)
                     {
                         NumericValidator numericValidator = new NumericValidator();
                         validator.addValidator(numericValidator);
                         numericValidator.setFloating(propertyValidator.floating());
                     }
-                    else if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
+                    
+                    if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
                     {
                         NumericRangeValidator numericRangeValidator = new NumericRangeValidator();
                         numericRangeValidator.setMaxValue(propertyValidator.maxValue());
@@ -149,14 +151,17 @@ public class BeansBindingHelper {
                         validator.addValidator(numericRangeValidator);
                         numericRangeValidator.setFloating(propertyValidator.floating());
                     }
-                    else if(propertyValidator.validationType() == ValidationType.LENGTH)
+                    
+                    if(propertyValidator.validationType() == ValidationType.LENGTH)
                     {
                         TextLengthValidator rangeValidator = new TextLengthValidator();
                         rangeValidator.setMaxLength(propertyValidator.maxLength());
                         rangeValidator.setMinLength(propertyValidator.minLength());
                         validator.addValidator(rangeValidator);
                     }
-                    else if(propertyValidator.validationType() == ValidationType.REGEX)
+                    
+                    if(propertyValidator.validationType() == ValidationType.REGEX
+                            || propertyValidator.regex() != null)
                     {
                         String strValue = propertyValidator.regex();
                         if(strValue != null && (strValue = strValue.trim()).length() > 0)
@@ -166,7 +171,8 @@ public class BeansBindingHelper {
                             validator.addValidator(regexValidator);
                         }
                     }
-                    else if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
+                    
+                    if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
                     {
                         MaskFormatterValidator v = new MaskFormatterValidator();
                         v.setMaxLength(propertyValidator.maxLength());
