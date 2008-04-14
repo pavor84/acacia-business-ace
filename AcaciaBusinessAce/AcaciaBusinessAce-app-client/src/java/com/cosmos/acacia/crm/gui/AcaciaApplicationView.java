@@ -4,6 +4,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

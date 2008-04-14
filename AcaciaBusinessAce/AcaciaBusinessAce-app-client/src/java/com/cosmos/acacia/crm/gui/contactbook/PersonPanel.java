@@ -4,24 +4,23 @@
  * Created on 09 March 2008, 16:50
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.bl.impl.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.BaseEntityPanel;
+import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
@@ -45,7 +44,7 @@ public class PersonPanel extends BaseEntityPanel {
         super(parentDataObject);
         init();
     }
-    
+
     @Override
     protected void init()
     {
@@ -71,15 +70,15 @@ public class PersonPanel extends BaseEntityPanel {
         lastNameTextField = new com.cosmos.swingb.JBTextField();
         extraNameTextField = new com.cosmos.swingb.JBTextField();
         genderLabel = new javax.swing.JLabel();
-        genderComboBox = new com.cosmos.swingb.JBComboBox();
+        genderComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         birthDataPanel = new com.cosmos.swingb.JBPanel();
         personalUniqueIdLabel = new javax.swing.JLabel();
         birthdateLabel = new javax.swing.JLabel();
         countryLabel = new javax.swing.JLabel();
         cityLabel = new javax.swing.JLabel();
         personalUniqueIdTextField = new com.cosmos.swingb.JBTextField();
-        birthPlaceCountryComboBox = new com.cosmos.swingb.JBComboBox();
-        birthPlaceCityComboBox = new com.cosmos.swingb.JBComboBox();
+        birthPlaceCountryComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        birthPlaceCityComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         birthdateDatePicker = new com.cosmos.swingb.JBDatePicker();
         passportsPanel = new com.cosmos.swingb.JBPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -362,8 +361,8 @@ public class PersonPanel extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.TableHolderPanel addressesPanel;
     private com.cosmos.swingb.JBPanel birthDataPanel;
-    private com.cosmos.swingb.JBComboBox birthPlaceCityComboBox;
-    private com.cosmos.swingb.JBComboBox birthPlaceCountryComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox birthPlaceCityComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox birthPlaceCountryComboBox;
     private com.cosmos.swingb.JBDatePicker birthdateDatePicker;
     private javax.swing.JLabel birthdateLabel;
     private javax.swing.JLabel cityLabel;
@@ -375,7 +374,7 @@ public class PersonPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField extraNameTextField;
     private javax.swing.JLabel firstNameLabel;
     private com.cosmos.swingb.JBTextField firstNameTextField;
-    private com.cosmos.swingb.JBComboBox genderComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox genderComboBox;
     private javax.swing.JLabel genderLabel;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -409,7 +408,7 @@ public class PersonPanel extends BaseEntityPanel {
         personBindingGroup = new BindingGroup();
 
         EntityProperties entityProps = getPersonEntityProperties();
-        
+
         genderComboBox.bind(personBindingGroup, getGenders(), person, entityProps.getPropertyDetails("gender"));
 
         firstNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("firstName"));
@@ -424,15 +423,15 @@ public class PersonPanel extends BaseEntityPanel {
 
         descriptionTextPane.bind(personBindingGroup, person, "description");
 
-        // Using an AbstractTablePanel implementation    
+        // Using an AbstractTablePanel implementation
         addressesTable = new AddressListPanel(person.getDataObject());
         addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
-        
-        // Adding the nested table listener to ensure that person is saved 
+
+        // Adding the nested table listener to ensure that person is saved
         // before adding addresses to it
         addNestedFormListener(addressesTable);
-        
-        //addressesTable.setButtonsTextVisibility(false);        
+
+        //addressesTable.setButtonsTextVisibility(false);
         addressesPanel.add(addressesTable);
 
         //JTableBinding passportsTableBinding = passportsTable.bind(personBindingGroup, getPassports(), getPassportEntityProperties());
@@ -465,17 +464,17 @@ public class PersonPanel extends BaseEntityPanel {
     {
         return person;
     }
-    
+
     public void performSave(boolean closeAfter)
     {
         System.out.println("Save: person: " + person);
         person = getFormSession().savePerson(person);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(person);
-        if (closeAfter) 
+        if (closeAfter)
             close();
     }
-    
+
     protected EntityProperties getPersonEntityProperties()
     {
         return getFormSession().getPersonEntityProperties();

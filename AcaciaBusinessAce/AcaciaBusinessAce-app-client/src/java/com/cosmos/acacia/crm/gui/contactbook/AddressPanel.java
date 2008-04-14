@@ -4,11 +4,13 @@
  * Created on 29 March 2008, 09:05
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.CommunicationContact;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -19,6 +21,9 @@ import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -60,8 +65,8 @@ public class AddressPanel extends BaseEntityPanel {
         nameLabel = new com.cosmos.swingb.JBLabel();
         countryLabel = new javax.swing.JLabel();
         cityLabel = new javax.swing.JLabel();
-        countryComboBox = new com.cosmos.swingb.JBComboBox();
-        cityComboBox = new com.cosmos.swingb.JBComboBox();
+        countryComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        cityComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         nameLabel1 = new com.cosmos.swingb.JBLabel();
         postalCodeTextField = new com.cosmos.swingb.JBTextField();
         addressPanel = new com.cosmos.swingb.JBPanel();
@@ -172,7 +177,7 @@ public class AddressPanel extends BaseEntityPanel {
         );
         communicationContactsPanelLayout.setVerticalGroup(
             communicationContactsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 104, Short.MAX_VALUE)
+            .addGap(0, 157, Short.MAX_VALUE)
         );
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
@@ -241,11 +246,11 @@ public class AddressPanel extends BaseEntityPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel addressPanel;
-    private com.cosmos.swingb.JBComboBox cityComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox cityComboBox;
     private javax.swing.JLabel cityLabel;
     private com.cosmos.acacia.gui.TableHolderPanel communicationContactsPanel;
     private com.cosmos.acacia.gui.TableHolderPanel contactPersonsPanel;
-    private com.cosmos.swingb.JBComboBox countryComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox countryComboBox;
     private javax.swing.JLabel countryLabel;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
@@ -264,7 +269,9 @@ public class AddressPanel extends BaseEntityPanel {
 
     private BindingGroup addressBindingGroup;
     private Address address;
-
+    private CommunicationContactsListPanel communicationContactsTable;
+    private ContactPerson contactPerson;
+    
     @Override
     protected void initData() {
         setResizable(false);
@@ -288,14 +295,57 @@ public class AddressPanel extends BaseEntityPanel {
 
         descriptionTextPane.bind(addressBindingGroup, address, "description");
 
-        ContactPersonsListPanel contactPersonsTable = new ContactPersonsListPanel(address.getDataObject());
-        contactPersonsTable.setVisibleButtons(1 + 2 + 4 + 8 + 64);
-        
+        final ContactPersonsListPanel contactPersonsTable = new ContactPersonsListPanel(address.getDataObject());
+        contactPersonsTable.setVisibleButtons(2 + 4 + 8 + 64);
+        contactPersonsTable.getDataTable().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                if(!event.getValueIsAdjusting()) {
+                    ListSelectionModel selectionModel = (ListSelectionModel) event.getSource();
+                    if (selectionModel.isSelectionEmpty()) {
+                        updateCommunicationContacts(getDataObject());
+                    } else {
+                        ContactPerson contactPerson = (ContactPerson) 
+                                contactPersonsTable.getDataTable().getSelectedRowObject();
+                        updateCommunicationContacts(contactPerson);
+                    }
+                }
+            }
+            
+        });
         contactPersonsPanel.add(contactPersonsTable);
+        
+        
+        communicationContactsTable = new CommunicationContactsListPanel(address.getDataObject());
+        communicationContactsTable.setVisibleButtons(2 + 4 + 8);
+        communicationContactsTable.setParentDataObject(address.getDataObject());
+        
+        communicationContactsPanel.add(communicationContactsTable);
+        
         addressBindingGroup.bind();
     }
 
-        protected AddressesListRemote getFormSession()
+    private void updateCommunicationContacts(DataObject parent)
+    {
+        List<CommunicationContact> communicationContacts =
+                getFormSession().getCommunicationContacts(parent);
+        communicationContactsTable.setContactPerson(null);
+        updateCommunicationContactsTable(communicationContacts);
+    }
+    
+    private void updateCommunicationContacts(ContactPerson contactPerson)
+    {
+        List<CommunicationContact> communicationContacts =
+                getFormSession().getCommunicationContacts(contactPerson);
+        communicationContactsTable.setContactPerson(contactPerson);
+        updateCommunicationContactsTable(communicationContacts);
+    }
+    
+    private void updateCommunicationContactsTable(List<CommunicationContact> data)
+    {
+        communicationContactsTable.getDataTable().setData(data);
+    }
+    
+    protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
         {
