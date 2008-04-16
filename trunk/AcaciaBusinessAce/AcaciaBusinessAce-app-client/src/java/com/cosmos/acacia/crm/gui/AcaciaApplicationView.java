@@ -242,6 +242,13 @@ public class AcaciaApplicationView extends FrameView {
         classifierGroups.showFrame();
     }
 
+    @Action
+    public void invoicesListAction() {
+        System.out.println("invoicesListAction");
+        InvoicesListPanel invoicesListPanel = new InvoicesListPanel(null);
+        invoicesListPanel.showFrame();
+    }
+    
     private ActionMap getActionMap()
     {
         return getContext().getActionMap(this);
