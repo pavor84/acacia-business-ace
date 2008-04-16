@@ -17,6 +17,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,6 +30,19 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "invoices")
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "Invoice.findByParentDataObjectAndDeleted",
+                query = "select i from Invoice i where i.dataObject.parentDataObject = :parentDataObject and i.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "Invoice.findByParentDataObjectIsNullAndDeleted",
+                query = "select i from Invoice i where i.dataObject.parentDataObject is null and i.dataObject.deleted = :deleted"
+            )
+    })
 public class Invoice extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
