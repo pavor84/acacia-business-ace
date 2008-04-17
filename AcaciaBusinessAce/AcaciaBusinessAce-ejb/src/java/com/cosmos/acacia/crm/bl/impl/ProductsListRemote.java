@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
@@ -43,6 +44,12 @@ public interface ProductsListRemote {
      * (May be of different type - for ex. {@link Person} or {@link Organization}) 
      * @return
      */
-    List<?> getProducers();
+    List<BusinessPartner> getProducers();
+    /**
+     * Retrieve the possible colors to select from when assigning one
+     * for a product. 
+     * @return not-null list
+     */
+    List<DbResource> getProductColors();
     
 }

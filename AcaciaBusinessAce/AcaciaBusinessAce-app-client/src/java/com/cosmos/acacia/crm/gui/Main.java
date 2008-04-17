@@ -27,7 +27,7 @@ public class Main {
         // TODO code application logic here
         System.out.println(
             "\n*********************************" +
-            "\n\t Hello World." +
+            "\n\t Hello World." +   
             "\n\t Current time is: " + new Date() +
             "\n*********************************");
 

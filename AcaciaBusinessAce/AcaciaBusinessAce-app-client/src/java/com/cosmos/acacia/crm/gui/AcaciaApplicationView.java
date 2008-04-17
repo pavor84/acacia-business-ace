@@ -27,7 +27,6 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
-import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -201,12 +200,7 @@ public class AcaciaApplicationView extends FrameView {
     public void productsListAction() {
         System.out.println("productsListAction");
         ProductsListPanel productsListPanel = new ProductsListPanel(null);
-        //productsListPanel.showFrame();
-        DialogResponse response = productsListPanel.showDialog();
-        if(DialogResponse.SELECT.equals(response))
-        {
-            System.out.println("Selected object: " + productsListPanel.getSelectedRowObject());
-        }
+        productsListPanel.showFrame();
     }
     
     @Action

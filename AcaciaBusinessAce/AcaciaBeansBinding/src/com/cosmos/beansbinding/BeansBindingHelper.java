@@ -72,7 +72,7 @@ public class BeansBindingHelper {
             if(property != null)
             {
                 PropertyDetails pd = new PropertyDetails();
-                pd.setOrderPosition(orderPosition++);
+                pd.setOrderPosition(orderPosition+=10);//increase by 10 - let have it possible to put columns in between
                 pd.setPropertyName(field.getName());
                 pd.setPropertyClassName(ClassHelper.getClassName(field.getType()));
                 pd.setPropertyTitle(property.title());
@@ -80,6 +80,9 @@ public class BeansBindingHelper {
                 pd.setEditable(property.editable());
                 pd.setVisible(property.visible());
                 pd.setHiden(property.hidden());
+                
+                if ( !Property.NULL.equals(property.customDisplay()) )
+                    pd.setCustomDisplay(property.customDisplay());
 
                 /* Setting validation-related values */
                 PropertyValidator propertyValidator = property.propertyValidator();

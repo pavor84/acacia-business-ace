@@ -21,6 +21,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.cosmos.resource.TextResource;
+
 /**
  *
  * @author Miro
@@ -42,8 +44,8 @@ import javax.persistence.TemporalType;
     }
 )
 public class Organization
-    extends BusinessPartner
-    implements Serializable
+    extends BusinessPartner 
+    implements Serializable, TextResource
 {
 
     private static final long serialVersionUID = 1L;
@@ -222,5 +224,20 @@ public class Organization
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Organization[organizationId=" + getPartnerId() + "]";
+    }
+
+    @Override
+    public String getDisplayName() {
+        return toShortText();
+    }
+    
+    @Override
+    public String toShortText() {
+        return getOrganizationName();
+    }
+    
+    @Override
+    public String toText() {
+        return null;
     }
 }

@@ -6,9 +6,10 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,11 +18,13 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.enums.ProductColor;
 import com.cosmos.acacia.crm.validation.impl.ProductValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -38,21 +41,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     @EJB
     private EntityStoreManagerLocal esm;
     @EJB
-    private DatabaseResourceLocal databaseResource;
-    @EJB
     private ProductValidatorLocal productValidator;
 
-    @PostConstruct
-    private void postConstruct()
-    {
-        System.out.println("postConstruct()");
-//        DataObject dataObject = em.find(DataObject.class, BigInteger.ONE);
-//        Organization company = new Organization();
-//        company.setDataObject(dataObject);
-//        company.setOrganizationId(BigInteger.ONE);
-//        company.setOrganizationType();
-    }
-
+    @SuppressWarnings("unchecked")
     public List<Product> getProducts(DataObject parent)
     {
         Query q;
@@ -69,6 +60,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return new ArrayList<Product>(q.getResultList());
     }
 
+    @SuppressWarnings("unchecked")
     public List<ProductCategory> getProductsCategories(DataObject parent)
     {
         Query q;
@@ -133,21 +125,39 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     public List<DbResource> getMeasureUnits(MeasurementUnit.Category category) {
         return MeasurementUnit.getDbResourcesByCategory(category);
     }
+    
+    public List<DbResource> getProductColors() {
+        return ProductColor.getDbResourcesByCategory(ProductColor.Category.DesktopComputer);
+    }
 
     /**
      * @see com.cosmos.acacia.crm.bl.impl.ProductsListRemote#getProducers()
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<?> getProducers() {
-        Query qPersons = em.createNamedQuery("Person.getAllNotDeleted");
-        Query qOrganizations = em.createNamedQuery("Organization.getAllNotDeleted");
+    public List<BusinessPartner> getProducers() {
         
-        return new ArrayList<Object>();
-//        List<?> result = new ArrayList<Object>();
-//        
-//        result.addAll(qPersons.getResultList());
-//        result.addAll(qOrganizations.getResultList());
-//        return result;
+        try{
+            Query q = em.createNamedQuery("BusinessPartner.getAllNotDeleted");
+            List<BusinessPartner> result = q.getResultList();
+            
+            /**
+             * Sort by name
+             */
+            Collections.sort(result, new Comparator<BusinessPartner>() {
+            
+                @Override
+                public int compare(BusinessPartner o1, BusinessPartner o2) {
+                    return o1.getDisplayName().compareTo(o2.getDisplayName());
+                }
+            
+            });
+            
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }

@@ -21,6 +21,7 @@ import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -222,18 +223,47 @@ public class JBTable
         return bind(bindingGroup, data, entityProperties, updateStrategy);
     }
 
+    /**
+     * You may need to bind to JTable without having to use EntityProperties.
+     * Use this method in this case.
+     * @param bindingGroup
+     * @param data
+     * @param propertyDetails
+     * @param updateStrategy
+     * @return
+     */
     public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
-            EntityProperties entityProperties,
+            Collection<PropertyDetails> propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
+        updateStrategy = UpdateStrategy.READ;
         if(!(data instanceof ObservableList))
             observableData = ObservableCollections.observableList(data);
         else
             observableData = (ObservableList)data;
-        this.entityProperties = entityProperties;
 
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, observableData, this);
+        createColumnsBinding(tableBinding, propertyDetails);
+        tableBinding.bind();
+
+        bindingGroup.addBinding(tableBinding);
+
+        return tableBinding;
+    }
+    
+    public JTableBinding bind(BindingGroup bindingGroup, List data,
+                              EntityProperties entityProperties,
+                              AutoBinding.UpdateStrategy updateStrategy) {
+        updateStrategy = UpdateStrategy.READ;
+        if (!(data instanceof ObservableList))
+            observableData = ObservableCollections.observableList(data);
+        else
+            observableData = (ObservableList) data;
+        this.entityProperties = entityProperties;
+
+        JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy,
+            observableData, this);
         createColumnsBinding(tableBinding, entityProperties);
         tableBinding.bind();
 
@@ -261,15 +291,27 @@ public class JBTable
         }
     }
 
-    protected ColumnBinding createColumnBinding(
+    //TODO
+    public ColumnBinding createColumnBinding(
         JTableBinding tableBinding,
         PropertyDetails propertyDetails)
     {
-        String expression = "${" + propertyDetails.getPropertyName() + "}";
+        //Use custom display if available
+        //Note that if custom display is used, the column class should be String.class or
+        //null. For this reason, we only set the class of the column if the property name
+        //is used. As a consequence the column with custom display is can not be editable.
+        String expression = propertyDetails.getCustomDisplay();
+        Class columnClass = null;
+        if ( expression==null ){
+            expression = "${" + propertyDetails.getPropertyName() + "}";
+            //set the class only if propert name is used for the display expression
+            columnClass = propertyDetails.getPropertyClass();
+        }
+        
         ELProperty elProperty = ELProperty.create(expression);
         ColumnBinding columnBinding = tableBinding.addColumnBinding(elProperty);
         columnBinding.setColumnName(propertyDetails.getPropertyTitle());
-        columnBinding.setColumnClass(propertyDetails.getPropertyClass());
+        columnBinding.setColumnClass(columnClass);
 
         Boolean b = propertyDetails.isEditable();
         if(b != null)
@@ -288,7 +330,7 @@ public class JBTable
 
         return columnBinding;
     }
-
+    
     public EntityProperties getEntityProperties() {
         return entityProperties;
     }
