@@ -224,9 +224,9 @@ public class Person extends BusinessPartner
 
     @Override
     public String toString() {
-        return toText();
+        return "com.cosmos.acacia.crm.data.Person[parentId=" + getParentId() + "]";
     }
-
+    
     public String toShortText() {
         return null;
     }
@@ -238,5 +238,10 @@ public class Person extends BusinessPartner
         String extraName = getExtraName() != null ? getExtraName() : "";
         
         return firstName + " " + secondName + " " + lastName + " " + extraName;
+    }
+    
+    @Override
+    public String getDisplayName() {
+        return toShortText();
     }
 }

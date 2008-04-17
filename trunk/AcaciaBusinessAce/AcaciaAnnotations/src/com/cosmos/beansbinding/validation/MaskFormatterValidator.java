@@ -7,9 +7,9 @@ package com.cosmos.beansbinding.validation;
 
 import java.io.Serializable;
 
-import javax.swing.text.MaskFormatter;
-
 import org.jdesktop.beansbinding.Validator;
+
+import com.cosmos.util.CodeFormatter;
 
 /**
  *
@@ -43,7 +43,7 @@ public class MaskFormatterValidator
         }
         
         try{
-            new MaskFormatter((String) value);
+            new CodeFormatter((String) value);
         }catch (Exception e){
             return ValidationError.InvalidMaskFormatterString.getValidatorResult();
         }

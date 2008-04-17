@@ -37,4 +37,12 @@ public @interface Property
     String sourceUnreadableValue() default NULL;
 
     PropertyValidator propertyValidator() default @PropertyValidator;
+
+    /**
+     * Supply EL property string to use when displaying the given element.
+     * The EL expression will be applied over the current property value. 
+     * If not provided, {@link #propertyName} will be used instead.
+     * @return String
+     */
+    String customDisplay() default NULL;
 }

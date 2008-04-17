@@ -25,6 +25,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.util.CodeFormatter;
 
 
 /**
@@ -117,7 +118,7 @@ public class Product
 
     @JoinColumn(name = "pattern_mask_format_id", referencedColumnName = "pattern_mask_format_id")
     @ManyToOne
-    @Property(title="Pattern Mask Format")
+    @Property(title="Pattern Mask Format", propertyValidator=@PropertyValidator(required=true))
     private PatternMaskFormat patternMaskFormat;
 
     @JoinColumn(name = "product_color_id", nullable=true, referencedColumnName = "resource_id")
@@ -197,9 +198,14 @@ public class Product
     @Property(title="Description")
     private String description;
 
-    @Column(name = "producer_id")
-    @Property(title="Producer Id", editable=false, readOnly=true, visible=false)
-    private BigInteger producerId;
+//    @Column(name = "producer_id")
+//    @Property(title="Producer Id", editable=false, readOnly=true, visible=false)
+//    private BigInteger producerId;
+//    
+    @JoinColumn(name = "producer_id")
+    @ManyToOne
+    @Property(title="Producer")
+    private BusinessPartner producer;
 
     @OneToOne
     /*@JoinColumn(
@@ -434,7 +440,7 @@ public class Product
         return weightUnit;
     }
 
-    public void setWeightUnitId(DbResource weightUnit) {
+    public void setWeightUnit(DbResource weightUnit) {
         firePropertyChange("weightUnit", this.weightUnit, weightUnit);
         this.weightUnit = weightUnit;
     }
@@ -466,14 +472,14 @@ public class Product
         this.description = description;
     }
 
-    public BigInteger getProducerId() {
-        return producerId;
-    }
-
-    public void setProducerId(BigInteger producerId) {
-        firePropertyChange("producerId", this.producerId, producerId);
-        this.producerId = producerId;
-    }
+//    public BigInteger getProducerId() {
+//        return producerId;
+//    }
+//
+//    public void setProducerId(BigInteger producerId) {
+//        firePropertyChange("producerId", this.producerId, producerId);
+//        this.producerId = producerId;
+//    }
 
     public DataObject getDataObject() {
         return dataObject;
@@ -527,6 +533,38 @@ public class Product
     @Override
     public void setId(BigInteger id) {
         setProductId(id);
+    }
+    
+    /**
+     * Synthetic property getter.
+     * Format on every call.
+     * If not setup {@link PatternMaskFormat} property - returns "";
+     * If no product code entered returns "";
+     * If format error occurs, prints the stack trace and returns "<FORMAT ERROR>";
+     * @return - not null result
+     */
+    public String getCodeFormatted(){
+        
+        
+        PatternMaskFormat f = getPatternMaskFormat();
+        if ( f==null )
+            return "";
+        if ( f.getFormat()==null )
+            return "";
+        if ( getProductCode()==null )
+            return "";
+        try {
+            CodeFormatter formatter = new CodeFormatter(f.getFormat());
+            String result = formatter.getDisplayValue(getProductCode());
+            return result;
+//            MaskFormatter formatter = new MaskFormatter(f.getFormat());
+//            formatter.setValidCharacters("0123456789abcdefABCDEF");
+//            return
+//            formatter.valueToString(getProductCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "<FORMAT ERROR>"; 
+        }
     }
 
 
@@ -586,4 +624,20 @@ public class Product
         return product;
     }
 
+    /**
+     * Setter for producer
+     * @param producer - BusinessPartner
+     */
+    public void setProducer(BusinessPartner producer) {
+        firePropertyChange("producer", this.producer, producer);
+        this.producer = producer;
+    }
+
+    /**
+     * Getter for producer
+     * @return BusinessPartner
+     */
+    public BusinessPartner getProducer() {
+        return producer;
+    }
 }

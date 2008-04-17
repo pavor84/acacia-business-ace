@@ -166,7 +166,7 @@ public class PatternMaskFormat implements Serializable {
     public String toString() {
         return "com.cosmos.acacia.crm.data.PatternMaskFormat[patternMaskFormatId=" + patternMaskFormatId + "]";
     }
-
+    
     /**
      * Getter for owner
      * @return BusinessPartner

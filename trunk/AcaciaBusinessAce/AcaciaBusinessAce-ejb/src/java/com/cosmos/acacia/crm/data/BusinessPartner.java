@@ -115,4 +115,6 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     public void setId(BigInteger id) {
         setPartnerId(id);
     }
+    
+    public abstract String getDisplayName();
 }

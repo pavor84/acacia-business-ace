@@ -28,6 +28,10 @@ public class PropertyDetails
     private String columnName;
     private int orderPosition;
     private Validator validator;
+    /**
+     * @see #getCustomDislay()
+     */
+    private String customDisplay;
     
     public PropertyDetails() {
     }
@@ -197,6 +201,24 @@ public class PropertyDetails
         {
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Supply EL property string to use when displaying the given object.
+     * If not provided, {@link #propertyName} will be used.
+     * Getter for customDislay
+     * @return String
+     */
+    public String getCustomDisplay() {
+        return customDisplay;
+    }
+
+    /**
+     * Setter for customDislay
+     * @param customDisplay - String
+     */
+    public void setCustomDisplay(String customDisplay) {
+        this.customDisplay = customDisplay;
     }
 
 }

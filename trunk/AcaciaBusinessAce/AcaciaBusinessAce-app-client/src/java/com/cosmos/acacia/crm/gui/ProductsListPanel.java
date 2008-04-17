@@ -5,6 +5,16 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
+
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.swingbinding.JTableBinding;
+
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -14,12 +24,8 @@ import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -39,22 +45,67 @@ public class ProductsListPanel
         super(parentDataObject);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
         super.initData();
 
-        setVisible(Button.Select, false);
-
         productsBindingGroup = new BindingGroup();
         AcaciaTable productsTable = getDataTable();
-        EntityProperties entityProps = getProductEntityProperties();
-        JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps);
+        EntityProperties entityProps = getFormSession().getProductEntityProperties();
+        List<PropertyDetails> propertyDetails = 
+            new ArrayList<PropertyDetails>(entityProps.getValues());
+        
+        //set custom display for 'patternMaskFormat'
+        setCustomDisplay(propertyDetails, "patternMaskFormat", 
+            "${patternMaskFormat.patternName} (${patternMaskFormat.format})");
+        
+        //set custom display for 'producer'
+        setCustomDisplay(propertyDetails, "producer", "${producer.displayName}");
+        
+        //add column
+        addColumn(55, getString("ProductList.codeFormatted"), "${codeFormatted}", entityProps);
+        
+        JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps, UpdateStrategy.READ);
+        
+        tableBinding.setEditable(false);
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getProductsCategories(), entityProps.getPropertyDetails("category"));
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), entityProps.getPropertyDetails("measureUnit"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.Volume), entityProps.getPropertyDetails("dimensionUnit"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.MassWeight), entityProps.getPropertyDetails("weightUnit"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getFormSession().getProductColors(), entityProps.getPropertyDetails("productColor"));
 
         productsBindingGroup.bind();
 
         productsTable.setEditable(true);
+    }
+    
+    private void addColumn(int orderPosition, String columnName,
+                           String customELDisplay, EntityProperties entityProperties) {
+        PropertyDetails pd = new PropertyDetails(null, columnName, null);
+        pd.setCustomDisplay(customELDisplay);
+        pd.setOrderPosition(orderPosition);
+        entityProperties.addPropertyDetails(pd);
+    }
+
+    private String getString(String key) {
+        return getResourceMap().getString(key);
+    }
+
+    /**
+     * Custom display is EL expression string
+     * @param propertyDetails
+     * @param propertyName
+     * @param customDisplay - provide valid EL expression string. 
+     * Otherwise no fail-fast in this method. Will fail when compiled. 
+     */
+    private void setCustomDisplay(List<PropertyDetails> propertyDetails, String propertyName, String customDisplay) {
+        for (PropertyDetails pd : propertyDetails) {
+            if ( pd.getPropertyName().equals(propertyName)){
+                pd.setCustomDisplay(customDisplay);
+                break;
+            }
+        }
     }
 
     protected boolean deleteRow(Object rowObject)
@@ -130,7 +181,7 @@ public class ProductsListPanel
     {
         return getFormSession().getMeasureUnits();
     }
-
+    
     private List<DbResource> getMeasureUnits(MeasurementUnit.Category category)
     {
         return getFormSession().getMeasureUnits(category);
