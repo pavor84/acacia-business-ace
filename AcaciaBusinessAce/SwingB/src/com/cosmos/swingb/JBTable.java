@@ -48,7 +48,7 @@ public class JBTable
 
     public JBTable()
     {
-        internalInitialization();
+        this(Application.getInstance());
     }
 
     public JBTable(Class<? extends Application> applicationClass)
@@ -58,7 +58,7 @@ public class JBTable
 
     public JBTable(Application application)
     {
-        this();
+        internalInitialization();
         this.application = application;
     }
 
