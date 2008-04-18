@@ -38,7 +38,7 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -59,7 +59,7 @@ import com.cosmos.swingb.JBTextField;
  */
 public class ProductPanel extends AcaciaPanel {
 
-    public ProductPanel(Product product) {
+    public ProductPanel(SimpleProduct product) {
         super(product.getDataObject().getParentDataObject());
         this.product = product;
         init();
@@ -710,7 +710,7 @@ public class ProductPanel extends AcaciaPanel {
     private ProductsListRemote formSession;
 
     private BindingGroup productBindingGroup;
-    private Product product;
+    private SimpleProduct product;
 	@SuppressWarnings("unchecked")
     private Binding productCodeBinding;
     @SuppressWarnings("unchecked")

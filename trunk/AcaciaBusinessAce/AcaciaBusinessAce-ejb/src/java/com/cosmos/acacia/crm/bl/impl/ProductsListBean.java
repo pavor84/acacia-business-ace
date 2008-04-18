@@ -21,7 +21,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.ProductColor;
@@ -44,7 +44,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private ProductValidatorLocal productValidator;
 
     @SuppressWarnings("unchecked")
-    public List<Product> getProducts(DataObject parent)
+    public List<SimpleProduct> getProducts(DataObject parent)
     {
         Query q;
         if(parent != null)
@@ -57,7 +57,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
             q = em.createNamedQuery("Product.findByParentDataObjectIsNullAndDeleted");
         }
         q.setParameter("deleted", false);
-        return new ArrayList<Product>(q.getResultList());
+        return new ArrayList<SimpleProduct>(q.getResultList());
     }
 
     @SuppressWarnings("unchecked")
@@ -79,7 +79,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
 
     public EntityProperties getProductEntityProperties()
     {
-        EntityProperties entityProperties = esm.getEntityProperties(Product.class);
+        EntityProperties entityProperties = esm.getEntityProperties(SimpleProduct.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         // TODO: Check which columns to be shown, visible, editable, etc.
         // depending of User Roles, Current Object, etc.
@@ -102,11 +102,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return entityProperties;
     }
 
-    public Product newProduct() {
-        return Product.newTestProduct(null, null);
+    public SimpleProduct newProduct() {
+        return SimpleProduct.newTestProduct(null, null);
     }
 
-    public Product saveProduct(Product product) {
+    public SimpleProduct saveProduct(SimpleProduct product) {
          
         productValidator.validate(product); 
            
@@ -114,7 +114,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return product; 
     }
 
-    public int deleteProduct(Product product) {
+    public int deleteProduct(SimpleProduct product) {
         return esm.remove(em, product);
     }
 
@@ -148,7 +148,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
             
                 @Override
                 public int compare(BusinessPartner o1, BusinessPartner o2) {
-                    return o1.getDisplayName().compareTo(o2.getDisplayName());
+                    String name1 = o1.getDisplayName();
+                    String name2 = o2.getDisplayName();
+                    if ( name1 !=null && name2!=null )
+                        return o1.getDisplayName().compareTo(o2.getDisplayName());
+                    return -1;
                 }
             
             });

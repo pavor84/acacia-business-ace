@@ -32,7 +32,7 @@ public class ProductSupplier
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
     @ManyToOne
-    private Product product;
+    private SimpleProduct product;
 
     /**
      * The Supplier can be both Person or Organization
@@ -68,11 +68,11 @@ public class ProductSupplier
         this.description = description;
     }
 
-    public Product getProduct() {
+    public SimpleProduct getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(SimpleProduct product) {
         this.product = product;
     }
 

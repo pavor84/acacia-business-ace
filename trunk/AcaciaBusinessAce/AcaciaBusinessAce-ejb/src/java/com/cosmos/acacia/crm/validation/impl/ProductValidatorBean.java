@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.validation.impl;
 
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 import static com.cosmos.acacia.crm.validation.ValidationUtil.*;
@@ -15,7 +15,7 @@ import javax.persistence.Query;
  * @author	Petar Milev
  * @version $Id: $
  *
- * Implement complicated 'business' validation for the Product ( @see {@link Product} ) here.
+ * Implement complicated 'business' validation for the Product ( @see {@link SimpleProduct} ) here.
  */
 @Stateless
 public class ProductValidatorBean implements ProductValidatorLocal {
@@ -23,7 +23,7 @@ public class ProductValidatorBean implements ProductValidatorLocal {
     @PersistenceContext  
     private EntityManager em;
 
-    public void validate(Product entity) throws ValidationException {
+    public void validate(SimpleProduct entity) throws ValidationException {
         ValidationException ve = new ValidationException();
         
         //required name  

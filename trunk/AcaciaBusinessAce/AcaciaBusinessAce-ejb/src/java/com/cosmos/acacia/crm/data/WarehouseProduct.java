@@ -34,7 +34,7 @@ public class WarehouseProduct implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
     @ManyToOne
-    private Product product;
+    private SimpleProduct product;
 
     @Column(name = "quantity_in_stock")
     private BigDecimal quantityInStock;
@@ -157,11 +157,11 @@ public class WarehouseProduct implements Serializable {
         this.notes = notes;
     }
 
-    public Product getProduct() {
+    public SimpleProduct getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(SimpleProduct product) {
         this.product = product;
     }
 

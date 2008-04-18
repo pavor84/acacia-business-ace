@@ -57,7 +57,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
     @Property(title="Product")
-    private Product product;
+    private SimpleProduct product;
 
     @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
     @ManyToOne
@@ -186,11 +186,11 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public Product getProduct() {
+    public SimpleProduct getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(SimpleProduct product) {
         firePropertyChange("product", this.product, product);
         this.product = product;
     }
