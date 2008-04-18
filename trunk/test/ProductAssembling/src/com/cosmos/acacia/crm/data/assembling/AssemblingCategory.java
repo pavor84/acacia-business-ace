@@ -33,8 +33,9 @@ public class AssemblingCategory implements Serializable {
     private String categoryName;
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private Collection<AssemblingSchema> assemblingSchemaCollection;
+
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+//    private Collection<AssemblingSchema> assemblingSchemaCollection;
 
     public AssemblingCategory() {
     }
@@ -81,13 +82,13 @@ public class AssemblingCategory implements Serializable {
         this.description = description;
     }
 
-    public Collection<AssemblingSchema> getAssemblingSchemaCollection() {
-        return assemblingSchemaCollection;
-    }
-
-    public void setAssemblingSchemaCollection(Collection<AssemblingSchema> assemblingSchemaCollection) {
-        this.assemblingSchemaCollection = assemblingSchemaCollection;
-    }
+//    public Collection<AssemblingSchema> getAssemblingSchemaCollection() {
+//        return assemblingSchemaCollection;
+//    }
+//
+//    public void setAssemblingSchemaCollection(Collection<AssemblingSchema> assemblingSchemaCollection) {
+//        this.assemblingSchemaCollection = assemblingSchemaCollection;
+//    }
 
     @Override
     public int hashCode() {
