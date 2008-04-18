@@ -242,6 +242,6 @@ public class Person extends BusinessPartner
     
     @Override
     public String getDisplayName() {
-        return toShortText();
+        return toText();
     }
 }

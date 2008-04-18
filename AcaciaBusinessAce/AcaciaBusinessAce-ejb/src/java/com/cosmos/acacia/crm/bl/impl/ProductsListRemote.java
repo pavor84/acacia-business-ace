@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
@@ -24,16 +24,16 @@ import javax.ejb.Remote;
 @Remote
 public interface ProductsListRemote {
 
-    List<Product> getProducts(DataObject parent);
+    List<SimpleProduct> getProducts(DataObject parent);
     List<ProductCategory> getProductsCategories(DataObject parent);
 
     EntityProperties getProductEntityProperties();
 
-    Product newProduct();
+    SimpleProduct newProduct();
 
-    Product saveProduct(Product product);
+    SimpleProduct saveProduct(SimpleProduct product);
 
-    int deleteProduct(Product product);
+    int deleteProduct(SimpleProduct product);
 
     List<DbResource> getMeasureUnits();
     List<DbResource> getMeasureUnits(MeasurementUnit.Category category);

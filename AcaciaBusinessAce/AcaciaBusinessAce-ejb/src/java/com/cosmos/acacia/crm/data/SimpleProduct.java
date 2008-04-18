@@ -33,18 +33,18 @@ import com.cosmos.util.CodeFormatter;
  * @author miro
  */
 @Entity
-@Table(name = "products")
+@Table(name = "simple_products")
 @NamedQueries(
     {
         @NamedQuery
             (
                 name = "Product.findByParentDataObjectAndDeleted",
-                query = "select p from Product p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+                query = "select p from SimpleProduct p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
                 name = "Product.findByParentDataObjectIsNullAndDeleted",
-                query = "select p from Product p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+                query = "select p from SimpleProduct p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
@@ -53,7 +53,7 @@ import com.cosmos.util.CodeFormatter;
                  * - productName - find all undeleted products with the same name (at most one should exist)
                  */
                 name = "Product.findByProductName",
-                query = "select p from Product p where p.productName like :productName and p.dataObject.deleted = false"
+                query = "select p from SimpleProduct p where p.productName like :productName and p.dataObject.deleted = false"
             ),
         @NamedQuery
             (
@@ -62,10 +62,10 @@ import com.cosmos.util.CodeFormatter;
                  * - productCode - find all undeleted products with the same code (at most one should exist)
                  */
                 name = "Product.findByProductCode",
-                query = "select p from Product p where p.productCode like :productCode and p.dataObject.deleted = false"
+                query = "select p from SimpleProduct p where p.productCode like :productCode and p.dataObject.deleted = false"
             )
     })
-public class Product
+public class SimpleProduct
     extends DataObjectBean
     implements Serializable
 {
@@ -217,10 +217,10 @@ public class Product
     private DataObject dataObject;
 
 
-    public Product() {
+    public SimpleProduct() {
     }
 
-    public Product(BigInteger productId) {
+    public SimpleProduct(BigInteger productId) {
         this.productId = productId;
     }
 
@@ -499,10 +499,10 @@ public class Product
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Product)) {
+        if (!(object instanceof SimpleProduct)) {
             return false;
         }
-        Product other = (Product) object;
+        SimpleProduct other = (SimpleProduct) object;
         if ((this.productId == null && other.productId != null) || (this.productId != null && !this.productId.equals(other.productId))) {
             return false;
         }
@@ -610,9 +610,9 @@ public class Product
         System.out.println("PostLoad()");
     }
 
-    public static Product newTestProduct(String productName, String productCode)
+    public static SimpleProduct newTestProduct(String productName, String productCode)
     {
-        Product product = new Product();
+        SimpleProduct product = new SimpleProduct();
         product.setProductName(productName);
         product.setProductCode(productCode);
         //product.setCategory(BigInteger.ONE);

@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.gui;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -32,7 +32,7 @@ public class ClassifierGroupsPanel
     private ProductsListRemote formSession;
 
     private BindingGroup productsBindingGroup;
-    private List<Product> products;
+    private List<SimpleProduct> products;
 
     public ClassifierGroupsPanel(DataObject parentDataObject)
     {
@@ -61,7 +61,7 @@ public class ClassifierGroupsPanel
     {
         if(rowObject != null)
         {
-            deleteProduct((Product)rowObject);
+            deleteProduct((SimpleProduct)rowObject);
             return true;
         }
 
@@ -72,7 +72,7 @@ public class ClassifierGroupsPanel
     {
         if(rowObject != null)
         {
-            ProductPanel productPanel = new ProductPanel((Product)rowObject);
+            ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
             DialogResponse response = productPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -111,7 +111,7 @@ public class ClassifierGroupsPanel
     }
 
 
-    protected List<Product> getProducts()
+    protected List<SimpleProduct> getProducts()
     {
         if(products == null)
         {
@@ -158,7 +158,7 @@ public class ClassifierGroupsPanel
         return formSession;
     }
 
-    protected int deleteProduct(Product product)
+    protected int deleteProduct(SimpleProduct product)
     {
         return getFormSession().deleteProduct(product);
     }

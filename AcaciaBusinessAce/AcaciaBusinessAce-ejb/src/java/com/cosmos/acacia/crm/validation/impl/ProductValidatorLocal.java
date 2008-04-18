@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.validation.impl;
 
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 import javax.ejb.Local;
 
@@ -14,6 +14,6 @@ import javax.ejb.Local;
  * @author jchan
  */
 @Local
-public interface ProductValidatorLocal extends EntityValidator<Product>{
+public interface ProductValidatorLocal extends EntityValidator<SimpleProduct>{
      
 }

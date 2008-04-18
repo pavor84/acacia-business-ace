@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import java.util.ArrayList;
@@ -45,24 +45,24 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
     @EJB
     private DataObjectTypeLocal dotLocal;
 
-    public List<Product> getProducts() {
+    public List<SimpleProduct> getProducts() {
         System.out.println("em: " + em);
         System.out.println("ems: " + esm);
         try
         {
             String sql = "select p from Product p where p.dataObject.parentDataObject = null and p.dataObject.deleted = false";
             Query q = em.createQuery(sql);
-            List<Product> data = q.getResultList();
+            List<SimpleProduct> data = q.getResultList();
             if(data != null)
             {
                 System.out.println("data.className: " + data.getClass().getName());
                 if(data.isEmpty())
                 {
-                    Product product = Product.newTestProduct("1st Product", "p1");
+                    SimpleProduct product = SimpleProduct.newTestProduct("1st Product", "p1");
                     esm.persist(em, product);
-                    product = Product.newTestProduct("2nd Product", "p2");
+                    product = SimpleProduct.newTestProduct("2nd Product", "p2");
                     esm.persist(em, product);
-                    product = Product.newTestProduct("3rd Product", "p3");
+                    product = SimpleProduct.newTestProduct("3rd Product", "p3");
                     esm.persist(em, product);
                     System.out.println("commitTransaction()");
 
@@ -79,7 +79,7 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
             }
 
             System.out.println("data: " + data);
-            return new ArrayList<Product>(data);
+            return new ArrayList<SimpleProduct>(data);
         }
         catch(Exception ex)
         {
@@ -91,7 +91,7 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
     //int stop = 99; //8
     public EntityProperties getProductEntityProperties()
     {
-        EntityProperties entityProperties = esm.getEntityProperties(Product.class);
+        EntityProperties entityProperties = esm.getEntityProperties(SimpleProduct.class);
         // TODO: Check which columns to be shown, visible, editable, etc.
         // depending of User Roles, Current Object, etc.
         /*for(Object key : entityProperties.getKeys().toArray())

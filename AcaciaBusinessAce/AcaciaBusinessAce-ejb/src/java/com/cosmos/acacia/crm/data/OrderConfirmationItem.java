@@ -37,7 +37,7 @@ public class OrderConfirmationItem implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    private Product product;
+    private SimpleProduct product;
 
     @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -112,11 +112,11 @@ public class OrderConfirmationItem implements Serializable {
         this.parentId = parentId;
     }
 
-    public Product getProduct() {
+    public SimpleProduct getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(SimpleProduct product) {
         this.product = product;
     }
 
