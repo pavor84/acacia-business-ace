@@ -333,6 +333,10 @@ public class JBPanel
         nestedFormListeners.add(listener);
     }
     
+    public Set<NestedFormListener> getNestedFormListeners()
+    {
+        return nestedFormListeners;
+    }
     /**
      * Asks all listeners to perform their actions and returns 
      * whether all of them allow the nested operation to proceed

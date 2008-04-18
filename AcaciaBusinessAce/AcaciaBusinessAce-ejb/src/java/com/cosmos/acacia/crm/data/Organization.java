@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -33,6 +34,16 @@ import com.cosmos.resource.TextResource;
 @PrimaryKeyJoinColumn(name="organization_id")
 @NamedQueries(
     {
+        @NamedQuery
+            (
+         	name = "Organization.findByParentDataObjectAndDeleted",
+         	query = "select o from Organization o where o.dataObject.parentDataObject = :parentDataObject and o.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+    		name = "Organization.findByParentDataObjectIsNullAndDeleted",
+    		query = "select o from Organization o where o.dataObject.parentDataObject is null and o.dataObject.deleted = :deleted"
+            ),
         /**
          * All not deleted organizations.
          */
@@ -51,45 +62,57 @@ public class Organization
     private static final long serialVersionUID = 1L;
     
     @Column(name = "organization_name", nullable = false)
+    @Property(title="Organization Name")
     private String organizationName;
 
     @Column(name = "nickname")
+    @Property(title="Nickname")
     private String nickname;
 
     @Column(name = "vat_number")
+    @Property(title="VAT Number")
     private String vatNumber;
 
     @Column(name = "unique_identifier_code")
+    @Property(title="Unique Identifier Code")
     private String uniqueIdentifierCode;
 
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
+    @Property(title="Registration Date")
     private Date registrationDate;
 
     @Column(name = "share_capital")
+    @Property(title="Share Capital")
     private BigDecimal shareCapital;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
     @JoinColumn(name = "registration_address_id", referencedColumnName = "address_id")
     @ManyToOne
+    @Property(title="Registration Address")
     private Address registrationAddress;
 
     @JoinColumn(name = "administration_address_id", referencedColumnName = "address_id")
     @ManyToOne
+    @Property(title="Administration Address")
     private Address administrationAddress;
 
     @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
     @ManyToOne
+    @Property(title="Currency")
     private Currency currency;
 
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
     @ManyToOne
+    @Property(title="Registration Organization Id")
     private Organization registrationOrganization;
 
     @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Organization Type Id")
     private DbResource organizationType;
 
     public Organization() {

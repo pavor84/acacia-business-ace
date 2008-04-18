@@ -35,7 +35,7 @@ import com.cosmos.resource.TextResource;
 @PrimaryKeyJoinColumn(name="partner_id")
 @NamedQueries(
 	{
-		@NamedQuery
+	@NamedQuery
          	(
          		name = "Person.findByParentDataObjectAndDeleted",
          		query = "select p from Person p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"

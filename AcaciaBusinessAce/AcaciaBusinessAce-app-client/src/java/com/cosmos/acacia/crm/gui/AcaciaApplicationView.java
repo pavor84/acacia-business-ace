@@ -4,6 +4,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -223,6 +224,13 @@ public class AcaciaApplicationView extends FrameView {
     	personsListPanel.showFrame();
     }
 
+    @Action
+    public void organizationsListAction(){
+    	System.out.println("organizationsListAction");
+    	OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(null);
+    	organizationsListPanel.showFrame();
+    }
+     
     @Action
     public void newPersonAction(){
     	//PersonPanel personPanel = new PersonPanel(null);

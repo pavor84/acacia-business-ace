@@ -55,7 +55,7 @@ public class Address extends DataObjectBean implements Serializable {
     private BigInteger parentId;
 
     @Column(name = "address_name", nullable = false)
-    @Property(title="First Name",
+    @Property(title="Name",
             propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, required = true))
     private String addressName;
 

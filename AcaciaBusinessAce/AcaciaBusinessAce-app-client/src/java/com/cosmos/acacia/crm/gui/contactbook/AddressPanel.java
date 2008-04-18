@@ -25,6 +25,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
@@ -276,6 +277,17 @@ public class AddressPanel extends BaseEntityPanel {
     protected void initData() {
         setResizable(false);
 
+      if (getParentDataObject() != null){
+            String parentObjectType = getParentDataObject().getDataObjectType().getDataObjectType();
+            ResourceMap resourceMap = getResourceMap();
+
+            if (parentObjectType.indexOf("Person") != -1){
+                setTitle(resourceMap.getString("address.text"));
+            } else if (parentObjectType.indexOf("Organization") != -1) {
+                setTitle(resourceMap.getString("branch.text"));
+            }
+        }
+        
         System.out.println("initData().address: " + address);
         if(address == null)
         {
