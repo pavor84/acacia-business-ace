@@ -118,7 +118,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
 
     public EntityProperties getPassportEntityProperties() {
-        EntityProperties entityProperties = esm.getEntityProperties(Country.class);
+        EntityProperties entityProperties = esm.getEntityProperties(Passport.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;

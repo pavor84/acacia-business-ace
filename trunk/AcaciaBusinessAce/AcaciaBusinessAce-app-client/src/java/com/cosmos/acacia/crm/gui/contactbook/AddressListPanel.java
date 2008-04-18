@@ -43,17 +43,6 @@ class AddressListPanel extends AbstractTablePanel {
         
         super.initData();
         
-        if (getParentDataObject() != null){
-            String parentObjectType = getParentDataObject().getDataObjectType().getDataObjectType();
-            ResourceMap resourceMap = getResourceMap();
-
-            if (parentObjectType.indexOf("Person") != -1){
-                setTypeTitle(resourceMap.getString("address.text"));
-            } else if (parentObjectType.indexOf("Organization") != -1) {
-               setTypeTitle(resourceMap.getString("branch.text"));
-            }
-        }
-        
         setVisible(Button.Select, false);
         addressesBindingGroup = new BindingGroup();
         AcaciaTable addressesTable = getDataTable();
@@ -131,8 +120,8 @@ class AddressListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
+            System.out.println(getParentDataObject());
             AddressPanel addressPanel = new AddressPanel(getParentDataObject());
-            addressPanel.setTitle(typeTitle);
             DialogResponse response = addressPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -156,13 +145,4 @@ class AddressListPanel extends AbstractTablePanel {
     public boolean canDelete(Object rowObject) {
         return true;
     }
-
-    public String getTypeTitle() {
-        return typeTitle;
-    }
-
-    public void setTypeTitle(String typeTitle) {
-        this.typeTitle = typeTitle;
-    }
-    
 }

@@ -72,14 +72,6 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return locationsManager.getCities();
     }
 
-    public EntityProperties getPersonEntityProperties()
-    {
-        EntityProperties entityProperties = esm.getEntityProperties(Person.class);
-        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-
-        return entityProperties;
-    }
-
     public Address newAddress() {
         return locationsManager.newAddress();
     }

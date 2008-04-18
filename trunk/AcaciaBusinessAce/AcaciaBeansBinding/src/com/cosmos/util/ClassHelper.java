@@ -5,6 +5,8 @@
 
 package com.cosmos.util;
 
+import java.lang.reflect.Field;
+
 /**
  *
  * @author miro
@@ -60,5 +62,22 @@ public class ClassHelper {
             return Double.class.getName();
 
         return cls.getName();
+    }
+    
+    public static String objectToString(Object object)
+    {
+        String result = object.getClass().getName() + " values {\n";
+        for (Field field: object.getClass().getDeclaredFields())
+        {
+            field.setAccessible(true);
+            try {
+                result += field.getName() + "=" + field.get(object) + "\n";
+            } catch (Exception ex){
+                
+            }
+        }
+        result += "\n}";
+        
+        return result;
     }
 }

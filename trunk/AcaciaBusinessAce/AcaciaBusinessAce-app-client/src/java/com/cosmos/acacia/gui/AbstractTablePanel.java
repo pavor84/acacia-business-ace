@@ -9,7 +9,11 @@ package com.cosmos.acacia.gui;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.listeners.TableModificationListener;
 import java.awt.Component;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -166,6 +170,7 @@ public abstract class AbstractTablePanel
 
     private Object selectedRowObject;
     private TableSelectionListener tableSelectionListener;
+    private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     
     protected void initData()
     {
@@ -372,6 +377,7 @@ public abstract class AbstractTablePanel
         if(newRowObject != null)
         {
             dataTable.addRow(newRowObject);
+            fireAdd(newRowObject);
         }
     }
 
@@ -389,6 +395,7 @@ public abstract class AbstractTablePanel
             if(newRowObject != null)
             {
                 dataTable.replaceSelectedRow(newRowObject);
+                fireModify(newRowObject);
             }
         }
     }
@@ -412,7 +419,10 @@ public abstract class AbstractTablePanel
             if(JOptionPane.YES_OPTION == result)
             {
                 if(deleteRow(rowObject))
+                {
                     dataTable.removeSelectedRow();
+                    fireDelete(rowObject);
+                }
             }
         }
     }
@@ -574,5 +584,41 @@ public abstract class AbstractTablePanel
     }
 
 
+    public void addTableModificationListener(TableModificationListener listener)
+    {
+        tableModificationListeners.add(listener);
+    }
+    
+    public Set<TableModificationListener> getTableModificationListeners()
+    {
+        return tableModificationListeners;
+    }
+    
+    protected void fireAdd(Object row)
+    {
+        System.out.println("fireAdd called with " + row);
+        for (TableModificationListener listener: tableModificationListeners)
+        {
+            listener.rowAdded(row);
+        }
+    }
+    
+    protected void fireModify(Object row)
+    {
+        System.out.println("fireModify called with " + row);
+        for (TableModificationListener listener: tableModificationListeners)
+        {
+            listener.rowModified(row);
+        }
+    }
+    
+    protected void fireDelete(Object row)
+    {
+        System.out.println("fireDelete called with " + row);
+        for (TableModificationListener listener: tableModificationListeners)
+        {
+            listener.rowDeleted(row);
+        }
+    }
 
 }
