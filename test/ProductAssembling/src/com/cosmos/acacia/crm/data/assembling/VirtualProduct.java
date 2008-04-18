@@ -6,14 +6,16 @@
 package com.cosmos.acacia.crm.data.assembling;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -22,22 +24,27 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "virtual_products")
-@NamedQueries({})
-public class VirtualProduct implements Serializable {
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING, length=2, name="product_type")
+public abstract class VirtualProduct
+    implements Serializable
+{
     private static final long serialVersionUID = 1L;
+
     @Id
+    @SequenceGenerator(
+        name="VirtualProductsSequenceGenerator",
+        sequenceName="virtual_products_seq",
+        allocationSize=1)
+    @GeneratedValue(
+        strategy=GenerationType.SEQUENCE,
+        generator="VirtualProductsSequenceGenerator")
     @Column(name = "product_id", nullable = false)
     private Long productId;
-    @Column(name = "product_type")
-    private String productType;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "virtualProduct")
-    private RealProduct realProduct;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "virtualProduct")
-    private AssemblingSchema assemblingSchema;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "virtualProductId")
-    private Collection<AssemblingSchemaItem> assemblingSchemaItemCollection;
 
-    public VirtualProduct() {
+
+    public VirtualProduct()
+    {
     }
 
     public VirtualProduct(Long productId) {
@@ -52,37 +59,6 @@ public class VirtualProduct implements Serializable {
         this.productId = productId;
     }
 
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public RealProduct getRealProduct() {
-        return realProduct;
-    }
-
-    public void setRealProduct(RealProduct realProduct) {
-        this.realProduct = realProduct;
-    }
-
-    public AssemblingSchema getAssemblingSchema() {
-        return assemblingSchema;
-    }
-
-    public void setAssemblingSchema(AssemblingSchema assemblingSchema) {
-        this.assemblingSchema = assemblingSchema;
-    }
-
-    public Collection<AssemblingSchemaItem> getAssemblingSchemaItemCollection() {
-        return assemblingSchemaItemCollection;
-    }
-
-    public void setAssemblingSchemaItemCollection(Collection<AssemblingSchemaItem> assemblingSchemaItemCollection) {
-        this.assemblingSchemaItemCollection = assemblingSchemaItemCollection;
-    }
 
     @Override
     public int hashCode() {
@@ -106,7 +82,7 @@ public class VirtualProduct implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.VirtualProduct[productId=" + productId + "]";
+        return "com.cosmos.acacia.crm.data.VirtualProduct[productId=" + productId + "]";
     }
 
 }

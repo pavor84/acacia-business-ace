@@ -22,27 +22,48 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "assembling_schema_items")
 @NamedQueries({})
-public class AssemblingSchemaItem implements Serializable {
+public class AssemblingSchemaItem
+    implements Serializable
+{
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "item_id", nullable = false)
     private Long itemId;
+
+    /**
+     * Data Type:
+     *   Integer
+     *   Decimal
+     *   Date
+     *   String
+     */
+    @Column(name = "data_type")
+    private String dataType;
+
     @Column(name = "min_constraint")
-    private BigDecimal minConstraint;
+    private Serializable minConstraint;
+
     @Column(name = "max_constraint")
-    private BigDecimal maxConstraint;
+    private Serializable maxConstraint;
+
     @Column(name = "quantity", nullable = false)
     private BigDecimal quantity;
+
     @Column(name = "default_value")
-    private String defaultValue;
+    private Serializable defaultValue;
+
     @Column(name = "description")
     private String description;
+
     @JoinColumn(name = "algorithm_id", referencedColumnName = "algorithm_id")
     @ManyToOne
     private AssemblingAlgorithm algorithmId;
+
     @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id")
     @ManyToOne
     private AssemblingSchema assemblingSchemaId;
+
     @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
     @ManyToOne
     private VirtualProduct virtualProductId;
@@ -54,11 +75,6 @@ public class AssemblingSchemaItem implements Serializable {
         this.itemId = itemId;
     }
 
-    public AssemblingSchemaItem(Long itemId, BigDecimal quantity) {
-        this.itemId = itemId;
-        this.quantity = quantity;
-    }
-
     public Long getItemId() {
         return itemId;
     }
@@ -67,19 +83,27 @@ public class AssemblingSchemaItem implements Serializable {
         this.itemId = itemId;
     }
 
-    public BigDecimal getMinConstraint() {
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public Object getMinConstraint() {
         return minConstraint;
     }
 
-    public void setMinConstraint(BigDecimal minConstraint) {
+    public void setMinConstraint(Serializable minConstraint) {
         this.minConstraint = minConstraint;
     }
 
-    public BigDecimal getMaxConstraint() {
+    public Object getMaxConstraint() {
         return maxConstraint;
     }
 
-    public void setMaxConstraint(BigDecimal maxConstraint) {
+    public void setMaxConstraint(Serializable maxConstraint) {
         this.maxConstraint = maxConstraint;
     }
 
@@ -91,11 +115,11 @@ public class AssemblingSchemaItem implements Serializable {
         this.quantity = quantity;
     }
 
-    public String getDefaultValue() {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 
-    public void setDefaultValue(String defaultValue) {
+    public void setDefaultValue(Serializable defaultValue) {
         this.defaultValue = defaultValue;
     }
 
