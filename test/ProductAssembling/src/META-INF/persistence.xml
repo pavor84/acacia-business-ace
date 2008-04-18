@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="ProductAssemblingPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>com.cosmos.acacia.crm.data.Offer</class>
+    <class>com.cosmos.acacia.crm.data.Product</class>
+    <class>com.cosmos.acacia.crm.data.ComplexProduct</class>
+    <class>com.cosmos.acacia.crm.data.OfferItem</class>
+    <class>com.cosmos.acacia.crm.data.SimpleProduct</class>
+    <class>com.cosmos.acacia.crm.data.ComplexProductItem</class>
+    <class>com.cosmos.acacia.crm.data.assembling.AssemblingSchema</class>
+    <class>com.cosmos.acacia.crm.data.assembling.AssemblingCategory</class>
+    <class>com.cosmos.acacia.crm.data.assembling.AssemblingAlgorithm</class>
+    <class>com.cosmos.acacia.crm.data.assembling.VirtualProduct</class>
+    <class>com.cosmos.acacia.crm.data.assembling.RealProduct</class>
+    <class>com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem</class>
+    <properties>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="hibernate.connection.username" value="postgres"/>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.password" value="PostgreSQL"/>
+      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/alustyle"/>
+    </properties>
+  </persistence-unit>
+</persistence>
