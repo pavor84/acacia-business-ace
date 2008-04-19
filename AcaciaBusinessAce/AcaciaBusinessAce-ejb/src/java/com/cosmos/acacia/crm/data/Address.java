@@ -78,7 +78,7 @@ public class Address extends DataObjectBean implements Serializable {
     private String postalAddress;
 
     @Column(name = "description")
-    @Property(title="Description")
+    @Property(title="Description", hidden=true)
     private String description;
 
     @PrimaryKeyJoinColumn

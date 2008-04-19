@@ -21,22 +21,16 @@ import javax.persistence.Table;
 @Table(name = "bank_details")
 @NamedQueries(
     {
-        @NamedQuery(
-            name = "BankDetail.findByBankDetailId",
-            query = "SELECT b FROM BankDetail b WHERE b.bankDetailId = :bankDetailId"
-        ),
-        @NamedQuery(
-            name = "BankDetail.findByIsDefault",
-            query = "SELECT b FROM BankDetail b WHERE b.isDefault = :isDefault"
-        ),
-        @NamedQuery(
-            name = "BankDetail.findByBankId",
-            query = "SELECT b FROM BankDetail b WHERE b.bankId = :bankId"
-        ),
-        @NamedQuery(
-            name = "BankDetail.findByBankAccount",
-            query = "SELECT b FROM BankDetail b WHERE b.bankAccount = :bankAccount"
-        )
+          @NamedQuery
+             (
+                name = "BankDetail.findByParentDataObjectAndDeleted",
+                query = "select bd from BankDetail bd where bd.dataObject.parentDataObject = :parentDataObject and bd.dataObject.deleted = :deleted"
+             ),
+        @NamedQuery
+             (
+                name = "BankDetail.findByParentDataObjectIsNullAndDeleted",
+                query = "select bd from BankDetail bd where bd.dataObject.parentDataObject is null and bd.dataObject.deleted = :deleted"
+              )
     }
 )
 public class BankDetail
@@ -50,32 +44,33 @@ public class BankDetail
     @Property(title="Bank Detail ID", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger bankDetailId;
       
-    @Column(name = "bank_account", nullable = false)
+    @Column(name = "bank_account")
     @Property(title="Bank Account")
     private String bankAccount;
     
-    @Column(name = "iban", nullable = false)
+    @Column(name = "iban")
     @Property(title="IBAN")
     private String iban;
     
-    @Column(name = "bic", nullable = false)
+    @Column(name = "bic")
     @Property(title="BIC")
     private String bic;
     
-    @Column(name = "swift_code", nullable = false)
+    @Column(name = "swift_code")
     @Property(title="SWIFT code")
     private String swiftCode;
     
-    @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
+    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Currency")
-    private Currency currencyId;
+    private DbResource currency;
         
-    @Column(name = "bank_id", nullable = false)
+    @JoinColumn(name = "bank_id", referencedColumnName = "organization_id", nullable = false)
+    @ManyToOne
     @Property(title="Bank")
-    private BigInteger bankId;
+    private Organization bank;
         
-    @JoinColumn(name = "bank_branch_id", referencedColumnName = "address_id")
+    @JoinColumn(name = "bank_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne
     @Property(title="Bank Branch")
     private Address bankBranch;
@@ -85,10 +80,9 @@ public class BankDetail
     @Property(title="Contact")
     private Person bankContact;
     
-    @Column(name = "is_default", nullable = false)
+    @Column(name = "is_default")
     @Property(title="Default")
     private boolean isDefault;
-       
        
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
@@ -105,10 +99,9 @@ public class BankDetail
         this.bankDetailId = bankDetailId;
     }
 
-    public BankDetail(BigInteger bankDetailId, boolean isDefault, BigInteger bankId, String bankAccount) {
+    public BankDetail(BigInteger bankDetailId, boolean isDefault, String bankAccount) {
         this.bankDetailId = bankDetailId;
         this.isDefault = isDefault;
-        this.bankId = bankId;
         this.bankAccount = bankAccount;
     }
 
@@ -128,12 +121,12 @@ public class BankDetail
         this.isDefault = isDefault;
     }
 
-    public BigInteger getBankId() {
-        return bankId;
+    public Organization getBank() {
+        return bank;
     }
 
-    public void setBankId(BigInteger bankId) {
-        this.bankId = bankId;
+    public void setBank(Organization bank) {
+        this.bank = bank;
     }
 
     public String getBankAccount() {
@@ -162,12 +155,12 @@ public class BankDetail
         this.parentId = parentId;
     }
 
-    public Currency getCurrencyId() {
-        return currencyId;
+    public DbResource getCurrency() {
+        return currency;
     }
 
-    public void setCurrencyId(Currency currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrency(DbResource currency) {
+        this.currency = currency;
     }
 
     public DataObject getDataObject() {
@@ -259,6 +252,6 @@ public class BankDetail
 
     @Override
     public void setId(BigInteger id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setBankDetailId(id);
     }
 }

@@ -26,7 +26,6 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.NestedFormListener;
 import com.cosmos.swingb.listeners.TableModificationListener;
-import java.lang.reflect.Field;
 import org.jdesktop.application.Action;
 
 /**
@@ -81,8 +80,8 @@ public class OrganizationPanel extends BaseEntityPanel {
         shareCapitalTextField = new com.cosmos.swingb.JBTextField();
         vatNumberTextField = new com.cosmos.swingb.JBTextField();
         uniqueIdTextField = new com.cosmos.swingb.JBTextField();
-        organizationTypeComboBox = new com.cosmos.swingb.JBComboBox();
-        currencyComboBox = new com.cosmos.swingb.JBComboBox();
+        organizationTypeComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        currencyComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         registrationDetailsPanel = new com.cosmos.swingb.JBPanel();
         registrationDateLabel = new com.cosmos.swingb.JBLabel();
         registrationAddressLabel = new com.cosmos.swingb.JBLabel();
@@ -91,7 +90,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         registrationDateDatePicker = new com.cosmos.swingb.JBDatePicker();
         registrationAddressTextField = new com.cosmos.swingb.JBTextField();
         administrationAddressTextField = new com.cosmos.swingb.JBTextField();
-        registeringOrganizationComboBox = new com.cosmos.swingb.JBComboBox();
+        registeringOrganizationComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         modifyRegistrationAddressButton = new com.cosmos.swingb.JBButton();
         modifyAdministrationAddressButton = new com.cosmos.swingb.JBButton();
 
@@ -113,7 +112,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, descriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionPanelLayout.setVerticalGroup(
@@ -130,7 +129,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         branchesPanel.setLayout(branchesPanelLayout);
         branchesPanelLayout.setHorizontalGroup(
             branchesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 752, Short.MAX_VALUE)
+            .addGap(0, 745, Short.MAX_VALUE)
         );
         branchesPanelLayout.setVerticalGroup(
             branchesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,7 +209,7 @@ public class OrganizationPanel extends BaseEntityPanel {
                             .addComponent(typeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(7, 7, 7)
                         .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(organizationTypeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                            .addComponent(organizationTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalInfoPanelLayout.createSequentialGroup()
                                 .addComponent(shareCapitalTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -345,33 +344,36 @@ public class OrganizationPanel extends BaseEntityPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(branchesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(generalInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(registrationDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE))
+                        .addComponent(registrationDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(branchesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(registrationDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(generalInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(generalInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(registrationDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(branchesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {generalInfoPanel, registrationDetailsPanel});
+
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -379,7 +381,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel administrationAddressLabel;
     private com.cosmos.swingb.JBTextField administrationAddressTextField;
     private com.cosmos.acacia.gui.TableHolderPanel branchesPanel;
-    private com.cosmos.swingb.JBComboBox currencyComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox currencyComboBox;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
@@ -391,8 +393,8 @@ public class OrganizationPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField nameTextField;
     private com.cosmos.swingb.JBLabel nicknameLabel;
     private com.cosmos.swingb.JBTextField nicknameTextField;
-    private com.cosmos.swingb.JBComboBox organizationTypeComboBox;
-    private com.cosmos.swingb.JBComboBox registeringOrganizationComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox organizationTypeComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox registeringOrganizationComboBox;
     private com.cosmos.swingb.JBLabel registeringOrganizationLabel;
     private com.cosmos.swingb.JBLabel registrationAddressLabel;
     private com.cosmos.swingb.JBTextField registrationAddressTextField;
@@ -419,7 +421,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     protected void initData() {
         setResizable(false);
         System.out.println("initData().organization: " + organization);
-        
+
         if(organization == null)
         {
             organization = getFormSession().newOrganization();
@@ -436,22 +438,22 @@ public class OrganizationPanel extends BaseEntityPanel {
         uniqueIdTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("uniqueIdentifierCode"));
 
         registrationDateDatePicker.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("registrationDate"));
-        
+
         organizationTypeComboBox.bind(organizationBindingGroup,
                 getOrganizationTypes(),
                 organization,
                 entityProps.getPropertyDetails("organizationType"));
-        
+
         currencyComboBox.bind(organizationBindingGroup,
                 getCurrencies(),
                 organization,
-                entityProps.getPropertyDetails("currency"));        
+                entityProps.getPropertyDetails("currency"));
 
         registeringOrganizationComboBox.bind(organizationBindingGroup,
                 getOrganizations(),
                 organization,
                 entityProps.getPropertyDetails("registrationOrganization"));
-        
+
         descriptionTextPane.bind(organizationBindingGroup, organization, "description");
 
         // Using an AbstractTablePanel implementation
@@ -463,21 +465,21 @@ public class OrganizationPanel extends BaseEntityPanel {
         // callback when a branch is deleted
         addNestedFormListener(branchesTable);
         branchesTable.addTableModificationListener(new DeletionListener());
-        
+
         //addressesTable.setButtonsTextVisibility(false);
         branchesPanel.add(branchesTable);
-        
+
         organizationBindingGroup.bind();
-        
-        
+
+
         if (organization.getRegistrationAddress() != null) {
             registrationAddressTextField.setText(organization.getRegistrationAddress().getAddressName());
         }
-        
+
         if (organization.getAdministrationAddress() != null) {
             administrationAddressTextField.setText(organization.getAdministrationAddress().getAddressName());
         }
-        
+
         registrationAddressTextField.setEditable(false);
         administrationAddressTextField.setEditable(false);
     }
@@ -512,7 +514,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter)
     {
         System.out.println("Save: organization: " + organization);
-        
+
         organization = getFormSession().saveOrganization(organization);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(organization);
@@ -529,7 +531,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     {
         return getFormSession().getAddressEntityProperties();
     }
-    
+
     private List<Organization> getOrganizations()
     {
         List<Organization> organizations = getFormSession().getOrganizations(null);
@@ -550,7 +552,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     public EntityFormButtonPanel getButtonPanel() {
        return entityFormButtonPanel;
     }
-    
+
     @Action
     public void modifyRegistrationAddress()
     {
@@ -563,7 +565,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         } else {
             addressPanel = new AddressPanel(organization.getRegistrationAddress());
         }
-        
+
         DialogResponse response = addressPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -573,21 +575,21 @@ public class OrganizationPanel extends BaseEntityPanel {
             branchesTable.getDataTable().addRow(address);
         }
     }
-    
+
     @Action
     public void modifyAdministrationAddress()
     {
         for (NestedFormListener listener: branchesTable.getNestedFormListeners()) {
             listener.actionPerformed();
         }
-        
+
         AddressPanel addressPanel;
         if (organization.getAdministrationAddress() == null) {
             addressPanel = new AddressPanel(organization.getDataObject());
         } else {
             addressPanel = new AddressPanel(organization.getAdministrationAddress());
         }
-        
+
         DialogResponse response = addressPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -597,7 +599,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             branchesTable.getDataTable().addRow(address);
         }
     }
-    
+
     class DeletionListener implements TableModificationListener {
 
         public void rowDeleted(Object row) {
@@ -605,8 +607,8 @@ public class OrganizationPanel extends BaseEntityPanel {
                 Address deletedAddress  = (Address) row;
                 Address administrationAddress = organization.getAdministrationAddress();
                 Address registrationAddress = organization.getRegistrationAddress();
-                
-                if (administrationAddress != null 
+
+                if (administrationAddress != null
                         && administrationAddress.getAddressId()
                             .equals(deletedAddress.getAddressId()))
                 {
@@ -614,7 +616,7 @@ public class OrganizationPanel extends BaseEntityPanel {
                     administrationAddressTextField.setText("");
                 }
 
-                if (registrationAddress != null 
+                if (registrationAddress != null
                         && registrationAddress.getAddressId()
                             .equals(deletedAddress.getAddressId()))
                 {
@@ -625,12 +627,12 @@ public class OrganizationPanel extends BaseEntityPanel {
         }
 
         public void rowModified(Object row) {
-            
+
         }
 
         public void rowAdded(Object row) {
-            
+
         }
-        
+
     }
 }

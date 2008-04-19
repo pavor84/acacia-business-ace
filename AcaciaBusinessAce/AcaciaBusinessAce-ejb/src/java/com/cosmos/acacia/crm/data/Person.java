@@ -228,7 +228,7 @@ public class Person extends BusinessPartner
     }
     
     public String toShortText() {
-        return null;
+        return toText();
     }
 
     public String toText() {

@@ -14,6 +14,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -35,6 +36,11 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     	super(parentDataObject);
     }
 
+    public OrganizationsListPanel(DataObject parentDataObject, Classifier classifier)
+    {
+        super(parentDataObject);
+        // TODO apply classifiers
+    }
     @EJB
     private OrganizationsListRemote formSession;
 

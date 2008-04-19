@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -33,6 +36,7 @@ import javax.persistence.Table;
 	}
 )
 public class City
+        extends DataObjectBean
         implements Serializable, TextResource
 {
 
@@ -41,7 +45,7 @@ public class City
     @Id
     @Column(name = "city_id", nullable = false)
     @Property(title="City Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private Integer cityId;
+    private BigInteger cityId;
 
     @Column(name = "city_name", nullable = false)
     @Property(title="Name")
@@ -68,24 +72,27 @@ public class City
     @Property(title="Description")
     private String description;
 
+    @PrimaryKeyJoinColumn
+    @OneToOne
+    private DataObject dataObject;
 
     public City() {
     }
 
-    public City(Integer cityId) {
+    public City(BigInteger cityId) {
         this.cityId = cityId;
     }
 
-    public City(Integer cityId, String cityName) {
+    public City(BigInteger cityId, String cityName) {
         this.cityId = cityId;
         this.cityName = cityName;
     }
 
-    public Integer getCityId() {
+    public BigInteger getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(BigInteger cityId) {
         this.cityId = cityId;
     }
 
@@ -169,6 +176,36 @@ public class City
 
     public String toText() {
         return getCityName();
+    }
+
+    @Override
+    public DataObject getDataObject() {
+        return dataObject;
+    }
+
+    @Override
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getCityId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setCityId(id);
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        return null; //TODO
+    }
+
+    @Override
+    public void setParentId(BigInteger parentId) {
+        //TODO
     }
 
 }

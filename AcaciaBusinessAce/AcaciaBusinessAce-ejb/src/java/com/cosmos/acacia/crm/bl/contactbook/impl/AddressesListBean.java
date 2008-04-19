@@ -150,6 +150,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         }
         q.setParameter("deleted", false);
 
+        System.out.println("Parent: " + parent);
+        
         return new ArrayList<ContactPerson>(q.getResultList());
     }
 
