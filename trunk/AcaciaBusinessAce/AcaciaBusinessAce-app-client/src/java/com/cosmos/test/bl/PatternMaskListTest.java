@@ -1,13 +1,10 @@
 package com.cosmos.test.bl;
 
-import java.rmi.RemoteException;
-import java.rmi.ServerException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -64,7 +61,7 @@ public class PatternMaskListTest {
      */
     @Test
     public void crudTest(){
-        String nameInsert = getRandomString(16);
+        String nameInsert = TestUtils.getRandomString(16);
         
         //create
         PatternMaskFormat inserted = createNew(nameInsert);
@@ -83,7 +80,7 @@ public class PatternMaskListTest {
         Assert.assertNotNull(found);
         
         //update
-        String nameUpdate = getRandomString(16);
+        String nameUpdate = TestUtils.getRandomString(16);
         found.setPatternName(nameUpdate);
         PatternMaskFormat updated = updateFormat(found);
         Assert.assertEquals(nameUpdate, updated.getPatternName());
@@ -117,6 +114,8 @@ public class PatternMaskListTest {
         result.setPatternName(nameInsert);
         result.setFormat("1234");
         
+        Random r = new SecureRandom();
+        
         List<BusinessPartner> owners = formSession.getOwnersList();
         Assert.assertNotNull(owners);
         if ( !owners.isEmpty() ){
@@ -129,17 +128,6 @@ public class PatternMaskListTest {
         formSession.savePatternMaskFormat(result);
     }
     
-    private Random r = new SecureRandom();
-    
-    private String getRandomString(int charactersLength) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < charactersLength; i++) {
-            int randInt = r.nextInt(Character.MAX_RADIX);
-            b.append(Integer.toString(randInt, Character.MAX_RADIX));
-        }
-        return b.toString();
-    }
-
     /**
      * Test inserting/updating invalid pattern mask formats
      * @param existing - test duplication errors against
@@ -152,25 +140,8 @@ public class PatternMaskListTest {
             createNew(existing.getPatternName());
             Assert.fail("Remote exeption, caused by BusinessValidationException expected.");
         }catch (Exception re){
-            ValidationException e = extractValidationException(re);
+            ValidationException e = TestUtils.extractValidationException(re);
             Assert.assertNotNull(e);
         }
-    }
-    
-    private ValidationException extractValidationException(Exception ex) {
-        Throwable e = ex;
-        while ( e!=null ){
-            if ( e instanceof ValidationException ){
-                return (ValidationException) e;
-            }
-            else if ( e instanceof ServerException || e instanceof RemoteException ){
-                e = e.getCause();
-            }
-            else if ( e instanceof EJBException )
-                e = ((EJBException)e).getCausedByException();
-            else
-                break;
-        }
-        return null;
     }
 }

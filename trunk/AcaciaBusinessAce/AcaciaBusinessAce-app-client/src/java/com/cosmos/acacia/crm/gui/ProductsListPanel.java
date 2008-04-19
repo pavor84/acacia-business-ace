@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -18,8 +19,8 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -40,6 +41,8 @@ public class ProductsListPanel
     private BindingGroup productsBindingGroup;
     private List<SimpleProduct> products;
 
+    private EntityProperties entityProps;
+
     public ProductsListPanel(DataObject parentDataObject)
     {
         super(parentDataObject);
@@ -49,10 +52,9 @@ public class ProductsListPanel
     @Override
     protected void initData() {
         super.initData();
-
-        productsBindingGroup = new BindingGroup();
-        AcaciaTable productsTable = getDataTable();
-        EntityProperties entityProps = getFormSession().getProductEntityProperties();
+        
+        entityProps = getFormSession().getProductEntityProperties();
+        
         List<PropertyDetails> propertyDetails = 
             new ArrayList<PropertyDetails>(entityProps.getValues());
         
@@ -65,6 +67,17 @@ public class ProductsListPanel
         
         //add column
         addColumn(55, getString("ProductList.codeFormatted"), "${codeFormatted}", entityProps);
+        
+        refreshDataTable(entityProps);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void refreshDataTable(EntityProperties entProps){
+        if ( productsBindingGroup!=null )
+            productsBindingGroup.unbind();
+        
+        productsBindingGroup = new BindingGroup();
+        AcaciaTable productsTable = getDataTable();
         
         JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps, UpdateStrategy.READ);
         
@@ -212,5 +225,17 @@ public class ProductsListPanel
     protected int deleteProduct(SimpleProduct product)
     {
         return getFormSession().deleteProduct(product);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        //reset the products - they will be reinitialized
+        products = null;
+        refreshDataTable(entityProps);
+        
+        return t;
     }
 }

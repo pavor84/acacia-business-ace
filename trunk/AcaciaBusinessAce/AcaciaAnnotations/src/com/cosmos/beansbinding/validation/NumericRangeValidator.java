@@ -16,7 +16,6 @@ public class NumericRangeValidator
     extends NumericValidator
     implements Serializable
 {
-
     private static final Result VALUE_IS_LESS_THAN_MIN_VALUE =
             ValidationError.NumericValueIsLessThanMin.getValidatorResult();
 
