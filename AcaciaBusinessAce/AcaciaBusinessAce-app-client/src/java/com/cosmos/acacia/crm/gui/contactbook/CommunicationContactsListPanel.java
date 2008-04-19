@@ -27,7 +27,7 @@ import org.jdesktop.application.Action;
  *
  * @author Bozhidar Bozhanov
  */
-class CommunicationContactsListPanel extends AbstractTablePanel {
+public class CommunicationContactsListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
     public CommunicationContactsListPanel(DataObject parentDataObject)

@@ -25,10 +25,10 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.LinkedList;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -49,6 +49,10 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     
     @EJB
     private PersonsListLocal personManager;
+    
+    
+    @EJB
+    private PositionTypesListLocal positionTypesManager;
 
     /**
      * A method for listing all existing countries
@@ -223,23 +227,24 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     public List<PositionType> getPositionTypes(DataObject parent) {
-        Query q = null;
-        if(parent != null)
-        {
-            if (parent.getDataObjectType().getDataObjectType().equals(Person.class.getName())) {
-                q = em.createNamedQuery("PositionType.findPersonPositionTypes");
-            }
-            if (parent.getDataObjectType().getDataObjectType().equals(Organization.class.getName())) {
-                q = em.createNamedQuery("PositionType.findOrganizationPositionTypes");
-            }
-            if (q != null){
-                q.setParameter("deleted", false);
-                return new ArrayList<PositionType>(q.getResultList());
-            }
+        try {
+            return getPositionTypes(
+                    Class.forName(parent.getDataObjectType().getDataObjectType()));
+        } catch (Exception ex) {
+            return new LinkedList<PositionType>();
         }
-        return new ArrayList<PositionType>();
     }
 
+   public List<PositionType> getPositionTypes(Class ownerClass) {
+       try {
+            return positionTypesManager.getPositionTypes(ownerClass);
+       } catch (Exception ex) {
+           ex.printStackTrace();
+           return new LinkedList<PositionType>();
+       }
+    }
+
+        
     public List<Person> getPersons() {
         return personManager.getPersons(null);
     }

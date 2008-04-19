@@ -13,7 +13,8 @@ import javax.naming.InitialContext;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.LocationsListRemote;
+import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -26,19 +27,20 @@ import org.jdesktop.application.Action;
  *
  * @author Bozhidar Bozhanov
  */
-public class ContactPersonsListPanel extends AbstractTablePanel {
+public class CitiesListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
-    public ContactPersonsListPanel(DataObject parentDataObject)
+    public CitiesListPanel()
     {
-        super(parentDataObject);
+        super(null);
     }
 
     @EJB
-    private AddressesListRemote formSession;
+    private LocationsListRemote formSession;
 
-    private BindingGroup contactPersonsBindingGroup;
-    private List<ContactPerson> contactPersons;
+    private BindingGroup citiesBindingGroup;
+    private List<City> cities;
+    private ContactPerson contactPerson;
 
     @Override
     protected void initData() {
@@ -46,37 +48,37 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         super.initData();
 
         setVisible(Button.Select, false);
-        contactPersonsBindingGroup = new BindingGroup();
-        AcaciaTable contactPersonsTable = getDataTable();
-        JTableBinding tableBinding = contactPersonsTable.bind(contactPersonsBindingGroup, getContactPersons(), getContactPersonEntityProperties());
+        citiesBindingGroup = new BindingGroup();
+        AcaciaTable citiesTable = getDataTable();
+        JTableBinding tableBinding = citiesTable.bind(citiesBindingGroup, getCities(), getCityEntityProperties());
 
-        contactPersonsBindingGroup.bind();
+        citiesBindingGroup.bind();
 
-        contactPersonsTable.setEditable(true);
+        citiesTable.setEditable(true);
     }
 
-    protected List<ContactPerson> getContactPersons()
+    protected List<City> getCities()
     {
-        if(contactPersons == null)
+        if(cities == null)
         {
-            contactPersons = getFormSession().getContactPersons(getParentDataObject());
+            cities = getFormSession().getCities();
         }
 
-        return contactPersons;
+        return cities;
     }
 
-    protected EntityProperties getContactPersonEntityProperties()
+    protected EntityProperties getCityEntityProperties()
     {
-        return getFormSession().getContactPersonEntityProperties();
+        return getFormSession().getCityEntityProperties();
     }
 
-    protected AddressesListRemote getFormSession()
+    protected LocationsListRemote getFormSession()
     {
         if(formSession == null)
         {
             try
             {
-                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
+                formSession = InitialContext.doLookup(LocationsListRemote.class.getName());
             }
             catch(Exception ex)
             {
@@ -87,11 +89,19 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    protected int deleteContactPerson(ContactPerson contactPerson)
+    protected int deleteCity(City city)
     {
-        return getFormSession().deleteContactPerson(contactPerson);
+        return getFormSession().deleteCity(city);
     }
 
+     public ContactPerson getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(ContactPerson contactPerson) {
+        this.contactPerson = contactPerson;
+    }
+    
     @Override
     @Action
     public void selectAction(){
@@ -103,7 +113,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
         {
-            deleteContactPerson((ContactPerson) rowObject);
+            deleteCity((City) rowObject);
             return true;
         }
 
@@ -114,11 +124,12 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            ContactPersonPanel contactPersonPanel = new ContactPersonPanel((ContactPerson)rowObject);
-            DialogResponse response = contactPersonPanel.showDialog(this);
+            CityPanel cityPanel = 
+                    new CityPanel((City) rowObject);
+            DialogResponse response = cityPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return contactPersonPanel.getSelectedValue();
+                return cityPanel.getSelectedValue();
             }
         }
          
@@ -127,15 +138,13 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
+        CityPanel cityPanel = new CityPanel();
         
-        ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObject());
-        
-        DialogResponse response = contactPersonPanel.showDialog(this);
+        DialogResponse response = cityPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return contactPersonPanel.getSelectedValue();
+            return cityPanel.getSelectedValue();
         }
-        
         return null;
     }
     

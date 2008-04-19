@@ -23,7 +23,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Bozhidar Bozhanov
  */
-class AddressListPanel extends AbstractTablePanel {
+public class AddressListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
     public AddressListPanel(DataObject parentDataObject)

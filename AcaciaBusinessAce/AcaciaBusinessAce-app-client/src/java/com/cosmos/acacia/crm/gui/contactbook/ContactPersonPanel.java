@@ -137,10 +137,6 @@ public class ContactPersonPanel extends BaseEntityPanel {
             contactPerson = getFormSession().newContactPerson();
         }
 
-        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
-        AutoCompleteDecorator.decorate(typeComboBox, resourceToStringConverter);
-        AutoCompleteDecorator.decorate(personsComboBox, resourceToStringConverter);
-
         contactPersonBindingGroup = new BindingGroup();
 
         EntityProperties entityProps = getContactPersonEntityProperties();
