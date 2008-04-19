@@ -6,7 +6,14 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBComboBox;
+import java.util.List;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JComboBoxBinding;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 /**
  *
@@ -19,5 +26,29 @@ public class AcaciaComboBox
     public AcaciaComboBox()
     {
         super(AcaciaApplication.class);
+    }
+    
+    
+    @Override
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            List data,
+            Object beanEntity,
+            PropertyDetails propertyDetails)
+    {
+        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+        AutoCompleteDecorator.decorate(this, resourceToStringConverter);
+        return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+    
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            List data,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            ObjectToStringConverter converter)
+    {
+        AutoCompleteDecorator.decorate(this, converter);
+        return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 }

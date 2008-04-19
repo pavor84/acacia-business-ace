@@ -56,13 +56,12 @@ public class PositionType
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
-    @Column(name = "owner_type", nullable = false)
-    @Property(title="Owner Type")
-    private char ownerType;
-
     @Column(name = "position_type_name", nullable = false)
     @Property(title="Position Type Name")
     private String positionTypeName;
+    
+    @Column(name = "owner_type", nullable = false)
+    private char ownerType;
 
     @Column(name = "description")
     @Property(title="Description")

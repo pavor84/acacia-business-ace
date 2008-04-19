@@ -139,9 +139,6 @@ public class CommunicationContactPanel extends BaseEntityPanel {
             communicationContact = getFormSession().newCommunicationContact();
         }
         
-        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
-        AutoCompleteDecorator.decorate(typeComboBox, resourceToStringConverter);
-
         communicationContactBindingGroup = new BindingGroup();
 
         EntityProperties entityProps = getCommunicationContactEntityProperties();

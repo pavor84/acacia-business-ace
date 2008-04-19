@@ -4,8 +4,12 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -232,10 +236,26 @@ public class AcaciaApplicationView extends FrameView {
     }
      
     @Action
-    public void newPersonAction(){
-    	//PersonPanel personPanel = new PersonPanel(null);
-    	//personPanel.showFrame();
+    public void organizationsPositionTypesListAction(){
+    	System.out.println("organizationsPositionTypesListAction");
+    	PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class);
+    	positionTypesListPanel.showFrame();
     }
+    
+    @Action
+    public void personsPositionTypesListAction(){
+    	System.out.println("personsPositionTypesListAction");
+    	PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class);
+    	positionTypesListPanel.showFrame();
+    }
+        
+    @Action
+    public void citiesListAction(){
+    	System.out.println("citiesList");
+    	CitiesListPanel citiesListPanel = new CitiesListPanel();
+    	citiesListPanel.showFrame();
+    }
+        
 
     @Action
     public void classifierGroupsAction()

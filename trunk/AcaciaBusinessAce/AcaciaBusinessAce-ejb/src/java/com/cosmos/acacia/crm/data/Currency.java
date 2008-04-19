@@ -1,16 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -19,24 +16,38 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "currencies")
-public class Currency implements Serializable {
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "Currency.fetchAll",
+            query = "select c from Currency c"
+        )
+    }
+)
+public class Currency
+    implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "currency_id", nullable = false)
+    @Property(title="Currency Id", editable=false, readOnly=true, visible=false, hidden=true)
     private Integer currencyId;
 
     @Column(name = "currency_name", nullable = false)
+    @Property(title="Name")
     private String currencyName;
 
     @Column(name = "currency_code_a3")
+    @Property(title="Currency Code A3")
     private String currencyCodeA3;
 
     @Column(name = "currency_code_n3")
+    @Property(title="Currency Code N3")
     private String currencyCodeN3;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
 
@@ -116,6 +127,17 @@ public class Currency implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Currency[currencyId=" + currencyId + "]";
+    }
+
+    public String toShortText() {
+        if (getCurrencyCodeA3() != null)
+            return getCurrencyCodeA3();
+        
+        return getCurrencyCodeN3();
+    }
+
+    public String toText() {
+        return getCurrencyName();
     }
 
 }

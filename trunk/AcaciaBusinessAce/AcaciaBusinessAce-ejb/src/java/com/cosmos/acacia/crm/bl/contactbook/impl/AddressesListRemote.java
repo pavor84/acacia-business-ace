@@ -58,6 +58,8 @@ public interface AddressesListRemote {
 
     List<PositionType> getPositionTypes(DataObject parentDataObject);
     
+    List<PositionType> getPositionTypes(Class ownerClass);
+    
     List<Person> getPersons();
     
     /* Handling communication contacts */
