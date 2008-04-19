@@ -38,8 +38,8 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
@@ -896,7 +896,7 @@ public class ProductPanel extends AcaciaPanel {
             return null;
         }
     }
-
+    
     protected void setSaveActionState()
     {
         setEnabled(Button.Save, productBindingGroup.isContentValid());
@@ -984,14 +984,19 @@ public class ProductPanel extends AcaciaPanel {
      * @return
      */
     private String getValidationErrorsMessage(ValidationException ve) {
-        StringBuilder msg = new StringBuilder();
+        String errorMessagesHeader = getResourceMap().getString("ValidationException.errorsListFollow");
+        StringBuilder msg = new StringBuilder(errorMessagesHeader);
+        msg.append("\n\n");
+        int i = 1;
         for (ValidationMessage validationMessage : ve.getMessages()) {
             String currentMsg = null;
             if ( validationMessage.getArguments()!=null )
                 currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
             else
                 currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
-            msg.append(currentMsg+"\n");
+            
+            msg.append(i).append(": ").append(currentMsg).append("\n\n");
+            i++;
         }
         return msg.toString();
     }
@@ -1090,6 +1095,10 @@ public class ProductPanel extends AcaciaPanel {
 
     @Action
     public void newProductCategory() {
+        JOptionPane.showConfirmDialog(
+            this.getParent(),
+            "Functionality not implemented!",
+            "Not implemented", JOptionPane.DEFAULT_OPTION);
     }
 
     @Action
@@ -1102,9 +1111,11 @@ public class ProductPanel extends AcaciaPanel {
 
     @Action
     public void newProducer() {
+        JOptionPane.showConfirmDialog(
+            this.getParent(),
+            "Functionality not implemented!",
+            "Not implemented",JOptionPane.DEFAULT_OPTION);
     }
-
-
 
     public enum Button
     {
@@ -1180,7 +1191,7 @@ public class ProductPanel extends AcaciaPanel {
     @Override
     protected Class getResourceStopClass()
     {
-        return ProductPanel.class;
+        return AcaciaPanel.class;
     }
     
     public static void main(String[] args) throws Exception{

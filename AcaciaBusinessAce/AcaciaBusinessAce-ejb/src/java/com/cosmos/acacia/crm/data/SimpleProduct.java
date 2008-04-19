@@ -88,11 +88,12 @@ public class SimpleProduct
 
     @Column(name = "product_name", nullable = false)
     @Property(title="Product Name",
-            propertyValidator=@PropertyValidator(required=true))
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=100))
     private String productName;
 
     @Column(name = "product_code", nullable = false)
-    @Property(title="Product Code")
+    @Property(title="Product Code",
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, maxLength=50, required=true))
     private String productCode;
 
     @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
@@ -128,35 +129,37 @@ public class SimpleProduct
 
     @Column(name = "minimum_quantity", nullable = false)
     @Property(title="Min. Quantity", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal minimumQuantity = BigDecimal.ONE;
 
     @Column(name = "maximum_quantity")
-    @Property(title="Max. Quantity")
+    @Property(title="Max. Quantity", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal maximumQuantity;
 
     @Column(name = "default_quantity")
-    @Property(title="Default Quantity")
+    @Property(title="Default Quantity", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal defaultQuantity;
 
     @Column(name = "purchase_price", nullable = false)
     @Property(title="Purchase Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal purchasePrice;
 
     @Column(name = "sale_price", nullable = false)
     @Property(title="Sales Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal salePrice;
 
     @Column(name = "list_price", nullable = false)
     @Property(title="List Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal listPrice;
 
     @Column(name = "quantity_per_package", nullable = false)
     @Property(title="Qty per Package", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private int quantityPerPackage = 1;
 
     @JoinColumn(name = "dimension_unit_id", referencedColumnName = "resource_id")
@@ -166,17 +169,17 @@ public class SimpleProduct
 
     @Column(name = "dimension_width")
     @Property(title="Dimension Width", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=99999d))
     private BigDecimal dimensionWidth;
 
     @Column(name = "dimension_length")
     @Property(title="Dimension Length", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=99999d))
     private BigDecimal dimensionLength;
 
     @Column(name = "dimension_height")
     @Property(title="Dimension Height", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=99999d))
     private BigDecimal dimensionHeight;
 
     @JoinColumn(name = "weight_unit_id", referencedColumnName = "resource_id")
@@ -186,12 +189,12 @@ public class SimpleProduct
 
     @Column(name = "weight")
     @Property(title="Weight", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=9999999999d))
     private BigDecimal weight;
 
     @Column(name = "delivery_time")
     @Property(title="Delivery time", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private Integer deliveryTime;
 
     @Column(name = "description")
