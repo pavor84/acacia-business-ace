@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" max="-2" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bankLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="branchLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="contactLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="contactLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ibanLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="accountLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="bicLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="swiftLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="branchLookup" linkSize="2" alignment="1" min="-2" pref="303" max="-2" attributes="0"/>
+                          <Component id="bankLookup" linkSize="2" alignment="1" min="-2" pref="311" max="-2" attributes="0"/>
+                          <Component id="ibanTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                          <Component id="accountTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                          <Component id="bicTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                          <Component id="swiftTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                          <Component id="currencyComboBox" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                          <Component id="contactComboBox" linkSize="2" alignment="1" min="-2" pref="312" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="56" pref="56" max="56" attributes="0"/>
+                      <Component id="defaultCheckBox" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="entityFormButtonPanel" pref="364" max="32767" attributes="1"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" max="-2" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="bankLabel" max="32767" attributes="1"/>
+                  <Component id="bankLookup" alignment="1" max="32767" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="branchLabel" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="branchLookup" max="32767" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ibanTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ibanLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="accountTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="accountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="bicLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bicTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="swiftLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="swiftTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="currencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="contactLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="contactComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="contactLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="defaultCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="ibanLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="ibanLabel.text"/>
+        <Property name="name" type="java.lang.String" value="ibanLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="ibanTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="ibanTextField.text"/>
+        <Property name="name" type="java.lang.String" value="ibanTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="bankLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="bankLabel.text"/>
+        <Property name="name" type="java.lang.String" value="bankLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="branchLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="branchLabel.text"/>
+        <Property name="name" type="java.lang.String" value="branchLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="accountLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="accountLabel.text"/>
+        <Property name="name" type="java.lang.String" value="accountLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="accountTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="accountTextField.text"/>
+        <Property name="name" type="java.lang.String" value="accountTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="bicLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="bicLabel.text"/>
+        <Property name="name" type="java.lang.String" value="bicLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="bicTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="bicTextField.text"/>
+        <Property name="name" type="java.lang.String" value="bicTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="swiftLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="swiftLabel.text"/>
+        <Property name="name" type="java.lang.String" value="swiftLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="swiftTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="swiftTextField.text"/>
+        <Property name="name" type="java.lang.String" value="swiftTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="contactLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="contactLabel.text"/>
+        <Property name="name" type="java.lang.String" value="contactLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="contactComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.DefaultComboBoxModel()" type="code"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="contactComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="bankLookup">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="bankLookup" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="branchLookup">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="branchLookup" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="defaultCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="defaultCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="defaultCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="currencyComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.DefaultComboBoxModel()" type="code"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="currencyComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="contactLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="contactLabel1.text"/>
+        <Property name="name" type="java.lang.String" value="contactLabel1" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

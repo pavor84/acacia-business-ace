@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.CommunicationType;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -51,6 +52,7 @@ public class DatabaseResourceBean
             getDbResources(OrganizationType.class);
             getDbResources(ProductColor.class);
             getDbResources(CommunicationType.class);
+            getDbResources(Currency.class);
             initialized = true;
         }
     }

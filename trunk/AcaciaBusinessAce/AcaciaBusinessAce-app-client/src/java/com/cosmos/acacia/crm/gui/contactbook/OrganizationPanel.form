@@ -18,19 +18,19 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="branchesPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="generalInfoPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="registrationDetailsPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="registrationDetailsPanel" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="entityFormButtonPanel" alignment="0" pref="768" max="32767" attributes="0"/>
+                  <Component id="branchesPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="761" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -38,9 +38,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" max="-2" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" max="-2" attributes="0">
-                  <Component id="registrationDetailsPanel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="generalInfoPanel" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="generalInfoPanel" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="registrationDetailsPanel" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="branchesPanel" max="32767" attributes="0"/>
@@ -48,7 +48,7 @@
               <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="11" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -71,7 +71,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="732" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="725" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -121,7 +121,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="752" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="745" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -181,7 +181,7 @@
                           </Group>
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="organizationTypeComboBox" pref="259" max="32767" attributes="0"/>
+                              <Component id="organizationTypeComboBox" min="-2" pref="259" max="-2" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="shareCapitalTextField" pref="180" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -299,7 +299,7 @@
             <Property name="name" type="java.lang.String" value="uniqueIdTextField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBComboBox" name="organizationTypeComboBox">
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="organizationTypeComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
@@ -312,7 +312,7 @@
             <Property name="name" type="java.lang.String" value="organizationTypeComboBox" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBComboBox" name="currencyComboBox">
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="currencyComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
@@ -457,7 +457,7 @@
             <Property name="name" type="java.lang.String" value="administrationAddressTextField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBComboBox" name="registeringOrganizationComboBox">
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="registeringOrganizationComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">

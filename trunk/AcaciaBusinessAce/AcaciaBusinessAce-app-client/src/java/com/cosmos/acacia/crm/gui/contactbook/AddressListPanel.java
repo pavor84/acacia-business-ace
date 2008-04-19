@@ -36,7 +36,6 @@ public class AddressListPanel extends AbstractTablePanel {
 
     private BindingGroup addressesBindingGroup;
     private List<Address> addresses;
-    private String typeTitle;
     
     @Override
     protected void initData() {

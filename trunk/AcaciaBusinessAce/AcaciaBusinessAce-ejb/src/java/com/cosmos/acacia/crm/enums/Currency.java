@@ -49,7 +49,7 @@ public enum Currency implements DatabaseResource {
     }
 
     public String toText() {
-        return null;
+        return getName();
     }
 
     @Override
@@ -64,9 +64,9 @@ public enum Currency implements DatabaseResource {
         {
             dbResources = new ArrayList<DbResource>(Currency.values().length);
 
-            for(Currency unit : Currency.values())
+            for(Currency currency : Currency.values())
             {
-                dbResources.add(unit.getDbResource());
+                dbResources.add(currency.getDbResource());
             }
         }
 
