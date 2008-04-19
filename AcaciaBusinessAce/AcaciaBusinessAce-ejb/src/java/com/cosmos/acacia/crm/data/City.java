@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,31 +32,40 @@ import javax.persistence.Table;
          	)
 	}
 )
-public class City implements Serializable {
+public class City
+        implements Serializable, TextResource
+{
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "city_id", nullable = false)
+    @Property(title="City Id", editable=false, readOnly=true, visible=false, hidden=true)
     private Integer cityId;
 
+    @Column(name = "city_name", nullable = false)
+    @Property(title="Name")
+    private String cityName;
+        
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
+    @Property(title="Country")
     private Country country;
 
-    @Column(name = "city_name", nullable = false)
-    private String cityName;
-
     @Column(name = "postal_code")
+    @Property(title="Postal code")
     private String postalCode;
 
     @Column(name = "city_code")
+    @Property(title="City code")
     private String cityCode;
 
     @Column(name = "city_phone_code")
+    @Property(title="Phone code")
     private String cityPhoneCode;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
 
@@ -150,6 +161,14 @@ public class City implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.City[cityId=" + cityId + "]";
+    }
+
+    public String toShortText() {
+       return null;
+    }
+
+    public String toText() {
+        return getCityName();
     }
 
 }
