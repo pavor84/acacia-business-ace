@@ -90,17 +90,17 @@ public class Person extends BusinessPartner
 
     @JoinColumn(name = "birth_place_country_id", referencedColumnName = "country_id")
     @ManyToOne
-    @Property(title="Country")
+    @Property(title="Country", customDisplay="${birthPlaceCountry.countryName}")
     private Country birthPlaceCountry;
 
     @JoinColumn(name = "birth_place_city_id", referencedColumnName = "city_id")
     @ManyToOne
-    @Property(title="City")
+    @Property(title="City", customDisplay="${birthPlaceCity.cityName}")
     private City birthPlaceCity;
 
     @JoinColumn(name = "gender_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Gender")
+    @Property(title="Gender", customDisplay="${gender.text}")
     private DbResource gender;
 
     @Column(name = "description")

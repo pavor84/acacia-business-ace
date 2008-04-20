@@ -331,6 +331,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 getContacts(selected),
                 bankDetail,
                 entityProps.getPropertyDetails("bankContact"));
+            bankDetailBindingGroup.bind();
             return selected;
         }else{
             return null;
@@ -343,7 +344,9 @@ public class BankDetailPanel extends BaseEntityPanel {
             return new ArrayList<Person>();
         
         DataObject parent = ((DataObjectBean) selectedObject).getDataObject();
-        return getFormSession().getBankContacts(parent);
+        List<Person> contacts = getFormSession().getBankContacts(parent);
+        
+        return contacts;
     }
     
     protected BankDetailsListRemote getFormSession()
