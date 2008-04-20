@@ -6,13 +6,13 @@
 package com.cosmos.acacia.crm.data.assembling;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -22,31 +22,37 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "assembling_algorithms")
 @NamedQueries({})
-public class AssemblingAlgorithm implements Serializable {
+public class AssemblingAlgorithm
+    implements Serializable
+{
     private static final long serialVersionUID = 1L;
+
     @Id
+    @SequenceGenerator(
+        name="AssemblingAlgorithmsSequenceGenerator",
+        sequenceName="assembling_algorithms_seq",
+        allocationSize=1)
+    @GeneratedValue(
+        strategy=GenerationType.SEQUENCE,
+        generator="AssemblingAlgorithmsSequenceGenerator")
     @Column(name = "algorithm_id", nullable = false)
     private Integer algorithmId;
+
     @Column(name = "algorithm_code", nullable = false)
     private String algorithmCode;
+
     @Column(name = "algorithm_name", nullable = false)
     private String algorithmName;
+
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "algorithmId")
-    private Collection<AssemblingSchemaItem> assemblingSchemaItemCollection;
+
 
     public AssemblingAlgorithm() {
     }
 
     public AssemblingAlgorithm(Integer algorithmId) {
         this.algorithmId = algorithmId;
-    }
-
-    public AssemblingAlgorithm(Integer algorithmId, String algorithmCode, String algorithmName) {
-        this.algorithmId = algorithmId;
-        this.algorithmCode = algorithmCode;
-        this.algorithmName = algorithmName;
     }
 
     public Integer getAlgorithmId() {
@@ -81,13 +87,6 @@ public class AssemblingAlgorithm implements Serializable {
         this.description = description;
     }
 
-    public Collection<AssemblingSchemaItem> getAssemblingSchemaItemCollection() {
-        return assemblingSchemaItemCollection;
-    }
-
-    public void setAssemblingSchemaItemCollection(Collection<AssemblingSchemaItem> assemblingSchemaItemCollection) {
-        this.assemblingSchemaItemCollection = assemblingSchemaItemCollection;
-    }
 
     @Override
     public int hashCode() {
@@ -111,7 +110,7 @@ public class AssemblingAlgorithm implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.AssemblingAlgorithm[algorithmId=" + algorithmId + "]";
+        return "com.cosmos.acacia.crm.data.AssemblingAlgorithm[algorithmId=" + algorithmId + "]";
     }
 
 }

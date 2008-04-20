@@ -31,6 +31,14 @@ public class AssemblingSchemaItem
     @Column(name = "item_id", nullable = false)
     private Long itemId;
 
+    @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id")
+    @ManyToOne
+    private AssemblingSchema assemblingSchema;
+
+    @JoinColumn(name = "algorithm_id", referencedColumnName = "algorithm_id")
+    @ManyToOne
+    private AssemblingAlgorithm algorithm;
+
     /**
      * Data Type:
      *   Integer
@@ -47,6 +55,10 @@ public class AssemblingSchemaItem
     @Column(name = "max_constraint")
     private Serializable maxConstraint;
 
+    @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
+    @ManyToOne
+    private VirtualProduct virtualProduct;
+
     @Column(name = "quantity", nullable = false)
     private BigDecimal quantity;
 
@@ -56,17 +68,6 @@ public class AssemblingSchemaItem
     @Column(name = "description")
     private String description;
 
-    @JoinColumn(name = "algorithm_id", referencedColumnName = "algorithm_id")
-    @ManyToOne
-    private AssemblingAlgorithm algorithmId;
-
-    @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id")
-    @ManyToOne
-    private AssemblingSchema assemblingSchemaId;
-
-    @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
-    @ManyToOne
-    private VirtualProduct virtualProductId;
 
     public AssemblingSchemaItem() {
     }
@@ -131,29 +132,30 @@ public class AssemblingSchemaItem
         this.description = description;
     }
 
-    public AssemblingAlgorithm getAlgorithmId() {
-        return algorithmId;
+    public AssemblingAlgorithm getAssemblingAlgorithm() {
+        return algorithm;
     }
 
-    public void setAlgorithmId(AssemblingAlgorithm algorithmId) {
-        this.algorithmId = algorithmId;
+    public void setAssemblingAlgorithm(AssemblingAlgorithm algorithm) {
+        this.algorithm = algorithm;
     }
 
-    public AssemblingSchema getAssemblingSchemaId() {
-        return assemblingSchemaId;
+    public AssemblingSchema getAssemblingSchema() {
+        return assemblingSchema;
     }
 
-    public void setAssemblingSchemaId(AssemblingSchema assemblingSchemaId) {
-        this.assemblingSchemaId = assemblingSchemaId;
+    public void setAssemblingSchema(AssemblingSchema assemblingSchema) {
+        this.assemblingSchema = assemblingSchema;
     }
 
-    public VirtualProduct getVirtualProductId() {
-        return virtualProductId;
+    public VirtualProduct getVirtualProduct() {
+        return virtualProduct;
     }
 
-    public void setVirtualProductId(VirtualProduct virtualProductId) {
-        this.virtualProductId = virtualProductId;
+    public void setVirtualProduct(VirtualProduct virtualProduct) {
+        this.virtualProduct = virtualProduct;
     }
+
 
     @Override
     public int hashCode() {
@@ -177,7 +179,7 @@ public class AssemblingSchemaItem
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.AssemblingSchemaItem[itemId=" + itemId + "]";
+        return "com.cosmos.acacia.crm.data.AssemblingSchemaItem[itemId=" + itemId + "]";
     }
 
 }
