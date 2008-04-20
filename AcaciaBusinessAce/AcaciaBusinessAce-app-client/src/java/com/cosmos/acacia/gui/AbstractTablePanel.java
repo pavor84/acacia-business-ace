@@ -8,11 +8,13 @@ package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import java.awt.Component;
-import java.math.BigInteger;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
@@ -197,6 +199,34 @@ public abstract class AbstractTablePanel
     }
 
 
+    public void addColumn(int orderPosition, String columnName,
+                           String customELDisplay, EntityProperties entityProperties) {
+        PropertyDetails pd = new PropertyDetails(null, columnName, null);
+        pd.setCustomDisplay(customELDisplay);
+        pd.setOrderPosition(orderPosition);
+        entityProperties.addPropertyDetails(pd);
+    }
+
+    protected String getString(String key) {
+        return getResourceMap().getString(key);
+    }
+
+    /**
+     * Custom display is EL expression string
+     * @param propertyDetails
+     * @param propertyName
+     * @param customDisplay - provide valid EL expression string. 
+     * Otherwise no fail-fast in this method. Will fail when compiled. 
+     */
+    public void setCustomDisplay(List<PropertyDetails> propertyDetails, String propertyName, String customDisplay) {
+        for (PropertyDetails pd : propertyDetails) {
+            if ( pd.getPropertyName().equals(propertyName)){
+                pd.setCustomDisplay(customDisplay);
+                break;
+            }
+        }
+    }
+    
     public AcaciaTable getDataTable()
     {
         return dataTable;
@@ -218,6 +248,7 @@ public abstract class AbstractTablePanel
      */
     protected abstract Object modifyRow(Object rowObject);
 
+    
     /**
      * 
      * @return

@@ -61,12 +61,12 @@ public class Address extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
-    @Property(title="Country")
+    @Property(title="Country", customDisplay="${country.countryName}")
     private Country country;
 
     @JoinColumn(name = "city_id", referencedColumnName = "city_id")
     @ManyToOne
-    @Property(title="City")
+    @Property(title="City", customDisplay="${city.cityName}")
     private City city;
 
     @Column(name = "postal_code")

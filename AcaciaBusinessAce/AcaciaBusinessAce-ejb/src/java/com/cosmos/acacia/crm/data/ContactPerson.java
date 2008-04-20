@@ -55,12 +55,13 @@ public class ContactPerson extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "position_type_id")
     @ManyToOne
-    @Property(title="Position Type")
+    @Property(title="Position Type", customDisplay="${positionType.positionTypeName}")
     private PositionType positionType;
 
     @JoinColumn(name = "contact_id")
     @ManyToOne
-    @Property(title="Person")
+    @Property(title="Person",
+        customDisplay="${contact.firstName} ${contact.secondName} ${contact.lastName} ${contact.extraName}")
     private Person contact;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

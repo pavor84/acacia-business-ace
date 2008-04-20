@@ -92,27 +92,27 @@ public class Organization
 
     @JoinColumn(name = "registration_address_id", referencedColumnName = "address_id")
     @ManyToOne
-    @Property(title="Registration Address")
+    @Property(title="Registration Address", customDisplay="${registrationAddress.addressName}")
     private Address registrationAddress;
 
     @JoinColumn(name = "administration_address_id", referencedColumnName = "address_id")
     @ManyToOne
-    @Property(title="Administration Address")
+    @Property(title="Administration Address", customDisplay="${administrationAddress.addressName}")
     private Address administrationAddress;
 
-    @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
+    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Currency")
-    private Currency currency;
+    @Property(title="Currency", customDisplay="${currency.text}")
+    private DbResource currency;
 
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
     @ManyToOne
-    @Property(title="Registration Organization Id")
+    @Property(title="Registration Organization", customDisplay="${registrationOrganization.organizationName}")
     private Organization registrationOrganization;
 
     @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Organization Type Id")
+    @Property(title="Organization Type", customDisplay="${organizationType.text}")
     private DbResource organizationType;
 
     public Organization() {
@@ -199,11 +199,11 @@ public class Organization
         this.administrationAddress = administrationAddress;
     }
 
-    public Currency getCurrency() {
+    public DbResource getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(DbResource currency) {
         this.currency = currency;
     }
 

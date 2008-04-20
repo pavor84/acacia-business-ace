@@ -60,7 +60,7 @@ public class CommunicationContact extends DataObjectBean implements Serializable
 
     @JoinColumn(name = "communication_type_id", referencedColumnName = "resource_id", nullable=false)
     @ManyToOne
-    @Property(title="Communication Type")
+    @Property(title="Communication Type", customDisplay="${communicationType.text}")
     private DbResource communicationType;
 
     @Column(name = "communication_value", nullable = false)
@@ -69,7 +69,8 @@ public class CommunicationContact extends DataObjectBean implements Serializable
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "contact_person_id")
     @ManyToOne
-    @Property(title="Contact Person")
+    @Property(title="Contact Person",
+        customDisplay="${contactPerson.contact.firstName} ${contactPerson.contact.secondName} ${contactPerson.contact.lastName} ${contactPerson.contact.extraName}")
     private ContactPerson contactPerson;
 
     @JoinColumn(name = "communication_contact_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

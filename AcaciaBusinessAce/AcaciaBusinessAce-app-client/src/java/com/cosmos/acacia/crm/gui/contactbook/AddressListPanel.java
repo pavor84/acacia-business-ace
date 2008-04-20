@@ -8,14 +8,16 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -42,16 +44,27 @@ public class AddressListPanel extends AbstractTablePanel {
         
         super.initData();
         
-        setVisible(Button.Select, false);
-        addressesBindingGroup = new BindingGroup();
-        AcaciaTable addressesTable = getDataTable();
-        JTableBinding tableBinding = addressesTable.bind(addressesBindingGroup, getAddresses(), getAddressEntityProperties());
+        EntityProperties entityProps = getAddressEntityProperties();
+        List<PropertyDetails> propertyDetails = 
+            new ArrayList<PropertyDetails>(entityProps.getValues());
         
-        addressesBindingGroup.bind();
-
-        addressesTable.setEditable(true);
+        refreshDataTable(entityProps);
+        
+        setVisible(Button.Select, false);
     }
 
+    protected void refreshDataTable(EntityProperties entityProps)
+    {
+        if ( addressesBindingGroup!=null )
+            addressesBindingGroup.unbind();
+        
+        addressesBindingGroup = new BindingGroup();
+        AcaciaTable addressesTable = getDataTable();
+        JTableBinding tableBinding = addressesTable.bind(addressesBindingGroup, getAddresses(), entityProps);
+        
+        addressesBindingGroup.bind();
+        addressesTable.setEditable(true);
+    }
     protected List<Address> getAddresses()
     {
         if(addresses == null)
@@ -62,6 +75,11 @@ public class AddressListPanel extends AbstractTablePanel {
         return addresses;
     }
 
+    protected List<City> getCities()
+    {
+        return getFormSession().getCities();
+    }
+        
     protected EntityProperties getAddressEntityProperties()
     {
         return getFormSession().getAddressEntityProperties();

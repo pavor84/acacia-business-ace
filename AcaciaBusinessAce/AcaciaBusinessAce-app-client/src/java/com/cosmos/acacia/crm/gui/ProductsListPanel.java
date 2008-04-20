@@ -93,34 +93,6 @@ public class ProductsListPanel
         productsTable.setEditable(true);
     }
     
-    private void addColumn(int orderPosition, String columnName,
-                           String customELDisplay, EntityProperties entityProperties) {
-        PropertyDetails pd = new PropertyDetails(null, columnName, null);
-        pd.setCustomDisplay(customELDisplay);
-        pd.setOrderPosition(orderPosition);
-        entityProperties.addPropertyDetails(pd);
-    }
-
-    private String getString(String key) {
-        return getResourceMap().getString(key);
-    }
-
-    /**
-     * Custom display is EL expression string
-     * @param propertyDetails
-     * @param propertyName
-     * @param customDisplay - provide valid EL expression string. 
-     * Otherwise no fail-fast in this method. Will fail when compiled. 
-     */
-    private void setCustomDisplay(List<PropertyDetails> propertyDetails, String propertyName, String customDisplay) {
-        for (PropertyDetails pd : propertyDetails) {
-            if ( pd.getPropertyName().equals(propertyName)){
-                pd.setCustomDisplay(customDisplay);
-                break;
-            }
-        }
-    }
-
     protected boolean deleteRow(Object rowObject)
     {
         if(rowObject != null)

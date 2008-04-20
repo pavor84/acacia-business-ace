@@ -67,17 +67,18 @@ public class BankDetail
         
     @JoinColumn(name = "bank_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne
-    @Property(title="Bank")
+    @Property(title="Bank", customDisplay="${bank.organizationName}")
     private Organization bank;
         
     @JoinColumn(name = "bank_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne
-    @Property(title="Bank Branch")
+    @Property(title="Bank Branch", customDisplay="${bankBranch.addressName}")
     private Address bankBranch;
     
     @JoinColumn(name = "bank_contact_id")
     @ManyToOne
-    @Property(title="Contact")
+    @Property(title="Contact",
+        customDisplay="${bankContact.firstName} ${bankContact.secondName} ${bankContact.lastName} ${bankContact.extraName}")
     private Person bankContact;
     
     @Column(name = "is_default")
