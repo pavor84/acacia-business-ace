@@ -206,7 +206,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
         field.setPreferredSize(new java.awt.Dimension(273, 20));
         field.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                unSelect(evt);
+                fieldKeyPressed(evt);
             }
         });
 
@@ -246,25 +246,30 @@ public class AcaciaLookup extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleParent(this);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void fieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldKeyPressed
+        onKeyCommand(evt);
+    }//GEN-LAST:event_fieldKeyPressed
+
     private void setEditable(boolean b) {
         button.setEnabled(b);
         field.setEnabled(b);
     }
-
+    
     @SuppressWarnings("unchecked")
-    private void unSelect(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_unSelect
+    private void onKeyCommand(KeyEvent evt){
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
             setSelectedItem(null);
             binding.getTargetProperty().setValue(this, null);
+        }else if ( evt.getKeyCode() == KeyEvent.VK_F5 ){
+            onSelect();
+        }else if ( field.equals(evt.getSource()) && evt.getKeyCode()==KeyEvent.VK_ENTER ){
+            onSelect();
         }
-    }// GEN-LAST:event_unSelect
+    }
 
     @SuppressWarnings("unchecked")
     private void buttonKeyPressed(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_buttonKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            setSelectedItem(null);
-            binding.getTargetProperty().setValue(this, null);
-        }
+        onKeyCommand(evt);
     }// GEN-LAST:event_buttonKeyPressed
 
     @SuppressWarnings("unchecked")
