@@ -17,18 +17,18 @@ public enum Gender implements DatabaseResource {
 
     Male("male"),
     Female("female");
-    
+
     private String gender;
     private DbResource dbResource;
-     
+
     private Gender(String gender){
         this.gender = gender;
     }
-    
+
     public String getGender(){
         return gender;
     }
-    
+
     public DbResource getDbResource() {
         return dbResource;
     }
@@ -38,18 +38,18 @@ public enum Gender implements DatabaseResource {
     }
 
     public String toShortText() {
-        return "";
+        return getGender();
     }
 
     public String toText() {
-        return getGender();
+        return null;
     }
-    
+
     @Override
     public String toString() {
         return super.toString() + ", " + dbResource;
     }
-    
+
     private static List<DbResource> dbResources;
     public static List<DbResource> getDbResources()
     {

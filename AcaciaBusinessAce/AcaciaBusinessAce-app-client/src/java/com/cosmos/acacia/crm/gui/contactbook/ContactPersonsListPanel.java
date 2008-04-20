@@ -52,7 +52,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
         contactPersonsBindingGroup.bind();
 
-        contactPersonsTable.setEditable(true);
+        contactPersonsTable.setEditable(false);
     }
 
     protected List<ContactPerson> getContactPersons()

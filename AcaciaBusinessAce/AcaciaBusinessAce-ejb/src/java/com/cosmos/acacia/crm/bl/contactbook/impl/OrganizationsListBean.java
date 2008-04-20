@@ -5,11 +5,6 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.bl.impl.*;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.Currency;
-import com.cosmos.acacia.crm.data.DbResource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +16,14 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.enums.OrganizationType;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -59,9 +59,10 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         q.setParameter("deleted", false);
         return new ArrayList<Organization>(q.getResultList());
     }
-    public List<Currency> getCurrencies()
+
+    public List<DbResource> getCurrencies()
     {
-        return new ArrayList<Currency>();
+        return Currency.getDbResources();
     }
 
     public EntityProperties getOrganizationEntityProperties()

@@ -55,7 +55,7 @@ public class PersonsListPanel extends AbstractTablePanel {
         
         personsBindingGroup.bind();
 
-        personsTable.setEditable(true);
+        personsTable.setEditable(false);
     }
 
     protected List<Person> getPersons()
