@@ -27,12 +27,12 @@ public interface OrganizationsListRemote {
 
     List<Organization> getOrganizations(DataObject parent);
 
-    List<Currency> getCurrencies();
+    List<DbResource> getCurrencies();
 
     List<Address> getAddresses(DataObject parent);
 
     List<BankDetail> getBankDetails(DataObject parent);
-    
+
     List<DbResource> getOrganizationTypes();
 
     EntityProperties getOrganizationEntityProperties();

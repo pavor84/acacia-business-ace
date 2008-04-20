@@ -27,8 +27,9 @@ public class AcaciaComboBox
     {
         super(AcaciaApplication.class);
     }
-    
-    
+
+
+    @SuppressWarnings("unchecked")
     @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
@@ -40,7 +41,8 @@ public class AcaciaComboBox
         AutoCompleteDecorator.decorate(this, resourceToStringConverter);
         return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
-    
+
+    @SuppressWarnings("unchecked")
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,

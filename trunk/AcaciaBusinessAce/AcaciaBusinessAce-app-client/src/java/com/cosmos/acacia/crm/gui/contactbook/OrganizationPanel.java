@@ -538,7 +538,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         return organizations;
     }
 
-    private List<Currency> getCurrencies()
+    private List<DbResource> getCurrencies()
     {
         return getFormSession().getCurrencies();
     }

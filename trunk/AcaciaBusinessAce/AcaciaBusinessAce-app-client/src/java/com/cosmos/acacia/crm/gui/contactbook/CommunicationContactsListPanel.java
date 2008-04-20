@@ -54,7 +54,7 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
 
         communicationContactsBindingGroup.bind();
 
-        communicationContactsTable.setEditable(true);
+        communicationContactsTable.setEditable(false);
     }
 
     protected List<CommunicationContact> getCommunicationContacts()

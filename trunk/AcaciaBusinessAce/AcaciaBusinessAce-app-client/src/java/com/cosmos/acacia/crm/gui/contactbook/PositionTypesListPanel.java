@@ -74,7 +74,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-        positionTypesTable.setEditable(true);
+        positionTypesTable.setEditable(false);
     }
     protected List<PositionType> getPositionTypes() throws Exception
     {

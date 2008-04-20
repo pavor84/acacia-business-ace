@@ -16,7 +16,6 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.contactbook.impl.LocationsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -54,7 +53,7 @@ public class CitiesListPanel extends AbstractTablePanel {
 
         citiesBindingGroup.bind();
 
-        citiesTable.setEditable(true);
+        citiesTable.setEditable(false);
     }
 
     protected List<City> getCities()

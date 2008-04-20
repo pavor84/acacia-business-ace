@@ -147,7 +147,7 @@ public enum OrganizationType
 
     public String toText()
     {
-        return null;
+        return getOrganizationName();
     }
 
 

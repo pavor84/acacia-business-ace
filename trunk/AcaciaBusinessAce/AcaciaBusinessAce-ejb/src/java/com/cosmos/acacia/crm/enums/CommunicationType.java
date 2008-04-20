@@ -19,18 +19,18 @@ public enum CommunicationType implements DatabaseResource {
     Mobile("Mobile"),
     ICQ("ICQ"),
     Skype("Skype");
-    
+
     private String communicationType;
     private DbResource dbResource;
-     
+
     private CommunicationType(String communicationType){
         this.communicationType = communicationType;
     }
-    
+
     public String getCommunicationType(){
         return communicationType;
     }
-    
+
     public DbResource getDbResource() {
         return dbResource;
     }
@@ -40,18 +40,18 @@ public enum CommunicationType implements DatabaseResource {
     }
 
     public String toShortText() {
-        return "";
+        return getCommunicationType();
     }
 
     public String toText() {
-        return getCommunicationType();
+        return null;
     }
-    
+
     @Override
     public String toString() {
         return super.toString() + ", " + dbResource;
     }
-    
+
     private static List<DbResource> dbResources;
     public static List<DbResource> getDbResources()
     {

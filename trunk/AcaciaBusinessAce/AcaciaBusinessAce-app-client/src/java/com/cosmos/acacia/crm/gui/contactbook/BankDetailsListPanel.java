@@ -52,7 +52,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
 
         bankDetailsBindingGroup.bind();
 
-        bankDetailsTable.setEditable(true);
+        bankDetailsTable.setEditable(false);
     }
 
     protected List<BankDetail> getBankDetails()

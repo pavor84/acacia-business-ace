@@ -61,7 +61,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
         
         organizationsBindingGroup.bind();
 
-        organizationsTable.setEditable(true);
+        organizationsTable.setEditable(false);
     }
 
     protected List<Organization> getOrganizations()

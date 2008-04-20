@@ -63,7 +63,7 @@ public class AddressListPanel extends AbstractTablePanel {
         JTableBinding tableBinding = addressesTable.bind(addressesBindingGroup, getAddresses(), entityProps);
         
         addressesBindingGroup.bind();
-        addressesTable.setEditable(true);
+        addressesTable.setEditable(false);
     }
     protected List<Address> getAddresses()
     {

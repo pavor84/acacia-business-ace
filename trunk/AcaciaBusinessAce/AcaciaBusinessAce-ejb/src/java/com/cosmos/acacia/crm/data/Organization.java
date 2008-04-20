@@ -102,7 +102,7 @@ public class Organization
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Currency", customDisplay="${currency.text}")
+    @Property(title="Currency", customDisplay="${currency.shortText}")
     private DbResource currency;
 
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
@@ -112,7 +112,7 @@ public class Organization
 
     @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Organization Type", customDisplay="${organizationType.text}")
+    @Property(title="Organization Type", customDisplay="${organizationType.shortText}")
     private DbResource organizationType;
 
     public Organization() {
