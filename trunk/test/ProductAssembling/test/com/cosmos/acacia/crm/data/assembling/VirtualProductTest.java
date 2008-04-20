@@ -3,11 +3,11 @@
  * and open the template in the editor.
  */
 
-package test.data;
+package com.cosmos.acacia.crm.data.assembling;
 
-import com.cosmos.acacia.crm.data.SimpleProduct;
-import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Logger;
@@ -26,29 +26,15 @@ import static org.junit.Assert.*;
  *
  * @author Miro
  */
-public class ProductTest
+public class VirtualProductTest
 {
-    private final static Logger logger = Logger.getLogger(ProductTest.class.getName());
+    private final static Logger logger = Logger.getLogger(VirtualProductTest.class.getName());
 
     private EntityManagerFactory emf;
     private EntityManager em;
-    
-    /*public void persist(Object object) {
-        EntityManagerFactory emf = javax.persistence.Persistence.createEntityManagerFactory("ProductAssemblingPU");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
-    }*/
 
-    public ProductTest() {
+
+    public VirtualProductTest() {
     }
 
     @BeforeClass
@@ -74,30 +60,40 @@ public class ProductTest
     @Test
     public void persistProducts()
     {
+        em.getTransaction().begin();
         SimpleProduct sp = new SimpleProduct();
         sp.setProductCode("SP");
         sp.setProductPrice(BigDecimal.valueOf(12.3));
-        em.getTransaction().begin();
         em.persist(sp);
+
+        RealProduct rp = new RealProduct();
+        rp.setSimpleProduct(sp);
+        em.persist(rp);
+
+        AssemblingCategory ac = new AssemblingCategory();
+        ac.setCategoryCode("AC");
+        ac.setCategoryName("AC");
+        em.persist(ac);
+
+        AssemblingSchema as = new AssemblingSchema();
+        as.setAssemblingCategory(ac);
+        as.setSchemaCode("AS");
+        as.setSchemaName("AS");
+        em.persist(as);
         em.getTransaction().commit();
 
-        ComplexProduct cp = new ComplexProduct();
-        cp.setProductCode("CP");
-        cp.setProductPrice(BigDecimal.valueOf(98.7));
-        em.getTransaction().begin();
-        em.persist(cp);
-        em.getTransaction().commit();
-
-        Query q = em.createQuery("select p from Product p");
-        List<Product> results = q.getResultList();
-        for(Product result : results)
+        Query q = em.createQuery("select p from VirtualProduct p");
+        List<VirtualProduct> results = q.getResultList();
+        for(VirtualProduct result : results)
         {
             logger.info("result=" + result.toString());
         }
 
         em.getTransaction().begin();
+        em.remove(rp);
         em.remove(sp);
-        em.remove(cp);
+        em.remove(as);
+        em.remove(ac);
         em.getTransaction().commit();
     }
 

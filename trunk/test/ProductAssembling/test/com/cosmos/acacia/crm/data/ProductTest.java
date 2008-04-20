@@ -3,9 +3,11 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data.test;
+package com.cosmos.acacia.crm.data;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -21,12 +23,14 @@ import static org.junit.Assert.*;
  *
  * @author Miro
  */
-public class TestTableTest
+public class ProductTest
 {
+    private final static Logger logger = Logger.getLogger(ProductTest.class.getName());
+
     private EntityManagerFactory emf;
     private EntityManager em;
-
-    public TestTableTest() {
+    
+    public ProductTest() {
     }
 
     @BeforeClass
@@ -49,46 +53,34 @@ public class TestTableTest
         emf.close();
     }
 
-    /**
-     * Test of setDataColumn method, of class TestTable.
-     */
     @Test
-    public void setDataColumn()
+    public void persistProducts()
     {
+        SimpleProduct sp = new SimpleProduct();
+        sp.setProductCode("SP");
+        sp.setProductPrice(BigDecimal.valueOf(12.3));
         em.getTransaction().begin();
+        em.persist(sp);
+        em.getTransaction().commit();
 
-        TestTable tt = new TestTable();
-        tt.setDataColumn(1);
-        tt.setDataType("Integer");
-        em.persist(tt);
+        ComplexProduct cp = new ComplexProduct();
+        cp.setProductCode("CP");
+        cp.setProductPrice(BigDecimal.valueOf(98.7));
+        em.getTransaction().begin();
+        em.persist(cp);
+        em.getTransaction().commit();
 
-        tt = new TestTable();
-        tt.setDataColumn((long)2);
-        tt.setDataType("Long");
-        em.persist(tt);
+        Query q = em.createQuery("select p from Product p");
+        List<Product> results = q.getResultList();
+        for(Product result : results)
+        {
+            logger.info("result=" + result.toString());
+        }
 
-        tt = new TestTable();
-        tt.setDataColumn("Miro");
-        tt.setDataType("String");
-        em.persist(tt);
-
+        em.getTransaction().begin();
+        em.remove(sp);
+        em.remove(cp);
         em.getTransaction().commit();
     }
-
-    /**
-     * Test of getDataColumn method, of class TestTable.
-     */
-    @Test
-    public void getDataColumn()
-    {
-        Query q = em.createQuery("select tt from TestTable tt");
-        List<TestTable> results = q.getResultList();
-        for(TestTable tt : results)
-        {
-            Object value = tt.getDataColumn();
-            System.out.println("tt.getDataType(): " + tt.getDataType() + ", value type: " + value.getClass().getName() + ", value: " + value);
-        }
-    }
-
 
 }

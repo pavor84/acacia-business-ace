@@ -6,13 +6,13 @@
 package com.cosmos.acacia.crm.data.assembling;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -22,20 +22,31 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "assembling_categories")
 @NamedQueries({})
-public class AssemblingCategory implements Serializable {
+public class AssemblingCategory
+    implements Serializable
+{
     private static final long serialVersionUID = 1L;
+
     @Id
+    @SequenceGenerator(
+        name="AssemblingCategoriesSequenceGenerator",
+        sequenceName="assembling_categories_seq",
+        allocationSize=1)
+    @GeneratedValue(
+        strategy=GenerationType.SEQUENCE,
+        generator="AssemblingCategoriesSequenceGenerator")
     @Column(name = "assembling_category_id", nullable = false)
     private Long assemblingCategoryId;
+
     @Column(name = "category_code", nullable = false)
     private String categoryCode;
+
     @Column(name = "category_name", nullable = false)
     private String categoryName;
+
     @Column(name = "description")
     private String description;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-//    private Collection<AssemblingSchema> assemblingSchemaCollection;
 
     public AssemblingCategory() {
     }
@@ -82,13 +93,6 @@ public class AssemblingCategory implements Serializable {
         this.description = description;
     }
 
-//    public Collection<AssemblingSchema> getAssemblingSchemaCollection() {
-//        return assemblingSchemaCollection;
-//    }
-//
-//    public void setAssemblingSchemaCollection(Collection<AssemblingSchema> assemblingSchemaCollection) {
-//        this.assemblingSchemaCollection = assemblingSchemaCollection;
-//    }
 
     @Override
     public int hashCode() {
@@ -112,7 +116,7 @@ public class AssemblingCategory implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.AssemblingCategory[assemblingCategoryId=" + assemblingCategoryId + "]";
+        return "com.cosmos.acacia.crm.data.AssemblingCategory[assemblingCategoryId=" + assemblingCategoryId + "]";
     }
 
 }
