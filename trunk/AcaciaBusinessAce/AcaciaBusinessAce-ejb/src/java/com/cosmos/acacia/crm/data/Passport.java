@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.cosmos.acacia.annotation.Property;
+
 /**
  *
  * @author Miro
@@ -27,54 +29,63 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "passports")
 @NamedQueries(
-	{
-		@NamedQuery
-         	(
-         		name = "Passport.findByParentDataObjectAndDeleted",
-         		query = "select p from Passport p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
-         	),
+    {
+        @NamedQuery
+             (
+                 name = "Passport.findByParentDataObjectAndDeleted",
+                 query = "select p from Passport p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+             ),
                 @NamedQuery
                 (
-        		name = "Passport.findByParentDataObjectIsNullAndDeleted",
-        		query = "select p from Passport p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+                name = "Passport.findByParentDataObjectIsNullAndDeleted",
+                query = "select p from Passport p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
                 )
-	}
+    }
 )
-public class Passport implements Serializable {
+public class Passport extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "passport_id", nullable = false)
+    @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger passportId;
 
     @Column(name = "parent_id", nullable = false)
+    @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @JoinColumn(name = "passport_type_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Passport Type", customDisplay="${passportType.text}")
     private DbResource passportType;
 
     @Column(name = "passport_number", nullable = false)
+    @Property(title="Passport Number")
     private String passportNumber;
 
     @Column(name = "issue_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Property(title="Issue Date")
     private Date issueDate;
 
     @Column(name = "expiration_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Property(title="Expiration Date")
     private Date expirationDate;
 
-    @JoinColumn(name = "issuer_id", insertable = false, updatable = false)
+    @JoinColumn(name = "issuer_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne
+    @Property(title="Issuer", customDisplay="${issuer.organizationName}")
     private Organization issuer;
 
-    @JoinColumn(name = "issuer_branch_id", referencedColumnName = "address_id")
+    @JoinColumn(name = "issuer_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne
+    @Property(title="Issuer Branch", customDisplay="${issuerBranch.addressName}")
     private Address issuerBranch;
 
     @Column(name = "additional_info")
+    @Property(title="Additional Info")
     private String additionalInfo;
 
     @JoinColumn(name = "passport_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -192,6 +203,16 @@ public class Passport implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Passport[passportId=" + passportId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getPassportId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setPassportId(id);
     }
 
 }
