@@ -5,8 +5,6 @@
 
 package com.cosmos.acacia.crm.data.assembling;
 
-import com.cosmos.acacia.crm.data.ComplexProduct;
-import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import java.math.BigDecimal;
 import java.util.List;

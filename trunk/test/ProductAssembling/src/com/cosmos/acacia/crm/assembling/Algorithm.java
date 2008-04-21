@@ -5,24 +5,32 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import com.cosmos.acacia.callback.AppCallback;
+import com.cosmos.acacia.callback.AppCallbackHandler;
+import com.cosmos.acacia.callback.assembling.ChoiceCallback;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.security.auth.callback.UnsupportedCallbackException;
 
 /**
  *
  * @author Miro
  */
 public abstract class Algorithm
+    implements Serializable
 {
     private Type type;
     private List resultList;
-    private int minSelection = 0;
-    private int maxSelection = Integer.MAX_VALUE;
+    private int minSelections = 0;
+    private int maxSelections = Integer.MAX_VALUE;
 
+    private AppCallbackHandler callbackHandler;
 
     public enum Type
     {
@@ -110,22 +118,30 @@ public abstract class Algorithm
         return type;
     }
 
-    public int getMaxSelection()
+    public int getMaxSelections()
     {
-        return maxSelection;
+        return maxSelections;
     }
 
-    public void setMaxSelection(int maxSelection) {
-        this.maxSelection = maxSelection;
+    public void setMaxSelections(int maxSelections) {
+        this.maxSelections = maxSelections;
     }
 
-    public int getMinSelection()
+    public int getMinSelections()
     {
-        return minSelection;
+        return minSelections;
     }
 
-    public void setMinSelection(int minSelection) {
-        this.minSelection = minSelection;
+    public void setMinSelections(int minSelections) {
+        this.minSelections = minSelections;
+    }
+
+    public AppCallbackHandler getCallbackHandler() {
+        return callbackHandler;
+    }
+
+    public void setCallbackHandler(AppCallbackHandler callbackHandler) {
+        this.callbackHandler = callbackHandler;
     }
 
     public List apply(
@@ -147,7 +163,14 @@ public abstract class Algorithm
         else
             resultRows = constraintRows;
 
-        return Collections.emptyList();
+        int size;
+        if((size = resultRows.size()) == 1 && Type.SingleSelectionAlgorithms.contains(type))
+            return getResultList(resultRows);
+
+        if(size == 0 || size < getMinSelections())
+            resultRows = constraintRows;
+
+        return applyUserSelection(resultRows);
     }
 
     protected List<ConstraintRow> applyRangeCondition(
@@ -167,6 +190,34 @@ public abstract class Algorithm
 
         return Collections.emptyList();
     }
+
+    protected List<ConstraintRow> applyUserSelection(List<ConstraintRow> constraintRows)
+        throws AlgorithmException
+    {
+        if(callbackHandler == null)
+            throw new IllegalArgumentException("The callbackHandler can not be null when applyUserSelection is invoked.");
+        ChoiceCallback choiceCallback = new ChoiceCallback(
+                type,
+                constraintRows,
+                -1,
+                getMinSelections(),
+                getMaxSelections());
+        try
+        {
+            callbackHandler.handle(new AppCallback[] {choiceCallback});
+        }
+        catch(IOException ex)
+        {
+            throw new AlgorithmException(ex);
+        }
+        catch(UnsupportedCallbackException ex)
+        {
+            throw new AlgorithmException(ex);
+        }
+
+        return choiceCallback.getSelectedRows();
+    }
+
 
     protected List getResultList(List<ConstraintRow> constraintRows) {
         if(resultList == null)
