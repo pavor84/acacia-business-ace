@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.OrganizationType;
+import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.acacia.crm.enums.ProductColor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +54,7 @@ public class DatabaseResourceBean
             getDbResources(ProductColor.class);
             getDbResources(CommunicationType.class);
             getDbResources(Currency.class);
+            getDbResources(PassportType.class);
             initialized = true;
         }
     }
