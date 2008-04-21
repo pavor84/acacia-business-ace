@@ -5,12 +5,15 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Miro
  */
 public class AlgorithmException
     extends Exception
+    implements Serializable
 {
 
     public AlgorithmException(Throwable cause) {

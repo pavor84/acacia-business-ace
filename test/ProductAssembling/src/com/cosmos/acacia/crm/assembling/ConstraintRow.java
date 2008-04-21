@@ -5,11 +5,14 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Miro
  */
 public class ConstraintRow
+    implements Serializable
 {
     private ConstraintValues constraintValues;
     private Object correspondingObject;

@@ -5,11 +5,14 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Miro
  */
 public class ConstraintValues
+    implements Serializable
 {
     public static final ConstraintValues EMPTY_CONSTRAINT_VALUES = new ConstraintValues();
 
