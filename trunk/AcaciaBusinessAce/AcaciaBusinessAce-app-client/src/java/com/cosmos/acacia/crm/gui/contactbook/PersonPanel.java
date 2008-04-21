@@ -80,14 +80,12 @@ public class PersonPanel extends BaseEntityPanel {
         birthPlaceCountryComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         birthPlaceCityComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         birthdateDatePicker = new com.cosmos.swingb.JBDatePicker();
-        passportsPanel = new com.cosmos.swingb.JBPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        passportsTable = new com.cosmos.acacia.gui.AcaciaTable();
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         addressesPanel = new com.cosmos.acacia.gui.TableHolderPanel();
         entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        passportsPanel = new com.cosmos.acacia.gui.TableHolderPanel();
 
         setOpaque(false);
 
@@ -246,41 +244,6 @@ public class PersonPanel extends BaseEntityPanel {
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
-        passportsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("passportsPanel.border.title"))); // NOI18N
-        passportsPanel.setName("passportsPanel"); // NOI18N
-        passportsPanel.setTitle(resourceMap.getString("passportsPanel.title")); // NOI18N
-
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
-
-        passportsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        passportsTable.setName("passportsTable"); // NOI18N
-        jScrollPane2.setViewportView(passportsTable);
-
-        javax.swing.GroupLayout passportsPanelLayout = new javax.swing.GroupLayout(passportsPanel);
-        passportsPanel.setLayout(passportsPanelLayout);
-        passportsPanelLayout.setHorizontalGroup(
-            passportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(passportsPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        passportsPanelLayout.setVerticalGroup(
-            passportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(passportsPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("descriptionPanel.border.title"))); // NOI18N
         descriptionPanel.setName("descriptionPanel"); // NOI18N
 
@@ -317,32 +280,46 @@ public class PersonPanel extends BaseEntityPanel {
         );
         addressesPanelLayout.setVerticalGroup(
             addressesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
+            .addGap(0, 153, Short.MAX_VALUE)
         );
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
+
+        passportsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("passportsPanel.border.title"))); // NOI18N
+        passportsPanel.setName("passportsPanel"); // NOI18N
+
+        javax.swing.GroupLayout passportsPanelLayout = new javax.swing.GroupLayout(passportsPanel);
+        passportsPanel.setLayout(passportsPanelLayout);
+        passportsPanelLayout.setHorizontalGroup(
+            passportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 658, Short.MAX_VALUE)
+        );
+        passportsPanelLayout.setVerticalGroup(
+            passportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 133, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(addressesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE)
+                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(passportsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(personalDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(birthDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(addressesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(passportsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(birthDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(personalDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(birthDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -353,7 +330,8 @@ public class PersonPanel extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -376,12 +354,10 @@ public class PersonPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField firstNameTextField;
     private com.cosmos.acacia.gui.AcaciaComboBox genderComboBox;
     private javax.swing.JLabel genderLabel;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lastNameLabel;
     private com.cosmos.swingb.JBTextField lastNameTextField;
-    private com.cosmos.swingb.JBPanel passportsPanel;
-    private com.cosmos.acacia.gui.AcaciaTable passportsTable;
+    private com.cosmos.acacia.gui.TableHolderPanel passportsPanel;
     private com.cosmos.swingb.JBPanel personalDataPanel;
     private javax.swing.JLabel personalUniqueIdLabel;
     private com.cosmos.swingb.JBTextField personalUniqueIdTextField;
@@ -393,6 +369,7 @@ public class PersonPanel extends BaseEntityPanel {
     private PersonsListRemote formSession;
 
     private AddressListPanel addressesTable;
+    private PassportsListPanel passportsTable;
     private BindingGroup personBindingGroup;
     private Person person;
 
@@ -434,7 +411,16 @@ public class PersonPanel extends BaseEntityPanel {
         //addressesTable.setButtonsTextVisibility(false);
         addressesPanel.add(addressesTable);
 
-        //JTableBinding passportsTableBinding = passportsTable.bind(personBindingGroup, getPassports(), getPassportEntityProperties());
+
+         // Using an AbstractTablePanel implementation
+        passportsTable = new PassportsListPanel(person.getDataObject());
+        passportsTable.setVisibleButtons(14); //Only New, Modify and Delete
+
+        // Adding the nested table listener to ensure that person is saved
+        // before adding addresses to it
+        addNestedFormListener(passportsTable);
+        passportsPanel.add(passportsTable);
+        
         personBindingGroup.bind();
     }
 

@@ -292,7 +292,7 @@ public class BankDetailPanel extends BaseEntityPanel {
             "${addressName}",
             UpdateStrategy.READ_WRITE);
             
-        branchLookup.setEnabled(false);
+        branchLookup.setEnabled(bankBinding.isContentValid());
  
         bankDetailBindingGroup.bind();
     }

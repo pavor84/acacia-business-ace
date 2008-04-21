@@ -80,19 +80,19 @@ public class BeansBindingHelper {
                 pd.setEditable(property.editable());
                 pd.setVisible(property.visible());
                 pd.setHiden(property.hidden());
-                
+
                 if ( !Property.NULL.equals(property.customDisplay()) )
                     pd.setCustomDisplay(property.customDisplay());
 
                 /* Setting validation-related values */
                 PropertyValidator propertyValidator = property.propertyValidator();
-                
+
                 if(propertyValidator.validationType() != ValidationType.NONE || propertyValidator.required())
                 {
                     BaseValidator validator = new BaseValidator();
-                  
+
                     validator.setRequired(propertyValidator.required());
-                    
+
                     if (propertyValidator.validator() != com.cosmos.beansbinding.validation.NoneValidator.class) {
                         try {
                             validator.addValidator((Validator) propertyValidator.validator().newInstance());
@@ -101,18 +101,18 @@ public class BeansBindingHelper {
                             ex.printStackTrace();
                         }
                     }
-                    
+
                     if(propertyValidator.validationType() == ValidationType.DATE)
                     {
                         String strValue = propertyValidator.datePattern();
                         if(strValue != null && (strValue = strValue.trim()).length() > 0){
                             DateValidator dateValidator = new DateValidator();
-                            
+
                             dateValidator.setDatePattern(strValue);
                             validator.addValidator(dateValidator);
                         }
                     }
-                    
+
                     if (propertyValidator.validationType() == ValidationType.DATE_RANGE)
                     {
                         DateRangeValidator dateRangeValidator = new DateRangeValidator();
@@ -135,17 +135,17 @@ public class BeansBindingHelper {
                             else
                                 dateRangeValidator.setToDate(strValue);
                         }
-                        
+
                         validator.addValidator(dateRangeValidator);
                     }
-                    
+
                     if(propertyValidator.validationType() == ValidationType.NUMBER)
                     {
                         NumericValidator numericValidator = new NumericValidator();
                         validator.addValidator(numericValidator);
                         numericValidator.setFloating(propertyValidator.floating());
                     }
-                    
+
                     if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
                     {
                         NumericRangeValidator numericRangeValidator = new NumericRangeValidator();
@@ -154,7 +154,7 @@ public class BeansBindingHelper {
                         validator.addValidator(numericRangeValidator);
                         numericRangeValidator.setFloating(propertyValidator.floating());
                     }
-                    
+
                     if(propertyValidator.validationType() == ValidationType.LENGTH)
                     {
                         TextLengthValidator rangeValidator = new TextLengthValidator();
@@ -162,7 +162,7 @@ public class BeansBindingHelper {
                         rangeValidator.setMinLength(propertyValidator.minLength());
                         validator.addValidator(rangeValidator);
                     }
-                    
+
                     if(propertyValidator.validationType() == ValidationType.REGEX
                             || propertyValidator.regex() != null)
                     {
@@ -174,7 +174,7 @@ public class BeansBindingHelper {
                             validator.addValidator(regexValidator);
                         }
                     }
-                    
+
                     if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
                     {
                         MaskFormatterValidator v = new MaskFormatterValidator();
@@ -196,12 +196,12 @@ public class BeansBindingHelper {
 
                 String columnName = null;
                 boolean nullable = true;
-                
+
                 Annotation column = field.getAnnotation(Column.class);
                 if (column == null) column = field.getAnnotation(JoinColumn.class);
                 if (column == null) column = field.getAnnotation(PrimaryKeyJoinColumn.class);
                 if (column == null) column = field.getAnnotation(DiscriminatorColumn.class);
-                
+
                 if(column != null)
                 {
                     try {
@@ -213,7 +213,7 @@ public class BeansBindingHelper {
                         ex.printStackTrace();
                     }
                 }
-                
+
                 if(columnName != null)
                     pd.setColumnName(columnName);
                 else
@@ -241,7 +241,7 @@ public class BeansBindingHelper {
                     BaseValidator validator = (BaseValidator) pd.getValidator();
                     if (validator == null)
                         validator = new BaseValidator();
-                    
+
                     if (!validator.isRequired())
                     {
                         validator.setRequired(true);
@@ -249,6 +249,12 @@ public class BeansBindingHelper {
                     }
                 }
 
+                // Setting custom display for Dates
+                if (pd.getPropertyClass() == Date.class && pd.getCustomDisplay() == Property.NULL)
+                {
+                    String name = pd.getPropertyName();
+                    pd.setCustomDisplay("${" + name + ".date}.${" + name + ".month}.${" + name + ".year}");
+                }
                 properties.add(pd);
             }
         }
