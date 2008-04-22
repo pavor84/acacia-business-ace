@@ -80,6 +80,7 @@ public class BeansBindingHelper {
                 pd.setEditable(property.editable());
                 pd.setVisible(property.visible());
                 pd.setHiden(property.hidden());
+                pd.setResourceDisplayInTable(property.resourceDisplayInTable());
 
                 if ( !Property.NULL.equals(property.customDisplay()) )
                     pd.setCustomDisplay(property.customDisplay());

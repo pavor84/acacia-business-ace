@@ -19,7 +19,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="generalInfoPanel" min="-2" max="-2" attributes="0"/>
@@ -28,9 +28,9 @@
                   </Group>
                   <Component id="branchesPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="entityFormButtonPanel" alignment="0" pref="761" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="1" pref="761" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -39,14 +39,14 @@
           <Group type="102" alignment="0" max="-2" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="generalInfoPanel" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="registrationDetailsPanel" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="registrationDetailsPanel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="generalInfoPanel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="branchesPanel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -126,7 +126,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="180" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="190" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -154,41 +154,23 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="nicknameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="vatNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="shareCapitalLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="typeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                          <Component id="nameTextField" pref="259" max="32767" attributes="0"/>
+                          <Component id="shareCapitalTextField" pref="181" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="currencyComboBox" min="-2" pref="73" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="nicknameLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                          <Component id="nicknameTextField" pref="259" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="vatNumberLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="vatNumberTextField" pref="260" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="uniqueIdLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                          <Component id="uniqueIdTextField" pref="259" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="shareCapitalLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="typeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="organizationTypeComboBox" min="-2" pref="259" max="-2" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="shareCapitalTextField" pref="180" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="currencyComboBox" min="-2" pref="73" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
+                      <Component id="organizationTypeComboBox" alignment="0" min="-2" pref="259" max="-2" attributes="0"/>
+                      <Component id="nicknameTextField" alignment="0" pref="260" max="32767" attributes="0"/>
+                      <Component id="nameTextField" alignment="0" pref="260" max="32767" attributes="0"/>
+                      <Component id="vatNumberTextField" alignment="0" pref="260" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -222,12 +204,7 @@
                       <Component id="vatNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="vatNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="uniqueIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace pref="13" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -263,12 +240,6 @@
             <Property name="name" type="java.lang.String" value="vatNumberLabel" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="uniqueIdLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="uniqueIdLabel.text"/>
-            <Property name="name" type="java.lang.String" value="uniqueIdLabel" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.swingb.JBTextField" name="nameTextField">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="nameTextField.text"/>
@@ -291,12 +262,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="vatNumberTextField.text"/>
             <Property name="name" type="java.lang.String" value="vatNumberTextField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="uniqueIdTextField">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="uniqueIdTextField.text"/>
-            <Property name="name" type="java.lang.String" value="uniqueIdTextField" noResource="true"/>
           </Properties>
         </Component>
         <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="organizationTypeComboBox">
@@ -342,22 +307,24 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="administrationAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="registeringOrganizationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="registrationDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="registrationAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="uniqueIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="registeringOrganizationComboBox" alignment="0" pref="227" max="32767" attributes="0"/>
-                      <Component id="registrationDateDatePicker" alignment="0" pref="227" max="32767" attributes="0"/>
+                      <Component id="uniqueIdTextField" alignment="0" pref="229" max="32767" attributes="0"/>
+                      <Component id="registeringOrganizationComboBox" alignment="0" pref="229" max="32767" attributes="0"/>
+                      <Component id="registrationDateDatePicker" alignment="0" pref="229" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="registrationAddressTextField" alignment="0" pref="201" max="32767" attributes="2"/>
-                              <Component id="administrationAddressTextField" alignment="0" pref="201" max="32767" attributes="2"/>
+                              <Component id="registrationAddressTextField" alignment="0" pref="203" max="32767" attributes="2"/>
+                              <Component id="administrationAddressTextField" alignment="0" pref="203" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -366,7 +333,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -406,7 +373,12 @@
                           <Component id="registrationAddressLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="50" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="uniqueIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -484,6 +456,18 @@
               <action class="com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel" id="modifyAdministrationAddress" methodName="modifyAdministrationAddress"/>
             </Property>
             <Property name="name" type="java.lang.String" value="modifyAdministrationAddressButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="uniqueIdLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="uniqueIdLabel.text"/>
+            <Property name="name" type="java.lang.String" value="uniqueIdLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="uniqueIdTextField">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="uniqueIdTextField.text"/>
+            <Property name="name" type="java.lang.String" value="uniqueIdTextField" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -4,6 +4,7 @@
  */
 package com.cosmos.beansbinding;
 
+import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
 import org.jdesktop.beansbinding.Validator;
@@ -28,6 +29,8 @@ public class PropertyDetails
     private String columnName;
     private int orderPosition;
     private Validator validator;
+    private ResourceDisplay resourceDisplayInTable;
+    
     /**
      * @see #getCustomDislay()
      */
@@ -221,4 +224,24 @@ public class PropertyDetails
         this.customDisplay = customDisplay;
     }
 
+    /**
+     * Gets the specific display option for a resource when it is going 
+     * to be displayed in a table
+     * 
+     * @return the resource display
+     */
+    public ResourceDisplay getResourceDisplayInTable() {
+        return resourceDisplayInTable;
+    }
+
+    /**
+     * Sets the specific display option for a resource when it is going 
+     * to be displayed in a table
+     * @param resourceDisplayInTable
+     */
+    public void setResourceDisplayInTable(ResourceDisplay resourceDisplayInTable) {
+        this.resourceDisplayInTable = resourceDisplayInTable;
+    }
+
+    
 }

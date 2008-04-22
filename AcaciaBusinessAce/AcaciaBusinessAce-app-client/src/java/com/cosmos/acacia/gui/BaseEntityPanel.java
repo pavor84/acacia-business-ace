@@ -5,15 +5,6 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.validation.ValidationException;
-import com.cosmos.acacia.crm.validation.ValidationMessage;
-import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBErrorPane;
-import com.cosmos.swingb.JBTextField;
-import com.cosmos.swingb.listeners.NestedFormListener;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -25,44 +16,62 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+
 import javax.ejb.EJBException;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBErrorPane;
+import com.cosmos.swingb.JBTextField;
+import com.cosmos.swingb.listeners.NestedFormListener;
+
 /**
+ * A base class for all panels representing a single entity
  *
  * @author Bozhidar Bozhanov
  */
 public abstract class BaseEntityPanel extends AcaciaPanel {
 
+    protected static Logger log = Logger.getLogger(BaseEntityPanel.class);
+
     public BaseEntityPanel(DataObject dataObject)
     {
         super(dataObject);
     }
-    
-        
+
+
     public abstract void performSave(boolean closeAfter);
-    
+
     public abstract BindingGroup getBindingGroup();
-    
+
     public abstract Object getEntity();
-    
+
     public abstract EntityFormButtonPanel getButtonPanel();
-        
+
     protected void init()
     {
         initData();
         initSaveStateListener();
+        setFonts();
     }
+
     protected void initSaveStateListener()
     {
         getButtonPanel().initSaveStateListener();
     }
-        
+
     public boolean checkFormValidity()
     {
         if (getBindingGroup().isContentValid()){
@@ -73,8 +82,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             return false;
         }
     }
-    
-    
+
+
     public void saveAction()
     {
         try {
@@ -94,19 +103,19 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             }
         }
     }
-    
+
     public void closeAction() {
         setDialogResponse(DialogResponse.CLOSE);
         close();
     }
-     
+
     public DataObject getDataObject()
     {
         if (getEntity() instanceof DataObjectBean)
         {
             return ((DataObjectBean) getEntity()).getDataObject();
         }
-        
+
         return null;
     }
      /**
@@ -122,7 +131,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         Throwable e = ex;
         while(e != null)
         {
-            System.out.println("VException is: " + e.getClass());
+            log.info("VException is: " + e.getClass());
             if(e instanceof ValidationException)
             {
                 return (ValidationException)e;
@@ -139,11 +148,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
         return null;
     }
-    
+
      /**
-     * Iterates through all fields and updates there appearance to error state if 
+     * Iterates through all fields and updates there appearance to error state if
      * some of the messages is related to their respective property.
-     * 
+     *
      * Note: currently - test support.
      * @param messages
      */
@@ -177,7 +186,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                 {
                     JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
                     if(errorProperties.contains(comboBox.getPropertyName()))
-                        comboBox.setStyleInvalid(); 
+                        comboBox.setStyleInvalid();
                 }
             }
         }
@@ -212,23 +221,23 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
         ResourceMap resource = getResourceMap();
         String title = resource.getString("saveAction.Action.error.title");
-        
+
         String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
         String category = getClass().getName() + ": saveAction.";
         Level errorLevel = Level.WARNING;
-        
+
         Map<String, String> state = populateState();
-        
+
         ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
         return errorInfo;
     }
-    
+
     protected Map<String, String> populateState()
     {
         Map <String, String> state = new HashMap<String, String>();
         Class clazz = getEntity().getClass();
         Field[] fields = clazz.getDeclaredFields();
-        
+
         for (Field field: fields)
         {
             try {
@@ -241,12 +250,12 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         }
         return state;
     }
-    
+
     protected void addNestedFormListener(AbstractTablePanel table)
     {
         table.addNestedFormListener(createNestedFormListener(table));
     }
-    
+
     protected NestedFormListener createNestedFormListener(final AbstractTablePanel table)
     {
         final String dialogMessage = getResourceMap().getString("save.confirm");
@@ -268,11 +277,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                 return true;
             }
         };
-        
+
         return listener;
     }
-    
-    
+
+
     @Override
     protected Class getResourceStopClass()
     {

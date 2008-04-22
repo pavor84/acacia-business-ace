@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.data.PositionType;
@@ -31,6 +32,8 @@ import com.cosmos.beansbinding.EntityProperties;
 @Stateless
 public class PositionTypesListBean implements PositionTypesListRemote, PositionTypesListLocal {
 
+    protected static Logger log = Logger.getLogger(PositionTypesListBean.class);
+
     @PersistenceContext
     private EntityManager em;
 
@@ -39,16 +42,16 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
 
     public List<PositionType> getPositionTypes(Class ownerClass) throws Exception
     {
-        System.out.println("Position type owner type: " + ownerClass);
+        log.info("Position type owner type: " + ownerClass);
         Query q = null;
         if (ownerClass == Person.class) {
            q = em.createNamedQuery("PositionType.findPersonPositionTypes");
         }
-        
+
         if (ownerClass == Organization.class) {
            q = em.createNamedQuery("PositionType.findOrganizationPositionTypes");
         }
-        
+
         if (q == null) {
             throw new Exception("Unsuported parent for position types." +
                     " Only Organization and Person allowed");

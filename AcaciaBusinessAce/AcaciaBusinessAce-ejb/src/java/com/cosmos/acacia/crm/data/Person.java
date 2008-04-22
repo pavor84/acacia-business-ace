@@ -100,7 +100,7 @@ public class Person extends BusinessPartner
 
     @JoinColumn(name = "gender_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Gender", customDisplay="${gender.text}")
+    @Property(title="Gender")
     private DbResource gender;
 
     @Column(name = "description")
