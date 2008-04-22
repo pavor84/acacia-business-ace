@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
@@ -31,6 +32,8 @@ import com.cosmos.swingb.DialogResponse;
  * @author  Bozhidar Bozhanov
  */
 public class PersonPanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(PersonPanel.class);
 
     /** Creates new form PersonPanel */
     public PersonPanel(Person person) {
@@ -376,7 +379,7 @@ public class PersonPanel extends BaseEntityPanel {
     @Override
     protected void initData() {
         setResizable(false);
-        System.out.println("initData().person: " + person);
+        log.info("initData().person: " + person);
         if(person == null)
         {
             person = getFormSession().newPerson();
@@ -420,7 +423,7 @@ public class PersonPanel extends BaseEntityPanel {
         // before adding addresses to it
         addNestedFormListener(passportsTable);
         passportsPanel.add(passportsTable);
-        
+
         personBindingGroup.bind();
     }
 
@@ -453,7 +456,7 @@ public class PersonPanel extends BaseEntityPanel {
 
     public void performSave(boolean closeAfter)
     {
-        System.out.println("Save: person: " + person);
+        log.info("Save: person: " + person);
         person = getFormSession().savePerson(person);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(person);

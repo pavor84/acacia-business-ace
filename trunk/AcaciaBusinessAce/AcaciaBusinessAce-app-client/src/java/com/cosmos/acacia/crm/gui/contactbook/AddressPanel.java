@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -24,6 +25,8 @@ import javax.naming.InitialContext;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -33,6 +36,8 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Bozhidar Bozhanov
  */
 public class AddressPanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(AddressPanel.class);
 
     /** Creates new form AddressPanel */
     public AddressPanel(Address address) {
@@ -296,7 +301,7 @@ public class AddressPanel extends BaseEntityPanel {
     private CommunicationContactsListPanel communicationContactsTable;
     private BankDetailsListPanel bankDetailsTable;
     private ContactPerson contactPerson;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -311,8 +316,8 @@ public class AddressPanel extends BaseEntityPanel {
                 setTitle(resourceMap.getString("branch.text"));
             }
         }
-        
-        System.out.println("initData().address: " + address);
+
+        log.info("initData().address: " + address);
         if(address == null)
         {
             address = getFormSession().newAddress();
@@ -340,33 +345,33 @@ public class AddressPanel extends BaseEntityPanel {
                     if (selectionModel.isSelectionEmpty()) {
                         updateCommunicationContacts(getDataObject());
                     } else {
-                        ContactPerson contactPerson = (ContactPerson) 
+                        ContactPerson contactPerson = (ContactPerson)
                                 contactPersonsTable.getDataTable().getSelectedRowObject();
                         updateCommunicationContacts(contactPerson);
                     }
                 }
             }
-            
+
         });
         contactPersonsPanel.add(contactPersonsTable);
-        
-        
+
+
         communicationContactsTable = new CommunicationContactsListPanel(address.getDataObject());
         communicationContactsTable.setVisibleButtons(2 + 4 + 8);
-        
+
         communicationContactsPanel.add(communicationContactsTable);
-        
-        
+
+
         bankDetailsTable = new BankDetailsListPanel(address.getDataObject());
         bankDetailsTable.setVisibleButtons(2 + 4 + 8);
-        
+
         bankDetailsPanel.add(bankDetailsTable);
-        
+
         // Adding nested form listeners for all tables
         addNestedFormListener(communicationContactsTable);
         addNestedFormListener(contactPersonsTable);
         addNestedFormListener(bankDetailsTable);
-        
+
         addressBindingGroup.bind();
     }
 
@@ -377,20 +382,20 @@ public class AddressPanel extends BaseEntityPanel {
         communicationContactsTable.setContactPerson(null);
         updateCommunicationContactsTable(communicationContacts);
     }
-    
+
     private void updateCommunicationContacts(ContactPerson contactPerson)
     {
         List<CommunicationContact> communicationContacts =
                 getFormSession().getCommunicationContacts(contactPerson);
-        communicationContactsTable.setContactPerson(contactPerson);        
+        communicationContactsTable.setContactPerson(contactPerson);
         updateCommunicationContactsTable(communicationContacts);
     }
-    
+
     private void updateCommunicationContactsTable(List<CommunicationContact> data)
     {
         communicationContactsTable.getDataTable().setData(data);
     }
-    
+
     protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
@@ -437,7 +442,7 @@ public class AddressPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: address: " + address);
+        log.info("Save: address: " + address);
         address = getFormSession().saveAddress(address, getParentDataObject());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(address);

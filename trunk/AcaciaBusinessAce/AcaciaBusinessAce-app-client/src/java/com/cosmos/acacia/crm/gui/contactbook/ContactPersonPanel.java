@@ -14,6 +14,8 @@ import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -23,6 +25,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author  Bozhidar Bozhanov
  */
 public class ContactPersonPanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(ContactPersonPanel.class);
 
     /** Creates new form ContactPersonPanel */
     public ContactPersonPanel(ContactPerson contactPerson) {
@@ -194,7 +198,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: contactPerson: " + contactPerson);
+        log.info("Save: contactPerson: " + contactPerson);
         contactPerson = getFormSession().saveContactPerson(contactPerson, getParentDataObject());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(contactPerson);

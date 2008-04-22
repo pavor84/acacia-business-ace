@@ -8,6 +8,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
@@ -28,6 +31,8 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Bozhidar Bozhanov
  */
 public class BankDetailPanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(BankDetailPanel.class);
 
     /** Creates new form ContactPersonPanel */
     public BankDetailPanel(BankDetail bankDetail) {
@@ -236,18 +241,18 @@ public class BankDetailPanel extends BaseEntityPanel {
     private BankDetailsListRemote formSession;
 
     private EntityProperties entityProps;
-    
+
     private BindingGroup bankDetailBindingGroup;
     private BankDetail bankDetail;
 
     private Binding bankBinding;
     private Binding branchBinding;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
 
-        System.out.println("initData().bankDetail: " + bankDetail);
+        log.info("initData().bankDetail: " + bankDetail);
         if(bankDetail == null)
         {
             bankDetail = getFormSession().newBankDetail();
@@ -262,45 +267,45 @@ public class BankDetailPanel extends BaseEntityPanel {
         bicTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("bic"));
         swiftTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("swiftCode"));
         defaultCheckBox.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("isDefault"));
-        
+
         contactComboBox.setEnabled(false);
-        
+
         currencyComboBox.bind(bankDetailBindingGroup,
                 getCurrencies(),
                 bankDetail,
                 entityProps.getPropertyDetails("currency"));
-        
-        bankBinding = bankLookup.bind(new AcaciaLookupProvider() {        
+
+        bankBinding = bankLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
                     return onChooseBank();
                 }
-            }, bankDetailBindingGroup, 
-            bankDetail, 
-            entityProps.getPropertyDetails("bank"), 
+            }, bankDetailBindingGroup,
+            bankDetail,
+            entityProps.getPropertyDetails("bank"),
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
-            
-        branchBinding = branchLookup.bind(new AcaciaLookupProvider() {        
+
+        branchBinding = branchLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
                     return onChooseBankBranch();
                 }
-            }, bankDetailBindingGroup, 
-            bankDetail, 
-            entityProps.getPropertyDetails("bankBranch"), 
+            }, bankDetailBindingGroup,
+            bankDetail,
+            entityProps.getPropertyDetails("bankBranch"),
             "${addressName}",
             UpdateStrategy.READ_WRITE);
-            
+
         branchLookup.setEnabled(bankBinding.isContentValid());
- 
+
         bankDetailBindingGroup.bind();
     }
 
     protected Object onChooseBank() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
         // TODO : classifiers!
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
@@ -310,11 +315,11 @@ public class BankDetailPanel extends BaseEntityPanel {
             return null;
         }
     }
-    
+
      protected Object onChooseBankBranch() {
         DataObject parent = null;
         try {
-            parent = 
+            parent =
                 ((Organization) bankBinding.getSourceProperty()
                     .getValue(bankBinding.getSourceObject())).getDataObject();
         } catch (NullPointerException ex) {
@@ -325,7 +330,7 @@ public class BankDetailPanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            
+
             contactComboBox.setEnabled(selected != null);
             contactComboBox.bind(bankDetailBindingGroup,
                 getContacts(selected),
@@ -337,18 +342,18 @@ public class BankDetailPanel extends BaseEntityPanel {
             return null;
         }
     }
-    
+
     protected List<Person> getContacts(Object selectedObject)
     {
         if (selectedObject == null)
             return new ArrayList<Person>();
-        
+
         DataObject parent = ((DataObjectBean) selectedObject).getDataObject();
         List<Person> contacts = getFormSession().getBankContacts(parent);
-        
+
         return contacts;
     }
-    
+
     protected BankDetailsListRemote getFormSession()
     {
         if(formSession == null)
@@ -391,7 +396,7 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: bankDetail: " + bankDetail);
+        log.info("Save: bankDetail: " + bankDetail);
         bankDetail = getFormSession().saveBankDetail(bankDetail, getParentDataObject());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(bankDetail);

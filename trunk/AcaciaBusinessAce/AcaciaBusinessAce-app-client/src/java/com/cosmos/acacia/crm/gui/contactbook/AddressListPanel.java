@@ -30,7 +30,7 @@ public class AddressListPanel extends AbstractTablePanel {
     /** Creates new form AddresssListPanel */
     public AddressListPanel(DataObject parentDataObject)
     {
-    	super(parentDataObject);
+        super(parentDataObject);
     }
 
     @EJB
@@ -38,18 +38,18 @@ public class AddressListPanel extends AbstractTablePanel {
 
     private BindingGroup addressesBindingGroup;
     private List<Address> addresses;
-    
+
     @Override
     protected void initData() {
-        
+
         super.initData();
-        
+
         EntityProperties entityProps = getAddressEntityProperties();
-        List<PropertyDetails> propertyDetails = 
+        List<PropertyDetails> propertyDetails =
             new ArrayList<PropertyDetails>(entityProps.getValues());
-        
+
         refreshDataTable(entityProps);
-        
+
         setVisible(Button.Select, false);
     }
 
@@ -57,11 +57,11 @@ public class AddressListPanel extends AbstractTablePanel {
     {
         if ( addressesBindingGroup!=null )
             addressesBindingGroup.unbind();
-        
+
         addressesBindingGroup = new BindingGroup();
         AcaciaTable addressesTable = getDataTable();
         JTableBinding tableBinding = addressesTable.bind(addressesBindingGroup, getAddresses(), entityProps);
-        
+
         addressesBindingGroup.bind();
         addressesTable.setEditable(false);
     }
@@ -79,12 +79,12 @@ public class AddressListPanel extends AbstractTablePanel {
     {
         return getFormSession().getCities();
     }
-        
+
     protected EntityProperties getAddressEntityProperties()
     {
         return getFormSession().getAddressEntityProperties();
     }
-    
+
     protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
@@ -120,7 +120,7 @@ public class AddressListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        
+
         if(rowObject != null)
         {
             AddressPanel addressePanel = new AddressPanel((Address)rowObject);
@@ -137,7 +137,7 @@ public class AddressListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            System.out.println(getParentDataObject());
+            log.info(getParentDataObject());
             AddressPanel addressPanel = new AddressPanel(getParentDataObject());
             DialogResponse response = addressPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))

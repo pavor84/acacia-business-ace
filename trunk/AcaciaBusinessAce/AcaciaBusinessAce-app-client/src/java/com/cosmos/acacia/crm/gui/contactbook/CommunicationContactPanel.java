@@ -14,6 +14,8 @@ import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -23,6 +25,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author  Bozhidar Bozhanov
  */
 public class CommunicationContactPanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(CommunicationContactPanel.class);
 
     /** Creates new form CommunicationContactPanel */
     public CommunicationContactPanel(CommunicationContact communicationContact) {
@@ -38,7 +42,7 @@ public class CommunicationContactPanel extends BaseEntityPanel {
         this.contactPerson = contactPerson;
         init();
     }
-    
+
     @Override
     protected void init()
     {
@@ -128,24 +132,24 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     private BindingGroup communicationContactBindingGroup;
     private CommunicationContact communicationContact;
     private ContactPerson contactPerson;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
 
-        System.out.println("initData().communicationContact: " + communicationContact);
+        log.info("initData().communicationContact: " + communicationContact);
         if(communicationContact == null)
         {
             communicationContact = getFormSession().newCommunicationContact();
         }
-        
+
         communicationContactBindingGroup = new BindingGroup();
 
         EntityProperties entityProps = getCommunicationContactEntityProperties();
 
         typeComboBox.bind(communicationContactBindingGroup, getCommunicationTypes(), communicationContact, entityProps.getPropertyDetails("communicationType"));
         valueTextField.bind(communicationContactBindingGroup, communicationContact, entityProps.getPropertyDetails("communicationValue"));
-        
+
         communicationContactBindingGroup.bind();
     }
 
@@ -190,7 +194,7 @@ public class CommunicationContactPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: communicationContact: " + communicationContact);
+        log.info("Save: communicationContact: " + communicationContact);
         communicationContact = getFormSession().saveCommunicationContact(
                 communicationContact, getParentDataObject(), contactPerson);
         setDialogResponse(DialogResponse.SAVE);
