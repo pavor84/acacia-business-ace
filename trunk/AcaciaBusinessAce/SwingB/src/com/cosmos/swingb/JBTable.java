@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellRenderer;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -45,6 +46,8 @@ public class JBTable
 
     private ObservableList observableData;
     private EntityProperties entityProperties;
+
+    private BeanTableCellRenderer beanResourceCellRenderer;
 
     public JBTable()
     {
@@ -378,7 +381,7 @@ public class JBTable
 
         column.setCellEditor(comboBoxCellEditor);
         if(app != null && column.getCellRenderer() == null)
-            column.setCellRenderer(new BeanTableCellRenderer(app.getClass()));
+            column.setCellRenderer(getBeanResourceCellRenderer());
     }
     
   /*      AcaciaComboBox categoryComboBox = new AcaciaComboBox();
@@ -440,7 +443,7 @@ public class JBTable
         column.setCellEditor(datePickerCellEditor);
         
         if(app != null && column.getCellRenderer() == null)
-            column.setCellRenderer(new BeanTableCellRenderer(app.getClass()));
+            column.setCellRenderer(getBeanResourceCellRenderer());
     }
     
     public ApplicationContext getContext()
@@ -495,6 +498,33 @@ public class JBTable
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    @Override
+    public TableCellRenderer getDefaultRenderer(Class<?> columnClass) {
+        String className;
+        if(columnClass != null)
+            className = columnClass.getName();
+        else
+            className = null;
+        System.out.println("className: " + className);
+        if(columnClass != null && "com.cosmos.acacia.crm.data.DbResource".equals(columnClass.getName()))
+        {
+            System.out.println("com.cosmos.acacia.crm.data.DbResource");
+            return getBeanResourceCellRenderer();
+        }
+
+        return super.getDefaultRenderer(columnClass);
+    }
+
+    protected TableCellRenderer getBeanResourceCellRenderer()
+    {
+        if(beanResourceCellRenderer == null)
+        {
+            beanResourceCellRenderer = new BeanTableCellRenderer(getApplication().getClass());
+        }
+
+        return beanResourceCellRenderer;
     }
 
 }
