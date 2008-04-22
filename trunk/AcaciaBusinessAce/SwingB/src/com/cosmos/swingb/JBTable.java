@@ -7,6 +7,7 @@ package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.converters.ResourceConverter;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +50,7 @@ public class JBTable
 
     private BeanTableCellRenderer beanResourceCellRenderer;
 
+   
     public JBTable()
     {
         this(Application.getInstance());
@@ -81,7 +83,7 @@ public class JBTable
         if((selectionModel = getSelectionModel()) != null)
             selectionModel.addListSelectionListener(listener);
     }
-    
+
     public void removeListSelectionListener(ListSelectionListener listener)
     {
         ListSelectionModel selectionModel;
@@ -158,7 +160,7 @@ public class JBTable
         {
             return convertRowIndexToModel(viewRowIndex);
         }
-        
+
         return -1;
     }
 
@@ -173,7 +175,7 @@ public class JBTable
                 selectedRowIndexes[i] = convertRowIndexToModel(selectedRowIndexes[i]);
             }
         }
-        
+
         return selectedRowIndexes;
     }
 
@@ -184,7 +186,7 @@ public class JBTable
         {
             return observableData.get(rowIndex);
         }
-        
+
         return null;
     }
 
@@ -201,7 +203,7 @@ public class JBTable
             }
             return rows;
         }
-        
+
         return Collections.EMPTY_LIST;
     }
 
@@ -254,7 +256,7 @@ public class JBTable
 
         return tableBinding;
     }
-    
+
     public JTableBinding bind(BindingGroup bindingGroup, List data,
                               EntityProperties entityProperties,
                               AutoBinding.UpdateStrategy updateStrategy) {
@@ -307,13 +309,24 @@ public class JBTable
         Class columnClass = null;
         if ( expression==null ){
             expression = "${" + propertyDetails.getPropertyName() + "}";
-            //set the class only if propert name is used for the display expression
             columnClass = propertyDetails.getPropertyClass();
+            //set the class only if propert name is used for the display expression
         }
+        
+        // TODO: Disallow custom display property for resources (to avoid class cast exceptions)
         
         ELProperty elProperty = ELProperty.create(expression);
         ColumnBinding columnBinding = tableBinding.addColumnBinding(elProperty);
         columnBinding.setColumnName(propertyDetails.getPropertyTitle());
+        
+        if (isResource(propertyDetails))
+        {
+            columnClass = propertyDetails.getPropertyClass();
+            columnBinding.setConverter(
+                    new ResourceConverter(getApplication().getClass(),
+                        propertyDetails.getResourceDisplayInTable()));
+        }
+        
         columnBinding.setColumnClass(columnClass);
 
         Boolean b = propertyDetails.isEditable();
@@ -333,7 +346,7 @@ public class JBTable
 
         return columnBinding;
     }
-    
+
     public EntityProperties getEntityProperties() {
         return entityProperties;
     }
@@ -383,7 +396,7 @@ public class JBTable
         if(app != null && column.getCellRenderer() == null)
             column.setCellRenderer(getBeanResourceCellRenderer());
     }
-    
+
   /*      AcaciaComboBox categoryComboBox = new AcaciaComboBox();
         categoryComboBox.bind(productsBindingGroup, getProductsCategories(), productsTable, "category");
         ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(categoryComboBox);
@@ -391,10 +404,10 @@ public class JBTable
         categoryColumn.setCellEditor(cellEditor);
   */
 
-    
+
     /**
      * Changes the default cell editor to a DatePicker and binds it
-     * 
+     *
      * @param bindingGroup
      * @param comboBoxValues
      * @param propertyName
@@ -414,10 +427,10 @@ public class JBTable
         datePicker.setFormats(dateFormat);
         datePicker.bind(bindingGroup, this, propertyDetails);
         JBDatePickerCellEditor datePickerCellEditor = new JBDatePickerCellEditor(datePicker);
-        
+
         // TODO: set Formatting of not-edited date
-        
-        
+
+
         TableColumnExt column;
         try
         {
@@ -427,7 +440,7 @@ public class JBTable
         {
             column = null;
         }
-        
+
         if(column == null)
         {
             if(propertyDetails != null)
@@ -436,16 +449,16 @@ public class JBTable
                 column = getColumnExt(columnName);
             }
         }
-        
+
         if(column == null)
             throw new IllegalArgumentException("Can not find table column for property name: " + propertyDetails.getPropertyName());
 
         column.setCellEditor(datePickerCellEditor);
-        
+
         if(app != null && column.getCellRenderer() == null)
             column.setCellRenderer(getBeanResourceCellRenderer());
     }
-    
+
     public ApplicationContext getContext()
     {
         if(applicationContext == null)
@@ -510,7 +523,6 @@ public class JBTable
         System.out.println("className: " + className);
         if(columnClass != null && "com.cosmos.acacia.crm.data.DbResource".equals(columnClass.getName()))
         {
-            System.out.println("com.cosmos.acacia.crm.data.DbResource");
             return getBeanResourceCellRenderer();
         }
 
@@ -527,4 +539,9 @@ public class JBTable
         return beanResourceCellRenderer;
     }
 
+    private boolean isResource(PropertyDetails propertyDetails)
+    {
+        return propertyDetails.getPropertyClass().getName()
+                .equals("com.cosmos.acacia.crm.data.DbResource");
+    }
 }

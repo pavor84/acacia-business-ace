@@ -45,4 +45,10 @@ public @interface Property
      * @return String
      */
     String customDisplay() default NULL;
+    
+    /**
+     * Specifies how is the resource displayed in a table
+     *
+     */
+     ResourceDisplay resourceDisplayInTable() default ResourceDisplay.ShortName;
 }

@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.data.DataObject;
@@ -38,6 +39,8 @@ import java.util.LinkedList;
 @Stateless
 public class AddressesListBean implements AddressesListRemote, AddressesListLocal {
 
+    protected static Logger log = Logger.getLogger(AddressesListBean.class);
+
     @PersistenceContext
     private EntityManager em;
 
@@ -46,11 +49,11 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @EJB
     private LocationsListLocal locationsManager;
-    
+
     @EJB
     private PersonsListLocal personManager;
-    
-    
+
+
     @EJB
     private PositionTypesListLocal positionTypesManager;
 
@@ -81,15 +84,15 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     public Address saveAddress(Address address, DataObject parentDataObject) {
-        
+
         address.setParentId(parentDataObject.getDataObjectId());
-       
+
         if (address.getDataObject() == null){
             DataObject dataObject = new DataObject();
             dataObject.setParentDataObject(parentDataObject);
             address.setDataObject(dataObject);
-        } 
-        
+        }
+
         return locationsManager.saveAddress(address);
     }
 
@@ -150,8 +153,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         }
         q.setParameter("deleted", false);
 
-        System.out.println("Parent: " + parent);
-        
+        log.info("Parent: " + parent);
+
         return new ArrayList<ContactPerson>(q.getResultList());
     }
 
@@ -222,9 +225,9 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             DataObject dataObject = new DataObject();
             dataObject.setParentDataObject(parentDataObject);
             contactPerson.setDataObject(dataObject);
-        } 
+        }
         esm.persist(em, contactPerson);
-        
+
         return contactPerson;
     }
 
@@ -246,7 +249,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
        }
     }
 
-        
+
     public List<Person> getPersons() {
         return personManager.getPersons(null);
     }
@@ -254,6 +257,6 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     public List<DbResource> getCommunicationTypes() {
         return CommunicationType.getDbResources();
     }
-    
-    
+
+
 }

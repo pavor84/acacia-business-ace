@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ResourceDisplay;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -102,7 +103,7 @@ public class Organization
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Currency", customDisplay="${currency.shortText}")
+    @Property(title="Currency", resourceDisplayInTable = ResourceDisplay.FullName)
     private DbResource currency;
 
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
@@ -112,7 +113,7 @@ public class Organization
 
     @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Organization Type", customDisplay="${organizationType.shortText}")
+    @Property(title="Organization Type")
     private DbResource organizationType;
 
     public Organization() {

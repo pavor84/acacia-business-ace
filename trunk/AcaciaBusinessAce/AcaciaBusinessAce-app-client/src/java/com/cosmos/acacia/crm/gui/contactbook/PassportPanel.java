@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -14,22 +13,23 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Passport;
-import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author  Bozhidar Bozhanov
  */
 public class PassportPanel extends BaseEntityPanel {
+
+    private Logger log = Logger.getLogger(PassportPanel.class);
 
     /** Creates new form ContactPersonPanel */
     public PassportPanel(Passport passport) {
@@ -227,7 +227,8 @@ public class PassportPanel extends BaseEntityPanel {
     protected void initData() {
         setResizable(false);
 
-        System.out.println("initData().passport: " + passport);
+        log.info("initData().passport: " + passport);
+
         if(passport == null)
         {
             passport = getFormSession().newPassport();
@@ -242,9 +243,9 @@ public class PassportPanel extends BaseEntityPanel {
 
         issueDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("issueDate"));
         expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"));
-        
+
         passportTypeComboBox.bind(passportBindingGroup, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
-        
+
         issuerBinding = issuerLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -327,7 +328,7 @@ public class PassportPanel extends BaseEntityPanel {
     {
         return getFormSession().getPassportTypes();
     }
-    
+
     @Action
     @Override
     public void closeAction() {
@@ -347,7 +348,7 @@ public class PassportPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: passport: " + passport);
+        log.info("Save: passport: " + passport);
         passport = getFormSession().savePassport(passport, getParentDataObject());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(passport);
