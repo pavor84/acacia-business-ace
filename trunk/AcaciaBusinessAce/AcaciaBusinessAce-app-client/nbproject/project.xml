@@ -21,6 +21,7 @@
             <included-library files="1">file.reference.beansbinding.jar</included-library>
             <included-library files="1">file.reference.appframework-1.0.3.jar</included-library>
             <included-library files="1">libs.junit_4.classpath</included-library>
+            <included-library files="1">file.reference.log4j-1.2.11.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
