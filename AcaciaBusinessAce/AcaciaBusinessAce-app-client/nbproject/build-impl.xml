@@ -373,6 +373,7 @@
         <copy file="${file.reference.beansbinding.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${file.reference.appframework-1.0.3.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copy file="${libs.junit_4.classpath}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copy file="${file.reference.log4j-1.2.11.jar}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <basename file="${reference.AcaciaBusinessAce-ejb.dist}" property="included.lib.reference.AcaciaBusinessAce-ejb.dist"/>
@@ -395,8 +396,10 @@
         <copy file="${file.reference.appframework-1.0.3.jar}" todir="${dist.ear.dir}"/>
         <basename file="${libs.junit_4.classpath}" property="included.lib.libs.junit_4.classpath"/>
         <copy file="${libs.junit_4.classpath}" todir="${dist.ear.dir}"/>
+        <basename file="${file.reference.log4j-1.2.11.jar}" property="included.lib.file.reference.log4j-1.2.11.jar"/>
+        <copy file="${file.reference.log4j-1.2.11.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.AcaciaBusinessAce-ejb.dist} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.AcaciaBeansBinding.jar} ${included.lib.file.reference.swingx-2008_01_20.jar} ${included.lib.file.reference.swing-worker-1.1.jar} ${included.lib.reference.SwingB.jar} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.appframework-1.0.3.jar} ${included.lib.libs.junit_4.classpath} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.AcaciaBusinessAce-ejb.dist} ${included.lib.reference.AcaciaBusinessLogic.dist} ${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.reference.AcaciaBeansBinding.jar} ${included.lib.file.reference.swingx-2008_01_20.jar} ${included.lib.file.reference.swing-worker-1.1.jar} ${included.lib.reference.SwingB.jar} ${included.lib.file.reference.beansbinding.jar} ${included.lib.file.reference.appframework-1.0.3.jar} ${included.lib.libs.junit_4.classpath} ${included.lib.file.reference.log4j-1.2.11.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
