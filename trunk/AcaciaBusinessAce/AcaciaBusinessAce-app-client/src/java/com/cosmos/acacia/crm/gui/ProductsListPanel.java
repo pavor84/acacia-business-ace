@@ -27,6 +27,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.swingx.JXTable.TableSearchable;
 
 /**
  *
@@ -90,7 +91,6 @@ public class ProductsListPanel
 
         productsBindingGroup.bind();
 
-        productsTable.setEditable(true);
     }
     
     protected boolean deleteRow(Object rowObject)

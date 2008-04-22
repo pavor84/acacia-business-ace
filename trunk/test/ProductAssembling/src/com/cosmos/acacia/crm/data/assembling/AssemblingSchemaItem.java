@@ -49,15 +49,11 @@ public class AssemblingSchemaItem
     @Column(name = "data_type")
     private String dataType;
 
-    @Column(name = "min_constraint")
-    private Serializable minConstraint;
+    @Column(name = "min_selections")
+    private Integer minSelections;
 
-    @Column(name = "max_constraint")
-    private Serializable maxConstraint;
-
-    @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
-    @ManyToOne
-    private VirtualProduct virtualProduct;
+    @Column(name = "max_selections")
+    private Integer maxSelections;
 
     @Column(name = "quantity", nullable = false)
     private BigDecimal quantity;
@@ -92,20 +88,20 @@ public class AssemblingSchemaItem
         this.dataType = dataType;
     }
 
-    public Object getMinConstraint() {
-        return minConstraint;
+    public Integer getMinSelections() {
+        return minSelections;
     }
 
-    public void setMinConstraint(Serializable minConstraint) {
-        this.minConstraint = minConstraint;
+    public void setMinSelections(Integer minSelections) {
+        this.minSelections = minSelections;
     }
 
-    public Object getMaxConstraint() {
-        return maxConstraint;
+    public Integer getMaxSelections() {
+        return maxSelections;
     }
 
-    public void setMaxConstraint(Serializable maxConstraint) {
-        this.maxConstraint = maxConstraint;
+    public void setMaxSelections(Integer maxSelections) {
+        this.maxSelections = maxSelections;
     }
 
     public BigDecimal getQuantity() {
@@ -146,14 +142,6 @@ public class AssemblingSchemaItem
 
     public void setAssemblingSchema(AssemblingSchema assemblingSchema) {
         this.assemblingSchema = assemblingSchema;
-    }
-
-    public VirtualProduct getVirtualProduct() {
-        return virtualProduct;
-    }
-
-    public void setVirtualProduct(VirtualProduct virtualProduct) {
-        this.virtualProduct = virtualProduct;
     }
 
 

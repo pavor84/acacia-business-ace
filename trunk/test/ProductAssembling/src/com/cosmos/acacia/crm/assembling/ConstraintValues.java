@@ -16,37 +16,37 @@ public class ConstraintValues
 {
     public static final ConstraintValues EMPTY_CONSTRAINT_VALUES = new ConstraintValues();
 
-    private Object minConstraint;
-    private Object maxConstraint;
+    private Comparable minConstraint;
+    private Comparable maxConstraint;
 
     private ConstraintValues()
     {
     }
 
-    public ConstraintValues(Object minConstraint)
+    public ConstraintValues(Comparable minConstraint)
     {
         this(minConstraint, minConstraint);
     }
 
-    public ConstraintValues(Object minConstraint, Object maxConstraint)
+    public ConstraintValues(Comparable minConstraint, Comparable maxConstraint)
     {
         this.minConstraint = minConstraint;
         this.maxConstraint = maxConstraint;
     }
 
-    public Object getMaxConstraint() {
+    public Comparable getMaxConstraint() {
         return maxConstraint;
     }
 
-    public void setMaxConstraint(Object maxConstraint) {
+    public void setMaxConstraint(Comparable maxConstraint) {
         this.maxConstraint = maxConstraint;
     }
 
-    public Object getMinConstraint() {
+    public Comparable getMinConstraint() {
         return minConstraint;
     }
 
-    public void setMinConstraint(Object minConstraint) {
+    public void setMinConstraint(Comparable minConstraint) {
         this.minConstraint = minConstraint;
     }
 
