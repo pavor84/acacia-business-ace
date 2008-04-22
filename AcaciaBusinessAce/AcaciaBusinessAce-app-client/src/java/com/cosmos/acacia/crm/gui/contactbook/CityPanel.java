@@ -12,6 +12,8 @@ import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -20,6 +22,8 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Bozhidar Bozhanov
  */
 public class CityPanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(CityPanel.class);
 
     /** Creates new form CityPanel */
     public CityPanel(City city) {
@@ -33,7 +37,7 @@ public class CityPanel extends BaseEntityPanel {
         super(null);
         init();
     }
-    
+
     @Override
     protected void init()
     {
@@ -209,17 +213,17 @@ public class CityPanel extends BaseEntityPanel {
     private BindingGroup cityBindingGroup;
     private City city;
     private ContactPerson contactPerson;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
 
-        System.out.println("initData().city: " + city);
+        log.info("initData().city: " + city);
         if(city == null)
         {
             city = getFormSession().newCity();
         }
-        
+
         cityBindingGroup = new BindingGroup();
 
         EntityProperties entityProps = getCityEntityProperties();
@@ -230,7 +234,7 @@ public class CityPanel extends BaseEntityPanel {
         phoneCodeTextField.bind(cityBindingGroup, city, entityProps.getPropertyDetails("cityPhoneCode"));
         postalCodeTextField.bind(cityBindingGroup, city, entityProps.getPropertyDetails("postalCode"));
         descriptionTextPane.bind(cityBindingGroup, city, entityProps.getPropertyDetails("description"));
-        
+
         cityBindingGroup.bind();
     }
 
@@ -270,7 +274,7 @@ public class CityPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: city: " + city);
+        log.info("Save: city: " + city);
         city = getFormSession().saveCity(city);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(city);
@@ -287,7 +291,7 @@ public class CityPanel extends BaseEntityPanel {
     public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
-    
+
     public List<Country> getCountries()
     {
         return getFormSession().getCountries();

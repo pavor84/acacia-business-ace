@@ -6,27 +6,31 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.listeners.TableModificationListener;
 import java.awt.Component;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
+
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
  *
@@ -35,15 +39,18 @@ import org.jdesktop.application.Task;
 public abstract class AbstractTablePanel
     extends AcaciaPanel
 {
+
+    protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
+
     /** Creates new form AbstractTablePanel */
     public AbstractTablePanel(DataObject parentDataObject) {
         super(parentDataObject);
         initComponents();
         initData();
     }
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -154,8 +161,8 @@ public abstract class AbstractTablePanel
                 .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonsPanel;
     private com.cosmos.swingb.JBButton closeButton;
@@ -168,12 +175,12 @@ public abstract class AbstractTablePanel
     private com.cosmos.swingb.JBButton selectButton;
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
-    
+
 
     private Object selectedRowObject;
     private TableSelectionListener tableSelectionListener;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
-    
+
     protected void initData()
     {
         setVisible(Button.Select, false);
@@ -215,8 +222,8 @@ public abstract class AbstractTablePanel
      * Custom display is EL expression string
      * @param propertyDetails
      * @param propertyName
-     * @param customDisplay - provide valid EL expression string. 
-     * Otherwise no fail-fast in this method. Will fail when compiled. 
+     * @param customDisplay - provide valid EL expression string.
+     * Otherwise no fail-fast in this method. Will fail when compiled.
      */
     public void setCustomDisplay(List<PropertyDetails> propertyDetails, String propertyName, String customDisplay) {
         for (PropertyDetails pd : propertyDetails) {
@@ -226,14 +233,14 @@ public abstract class AbstractTablePanel
             }
         }
     }
-    
+
     public AcaciaTable getDataTable()
     {
         return dataTable;
     }
 
     /**
-     * 
+     *
      * @param rowObject
      * @return true if the object is delete
      */
@@ -242,15 +249,15 @@ public abstract class AbstractTablePanel
     /**
      * rowObject is the object which have to be modified.
      * The object is not modified if return null. Othervise return the new Object.
-     * 
+     *
      * @param rowObject
      * @return newRowObject
      */
     protected abstract Object modifyRow(Object rowObject);
 
-    
+
     /**
-     * 
+     *
      * @return
      */
     protected abstract Object newRow();
@@ -292,7 +299,7 @@ public abstract class AbstractTablePanel
         }
     }
 
-    public void setVisible(Button button, boolean visible) {       
+    public void setVisible(Button button, boolean visible) {
         switch(button)
         {
             case Select:
@@ -357,7 +364,7 @@ public abstract class AbstractTablePanel
      * Sets the visible buttons:
      * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32, Unselect=64
      * Sum the buttons you want to show and pass the result to the method
-     * 
+     *
      * @param visibleButtons
      */
     public void setVisibleButtons(int visibleButtons){
@@ -369,27 +376,27 @@ public abstract class AbstractTablePanel
                 setVisible(bv.getButton(), false);
         }
     }
-    
+
     /*public void setButtonsTextVisibility(boolean visible){
         selectButton.setToolTipText(selectButton.getText());
         selectButton.setText("");
-        
+
         newButton.setToolTipText(newButton.getText());
         newButton.setText("");
-        
+
         modifyButton.setToolTipText(modifyButton.getText());
         modifyButton.setText("");
-        
+
         deleteButton.setToolTipText(deleteButton.getText());
         deleteButton.setText("");
-        
+
         refreshButton.setToolTipText(refreshButton.getText());
         refreshButton.setText("");
-        
+
         closeButton.setToolTipText(closeButton.getText());
         closeButton.setText("");
     }*/
-    
+
     @Action
     public void selectAction() {
         selectedRowObject = dataTable.getSelectedRowObject();
@@ -421,7 +428,7 @@ public abstract class AbstractTablePanel
             {
                 rowObject = ((DataObjectBean)rowObject).clone();
             }
-            
+
             Object newRowObject = modifyRow(rowObject);
             if(newRowObject != null)
             {
@@ -460,7 +467,7 @@ public abstract class AbstractTablePanel
 
     @Action
     public Task refreshAction() {
-        System.out.println("refreshAction");
+        log.info("refreshAction");
         return new RefreshActionTask(getApplication());
     }
 
@@ -485,7 +492,7 @@ public abstract class AbstractTablePanel
         return super.showDialog(parentComponent);
     }
 
-    
+
 
 
 
@@ -525,7 +532,7 @@ public abstract class AbstractTablePanel
         Refresh(16, Button.Refresh),
         Close(32, Button.Close),
         Unselect(64, Button.Unselect);
-        
+
         ButtonVisibility(int visibilityIndex, Button button)
         {
             this.visibilityIndex = visibilityIndex;
@@ -533,18 +540,18 @@ public abstract class AbstractTablePanel
         }
         private int visibilityIndex;
         private Button button;
-        
+
         public int getVisibilityIndex()
         {
             return visibilityIndex;
         }
-        
+
         public Button getButton()
         {
             return button;
         }
     }
-    
+
     public class TableSelectionListener
         implements ListSelectionListener
     {
@@ -590,25 +597,25 @@ public abstract class AbstractTablePanel
             // doInBackground() depends on from parameters
             // to RefreshActionTask fields, here.
             super(app);
-            System.out.println("RefreshActionTask()");
+            log.info("RefreshActionTask()");
         }
 
         @Override
         protected Object doInBackground()
         {
-            System.out.println("doInBackground().begin");
+            log.info("doInBackground().begin");
             // Your Task's code here.  This method runs
             // on a background thread, so don't reference
             // the Swing GUI from here.
             Object result = null;
-            System.out.println("doInBackground().end: " + result);
+            log.info("doInBackground().end: " + result);
             return result;  // return your result
         }
 
         @Override
         protected void succeeded(Object result)
         {
-            System.out.println("succeeded(Result:" + result + ")");
+            log.info("succeeded(Result:" + result + ")");
             // Runs on the EDT.  Update the GUI based on
             // the result computed by doInBackground().
         }
@@ -619,33 +626,33 @@ public abstract class AbstractTablePanel
     {
         tableModificationListeners.add(listener);
     }
-    
+
     public Set<TableModificationListener> getTableModificationListeners()
     {
         return tableModificationListeners;
     }
-    
+
     protected void fireAdd(Object row)
     {
-        System.out.println("fireAdd called with " + row);
+        log.info("fireAdd called with " + row);
         for (TableModificationListener listener: tableModificationListeners)
         {
             listener.rowAdded(row);
         }
     }
-    
+
     protected void fireModify(Object row)
     {
-        System.out.println("fireModify called with " + row);
+        log.info("fireModify called with " + row);
         for (TableModificationListener listener: tableModificationListeners)
         {
             listener.rowModified(row);
         }
     }
-    
+
     protected void fireDelete(Object row)
     {
-        System.out.println("fireDelete called with " + row);
+        log.info("fireDelete called with " + row);
         for (TableModificationListener listener: tableModificationListeners)
         {
             listener.rowDeleted(row);

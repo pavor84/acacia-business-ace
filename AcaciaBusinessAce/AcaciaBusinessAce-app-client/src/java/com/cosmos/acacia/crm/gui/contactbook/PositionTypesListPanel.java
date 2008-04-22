@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -29,6 +30,8 @@ import org.jdesktop.application.Action;
  */
 public class PositionTypesListPanel extends AbstractTablePanel {
 
+    protected static Logger log = Logger.getLogger(PositionTypesListPanel.class);
+
     /** Creates new form AddresssListPanel */
     public PositionTypesListPanel(DataObject parentDataObject)
     {
@@ -47,15 +50,15 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         this.ownerClass = ownerClass;
         postInitData();
     }
-    
+
     @EJB
     private PositionTypesListRemote formSession;
 
     private BindingGroup positionTypesBindingGroup;
     private List<PositionType> positionTypes;
     private ContactPerson contactPerson;
-    private Class ownerClass;         
-    
+    private Class ownerClass;
+
     @Override
     protected void initData(){
 
@@ -72,7 +75,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
          try {
             JTableBinding tableBinding = positionTypesTable.bind(positionTypesBindingGroup, getPositionTypes(), getPositionTypeEntityProperties());
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            log.error(ex.getMessage());
         }
         positionTypesTable.setEditable(false);
     }
@@ -120,14 +123,14 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     public void setContactPerson(ContactPerson contactPerson) {
         this.contactPerson = contactPerson;
     }
-    
+
     @Override
     @Action
     public void selectAction(){
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -143,7 +146,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            PositionTypePanel positionTypePanel = 
+            PositionTypePanel positionTypePanel =
                     new PositionTypePanel((PositionType) rowObject, ownerClass);
             DialogResponse response = positionTypePanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
@@ -151,7 +154,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
                 return positionTypePanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -159,7 +162,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     protected Object newRow() {
         PositionTypePanel positionTypePanel = new PositionTypePanel(getParentDataObject(),
                     ownerClass);
-        
+
         DialogResponse response = positionTypePanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -167,7 +170,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         }
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

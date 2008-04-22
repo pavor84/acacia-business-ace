@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.gui;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
@@ -14,18 +15,22 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 
+import com.cosmos.acacia.crm.gui.contactbook.CityPanel;
+
 /**
  *
  * @author  Bozhidar Bozhanov
  */
 public class EntityFormButtonPanel extends AcaciaPanel {
-    
+
+    protected static Logger log = Logger.getLogger(EntityFormButtonPanel.class);
+
     /** Creates new form EntityFormButtonPanel */
     public EntityFormButtonPanel() {
         super();
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -74,15 +79,15 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBButton problemsButton;
     private com.cosmos.swingb.JBButton saveButton;
     // End of variables declaration//GEN-END:variables
-    
-    
+
+
       @Action
     public void saveAction()
     {
@@ -92,30 +97,30 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 parent.saveAction();
             }
         } catch (ClassCastException ex) {
-            System.out.println("Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            log.info("saveAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
-    
+
     @Action
     public void closeAction()
     {
         try {
             ((BaseEntityPanel) getParent()).closeAction();
         } catch (ClassCastException ex) {
-            System.out.println("Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            log.info("closeAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
-    
+
     @Action
     public void problemsAction()
     {
         try {
             ((BaseEntityPanel) getParent()).checkFormValidity();
         } catch (ClassCastException ex) {
-            System.out.println("Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            log.info("problemsAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
-    
+
     public void initSaveStateListener()
     {
         try {
@@ -136,10 +141,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 });
             }
         } catch (ClassCastException ex) {
-            System.out.println("Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            log.error("initSaveStateListener: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
- 
+
     protected void setSaveActionState(BaseEntityPanel parent)
     {
         BindingGroup bindingGroup;
@@ -149,8 +154,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             setEnabled(Button.Problems, !bindingGroup.isContentValid());
         }
     }
-    
-    
+
+
     public enum Button
     {
         Save("saveAction"),
@@ -197,7 +202,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         }
     }
 
-    public void setVisible(Button button, boolean visible) {       
+    public void setVisible(Button button, boolean visible) {
         switch(button)
         {
             case Save:
@@ -225,6 +230,6 @@ public class EntityFormButtonPanel extends AcaciaPanel {
 
     @Override
     protected void initData() {
-       
+
     }
 }

@@ -10,6 +10,8 @@ import com.cosmos.swingb.DialogResponse;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -18,6 +20,8 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Bozhidar Bozhanov
  */
 public class PositionTypePanel extends BaseEntityPanel {
+
+    protected static Logger log = Logger.getLogger(PositionTypePanel.class);
 
     /** Creates new form PositionTypePanel */
     public PositionTypePanel(PositionType positionType, Class ownerClass) {
@@ -33,7 +37,7 @@ public class PositionTypePanel extends BaseEntityPanel {
         this.ownerClass = ownerClass;
         init();
     }
-    
+
     @Override
     protected void init()
     {
@@ -136,12 +140,12 @@ public class PositionTypePanel extends BaseEntityPanel {
     private BindingGroup positionTypeBindingGroup;
     private PositionType positionType;
     private Class ownerClass;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
 
-        System.out.println("initData().positionType: " + positionType);
+        log.info("initData().positionType: " + positionType);
         if(positionType == null)
         {
             positionType = getFormSession().newPositionType();
@@ -151,9 +155,9 @@ public class PositionTypePanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getPositionTypeEntityProperties();
 
-        nameTextField.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("positionTypeName"));   
+        nameTextField.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("positionTypeName"));
         descriptionTextPane.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("description"));
-        
+
         positionTypeBindingGroup.bind();
     }
 
@@ -194,7 +198,7 @@ public class PositionTypePanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("Save: positionType: " + positionType);
+        log.info("Save: positionType: " + positionType);
         positionType = getFormSession().savePositionType(positionType, ownerClass);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(positionType);
