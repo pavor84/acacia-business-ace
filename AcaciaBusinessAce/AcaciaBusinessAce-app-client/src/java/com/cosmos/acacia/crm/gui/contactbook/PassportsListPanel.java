@@ -127,15 +127,16 @@ public class PassportsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-
-        PassportPanel passportPanel = new PassportPanel(getParentDataObject());
-
-        DialogResponse response = passportPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
+        if (canNestedOperationProceed())
         {
-            return passportPanel.getSelectedValue();
-        }
+            PassportPanel passportPanel = new PassportPanel(getParentDataObject());
 
+            DialogResponse response = passportPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return passportPanel.getSelectedValue();
+            }
+        }
         return null;
     }
 

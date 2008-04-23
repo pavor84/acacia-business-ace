@@ -127,15 +127,16 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        
-        ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObject());
-        
-        DialogResponse response = contactPersonPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
+        if (canNestedOperationProceed())
         {
-            return contactPersonPanel.getSelectedValue();
+            ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObject());
+
+            DialogResponse response = contactPersonPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return contactPersonPanel.getSelectedValue();
+            }
         }
-        
         return null;
     }
     

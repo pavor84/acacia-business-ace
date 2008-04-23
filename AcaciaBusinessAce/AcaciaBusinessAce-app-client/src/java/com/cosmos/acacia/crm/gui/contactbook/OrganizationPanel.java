@@ -410,7 +410,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     @Override
     protected void initData() {
         setResizable(false);
-        System.out.println("initData().organization: " + organization);
+        log.info("initData().organization: " + organization);
 
         if(organization == null)
         {
