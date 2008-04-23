@@ -127,13 +127,15 @@ public class BankDetailsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        
-        BankDetailPanel bankDetailPanel = new BankDetailPanel(getParentDataObject());
-        
-        DialogResponse response = bankDetailPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
+        if (canNestedOperationProceed())
         {
-            return bankDetailPanel.getSelectedValue();
+            BankDetailPanel bankDetailPanel = new BankDetailPanel(getParentDataObject());
+
+            DialogResponse response = bankDetailPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return bankDetailPanel.getSelectedValue();
+            }
         }
         
         return null;
