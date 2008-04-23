@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -21,7 +22,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "assembling_categories")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "AssemblingCategory.findByCategoryCode",
+                query = "select ac from AssemblingCategory ac where ac.categoryCode = :categoryCode"
+            )
+    })
 public class AssemblingCategory
     implements Serializable
 {

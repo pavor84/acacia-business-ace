@@ -27,30 +27,34 @@ public class ProductTest
 {
     private final static Logger logger = Logger.getLogger(ProductTest.class.getName());
 
-    private EntityManagerFactory emf;
+    private static EntityManagerFactory emf;
     private EntityManager em;
     
     public ProductTest() {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClass()
+        throws Exception
+    {
+        emf = Persistence.createEntityManagerFactory("ProductAssemblingPU");
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass()
+        throws Exception
+    {
+        emf.close();
     }
 
     @Before
     public void setUp() {
-        emf = Persistence.createEntityManagerFactory("ProductAssemblingPU");
         em = emf.createEntityManager();
     }
 
     @After
     public void tearDown() {
         em.close();
-        emf.close();
     }
 
     @Test
