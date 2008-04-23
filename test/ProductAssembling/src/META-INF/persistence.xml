@@ -14,12 +14,6 @@
     <class>com.cosmos.acacia.crm.data.assembling.VirtualProduct</class>
     <class>com.cosmos.acacia.crm.data.assembling.RealProduct</class>
     <class>com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem</class>
-    <class>com.cosmos.acacia.crm.data.test.TestTable</class>
-    <class>com.cosmos.acacia.crm.data.assembling.test.AssemblingCategory</class>
-    <class>com.cosmos.acacia.crm.data.assembling.test.AssemblingSchema</class>
-    <class>com.cosmos.acacia.crm.data.assembling.test.AssemblingAlgorithm</class>
-    <class>com.cosmos.acacia.crm.data.assembling.test.AssemblingSchemaItem</class>
-    <class>com.cosmos.acacia.crm.data.assembling.test.VirtualProduct</class>
     <class>com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue</class>
     <properties>
       <property name="hibernate.show_sql" value="true"/>

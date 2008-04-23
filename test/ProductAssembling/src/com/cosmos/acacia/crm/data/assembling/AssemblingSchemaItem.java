@@ -7,12 +7,15 @@ package com.cosmos.acacia.crm.data.assembling;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -37,7 +40,7 @@ public class AssemblingSchemaItem
 
     @JoinColumn(name = "algorithm_id", referencedColumnName = "algorithm_id")
     @ManyToOne
-    private AssemblingAlgorithm algorithm;
+    private AssemblingAlgorithm assemblingAlgorithm;
 
     /**
      * Data Type:
@@ -63,6 +66,9 @@ public class AssemblingSchemaItem
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "assemblingSchemaItem")
+    private List<AssemblingSchemaItemValue> itemValues;
 
 
     public AssemblingSchemaItem() {
@@ -129,11 +135,11 @@ public class AssemblingSchemaItem
     }
 
     public AssemblingAlgorithm getAssemblingAlgorithm() {
-        return algorithm;
+        return assemblingAlgorithm;
     }
 
-    public void setAssemblingAlgorithm(AssemblingAlgorithm algorithm) {
-        this.algorithm = algorithm;
+    public void setAssemblingAlgorithm(AssemblingAlgorithm assemblingAlgorithm) {
+        this.assemblingAlgorithm = assemblingAlgorithm;
     }
 
     public AssemblingSchema getAssemblingSchema() {
@@ -142,6 +148,14 @@ public class AssemblingSchemaItem
 
     public void setAssemblingSchema(AssemblingSchema assemblingSchema) {
         this.assemblingSchema = assemblingSchema;
+    }
+
+    public List<AssemblingSchemaItemValue> getItemValues() {
+        return itemValues;
+    }
+
+    public void setItemValues(List<AssemblingSchemaItemValue> itemValues) {
+        this.itemValues = itemValues;
     }
 
 
