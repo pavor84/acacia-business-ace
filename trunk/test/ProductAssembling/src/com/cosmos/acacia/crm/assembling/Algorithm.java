@@ -86,6 +86,18 @@ public class Algorithm
 
         EqualsMultipleSelection;
 
+
+        private int algorithmId;
+
+        public int getAlgorithmId() {
+            return algorithmId;
+        }
+
+        public void setAlgorithmId(int algorithmId) {
+            this.algorithmId = algorithmId;
+        }
+
+
         public final static Set RangeAlgorithms = 
                 EnumSet.of(RangeSelection, RangeSingleSelection, RangeMultipleSelection);
 

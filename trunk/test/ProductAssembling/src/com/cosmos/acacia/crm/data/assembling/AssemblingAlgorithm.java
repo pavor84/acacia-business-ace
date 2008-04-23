@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -21,7 +22,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "assembling_algorithms")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "AssemblingAlgorithm.findByAlgorithmCode",
+                query = "select aa from AssemblingAlgorithm aa where aa.algorithmCode = :algorithmCode"
+            )
+    })
 public class AssemblingAlgorithm
     implements Serializable
 {
