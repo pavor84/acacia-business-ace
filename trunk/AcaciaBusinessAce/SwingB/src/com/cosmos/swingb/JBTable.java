@@ -515,12 +515,7 @@ public class JBTable
 
     @Override
     public TableCellRenderer getDefaultRenderer(Class<?> columnClass) {
-        String className;
-        if(columnClass != null)
-            className = columnClass.getName();
-        else
-            className = null;
-        System.out.println("className: " + className);
+
         if(columnClass != null && "com.cosmos.acacia.crm.data.DbResource".equals(columnClass.getName()))
         {
             return getBeanResourceCellRenderer();

@@ -6,7 +6,6 @@
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
 import com.cosmos.acacia.crm.bl.impl.*;
-import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import java.util.ArrayList;

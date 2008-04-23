@@ -40,8 +40,9 @@ public class PositionTypesListPanel extends AbstractTablePanel {
             this.ownerClass = Class.forName(
                 parentDataObject.getDataObjectType().getDataObjectType());
         } catch (Exception ex) {
-            // Ignore
+            log.error("constructor", ex);
         }
+        postInitData();
     }
 
     public PositionTypesListPanel(Class ownerClass)
