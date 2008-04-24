@@ -5,14 +5,20 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -25,39 +31,49 @@ import javax.persistence.Table;
 	{
 		@NamedQuery
          	(
-         		name = "Country.findAll",
+         		name = "Country.fetchAll",
          		query = "from Country "
          	)
 	}
 )
-public class Country implements Serializable {
+public class Country implements TextResource, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @SequenceGenerator(name="CountrySequenceGenerator", sequenceName="countries_seq", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CountrySequenceGenerator")
     @Column(name = "country_id", nullable = false)
+    @Property(title="Country Id", editable=false, readOnly=true, visible=false, hidden=true)
     private Integer countryId;
 
     @Column(name = "country_name", nullable = false)
+    @Property(title = "Name")
     private String countryName;
 
     @Column(name = "country_code_a2")
+    @Property(title = "Country Code (A2)")
     private String countryCodeA2;
 
     @Column(name = "country_code_a3")
+    @Property(title = "Country Code (A3)")
     private String countryCodeA3;
 
     @Column(name = "country_code_n3")
+    @Property(title = "Country Code (N3)")
     private String countryCodeN3;
 
     @Column(name = "country_phone_code")
+    @Property(title = "Phone Code")
     private String countryPhoneCode;
 
-    @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
+    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    private Currency currency;
+    @Property(title = "Currency", resourceDisplayInTable=ResourceDisplay.ShortName)
+    private DbResource currency;
 
     @Column(name = "description")
+    @Property(title = "Description")
     private String description;
 
 
@@ -129,11 +145,11 @@ public class Country implements Serializable {
         this.description = description;
     }
 
-    public Currency getCurrency() {
+    public DbResource getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currencyId) {
+    public void setCurrency(DbResource currencyId) {
         this.currency = currencyId;
     }
 
@@ -161,6 +177,14 @@ public class Country implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Country[countryId=" + countryId + "]";
+    }
+
+    public String toShortText() {
+        return getCountryName();
+    }
+
+    public String toText() {
+        return null;
     }
 
 }

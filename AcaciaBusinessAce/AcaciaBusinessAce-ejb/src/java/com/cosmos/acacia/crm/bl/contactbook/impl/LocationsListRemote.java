@@ -13,6 +13,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -24,6 +25,8 @@ import com.cosmos.beansbinding.EntityProperties;
 @Remote
 public interface LocationsListRemote {
 
+    List<DbResource> getCurrencies();
+    
     // Methods for handling countries
     List<Country> getCountries();
 

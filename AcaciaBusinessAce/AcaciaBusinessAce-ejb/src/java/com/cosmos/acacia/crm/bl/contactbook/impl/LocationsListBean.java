@@ -21,6 +21,7 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -37,10 +38,13 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     @EJB
     private EntityStoreManagerLocal esm;
 
+    @EJB
+    private BankDetailsListLocal bankDetailsManager;
+        
     public List<Country> getCountries()
     {
 
-        Query q = em.createNamedQuery("Country.findAll");
+        Query q = em.createNamedQuery("Country.fetchAll");
 
         return new ArrayList<Country>(q.getResultList());
     }
@@ -67,7 +71,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public List<City> getCities() {
-    	Query q = em.createNamedQuery("Country.findAll");
+    	Query q = em.createNamedQuery("City.fetchAll");
 
         return new ArrayList<City>(q.getResultList());
     }
@@ -123,5 +127,9 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     public int deleteAddress(Address address) {
         return esm.remove(em, address);
+    }
+    
+    public List<DbResource> getCurrencies() {
+        return bankDetailsManager.getCurrencies();
     }
 }

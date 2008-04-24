@@ -42,6 +42,9 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     @EJB
     private LocationsListLocal locationsManager;
+    
+    @EJB
+    private BankDetailsListLocal bankDetailsManager;
 
     public List<Organization> getOrganizations(DataObject parent)
     {
@@ -62,7 +65,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     public List<DbResource> getCurrencies()
     {
-        return Currency.getDbResources();
+        return bankDetailsManager.getCurrencies();
     }
 
     public EntityProperties getOrganizationEntityProperties()

@@ -6,7 +6,6 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.resource.EnumResource;
-import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -118,44 +117,6 @@ public class DbResource
         {
             Class enumClass = Class.forName(getEnumClass().getEnumClassName());
             return Enum.valueOf(enumClass, getEnumName());
-        }
-        catch(Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
-    }
-    
-    public String getText()
-    {
-        try
-        {
-            Class enumClass = Class.forName(getEnumClass().getEnumClassName());
-            Enum e = Enum.valueOf(enumClass, getEnumName());
-            return ((TextResource) e).toText();
-        }
-        catch (ClassCastException ex)
-        {
-            System.out.println("Enum class should implement TextResource for controlled display behaviour");
-            return getEnumValue().toString();
-        }
-        catch(Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
-    }
-    
-    public String getShortText()
-    {
-        try
-        {
-            Class enumClass = Class.forName(getEnumClass().getEnumClassName());
-            Enum e = Enum.valueOf(enumClass, getEnumName());
-            return ((TextResource) e).toShortText();
-        }
-        catch (ClassCastException ex)
-        {
-            System.out.println("Enum class should implement TextResource for controlled display behaviour");
-            return getEnumValue().toString();
         }
         catch(Exception ex)
         {
