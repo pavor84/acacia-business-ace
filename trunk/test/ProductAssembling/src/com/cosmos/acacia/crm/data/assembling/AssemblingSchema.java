@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -21,7 +22,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "assembling_schemas")
 @DiscriminatorValue(value="AS")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "AssemblingSchema.findBySchemaCode",
+                query = "select t1 from AssemblingSchema t1 where t1.schemaCode = :schemaCode"
+            )
+    })
 public class AssemblingSchema
     extends VirtualProduct
     implements Serializable

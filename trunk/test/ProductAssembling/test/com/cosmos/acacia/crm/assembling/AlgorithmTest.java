@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.assembling;
 
 import com.cosmos.acacia.crm.data.assembling.AssemblingAlgorithm;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -32,6 +33,8 @@ public class AlgorithmTest
     private EntityManager em;
 
     private static final String categoryCode = "Test Assembling Category";
+
+    private static final String schemaCode01 = "Test Schema Code 01";
 
 
     public AlgorithmTest()
@@ -91,6 +94,23 @@ public class AlgorithmTest
             }
             em.getTransaction().commit();
 
+            AssemblingSchema aSchema01;
+            em.getTransaction().begin();
+            q = em.createNamedQuery("AssemblingSchema.findBySchemaCode");
+            q.setParameter("schemaCode", schemaCode01);
+            try
+            {
+                aSchema01 = (AssemblingSchema)q.getSingleResult();
+            }
+            catch(NoResultException ex)
+            {
+                aSchema01 = new AssemblingSchema();
+                aSchema01.setSchemaCode(schemaCode01);
+                aSchema01.setSchemaName(schemaCode01);
+                aSchema01.setAssemblingCategory(aCategory);
+                em.persist(aSchema01);
+            }
+            em.getTransaction().commit();
         }
         finally
         {
