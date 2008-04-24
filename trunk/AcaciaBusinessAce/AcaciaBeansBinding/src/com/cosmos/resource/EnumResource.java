@@ -11,6 +11,4 @@ package com.cosmos.resource;
  */
 public interface EnumResource {
     Enum getEnumValue();
-    String getText();
-    String getShortText();
 }
