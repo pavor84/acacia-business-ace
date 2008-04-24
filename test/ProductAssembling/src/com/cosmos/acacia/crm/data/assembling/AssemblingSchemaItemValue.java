@@ -9,10 +9,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -28,6 +31,13 @@ public class AssemblingSchemaItemValue
     private static final long serialVersionUID = 1L;
 
     @Id
+    @SequenceGenerator(
+        name="AssemblingSchemaItemValuesSequenceGenerator",
+        sequenceName="assembling_schema_item_values_seq",
+        allocationSize=1)
+    @GeneratedValue(
+        strategy=GenerationType.SEQUENCE,
+        generator="AssemblingSchemaItemValuesSequenceGenerator")
     @Column(name = "item_value_id", nullable = false)
     private Long itemValueId;
 
@@ -48,7 +58,7 @@ public class AssemblingSchemaItemValue
     private VirtualProduct virtualProduct;
 
     @Column(name = "quantity", nullable = false)
-    private BigDecimal quantity;
+    private BigDecimal quantity = BigDecimal.ONE;
 
 
     public AssemblingSchemaItemValue() {
