@@ -53,7 +53,7 @@ public class City
         
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
-    @Property(title="Country")
+    @Property(title="Country", customDisplay="${country.countryName}")
     private Country country;
 
     @Column(name = "postal_code")

@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.gui;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
@@ -255,7 +256,14 @@ public class AcaciaApplicationView extends FrameView {
     	CitiesListPanel citiesListPanel = new CitiesListPanel();
     	citiesListPanel.showFrame();
     }
-        
+     
+          
+    @Action
+    public void countriesListAction(){
+    	System.out.println("cointriesList");
+    	CountriesListPanel countriesListPanel = new CountriesListPanel();
+    	countriesListPanel.showFrame();
+    }
 
     @Action
     public void classifierGroupsAction()

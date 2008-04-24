@@ -212,7 +212,6 @@ public class CityPanel extends BaseEntityPanel {
 
     private BindingGroup cityBindingGroup;
     private City city;
-    private ContactPerson contactPerson;
 
     @Override
     protected void initData() {
