@@ -11,11 +11,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -24,13 +28,32 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "assembling_schema_items")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "AssemblingSchemaItem.findByMessageCode",
+                query = "select t1 from AssemblingSchemaItem t1 where t1.messageCode = :messageCode"
+            ),
+        @NamedQuery
+            (
+                name = "AssemblingSchemaItem.findByAssemblingSchema",
+                query = "select t1 from AssemblingSchemaItem t1 where t1.assemblingSchema = :assemblingSchema"
+            )
+    })
 public class AssemblingSchemaItem
     implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @SequenceGenerator(
+        name="AssemblingSchemaItemsSequenceGenerator",
+        sequenceName="assembling_schema_items_seq",
+        allocationSize=1)
+    @GeneratedValue(
+        strategy=GenerationType.SEQUENCE,
+        generator="AssemblingSchemaItemsSequenceGenerator")
     @Column(name = "item_id", nullable = false)
     private Long itemId;
 
@@ -41,6 +64,12 @@ public class AssemblingSchemaItem
     @JoinColumn(name = "algorithm_id", referencedColumnName = "algorithm_id")
     @ManyToOne
     private AssemblingAlgorithm assemblingAlgorithm;
+
+    @Column(name = "message_code", nullable = false)
+    private String messageCode;
+
+    @Column(name = "message_text", nullable = false)
+    private String messageText;
 
     /**
      * Data Type:
@@ -59,7 +88,7 @@ public class AssemblingSchemaItem
     private Integer maxSelections;
 
     @Column(name = "quantity", nullable = false)
-    private BigDecimal quantity;
+    private BigDecimal quantity = BigDecimal.ONE;
 
     @Column(name = "default_value")
     private Serializable defaultValue;
@@ -92,6 +121,22 @@ public class AssemblingSchemaItem
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
+    }
+
+    public String getMessageCode() {
+        return messageCode;
+    }
+
+    public void setMessageCode(String messageCode) {
+        this.messageCode = messageCode;
+    }
+
+    public String getMessageText() {
+        return messageText;
+    }
+
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
     public Integer getMinSelections() {

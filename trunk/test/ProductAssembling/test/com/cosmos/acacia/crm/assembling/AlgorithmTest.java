@@ -8,6 +8,8 @@ package com.cosmos.acacia.crm.assembling;
 import com.cosmos.acacia.crm.data.assembling.AssemblingAlgorithm;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -36,6 +38,16 @@ public class AlgorithmTest
 
     private static final String schemaCode01 = "Test Schema Code 01";
 
+    private static final String unconditionalSelection = "UnconditionalSelection";
+    private static final String userSelection = "UserSelection";
+    private static final String userSingleSelection = "UserSingleSelection";
+    private static final String userMultipleSelection = "UserMultipleSelection";
+    private static final String rangeSelection = "RangeSelection";
+    private static final String rangeSingleSelection = "RangeSingleSelection";
+    private static final String rangeMultipleSelection = "RangeMultipleSelection";
+    private static final String equalsSelection = "EqualsSelection";
+    private static final String equalsSingleSelection = "EqualsSingleSelection";
+    private static final String equalsMultipleSelection = "EqualsMultipleSelection";
 
     public AlgorithmTest()
     {
@@ -110,6 +122,36 @@ public class AlgorithmTest
                 aSchema01.setAssemblingCategory(aCategory);
                 em.persist(aSchema01);
             }
+            em.getTransaction().commit();
+
+            AssemblingSchemaItem schemaItem;
+            AssemblingSchemaItemValue itemValue;
+            em.getTransaction().begin();
+            q = em.createNamedQuery("AssemblingSchemaItem.findByMessageCode");
+
+            q.setParameter("schemaCode", unconditionalSelection);
+            try
+            {
+                schemaItem = (AssemblingSchemaItem)q.getSingleResult();
+            }
+            catch(NoResultException ex)
+            {
+                schemaItem = new AssemblingSchemaItem();
+                schemaItem.setAssemblingSchema(aSchema01);
+                aAlgorithm = em.find(AssemblingAlgorithm.class, Algorithm.Type.UnconditionalSelection.getAlgorithmId());
+                schemaItem.setAssemblingAlgorithm(aAlgorithm);
+                schemaItem.setDataType("Integer");
+                schemaItem.setMessageCode(unconditionalSelection);
+                schemaItem.setMessageText(unconditionalSelection);
+
+                itemValue = new AssemblingSchemaItemValue();
+                itemValue.setAssemblingSchemaItem(schemaItem);
+                //itemValue.setVirtualProduct();
+
+                em.persist(schemaItem);
+            }
+
+
             em.getTransaction().commit();
         }
         finally
