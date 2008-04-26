@@ -55,4 +55,9 @@ public class ConstraintValues
         return minConstraint == null && maxConstraint == null;
     }
 
+    @Override
+    public String toString()
+    {
+        return "ConstraintValues[" + minConstraint + ", " + maxConstraint + "]";
+    }
 }

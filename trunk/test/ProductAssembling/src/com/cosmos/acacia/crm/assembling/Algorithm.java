@@ -5,9 +5,11 @@
 
 package com.cosmos.acacia.crm.assembling;
 
-import com.cosmos.acacia.callback.AppCallback;
-import com.cosmos.acacia.callback.AppCallbackHandler;
+import com.cosmos.acacia.callback.ApplicationCallback;
+import com.cosmos.acacia.callback.ApplicationCallbackHandler;
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
+import com.cosmos.acacia.callback.assembling.LessSelectedItemsThanAllowed;
+import com.cosmos.acacia.callback.assembling.MoreSelectedItemsThanAllowed;
 import com.cosmos.acacia.crm.data.assembling.AssemblingAlgorithm;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -124,7 +126,7 @@ public class Algorithm
 
     private AssemblingSchemaItem assemblingSchemaItem;
 
-    private AppCallbackHandler callbackHandler;
+    private ApplicationCallbackHandler callbackHandler;
 
 
     public Algorithm(AssemblingSchemaItem assemblingSchemaItem)
@@ -159,11 +161,11 @@ public class Algorithm
         return assemblingSchemaItem;
     }
 
-    public AppCallbackHandler getCallbackHandler() {
+    public ApplicationCallbackHandler getCallbackHandler() {
         return callbackHandler;
     }
 
-    public void setCallbackHandler(AppCallbackHandler callbackHandler) {
+    public void setCallbackHandler(ApplicationCallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
     }
 
@@ -173,7 +175,7 @@ public class Algorithm
         return apply(assemblingSchemaItem.getItemValues(), valueAgainstConstraints);
     }
 
-    protected List apply(
+    protected List<ConstraintRow> apply(
             List<AssemblingSchemaItemValue> itemValues,
             Object valueAgainstConstraints)
         throws AlgorithmException
@@ -210,7 +212,7 @@ public class Algorithm
         if(size == 0 || size < getMinSelections())
             resultRows = constraintRows;
 
-        return applyUserSelection(resultRows);
+        return getResultList(applyUserSelection(resultRows));
     }
 
     protected List<ConstraintRow> applyRangeCondition(
@@ -272,7 +274,7 @@ public class Algorithm
                 getMaxSelections());
         try
         {
-            callbackHandler.handle(new AppCallback[] {choiceCallback});
+            callbackHandler.handle(new ApplicationCallback[] {choiceCallback});
         }
         catch(IOException ex)
         {
@@ -283,7 +285,23 @@ public class Algorithm
             throw new AlgorithmException(ex);
         }
 
-        return choiceCallback.getSelectedRows();
+        List<ConstraintRow> selectedRows = choiceCallback.getSelectedRows();
+        if(Type.SingleSelectionAlgorithms.contains(type) ||
+           Type.MultipleSelectionAlgorithms.contains(type))
+        {
+            int selected = selectedRows.size();
+            int allowed;
+            if(selected < (allowed = choiceCallback.getMinSelections()))
+            {
+                throw new LessSelectedItemsThanAllowed(selected, allowed);
+            }
+            else if(selected > choiceCallback.getMaxSelections())
+            {
+                throw new MoreSelectedItemsThanAllowed(selected, allowed);
+            }
+        }
+
+        return selectedRows;
     }
 
 
@@ -293,7 +311,7 @@ public class Algorithm
             resultList = new ArrayList(constraintRows.size());
         }
 
-        addItems(constraintRows);
+        addConstraintRows(constraintRows);
         return resultList;
     }
 
@@ -309,14 +327,14 @@ public class Algorithm
         getResultList().add(item);
     }
 
-    protected void addItem(ConstraintRow constraintRow)
+    protected void addConstraintRow(ConstraintRow constraintRow)
     {
         addItem(constraintRow.getCorrespondingObject());
     }
 
-    protected void addItems(List<ConstraintRow> constraintRows)
+    protected void addConstraintRows(List<ConstraintRow> constraintRows)
     {
         for(ConstraintRow constraintRow : constraintRows)
-            addItem(constraintRow);
+            addConstraintRow(constraintRow);
     }
 }

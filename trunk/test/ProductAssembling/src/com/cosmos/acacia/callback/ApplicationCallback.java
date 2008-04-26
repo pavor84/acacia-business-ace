@@ -11,7 +11,7 @@ import javax.security.auth.callback.Callback;
  *
  * @author Miro
  */
-public interface AppCallback
+public interface ApplicationCallback
     extends Callback
 {
 }

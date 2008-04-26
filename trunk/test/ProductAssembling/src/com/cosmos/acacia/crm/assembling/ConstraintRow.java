@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import java.io.Serializable;
 
 /**
@@ -15,14 +16,14 @@ public class ConstraintRow
     implements Serializable
 {
     private ConstraintValues constraintValues;
-    private Object correspondingObject;
+    private AssemblingSchemaItemValue correspondingObject;
 
-    public ConstraintRow(Object correspondingObject)
+    public ConstraintRow(AssemblingSchemaItemValue correspondingObject)
     {
         this(ConstraintValues.EMPTY_CONSTRAINT_VALUES, correspondingObject);
     }
 
-    public ConstraintRow(ConstraintValues constraintValues, Object correspondingObject)
+    public ConstraintRow(ConstraintValues constraintValues, AssemblingSchemaItemValue correspondingObject)
     {
         this.constraintValues = constraintValues;
         this.correspondingObject = correspondingObject;
@@ -36,12 +37,17 @@ public class ConstraintRow
         this.constraintValues = constraintValues;
     }
 
-    public Object getCorrespondingObject() {
+    public AssemblingSchemaItemValue getCorrespondingObject() {
         return correspondingObject;
     }
 
-    public void setCorrespondingObject(Object correspondingObject) {
+    public void setCorrespondingObject(AssemblingSchemaItemValue correspondingObject) {
         this.correspondingObject = correspondingObject;
     }
 
+    @Override
+    public String toString()
+    {
+        return "ConstraintRow[" + constraintValues.toString() + ", correspondingObject=" + correspondingObject + "]";
+    }
 }
