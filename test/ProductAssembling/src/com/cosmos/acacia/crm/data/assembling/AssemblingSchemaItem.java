@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,8 +33,9 @@ import javax.persistence.Table;
     {
         @NamedQuery
             (
-                name = "AssemblingSchemaItem.findByMessageCode",
-                query = "select t1 from AssemblingSchemaItem t1 where t1.messageCode = :messageCode"
+                name = "AssemblingSchemaItem.findBySchemaAndMessageCode",
+                query = "select t1 from AssemblingSchemaItem t1" +
+                        " where t1.assemblingSchema = :assemblingSchema and t1.messageCode = :messageCode"
             ),
         @NamedQuery
             (
@@ -96,7 +98,7 @@ public class AssemblingSchemaItem
     @Column(name = "description")
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "assemblingSchemaItem")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "assemblingSchemaItem", fetch=FetchType.EAGER)
     private List<AssemblingSchemaItemValue> itemValues;
 
 

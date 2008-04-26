@@ -12,6 +12,6 @@ import com.cosmos.acacia.callback.*;
  * @author Miro
  */
 public interface AssemblingCallback
-    extends AppCallback
+    extends ApplicationCallback
 {
 }

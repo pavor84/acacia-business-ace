@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -19,7 +20,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "simple_products")
 @DiscriminatorValue(value="S")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "SimpleProduct.findByProductCode",
+                query = "select t1 from SimpleProduct t1 where t1.productCode = :productCode"
+            )
+    })
 public class SimpleProduct
     extends Product
     implements Serializable

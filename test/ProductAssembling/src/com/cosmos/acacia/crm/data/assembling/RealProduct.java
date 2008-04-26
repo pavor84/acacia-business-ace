@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -21,7 +22,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "real_products")
 @DiscriminatorValue(value="RP")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "RealProduct.findBySimpleProduct",
+                query = "select t1 from RealProduct t1 where t1.simpleProduct = :simpleProduct"
+            )
+    })
 public class RealProduct
     extends VirtualProduct
     implements Serializable
