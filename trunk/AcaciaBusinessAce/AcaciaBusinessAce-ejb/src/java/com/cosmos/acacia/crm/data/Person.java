@@ -31,19 +31,19 @@ import com.cosmos.resource.TextResource;
  */
 @Entity
 @Table(name = "persons")
-/** Will duplicate the primary key from superclass with this name in the 'persons' table */ 
+/** Will duplicate the primary key from superclass with this name in the 'persons' table */
 @PrimaryKeyJoinColumn(name="partner_id")
 @NamedQueries(
-	{
-	@NamedQuery
-         	(
-         		name = "Person.findByParentDataObjectAndDeleted",
-         		query = "select p from Person p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
-         	),
+    {
+    @NamedQuery
+             (
+                 name = "Person.findByParentDataObjectAndDeleted",
+                 query = "select p from Person p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+             ),
         @NamedQuery
             (
-    		name = "Person.findByParentDataObjectIsNullAndDeleted",
-    		query = "select p from Person p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+            name = "Person.findByParentDataObjectIsNullAndDeleted",
+            query = "select p from Person p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
             ),
         /**
          * All not deleted persons.
@@ -52,8 +52,8 @@ import com.cosmos.resource.TextResource;
             (
             name = "Person.getAllNotDeleted",
             query = "select p from Person p where p.dataObject.deleted = false"
-            )  
-	}
+            )
+    }
 )
 public class Person extends BusinessPartner
         implements Serializable, TextResource
@@ -67,8 +67,7 @@ public class Person extends BusinessPartner
     private String firstName;
 
     @Column(name = "second_name")
-    @Property(title="Second Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.REGEX, regex="[a-z]"))
+    @Property(title="Second Name")
     private String secondName;
 
     @Column(name = "last_name", nullable = false)
@@ -226,7 +225,7 @@ public class Person extends BusinessPartner
     public String toString() {
         return "com.cosmos.acacia.crm.data.Person[parentId=" + getParentId() + "]";
     }
-    
+
     public String toShortText() {
         return toText();
     }
@@ -236,10 +235,10 @@ public class Person extends BusinessPartner
         String secondName = getSecondName() != null ? getSecondName() : "";
         String lastName = getLastName() != null ? getLastName() : "";
         String extraName = getExtraName() != null ? getExtraName() : "";
-        
+
         return firstName + " " + secondName + " " + lastName + " " + extraName;
     }
-    
+
     @Override
     public String getDisplayName() {
         return toText();

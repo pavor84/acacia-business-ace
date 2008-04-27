@@ -47,7 +47,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     protected static Logger log = Logger.getLogger(BaseEntityPanel.class);
 
     protected DialogResponse modifiedResponse = null;
-    
+
     public BaseEntityPanel(DataObject dataObject)
     {
         super(dataObject);
@@ -95,6 +95,13 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     public void closeAction() {
+        BindingGroup bindingGroup;
+        if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
+        {
+            if(!closeDialogConfirmation())
+                return;
+        }
+
         if (modifiedResponse != null)
             setDialogResponse(modifiedResponse);
         else
@@ -301,7 +308,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             setDialogResponse(modifiedResponse);
         else
             setDialogResponse(DialogResponse.CLOSE);
-        
+
         super.dialogWindowClosing(event);
     }
 
