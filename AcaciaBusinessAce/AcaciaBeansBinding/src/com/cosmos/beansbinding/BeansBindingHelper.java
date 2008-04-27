@@ -21,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.Validator;
 
 import com.cosmos.acacia.annotation.Property;
@@ -42,6 +43,8 @@ import com.cosmos.util.ClassHelper;
  * @author miro
  */
 public class BeansBindingHelper {
+
+    protected static Logger log = Logger.getLogger(BeansBindingHelper.class);
 
     public static EntityProperties createEntityProperties(Class entityClass) {
         EntityProperties entityProperties = new EntityProperties(entityClass);
@@ -253,6 +256,8 @@ public class BeansBindingHelper {
                 // Setting custom display for Dates
                 if (pd.getPropertyClass() == Date.class && pd.getCustomDisplay() == Property.NULL)
                 {
+                    log.info("Setting date custom display for property " + pd.getPropertyName());
+
                     String name = pd.getPropertyName();
                     pd.setCustomDisplay("${" + name + ".date}.${" + name + ".month}.${" + name + ".year}");
                 }
