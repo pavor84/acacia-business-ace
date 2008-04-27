@@ -98,6 +98,9 @@ public class ContactBookTest {
         List<City> cities = addressFormSession.getCities();
         Assert.assertNotNull(cities);
 
+        List<DbResource> communicationTypes = addressFormSession.getCommunicationTypes();
+        Assert.assertNotNull(communicationTypes);
+
         EntityProperties entityProperties =
             addressFormSession.getAddressEntityProperties();
         Assert.assertNotNull(entityProperties);
@@ -111,13 +114,13 @@ public class ContactBookTest {
         Organization organization = organizationFormSession.newOrganization();
         organization.setOrganizationName(TestUtils.getRandomString(15));
 
-        organizationFormSession.saveOrganization(organization);
+        organization = organizationFormSession.saveOrganization(organization);
 
         DataObject organizationDataObject = organization.getDataObject();
         Address address = addressFormSession.newAddress();
         address.setAddressName(TestUtils.getRandomString(15));
 
-        addressFormSession.saveAddress(address, organizationDataObject);
+        address = addressFormSession.saveAddress(address, organizationDataObject);
 
         DataObject addressDataObject = address.getDataObject();
 
@@ -127,35 +130,31 @@ public class ContactBookTest {
         person.setSecondName(TestUtils.getRandomString(5));
         person.setLastName(TestUtils.getRandomString(5));
         person.setExtraName(TestUtils.getRandomString(5));
-        personFormSession.savePerson(person);
+        person = personFormSession.savePerson(person);
 
         contactPerson.setContact(person);
         contactPerson.setDataObject(addressDataObject);
 
-        addressFormSession.saveContactPerson(contactPerson, addressDataObject);
+        contactPerson = addressFormSession.saveContactPerson(contactPerson, addressDataObject);
         CommunicationContact communicationContact = addressFormSession.newCommunicationContact();
-        communicationContact.setCommunicationType(CommunicationType.getDbResources().get(0));
+        communicationContact.setCommunicationType(addressFormSession.getCommunicationTypes().get(0));
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
 
-        addressFormSession.saveCommunicationContact(communicationContact, addressDataObject, contactPerson);
-
-        BankDetail bankDetail = bankDetailsFormSession.newBankDetail();
-        bankDetail.setIban(TestUtils.getRandomString(5));
-        bankDetailsFormSession.saveBankDetail(bankDetail, addressDataObject);
+        communicationContact = addressFormSession.saveCommunicationContact(communicationContact, addressDataObject, contactPerson);
 
         // Modifying the entries
 
         organization.setOrganizationName(TestUtils.getRandomString(10));
-        organizationFormSession.saveOrganization(organization);
+        organization = organizationFormSession.saveOrganization(organization);
 
         person.setFirstName(TestUtils.getRandomString(6));
-        personFormSession.savePerson(person);
+        person = personFormSession.savePerson(person);
 
         contactPerson.setContact(person);
-        addressFormSession.saveContactPerson(contactPerson, organization.getDataObject());
+        contactPerson = addressFormSession.saveContactPerson(contactPerson, address.getDataObject());
 
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
-        addressFormSession.saveCommunicationContact(communicationContact, organization.getDataObject(), contactPerson);
+        communicationContact = addressFormSession.saveCommunicationContact(communicationContact, address.getDataObject(), contactPerson);
 
 
         // Deleting the entries
