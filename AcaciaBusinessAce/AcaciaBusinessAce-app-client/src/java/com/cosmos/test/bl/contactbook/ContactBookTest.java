@@ -98,6 +98,12 @@ public class ContactBookTest {
         List<City> cities = addressFormSession.getCities();
         Assert.assertNotNull(cities);
 
+        List<Organization> organizations = organizationFormSession.getOrganizations(null);
+        Assert.assertNotNull(organizations);
+
+        List<Person> persons = personFormSession.getPersons(null);
+        Assert.assertNotNull(persons);
+
         List<DbResource> communicationTypes = addressFormSession.getCommunicationTypes();
         Assert.assertNotNull(communicationTypes);
 
