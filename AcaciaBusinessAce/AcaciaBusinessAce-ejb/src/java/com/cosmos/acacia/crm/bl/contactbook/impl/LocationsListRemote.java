@@ -26,7 +26,7 @@ import com.cosmos.beansbinding.EntityProperties;
 public interface LocationsListRemote {
 
     List<DbResource> getCurrencies();
-    
+
     // Methods for handling countries
     List<Country> getCountries();
 
@@ -41,6 +41,8 @@ public interface LocationsListRemote {
 
     // Methods for handling cities
     List<City> getCities();
+
+    List<City> getCities(Country country);
 
     EntityProperties getCityEntityProperties();
 

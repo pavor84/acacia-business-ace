@@ -27,13 +27,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "cities")
 @NamedQueries(
-	{
-		@NamedQuery
-         	(
-         		name = "City.fetchAll",
-         		query = "from City"
-         	)
-	}
+    {
+        @NamedQuery
+             (
+                 name = "City.fetchAll",
+                 query = "from City"
+             ),
+         @NamedQuery
+             (
+                 name = "City.findByCountry",
+                 query = "select c from City c where c.country = :country"
+             )
+    }
 )
 public class City
         extends DataObjectBean
@@ -50,7 +55,7 @@ public class City
     @Column(name = "city_name", nullable = false)
     @Property(title="Name")
     private String cityName;
-        
+
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
     @Property(title="Country", customDisplay="${country.countryName}")

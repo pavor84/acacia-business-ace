@@ -5,13 +5,13 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.Country;
 import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
@@ -32,10 +32,12 @@ public interface PersonsListRemote {
 
     List<City> getCities();
 
+    List<City> getCities(Country country);
+
     List<Address> getAddresses(DataObject parent);
 
     List<Passport> getPassports(DataObject parent);
-    
+
     List<DbResource> getGenders();
 
     EntityProperties getPersonEntityProperties();
