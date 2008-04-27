@@ -49,6 +49,7 @@
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="com.cosmos.acacia.gui.EntityFormButtonPanel" id="saveAction" methodName="saveAction"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="saveButton.toolTipText"/>
         <Property name="name" type="java.lang.String" value="saveButton" noResource="true"/>
       </Properties>
     </Component>
@@ -57,6 +58,7 @@
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="com.cosmos.acacia.gui.EntityFormButtonPanel" id="closeAction" methodName="closeAction"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="closeButton.toolTipText"/>
         <Property name="name" type="java.lang.String" value="closeButton" noResource="true"/>
       </Properties>
     </Component>
@@ -65,6 +67,7 @@
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="com.cosmos.acacia.gui.EntityFormButtonPanel" id="problemsAction" methodName="problemsAction"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="problemsButton.toolTipText"/>
         <Property name="name" type="java.lang.String" value="problemsButton" noResource="true"/>
       </Properties>
     </Component>

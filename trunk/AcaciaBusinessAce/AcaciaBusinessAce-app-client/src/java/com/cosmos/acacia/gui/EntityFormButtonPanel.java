@@ -15,7 +15,6 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 
-import com.cosmos.acacia.crm.gui.contactbook.CityPanel;
 
 /**
  *
@@ -47,12 +46,16 @@ public class EntityFormButtonPanel extends AcaciaPanel {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(EntityFormButtonPanel.class, this);
         saveButton.setAction(actionMap.get("saveAction")); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(EntityFormButtonPanel.class);
+        saveButton.setToolTipText(resourceMap.getString("saveButton.toolTipText")); // NOI18N
         saveButton.setName("saveButton"); // NOI18N
 
         closeButton.setAction(actionMap.get("closeAction")); // NOI18N
+        closeButton.setToolTipText(resourceMap.getString("closeButton.toolTipText")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
         problemsButton.setAction(actionMap.get("problemsAction")); // NOI18N
+        problemsButton.setToolTipText(resourceMap.getString("problemsButton.toolTipText")); // NOI18N
         problemsButton.setName("problemsButton"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
