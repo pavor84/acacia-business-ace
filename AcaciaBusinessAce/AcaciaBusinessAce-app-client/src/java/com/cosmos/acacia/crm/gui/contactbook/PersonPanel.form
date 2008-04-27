@@ -225,12 +225,12 @@
                           <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="personalUniqueIdTextField" linkSize="2" alignment="1" pref="217" max="32767" attributes="1"/>
-                      <Component id="birthPlaceCountryComboBox" linkSize="2" alignment="1" pref="179" max="32767" attributes="1"/>
-                      <Component id="birthPlaceCityComboBox" linkSize="2" alignment="1" pref="172" max="32767" attributes="1"/>
-                      <Component id="birthdateDatePicker" max="32767" attributes="0"/>
+                  <EmptySpace pref="8" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="personalUniqueIdTextField" alignment="0" pref="228" max="32767" attributes="1"/>
+                      <Component id="birthdateDatePicker" alignment="0" pref="228" max="32767" attributes="0"/>
+                      <Component id="birthPlaceCountryComboBox" alignment="0" pref="228" max="32767" attributes="1"/>
+                      <Component id="cityLookup" alignment="0" pref="228" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -254,11 +254,11 @@
                       <Component id="birthPlaceCountryComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cityLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="birthPlaceCityComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cityLabel" min="-2" pref="12" max="-2" attributes="0"/>
+                      <Component id="cityLookup" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="27" max="32767" attributes="0"/>
+                  <EmptySpace pref="17" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -306,25 +306,17 @@
             <Property name="name" type="java.lang.String" value="birthPlaceCountryComboBox" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="birthPlaceCityComboBox">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
-            </Property>
-            <Property name="name" type="java.lang.String" value="birthPlaceCityComboBox" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.swingb.JBDatePicker" name="birthdateDatePicker">
           <Properties>
             <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="GeneralSettings.getDateFormat()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="birthdateDatePicker" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="cityLookup">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="cityLookup" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

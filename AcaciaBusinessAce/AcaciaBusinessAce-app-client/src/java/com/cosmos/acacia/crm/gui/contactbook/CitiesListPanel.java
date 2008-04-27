@@ -16,6 +16,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.contactbook.impl.LocationsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -33,10 +34,18 @@ public class CitiesListPanel extends AbstractTablePanel {
     {
         super(null);
     }
+    
+    public CitiesListPanel(Country country)
+    {
+        super(null);
+        this.country = country;
+        postInitData();
+    }
 
     @EJB
     private LocationsListRemote formSession;
 
+    private Country country;
     private BindingGroup citiesBindingGroup;
     private List<City> cities;
     private ContactPerson contactPerson;
@@ -45,8 +54,10 @@ public class CitiesListPanel extends AbstractTablePanel {
     protected void initData() {
 
         super.initData();
-
         setVisible(Button.Select, false);
+    }
+
+    protected void postInitData() {
         citiesBindingGroup = new BindingGroup();
         AcaciaTable citiesTable = getDataTable();
         JTableBinding tableBinding = citiesTable.bind(citiesBindingGroup, getCities(), getCityEntityProperties());
@@ -55,12 +66,14 @@ public class CitiesListPanel extends AbstractTablePanel {
 
         citiesTable.setEditable(false);
     }
-
-    protected List<City> getCities()
-    {
-        if(cities == null)
-        {
-            cities = getFormSession().getCities();
+            
+    protected List<City> getCities() {
+        if(cities == null) {
+            if (country == null) {
+                cities = getFormSession().getCities();
+            } else {
+                cities = getFormSession().getCities(country);
+            }
         }
 
         return cities;

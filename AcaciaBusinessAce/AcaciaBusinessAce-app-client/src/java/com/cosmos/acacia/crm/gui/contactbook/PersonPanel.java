@@ -22,11 +22,14 @@ import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.Binding;
 
 /**
  * A form for adding and editing persons
@@ -83,8 +86,8 @@ public class PersonPanel extends BaseEntityPanel {
         cityLabel = new javax.swing.JLabel();
         personalUniqueIdTextField = new com.cosmos.swingb.JBTextField();
         birthPlaceCountryComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        birthPlaceCityComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         birthdateDatePicker = new com.cosmos.swingb.JBDatePicker();
+        cityLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
@@ -194,11 +197,10 @@ public class PersonPanel extends BaseEntityPanel {
         birthPlaceCountryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         birthPlaceCountryComboBox.setName("birthPlaceCountryComboBox"); // NOI18N
 
-        birthPlaceCityComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        birthPlaceCityComboBox.setName("birthPlaceCityComboBox"); // NOI18N
-
         birthdateDatePicker.setFormats(GeneralSettings.getDateFormat());
         birthdateDatePicker.setName("birthdateDatePicker"); // NOI18N
+
+        cityLookup.setName("cityLookup"); // NOI18N
 
         javax.swing.GroupLayout birthDataPanelLayout = new javax.swing.GroupLayout(birthDataPanel);
         birthDataPanel.setLayout(birthDataPanelLayout);
@@ -217,17 +219,14 @@ public class PersonPanel extends BaseEntityPanel {
                     .addGroup(birthDataPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(cityLabel)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addGroup(birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(personalUniqueIdTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(birthPlaceCountryComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                    .addComponent(birthPlaceCityComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                    .addComponent(birthdateDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(personalUniqueIdTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                    .addComponent(birthdateDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                    .addComponent(birthPlaceCountryComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                    .addComponent(cityLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        birthDataPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {birthPlaceCityComboBox, birthPlaceCountryComboBox, personalUniqueIdTextField});
-
         birthDataPanelLayout.setVerticalGroup(
             birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(birthDataPanelLayout.createSequentialGroup()
@@ -243,10 +242,10 @@ public class PersonPanel extends BaseEntityPanel {
                     .addComponent(countryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(birthPlaceCountryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(birthDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(birthPlaceCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                    .addComponent(cityLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("descriptionPanel.border.title"))); // NOI18N
@@ -344,11 +343,11 @@ public class PersonPanel extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.TableHolderPanel addressesPanel;
     private com.cosmos.swingb.JBPanel birthDataPanel;
-    private com.cosmos.acacia.gui.AcaciaComboBox birthPlaceCityComboBox;
     private com.cosmos.acacia.gui.AcaciaComboBox birthPlaceCountryComboBox;
     private com.cosmos.swingb.JBDatePicker birthdateDatePicker;
     private javax.swing.JLabel birthdateLabel;
     private javax.swing.JLabel cityLabel;
+    private com.cosmos.acacia.gui.AcaciaLookup cityLookup;
     private javax.swing.JLabel countryLabel;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
@@ -377,7 +376,9 @@ public class PersonPanel extends BaseEntityPanel {
     private PassportsListPanel passportsTable;
     private BindingGroup personBindingGroup;
     private Person person;
-
+    private Binding cityBinding;
+    private Country country;
+    
     @Override
     protected void initData() {
         setResizable(false);
@@ -401,7 +402,24 @@ public class PersonPanel extends BaseEntityPanel {
         personalUniqueIdTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("personalUniqueId"));
         birthdateDatePicker.bind(personBindingGroup, person, entityProps.getPropertyDetails("birthDate"));
         birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
-        birthPlaceCityComboBox.bind(personBindingGroup, getCities(), person, entityProps.getPropertyDetails("birthPlaceCity"));
+         birthPlaceCountryComboBox.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {               
+                country = (Country) birthPlaceCountryComboBox.getSelectedItem();
+                cityBinding.getTargetProperty().setValue(cityLookup, null);
+            }
+        });
+        
+        cityBinding = cityLookup.bind(new AcaciaLookupProvider() {
+                @Override
+                public Object showSelectionControl() {
+                    return onChooseCity();
+                }
+            }, personBindingGroup,
+            person,
+            entityProps.getPropertyDetails("birthPlaceCity"),
+            "${cityName}",
+            UpdateStrategy.READ_WRITE);
 
         descriptionTextPane.bind(personBindingGroup, person, "description");
 
@@ -427,32 +445,27 @@ public class PersonPanel extends BaseEntityPanel {
         passportsPanel.add(passportsTable);
 
         personBindingGroup.bind();
-        
-        birthPlaceCountryComboBox.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (birthPlaceCityComboBox.getSelectedItem() == null)
-                {
-                    Country country = (Country) birthPlaceCountryComboBox.getSelectedItem();
-                    birthPlaceCityComboBox.bind(personBindingGroup, getCities(country), person, entityProps.getPropertyDetails("birthPlaceCity"));
-                    personBindingGroup.bind();
-                }
-            }
-        });
-        
-        birthPlaceCityComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (birthPlaceCountryComboBox.getSelectedItem() == null)
-                {
-                    Country selectedCountry = ((City) birthPlaceCityComboBox.getSelectedItem()).getCountry();
-                    birthPlaceCountryComboBox.setSelectedItem(selectedCountry);
-                }
-            }
-        });
     }
 
-        protected PersonsListRemote getFormSession()
+    protected Object onChooseCity() {
+        
+        CitiesListPanel listPanel = new CitiesListPanel(country);
+                
+        log.info("Displaying cities for country: " + country);
+        
+        DialogResponse dResponse = listPanel.showDialog(this);
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+            City selectedCity = (City) listPanel.getSelectedRowObject();
+            if (birthPlaceCountryComboBox.getSelectedItem() == null)
+                birthPlaceCountryComboBox.setSelectedItem(selectedCity.getCountry());
+                    
+            return selectedCity;
+        } else {
+            return null;
+        }
+    }
+    
+    protected PersonsListRemote getFormSession()
     {
         if(formSession == null)
         {
