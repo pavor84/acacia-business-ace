@@ -83,7 +83,8 @@ public class AlgorithmTest
         RangeMultipleSelection_From1_To5_Item1(Type.RangeMultipleSelection, 1, 5),
         RangeMultipleSelection_From2_To4_Item2(Type.RangeMultipleSelection, 2, 4),
         RangeMultipleSelection_From4_To5_Item3(Type.RangeMultipleSelection, 4, 5),
-        RangeMultipleSelection_From7_To8_Item4(Type.RangeMultipleSelection, 7, 8),
+        RangeMultipleSelection_From4_To6_Item4(Type.RangeMultipleSelection, 4, 6),
+        RangeMultipleSelection_From7_To8_Item5(Type.RangeMultipleSelection, 7, 8),
         EqualsSelection_Value1_Item1(Type.EqualsSelection, 1),
         EqualsSelection_Value2_Item2(Type.EqualsSelection, 2),
         EqualsSelection_Value2_Item3(Type.EqualsSelection, 2),
@@ -96,6 +97,7 @@ public class AlgorithmTest
         EqualsMultipleSelection_Value2_Item2(Type.EqualsMultipleSelection, 2),
         EqualsMultipleSelection_Value2_Item3(Type.EqualsMultipleSelection, 2),
         EqualsMultipleSelection_Value4_Item4(Type.EqualsMultipleSelection, 4),
+        EqualsMultipleSelection_Value2_Item5(Type.EqualsMultipleSelection, 2),
         ;
 
         private SchemaItemValue(Type algorithmType)
@@ -287,8 +289,16 @@ public class AlgorithmTest
             }
             else if(Type.MultipleSelectionAlgorithms.contains(type))
             {
-                minSelections = 2;
-                maxSelections = 3;
+                if(Type.EqualsAlgorithms.contains(type))
+                {
+                    minSelections = 1;
+                    maxSelections = 2;
+                }
+                else
+                {
+                    minSelections = 2;
+                    maxSelections = 3;
+                }
             }
             else
             {
@@ -474,6 +484,9 @@ public class AlgorithmTest
         return null;
     }
 
+    /**
+     * 2 item values
+     */
     @Test
     public void UnconditionalSelection()
     {
@@ -491,6 +504,9 @@ public class AlgorithmTest
         }
     }
 
+    /**
+     * 3 item values
+     */
     @Test
     public void UserSelection()
     {
@@ -505,6 +521,7 @@ public class AlgorithmTest
             List results = algorithm.apply(null);
             assertNotNull(results);
             assertTrue(results.size() == selectItems.length);
+            assertTrue(callbackHandler.isInvoked());
 
             selectItems = new int[] {0, 2};
             callbackHandler = new AcaciaCallbackHandler(selectItems);
@@ -518,6 +535,7 @@ public class AlgorithmTest
                 AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
                 assertTrue(itemValue.equals(result));
             }
+            assertTrue(callbackHandler.isInvoked());
         }
         catch(Exception ex)
         {
@@ -525,6 +543,9 @@ public class AlgorithmTest
         }
     }
 
+    /**
+     * 3 item values
+     */
     @Test
     public void UserSingleSelection()
     {
@@ -545,6 +566,7 @@ public class AlgorithmTest
                 AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
                 assertTrue(itemValue.equals(result));
             }
+            assertTrue(callbackHandler.isInvoked());
 
             selectItems = new int[] {};
             callbackHandler = new AcaciaCallbackHandler(selectItems);
@@ -555,6 +577,7 @@ public class AlgorithmTest
                 assertTrue(false);
             }
             catch(LessSelectedItemsThanAllowed ex) {}
+            assertTrue(callbackHandler.isInvoked());
 
             selectItems = new int[] {0, 2};
             callbackHandler = new AcaciaCallbackHandler(selectItems);
@@ -565,6 +588,23 @@ public class AlgorithmTest
                 assertTrue(false);
             }
             catch(MoreSelectedItemsThanAllowed ex) {}
+
+            itemValues.remove(2);
+            itemValues.remove(1);
+            algorithm = new Algorithm(asi);
+            selectItems = new int[] {0};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(null);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertFalse(callbackHandler.isInvoked());
         }
         catch(Exception ex)
         {
@@ -572,39 +612,485 @@ public class AlgorithmTest
         }
     }
 
+    /**
+     * 4 item values.
+     * minSelections = 2
+     * maxSelections = 3
+     */
     @Test
     public void UserMultipleSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.UserMultipleSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int selectItems[] = new int[] {1, 2};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(null);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {1, 2, 3};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(null);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(null);
+                assertTrue(false);
+            }
+            catch(LessSelectedItemsThanAllowed ex) {}
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1, 2, 3};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(null);
+                assertTrue(false);
+            }
+            catch(MoreSelectedItemsThanAllowed ex) {}
+
+            itemValues.remove(3);
+            itemValues.remove(2);
+            algorithm = new Algorithm(asi);
+            selectItems = new int[] {0, 1};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(null);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertFalse(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
+    /**
+     * 4 item values:
+     * From 1 to 5,
+     * From 2 to 4,
+     * From 4 to 5,
+     * From 7 to 8
+     * 3 => 1-5, 2-4
+     */
     @Test
     public void RangeSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.RangeSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int[] selectItems = new int[] {};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(3);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(3);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
+    /**
+     * 4 item values:
+     * From 1 to 5,
+     * From 2 to 4,
+     * From 4 to 5,
+     * From 7 to 8
+     * 3 => 1-5, 2-4
+     * 7 => 7-8
+     */
     @Test
     public void RangeSingleSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.RangeSingleSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int selectItems[] = new int[] {1};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(3);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(3);
+                assertTrue(false);
+            }
+            catch(LessSelectedItemsThanAllowed ex) {}
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(3);
+                assertTrue(false);
+            }
+            catch(MoreSelectedItemsThanAllowed ex) {}
+
+            selectItems = new int[] {0};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(7);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            AssemblingSchemaItemValue itemValue = itemValues.get(3);
+            AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(0);
+            assertTrue(itemValue.equals(result));
+            assertFalse(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
+    /**
+     * 5 item values:
+     * From 1 to 5,
+     * From 2 to 4,
+     * From 4 to 5,
+     * From 4 to 6
+     * From 7 to 8
+     * 3 => 1-5, 2-4
+     * 4 => 1-5, 2-4, 4-5, 4-6
+     * 7 => 7-8
+     */
     @Test
     public void RangeMultipleSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.RangeMultipleSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int selectItems[] = new int[] {0, 1};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(4);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1, 2};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(4);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(4);
+                assertTrue(false);
+            }
+            catch(LessSelectedItemsThanAllowed ex) {}
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1, 2, 3};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(4);
+                assertTrue(false);
+            }
+            catch(MoreSelectedItemsThanAllowed ex) {}
+
+            selectItems = new int[] {0, 1};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(3);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertFalse(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
+    /**
+     * 4 item values: 1, 2, 2, 4
+     * 1 => 1
+     * 2 => 2, 3
+     * 3 => 
+     * 4 => 4
+     */
     @Test
     public void EqualsSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.EqualsSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int[] selectItems = new int[] {};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(2);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(2);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            selectItems = new int[] {1, 2};
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
+    /**
+     * 4 item values: 1, 2, 2, 4
+     * 1 => 1
+     * 2 => 2, 3
+     * 3 => 
+     * 4 => 4
+     */
     @Test
     public void EqualsSingleSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.EqualsSingleSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int selectItems[] = new int[] {0};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(2);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            AssemblingSchemaItemValue itemValue = itemValues.get(1);
+            AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(0);
+            assertTrue(itemValue.equals(result));
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(2);
+                assertTrue(false);
+            }
+            catch(LessSelectedItemsThanAllowed ex) {}
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(2);
+                assertTrue(false);
+            }
+            catch(MoreSelectedItemsThanAllowed ex) {}
+
+            selectItems = new int[] {0};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(1);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            itemValue = itemValues.get(0);
+            result = (AssemblingSchemaItemValue)results.get(0);
+            assertTrue(itemValue.equals(result));
+            assertFalse(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
+    /**
+     * 5 item values: 1, 2, 2, 4, 2
+     * 1 => 1
+     * 2 => 2, 3, 5
+     * 3 => 
+     * 4 => 4
+     */
     @Test
     public void EqualsMultipleSelection()
     {
+        AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.EqualsMultipleSelection);
+        List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
+        Algorithm algorithm = new Algorithm(asi);
+        try
+        {
+            int selectItems[] = new int[] {0};
+            AcaciaCallbackHandler callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            List results = algorithm.apply(2);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            selectItems = new int[] {1};
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {1, 2};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(2);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            selectItems = new int[] {2, 4};
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(3);
+                assertTrue(false);
+            }
+            catch(LessSelectedItemsThanAllowed ex) {}
+            assertTrue(callbackHandler.isInvoked());
+
+            selectItems = new int[] {0, 1, 2};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            try
+            {
+                algorithm.apply(2);
+                assertTrue(false);
+            }
+            catch(MoreSelectedItemsThanAllowed ex) {}
+
+            selectItems = new int[] {0};
+            callbackHandler = new AcaciaCallbackHandler(selectItems);
+            algorithm.setCallbackHandler(callbackHandler);
+            results = algorithm.apply(4);
+            assertNotNull(results);
+            assertTrue(results.size() == selectItems.length);
+            selectItems = new int[] {3};
+            for(int i = 0; i < selectItems.length; i++)
+            {
+                AssemblingSchemaItemValue itemValue = itemValues.get(selectItems[i]);
+                AssemblingSchemaItemValue result = (AssemblingSchemaItemValue)results.get(i);
+                assertTrue(itemValue.equals(result));
+            }
+            assertFalse(callbackHandler.isInvoked());
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
 
@@ -612,6 +1098,7 @@ public class AlgorithmTest
         implements ApplicationCallbackHandler
     {
         private int[] selectItems;
+        private boolean invoked;
 
         public AcaciaCallbackHandler(int[] selectItems)
         {
@@ -622,6 +1109,7 @@ public class AlgorithmTest
                 throws IOException,
                 UnsupportedCallbackException
         {
+            invoked = true;
             for(Callback callback : callbacks)
             {
                 if(callback instanceof ChoiceCallback)
@@ -642,6 +1130,9 @@ public class AlgorithmTest
                 }
             }
         }
-        
+
+        public boolean isInvoked() {
+            return invoked;
+        }
     }
 }
