@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -20,8 +21,8 @@ import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import org.apache.log4j.Logger;
 
 /**
  *
