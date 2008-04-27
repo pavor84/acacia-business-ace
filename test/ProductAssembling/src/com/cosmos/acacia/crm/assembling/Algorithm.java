@@ -180,6 +180,8 @@ public class Algorithm
             Object valueAgainstConstraints)
         throws AlgorithmException
     {
+        if(resultList != null && resultList.size() > 0)
+            resultList.clear();
         List<ConstraintRow> constraintRows = new ArrayList<ConstraintRow>(itemValues.size());
         for(AssemblingSchemaItemValue itemValue : itemValues)
         {
@@ -205,11 +207,15 @@ public class Algorithm
         else
             resultRows = constraintRows;
 
-        int size;
-        if((size = resultRows.size()) == 1 && Type.SingleSelectionAlgorithms.contains(type))
-            return getResultList(resultRows);
+        int size = resultRows.size();
+        if(Type.SingleSelectionAlgorithms.contains(type) ||
+           Type.MultipleSelectionAlgorithms.contains(type))
+        {
+            if(size > 0 && size == minSelections && size <= maxSelections)
+                return getResultList(resultRows);
+        }
 
-        if(size == 0 || size < getMinSelections())
+        if(size == 0 || size < minSelections)
             resultRows = constraintRows;
 
         return getResultList(applyUserSelection(resultRows));
@@ -270,8 +276,8 @@ public class Algorithm
                 type,
                 constraintRows,
                 -1,
-                getMinSelections(),
-                getMaxSelections());
+                minSelections,
+                maxSelections);
         try
         {
             callbackHandler.handle(new ApplicationCallback[] {choiceCallback});
