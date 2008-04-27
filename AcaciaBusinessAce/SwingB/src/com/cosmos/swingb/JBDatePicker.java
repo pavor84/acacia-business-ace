@@ -28,7 +28,7 @@ public class JBDatePicker
     {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
-        
+
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
@@ -40,14 +40,14 @@ public class JBDatePicker
             setEnabled(false);
             return null;
         }
-        
+
         Binding binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
-        
+
         return binding;
     }
-    
+
      private Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName,
@@ -57,8 +57,8 @@ public class JBDatePicker
         BeanProperty beanProperty = BeanProperty.create("date");
         Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
-        
+
         return binding;
-        
+
      }
 }
