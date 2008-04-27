@@ -38,57 +38,57 @@ public class BankDetail
         implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @Column(name = "bank_detail_id", nullable = false)
     @Property(title="Bank Detail ID", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger bankDetailId;
-      
+
     @Column(name = "bank_account")
     @Property(title="Bank Account")
     private String bankAccount;
-    
+
     @Column(name = "iban")
     @Property(title="IBAN")
     private String iban;
-    
+
     @Column(name = "bic")
     @Property(title="BIC")
     private String bic;
-    
+
     @Column(name = "swift_code")
     @Property(title="SWIFT code")
     private String swiftCode;
-    
+
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Currency")
     private DbResource currency;
-        
+
     @JoinColumn(name = "bank_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne
     @Property(title="Bank", customDisplay="${bank.organizationName}")
     private Organization bank;
-        
+
     @JoinColumn(name = "bank_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne
     @Property(title="Bank Branch", customDisplay="${bankBranch.addressName}")
     private Address bankBranch;
-    
+
     @JoinColumn(name = "bank_contact_id")
     @ManyToOne
     @Property(title="Contact",
         customDisplay="${bankContact.firstName} ${bankContact.secondName} ${bankContact.lastName} ${bankContact.extraName}")
     private Person bankContact;
-    
-    @Column(name = "is_default")
+
+    @Column(name = "is_default", nullable = false)
     @Property(title="Default")
     private boolean isDefault;
-       
+
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
-    
+
     @JoinColumn(name = "bank_detail_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -119,6 +119,7 @@ public class BankDetail
     }
 
     public void setIsDefault(boolean isDefault) {
+        firePropertyChange("isDefault", this.isDefault, isDefault);
         this.isDefault = isDefault;
     }
 
@@ -150,7 +151,7 @@ public class BankDetail
     public BigInteger getParentId() {
         return parentId;
     }
-    
+
     @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
@@ -220,7 +221,7 @@ public class BankDetail
         this.swiftCode = swiftCode;
     }
 
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

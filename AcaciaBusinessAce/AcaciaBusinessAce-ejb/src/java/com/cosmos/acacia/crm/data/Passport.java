@@ -129,6 +129,7 @@ public class Passport extends DataObjectBean implements Serializable {
     }
 
     public void setIssueDate(Date issueDate) {
+        firePropertyChange("issueDate", this.issueDate, issueDate);
         this.issueDate = issueDate;
     }
 
@@ -137,6 +138,7 @@ public class Passport extends DataObjectBean implements Serializable {
     }
 
     public void setExpirationDate(Date expirationDate) {
+        firePropertyChange("expirationDate", this.expirationDate, expirationDate);
         this.expirationDate = expirationDate;
     }
 
