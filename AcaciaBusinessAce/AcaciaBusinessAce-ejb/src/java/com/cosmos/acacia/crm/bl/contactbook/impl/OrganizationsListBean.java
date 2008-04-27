@@ -16,6 +16,7 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.bl.contactbook.validation.OrganizationValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
@@ -23,7 +24,6 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.enums.OrganizationType;
-import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -42,13 +42,16 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     @EJB
     private LocationsListLocal locationsManager;
-    
+
     @EJB
     private BankDetailsListLocal bankDetailsManager;
 
+    @EJB
+    private OrganizationValidatorLocal organizationValidator;
+
+    @SuppressWarnings("unchecked")
     public List<Organization> getOrganizations(DataObject parent)
     {
-
         Query q;
         if(parent != null)
         {
@@ -81,6 +84,8 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     public Organization saveOrganization(Organization organization) {
+        organizationValidator.validate(organization);
+
         esm.persist(em, organization);
         return organization;
     }

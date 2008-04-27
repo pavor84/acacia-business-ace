@@ -39,6 +39,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
     @EJB
     private EntityStoreManagerLocal esm;
 
+    @SuppressWarnings("unchecked")
     public List<PositionType> getPositionTypes(Class ownerClass) throws Exception
     {
         log.info("Position type owner type: " + ownerClass);
@@ -71,6 +72,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
         return new PositionType();
     }
 
+    @SuppressWarnings("unchecked")
     public PositionType savePositionType(PositionType positionType, Class ownerClass) {
         if (ownerClass != null) {
             if (ownerClass == Person.class)

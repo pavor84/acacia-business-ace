@@ -536,6 +536,12 @@ public class JBTable
 
     private boolean isResource(PropertyDetails propertyDetails)
     {
+        if (propertyDetails == null || propertyDetails.getPropertyClass() == null
+                || propertyDetails.getPropertyClass().getName() == null)
+        {
+            return false;
+        }
+        
         return propertyDetails.getPropertyClass().getName()
                 .equals("com.cosmos.acacia.crm.data.DbResource");
     }

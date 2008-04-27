@@ -61,8 +61,8 @@ public class ContactPersonPanel extends BaseEntityPanel {
         entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         typeLabel = new com.cosmos.swingb.JBLabel();
         personLabel = new com.cosmos.swingb.JBLabel();
-        personsComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         typeLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        personLookup = new com.cosmos.acacia.gui.AcaciaLookup();
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
@@ -73,42 +73,40 @@ public class ContactPersonPanel extends BaseEntityPanel {
         personLabel.setText(resourceMap.getString("personLabel.text")); // NOI18N
         personLabel.setName("personLabel"); // NOI18N
 
-        personsComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        personsComboBox.setName("personsComboBox"); // NOI18N
-
         typeLookup.setName("typeLookup"); // NOI18N
+
+        personLookup.setName("personLookup"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(typeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(typeLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
-                            .addComponent(personsComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(personLookup, 0, 0, Short.MAX_VALUE)
+                            .addComponent(typeLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(typeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(typeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
                     .addComponent(typeLookup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(personsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(personLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(personLookup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -118,7 +116,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.swingb.JBLabel personLabel;
-    private com.cosmos.acacia.gui.AcaciaComboBox personsComboBox;
+    private com.cosmos.acacia.gui.AcaciaLookup personLookup;
     private com.cosmos.swingb.JBLabel typeLabel;
     private com.cosmos.acacia.gui.AcaciaLookup typeLookup;
     // End of variables declaration//GEN-END:variables
@@ -129,6 +127,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     private BindingGroup contactPersonBindingGroup;
     private ContactPerson contactPerson;
     private Binding typeBinding;
+    private Binding personBinding;
     
     @Override
     protected void initData() {
@@ -155,7 +154,17 @@ public class ContactPersonPanel extends BaseEntityPanel {
             "${positionTypeName}",
             UpdateStrategy.READ_WRITE);
             
-        personsComboBox.bind(contactPersonBindingGroup, getPersons(), contactPerson, entityProps.getPropertyDetails("contact"));
+        personBinding = personLookup.bind(new AcaciaLookupProvider() {
+                @Override
+                public Object showSelectionControl() {
+                    return onChoosePerson();
+                }
+            }, contactPersonBindingGroup,
+            contactPerson,
+            entityProps.getPropertyDetails("contact"),
+            entityProps.getPropertyDetails("contact")
+                    .getCustomDisplay().replaceAll("contact.", ""),
+            UpdateStrategy.READ_WRITE);
 
 
         contactPersonBindingGroup.bind();
@@ -175,6 +184,17 @@ public class ContactPersonPanel extends BaseEntityPanel {
         }
     }
         
+    protected Object onChoosePerson() {
+        PersonsListPanel listPanel = new PersonsListPanel(null);
+        
+        DialogResponse dResponse = listPanel.showDialog(this);
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+            return listPanel.getSelectedRowObject();
+        } else {
+            return null;
+        }
+    }
+    
     protected AddressesListRemote getFormSession()
     {
         if(formSession == null)

@@ -5,12 +5,6 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.bl.impl.*;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Passport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +16,14 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.beansbinding.EntityProperties;
@@ -44,6 +45,10 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     @EJB
     private LocationsListLocal locationsManager;
 
+    @EJB
+    private PersonValidatorLocal personValidator;
+
+    @SuppressWarnings("unchecked")
     public List<Person> getPersons(DataObject parent)
     {
 
@@ -96,6 +101,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
 
     public Person savePerson(Person person) {
+        personValidator.validate(person);
         esm.persist(em, person);
         return person;
     }
@@ -126,5 +132,10 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     public List<DbResource> getGenders() {
         return Gender.getDbResources();
+    }
+
+    @Override
+    public List<City> getCities(Country country) {
+        return locationsManager.getCities(country);
     }
 }

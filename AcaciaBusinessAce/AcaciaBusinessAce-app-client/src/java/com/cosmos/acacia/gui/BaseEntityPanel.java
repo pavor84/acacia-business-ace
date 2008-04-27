@@ -46,6 +46,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     protected static Logger log = Logger.getLogger(BaseEntityPanel.class);
 
+    protected DialogResponse modifiedResponse = null;
+    
     public BaseEntityPanel(DataObject dataObject)
     {
         super(dataObject);
@@ -76,11 +78,10 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     {
         if (getBindingGroup().isContentValid()){
                 return true;
-        } else {
-            // TODO : Detailed message?
-            JOptionPane.showMessageDialog(this, getResourceMap().getString("save.invalid"));
-            return false;
         }
+        // TODO : Detailed message?
+        JOptionPane.showMessageDialog(this, getResourceMap().getString("save.invalid"));
+        return false;
     }
 
 
@@ -89,23 +90,15 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         try {
             performSave(true);
         } catch (Exception ex){
-            ValidationException ve = extractValidationException(ex);
-            if ( ve!=null ){
-                updateFieldsStyle(ve.getMessages());
-                String message = getValidationErrorsMessage(ve);
-                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
-            } else {
-                ex.printStackTrace();
-                // TODO: Log that error
-                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
-                ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
-                JBErrorPane.showDialog(this, errorInfo);
-            }
+            checkForValidationException(ex);
         }
     }
 
     public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
+        if (modifiedResponse != null)
+            setDialogResponse(modifiedResponse);
+        else
+            setDialogResponse(DialogResponse.CLOSE);
         close();
     }
 
@@ -232,6 +225,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return errorInfo;
     }
 
+    @SuppressWarnings("unchecked")
     protected Map<String, String> populateState()
     {
         Map <String, String> state = new HashMap<String, String>();
@@ -267,12 +261,17 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                             BaseEntityPanel.this, dialogMessage, "", JOptionPane.OK_CANCEL_OPTION);
 
                     if (answer == JOptionPane.OK_OPTION && checkFormValidity()) {
-                        performSave(false);
+                        try {
+                            setModifiedResponse(DialogResponse.SAVE);
+                            performSave(false);
+                        } catch (Exception ex) {
+                            checkForValidationException(ex);
+                            return false;
+                        }
+
                         table.setParentDataObject(getDataObject());
                         return true;
                     }
-
-                    return false;
                 }
                 return true;
             }
@@ -282,6 +281,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Class getResourceStopClass()
     {
@@ -297,8 +297,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             if(!closeDialogConfirmation())
                 return;
         }
-
-        setDialogResponse(DialogResponse.CLOSE);
+        if (modifiedResponse != null)
+            setDialogResponse(modifiedResponse);
+        else
+            setDialogResponse(DialogResponse.CLOSE);
+        
         super.dialogWindowClosing(event);
     }
 
@@ -318,4 +321,24 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return JOptionPane.YES_OPTION == result;
     }
 
+    protected void checkForValidationException(Exception ex)
+    {
+        ValidationException ve = extractValidationException(ex);
+        if ( ve!=null ){
+            updateFieldsStyle(ve.getMessages());
+            String message = getValidationErrorsMessage(ve);
+            JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
+        } else {
+            ex.printStackTrace();
+            // TODO: Log that error
+            String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
+            ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
+            JBErrorPane.showDialog(this, errorInfo);
+        }
+    }
+
+    protected void setModifiedResponse(DialogResponse modifiedResponse)
+    {
+        this.modifiedResponse = modifiedResponse;
+    }
 }

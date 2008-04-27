@@ -40,7 +40,8 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     @EJB
     private BankDetailsListLocal bankDetailsManager;
-        
+
+    @SuppressWarnings("unchecked")
     public List<Country> getCountries()
     {
 
@@ -70,8 +71,9 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return esm.remove(em, country);
     }
 
+    @SuppressWarnings("unchecked")
     public List<City> getCities() {
-    	Query q = em.createNamedQuery("City.fetchAll");
+        Query q = em.createNamedQuery("City.fetchAll");
 
         return new ArrayList<City>(q.getResultList());
     }
@@ -84,7 +86,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public City newCity() {
-    	return new City();
+        return new City();
     }
 
     public City saveCity(City city) {
@@ -96,17 +98,16 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return esm.remove(em, city);
     }
 
+    @SuppressWarnings("unchecked")
     public List<Address> getAddresses(DataObject parent) {
         if (parent != null) {
             Query query = em.createNamedQuery("Address.findByParentDataObjectAndDeleted");
             query.setParameter("parentDataObject", parent);
             query.setParameter("deleted", false);
-            
+
             return new ArrayList<Address>(query.getResultList());
-        } else {
-            return new ArrayList<Address>();
         }
-               
+        return new ArrayList<Address>();
     }
 
     public EntityProperties getAddressEntityProperties() {
@@ -128,8 +129,17 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     public int deleteAddress(Address address) {
         return esm.remove(em, address);
     }
-    
+
     public List<DbResource> getCurrencies() {
         return bankDetailsManager.getCurrencies();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<City> getCities(Country country) {
+        Query q = em.createNamedQuery("City.findByCountry");
+        q.setParameter("country", country);
+
+        return new ArrayList<City>(q.getResultList());
     }
 }

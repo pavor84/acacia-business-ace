@@ -38,7 +38,12 @@ import javax.persistence.Table;
              (
                 name = "Address.findByParentDataObjectIsNullAndDeleted",
                 query = "select a from Address a where a.dataObject.parentDataObject is null and a.dataObject.deleted = :deleted"
-              )
+              ),
+        @NamedQuery
+            (
+                name = "Address.findByNameAndParentDataObject",
+                query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObject = :parentDataObject"
+            )
     }
 )
 public class Address extends DataObjectBean implements Serializable {

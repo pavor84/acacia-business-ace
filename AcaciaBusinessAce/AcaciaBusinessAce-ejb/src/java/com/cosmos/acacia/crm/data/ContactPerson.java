@@ -37,7 +37,14 @@ import javax.persistence.Table;
         (
            name = "ContactPerson.findByParentDataObjectIsNullAndDeleted",
            query = "select cp from ContactPerson cp where cp.dataObject.parentDataObject is null and cp.dataObject.deleted = :deleted"
-         )
+        ),
+        @NamedQuery
+        (
+            name = "ContactPerson.findByPersonAndTypeAndParentDataObject",
+            query = "select cp from ContactPerson cp where cp.contact=:person and " +
+                    "cp.dataObject.parentDataObject=:parentDataObject and " +
+                    "cp.positionType=:positionType"
+        )
     }
 )
 public class ContactPerson extends DataObjectBean implements Serializable {
@@ -86,18 +93,22 @@ public class ContactPerson extends DataObjectBean implements Serializable {
         this.contactPersonId = contactPersonId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }

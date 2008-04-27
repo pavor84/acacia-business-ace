@@ -37,6 +37,7 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
     @EJB
     private EntityStoreManagerLocal esm;
 
+    @SuppressWarnings("unchecked")
     public List<Passport> getPassports(DataObject parentDataObject)
     {
         Query q;

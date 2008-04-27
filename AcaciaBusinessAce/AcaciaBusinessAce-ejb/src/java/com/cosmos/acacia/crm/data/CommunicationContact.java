@@ -42,7 +42,15 @@ import javax.persistence.Table;
              (
                  name = "CommunicationContact.findByContactPerson",
                  query = "select cc from CommunicationContact cc where cc.contactPerson = :contactPerson and cc.dataObject.deleted = :deleted"
-             )
+             ),
+        @NamedQuery
+            (
+                name = "CommunicationContact.findByTypeAndContactPersonAndParentDataObject",
+                query = "select cc from CommunicationContact cc where " +
+                        "cc.communicationType = :communicationType and " +
+                        "cc.contactPerson = :contactPerson and " +
+                        "cc.dataObject.parentDataObject = :parentDataObject"
+            )
     }
 )
 public class CommunicationContact extends DataObjectBean implements Serializable {

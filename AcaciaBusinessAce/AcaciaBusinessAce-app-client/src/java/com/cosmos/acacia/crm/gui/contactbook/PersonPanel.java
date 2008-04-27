@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -387,7 +389,7 @@ public class PersonPanel extends BaseEntityPanel {
 
         personBindingGroup = new BindingGroup();
 
-        EntityProperties entityProps = getPersonEntityProperties();
+        final EntityProperties entityProps = getPersonEntityProperties();
 
         genderComboBox.bind(personBindingGroup, getGenders(), person, entityProps.getPropertyDetails("gender"));
 
@@ -425,6 +427,29 @@ public class PersonPanel extends BaseEntityPanel {
         passportsPanel.add(passportsTable);
 
         personBindingGroup.bind();
+        
+        birthPlaceCountryComboBox.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (birthPlaceCityComboBox.getSelectedItem() == null)
+                {
+                    Country country = (Country) birthPlaceCountryComboBox.getSelectedItem();
+                    birthPlaceCityComboBox.bind(personBindingGroup, getCities(country), person, entityProps.getPropertyDetails("birthPlaceCity"));
+                    personBindingGroup.bind();
+                }
+            }
+        });
+        
+        birthPlaceCityComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (birthPlaceCountryComboBox.getSelectedItem() == null)
+                {
+                    Country selectedCountry = ((City) birthPlaceCityComboBox.getSelectedItem()).getCountry();
+                    birthPlaceCountryComboBox.setSelectedItem(selectedCountry);
+                }
+            }
+        });
     }
 
         protected PersonsListRemote getFormSession()
@@ -444,16 +469,19 @@ public class PersonPanel extends BaseEntityPanel {
         return formSession;
     }
 
+    @Override
     public BindingGroup getBindingGroup()
     {
         return personBindingGroup;
     }
 
+    @Override
     public Object getEntity()
     {
         return person;
     }
 
+    @Override
     public void performSave(boolean closeAfter)
     {
         log.info("Save: person: " + person);
@@ -487,6 +515,11 @@ public class PersonPanel extends BaseEntityPanel {
     private List<City> getCities()
     {
         return getFormSession().getCities();
+    }
+
+    private List<City> getCities(Country country)
+    {
+        return getFormSession().getCities(country);
     }
 
     private List<DbResource> getGenders()

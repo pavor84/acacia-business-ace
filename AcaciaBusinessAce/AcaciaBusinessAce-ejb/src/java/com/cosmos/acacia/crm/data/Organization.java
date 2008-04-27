@@ -37,13 +37,13 @@ import com.cosmos.resource.TextResource;
     {
         @NamedQuery
             (
-         	name = "Organization.findByParentDataObjectAndDeleted",
-         	query = "select o from Organization o where o.dataObject.parentDataObject = :parentDataObject and o.dataObject.deleted = :deleted"
+             name = "Organization.findByParentDataObjectAndDeleted",
+             query = "select o from Organization o where o.dataObject.parentDataObject = :parentDataObject and o.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
-    		name = "Organization.findByParentDataObjectIsNullAndDeleted",
-    		query = "select o from Organization o where o.dataObject.parentDataObject is null and o.dataObject.deleted = :deleted"
+            name = "Organization.findByParentDataObjectIsNullAndDeleted",
+            query = "select o from Organization o where o.dataObject.parentDataObject is null and o.dataObject.deleted = :deleted"
             ),
         /**
          * All not deleted organizations.
@@ -52,16 +52,21 @@ import com.cosmos.resource.TextResource;
             (
             name = "Organization.getAllNotDeleted",
             query = "select o from Organization o where o.dataObject.deleted = false"
+            ),
+        @NamedQuery
+            (
+                name = "Organization.findByName",
+                query = "select o from Organization o where o.organizationName=:organizationName"
             )
     }
 )
 public class Organization
-    extends BusinessPartner 
+    extends BusinessPartner
     implements Serializable, TextResource
 {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Column(name = "organization_name", nullable = false)
     @Property(title="Organization Name")
     private String organizationName;
@@ -254,12 +259,12 @@ public class Organization
     public String getDisplayName() {
         return toShortText();
     }
-    
+
     @Override
     public String toShortText() {
         return getOrganizationName();
     }
-    
+
     @Override
     public String toText() {
         return null;
