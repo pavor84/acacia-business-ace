@@ -18,6 +18,8 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -324,7 +326,7 @@ public class AddressPanel extends BaseEntityPanel {
 
         addressBindingGroup = new BindingGroup();
 
-        EntityProperties entityProps = getAddressEntityProperties();
+        final EntityProperties entityProps = getAddressEntityProperties();
 
         nameTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("addressName"));
         postalCodeTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalCode"));
@@ -354,7 +356,6 @@ public class AddressPanel extends BaseEntityPanel {
         });
         contactPersonsPanel.add(contactPersonsTable);
 
-
         communicationContactsTable = new CommunicationContactsListPanel(address.getDataObject());
         communicationContactsTable.setVisibleButtons(2 + 4 + 8);
 
@@ -372,6 +373,29 @@ public class AddressPanel extends BaseEntityPanel {
         addNestedFormListener(bankDetailsTable);
 
         addressBindingGroup.bind();
+        
+        countryComboBox.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cityComboBox.getSelectedItem() == null)
+                {
+                    Country country = (Country) countryComboBox.getSelectedItem();
+                    cityComboBox.bind(addressBindingGroup, getCities(country), address, entityProps.getPropertyDetails("birthPlaceCity"));
+                    addressBindingGroup.bind();
+                }
+            }
+        });
+        
+        cityComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (countryComboBox.getSelectedItem() == null)
+                {
+                    Country selectedCountry = ((City) cityComboBox.getSelectedItem()).getCountry();
+                    countryComboBox.setSelectedItem(selectedCountry);
+                }
+            }
+        });
     }
 
     private void updateCommunicationContacts(DataObject parent)
@@ -434,6 +458,11 @@ public class AddressPanel extends BaseEntityPanel {
         return getFormSession().getCities();
     }
 
+    private List<City> getCities(Country country)
+    {
+        return getFormSession().getCities(country);
+    }
+      
     @Override
     public BindingGroup getBindingGroup() {
         return addressBindingGroup;

@@ -5,15 +5,8 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.bl.impl.*;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.CommunicationContact;
-import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.PositionType;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -25,11 +18,21 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.bl.contactbook.validation.AddressValidatorLocal;
+import com.cosmos.acacia.crm.bl.contactbook.validation.CommunicationContactValidatorLocal;
+import com.cosmos.acacia.crm.bl.contactbook.validation.ContactPersonValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.CommunicationContact;
+import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
-import java.util.LinkedList;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -53,6 +56,14 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     @EJB
     private PersonsListLocal personManager;
 
+    @EJB
+    private AddressValidatorLocal addressValidator;
+
+    @EJB
+    private ContactPersonValidatorLocal contactPersonValidator;
+
+    @EJB
+    private CommunicationContactValidatorLocal communicationContactValidator;
 
     @EJB
     private PositionTypesListLocal positionTypesManager;
@@ -93,6 +104,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             address.setDataObject(dataObject);
         }
 
+        addressValidator.validate(address);
+
         return locationsManager.saveAddress(address);
     }
 
@@ -108,6 +121,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
        return locationsManager.getAddressEntityProperties();
     }
 
+    @SuppressWarnings("unchecked")
     public List<CommunicationContact> getCommunicationContacts(DataObject parent) {
         Query q;
         if(parent != null)
@@ -124,6 +138,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return new ArrayList<CommunicationContact>(q.getResultList());
     }
 
+    @SuppressWarnings("unchecked")
     public List<CommunicationContact> getCommunicationContacts(ContactPerson contactPerson) {
         Query q;
         if(contactPerson != null)
@@ -140,6 +155,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return new ArrayList<CommunicationContact>(q.getResultList());
     }
 
+    @SuppressWarnings("unchecked")
     public List<ContactPerson> getContactPersons(DataObject parent) {
         Query q;
         if(parent != null)
@@ -203,6 +219,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             DataObject parentDataObject,
             ContactPerson contactPerson)
     {
+
         communicationContact.setContactPerson(contactPerson);
         if (parentDataObject != null)
         {
@@ -214,18 +231,24 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             }
         }
 
+        communicationContactValidator.validate(communicationContact);
+
         esm.persist(em, communicationContact);
         return communicationContact;
     }
 
     @Override
     public ContactPerson saveContactPerson(ContactPerson contactPerson, DataObject parentDataObject) {
+
         contactPerson.setParentId(parentDataObject.getDataObjectId());
         if (contactPerson.getDataObject() == null){
             DataObject dataObject = new DataObject();
             dataObject.setParentDataObject(parentDataObject);
             contactPerson.setDataObject(dataObject);
         }
+
+        contactPersonValidator.validate(contactPerson);
+
         esm.persist(em, contactPerson);
 
         return contactPerson;
@@ -240,6 +263,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         }
     }
 
+   @SuppressWarnings("unchecked")
    public List<PositionType> getPositionTypes(Class ownerClass) {
        try {
             return positionTypesManager.getPositionTypes(ownerClass);
@@ -258,5 +282,9 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return CommunicationType.getDbResources();
     }
 
+    public List<City> getCities(Country country)
+    {
+        return locationsManager.getCities(country);
+    }
 
 }

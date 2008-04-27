@@ -5,15 +5,15 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import java.util.List;
+
+import javax.ejb.Remote;
+
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
-import java.util.List;
-
-import javax.ejb.Remote;
-
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
@@ -31,9 +31,11 @@ public interface AddressesListRemote {
     List<Country> getCountries();
 
     List<City> getCities();
-
-    /* Handlign addresses */
     
+    List<City> getCities(Country country);
+
+    /* Handling addresses */
+
     EntityProperties getAddressEntityProperties();
 
     Address newAddress();
@@ -43,7 +45,7 @@ public interface AddressesListRemote {
     int deleteAddress(Address address);
 
     List<Address> getAddresses(DataObject parentDataObject);
-    
+
     /* Handling contact persons */
 
     List<ContactPerson> getContactPersons(DataObject parent);
@@ -57,11 +59,12 @@ public interface AddressesListRemote {
     int deleteContactPerson(ContactPerson contactPerson);
 
     List<PositionType> getPositionTypes(DataObject parentDataObject);
-    
+
+    @SuppressWarnings("unchecked")
     List<PositionType> getPositionTypes(Class ownerClass);
-    
+
     List<Person> getPersons();
-    
+
     /* Handling communication contacts */
 
     List<CommunicationContact> getCommunicationContacts(DataObject parent);
@@ -78,6 +81,6 @@ public interface AddressesListRemote {
             ContactPerson contactPerson);
 
     int deleteCommunicationContact(CommunicationContact communicationContact);
-    
+
     List<DbResource> getCommunicationTypes();
 }
