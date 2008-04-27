@@ -279,6 +279,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                         table.setParentDataObject(getDataObject());
                         return true;
                     }
+                    return false;
                 }
                 return true;
             }
