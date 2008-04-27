@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.assembling.AssemblingAlgorithm;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -32,7 +33,7 @@ public class ComplexProductItem
     private Long complexProductItemId;
 
     @Column(name = "order_position")
-    private String orderPosition;
+    private int orderPosition;
 
     @Column(name = "quantity", nullable = false)
     private BigDecimal quantity;
@@ -43,8 +44,12 @@ public class ComplexProductItem
     @Column(name = "item_price", nullable = false)
     private BigDecimal itemPrice;
 
-    @Column(name = "applied_algorithm_info")
-    private String appliedAlgorithmInfo;
+    @JoinColumn(name = "applied_algorithm_id", referencedColumnName = "algorithm_id")
+    @ManyToOne
+    private AssemblingAlgorithm appliedAlgorithm;
+
+    @Column(name = "applied_value")
+    private Serializable appliedValue;
 
     @JoinColumn(name = "complex_product_id", referencedColumnName = "product_id")
     @ManyToOne
@@ -64,6 +69,11 @@ public class ComplexProductItem
         this.complexProductItemId = complexProductItemId;
     }
 
+    public ComplexProductItem(ComplexProduct complexProduct)
+    {
+        this.complexProduct = complexProduct;
+    }
+
     public Long getComplexProductItemId() {
         return complexProductItemId;
     }
@@ -72,11 +82,11 @@ public class ComplexProductItem
         this.complexProductItemId = complexProductItemId;
     }
 
-    public String getOrderPosition() {
+    public int getOrderPosition() {
         return orderPosition;
     }
 
-    public void setOrderPosition(String orderPosition) {
+    public void setOrderPosition(int orderPosition) {
         this.orderPosition = orderPosition;
     }
 
@@ -104,12 +114,20 @@ public class ComplexProductItem
         this.itemPrice = itemPrice;
     }
 
-    public String getAppliedAlgorithmInfo() {
-        return appliedAlgorithmInfo;
+    public AssemblingAlgorithm getAppliedAlgorithm() {
+        return appliedAlgorithm;
     }
 
-    public void setAppliedAlgorithmInfo(String appliedAlgorithmInfo) {
-        this.appliedAlgorithmInfo = appliedAlgorithmInfo;
+    public void setAppliedAlgorithm(AssemblingAlgorithm appliedAlgorithm) {
+        this.appliedAlgorithm = appliedAlgorithm;
+    }
+
+    public Object getAppliedValue() {
+        return appliedValue;
+    }
+
+    public void setAppliedValue(Serializable appliedValue) {
+        this.appliedValue = appliedValue;
     }
 
     public ComplexProduct getComplexProduct() {

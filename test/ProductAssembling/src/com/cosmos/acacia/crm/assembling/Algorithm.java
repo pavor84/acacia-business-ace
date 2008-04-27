@@ -120,7 +120,7 @@ public class Algorithm
     }
 
     private Type type;
-    private List resultList;
+    private List<AssemblingSchemaItemValue> resultList;
     private int minSelections = 0;
     private int maxSelections = Integer.MAX_VALUE;
 
@@ -169,13 +169,13 @@ public class Algorithm
         this.callbackHandler = callbackHandler;
     }
 
-    public List apply(Object valueAgainstConstraints)
+    public List<AssemblingSchemaItemValue> apply(Object valueAgainstConstraints)
         throws AlgorithmException
     {
         return apply(assemblingSchemaItem.getItemValues(), valueAgainstConstraints);
     }
 
-    protected List<ConstraintRow> apply(
+    protected List<AssemblingSchemaItemValue> apply(
             List<AssemblingSchemaItemValue> itemValues,
             Object valueAgainstConstraints)
         throws AlgorithmException
@@ -311,7 +311,7 @@ public class Algorithm
     }
 
 
-    protected List getResultList(List<ConstraintRow> constraintRows) {
+    protected List<AssemblingSchemaItemValue> getResultList(List<ConstraintRow> constraintRows) {
         if(resultList == null)
         {
             resultList = new ArrayList(constraintRows.size());
@@ -321,14 +321,14 @@ public class Algorithm
         return resultList;
     }
 
-    protected List getResultList() {
+    protected List<AssemblingSchemaItemValue> getResultList() {
         if(resultList == null)
             resultList = new LinkedList();
 
         return resultList;
     }
 
-    protected void addItem(Object item)
+    protected void addItem(AssemblingSchemaItemValue item)
     {
         getResultList().add(item);
     }

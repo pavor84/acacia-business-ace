@@ -5,10 +5,13 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
 
@@ -29,8 +32,9 @@ public class ComplexProduct
     @Column(name = "product_code", nullable = false)
     private String productCode;
 
-    @Column(name = "assembling_schema_info")
-    private String assemblingSchemaInfo;
+    @JoinColumn(name = "applied_schema_id", referencedColumnName = "product_id")
+    @ManyToOne
+    private AssemblingSchema appliedSchema;
 
 
     public ComplexProduct()
@@ -51,14 +55,13 @@ public class ComplexProduct
         this.productCode = productCode;
     }
 
-    public String getAssemblingSchemaInfo() {
-        return assemblingSchemaInfo;
+    public AssemblingSchema getAppliedSchema() {
+        return appliedSchema;
     }
 
-    public void setAssemblingSchemaInfo(String assemblingSchemaInfo) {
-        this.assemblingSchemaInfo = assemblingSchemaInfo;
+    public void setAppliedSchema(AssemblingSchema appliedSchema) {
+        this.appliedSchema = appliedSchema;
     }
-
 
     @Override
     public String toString() {
