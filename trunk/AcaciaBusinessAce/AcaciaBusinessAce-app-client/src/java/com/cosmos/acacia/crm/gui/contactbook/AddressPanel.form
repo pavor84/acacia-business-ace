@@ -21,20 +21,20 @@
                   <Component id="bankDetailsPanel" alignment="0" max="32767" attributes="1"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                      <Component id="nameTextField" min="-2" pref="155" max="-2" attributes="1"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="addressNameTextField" min="-2" pref="155" max="-2" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="countryLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="countryComboBox" min="-2" pref="175" max="-2" attributes="1"/>
+                      <Component id="countryComboBox" min="-2" pref="132" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cityComboBox" pref="179" max="32767" attributes="1"/>
+                      <Component id="cityLookup" pref="246" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="nameLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="postalCodeLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="postalCodeTextField" min="-2" pref="61" max="-2" attributes="0"/>
+                      <Component id="postalCodeTextField" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="contactPersonsPanel" min="-2" max="-2" attributes="0"/>
@@ -42,8 +42,8 @@
                       <Component id="communicationContactsPanel" max="32767" attributes="0"/>
                   </Group>
                   <Component id="addressPanel" alignment="0" max="32767" attributes="1"/>
-                  <Component id="entityFormButtonPanel" alignment="0" pref="772" max="32767" attributes="1"/>
                   <Component id="descriptionPanel" alignment="0" max="32767" attributes="1"/>
+                  <Component id="entityFormButtonPanel" alignment="1" pref="772" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -51,29 +51,51 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="postalCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="nameLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cityComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cityLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="countryComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="countryLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="nameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="14" pref="14" max="14" attributes="0"/>
+                      <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="14" pref="14" max="14" attributes="0"/>
+                      <Component id="postalCodeLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                      <Component id="postalCodeTextField" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="14" pref="14" max="14" attributes="0"/>
+                      <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="cityLookup" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="countryComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                      <Component id="addressPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="contactPersonsPanel" linkSize="1" alignment="3" min="-2" max="-2" attributes="1"/>
+                          <Component id="communicationContactsPanel" linkSize="1" alignment="3" min="-2" max="-2" attributes="1"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bankDetailsPanel" min="-2" max="-2" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="15" pref="15" max="15" attributes="0"/>
+                      <Component id="countryLabel" min="-2" pref="12" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                      <Component id="addressNameTextField" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="addressPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="contactPersonsPanel" linkSize="1" alignment="3" min="-2" max="-2" attributes="1"/>
-                  <Component id="communicationContactsPanel" linkSize="1" alignment="3" min="-2" max="-2" attributes="1"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="bankDetailsPanel" min="-2" max="-2" attributes="1"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" pref="47" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -113,23 +135,10 @@
         <Property name="name" type="java.lang.String" value="countryComboBox" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="cityComboBox">
+    <Component class="com.cosmos.swingb.JBLabel" name="postalCodeLabel">
       <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-        <Property name="name" type="java.lang.String" value="cityComboBox" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="nameLabel1">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="nameLabel1.text"/>
-        <Property name="name" type="java.lang.String" value="nameLabel1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="postalCodeLabel.text"/>
+        <Property name="name" type="java.lang.String" value="postalCodeLabel" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBTextField" name="postalCodeTextField">
@@ -257,7 +266,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="374" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -282,7 +291,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="360" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="406" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -297,10 +306,10 @@
         <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="nameTextField">
+    <Component class="com.cosmos.swingb.JBTextField" name="addressNameTextField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="nameTextField.text"/>
-        <Property name="name" type="java.lang.String" value="nameTextField" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="addressNameTextField.text"/>
+        <Property name="name" type="java.lang.String" value="addressNameTextField" noResource="true"/>
       </Properties>
     </Component>
     <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="bankDetailsPanel">
@@ -328,5 +337,10 @@
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="cityLookup">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="cityLookup" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>
