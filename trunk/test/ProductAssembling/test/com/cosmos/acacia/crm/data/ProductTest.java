@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Logger;
@@ -67,10 +69,20 @@ public class ProductTest
         em.persist(sp);
         em.getTransaction().commit();
 
+        AssemblingCategory ac = new AssemblingCategory();
+        ac.setCategoryCode("ac");
+        ac.setCategoryName("ac");
+        AssemblingSchema as = new AssemblingSchema();
+        as.setSchemaCode("as");
+        as.setSchemaName("as");
+        as.setAssemblingCategory(ac);
         ComplexProduct cp = new ComplexProduct();
         cp.setProductCode("CP");
         cp.setProductPrice(BigDecimal.valueOf(98.7));
+        cp.setAppliedSchema(as);
         em.getTransaction().begin();
+        em.persist(ac);
+        em.persist(as);
         em.persist(cp);
         em.getTransaction().commit();
 
@@ -84,6 +96,8 @@ public class ProductTest
         em.getTransaction().begin();
         em.remove(sp);
         em.remove(cp);
+        em.remove(as);
+        em.remove(ac);
         em.getTransaction().commit();
     }
 
