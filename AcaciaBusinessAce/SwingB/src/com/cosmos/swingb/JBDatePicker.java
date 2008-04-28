@@ -6,6 +6,8 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import java.text.DateFormat;
+import java.util.Locale;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -53,6 +55,9 @@ public class JBDatePicker
             String propertyName,
             AutoBinding.UpdateStrategy updateStrategy)
      {
+         
+        this.setFormats(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()));
+
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("date");
         Binding binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
