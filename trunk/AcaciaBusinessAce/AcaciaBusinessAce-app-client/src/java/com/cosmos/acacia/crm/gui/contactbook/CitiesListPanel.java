@@ -22,6 +22,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -149,6 +150,21 @@ public class CitiesListPanel extends AbstractTablePanel {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (citiesBindingGroup != null)
+            citiesBindingGroup.unbind();
+        
+        cities = null;
+        
+        initData();
+        
+        return t;
+    }
+        
     @Override
     protected Object newRow() {
         CityPanel cityPanel = new CityPanel();

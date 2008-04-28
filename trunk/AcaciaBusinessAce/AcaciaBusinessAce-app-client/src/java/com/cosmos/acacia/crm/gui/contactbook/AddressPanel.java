@@ -6,6 +6,23 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.apache.log4j.Logger;
+import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
@@ -18,23 +35,6 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-
-import com.cosmos.util.ClassHelper;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
@@ -321,7 +321,7 @@ public class AddressPanel extends BaseEntityPanel {
     private ContactPerson contactPerson;
     private Binding cityBinding;
     private Country country;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -359,7 +359,7 @@ public class AddressPanel extends BaseEntityPanel {
                 cityBinding.getTargetProperty().setValue(cityLookup, null);
             }
         });
-        
+
         cityBinding = cityLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -370,7 +370,7 @@ public class AddressPanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("city"),
             "${cityName}",
             UpdateStrategy.READ_WRITE);
-            
+
 
         descriptionTextPane.bind(addressBindingGroup, address, "description");
 
@@ -413,23 +413,23 @@ public class AddressPanel extends BaseEntityPanel {
     }
 
      protected Object onChooseCity() {
-        
+
         CitiesListPanel listPanel = new CitiesListPanel(country);
-                
+
         log.info("Displaying cities for country: " + country);
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             City selectedCity = (City) listPanel.getSelectedRowObject();
             if (countryComboBox.getSelectedItem() == null)
                 countryComboBox.setSelectedItem(selectedCity.getCountry());
-                    
+
             return selectedCity;
         } else {
             return null;
         }
     }
-     
+
     private void updateCommunicationContacts(DataObject parent)
     {
         List<CommunicationContact> communicationContacts =
@@ -494,7 +494,7 @@ public class AddressPanel extends BaseEntityPanel {
     {
         return getFormSession().getCities(country);
     }
-      
+
     @Override
     public BindingGroup getBindingGroup() {
         return addressBindingGroup;
@@ -503,7 +503,7 @@ public class AddressPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: address: " + address);
-        
+
         address = getFormSession().saveAddress(address, getParentDataObject());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(address);

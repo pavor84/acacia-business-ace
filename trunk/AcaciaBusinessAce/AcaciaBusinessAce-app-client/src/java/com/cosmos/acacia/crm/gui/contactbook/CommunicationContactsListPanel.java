@@ -22,6 +22,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -120,6 +121,21 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (communicationContactsBindingGroup != null)
+            communicationContactsBindingGroup.unbind();
+        
+        communicationContacts = null;
+        
+        initData();
+        
+        return t;
+    }
+        
     @Override
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)

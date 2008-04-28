@@ -21,6 +21,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -125,6 +126,21 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (contactPersonsBindingGroup != null)
+            contactPersonsBindingGroup.unbind();
+        
+        contactPersons = null;
+        
+        initData();
+        
+        return t;
+    }
+        
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed())

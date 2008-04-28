@@ -20,6 +20,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -146,6 +147,21 @@ public class AddressListPanel extends AbstractTablePanel {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (addressesBindingGroup != null)
+            addressesBindingGroup.unbind();
+        
+        addresses = null;
+        
+        initData();
+        
+        return t;
+    }
+        
     @Override
     public boolean canCreate() {
         return true;
