@@ -33,12 +33,12 @@ public abstract class VirtualProduct
 
     @Id
     @SequenceGenerator(
-        name="VirtualProductsSequenceGenerator",
-        sequenceName="virtual_products_seq",
+        name="DataObjectsSequenceGenerator",
+        sequenceName="data_objects_seq",
         allocationSize=1)
     @GeneratedValue(
         strategy=GenerationType.SEQUENCE,
-        generator="VirtualProductsSequenceGenerator")
+        generator="DataObjectsSequenceGenerator")
     @Column(name = "product_id", nullable = false)
     private Long productId;
 

@@ -5,9 +5,8 @@
 
 package com.cosmos.acacia.callback.assembling;
 
-import com.cosmos.acacia.crm.assembling.Algorithm;
-import com.cosmos.acacia.crm.assembling.Algorithm.Type;
 import com.cosmos.acacia.crm.assembling.ConstraintRow;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,24 +19,22 @@ import java.util.List;
 public class ChoiceCallback
     implements AssemblingCallback, Serializable
 {
-    private Algorithm.Type algorithmType;
+    private AssemblingSchemaItem assemblingSchemaItem;
+    private Object valueAgainstConstraints;
     private List<ConstraintRow> choices;
     private int defaultChoice;
-    private int minSelections;
-    private int maxSelections;
 
     private List<ConstraintRow> selectedRows;
 
     public ChoiceCallback(
-            Algorithm.Type algorithmType,
+            AssemblingSchemaItem assemblingSchemaItem,
+            Object valueAgainstConstraints,
             List<ConstraintRow> choices,
-            int defaultChoice,
-            int minSelections,
-            int maxSelections)
+            int defaultChoice)
     {
-        if(algorithmType == null)
-            throw new IllegalArgumentException("The algorithmType can not be null.");
-        this.algorithmType = algorithmType;
+        if(assemblingSchemaItem == null)
+            throw new IllegalArgumentException("The Assembling Schema Item can not be null.");
+        this.assemblingSchemaItem = assemblingSchemaItem;
 
         if(choices == null || choices.size() == 0)
             throw new IllegalArgumentException("The choices can not be null or zero length: " + choices);
@@ -48,14 +45,7 @@ public class ChoiceCallback
             throw new IllegalArgumentException("The defaultChoice index (" + defaultChoice + ") can not be great than choices size (" + size + ").");
         this.defaultChoice = defaultChoice;
 
-        if(minSelections > maxSelections)
-            throw new IllegalArgumentException("The minSelections (" + minSelections + ") can not be great than maxSelections (" + maxSelections + ").");
-        this.minSelections = minSelections;
-        this.maxSelections = maxSelections;
-    }
-
-    public Type getAlgorithmType() {
-        return algorithmType;
+        this.valueAgainstConstraints = valueAgainstConstraints;
     }
 
     public List<ConstraintRow> getChoices() {
@@ -66,12 +56,12 @@ public class ChoiceCallback
         return defaultChoice;
     }
 
-    public int getMaxSelections() {
-        return maxSelections;
+    public AssemblingSchemaItem getAssemblingSchemaItem() {
+        return assemblingSchemaItem;
     }
 
-    public int getMinSelections() {
-        return minSelections;
+    public Object getValueAgainstConstraints() {
+        return valueAgainstConstraints;
     }
 
     public List<ConstraintRow> getSelectedRows()

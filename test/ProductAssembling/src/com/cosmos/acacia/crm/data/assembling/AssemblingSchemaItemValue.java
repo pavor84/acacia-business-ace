@@ -32,12 +32,12 @@ public class AssemblingSchemaItemValue
 
     @Id
     @SequenceGenerator(
-        name="AssemblingSchemaItemValuesSequenceGenerator",
-        sequenceName="assembling_schema_item_values_seq",
+        name="DataObjectsSequenceGenerator",
+        sequenceName="data_objects_seq",
         allocationSize=1)
     @GeneratedValue(
         strategy=GenerationType.SEQUENCE,
-        generator="AssemblingSchemaItemValuesSequenceGenerator")
+        generator="DataObjectsSequenceGenerator")
     @Column(name = "item_value_id", nullable = false)
     private Long itemValueId;
 
