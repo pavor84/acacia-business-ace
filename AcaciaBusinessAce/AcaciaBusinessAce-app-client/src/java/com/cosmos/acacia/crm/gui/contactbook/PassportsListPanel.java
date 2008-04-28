@@ -21,6 +21,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -110,6 +111,21 @@ public class PassportsListPanel extends AbstractTablePanel {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (passportsBindingGroup != null)
+            passportsBindingGroup.unbind();
+        
+        passports = null;
+        
+        initData();
+        
+        return t;
+    }
+        
     @Override
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)

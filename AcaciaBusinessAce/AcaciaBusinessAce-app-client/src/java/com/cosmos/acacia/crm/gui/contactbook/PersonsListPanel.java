@@ -20,6 +20,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.application.Task;
 
 /**
  * Panel for listing existing persons, giving CRUD options
@@ -128,6 +129,21 @@ public class PersonsListPanel extends AbstractTablePanel {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (personsBindingGroup != null)
+            personsBindingGroup.unbind();
+        
+        persons = null;
+        
+        initData();
+        
+        return t;
+    }
+    
     @Override
     public boolean canCreate() {
         return true;

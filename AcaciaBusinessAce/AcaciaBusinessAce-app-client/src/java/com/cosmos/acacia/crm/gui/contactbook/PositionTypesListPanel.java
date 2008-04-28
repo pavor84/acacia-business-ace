@@ -23,6 +23,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 
 /**
  *
@@ -159,6 +160,21 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (positionTypesBindingGroup != null)
+            positionTypesBindingGroup.unbind();
+        
+        positionTypes = null;
+        
+        initData();
+        
+        return t;
+    }
+        
     @Override
     protected Object newRow() {
         PositionTypePanel positionTypePanel = new PositionTypePanel(getParentDataObject(),

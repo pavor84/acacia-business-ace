@@ -19,9 +19,9 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.application.Task;
 
 /**
  * Panel for listing existing organizations, giving CRUD options
@@ -54,10 +54,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
         organizationsBindingGroup = new BindingGroup();
         AcaciaTable organizationsTable = getDataTable();
         JTableBinding tableBinding = organizationsTable.bind(organizationsBindingGroup, getOrganizations(), getOrganizationEntityProperties());
-        organizationsTable.bindDatePickerCellEditor(
-                organizationsBindingGroup,
-                getOrganizationEntityProperties().getPropertyDetails("registrationDate"),
-                GeneralSettings.getDateFormat());
+       
         
         organizationsBindingGroup.bind();
 
@@ -140,6 +137,21 @@ public class OrganizationsListPanel extends AbstractTablePanel {
            return null;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        
+        if (organizationsBindingGroup != null)
+            organizationsBindingGroup.unbind();
+        
+        organizations = null;
+        
+        initData();
+        
+        return t;
+    }
+     
     @Override
     public boolean canCreate() {
         return true;

@@ -28,7 +28,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="personalDataPanel" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="birthDataPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="birthDataPanel" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -225,7 +225,7 @@
                           <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="8" max="32767" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="personalUniqueIdTextField" alignment="0" pref="228" max="32767" attributes="1"/>
                       <Component id="birthdateDatePicker" alignment="0" pref="228" max="32767" attributes="0"/>

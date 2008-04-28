@@ -47,8 +47,8 @@ import javax.persistence.Table;
                  */
                 name = "ProductCategory.findByNameNotDeleted",
                 query = "select p from ProductCategory p where p.categoryName like :categoryName and p.dataObject.deleted = false"
-            ),
-    })
+            )
+})
 public class ProductCategory
     extends DataObjectBean
     implements Serializable, TextResource

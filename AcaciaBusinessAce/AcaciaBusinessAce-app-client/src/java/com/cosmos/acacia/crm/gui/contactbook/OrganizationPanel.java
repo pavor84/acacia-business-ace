@@ -491,7 +491,13 @@ public class OrganizationPanel extends BaseEntityPanel {
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
-            return listPanel.getSelectedRowObject();
+            Organization result = (Organization) listPanel.getSelectedRowObject();
+            
+            if (result.getPartnerId() == organization.getPartnerId()) {
+                return null;
+            }
+            
+            return result;
         } else {
             return null;
         }
