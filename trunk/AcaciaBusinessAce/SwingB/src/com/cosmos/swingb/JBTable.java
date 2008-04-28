@@ -131,6 +131,20 @@ public class JBTable
         int rowIndex = getSelectedRow();
         setRow(rowIndex, bean);
     }
+    
+    /**
+     * Updates the visualization of a given row associated with a given bean.
+     * The bean should be already present in the table, otherwise the
+     * method throws {@link IllegalArgumentException}
+     * @param bean
+     */
+    public void updateRow(Object bean)
+    {
+        int rowIndex = getRowIndex(bean);
+        if ( rowIndex==-1 )
+            throw new IllegalArgumentException("Object: "+bean+" not found in table!");
+        setRow(rowIndex, bean);
+    }
 
     public int getRowIndex(Object bean)
     {
@@ -205,6 +219,22 @@ public class JBTable
         }
 
         return Collections.EMPTY_LIST;
+    }
+    
+    /**
+     * Removes the row for the given object.
+     * If the rowObject is not found, {@link IllegalArgumentException} is thrown.
+     * @param rowObject
+     */
+    public void removeRow(Object rowObject){
+        int rowIndex = getRowIndex(rowObject);
+        if ( rowIndex==-1 )
+            throw new IllegalArgumentException("Row for object not found. Object: "+rowObject);
+        
+        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
+        {
+            observableData.remove(rowIndex);
+        }
     }
 
     public Object removeSelectedRow()
@@ -309,8 +339,8 @@ public class JBTable
         Class columnClass = null;
         if ( expression==null ){
             expression = "${" + propertyDetails.getPropertyName() + "}";
+            // set the class only if propert name is used for the display expression
             columnClass = propertyDetails.getPropertyClass();
-            //set the class only if propert name is used for the display expression
         }
         
         // TODO: Disallow custom display property for resources (to avoid class cast exceptions)

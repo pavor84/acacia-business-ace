@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -30,6 +31,8 @@ import com.cosmos.swingb.DialogResponse;
  *
  */
 public class PatternMaskFormatListPanel extends AbstractTablePanel {
+    
+    protected static Logger log = Logger.getLogger(PatternMaskFormatListPanel.class);
     
     @EJB
     private PatternMaskListRemote formSession;
@@ -88,7 +91,6 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
         
         return t;
     }
-    
     
     @Override
     protected boolean deleteRow(Object rowObject) {

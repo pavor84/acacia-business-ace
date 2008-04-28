@@ -7,6 +7,7 @@
 package com.cosmos.acacia.gui;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -178,7 +179,6 @@ public abstract class AbstractTablePanel
 
 
     private Object selectedRowObject;
-    private TableSelectionListener tableSelectionListener;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
 
     protected void initData()
@@ -267,9 +267,9 @@ public abstract class AbstractTablePanel
     public abstract boolean canDelete(Object rowObject);
 
 
-    public void addListSelectionListener(AcaciaTable table)
+    protected void addListSelectionListener(AcaciaTable table)
     {
-        tableSelectionListener = new TableSelectionListener(table);
+        new TableSelectionListener(table);
     }
 
     public javax.swing.Action getAction(Button button)
@@ -437,34 +437,40 @@ public abstract class AbstractTablePanel
             }
         }
     }
-
+    
     @Action
     public void deleteAction() {
         Object rowObject = dataTable.getSelectedRowObject();
-        if(rowObject != null)
-        {
-            ResourceMap resource = getResourceMap();
-            String title = resource.getString("deleteAction.ConfirmDialog.title");
-            String message = resource.getString("deleteAction.ConfirmDialog.message");
-            Icon icon = resource.getImageIcon("deleteAction.ConfirmDialog.icon");
-            int result = JOptionPane.showConfirmDialog(
-                    this.getParent(),
-                    message,
-                    title,
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    icon);
-            if(JOptionPane.YES_OPTION == result)
+        
+        if ( showDeleteConfirmation(getResourceMap().getString("deleteAction.ConfirmDialog.message")) ){
+            if(deleteRow(rowObject))
             {
-                if(deleteRow(rowObject))
-                {
-                    dataTable.removeSelectedRow();
-                    fireDelete(rowObject);
-                }
+                dataTable.removeSelectedRow();
+                fireDelete(rowObject);    
             }
+            
         }
     }
+    
+    protected boolean showDeleteConfirmation(String message){
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("deleteAction.ConfirmDialog.title");
+        Icon icon = resource.getImageIcon("deleteAction.ConfirmDialog.icon");
+        int result = JOptionPane.showConfirmDialog(
+                this.getParent(),
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                icon);
+        if(JOptionPane.YES_OPTION == result)
+        {
+            return true;
+        }
+        return false;
+    }
 
+    @SuppressWarnings("unchecked")
     @Action
     public Task refreshAction() {
         log.info("refreshAction");
@@ -476,8 +482,16 @@ public abstract class AbstractTablePanel
         selectedRowObject = null;
         setDialogResponse(DialogResponse.CLOSE);
         close();
+        fireTablePanelClose();
     }
 
+    protected void fireTablePanelClose() {
+        for (TablePanelListener listener : tablePanelListeners) {
+            listener.tablePanelClose();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     protected Class getResourceStopClass()
     {
@@ -491,10 +505,6 @@ public abstract class AbstractTablePanel
         setVisible(Button.Unselect, true);
         return super.showDialog(parentComponent);
     }
-
-
-
-
 
     public enum Button
     {
@@ -584,6 +594,7 @@ public abstract class AbstractTablePanel
                 }
                 setEnabled(Button.New, canCreate());
                 selectedRowObject = null;
+                fireSelectionChanged();
             }
         }
     }
@@ -627,6 +638,12 @@ public abstract class AbstractTablePanel
         tableModificationListeners.add(listener);
     }
 
+    protected void fireSelectionChanged() {
+        for (TablePanelListener listener : tablePanelListeners) {
+            listener.selectionRowChanged();
+        }
+    }
+
     public Set<TableModificationListener> getTableModificationListeners()
     {
         return tableModificationListeners;
@@ -658,5 +675,25 @@ public abstract class AbstractTablePanel
             listener.rowDeleted(row);
         }
     }
-
+    
+    private List<TablePanelListener> tablePanelListeners = new ArrayList<TablePanelListener>();
+    
+    /**
+     * Add new listener
+     * @param listener
+     */
+    public void addTablePanelListener(TablePanelListener listener){
+        tablePanelListeners.add(listener);
+    }
+    
+    /**
+     * Finds the row that is displaying the passed instance and
+     * refreshes the data.
+     * Fires row modification event to all listeners.
+     * @param newChildren
+     */
+    public void updateRowObject(Object rowObject) {
+        dataTable.updateRow(rowObject);
+        fireModify(rowObject);
+    }
 }

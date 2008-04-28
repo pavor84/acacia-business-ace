@@ -6,27 +6,19 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.validation.ValidationException;
-import com.cosmos.acacia.crm.validation.ValidationMessage;
-import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBErrorPane;
-import com.cosmos.swingb.JBTextField;
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
-import java.rmi.RemoteException;
-import java.rmi.ServerException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import javax.ejb.EJBException;
+
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
@@ -36,6 +28,14 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingx.error.ErrorInfo;
+
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBErrorPane;
+import com.cosmos.swingb.JBTextField;
 
 /**
  *
@@ -326,36 +326,6 @@ public abstract class AbstractEntityPanel
     }
 
     /**
-     * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
-     * an EJB exception. That is way it is a little bit tricky to get it. This method implements this
-     * logic by checking if some of the causes for the main exception is actually a {@link ValidationException}
-     * @param ex
-     * @return - the ValidationException if some 'caused by' exception is {@link ValidationException},
-     * null otherwise
-     */
-    protected ValidationException extractValidationException(Exception ex)
-    {
-        Throwable e = ex;
-        while(e != null)
-        {
-            if(e instanceof ValidationException)
-            {
-                return (ValidationException)e;
-            }
-            else if(e instanceof ServerException || e instanceof RemoteException)
-            {
-                e = e.getCause();
-            }
-            else if(e instanceof EJBException)
-                e = ((EJBException)e).getCausedByException();
-            else
-                break;
-        }
-
-        return null;
-    }
-
-    /**
      * Iterates through all fields and updates there appearance to error state if 
      * some of the messages is related to their respective property.
      * 
@@ -396,27 +366,6 @@ public abstract class AbstractEntityPanel
                 }
             }
         }
-    }
-
-    /**
-     * Iterate over all validation messages and compose one string - message per line.
-     * @param ve
-     * @return
-     */
-    private String getValidationErrorsMessage(ValidationException ve)
-    {
-        StringBuilder msg = new StringBuilder();
-        for(ValidationMessage validationMessage : ve.getMessages())
-        {
-            String currentMsg = null;
-            if(validationMessage.getArguments() != null)
-                currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
-            else
-                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
-            msg.append(currentMsg+"\n");
-        }
-
-        return msg.toString();
     }
 
     /**
