@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
 import java.util.ArrayList;
@@ -66,23 +61,11 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return new ArrayList<Person>(q.getResultList());
     }
 
-    /**
-     * A method for listing all existing countries
-     *
-     * @param parent
-     * @return the country-list
-     */
     public List<Country> getCountries()
     {
         return locationsManager.getCountries();
     }
 
-    /**
-     * A method for listing all existing cities
-     *
-     * @param parent
-     * @return the city-list
-     */
     public List<City> getCities()
     {
         return locationsManager.getCities();
