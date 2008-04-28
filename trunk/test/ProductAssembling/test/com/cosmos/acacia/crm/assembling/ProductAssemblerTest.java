@@ -5,6 +5,13 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import com.cosmos.acacia.callback.ApplicationCallbackHandler;
+import com.cosmos.acacia.callback.assembling.ChoiceCallback;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -46,4 +53,45 @@ public class ProductAssemblerTest {
     {
     }
 
+    private static class AcaciaCallbackHandler
+        implements ApplicationCallbackHandler
+    {
+        private int[] selectItems;
+        private boolean invoked;
+
+        public AcaciaCallbackHandler(int[] selectItems)
+        {
+            this.selectItems = selectItems;
+        }
+
+        public void handle(Callback[] callbacks)
+                throws IOException,
+                UnsupportedCallbackException
+        {
+            invoked = true;
+            for(Callback callback : callbacks)
+            {
+                if(callback instanceof ChoiceCallback)
+                {
+                    ChoiceCallback choiceCallback = (ChoiceCallback)callback;
+                    List<ConstraintRow> constraintRows = choiceCallback.getChoices();
+                    List<ConstraintRow> result = new ArrayList<ConstraintRow>(selectItems.length);
+                    for(int i = 0; i < selectItems.length; i++)
+                    {
+                        result.add(constraintRows.get(selectItems[i]));
+                    }
+
+                    choiceCallback.setSelectedRows(result);
+                }
+                else
+                {
+                    throw new UnsupportedCallbackException(callback);
+                }
+            }
+        }
+
+        public boolean isInvoked() {
+            return invoked;
+        }
+    }
 }

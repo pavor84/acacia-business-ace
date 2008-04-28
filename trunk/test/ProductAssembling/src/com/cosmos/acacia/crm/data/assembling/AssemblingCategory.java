@@ -37,12 +37,12 @@ public class AssemblingCategory
 
     @Id
     @SequenceGenerator(
-        name="AssemblingCategoriesSequenceGenerator",
-        sequenceName="assembling_categories_seq",
+        name="DataObjectsSequenceGenerator",
+        sequenceName="data_objects_seq",
         allocationSize=1)
     @GeneratedValue(
         strategy=GenerationType.SEQUENCE,
-        generator="AssemblingCategoriesSequenceGenerator")
+        generator="DataObjectsSequenceGenerator")
     @Column(name = "assembling_category_id", nullable = false)
     private Long assemblingCategoryId;
 

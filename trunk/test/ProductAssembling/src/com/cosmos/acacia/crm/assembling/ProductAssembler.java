@@ -173,6 +173,11 @@ public class ProductAssembler
         return BigDecimal.valueOf(0.0);
     }
 
+    public long getUserId()
+    {
+        return 1;
+    }
+
     /**
      * If the algorithm type is Range or Equals trying to find corresponding
      * value in the lollowing order:
@@ -182,7 +187,9 @@ public class ProductAssembler
      * 4. Ask the operator (seller, client) using Dialog Form and Callback mechanism
      * 
      */
-    protected Object getAlgorithmValue(AssemblingSchemaItem asi, Map parameters)
+    protected Object getAlgorithmValue(
+            AssemblingSchemaItem asi,
+            Map parameters)
     {
         Algorithm.Type algorithmType;
         algorithmType = Algorithm.Type.valueOf(asi.getAssemblingAlgorithm().getAlgorithmCode());

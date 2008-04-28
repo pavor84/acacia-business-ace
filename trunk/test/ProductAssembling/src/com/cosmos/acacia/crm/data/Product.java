@@ -56,12 +56,12 @@ public abstract class Product
 
     @Id
     @SequenceGenerator(
-        name="ProductsSequenceGenerator",
-        sequenceName="products_seq",
+        name="DataObjectsSequenceGenerator",
+        sequenceName="data_objects_seq",
         allocationSize=1)
     @GeneratedValue(
         strategy=GenerationType.SEQUENCE,
-        generator="ProductsSequenceGenerator")
+        generator="DataObjectsSequenceGenerator")
     @Column(name = "product_id", nullable = false)
     private Long productId;
 

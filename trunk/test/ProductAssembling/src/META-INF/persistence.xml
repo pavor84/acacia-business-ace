@@ -15,6 +15,7 @@
     <class>com.cosmos.acacia.crm.data.assembling.RealProduct</class>
     <class>com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem</class>
     <class>com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue</class>
+    <class>com.cosmos.acacia.crm.data.DbProperty</class>
     <properties>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

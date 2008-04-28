@@ -199,13 +199,14 @@ public class Algorithm
         if(Type.UnconditionalSelection.equals(type))
             return getResultList(constraintRows);
 
-        List<ConstraintRow> resultRows;
-        if(Type.RangeAlgorithms.contains(type))
-            resultRows = applyRangeCondition(constraintRows, (Comparable)valueAgainstConstraints);
-        else if(Type.EqualsAlgorithms.contains(type))
-            resultRows = applyEqualsCondition(constraintRows, valueAgainstConstraints);
-        else
-            resultRows = constraintRows;
+        List<ConstraintRow> resultRows = constraintRows;
+        if(valueAgainstConstraints != null)
+        {
+            if(Type.RangeAlgorithms.contains(type))
+                resultRows = applyRangeCondition(constraintRows, (Comparable)valueAgainstConstraints);
+            else if(Type.EqualsAlgorithms.contains(type))
+                resultRows = applyEqualsCondition(constraintRows, valueAgainstConstraints);
+        }
 
         int size = resultRows.size();
         if(Type.SingleSelectionAlgorithms.contains(type) ||
@@ -218,7 +219,7 @@ public class Algorithm
         if(size == 0 || size < minSelections)
             resultRows = constraintRows;
 
-        return getResultList(applyUserSelection(resultRows));
+        return getResultList(applyUserSelection(resultRows, valueAgainstConstraints));
     }
 
     protected List<ConstraintRow> applyRangeCondition(
@@ -267,17 +268,18 @@ public class Algorithm
         return Collections.emptyList();
     }
 
-    protected List<ConstraintRow> applyUserSelection(List<ConstraintRow> constraintRows)
+    protected List<ConstraintRow> applyUserSelection(
+            List<ConstraintRow> constraintRows,
+            Object valueAgainstConstraints)
         throws AlgorithmException
     {
         if(callbackHandler == null)
             throw new IllegalArgumentException("The callbackHandler can not be null when applyUserSelection is invoked.");
         ChoiceCallback choiceCallback = new ChoiceCallback(
-                type,
+                assemblingSchemaItem,
+                valueAgainstConstraints,
                 constraintRows,
-                -1,
-                minSelections,
-                maxSelections);
+                -1);
         try
         {
             callbackHandler.handle(new ApplicationCallback[] {choiceCallback});
@@ -297,11 +299,11 @@ public class Algorithm
         {
             int selected = selectedRows.size();
             int allowed;
-            if(selected < (allowed = choiceCallback.getMinSelections()))
+            if(selected < (allowed = minSelections))
             {
                 throw new LessSelectedItemsThanAllowed(selected, allowed);
             }
-            else if(selected > choiceCallback.getMaxSelections())
+            else if(selected > maxSelections)
             {
                 throw new MoreSelectedItemsThanAllowed(selected, allowed);
             }
@@ -344,3 +346,19 @@ public class Algorithm
             addConstraintRow(constraintRow);
     }
 }
+
+/**
+ * 
+delete from complex_product_items;
+delete from complex_products;
+delete from assembling_schema_item_values;
+delete from assembling_schema_items;
+delete from assembling_schemas;
+delete from assembling_categories;
+delete from real_products;
+delete from simple_products;
+delete from virtual_products;
+delete from products;
+delete from offer_items;
+delete from offers;
+ */
