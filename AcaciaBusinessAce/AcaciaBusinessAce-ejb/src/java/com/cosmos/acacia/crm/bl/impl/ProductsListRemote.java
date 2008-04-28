@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
 import javax.ejb.Remote;
@@ -52,4 +53,48 @@ public interface ProductsListRemote {
      */
     List<DbResource> getProductColors();
     
+    /**
+     * Entity properties for categories
+     * @return
+     */
+    EntityProperties getProductCategoryEntityProperties();
+    
+    /**
+     * Save a product category instance.
+     * @param entity
+     * @return
+     */
+    ProductCategory saveProductCategory(ProductCategory entity);
+    
+    /**
+     * Create new instance for this object
+     * @param object
+     * @return
+     */
+    ProductCategory newProductCategory(ProductCategory parentCategory);
+    
+    /**
+     * Removes the category.
+     * @param rowObject
+     * @return - true on success, false otherwise
+     */
+    boolean deleteProductCategory(ProductCategory category);
+    
+    /**
+     * Set the first category as a parent to the second.
+     * First checks if the first category is a child of the second (which
+     * will lead to parent-child cycle). In this case throws {@link ValidationException}.
+     * On success returns the updated new child object.
+     * @param newParent
+     * @param newChildren 
+     * @return - {@link ProductCategory} - the updated new children category
+     */
+    ProductCategory updateParents(ProductCategory newParent, ProductCategory newChildren);
+    
+    /**
+     * Deletes all categories from the list in order.
+     * @param withSubCategories
+     * @return true on success, false if the deletion fails
+     */
+    boolean deleteProductCategories(List<ProductCategory> categories);
 }

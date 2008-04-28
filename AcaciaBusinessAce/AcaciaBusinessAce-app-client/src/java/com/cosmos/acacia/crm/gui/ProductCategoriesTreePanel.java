@@ -6,10 +6,43 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import org.jdesktop.application.Application;
+import java.awt.Point;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetContext;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TooManyListenersException;
 
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.swing.DropMode;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.JPopupMenu.Separator;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaToStringConverter;
+import com.cosmos.acacia.gui.TablePanelListener;
+import com.cosmos.swingb.JBPopupMenu;
+import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
  *
@@ -17,13 +50,370 @@ import com.cosmos.acacia.gui.AcaciaPanel;
  */
 public class ProductCategoriesTreePanel extends AcaciaPanel {
     
+    private ProductCategoryListPanel categoryListPanel;
+    
+    @EJB
+    private ProductsListRemote formSession;
+
+    public TreePath contextMenuTreePath;
+    
     /** Creates new form ProductCategoriesPanel */
     public ProductCategoriesTreePanel(DataObject parentDataObject) {
         super(parentDataObject);
         initComponents();
+        initComponentsCustom();
         initData();
     }
     
+    private void initComponentsCustom() {
+        categoryListPanel = new ProductCategoryListPanel(null);
+        categoryListPanel.addTablePanelListener(new TablePanelListener() {
+            @Override
+            public void tablePanelClose() {
+                onTablePanelClose();
+            }
+
+            @Override
+            public void selectionRowChanged() {
+                onTableSelectionChanged();
+            }
+        });
+        categoryListPanel.addTableModificationListener(new TableModificationListener() {
+            @Override
+            public void rowModified(Object row) {
+                onRowModified(row);
+            }
+            @Override
+            public void rowDeleted(Object row) {
+                onRowDeleted(row);
+            }
+            @Override
+            public void rowAdded(Object row) {
+                onRowAdded(row);
+            }
+        });
+        
+        listPanel.add(categoryListPanel);
+        listPanel.setPreferredSize(categoryListPanel.getPreferredSize());
+        listPanel.setSize(categoryListPanel.getSize());
+        
+        treeContextMenu = new JBPopupMenu();
+        
+        ActionListener menuItemListener = new TreeActionListener();
+        
+        JMenuItem newItem = new JMenuItem();
+        JMenuItem modifyItem = new JMenuItem();
+        JMenuItem deleteItem = new JMenuItem();
+        
+        newItem.setName("newItem");
+        newItem.setText(getResourceMap().getString("Tree.action.new"));
+        newItem.addActionListener(menuItemListener);
+        
+        modifyItem.setName("modifyItem");
+        modifyItem.setText(getResourceMap().getString("Tree.action.modify"));
+        modifyItem.addActionListener(menuItemListener);
+        
+        deleteItem.setName("deleteItem");
+        deleteItem.setText(getResourceMap().getString("Tree.action.delete"));
+        deleteItem.addActionListener(menuItemListener);
+        
+        treeContextMenu.add(newItem);
+        treeContextMenu.add(new Separator());
+        treeContextMenu.add(modifyItem);
+        treeContextMenu.add(deleteItem);
+        
+        categoryTree.addMouseListener(new PopupTrigger());
+        
+        categoryTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                treeSelectionChanging = true;
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                if ( node.getUserObject() instanceof ProductCategory ){
+                    ProductCategory c = (ProductCategory) node.getUserObject();
+                    categoryListPanel.getDataTable().clearSelection();
+                    categoryListPanel.getDataTable().setSelectedRowObject(c);
+                }
+                treeSelectionChanging = false;
+            }
+        });
+        categoryTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        categoryTree.setDragEnabled(true);
+        categoryTree.setDropMode(DropMode.ON);
+        DropTarget dropTarget = new DropTarget();
+        try{
+            dropTarget.addDropTargetListener(new TreeDropTargetListener());
+        }catch ( TooManyListenersException e ){
+            e.printStackTrace();
+        }
+        categoryTree.setDropTarget(dropTarget);
+    }
+    
+    class TreeActionListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JMenuItem item = (JMenuItem) e.getSource();
+            if ( item.getName().equals("newItem") )
+                categoryListPanel.newAction();
+            else if ( item.getName().equals("modifyItem") )
+                categoryListPanel.modifyAction();
+            else if ( item.getName().equals("deleteItem") )
+                categoryListPanel.deleteAction();
+        }
+    }
+    
+    class PopupTrigger extends MouseAdapter {
+        public void mouseReleased(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                int x = e.getX();
+                int y = e.getY();
+                TreePath path = categoryTree.getPathForLocation(x, y);
+                
+                if (path != null) {
+                    //don't accept the root
+                    DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) categoryTree.getModel().getRoot();
+                    if ( path.equals(new TreePath(rootNode.getPath())) ){
+                        return;
+                    }
+                    
+                    categoryTree.setSelectionPath(path);
+                    treeContextMenu.show(categoryTree, x, y);
+                    contextMenuTreePath = path;
+                }
+            }
+        }
+    }
+    
+    protected void onRowAdded(Object row) {
+        ProductCategory added = (ProductCategory) row;
+        DefaultMutableTreeNode addedNode = new DefaultMutableTreeNode(added);
+
+        DefaultMutableTreeNode parentNode = null;
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) categoryTree.getModel().getRoot(); 
+        ProductCategory parent = added.getParentCategory();
+        if ( parent==null )
+            parentNode = root;
+        else{
+            parentNode = (DefaultMutableTreeNode) findTreeNodeForUserObject(root, parent);
+        }
+        
+        DefaultTreeModel m = (DefaultTreeModel) categoryTree.getModel();
+        
+        int idx = findAppropriateIndex(parentNode, addedNode);
+        m.insertNodeInto(addedNode, parentNode, idx); 
+        
+        categoryTree.expandPath(new TreePath(parentNode.getPath()));
+    }
+
+    protected void onRowDeleted(Object row) {
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) categoryTree.getModel().getRoot();
+        DefaultMutableTreeNode deletedNode = (DefaultMutableTreeNode)
+            findTreeNodeForUserObject(root, (ProductCategory) row);
+        
+        DefaultTreeModel m = (DefaultTreeModel) categoryTree.getModel();
+        m.removeNodeFromParent(deletedNode);
+    }
+
+    protected void onRowModified(Object row) {
+        TreeNode rowNode = findTreeNodeForUserObject(
+            (DefaultMutableTreeNode)categoryTree.getModel().getRoot(), 
+            (ProductCategory)row);
+        
+        DefaultTreeModel m = (DefaultTreeModel) categoryTree.getModel();
+        TreePath rowNodePath = new TreePath(
+            ((DefaultMutableTreeNode)rowNode).getPath());
+        
+        m.valueForPathChanged(rowNodePath, row);
+    }
+
+    private class TreeDropTargetListener extends DropTargetAdapter{
+        @Override
+        public void drop(DropTargetDropEvent dtde) {
+            DefaultMutableTreeNode targetNode = getNodeForEvent(dtde);
+            DefaultMutableTreeNode sourceNode = getSourceNode();
+            
+            if ( targetNode.equals(sourceNode.getParent())) {
+                dragNDropImpossible(getResourceMap().getString("Tree.err.alreadyChild"));
+                return;
+            }
+            
+            ProductCategory newChild = null;
+            //children ok
+            if ( sourceNode.getUserObject() instanceof ProductCategory ){
+                newChild = (ProductCategory) sourceNode.getUserObject();
+            //invalid children found
+            }else{
+                dragNDropImpossible(getResourceMap().getString("Tree.err.invalidSourceObject"));
+                return;
+            }
+            
+            //check for parent-child cycle
+            TreeNode ancestor = targetNode;
+            while ( ancestor!=null ){
+                if ( ancestor.equals(sourceNode) ){
+                    dragNDropImpossible(getResourceMap().getString("ProductCategory.err.cyclicParent"));
+                    return;
+                }
+                ancestor = ancestor.getParent();
+            }
+            
+            boolean success = false;
+            
+            //dropped over the root
+            if ( categoryTree.getModel().getRoot().equals(targetNode) ){
+                if ( !showDragNDropWarning() )
+                    return;
+                success = updateParentsAndRefreshTable(null, newChild);
+            }
+            //dropped on some other valid item
+            else if ( targetNode.getUserObject() instanceof ProductCategory ){
+                if ( !showDragNDropWarning() )
+                    return;
+                ProductCategory newParent = (ProductCategory) targetNode.getUserObject();
+                success = updateParentsAndRefreshTable(newParent, newChild);
+            //dropped over invalid item
+            }else{
+                dragNDropImpossible(getResourceMap().getString("Tree.err.invalidDnDTargetNode"));
+            }
+            
+            //if everything is ok, update the tree model
+            if ( success ){
+                updateNodeParent(targetNode, sourceNode);
+            }
+        }
+        
+        private DefaultMutableTreeNode getSourceNode() {
+            return (DefaultMutableTreeNode)
+            categoryTree.getSelectionPath().getLastPathComponent();
+        }
+
+        private DefaultMutableTreeNode getNodeForEvent(DropTargetDropEvent dtde) {
+            Point p = dtde.getLocation();
+            DropTargetContext dtc = dtde.getDropTargetContext();
+            JTree tree = (JTree) dtc.getComponent();
+            TreePath path = tree.getClosestPathForLocation(p.x, p.y);
+            return (DefaultMutableTreeNode) path.getLastPathComponent();
+        }
+    }
+    
+    /**
+     * Mark that three selection is initiated.
+     * This way we will skip re-selection of the table. 
+     */
+    private boolean treeSelectionChanging = false; 
+
+    protected void onTableSelectionChanged() {
+        if ( treeSelectionChanging )
+            return;
+        ProductCategory selected = (ProductCategory) categoryListPanel.getDataTable().getSelectedRowObject();
+        TreePath path = null;
+        if ( selected!=null ){
+            DefaultMutableTreeNode root = 
+                (DefaultMutableTreeNode) categoryTree.getModel().getRoot();
+            DefaultMutableTreeNode node = 
+                (DefaultMutableTreeNode) findTreeNodeForUserObject(root, selected);
+            if ( node!=null )
+                path = new TreePath(node.getPath());
+        }
+        
+        if ( path!=null ){
+            categoryTree.getSelectionModel().setSelectionPath(path);
+        }else{
+            categoryTree.getSelectionModel().clearSelection();
+        }
+    }
+
+    public boolean showDragNDropWarning() {
+        int option =
+        JOptionPane.showConfirmDialog(this, 
+            getResourceMap().getString("Tree.DnDWarning"),
+            getResourceMap().getString("Tree.DnDWarningTitle"), 
+            JOptionPane.YES_NO_OPTION);
+        if ( option==JOptionPane.YES_OPTION ){
+            return true;
+        }
+        return false;
+    }
+    
+    protected void updateNodeParent(DefaultMutableTreeNode newParent, DefaultMutableTreeNode newChild) {
+        DefaultTreeModel m = (DefaultTreeModel) categoryTree.getModel();
+        m.removeNodeFromParent(newChild);
+        
+        int idx = findAppropriateIndex(newParent, newChild);
+        m.insertNodeInto(newChild, newParent, idx);
+        
+        categoryTree.expandPath(new TreePath(newParent.getPath()));
+    }
+
+    private int findAppropriateIndex(DefaultMutableTreeNode newParent,
+                                     DefaultMutableTreeNode newChild) {
+        ProductCategory child = (ProductCategory) newChild.getUserObject();
+        
+        String childStr = categoryToStringConverter.getPreferredStringForItem(child);
+        
+        for (int i = 0; i < newParent.getChildCount(); i++) {
+            DefaultMutableTreeNode curChildNode = (DefaultMutableTreeNode) newParent.getChildAt(i);
+            ProductCategory curChild = (ProductCategory) curChildNode.getUserObject();
+            
+            String curChildStr = categoryToStringConverter.getPreferredStringForItem(curChild);
+            
+            if ( childStr.compareTo(curChildStr)<=0 )
+                return i;
+        }
+
+        return newParent.getChildCount();
+    }
+
+    /**
+     * Tries to update the model by calling the business logic.
+     * After that tries to refresh the table panel.
+     * 
+     * @param newParent
+     * @param newChildren
+     * @return true on success, false otherwise
+     */
+    protected boolean updateParentsAndRefreshTable(ProductCategory newParent, ProductCategory newChildren) {
+        try{
+            ProductCategory updatedCategory = 
+                getFormSession().updateParents(newParent, newChildren);
+            
+            categoryListPanel.updateRowObject(updatedCategory);
+            
+            return true;
+        }catch ( Exception e ){
+            ValidationException ve = extractValidationException(e);
+            if ( ve!=null ){
+                String validationMsg = getValidationErrorsMessage(ve);
+                dragNDropImpossible(validationMsg);
+            }else
+                dragNDropImpossible(getResourceMap().getString("Tree.err.cantSetParents"));
+            return false;
+        }
+    }
+
+    public void dragNDropImpossible(String message) {
+        JOptionPane.showConfirmDialog(
+            this.getParent(),
+            message,
+            getResourceMap().getString("Tree.err.invalidDragNDrop"), JOptionPane.DEFAULT_OPTION);
+    }
+
+    private TreeNode findTreeNodeForUserObject(DefaultMutableTreeNode current, ProductCategory searched) {
+        if ( searched.equals(current.getUserObject()) )
+                return current;
+        for (int i = 0; i < current.getChildCount(); i++) {
+            TreeNode c = current.getChildAt(i);
+            TreeNode r = findTreeNodeForUserObject((DefaultMutableTreeNode) c, searched);
+            if ( r!=null )
+                return r;
+        }
+        return null;
+    }
+
+    protected void onTablePanelClose() {
+        this.close();
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -34,7 +424,7 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
 
         productCategoriesSplitPane = new com.cosmos.swingb.JBSplitPane();
         productCategoriesTreeScrollPane = new javax.swing.JScrollPane();
-        productCategoriesTree = new com.cosmos.swingb.JBTree();
+        categoryTree = new com.cosmos.swingb.JBTree();
         listPanel = new com.cosmos.swingb.JBPanel();
 
         setName("Form"); // NOI18N
@@ -45,8 +435,11 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
 
         productCategoriesTreeScrollPane.setName("productCategoriesTreeScrollPane"); // NOI18N
 
-        productCategoriesTree.setName("productCategoriesTree"); // NOI18N
-        productCategoriesTreeScrollPane.setViewportView(productCategoriesTree);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoriesTreePanel.class);
+        categoryTree.setToolTipText(resourceMap.getString("categoryTree.toolTipText")); // NOI18N
+        categoryTree.setDragEnabled(true);
+        categoryTree.setName("categoryTree"); // NOI18N
+        productCategoriesTreeScrollPane.setViewportView(categoryTree);
 
         productCategoriesSplitPane.setLeftComponent(productCategoriesTreeScrollPane);
 
@@ -58,18 +451,88 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBTree categoryTree;
     private com.cosmos.swingb.JBPanel listPanel;
     private com.cosmos.swingb.JBSplitPane productCategoriesSplitPane;
-    private com.cosmos.swingb.JBTree productCategoriesTree;
     private javax.swing.JScrollPane productCategoriesTreeScrollPane;
+
+    private AcaciaToStringConverter categoryToStringConverter;
+
+    private JBPopupMenu treeContextMenu;
     // End of variables declaration//GEN-END:variables
     
     protected void initData()
     {
-        PatternMaskFormatListPanel p = new PatternMaskFormatListPanel(null);
+        //the list panel will benefit from the tree component because of the
+        //possibility to easy lookup the children for a given node
+        categoryListPanel.setCategoriesTree(categoryTree);
         
-        listPanel.add(p);
-        listPanel.setPreferredSize(p.getPreferredSize());
-        listPanel.setSize(p.getSize());
+        categoryToStringConverter = new AcaciaToStringConverter("${categoryName}");
+        categoryTree.setToStringConverter(categoryToStringConverter);
+        
+        List<ProductCategory> categories = categoryListPanel.getCategories();
+        
+        //make tree model from the list of categories
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(
+            getResourceMap().getString("CategoryTree.rootNodeDisplay"));
+        DefaultTreeModel treeModel = new DefaultTreeModel(root);
+        categoryTree.setModel(treeModel);
+        addCateogriesToTree(root, categories);
+        
+        categoryTree.enableToStringCellRenderer();
+        categoryTree.expandPath(new TreePath(root.getPath()));
+    }
+    
+    private void addCateogriesToTree(DefaultMutableTreeNode root, List<ProductCategory> categories) {
+        
+        java.util.Map<ProductCategory, DefaultMutableTreeNode> added = new HashMap
+            <ProductCategory, DefaultMutableTreeNode>();
+        
+        for (ProductCategory cat : categories) {
+            ProductCategory parentCat = cat.getParentCategory();
+            DefaultMutableTreeNode catNode = findOrCreateNode(cat, added, root);
+            DefaultMutableTreeNode parentNode = findOrCreateNode(parentCat, added, root);
+            
+            int idx = findAppropriateIndex(parentNode, catNode);
+            parentNode.insert(catNode, idx);
+        }
+    }
+
+    /**
+     * Find the node model corresponding of the given cat.
+     * If not found - creates new instance.
+     * If the cat is null, the root node model is assumed and returned.
+     * @param cat
+     * @param added
+     * @param root
+     * @return - found node, new created node, or passed root node.
+     */
+    private DefaultMutableTreeNode findOrCreateNode(ProductCategory cat,
+                                           java.util.Map<ProductCategory, DefaultMutableTreeNode> added,
+                                           DefaultMutableTreeNode root) {
+        //assuming root if null
+        if ( cat==null ){
+            return root;
+        }
+        //find node
+        DefaultMutableTreeNode result = added.get(cat);
+        //create new node
+        if ( result==null ){
+            result = new DefaultMutableTreeNode(cat);
+            added.put(cat, result);
+        }
+        return result;
+    }
+    
+    protected ProductsListRemote getFormSession() {
+        if (formSession == null) {
+            try {
+                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return formSession;
     }
 }

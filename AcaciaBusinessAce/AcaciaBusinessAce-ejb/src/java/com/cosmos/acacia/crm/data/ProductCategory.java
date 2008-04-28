@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -37,7 +38,16 @@ import javax.persistence.Table;
             (
                 name = "ProductCategory.findByParentDataObjectIsNullAndDeleted",
                 query = "select p from ProductCategory p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
-            )
+            ),
+        @NamedQuery
+            (
+                /**
+                 * Parameters:
+                 * - categoryName - find all undeleted elements with the same name (at most one should exist)
+                 */
+                name = "ProductCategory.findByNameNotDeleted",
+                query = "select p from ProductCategory p where p.categoryName like :categoryName and p.dataObject.deleted = false"
+            ),
     })
 public class ProductCategory
     extends DataObjectBean
@@ -55,9 +65,9 @@ public class ProductCategory
     private BigInteger parentId;
 
     @Column(name = "category_name", nullable = false)
-    @Property(title="Category Name")
+    @Property(title="Category Name", propertyValidator=@PropertyValidator( minLength=2, maxLength=100))
     private String categoryName;
-
+    
     @Column(name = "description")
     @Property(title="Description")
     private String description;
@@ -74,12 +84,16 @@ public class ProductCategory
     @PrimaryKeyJoinColumn
     private DataObject dataObject;
 
-
     @JoinColumn(name = "pattern_mask_format_id", referencedColumnName = "pattern_mask_format_id")
     @ManyToOne
-    @Property(title="Pattern Mask Format")
+    @Property(title="Pattern Mask Format", customDisplay=
+        "${patternMaskFormat.patternName} (${patternMaskFormat.format})")
     private PatternMaskFormat patternMaskFormat;
-
+    
+    @ManyToOne
+    @JoinColumn(name="parent_cat_id")
+    @Property(title="Parent Category", customDisplay="${parentCategory.categoryName}")
+    private ProductCategory parentCategory;
 
     public ProductCategory() {
     }
@@ -187,6 +201,22 @@ public class ProductCategory
 
     public String toText() {
         return getCategoryName();
+    }
+
+    /**
+     * Getter for parentCategory
+     * @return ProductCategory
+     */
+    public ProductCategory getParentCategory() {
+        return parentCategory;
+    }
+
+    /**
+     * Setter for parentCategory
+     * @param parentCategory - ProductCategory
+     */
+    public void setParentCategory(ProductCategory parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
 }

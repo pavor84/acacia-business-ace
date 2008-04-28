@@ -21,10 +21,12 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.ProductColor;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.validation.impl.ProductCategoryValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.ProductValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -42,6 +44,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private EntityStoreManagerLocal esm;
     @EJB
     private ProductValidatorLocal productValidator;
+    @EJB
+    private ProductCategoryValidatorLocal productCategoryValidator;
 
     @SuppressWarnings("unchecked")
     public List<SimpleProduct> getProducts(DataObject parent)
@@ -163,5 +167,88 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         }
         
         return null;
+    }
+
+    /**
+     * @see com.cosmos.acacia.crm.bl.impl.ProductsListRemote#getProductCategoryEntityProperties()
+     */
+    @Override
+    public EntityProperties getProductCategoryEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(ProductCategory.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public ProductCategory saveProductCategory(ProductCategory entity) {
+        productCategoryValidator.validate(entity); 
+        
+        esm.persist(em, entity);
+        return entity; 
+    }
+
+    @Override
+    public ProductCategory newProductCategory(ProductCategory parentCategory) {
+        ProductCategory newObject = new ProductCategory();
+        newObject.setParentCategory(parentCategory);
+        return newObject;
+    }
+
+    @Override
+    public boolean deleteProductCategory(ProductCategory category) {
+        try{
+            esm.remove(em, category);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * @see com.cosmos.acacia.crm.bl.impl.ProductsListRemote#updateParents(com.cosmos.acacia.crm.data.ProductCategory, com.cosmos.acacia.crm.data.ProductCategory)
+     */
+    @Override
+    public ProductCategory updateParents(ProductCategory newParent, ProductCategory newChildren) {
+        
+        if ( newParent!=null ){
+            ValidationException ve = new ValidationException();
+            
+            // check cyclic parents
+            ProductCategory ancestor = newParent;
+            while ( ancestor!=null ){
+                if ( ancestor.equals(newChildren) ){
+                    ve.addMessage("parentCategory", "ProductCategory.err.cyclicParent");
+                    break;
+                }
+                ancestor = ancestor.getParentCategory();
+            }
+            
+            // if we have validation messages - throw the exception since not everything is OK
+            if ( !ve.getMessages().isEmpty() )
+                throw ve;
+            
+            //merge the parent
+            newParent = em.merge(newParent);
+        }
+        
+        //newParent may be null here - but no problem
+        newChildren.setParentCategory(newParent);
+        esm.persist(em, newChildren);
+        
+        return newChildren;
+    }
+
+    @Override
+    public boolean deleteProductCategories(List<ProductCategory> categories) {
+        try{
+            for (ProductCategory productCategory : categories) {
+                esm.remove(em, productCategory);
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
