@@ -33,6 +33,7 @@ public class CitiesListPanel extends AbstractTablePanel {
     public CitiesListPanel()
     {
         super(null);
+        postInitData();
     }
     
     public CitiesListPanel(Country country)
