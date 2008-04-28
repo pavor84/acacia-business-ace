@@ -12,18 +12,20 @@ import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.LocationsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.impl.ProductsListBean;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.test.bl.TestUtils;
 
@@ -51,6 +53,11 @@ public class ContactBookTest {
     @EJB
     private BankDetailsListRemote bankDetailsFormSession;
 
+    @EJB
+    private PassportsListRemote passportFormSession;
+
+    @EJB
+    private LocationsListRemote locationFormSession;
 
     @Before
     public void setUp() {
@@ -81,6 +88,22 @@ public class ContactBookTest {
         if (bankDetailsFormSession == null){
             try {
                 bankDetailsFormSession = InitialContext.doLookup(BankDetailsListRemote.class.getName());
+            } catch (NamingException e) {
+                throw new IllegalStateException("Remote bean can't be loaded", e);
+            }
+        }
+
+        if (passportFormSession == null){
+            try {
+                passportFormSession = InitialContext.doLookup(PassportsListRemote.class.getName());
+            } catch (NamingException e) {
+                throw new IllegalStateException("Remote bean can't be loaded", e);
+            }
+        }
+
+        if (locationFormSession == null){
+            try {
+                locationFormSession = InitialContext.doLookup(LocationsListRemote.class.getName());
             } catch (NamingException e) {
                 throw new IllegalStateException("Remote bean can't be loaded", e);
             }
@@ -171,5 +194,25 @@ public class ContactBookTest {
         addressFormSession.deleteAddress(address);
         organizationFormSession.deleteOrganization(organization);
 
+    }
+
+    @Test
+    public void locationsTest() {
+
+        // adding
+
+        Country country = locationFormSession.newCountry();
+        country.setCountryName(TestUtils.getRandomString(10));
+        country = locationFormSession.saveCountry(country);
+
+        City city = locationFormSession.newCity();
+        city.setCountry(country);
+        city.setCityName(TestUtils.getRandomString(10));
+
+        locationFormSession.saveCity(city);
+
+        // deleting
+
+        locationFormSession.deleteCountry(country);
     }
 }
