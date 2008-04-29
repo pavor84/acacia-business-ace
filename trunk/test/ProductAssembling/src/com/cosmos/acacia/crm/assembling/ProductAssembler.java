@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import com.cosmos.acacia.callback.ApplicationCallbackHandler;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.Product;
@@ -37,6 +38,8 @@ public class ProductAssembler
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> assemblingSchemaItems;
 
+    private ApplicationCallbackHandler callbackHandler;
+
     public ProductAssembler(AssemblingSchema assemblingSchema)
     {
         this.assemblingSchema = assemblingSchema;
@@ -44,6 +47,14 @@ public class ProductAssembler
 
     public AssemblingSchema getAssemblingSchema() {
         return assemblingSchema;
+    }
+
+    public ApplicationCallbackHandler getCallbackHandler() {
+        return callbackHandler;
+    }
+
+    public void setCallbackHandler(ApplicationCallbackHandler callbackHandler) {
+        this.callbackHandler = callbackHandler;
     }
 
     public ComplexProduct assemblе(Map parameters)
@@ -99,6 +110,7 @@ public class ProductAssembler
     {
         BigDecimal iQuantity = asi.getQuantity();
         Algorithm algorithm = new Algorithm(asi);
+        algorithm.setCallbackHandler(callbackHandler);
         Object valueAgainstConstraints = getAlgorithmValue(asi, parameters);
         List<AssemblingSchemaItemValue> itemValues = algorithm.apply(valueAgainstConstraints);
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(itemValues.size());
@@ -115,6 +127,7 @@ public class ProductAssembler
             {
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
                 ProductAssembler assembler = new ProductAssembler(itemSchema);
+                assembler.setCallbackHandler(callbackHandler);
                 itemProduct = assembler.assemblе(parameters);
             }
             else
@@ -196,7 +209,8 @@ public class ProductAssembler
         if(Algorithm.Type.RangeAlgorithms.contains(algorithmType) ||
            Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
         {
-            
+            String messageCode = asi.getMessageCode();
+            return parameters.get(messageCode);
         }
 
         return null;
@@ -226,7 +240,7 @@ public class ProductAssembler
     {
         if(assemblingSchemaItems == null)
         {
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = getEntityManagerFactory().createEntityManager();
             em.getTransaction().begin();
             Query q = em.createNamedQuery("AssemblingSchemaItem.findByAssemblingSchema");
             q.setParameter("assemblingSchema", assemblingSchema);
