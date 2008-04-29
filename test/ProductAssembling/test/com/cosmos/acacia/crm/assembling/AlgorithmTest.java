@@ -49,10 +49,10 @@ public class AlgorithmTest
     private static EntityManagerFactory emf;
     private EntityManager em;
 
-    private static final String categoryCode = "Test Assembling Category";
+    public static final String categoryCode = "Test Assembling Category";
 
-    private static final String schemaCode01 = "Test Schema Code 01";
-    private static final String schemaCode02 = "Test Schema Code 02";
+    public static final String schemaCode01 = "Test Schema Code 01";
+    public static final String schemaCode02 = "Test Schema Code 02";
 
     private static AssemblingSchema assemblingSchema01;
     private static AssemblingSchema assemblingSchema02;
@@ -429,7 +429,8 @@ public class AlgorithmTest
     public static void tearDownClass()
         throws Exception
     {
-        emf.close();
+        if(emf != null)
+            emf.close();
     }
 
     @Before
@@ -441,7 +442,8 @@ public class AlgorithmTest
     @After
     public void tearDown()
     {
-        em.close();
+        if(em != null)
+            em.close();
     }
 
     private static List<AssemblingSchemaItem> getAssemblingSchemaItems()

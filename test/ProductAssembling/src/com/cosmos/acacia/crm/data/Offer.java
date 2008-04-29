@@ -10,9 +10,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -28,6 +31,13 @@ public class Offer
     private static final long serialVersionUID = 1L;
 
     @Id
+    @SequenceGenerator(
+        name="DataObjectsSequenceGenerator",
+        sequenceName="data_objects_seq",
+        allocationSize=1)
+    @GeneratedValue(
+        strategy=GenerationType.SEQUENCE,
+        generator="DataObjectsSequenceGenerator")
     @Column(name = "offer_id", nullable = false)
     private Long offerId;
 
