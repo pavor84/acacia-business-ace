@@ -60,6 +60,24 @@ public class ProductAssembler
     public ComplexProduct assemblе(Map parameters)
         throws AlgorithmException
     {
+        EntityManager em = getEntityManager();
+        try
+        {
+            em.getTransaction().begin();
+            ComplexProduct product = assemblе(parameters, em);
+            em.getTransaction().commit();
+            return product;
+        }
+        catch(Exception ex)
+        {
+            em.getTransaction().rollback();
+            throw new RuntimeException(ex);
+        }
+    }
+
+    protected ComplexProduct assemblе(Map parameters, EntityManager em)
+        throws AlgorithmException
+    {
         int itemCounter = 0;
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
         ComplexProduct product = new ComplexProduct();
@@ -69,7 +87,7 @@ public class ProductAssembler
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(asiList.size());
         for(AssemblingSchemaItem asi : asiList)
         {
-            List<ComplexProductItem> cpiList = assemblе(asi, product, parameters);
+            List<ComplexProductItem> cpiList = assemblе(asi, product, parameters, em);
             if(cpiList == null || cpiList.size() == 0)
                 continue;
 
@@ -82,21 +100,10 @@ public class ProductAssembler
         }
         product.setProductPrice(productPrice);
 
-        EntityManager em = getEntityManager();
-        try
+        em.persist(product);
+        for(ComplexProductItem productItem : productItems)
         {
-            em.getTransaction().begin();
-            em.persist(product);
-            for(ComplexProductItem productItem : productItems)
-            {
-                em.persist(productItem);
-            }
-            em.getTransaction().commit();
-        }
-        catch(Exception ex)
-        {
-            em.getTransaction().rollback();
-            throw new RuntimeException(ex);
+            em.persist(productItem);
         }
 
         return product;
@@ -105,7 +112,8 @@ public class ProductAssembler
     protected List<ComplexProductItem> assemblе(
             AssemblingSchemaItem asi,
             ComplexProduct product,
-            Map parameters)
+            Map parameters,
+            EntityManager em)
         throws AlgorithmException
     {
         BigDecimal iQuantity = asi.getQuantity();
@@ -128,7 +136,7 @@ public class ProductAssembler
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
                 ProductAssembler assembler = new ProductAssembler(itemSchema);
                 assembler.setCallbackHandler(callbackHandler);
-                itemProduct = assembler.assemblе(parameters);
+                itemProduct = assembler.assemblе(parameters, em);
             }
             else
             {
