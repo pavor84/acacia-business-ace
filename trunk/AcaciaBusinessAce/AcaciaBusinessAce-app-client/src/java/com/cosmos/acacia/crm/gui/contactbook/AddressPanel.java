@@ -507,8 +507,13 @@ public class AddressPanel extends BaseEntityPanel {
         address = getFormSession().saveAddress(address, getParentDataObject());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(address);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        } else {
+            addressBindingGroup.unbind();
+            initData();
+        }
+               
     }
 
     @Override

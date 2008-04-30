@@ -537,8 +537,12 @@ public class OrganizationPanel extends BaseEntityPanel {
         organization = getFormSession().saveOrganization(organization);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(organization);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        } else {
+            organizationBindingGroup.unbind();
+            initData();
+        }
     }
 
     protected EntityProperties getOrganizationEntityProperties()

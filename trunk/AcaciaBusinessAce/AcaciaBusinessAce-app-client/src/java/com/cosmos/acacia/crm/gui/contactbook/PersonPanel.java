@@ -501,8 +501,12 @@ public class PersonPanel extends BaseEntityPanel {
         person = getFormSession().savePerson(person);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(person);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        } else {
+            personBindingGroup.unbind();
+            initData();
+        }
     }
 
     protected EntityProperties getPersonEntityProperties()
