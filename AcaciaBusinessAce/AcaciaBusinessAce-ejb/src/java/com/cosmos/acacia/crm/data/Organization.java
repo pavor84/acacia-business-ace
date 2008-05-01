@@ -6,7 +6,9 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -68,7 +70,8 @@ public class Organization
     private static final long serialVersionUID = 1L;
 
     @Column(name = "organization_name", nullable = false)
-    @Property(title="Organization Name")
+    @Property(title="Organization Name",
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=255))
     private String organizationName;
 
     @Column(name = "nickname")

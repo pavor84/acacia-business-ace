@@ -116,6 +116,14 @@ public interface PersonsListRemote {
      */
     Person savePerson(Person person);
 
+     /**
+     * Saves a Person only if the combination of his/her three names is unique
+     *
+     * @param person
+     * @return the saved person or null, of the person is not unique
+     */
+    Person saveIfUnique(Person person);
+    
     /**
      * Deletes a Person
      *

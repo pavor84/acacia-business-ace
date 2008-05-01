@@ -28,9 +28,12 @@ import org.jdesktop.application.Task;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBDialog;
+import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
@@ -450,10 +453,19 @@ public abstract class AbstractTablePanel
         Object rowObject = dataTable.getSelectedRowObject();
         
         if ( showDeleteConfirmation(getResourceMap().getString("deleteAction.ConfirmDialog.message")) ){
-            if(deleteRow(rowObject))
-            {
-                dataTable.removeSelectedRow();
-                fireDelete(rowObject);    
+            try {
+                if(deleteRow(rowObject))
+                {
+                    dataTable.removeSelectedRow();
+                    fireDelete(rowObject);    
+                }
+            } catch (Exception ex) {
+                ValidationException ve = extractValidationException(ex);
+                if (ve != null) {
+                    JOptionPane.showMessageDialog(this, getValidationErrorsMessage(ve));
+                } else {
+                    log.error(ex);
+                }
             }
             
         }

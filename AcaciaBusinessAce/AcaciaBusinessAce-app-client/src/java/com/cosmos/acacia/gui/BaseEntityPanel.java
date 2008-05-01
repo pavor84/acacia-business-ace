@@ -275,8 +275,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             String message = getValidationErrorsMessage(ve);
             JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
         } else {
-            ex.printStackTrace();
-            // TODO: Log that error
+            log.error(ex);
             String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
             ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
             JBErrorPane.showDialog(this, errorInfo);
