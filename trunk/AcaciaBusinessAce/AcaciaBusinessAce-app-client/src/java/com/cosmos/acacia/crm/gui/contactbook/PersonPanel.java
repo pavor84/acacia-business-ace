@@ -28,6 +28,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import javax.swing.JOptionPane;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
 
@@ -498,14 +499,33 @@ public class PersonPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter)
     {
         log.info("Save: person: " + person);
-        person = getFormSession().savePerson(person);
-        setDialogResponse(DialogResponse.SAVE);
-        setSelectedValue(person);
-        if (closeAfter) {
-            close();
-        } else {
-            personBindingGroup.unbind();
-            initData();
+        
+        boolean isUnique = true;
+        Person tmpPerson = null;
+        if ((tmpPerson = getFormSession().saveIfUnique(person)) == null) {
+            isUnique = false;
+            
+            int answer = JOptionPane.showConfirmDialog(
+                        this, getResourceMap().getString("Person.confirm.uniqueness"), "", JOptionPane.OK_CANCEL_OPTION);
+
+            if(answer == JOptionPane.OK_OPTION) {
+                person = getFormSession().savePerson(person);
+                isUnique = true;
+            }
+        }
+        
+        if (tmpPerson != null)
+            person = tmpPerson;
+        
+        if (isUnique) {
+            setDialogResponse(DialogResponse.SAVE);
+            setSelectedValue(person);
+            if (closeAfter) {
+                close();
+            } else {
+                personBindingGroup.unbind();
+                initData();
+            }
         }
     }
 

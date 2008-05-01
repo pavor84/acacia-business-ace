@@ -29,6 +29,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.NestedFormListener;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import javax.swing.JOptionPane;
 
 /**
  * A form for adding and editing organizations
@@ -493,7 +494,10 @@ public class OrganizationPanel extends BaseEntityPanel {
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Organization result = (Organization) listPanel.getSelectedRowObject();
             
-            if (result.getPartnerId() == organization.getPartnerId()) {
+            if (result.equals(organization)) {
+                JOptionPane.showMessageDialog(this, 
+                        getResourceMap().getString("Organization.err.registeringOrganization"));
+                
                 return null;
             }
             
