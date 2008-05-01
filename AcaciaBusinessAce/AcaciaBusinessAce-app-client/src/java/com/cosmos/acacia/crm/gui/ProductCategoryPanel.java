@@ -6,11 +6,8 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import org.jdesktop.application.Application;
 
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -68,7 +65,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        parentCategoryField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel1 = new com.cosmos.swingb.JBLabel();
         nameField = new com.cosmos.swingb.JBTextField();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
@@ -78,12 +74,11 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         patternMaskFormatField = new com.cosmos.acacia.gui.AcaciaLookup();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        categoryField = new com.cosmos.acacia.gui.AcaciaLookup();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoryPanel.class);
         setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("Form.border.title"))); // NOI18N
         setName("Form"); // NOI18N
-
-        parentCategoryField.setName("parentCategoryField"); // NOI18N
 
         jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
         jBLabel1.setName("jBLabel1"); // NOI18N
@@ -112,6 +107,8 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
 
+        categoryField.setName("categoryField"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,14 +119,14 @@ public class ProductCategoryPanel extends BaseEntityPanel {
                     .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(nameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(parentCategoryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(patternMaskFormatField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(categoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                            .addComponent(patternMaskFormatField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,9 +138,9 @@ public class ProductCategoryPanel extends BaseEntityPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(parentCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,7 +156,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        Application.getInstance().getContext().getResourceMap(getClass()).injectComponents(this);
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
@@ -171,7 +167,18 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         
         //parent category
         propDetails = entProps.getPropertyDetails("parentCategory");
-        parentCategoryField.bind(bindGroup, getCategories(), entity, propDetails);
+        categoryField.bind(new AcaciaLookupProvider() {
+            
+            @Override
+            public Object showSelectionControl() {
+                return onChooseCategory();
+            }
+        
+        }, bindGroup, 
+        entity, 
+        propDetails, 
+        "${categoryName}",
+        UpdateStrategy.READ_WRITE);
         
         //category name
         propDetails = entProps.getPropertyDetails("categoryName");
@@ -198,6 +205,35 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         bindGroup.bind();
     }
     
+    @SuppressWarnings("unchecked")
+    protected Object onChooseCategory() {
+        ProductCategoriesTreePanel panel = new ProductCategoriesTreePanel(null);
+        panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
+        panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
+        panel.setModificationsEnabled(false);
+        
+        DialogResponse dResponse = panel.showDialog(this);
+        
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+            
+            ProductCategory category = (ProductCategory)
+                panel.getCategoryListPanel().getSelectedRowObject();
+            
+//            PatternMaskFormat oldFormat = 
+//                (PatternMaskFormat) patternMaskBinding.getTargetProperty()
+//                    .getValue(patternMaskBinding.getTargetObject());
+//            
+//            if ( oldFormat==null && category!=null ){
+//                patternMaskBinding.getTargetProperty()
+//                    .setValue(patternMaskBinding.getTargetObject(), category.getPatternMaskFormat());
+//            }
+            
+            return category;
+        }else{
+            return null;
+        }
+    }
+
     protected Object onChoosePatternMask() {
         PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
         DialogResponse dResponse = listPanel.showDialog(this);
@@ -208,18 +244,8 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private List getCategories() {
-        
-        List result = getFormSession().getProductsCategories(getParentDataObject());
-        
-        //remove the current instance - if already persisted
-        result.remove(entity);
-        
-        return result;
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.acacia.gui.AcaciaLookup categoryField;
     private com.cosmos.swingb.JBTextArea descriptionField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBLabel jBLabel1;
@@ -228,7 +254,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.swingb.JBTextField nameField;
-    private com.cosmos.acacia.gui.AcaciaComboBox parentCategoryField;
     private com.cosmos.acacia.gui.AcaciaLookup patternMaskFormatField;
     // End of variables declaration//GEN-END:variables
 

@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -107,7 +108,13 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     }
 
     public SimpleProduct newProduct() {
-        return SimpleProduct.newTestProduct(null, null);
+        SimpleProduct product = new SimpleProduct();
+        product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
+        product.setPurchasePrice(BigDecimal.valueOf(100.00));
+        product.setSalePrice(BigDecimal.valueOf(100.00));
+        product.setListPrice(BigDecimal.valueOf(100.00));
+        
+        return product;
     }
 
     public SimpleProduct saveProduct(SimpleProduct product) {

@@ -41,6 +41,8 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.TablePanelListener;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPopupMenu;
 import com.cosmos.swingb.listeners.TableModificationListener;
 
@@ -56,6 +58,8 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
     private ProductsListRemote formSession;
 
     public TreePath contextMenuTreePath;
+
+    private JBPopupMenu treeContextMenu;
     
     /** Creates new form ProductCategoriesPanel */
     public ProductCategoriesTreePanel(DataObject parentDataObject) {
@@ -77,6 +81,16 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
             public void selectionRowChanged() {
                 onTableSelectionChanged();
             }
+
+            @Override
+            public void selectAction() {
+                onTableSelectAction();
+            }
+
+            @Override
+            public void tableRefreshed() {
+                onTableRefreshed();
+            }
         });
         categoryListPanel.addTableModificationListener(new TableModificationListener() {
             @Override
@@ -93,7 +107,20 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
             }
         });
         
-        listPanel.add(categoryListPanel);
+        //stupid ha ? - well after 30 minutes of wondering...
+        categoryTree.setOverwriteRendererIcons(true);
+        
+        javax.swing.GroupLayout listPanelLayout = new javax.swing.GroupLayout(listPanel);
+        listPanel.setLayout(listPanelLayout);
+        listPanelLayout.setHorizontalGroup(
+            listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(categoryListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+        );
+        listPanelLayout.setVerticalGroup(
+            listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(categoryListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+        );
+        
         listPanel.setPreferredSize(categoryListPanel.getPreferredSize());
         listPanel.setSize(categoryListPanel.getSize());
         
@@ -101,10 +128,9 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         
         ActionListener menuItemListener = new TreeActionListener();
         
-        JMenuItem newItem = new JMenuItem();
-        JMenuItem modifyItem = new JMenuItem();
-        JMenuItem deleteItem = new JMenuItem();
-        
+        newItem = new JMenuItem();
+        modifyItem = new JMenuItem();
+        deleteItem = new JMenuItem();
         newItem.setName("newItem");
         newItem.setText(getResourceMap().getString("Tree.action.new"));
         newItem.addActionListener(menuItemListener);
@@ -127,13 +153,21 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         categoryTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
+                //mark the current operation event
                 treeSelectionChanging = true;
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-                if ( node.getUserObject() instanceof ProductCategory ){
-                    ProductCategory c = (ProductCategory) node.getUserObject();
-                    categoryListPanel.getDataTable().clearSelection();
-                    categoryListPanel.getDataTable().setSelectedRowObject(c);
+                //reset the selection
+                categoryListPanel.getDataTable().clearSelection();
+                //check if the operation is selection or unselection - so do nothing
+                if (e.getNewLeadSelectionPath()!=null ){
+                    //valid select operation - update the table
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                    
+                    if ( node.getUserObject() instanceof ProductCategory ){
+                        ProductCategory c = (ProductCategory) node.getUserObject();
+                        categoryListPanel.getDataTable().setSelectedRowObject(c);
+                    }
                 }
+                //unmark the current operation
                 treeSelectionChanging = false;
             }
         });
@@ -147,8 +181,19 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
             e.printStackTrace();
         }
         categoryTree.setDropTarget(dropTarget);
+        
     }
     
+    protected void onTableRefreshed() {
+        List<ProductCategory> categories = categoryListPanel.getCategories();
+        refreshTreeModel(categories);
+    }
+
+    protected void onTableSelectAction() {
+        setDialogResponse(DialogResponse.SELECT);
+        this.close();
+    }
+
     class TreeActionListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -173,8 +218,13 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
                     //don't accept the root
                     DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) categoryTree.getModel().getRoot();
                     if ( path.equals(new TreePath(rootNode.getPath())) ){
-                        return;
+                        modifyItem.setEnabled(false);
+                        deleteItem.setEnabled(false);
+                    }else{
+                        modifyItem.setEnabled(modificationsEnabled);
+                        deleteItem.setEnabled(modificationsEnabled);
                     }
+                    newItem.setEnabled(modificationsEnabled);
                     
                     categoryTree.setSelectionPath(path);
                     treeContextMenu.show(categoryTree, x, y);
@@ -215,15 +265,48 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
     }
 
     protected void onRowModified(Object row) {
-        TreeNode rowNode = findTreeNodeForUserObject(
-            (DefaultMutableTreeNode)categoryTree.getModel().getRoot(), 
-            (ProductCategory)row);
+        ProductCategory modified = (ProductCategory) row;
+        
+        DefaultMutableTreeNode rowNode = (DefaultMutableTreeNode)
+            findTreeNodeForUserObject(
+                (DefaultMutableTreeNode)categoryTree.getModel().getRoot(), 
+            modified);
         
         DefaultTreeModel m = (DefaultTreeModel) categoryTree.getModel();
         TreePath rowNodePath = new TreePath(
             ((DefaultMutableTreeNode)rowNode).getPath());
         
+        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) rowNode.getParent();
+        
+        ProductCategory parentByTree = null;
+        if ( parentNode.getUserObject() instanceof ProductCategory ){
+            parentByTree = (ProductCategory) parentNode.getUserObject();
+        }
+        
+        boolean parentsChanged = true;
+        //before null, and now null
+        if ( parentByTree==null && modified.getParentCategory()==null ){
+            parentsChanged = false;
+        }else if ( parentByTree!=null && parentByTree.equals(modified.getParentCategory()) ){
+            parentsChanged = false;
+        }else if ( modified.getParentCategory()!=null && modified.getParentCategory().equals(parentByTree)){
+            parentsChanged = false;
+        }
+        
+        //update of the item representation may be also needed
         m.valueForPathChanged(rowNodePath, row);
+            
+        //if the parents were changed - update them also
+        if ( parentsChanged ){
+            DefaultMutableTreeNode newParent = null;
+            DefaultMutableTreeNode root = (DefaultMutableTreeNode) m.getRoot();
+            if ( modified.getParentCategory()==null )
+                newParent = root;
+            else
+                newParent = (DefaultMutableTreeNode) 
+                findTreeNodeForUserObject(root, modified.getParentCategory());
+            updateNodeParent(newParent, rowNode);
+        }
     }
 
     private class TreeDropTargetListener extends DropTargetAdapter{
@@ -231,6 +314,10 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         public void drop(DropTargetDropEvent dtde) {
             DefaultMutableTreeNode targetNode = getNodeForEvent(dtde);
             DefaultMutableTreeNode sourceNode = getSourceNode();
+            
+            //ignore if dropped over itself
+            if ( targetNode!=null && targetNode.equals(sourceNode))
+                return;
             
             if ( targetNode.equals(sourceNode.getParent())) {
                 dragNDropImpossible(getResourceMap().getString("Tree.err.alreadyChild"));
@@ -300,7 +387,9 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
      * Mark that three selection is initiated.
      * This way we will skip re-selection of the table. 
      */
-    private boolean treeSelectionChanging = false; 
+    private boolean treeSelectionChanging = false;
+
+    private AcaciaToStringConverter categoryToStringConverter; 
 
     protected void onTableSelectionChanged() {
         if ( treeSelectionChanging )
@@ -430,15 +519,23 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         setName("Form"); // NOI18N
         setLayout(new java.awt.BorderLayout());
 
-        productCategoriesSplitPane.setDividerLocation(150);
+        productCategoriesSplitPane.setDividerLocation(220);
         productCategoriesSplitPane.setName("productCategoriesSplitPane"); // NOI18N
 
         productCategoriesTreeScrollPane.setName("productCategoriesTreeScrollPane"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoriesTreePanel.class);
+        categoryTree.setBackground(resourceMap.getColor("categoryTree.background")); // NOI18N
+        categoryTree.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 4, 4, 4));
         categoryTree.setToolTipText(resourceMap.getString("categoryTree.toolTipText")); // NOI18N
+        categoryTree.setClosedIcon(resourceMap.getIcon("categoryTree.closedIcon")); // NOI18N
         categoryTree.setDragEnabled(true);
+        categoryTree.setLeafIcon(resourceMap.getIcon("categoryTree.leafIcon")); // NOI18N
+        categoryTree.setMaximumSize(new java.awt.Dimension(100, 100));
+        categoryTree.setMinimumSize(new java.awt.Dimension(100, 100));
         categoryTree.setName("categoryTree"); // NOI18N
+        categoryTree.setOpenIcon(resourceMap.getIcon("categoryTree.openIcon")); // NOI18N
+        categoryTree.setPreferredSize(new java.awt.Dimension(100, 100));
         productCategoriesTreeScrollPane.setViewportView(categoryTree);
 
         productCategoriesSplitPane.setLeftComponent(productCategoriesTreeScrollPane);
@@ -455,11 +552,15 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
     private com.cosmos.swingb.JBPanel listPanel;
     private com.cosmos.swingb.JBSplitPane productCategoriesSplitPane;
     private javax.swing.JScrollPane productCategoriesTreeScrollPane;
-
-    private AcaciaToStringConverter categoryToStringConverter;
-
-    private JBPopupMenu treeContextMenu;
     // End of variables declaration//GEN-END:variables
+
+    private JMenuItem modifyItem;
+
+    private JMenuItem deleteItem;
+
+    private boolean modificationsEnabled = true;
+
+    private JMenuItem newItem;
     
     protected void initData()
     {
@@ -472,6 +573,10 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         
         List<ProductCategory> categories = categoryListPanel.getCategories();
         
+        refreshTreeModel(categories);
+    }
+    
+    private void refreshTreeModel(List<ProductCategory> categories) {
         //make tree model from the list of categories
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(
             getResourceMap().getString("CategoryTree.rootNodeDisplay"));
@@ -482,7 +587,7 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         categoryTree.enableToStringCellRenderer();
         categoryTree.expandPath(new TreePath(root.getPath()));
     }
-    
+
     private void addCateogriesToTree(DefaultMutableTreeNode root, List<ProductCategory> categories) {
         
         java.util.Map<ProductCategory, DefaultMutableTreeNode> added = new HashMap
@@ -534,5 +639,20 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         }
 
         return formSession;
+    }
+
+    /**
+     * Getter for categoryListPanel
+     * @return ProductCategoryListPanel
+     */
+    public ProductCategoryListPanel getCategoryListPanel() {
+        return categoryListPanel;
+    }
+
+    public void setModificationsEnabled(boolean enabled) {
+        modificationsEnabled = enabled;
+        categoryListPanel.setVisible(Button.Delete, enabled);
+        categoryListPanel.setVisible(Button.Modify, enabled);
+        categoryListPanel.setVisible(Button.New, enabled);
     }
 }

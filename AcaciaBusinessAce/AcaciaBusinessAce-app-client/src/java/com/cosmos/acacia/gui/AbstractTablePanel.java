@@ -402,6 +402,13 @@ public abstract class AbstractTablePanel
         selectedRowObject = dataTable.getSelectedRowObject();
         setDialogResponse(DialogResponse.SELECT);
         close();
+        fireTableSelectAction();
+    }
+
+    protected void fireTableSelectAction() {
+        for (TablePanelListener listener : tablePanelListeners) {
+            listener.selectAction();
+        }
     }
 
     @Action
@@ -474,7 +481,15 @@ public abstract class AbstractTablePanel
     @Action
     public Task refreshAction() {
         log.info("refreshAction");
-        return new RefreshActionTask(getApplication());
+        Task result = new RefreshActionTask(getApplication());
+        fireTableRefreshed();
+        return result;
+    }
+
+    protected void fireTableRefreshed() {
+        for (TablePanelListener listener : tablePanelListeners) {
+            listener.tableRefreshed();
+        }
     }
 
     @Action

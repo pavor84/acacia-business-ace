@@ -18,4 +18,14 @@ public interface TablePanelListener {
      * is changed
      */
     public void selectionRowChanged();
+    
+    /**
+     * Meaning that select operation is issued.
+     */
+    public void selectAction();
+
+    /**
+     * Refresh operation was done over the table panel
+     */
+    public void tableRefreshed();
 }

@@ -19,7 +19,6 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -58,6 +57,10 @@ public class ProductsListPanel
         List<PropertyDetails> propertyDetails = 
             new ArrayList<PropertyDetails>(entityProps.getValues());
         
+        //set custom display for 'productCategory'
+        setCustomDisplay(propertyDetails, "category", 
+            "${category.categoryName}");
+        
         //set custom display for 'patternMaskFormat'
         setCustomDisplay(propertyDetails, "patternMaskFormat", 
             "${patternMaskFormat.patternName} (${patternMaskFormat.format})");
@@ -82,7 +85,6 @@ public class ProductsListPanel
         JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps, UpdateStrategy.READ);
         
         tableBinding.setEditable(false);
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getProductsCategories(), entityProps.getPropertyDetails("category"));
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), entityProps.getPropertyDetails("measureUnit"));
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.Volume), entityProps.getPropertyDetails("dimensionUnit"));
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.MassWeight), entityProps.getPropertyDetails("weightUnit"));
@@ -154,11 +156,6 @@ public class ProductsListPanel
         }
 
         return products;
-    }
-
-    private List<ProductCategory> getProductsCategories()
-    {
-        return getFormSession().getProductsCategories(getParentDataObject());
     }
 
     private List<DbResource> getMeasureUnits()

@@ -6,7 +6,7 @@ package com.cosmos.test.bl;
  * @version $Id: $
  * 
  * Thrown when a given unit test can not complete its work because
- * of missing data base information or any other reason.
+ * of missing needed preset database information or any other reason.
  *
  */
 public class UncompleteUnitTestException extends Exception {
