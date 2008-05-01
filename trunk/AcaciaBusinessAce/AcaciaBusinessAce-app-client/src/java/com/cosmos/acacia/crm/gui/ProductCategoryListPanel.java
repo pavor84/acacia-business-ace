@@ -139,9 +139,8 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
         
         if ( result ){
             removeFromTable(withSubCategories);
+            fireDelete(rowObject);
         }
-        
-        fireDelete(rowObject);
     }
     
     protected boolean deleteRow(Object rowObject) {

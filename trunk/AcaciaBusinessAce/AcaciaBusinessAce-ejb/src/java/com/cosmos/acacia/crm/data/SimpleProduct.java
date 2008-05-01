@@ -83,7 +83,7 @@ public class SimpleProduct
 
     @JoinColumn(name = "category_id", nullable=false, referencedColumnName = "product_category_id")
     @ManyToOne
-    @Property(title="Category")
+    @Property(title="Category", propertyValidator=@PropertyValidator(required=true))
     private ProductCategory category;
 
     @Column(name = "product_name", nullable = false)
@@ -119,7 +119,7 @@ public class SimpleProduct
 
     @JoinColumn(name = "pattern_mask_format_id", referencedColumnName = "pattern_mask_format_id")
     @ManyToOne
-    @Property(title="Pattern Mask Format", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Pattern Mask Format")
     private PatternMaskFormat patternMaskFormat;
 
     @JoinColumn(name = "product_color_id", nullable=true, referencedColumnName = "resource_id")
@@ -316,14 +316,7 @@ public class SimpleProduct
     }
 
     public PatternMaskFormat getPatternMaskFormat() {
-        if(patternMaskFormat != null)
-            return patternMaskFormat;
-
-        ProductCategory pc;
-        if((pc = getCategory()) != null)
-            return pc.getPatternMaskFormat();
-
-        return null;
+        return patternMaskFormat;
     }
 
     public void setPatternMaskFormat(PatternMaskFormat patternMaskFormat) {

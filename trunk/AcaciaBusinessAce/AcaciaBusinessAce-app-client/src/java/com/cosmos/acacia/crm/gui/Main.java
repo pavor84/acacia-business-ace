@@ -10,6 +10,7 @@ import java.util.Date;
 import org.junit.runner.JUnitCore;
 
 import com.cosmos.test.bl.PatternMaskListTest;
+import com.cosmos.test.bl.ProductCategoriesTest;
 import com.cosmos.test.bl.ProductsListTest;
 
 /**
@@ -85,7 +86,8 @@ public class Main {
         {
 //            DataObjectTest.class.getName(),
             PatternMaskListTest.class.getName(),
-            ProductsListTest.class.getName()
+            ProductsListTest.class.getName(),
+            ProductCategoriesTest.class.getName()
         };
 
         JUnitCore.main(tests);
