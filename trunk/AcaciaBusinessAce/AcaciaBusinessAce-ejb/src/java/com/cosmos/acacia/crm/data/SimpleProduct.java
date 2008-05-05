@@ -11,14 +11,11 @@ import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
@@ -26,6 +23,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.util.CodeFormatter;
+import javax.persistence.DiscriminatorValue;
 
 
 /**
@@ -34,6 +32,7 @@ import com.cosmos.util.CodeFormatter;
  */
 @Entity
 @Table(name = "simple_products")
+@DiscriminatorValue(value="S")
 @NamedQueries(
     {
         @NamedQuery
@@ -66,20 +65,11 @@ import com.cosmos.util.CodeFormatter;
             )
     })
 public class SimpleProduct
-    extends DataObjectBean
+    extends Product
     implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @Column(name = "product_id", nullable = false)
-    @Property(title="Product Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger productId;
-
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
 
     @JoinColumn(name = "category_id", nullable=false, referencedColumnName = "product_category_id")
     @ManyToOne
@@ -100,10 +90,6 @@ public class SimpleProduct
     @ManyToOne
     @Property(title="Measure Unit")
     private DbResource measureUnit;
-
-    @Column(name = "is_complex", nullable = false)
-    @Property(title="Is Complex")
-    private boolean complex;
 
     @Column(name = "is_purchased", nullable = false)
     @Property(title="Is Purchased")
@@ -210,37 +196,12 @@ public class SimpleProduct
     @Property(title="Producer")
     private BusinessPartner producer;
 
-    @OneToOne
-    /*@JoinColumn(
-        name = "product_id",
-        referencedColumnName = "data_object_id",
-        insertable = false,
-        updatable = false)*/
-    @PrimaryKeyJoinColumn
-    private DataObject dataObject;
-
 
     public SimpleProduct() {
     }
 
     public SimpleProduct(BigInteger productId) {
-        this.productId = productId;
-    }
-
-    public BigInteger getProductId() {
-        return productId;
-    }
-
-    public void setProductId(BigInteger productId) {
-        this.productId = productId;
-    }
-
-    public BigInteger getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
+        super(productId);
     }
 
     public ProductCategory getCategory() {
@@ -252,40 +213,48 @@ public class SimpleProduct
         this.category = category;
     }
 
+    @Override
     public String getProductName() {
         return productName;
     }
 
+    @Override
     public void setProductName(String productName) {
         firePropertyChange("productName", this.productName, productName);
         this.productName = productName;
     }
 
+    @Override
     public String getProductCode() {
         return productCode;
     }
 
+    @Override
     public void setProductCode(String productCode) {
         firePropertyChange("productCode", this.productCode, productCode);
         this.productCode = productCode;
     }
 
+    @Override
     public DbResource getMeasureUnit() {
         return measureUnit;
     }
 
+    @Override
     public void setMeasureUnit(DbResource measureUnit) {
         firePropertyChange("measureUnit", this.measureUnit, measureUnit);
         this.measureUnit = measureUnit;
     }
 
-    public boolean isComplex() {
-        return complex;
+    @Override
+    public BigDecimal getSalePrice() {
+        return salePrice;
     }
 
-    public void setComplex(boolean isComplex) {
-        firePropertyChange("complex", this.complex, complex);
-        this.complex = isComplex;
+    @Override
+    public void setSalePrice(BigDecimal salePrice) {
+        firePropertyChange("salePrice", this.salePrice, salePrice);
+        this.salePrice = salePrice;
     }
 
     public boolean isPurchased() {
@@ -367,15 +336,6 @@ public class SimpleProduct
     public void setPurchasePrice(BigDecimal purchasePrice) {
         firePropertyChange("purchasePrice", this.purchasePrice, purchasePrice);
         this.purchasePrice = purchasePrice;
-    }
-
-    public BigDecimal getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(BigDecimal salePrice) {
-        firePropertyChange("salePrice", this.salePrice, salePrice);
-        this.salePrice = salePrice;
     }
 
     public BigDecimal getListPrice() {
@@ -477,60 +437,7 @@ public class SimpleProduct
 //        this.producerId = producerId;
 //    }
 
-    public DataObject getDataObject() {
-        return dataObject;
-    }
 
-    public void setDataObject(DataObject dataObject) {
-        this.dataObject = dataObject;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (productId != null ? productId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SimpleProduct)) {
-            return false;
-        }
-        SimpleProduct other = (SimpleProduct) object;
-        if ((this.productId == null && other.productId != null) || (this.productId != null && !this.productId.equals(other.productId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.getClass().getName()).append("[productId=");
-        sb.append(productId);
-        sb.append(", productName=").append(productName);
-        sb.append(", productCode=").append(productCode);
-        sb.append(", category=").append(category).append("]");
-        DataObject dataObject = getDataObject();
-        if(dataObject != null)
-            sb.append(":v.").append(getDataObject().getDataObjectVersion());
-        return sb.toString();
-    }
-
-    // DataObjectBean
-
-    @Override
-    public BigInteger getId() {
-        return getProductId();
-    }
-
-    @Override
-    public void setId(BigInteger id) {
-        setProductId(id);
-    }
-    
     /**
      * Synthetic property getter.
      * Format on every call.
