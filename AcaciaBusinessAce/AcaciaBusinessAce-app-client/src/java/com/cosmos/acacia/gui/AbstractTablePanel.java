@@ -462,13 +462,26 @@ public abstract class AbstractTablePanel
             } catch (Exception ex) {
                 ValidationException ve = extractValidationException(ex);
                 if (ve != null) {
-                    JOptionPane.showMessageDialog(this, getValidationErrorsMessage(ve));
+                    JOptionPane.showMessageDialog(this, formMessage(ve.getMessage()));
                 } else {
                     log.error(ex);
                 }
             }
             
         }
+    }
+    
+    /**
+     * Forms the error message shown when constraint violation occurs
+     * 
+     * @param the name of the table
+     * @return the message
+     */
+    private String formMessage(String table)
+    {
+        String message = getResourceMap().getString("deleteAction.err.referenced");
+        message += " " + table.replaceAll("_", " ");
+        return message;
     }
     
     protected boolean showDeleteConfirmation(String message){

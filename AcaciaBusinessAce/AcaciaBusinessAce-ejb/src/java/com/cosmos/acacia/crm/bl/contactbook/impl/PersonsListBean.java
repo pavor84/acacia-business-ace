@@ -135,12 +135,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
     
     public int deletePerson(Person person) {
-        try {
-            return esm.remove(em, person);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new ValidationException(ex);
-        }
+        return esm.remove(em, person);
     }
 
     public List<Address> getAddresses(DataObject parent) {

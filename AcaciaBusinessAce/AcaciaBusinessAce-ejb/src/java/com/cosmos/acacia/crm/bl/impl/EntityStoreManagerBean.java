@@ -8,10 +8,12 @@ package com.cosmos.acacia.crm.bl.impl;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 
 import java.math.BigInteger;
+import java.sql.BatchUpdateException;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.ejb.EJB;
@@ -19,6 +21,7 @@ import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 /**
  *
@@ -102,9 +105,33 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
         entity = em.merge(entity);
         em.remove(entity);
+        try {
+            em.flush();
+        } catch (PersistenceException pe) {
+            throw new ValidationException(getRootCauseMessage(pe));
+        }
         return version;
     }
 
+    private String getRootCauseMessage(Throwable ex)
+    {
+        if (ex.getCause() != null) {
+            return getRootCauseMessage(ex.getCause());
+        }
+        
+        if (ex instanceof BatchUpdateException) {
+            BatchUpdateException bue = (BatchUpdateException) ex;
+            String message = bue.getNextException().getMessage();
+            message = message.substring(
+                    message.lastIndexOf("from table "));
+            message = message.replaceAll("\"", "");
+            message = message.replaceAll("\\.", "");
+            message = message.replaceAll("from table ", "");
+            return message;
+        }
+        return "";
+    }
+    
     private DataObjectTypeLocal getDataObjectTypeLocal()
     {
         if(dotLocal == null)
