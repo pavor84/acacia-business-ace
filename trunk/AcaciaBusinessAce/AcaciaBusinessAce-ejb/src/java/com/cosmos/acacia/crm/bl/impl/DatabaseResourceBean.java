@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.CommunicationType;
@@ -44,6 +45,7 @@ public class DatabaseResourceBean
     private EntityManager em;
 
 
+    @Override
     public synchronized void initDatabaseResource() {
         if(!initialized)
         {
@@ -55,6 +57,7 @@ public class DatabaseResourceBean
             getDbResources(CommunicationType.class);
             getDbResources(Currency.class);
             getDbResources(PassportType.class);
+            getDbResources(Algorithm.Type.class);
             initialized = true;
         }
     }
