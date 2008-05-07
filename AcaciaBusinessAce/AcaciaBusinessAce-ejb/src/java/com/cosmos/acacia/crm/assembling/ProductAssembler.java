@@ -30,7 +30,7 @@ import javax.persistence.Query;
 public class ProductAssembler
 {
     //@PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
@@ -42,9 +42,12 @@ public class ProductAssembler
 
     private ApplicationCallbackHandler callbackHandler;
 
-    public ProductAssembler(AssemblingSchema assemblingSchema)
+    public ProductAssembler(
+            AssemblingSchema assemblingSchema,
+            EntityManager entityManager)
     {
         this.assemblingSchema = assemblingSchema;
+        this.entityManager = entityManager;
     }
 
     public AssemblingSchema getAssemblingSchema() {
@@ -62,17 +65,17 @@ public class ProductAssembler
     public ComplexProduct assemblе(Map parameters)
         throws AlgorithmException
     {
-        //EntityManager em = getEntityManager();
+        EntityManager em = getEntityManager();
         try
         {
-            em.getTransaction().begin();
+            //em.getTransaction().begin();
             ComplexProduct product = assemblе(parameters, em);
-            em.getTransaction().commit();
+            //em.getTransaction().commit();
             return product;
         }
         catch(Exception ex)
         {
-            em.getTransaction().rollback();
+            //em.getTransaction().rollback();
             throw new RuntimeException(ex);
         }
     }
@@ -136,7 +139,7 @@ public class ProductAssembler
             if(virtualProduct instanceof AssemblingSchema)
             {
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
-                ProductAssembler assembler = new ProductAssembler(itemSchema);
+                ProductAssembler assembler = new ProductAssembler(itemSchema, em);
                 assembler.setCallbackHandler(callbackHandler);
                 itemProduct = assembler.assemblе(parameters, em);
             }
@@ -234,23 +237,23 @@ public class ProductAssembler
         }
 
         return emf;
-    }
+    }*/
 
     protected EntityManager getEntityManager()
     {
         if(entityManager == null)
         {
-            entityManager = getEntityManagerFactory().createEntityManager();
+            //entityManager = getEntityManagerFactory().createEntityManager();
         }
 
         return entityManager;
-    }*/
+    }
 
     protected List<AssemblingSchemaItem> getAssemblingSchemaItems()
     {
         if(assemblingSchemaItems == null)
         {
-            //EntityManager em = getEntityManagerFactory().createEntityManager();
+            EntityManager em = getEntityManager();
             em.getTransaction().begin();
             Query q = em.createNamedQuery("AssemblingSchemaItem.findByAssemblingSchema");
             q.setParameter("assemblingSchema", assemblingSchema);
