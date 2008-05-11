@@ -217,6 +217,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                         try {
                             setModifiedResponse(DialogResponse.SAVE);
                             performSave(false);
+                            
+                            // Checking is special conditions for disabling new window after save are met
+                            if (isSpecialConditionPresent() == true)
+                                return false;
+                            
                         } catch (Exception ex) {
                             checkForValidationException(ex);
                             return false;
@@ -285,5 +290,16 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     protected void setModifiedResponse(DialogResponse modifiedResponse)
     {
         this.modifiedResponse = modifiedResponse;
+    }
+    
+    /**
+     * Override this method if you want to add special conditions,
+     * which, if met, will disable the opening of nested forms
+     * 
+     * @return if special conditions are present
+     */
+    protected boolean isSpecialConditionPresent()
+    {
+        return false;
     }
 }
