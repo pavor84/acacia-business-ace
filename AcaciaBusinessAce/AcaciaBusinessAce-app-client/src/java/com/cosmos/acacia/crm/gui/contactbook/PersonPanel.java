@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -28,6 +29,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.awt.event.KeyAdapter;
 import javax.swing.JOptionPane;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
@@ -379,7 +381,9 @@ public class PersonPanel extends BaseEntityPanel {
     private Person person;
     private Binding cityBinding;
     private Country country;
-    
+    private boolean namesChanged;
+    private boolean isUnique;
+            
     @Override
     protected void initData() {
         setResizable(false);
@@ -445,6 +449,11 @@ public class PersonPanel extends BaseEntityPanel {
         addNestedFormListener(passportsTable);
         passportsPanel.add(passportsTable);
 
+        NameChangeListener nameChangeListener = new NameChangeListener();
+        firstNameTextField.addKeyListener(nameChangeListener);
+        secondNameTextField.addKeyListener(nameChangeListener);
+        lastNameTextField.addKeyListener(nameChangeListener);
+        
         personBindingGroup.bind();
     }
 
@@ -500,9 +509,13 @@ public class PersonPanel extends BaseEntityPanel {
     {
         log.info("Save: person: " + person);
         
-        boolean isUnique = true;
+        isUnique = true;
         Person tmpPerson = null;
-        if ((tmpPerson = getFormSession().saveIfUnique(person)) == null) {
+        
+        // Checking whether this is a new person or the names were changed
+        // in order to invoke the uniquness check server-side
+        if ((person.getDataObject() == null || namesChanged) &&
+                (tmpPerson = getFormSession().saveIfUnique(person)) == null) {
             isUnique = false;
             
             int answer = JOptionPane.showConfirmDialog(
@@ -567,5 +580,18 @@ public class PersonPanel extends BaseEntityPanel {
     @Override
     public EntityFormButtonPanel getButtonPanel() {
        return entityFormButtonPanel;
+    }
+    
+    @Override
+    protected boolean isSpecialConditionPresent()
+    {
+        return !isUnique;
+    }
+    
+    class NameChangeListener extends KeyAdapter {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            namesChanged = true;
+        }
     }
 }
