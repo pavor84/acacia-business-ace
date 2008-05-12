@@ -12,8 +12,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 
 /**
  *
@@ -21,7 +26,29 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "warehouses")
-public class Warehouse implements Serializable {
+@NamedQueries({ 
+    @NamedQuery
+    ( 
+        /**
+         * Get all mask formats for a given name - at most one should exist
+         * Parameters:
+         * - name - the name of the pattern mask
+         */
+        name = "Warehouse.findByAddressName",
+        query = "select w from Warehouse w where w.dataObject.deleted = false order by w.address.addressName asc"
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Get all mask formats for a given name - at most one should exist
+         * Parameters:
+         * - name - the name of the pattern mask
+         */
+        name = "Warehouse.findByAddress",
+        query = "select w from Warehouse w where w.dataObject.deleted = false and w.address = :address"
+    )
+})
+public class Warehouse extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,21 +59,23 @@ public class Warehouse implements Serializable {
     @Column(name = "parent_id")
     private BigInteger parentId;
 
-    @JoinColumn(name = "warehouseman_id")
-    @ManyToOne
-    private Person warehouseman;
-
-    @Column(name = "description")
-    private String description;
-
+    @Property(title="Location", customDisplay="${address.addressName}", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     @ManyToOne
     private Address address;
+    
+    @Property(title="Person in charge", customDisplay="${warehouseman.firstName} ${warehouseman.lastName}", propertyValidator=@PropertyValidator(required=true))
+    @JoinColumn(name = "warehouseman_id")
+    @ManyToOne
+    private Person warehouseman;
+    
+    @Property(title="Description")
+    @Column(name = "description")
+    private String description;
 
     @JoinColumn(name = "warehouse_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-
 
     public Warehouse() {
     }
@@ -128,4 +157,13 @@ public class Warehouse implements Serializable {
         return "com.cosmos.acacia.crm.data.Warehouse[warehouseId=" + warehouseId + "]";
     }
 
+    @Override
+    public BigInteger getId() {
+        return getWarehouseId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setWarehouseId(id);
+    }
 }

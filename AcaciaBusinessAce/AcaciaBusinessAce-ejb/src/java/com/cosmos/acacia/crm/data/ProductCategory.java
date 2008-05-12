@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -65,7 +66,7 @@ public class ProductCategory
     private BigInteger parentId;
 
     @Column(name = "category_name", nullable = false)
-    @Property(title="Category Name", propertyValidator=@PropertyValidator( minLength=2, maxLength=100))
+    @Property(title="Category Name", propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=50))
     private String categoryName;
     
     @Column(name = "description")
@@ -128,7 +129,7 @@ public class ProductCategory
     }
 
     public void setCategoryName(String categoryName) {
-        firePropertyChange("categoryName", this.categoryName, categoryName);
+        //firePropertyChange("categoryName", this.categoryName, categoryName);
         this.categoryName = categoryName;
     }
 
@@ -137,7 +138,7 @@ public class ProductCategory
     }
 
     public void setDescription(String description) {
-        firePropertyChange("description", this.description, description);
+        //firePropertyChange("description", this.description, description);
         this.description = description;
     }
 
@@ -154,10 +155,9 @@ public class ProductCategory
     }
 
     public void setPatternMaskFormat(PatternMaskFormat patternMaskFormat) {
-        firePropertyChange("patternMaskFormat", this.patternMaskFormat, patternMaskFormat);
+        //firePropertyChange("patternMaskFormat", this.patternMaskFormat, patternMaskFormat);
         this.patternMaskFormat = patternMaskFormat;
     }
-
 
     @Override
     public int hashCode() {

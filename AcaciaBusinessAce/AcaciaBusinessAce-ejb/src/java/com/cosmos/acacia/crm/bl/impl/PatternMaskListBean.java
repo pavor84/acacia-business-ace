@@ -121,13 +121,7 @@ public class PatternMaskListBean implements PatternMaskListRemote {
 
     @Override
     public boolean deletePatternMaskFormat(PatternMaskFormat formatObject) {
-        try{
-            formatObject = em.merge(formatObject);
-            em.remove(formatObject);
-            return true;
-        }catch ( Exception e ){
-            e.printStackTrace();
-            return false;
-        }
+        esm.remove(em, formatObject);
+        return true;
     }
 }

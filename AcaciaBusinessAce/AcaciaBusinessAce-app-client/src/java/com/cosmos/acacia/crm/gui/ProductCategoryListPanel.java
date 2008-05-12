@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -25,11 +26,13 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBTree;
+import com.cosmos.util.Lister;
 
 /**
  * 
@@ -44,11 +47,12 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
     private ProductsListRemote formSession;
 
     private BindingGroup bindingGroup;
-    private List<ProductCategory> categories;
 
     private EntityProperties entityProps;
     
     private JBTree categoriesTree;
+    
+    private Lister<ProductCategory> categoriesLister;
     
     public ProductCategoryListPanel(){
         this(null);
@@ -60,7 +64,14 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
         
         entityProps = getFormSession().getProductCategoryEntityProperties();
         
-        refreshDataTable(entityProps);
+        categoriesLister = new Lister<ProductCategory>() {
+            @Override
+            public List<ProductCategory> getList() {
+                return getFormSession().getProductsCategories(null);
+            }
+        };
+        
+        refreshDataTable();
     }
     
     /** Creates new form ProductCategoryListPanel */
@@ -69,24 +80,25 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
     }
     
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
+    /**
+     * When called the table is unbound, the bind again but
+     * with the new list get from the lister.
+     * (the lister is queried again)
+     */
+    public void refreshDataTable(){
         if ( bindingGroup!=null )
             bindingGroup.unbind();
         
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
         
-        JTableBinding tableBinding = table.bind(bindingGroup, getCategories(), entProps, UpdateStrategy.READ);
+        List<ProductCategory> theList = categoriesLister.getList();
+        JTableBinding tableBinding = table.bind(bindingGroup, theList, entityProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
         bindingGroup.bind();
     }
     
-    List<ProductCategory> getCategories() {
-        categories = getFormSession().getProductsCategories(getParentDataObject());
-        return categories;
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -123,17 +135,26 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
         boolean result = false;
         try{ 
             result = getFormSession().deleteProductCategories(withSubCategories);
-            result = true;
         }catch (Exception e){
-            String message = null;
-            if ( withSubCategories.size()>1 )
-                message = getResourceMap().getString("ProductCategory.err.cantDeleteMany");
-            else 
-                message = getResourceMap().getString("ProductCategory.err.cantDelete"); 
-            JOptionPane.showMessageDialog(this, 
-                message,
-                getResourceMap().getString("ProductCategory.err.cantDeleteTitle"),
-                JOptionPane.DEFAULT_OPTION);
+            ValidationException ve = extractValidationException(e);
+            if (ve != null) {
+                String messagePrefix = null;
+                if ( withSubCategories.size()>1 ){
+                    messagePrefix = getResourceMap().getString("ProductCategory.err.cantDeleteMany");
+                }
+                else{
+                    messagePrefix = getResourceMap().getString("deleteAction.err.referenced");
+                }
+                     
+                String message = getTableReferencedMessage(messagePrefix, ve.getMessage());
+                
+                JOptionPane.showMessageDialog(this, 
+                    message,
+                    getResourceMap().getString("ProductCategory.err.cantDeleteTitle"),
+                    JOptionPane.DEFAULT_OPTION);
+            } else {
+                log.error(e);
+            }
             result = false;
         }
         
@@ -141,6 +162,25 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
             removeFromTable(withSubCategories);
             fireDelete(rowObject);
         }
+    }
+    
+    /**
+     * Forms the error message shown when constraint violation occurs
+     * 
+     * @param the name of the table
+     * @return the message
+     */
+    private String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
+    {
+        String message = cantDeleteMessagePrefix;
+        String tableUserfriendly = 
+            getResourceMap().getString("table.userfriendlyname."+table);
+        String result = null;
+        if ( tableUserfriendly==null )
+            result = message + " " + table.replace('_', ' ');
+        else
+            result = message + " " + tableUserfriendly;
+        return result;
     }
     
     protected boolean deleteRow(Object rowObject) {
@@ -194,7 +234,15 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         ProductCategory category = getFormSession().newProductCategory(null);
-        ProductCategory autoParent = (ProductCategory) getDataTable().getSelectedRowObject();
+        ProductCategory autoParent = null;
+        TreePath selection = 
+            getCategoriesTree().getSelectionPath();
+        if ( selection!=null ){
+            DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selection.getLastPathComponent();
+            if ( selNode.getUserObject() instanceof ProductCategory )
+                autoParent = (ProductCategory) selNode.getUserObject();
+        }
+            //(ProductCategory) getDataTable().getSelectedRowObject();
         category.setParentCategory(autoParent);
         
         return onEditEntity(category);
@@ -231,7 +279,7 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
          
-        refreshDataTable(entityProps);
+        refreshDataTable();
         
         return t;
     }
@@ -269,6 +317,22 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
      */
     public void setCategoriesTree(JBTree categoriesTree) {
         this.categoriesTree = categoriesTree;
+    }
+
+    /**
+     * Getter for categoriesLister
+     * @return Lister<ProductCategory>
+     */
+    public Lister<ProductCategory> getCategoriesLister() {
+        return categoriesLister;
+    }
+
+    /**
+     * Setter for categoriesLister
+     * @param categoriesLister - Lister<ProductCategory>
+     */
+    public void setCategoriesLister(Lister<ProductCategory> categoriesLister) {
+        this.categoriesLister = categoriesLister;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
