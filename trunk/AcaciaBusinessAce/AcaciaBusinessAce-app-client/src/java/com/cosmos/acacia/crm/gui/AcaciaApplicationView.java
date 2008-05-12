@@ -4,13 +4,6 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,6 +26,13 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -210,6 +210,18 @@ public class AcaciaApplicationView extends FrameView {
     }
     
     @Action
+    public void warehouseListAction(){
+        WarehouseListPanel listPanel = new WarehouseListPanel(null);
+        listPanel.showFrame();
+    }
+    
+    @Action
+    public void warehouseProductListAction(){
+        WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
+        listPanel.showFrame();
+    }
+    
+    @Action
     public void patternMaskListAction(){
         PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
         listPanel.showFrame();
@@ -303,6 +315,9 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem personsListMenuItem = new JBMenuItem();
         JBMenuItem newPersonMenuItem = new JBMenuItem();
         JBMenuItem patternMasksItem = new JBMenuItem();
+        JBMenu warehousesMenu = new JBMenu();
+        JBMenuItem warehousesItem = new JBMenuItem();
+        JBMenuItem warehouseProductsItem = new JBMenuItem();
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -381,6 +396,21 @@ public class AcaciaApplicationView extends FrameView {
         businessPartners.add(patternMasksItem);
 
         menuBar.add(businessPartners);
+        
+        warehousesMenu.setName("warehousesMenu"); // NOI18N
+        warehousesMenu.setText(resourceMap.getString("warehousesMenu.text")); // NOI18N
+
+        warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
+        warehousesItem.setText(resourceMap.getString("warehousesItem.text"));
+        warehousesItem.setName("warehouseListItem"); // NOI18N
+        warehousesMenu.add(warehousesItem);
+        
+        warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
+        warehouseProductsItem.setText(resourceMap.getString("warehouseProductsItem.text"));
+        warehouseProductsItem.setName("warehouseProductsItem"); // NOI18N
+        warehousesMenu.add(warehouseProductsItem);
+        
+        menuBar.add(warehousesMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N

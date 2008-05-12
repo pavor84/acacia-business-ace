@@ -32,8 +32,6 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBDialog;
-import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
@@ -462,7 +460,7 @@ public abstract class AbstractTablePanel
             } catch (Exception ex) {
                 ValidationException ve = extractValidationException(ex);
                 if (ve != null) {
-                    JOptionPane.showMessageDialog(this, formMessage(ve.getMessage()));
+                    JOptionPane.showMessageDialog(this, formTableReferencedMessage(ve.getMessage()));
                 } else {
                     log.error(ex);
                 }
@@ -477,11 +475,17 @@ public abstract class AbstractTablePanel
      * @param the name of the table
      * @return the message
      */
-    private String formMessage(String table)
+    private String formTableReferencedMessage(String table)
     {
         String message = getResourceMap().getString("deleteAction.err.referenced");
-        message += " " + table.replaceAll("_", " ");
-        return message;
+        String tableUserfriendly = 
+            getResourceMap().getString("table.userfriendlyname."+table);
+        String result = null;
+        if ( tableUserfriendly==null )
+            result = message + " " + table.replace('_', ' ');
+        else
+            result = message + " " + tableUserfriendly;
+        return result;
     }
     
     protected boolean showDeleteConfirmation(String message){
@@ -529,13 +533,6 @@ public abstract class AbstractTablePanel
         for (TablePanelListener listener : tablePanelListeners) {
             listener.tablePanelClose();
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Class getResourceStopClass()
-    {
-        return AbstractTablePanel.class;
     }
 
     @Override

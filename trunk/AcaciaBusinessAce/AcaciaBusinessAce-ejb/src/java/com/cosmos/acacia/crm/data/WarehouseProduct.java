@@ -7,13 +7,22 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -21,75 +30,110 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "warehouse_products")
+@NamedQueries({
+    @NamedQuery
+    ( 
+        /**
+         * Get all warehouse products which are not deleted (i.e. their warehouse is not deleted)
+         */
+        name = "WarehouseProduct.findAll",
+        query = "select w from WarehouseProduct w where w.warehouse.dataObject.deleted = false"
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Get all warehouse products which are not deleted and are in a given warehouse and
+         * associated with a given product
+         * Parameters:
+         *  - product - not null
+         *  - warehouse - not null
+         */
+        name = "WarehouseProduct.findByProductAndWarehouse",
+        query = "select w from WarehouseProduct w where w.warehouse.dataObject.deleted = false " +
+        		"and w.warehouse = :warehouse and w.product = :product"
+    )
+})
 public class WarehouseProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    @Id
+    @Column(name = "warehouse_product_id", nullable = false)
+    @SequenceGenerator(name="WarehouseProductSequenceGenerator", sequenceName="warehouse_product_seq", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="WarehouseProductSequenceGenerator")
+    private Integer id;
 
-    @EmbeddedId
-    protected WarehouseProductPK warehouseProductPK;
-
+    @Property(title="Warehouse", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id", insertable = false, updatable = false)
     @ManyToOne
     private Warehouse warehouse;
 
+    @Property(title="Product", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
     @ManyToOne
     private SimpleProduct product;
 
+    @Property(title="In Stock", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "quantity_in_stock")
     private BigDecimal quantityInStock;
 
+    @Property(title="Ordered", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "ordered_quantity")
     private BigDecimal orderedQuantity;
 
+    @Property(title="Reserved", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "reserved_quantity")
     private BigDecimal reservedQuantity;
 
+    @Property(title="Sold", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "sold_quantity")
     private BigDecimal soldQuantity;
 
+    @Property(title="Due", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "quantity_due")
     private BigDecimal quantityDue;
 
+    @Property(title="Min. Qty", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "minimum_quantity")
     private BigDecimal minimumQuantity;
 
+    @Property(title="Max. Qty", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "maximum_quantity")
     private BigDecimal maximumQuantity;
 
+    @Property(title="Default Qty", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "default_quantity")
     private BigDecimal defaultQuantity;
 
+    @Property(title="Purchase Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "purchase_price")
     private BigDecimal purchasePrice;
-
+    
+    @Property(title="Sales Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "sale_price")
     private BigDecimal salePrice;
 
+    @Property(title="Delivery Time", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "delivery_time")
     private Integer deliveryTime;
 
     @Column(name = "notes")
+    @Property(title="Notes")
     private String notes;
 
 
     public WarehouseProduct() {
-    }
-
-    public WarehouseProduct(WarehouseProductPK warehouseProductPK) {
-        this.warehouseProductPK = warehouseProductPK;
-    }
-
-    public WarehouseProduct(BigInteger warehouseId, BigInteger productId) {
-        this.warehouseProductPK = new WarehouseProductPK(warehouseId, productId);
-    }
-
-    public WarehouseProductPK getWarehouseProductPK() {
-        return warehouseProductPK;
-    }
-
-    public void setWarehouseProductPK(WarehouseProductPK warehouseProductPK) {
-        this.warehouseProductPK = warehouseProductPK;
     }
 
     public BigDecimal getQuantityInStock() {
@@ -261,18 +305,18 @@ public class WarehouseProduct implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (warehouseProductPK != null ? warehouseProductPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof WarehouseProduct)) {
+        if (!(object instanceof PatternMaskFormat)) {
             return false;
         }
         WarehouseProduct other = (WarehouseProduct) object;
-        if ((this.warehouseProductPK == null && other.warehouseProductPK != null) || (this.warehouseProductPK != null && !this.warehouseProductPK.equals(other.warehouseProductPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -280,7 +324,22 @@ public class WarehouseProduct implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.WarehouseProduct[warehouseProductPK=" + warehouseProductPK + "]";
+        return "com.cosmos.acacia.crm.data.WarehouseProduct[id=" + id + "]";
     }
 
+    /**
+     * Getter for id
+     * @return Integer
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * Setter for id
+     * @param id - Integer
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

@@ -179,7 +179,7 @@ public class SimpleProduct
     private BigDecimal weight;
 
     @Column(name = "delivery_time")
-    @Property(title="Delivery time", propertyValidator=@PropertyValidator(
+    @Property(title="Delivery Time", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private Integer deliveryTime;
 
@@ -187,15 +187,11 @@ public class SimpleProduct
     @Property(title="Description")
     private String description;
 
-//    @Column(name = "producer_id")
-//    @Property(title="Producer Id", editable=false, readOnly=true, visible=false)
-//    private BigInteger producerId;
-//    
     @JoinColumn(name = "producer_id")
     @ManyToOne
     @Property(title="Producer")
     private BusinessPartner producer;
-
+    
 
     public SimpleProduct() {
     }
@@ -428,16 +424,6 @@ public class SimpleProduct
         this.description = description;
     }
 
-//    public BigInteger getProducerId() {
-//        return producerId;
-//    }
-//
-//    public void setProducerId(BigInteger producerId) {
-//        firePropertyChange("producerId", this.producerId, producerId);
-//        this.producerId = producerId;
-//    }
-
-
     /**
      * Synthetic property getter.
      * Format on every call.
@@ -460,10 +446,6 @@ public class SimpleProduct
             CodeFormatter formatter = new CodeFormatter(f.getFormat());
             String result = formatter.getDisplayValue(getProductCode());
             return result;
-//            MaskFormatter formatter = new MaskFormatter(f.getFormat());
-//            formatter.setValidCharacters("0123456789abcdefABCDEF");
-//            return
-//            formatter.valueToString(getProductCode());
         } catch (Exception e) {
             e.printStackTrace();
             return "<FORMAT ERROR>"; 

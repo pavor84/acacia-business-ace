@@ -203,13 +203,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
 
     @Override
     public boolean deleteProductCategory(ProductCategory category) {
-        try{
-            esm.remove(em, category);
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        esm.remove(em, category);
+        return true;
     }
 
     /**
@@ -248,14 +243,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
 
     @Override
     public boolean deleteProductCategories(List<ProductCategory> categories) {
-        try{
-            for (ProductCategory productCategory : categories) {
-                esm.remove(em, productCategory);
-            }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
+        for (ProductCategory productCategory : categories) {
+            esm.remove(em, productCategory);
         }
+        return true;
     }
 }
