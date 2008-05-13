@@ -55,7 +55,11 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
     private Lister<ProductCategory> categoriesLister;
     
     public ProductCategoryListPanel(){
-        this(null);
+        this(null, false);
+    }
+    
+    public ProductCategoryListPanel(boolean removeTableGaps){
+        this(null, removeTableGaps);
     }
     
     @Override
@@ -75,10 +79,37 @@ public class ProductCategoryListPanel extends AbstractTablePanel {
     }
     
     /** Creates new form ProductCategoryListPanel */
-    public ProductCategoryListPanel(DataObject parentDataObject) {
+    public ProductCategoryListPanel(DataObject parentDataObject, boolean removeTableContainerGaps) {
         super(parentDataObject);
+        
+        initComponentsCustom(removeTableContainerGaps);
     }
     
+    private void initComponentsCustom(boolean removeTableContainerGaps) {
+        //if removing the gaps - set the layout manually, with no gaps
+        if ( removeTableContainerGaps ){
+            
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+            this.setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(getDataScrollPane(), javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE)
+                        .addComponent(getButtonsPanel(), javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    )
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(getDataScrollPane(), javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(getButtonsPanel(), javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            );
+            
+        }
+    }
+
     @SuppressWarnings("unchecked")
     /**
      * When called the table is unbound, the bind again but
