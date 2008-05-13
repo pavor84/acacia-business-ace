@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -32,6 +33,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
@@ -50,8 +52,6 @@ public abstract class AbstractTablePanel
         initComponents();
         initData();
     }
-
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -178,7 +178,6 @@ public abstract class AbstractTablePanel
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
 
-
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
 
@@ -206,6 +205,21 @@ public abstract class AbstractTablePanel
         this.selectedRowObject = selectedRowObject;
     }
 
+    /**
+     * A getter for subclasses to use
+     * @return JScrollPane
+     */
+    protected JScrollPane getDataScrollPane(){
+        return dataScrollPane;
+    }
+    
+    /**
+     * A getter for subclasses to use
+     * @return JScrollPane
+     */
+    protected JBPanel getButtonsPanel(){
+        return buttonsPanel;
+    }
 
     public void addColumn(int orderPosition, String columnName,
                            String customELDisplay, EntityProperties entityProperties) {

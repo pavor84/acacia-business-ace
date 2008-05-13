@@ -69,7 +69,7 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
     }
     
     private void initComponentsCustom() {
-        categoryListPanel = new ProductCategoryListPanel(null);
+        categoryListPanel = new ProductCategoryListPanel(true);
         categoryListPanel.addTablePanelListener(new TablePanelListener() {
             @Override
             public void tablePanelClose() {
@@ -608,12 +608,25 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         showAllHeirsCheck = new com.cosmos.swingb.JBCheckBox();
 
         setName("Form"); // NOI18N
-        setLayout(new java.awt.BorderLayout());
 
-        productCategoriesSplitPane.setDividerLocation(220);
+        productCategoriesSplitPane.setDividerLocation(230);
+        productCategoriesSplitPane.setRightComponent(listPanel);
+        productCategoriesSplitPane.setContinuousLayout(true);
         productCategoriesSplitPane.setName("productCategoriesSplitPane"); // NOI18N
 
         listPanel.setName("listPanel"); // NOI18N
+
+        javax.swing.GroupLayout listPanelLayout = new javax.swing.GroupLayout(listPanel);
+        listPanel.setLayout(listPanelLayout);
+        listPanelLayout.setHorizontalGroup(
+            listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 780, Short.MAX_VALUE)
+        );
+        listPanelLayout.setVerticalGroup(
+            listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 527, Short.MAX_VALUE)
+        );
+
         productCategoriesSplitPane.setRightComponent(listPanel);
 
         jBPanel1.setName("jBPanel1"); // NOI18N
@@ -627,7 +640,7 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         categoryTree.setClosedIcon(resourceMap.getIcon("categoryTree.closedIcon")); // NOI18N
         categoryTree.setDragEnabled(true);
         categoryTree.setLeafIcon(resourceMap.getIcon("categoryTree.leafIcon")); // NOI18N
-        categoryTree.setMaximumSize(new java.awt.Dimension(100, 100));
+        categoryTree.setMaximumSize(new java.awt.Dimension(30000, 30000));
         categoryTree.setMinimumSize(new java.awt.Dimension(100, 100));
         categoryTree.setName("categoryTree"); // NOI18N
         categoryTree.setOpenIcon(resourceMap.getIcon("categoryTree.openIcon")); // NOI18N
@@ -645,20 +658,30 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel1Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
-            .addComponent(productCategoriesTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+            .addComponent(productCategoriesTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
         );
         jBPanel1Layout.setVerticalGroup(
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel1Layout.createSequentialGroup()
-                .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(productCategoriesTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE))
+                .addComponent(productCategoriesTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
         );
 
         productCategoriesSplitPane.setLeftComponent(jBPanel1);
 
-        add(productCategoriesSplitPane, java.awt.BorderLayout.PAGE_START);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(productCategoriesSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(productCategoriesSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
     
     
