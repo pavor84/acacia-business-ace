@@ -120,8 +120,10 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
             .addComponent(categoryListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
         );
         
-        listPanel.setPreferredSize(categoryListPanel.getPreferredSize());
-        listPanel.setSize(categoryListPanel.getSize());
+        //listPanel.setPreferredSize(categoryListPanel.getPreferredSize());
+        //listPanel.setSize(categoryListPanel.getSize());
+        
+        categoryListPanel.getDataTable().packAll();
         
 //        treeContextMenu = new JBPopupMenu();
 //        
@@ -603,16 +605,22 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         productCategoriesSplitPane = new com.cosmos.swingb.JBSplitPane();
         listPanel = new com.cosmos.swingb.JBPanel();
         jBPanel1 = new com.cosmos.swingb.JBPanel();
+        showAllHeirsCheck = new com.cosmos.swingb.JBCheckBox();
+        jBScrollPane1 = new com.cosmos.swingb.JBScrollPane();
         productCategoriesTreeScrollPane = new javax.swing.JScrollPane();
         categoryTree = new com.cosmos.swingb.JBTree();
-        showAllHeirsCheck = new com.cosmos.swingb.JBCheckBox();
 
+        setMaximumSize(null);
+        setMinimumSize(null);
         setName("Form"); // NOI18N
+        setPreferredSize(null);
 
-        productCategoriesSplitPane.setDividerLocation(230);
-        productCategoriesSplitPane.setRightComponent(listPanel);
+        productCategoriesSplitPane.setDividerLocation(240);
         productCategoriesSplitPane.setContinuousLayout(true);
+        productCategoriesSplitPane.setMaximumSize(null);
+        productCategoriesSplitPane.setMinimumSize(null);
         productCategoriesSplitPane.setName("productCategoriesSplitPane"); // NOI18N
+        productCategoriesSplitPane.setPreferredSize(null);
 
         listPanel.setName("listPanel"); // NOI18N
 
@@ -620,37 +628,44 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         listPanel.setLayout(listPanelLayout);
         listPanelLayout.setHorizontalGroup(
             listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 780, Short.MAX_VALUE)
+            .addGap(0, 770, Short.MAX_VALUE)
         );
         listPanelLayout.setVerticalGroup(
             listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 527, Short.MAX_VALUE)
+            .addGap(0, 423, Short.MAX_VALUE)
         );
 
         productCategoriesSplitPane.setRightComponent(listPanel);
 
         jBPanel1.setName("jBPanel1"); // NOI18N
 
+        showAllHeirsCheck.setMnemonic('S');
+        showAllHeirsCheck.setSelected(true);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoriesTreePanel.class);
+        showAllHeirsCheck.setText(resourceMap.getString("showAllHeirsCheck.text")); // NOI18N
+        showAllHeirsCheck.setName("showAllHeirsCheck"); // NOI18N
+
+        jBScrollPane1.setBorder(null);
+        jBScrollPane1.setName("jBScrollPane1"); // NOI18N
+
         productCategoriesTreeScrollPane.setName("productCategoriesTreeScrollPane"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoriesTreePanel.class);
         categoryTree.setBackground(resourceMap.getColor("categoryTree.background")); // NOI18N
         categoryTree.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 4, 4, 4));
         categoryTree.setToolTipText(resourceMap.getString("categoryTree.toolTipText")); // NOI18N
+        categoryTree.setAutoscrolls(true);
         categoryTree.setClosedIcon(resourceMap.getIcon("categoryTree.closedIcon")); // NOI18N
         categoryTree.setDragEnabled(true);
         categoryTree.setLeafIcon(resourceMap.getIcon("categoryTree.leafIcon")); // NOI18N
         categoryTree.setMaximumSize(new java.awt.Dimension(30000, 30000));
-        categoryTree.setMinimumSize(new java.awt.Dimension(100, 100));
+        categoryTree.setMinimumSize(null);
         categoryTree.setName("categoryTree"); // NOI18N
         categoryTree.setOpenIcon(resourceMap.getIcon("categoryTree.openIcon")); // NOI18N
-        categoryTree.setPreferredSize(new java.awt.Dimension(100, 100));
+        categoryTree.setPreferredSize(null);
+        categoryTree.setVisibleRowCount(0);
         productCategoriesTreeScrollPane.setViewportView(categoryTree);
 
-        showAllHeirsCheck.setMnemonic('S');
-        showAllHeirsCheck.setSelected(true);
-        showAllHeirsCheck.setText(resourceMap.getString("showAllHeirsCheck.text")); // NOI18N
-        showAllHeirsCheck.setName("showAllHeirsCheck"); // NOI18N
+        jBScrollPane1.setViewportView(productCategoriesTreeScrollPane);
 
         javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
         jBPanel1.setLayout(jBPanel1Layout);
@@ -658,8 +673,8 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel1Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
-            .addComponent(productCategoriesTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+            .addComponent(jBScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
         );
         jBPanel1Layout.setVerticalGroup(
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -667,7 +682,7 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
                 .addContainerGap()
                 .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(productCategoriesTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
+                .addComponent(jBScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
         );
 
         productCategoriesSplitPane.setLeftComponent(jBPanel1);
@@ -676,11 +691,11 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(productCategoriesSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
+            .addComponent(productCategoriesSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(productCategoriesSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+            .addComponent(productCategoriesSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -688,6 +703,7 @@ public class ProductCategoriesTreePanel extends AcaciaPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBTree categoryTree;
     private com.cosmos.swingb.JBPanel jBPanel1;
+    private com.cosmos.swingb.JBScrollPane jBScrollPane1;
     private com.cosmos.swingb.JBPanel listPanel;
     private com.cosmos.swingb.JBSplitPane productCategoriesSplitPane;
     private javax.swing.JScrollPane productCategoriesTreeScrollPane;
