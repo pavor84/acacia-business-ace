@@ -62,7 +62,7 @@ public class ProductAssembler
         this.callbackHandler = callbackHandler;
     }
 
-    public ComplexProduct assemblе(Map parameters)
+    public ComplexProduct assemble(Map parameters)
         throws AlgorithmException
     {
         EntityManager em = getEntityManager();
