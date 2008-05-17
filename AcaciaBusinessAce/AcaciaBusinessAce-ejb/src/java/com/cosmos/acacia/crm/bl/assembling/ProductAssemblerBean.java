@@ -27,12 +27,13 @@ public class ProductAssemblerBean
 
 
     @Override
-    public ComplexProduct assemblе(AssemblingSchema assemblingSchema, Map parameters)
+    public ComplexProduct assemble(AssemblingSchema assemblingSchema, Map parameters)
         throws AlgorithmException
     {
+        
         ProductAssembler pa = new ProductAssembler(assemblingSchema, em);
         //pa.setCallbackHandler(callbackHandler);
-        return pa.assemblе(parameters);
+        return pa.assemble(parameters);
     }
 
     
