@@ -19,7 +19,7 @@ import javax.ejb.Remote;
 public interface ProductAssemblerRemote
 {
 
-    ComplexProduct assemblе(AssemblingSchema assemblingSchema, Map parameters)
+    ComplexProduct assemble(AssemblingSchema assemblingSchema, Map parameters)
         throws AlgorithmException;
     
 }
