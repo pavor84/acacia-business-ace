@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
@@ -21,9 +22,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.Gender;
-import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
-import org.apache.log4j.Logger;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -34,7 +33,7 @@ import org.apache.log4j.Logger;
 public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     protected Logger log = Logger.getLogger(PersonsListBean.class);
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -93,47 +92,47 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return person;
     }
 
+    @SuppressWarnings("unchecked")
     public Person saveIfUnique(Person person) {
-    
+
         // Not using a NamedQuery, because it will complicate things unnecessarily
-        
+
         String query = "select p from Person p where " +
                 "p.firstName = :firstName and " +
                 "p.lastName = :lastName and ";
-        
+
         if (person.getSecondName() != null)
             query += "p.secondName = :secondName and ";
         else
             query += "p.secondName is null and ";
-        
-        
+
+
         if (person.getExtraName() != null)
             query += "p.extraName = :extraName and ";
         else
             query += "p.extraName is null and ";
-        
-        
+
+
         query += "p.dataObject.deleted = false";
-            
+
         Query q = em.createQuery(query);
-        
+
         q.setParameter("firstName", person.getFirstName());
         q.setParameter("lastName", person.getLastName());
         if (person.getSecondName() != null)
             q.setParameter("secondName", person.getSecondName());
-        
+
         if (person.getExtraName() != null)
             q.setParameter("extraName", person.getExtraName());
-        
+
         List results = q.getResultList();
-        log.info("Existing persons: " + results.size());
-        
+
         if (results != null && results.size() > 0)
             return null;
-        
+
         return savePerson(person);
     }
-    
+
     public int deletePerson(Person person) {
         return esm.remove(em, person);
     }

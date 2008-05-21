@@ -5,15 +5,14 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,33 +25,55 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "classifiers")
-public class Classifier implements Serializable {
+@NamedQueries(
+    {
+        @NamedQuery
+             (
+                name = "Classifier.findByParentDataObjectAndDeleted",
+                query = "select c from Classifier c where c.dataObject.parentDataObject = :parentDataObject and c.dataObject.deleted = :deleted"
+             ),
+        @NamedQuery
+             (
+                name = "Classifier.findAllAndDeleted",
+                query = "select c from Classifier c where c.dataObject.deleted = :deleted"
+              ),
+        @NamedQuery
+            (
+                name = "Classifier.findByCode",
+                query = "select c from Classifier c where c.classifierCode=:code"
+
+            )
+    }
+)
+public class Classifier extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "classifier_id", nullable = false)
+    @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger classifierId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
     @Column(name = "classifier_code", nullable = false)
+    @Property(title="Code")
     private String classifierCode;
 
     @Column(name = "classifier_name", nullable = false)
+    @Property(title="Name")
     private String classifierName;
 
-    @Column(name = "description")
-    private String description;
-
-    @JoinTable(name = "classifier_applied_for_dot", joinColumns = {@JoinColumn(name = "classifier_id", referencedColumnName = "classifier_id")}, inverseJoinColumns = {@JoinColumn(name = "data_object_type_id", referencedColumnName = "data_object_type_id")})
-    @ManyToMany
-    private Collection<DataObjectType> appliedForDataObjectTypes;
-
-    @JoinColumn(name = "classifier_group_id", referencedColumnName = "classifier_group_id")
+    @JoinColumn(name = "parent_id", referencedColumnName = "classifier_group_id", insertable=false, updatable=false, nullable=false)
     @ManyToOne
+    @Property(title="Group", customDisplay="${classifierGroup.classifierGroupName}")
     private ClassifierGroup classifierGroup;
+        
+    @Column(name = "description")
+    @Property(title="Description")
+    private String description;
 
     @JoinColumn(name = "classifier_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -80,10 +101,12 @@ public class Classifier implements Serializable {
         this.classifierId = classifierId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
@@ -112,14 +135,6 @@ public class Classifier implements Serializable {
         this.description = description;
     }
 
-    public Collection<DataObjectType> getAppliedForDataObjectTypes() {
-        return appliedForDataObjectTypes;
-    }
-
-    public void setAppliedForDataObjectTypes(Collection<DataObjectType> appliedForDataObjectTypes) {
-        this.appliedForDataObjectTypes = appliedForDataObjectTypes;
-    }
-
     public ClassifierGroup getClassifierGroup() {
         return classifierGroup;
     }
@@ -128,10 +143,12 @@ public class Classifier implements Serializable {
         this.classifierGroup = classifierGroup;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -159,6 +176,16 @@ public class Classifier implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Classifier[classifierId=" + classifierId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return classifierId;
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        this.classifierId = id;
     }
 
 }

@@ -5,12 +5,17 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,27 +25,46 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "classifier_groups")
-public class ClassifierGroup implements Serializable {
+@NamedQueries(
+    {
+        /**
+         * All not deleted classifier groups.
+         */
+        @NamedQuery
+            (
+            name = "ClassifierGroup.getAllNotDeleted",
+            query = "select cg from ClassifierGroup cg where cg.dataObject.deleted = false"
+            )
+    }
+)
+public class ClassifierGroup extends DataObjectBean
+        implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "classifier_group_id", nullable = false)
+    @Property(title="Classifier Group Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger classifierGroupId;
 
     @Column(name = "parent_id")
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
-    @Column(name = "is_system_group", nullable = false)
-    private boolean isSystemGroup;
-
     @Column(name = "classifier_group_code", nullable = false)
+    @Property(title="Group Code")
     private String classifierGroupCode;
 
     @Column(name = "classifier_group_name", nullable = false)
+    @Property(title="Group Name")
     private String classifierGroupName;
 
+    @Column(name = "is_system_group", nullable = false)
+    @Property(title="System")
+    private boolean isSystemGroup;
+    
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
     @JoinColumn(name = "classifier_group_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -69,10 +93,12 @@ public class ClassifierGroup implements Serializable {
         this.classifierGroupId = classifierGroupId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
@@ -109,10 +135,12 @@ public class ClassifierGroup implements Serializable {
         this.description = description;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -140,6 +168,26 @@ public class ClassifierGroup implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.ClassifierGroup[classifierGroupId=" + classifierGroupId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return classifierGroupId;
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        this.classifierGroupId = id;
+    }
+
+    @Override
+    public String toShortText() {
+        return null;
+    }
+
+    @Override
+    public String toText() {
+        return classifierGroupName + " (" +  classifierGroupCode + ")";
     }
 
 }

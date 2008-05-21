@@ -29,6 +29,7 @@ import org.jdesktop.application.Task;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -71,6 +72,7 @@ public abstract class AbstractTablePanel
         newButton = new com.cosmos.swingb.JBButton();
         selectButton = new com.cosmos.swingb.JBButton();
         unselectButton = new com.cosmos.swingb.JBButton();
+        classifyButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -103,6 +105,11 @@ public abstract class AbstractTablePanel
         unselectButton.setAction(actionMap.get("unselectAction")); // NOI18N
         unselectButton.setName("unselectButton"); // NOI18N
 
+        classifyButton.setAction(actionMap.get("classifyAction")); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AbstractTablePanel.class);
+        classifyButton.setText(resourceMap.getString("classifyButton.text")); // NOI18N
+        classifyButton.setName("classifyButton"); // NOI18N
+
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
         buttonsPanelLayout.setHorizontalGroup(
@@ -112,7 +119,9 @@ public abstract class AbstractTablePanel
                 .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 233, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
+                .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -138,7 +147,8 @@ public abstract class AbstractTablePanel
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -167,6 +177,7 @@ public abstract class AbstractTablePanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonsPanel;
+    private com.cosmos.swingb.JBButton classifyButton;
     private com.cosmos.swingb.JBButton closeButton;
     private javax.swing.JScrollPane dataScrollPane;
     private com.cosmos.acacia.gui.AcaciaTable dataTable;
@@ -344,6 +355,9 @@ public abstract class AbstractTablePanel
             case Close:
                 closeButton.setVisible(visible);
                 break;
+            case Classify:
+                classifyButton.setVisible(visible);
+                break;
         }
     }
 
@@ -377,7 +391,7 @@ public abstract class AbstractTablePanel
 
     /**
      * Sets the visible buttons:
-     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32, Unselect=64
+     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32, Unselect=64, Classify = 128
      * Sum the buttons you want to show and pass the result to the method
      *
      * @param visibleButtons
@@ -529,6 +543,16 @@ public abstract class AbstractTablePanel
         return result;
     }
 
+    @Action
+    public void classifyAction() {
+        log.info("classifyAction");
+        if (getDataTable().getSelectedRowObject() != null) {
+            ClassifyObjectPanel cop = new ClassifyObjectPanel(
+                ((DataObjectBean)getDataTable().getSelectedRowObject()).getDataObject());
+            cop.showDialog();
+        }
+    }
+    
     protected void fireTableRefreshed() {
         for (TablePanelListener listener : tablePanelListeners) {
             listener.tableRefreshed();
@@ -561,6 +585,7 @@ public abstract class AbstractTablePanel
     {
         Select("selectAction"),
         Unselect("unselectAction"),
+        Classify("classifyAction"),
         New("newAction"),
         Modify("modifyAction"),
         Delete("deleteAction"),
@@ -592,7 +617,8 @@ public abstract class AbstractTablePanel
         Delete(8, Button.Delete),
         Refresh(16, Button.Refresh),
         Close(32, Button.Close),
-        Unselect(64, Button.Unselect);
+        Unselect(64, Button.Unselect),
+        Classify(128, Button.Classify);
 
         ButtonVisibility(int visibilityIndex, Button button)
         {

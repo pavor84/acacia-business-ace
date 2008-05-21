@@ -280,10 +280,17 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void classifierGroupsAction()
     {
-        ClassifierGroupsPanel classifierGroups = new ClassifierGroupsPanel(null);
+        ClassifierGroupsListPanel classifierGroups = new ClassifierGroupsListPanel(null);
         classifierGroups.showFrame();
     }
 
+    @Action
+    public void classifiersAction()
+    {
+        ClassifiersListPanel classifiers = new ClassifiersListPanel(null, null);
+        classifiers.showFrame();
+    }
+        
     @Action
     public void invoicesListAction() {
         System.out.println("invoicesListAction");
