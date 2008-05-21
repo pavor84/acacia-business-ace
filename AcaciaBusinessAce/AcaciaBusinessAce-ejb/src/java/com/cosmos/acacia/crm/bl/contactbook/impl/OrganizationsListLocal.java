@@ -9,7 +9,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author miro
+ * @author Bozhidar Bozhanov
  */
 @Local
 public interface OrganizationsListLocal

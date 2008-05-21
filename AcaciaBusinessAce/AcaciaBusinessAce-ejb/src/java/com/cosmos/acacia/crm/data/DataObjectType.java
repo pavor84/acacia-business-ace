@@ -5,13 +5,13 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -23,21 +23,39 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "data_object_types")
-@NamedQueries({@NamedQuery(name = "DataObjectType.findByDataObjectTypeId",
-                query = "SELECT d FROM DataObjectType d WHERE d.dataObjectTypeId = :dataObjectTypeId"),
-               @NamedQuery(name = "DataObjectType.findByDataObjectType",
-                query = "SELECT d FROM DataObjectType d WHERE d.dataObjectType = :dataObjectType")})
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "DataObjectType.findByDataObjectTypeId",
+            query = "SELECT d FROM DataObjectType d WHERE d.dataObjectTypeId = :dataObjectTypeId"
+        ),
+        @NamedQuery(
+            name = "DataObjectType.findByDataObjectType",
+            query = "SELECT d FROM DataObjectType d WHERE d.dataObjectType = :dataObjectType"
+        ),
+        @NamedQuery(
+            name = "DataObjectType.listAll",
+            query = "SELECT dot FROM DataObjectType dot"
+        )
+    }
+)
 public class DataObjectType implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name="DOTSequenceGenerator", sequenceName="data_object_type_seq", allocationSize=1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DOTSequenceGenerator")
     @Column(name = "data_object_type_id", nullable = false)
+    @Property(title="Id", editable=false, readOnly=true, visible=false, hidden=true)
     private Integer dataObjectTypeId;
+    
     @Column(name = "data_object_type", nullable = false)
+    @Property(title="Type")
     private String dataObjectType;
+    
     @Column(name = "notes")
+    @Property(title="Notes")
     private String notes;
+    
     @Column(name = "small_image_uri")
     private String smallImageUri;
     //@Lob
@@ -70,7 +88,7 @@ public class DataObjectType implements Serializable {
     }
 
     public String getDataObjectType() {
-        return dataObjectType;
+        return dataObjectType.replaceAll(this.getClass().getPackage().getName() + "\\.", "");
     }
 
     public void setDataObjectType(String dataObjectType) {
@@ -116,7 +134,7 @@ public class DataObjectType implements Serializable {
     public void setMediumImage(byte[] mediumImage) {
         this.mediumImage = mediumImage;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

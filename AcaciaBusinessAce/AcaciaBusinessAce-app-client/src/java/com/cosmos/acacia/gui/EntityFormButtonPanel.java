@@ -215,6 +215,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             case Close:
                 closeButton.setVisible(visible);
                 break;
+                
+            case Problems:
+                problemsButton.setVisible(visible);
+                break;
         }
     }
 
@@ -226,8 +230,11 @@ public class EntityFormButtonPanel extends AcaciaPanel {
 
             case Close:
                 return closeButton.isVisible();
+                
+           case Problems:
+                return problemsButton.isVisible();
         }
-
+        
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
 

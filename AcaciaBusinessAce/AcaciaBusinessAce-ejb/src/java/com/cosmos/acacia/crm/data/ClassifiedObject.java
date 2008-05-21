@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -22,6 +23,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "classified_objects")
+@NamedQueries({
+    @NamedQuery(
+        name = "ClassifiedObject.findByDataObject",
+        query = "select co from ClassifiedObject co where co.dataObject=:dataObject"
+    ),
+    @NamedQuery(
+        name = "ClassifiedObject.findClassifiedObject",
+        query = "select co from ClassifiedObject co where co = :classifiedObject"
+    )
+})
 public class ClassifiedObject implements Serializable {
 
     private static final long serialVersionUID = 1L;

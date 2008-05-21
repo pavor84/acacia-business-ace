@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.bl.contactbook.impl;
+package com.cosmos.acacia.crm.bl.impl;
 
 import javax.ejb.Local;
 
@@ -12,7 +12,7 @@ import javax.ejb.Local;
  * @author Bozhidar Bozhanov
  */
 @Local
-public interface AddressesListLocal
-    extends AddressesListRemote
+public interface ClassifiersLocal
+    extends ClassifiersRemote
 {
 }

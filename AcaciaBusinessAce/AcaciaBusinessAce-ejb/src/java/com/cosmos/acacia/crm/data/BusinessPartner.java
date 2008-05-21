@@ -34,34 +34,35 @@ import javax.persistence.PrimaryKeyJoinColumn;
         (
             name = "BusinessPartner.getAllNotDeleted",
             query = "select bp from BusinessPartner bp where bp.dataObject.deleted = false"
-        )  
+        )
     }
 )
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {
-    
+
     @Id
     @Column(name = "partner_id", nullable = false)
     @Property(title="Partner id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger partnerId;
-    
+
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
-    
+
     /*
     @JoinColumn(name = "id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
     */
-    
+
     @OneToOne
     @PrimaryKeyJoinColumn
     private DataObject dataObject;
-        
+
     /**
      * Getter for parentId
      * @return BigInteger
      */
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
@@ -70,6 +71,7 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
      * Setter for parentId
      * @param parentId - BigInteger
      */
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
@@ -78,6 +80,7 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
      * Getter for dataObject
      * @return DataObject
      */
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
@@ -86,6 +89,7 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
      * Setter for dataObject
      * @param dataObject - DataObject
      */
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -105,16 +109,16 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     public void setPartnerId(BigInteger partnerId) {
         this.partnerId = partnerId;
     }
-    
+
     @Override
     public BigInteger getId() {
         return getPartnerId();
     }
-    
+
     @Override
     public void setId(BigInteger id) {
         setPartnerId(id);
     }
-    
+
     public abstract String getDisplayName();
 }

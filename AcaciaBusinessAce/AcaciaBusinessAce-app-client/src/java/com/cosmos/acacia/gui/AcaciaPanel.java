@@ -56,7 +56,7 @@ public abstract class AcaciaPanel
         Component[] components = this.getComponents();
         // Get a font from config?
         Font font = new Font("Tahoma", Font.PLAIN, 11);
-        setFontToComponents(components, font);
+        //setFontToComponents(components, font);
     }
 
     protected void setFontToComponents(Component[] components, Font font)

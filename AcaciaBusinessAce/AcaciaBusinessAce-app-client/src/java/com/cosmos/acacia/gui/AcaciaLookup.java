@@ -65,7 +65,10 @@ public class AcaciaLookup extends javax.swing.JPanel {
         this.selectedItem = selectedItem;
     }
 
-    private void updateText() {
+    public void updateText() {
+        if (toStringConverter == null)
+            toStringConverter = new AcaciaToStringConverter();
+        
         String text = toStringConverter.getPreferredStringForItem(getSelectedItem());
         field.setText(text);
     }
@@ -345,6 +348,16 @@ public class AcaciaLookup extends javax.swing.JPanel {
         super.setEnabled(enabled);
         button.setEnabled(enabled);
     }
+
+    public AcaciaLookupProvider getLookupProvider() {
+        return lookupProvider;
+    }
+
+    public void setLookupProvider(AcaciaLookupProvider lookupProvider) {
+        this.lookupProvider = lookupProvider;
+    }
+    
+    
     /**
      * 
      * Created	:	13.04.2008

@@ -165,10 +165,12 @@ public class BankDetail
         this.currency = currency;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }

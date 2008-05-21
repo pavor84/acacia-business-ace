@@ -105,10 +105,12 @@ public class Address extends DataObjectBean implements Serializable {
         this.addressId = addressId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
@@ -161,10 +163,12 @@ public class Address extends DataObjectBean implements Serializable {
         this.country = country;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }

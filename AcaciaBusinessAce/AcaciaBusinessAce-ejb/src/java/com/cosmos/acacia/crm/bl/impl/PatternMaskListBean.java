@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.bl.validation.PatternMaskFormatValidatorLocal;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
