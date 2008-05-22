@@ -31,6 +31,10 @@ import javax.persistence.Table;
     @NamedQuery(
         name = "ClassifiedObject.findClassifiedObject",
         query = "select co from ClassifiedObject co where co = :classifiedObject"
+    ),
+    @NamedQuery(
+        name = "ClassifiedObject.findByClassifier",
+        query = "select co from ClassifiedObject co where classifier = :classifier and dataObject.deleted = :deleted"
     )
 })
 public class ClassifiedObject implements Serializable {

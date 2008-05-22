@@ -88,7 +88,7 @@ public class DataObjectType implements Serializable {
     }
 
     public String getDataObjectType() {
-        return dataObjectType.replaceAll(this.getClass().getPackage().getName() + "\\.", "");
+        return dataObjectType;
     }
 
     public void setDataObjectType(String dataObjectType) {

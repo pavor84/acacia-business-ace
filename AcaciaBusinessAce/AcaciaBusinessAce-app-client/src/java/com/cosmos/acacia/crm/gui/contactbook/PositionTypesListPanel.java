@@ -18,6 +18,7 @@ import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -73,6 +74,9 @@ public class PositionTypesListPanel extends AbstractTablePanel {
 
     protected void postInitData()
     {
+        String key = ownerClass == Person.class ? "title.positions.person" : "title.positions.organization";
+        setTitle(getResourceMap().getString(key));
+        
         AcaciaTable positionTypesTable = getDataTable();
          try {
             JTableBinding tableBinding = positionTypesTable.bind(positionTypesBindingGroup, getPositionTypes(), getPositionTypeEntityProperties());
@@ -171,6 +175,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         positionTypes = null;
         
         initData();
+        postInitData();
         
         return t;
     }

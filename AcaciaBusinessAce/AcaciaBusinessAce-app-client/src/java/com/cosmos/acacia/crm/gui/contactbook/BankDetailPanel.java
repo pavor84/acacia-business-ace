@@ -303,7 +303,7 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     protected Object onChooseBank() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
-        // TODO : classifiers!
+        listPanel.setClassifier(getClassifiersFormSession().getClassifier("test"));
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
