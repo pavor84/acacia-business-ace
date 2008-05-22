@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.app.AcaciaSession;
+import com.cosmos.acacia.app.AppSession;
 
 /**
  * Created	:	19.05.2008
@@ -24,10 +24,10 @@ public class AcaciaSessionTest {
         String valueName = "AcaciaSessionTest.value.x";
         
         //set a value
-        AcaciaSession.setValue(valueName, value);
+        AppSession.get().setValue(valueName, value);
         
         //get a value
-        Object valueX = AcaciaSession.getValue(valueName);
+        Object valueX = AppSession.get().getValue(valueName);
         
         Assert.assertEquals(valueX, value);
     }

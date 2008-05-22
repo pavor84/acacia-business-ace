@@ -261,13 +261,21 @@ public class AcaciaLookup extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     private void onKeyCommand(KeyEvent evt){
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            setSelectedItem(null);
-            binding.getTargetProperty().setValue(this, null);
+            clearSelectedValue();
         }else if ( evt.getKeyCode() == KeyEvent.VK_F5 ){
             onSelect();
         }else if ( field.equals(evt.getSource()) && evt.getKeyCode()==KeyEvent.VK_ENTER ){
             onSelect();
         }
+    }
+    
+    /**
+     * Clears the selected value and sets the target property to null.
+     */
+    @SuppressWarnings("unchecked")
+    public void clearSelectedValue(){
+        setSelectedItem(null);
+        binding.getTargetProperty().setValue(this, null);
     }
 
     @SuppressWarnings("unchecked")

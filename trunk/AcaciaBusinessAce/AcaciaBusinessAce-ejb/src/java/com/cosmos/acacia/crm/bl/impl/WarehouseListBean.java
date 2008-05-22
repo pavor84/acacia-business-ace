@@ -1,6 +1,11 @@
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -10,8 +15,11 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListLocal;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.validation.impl.WarehouseProductValidatorLocal;
@@ -37,6 +45,8 @@ public class WarehouseListBean implements WarehouseListRemote {
     private WarehouseValidatorLocal warehouseValidator;
     @EJB
     private WarehouseProductValidatorLocal warehouseProductValidator;
+    @EJB
+    private AddressesListLocal addressesList;
     
     @Override
     public EntityProperties getWarehouseEntityProperties() {
@@ -74,16 +84,43 @@ public class WarehouseListBean implements WarehouseListRemote {
             em.createQuery("select a from Address a where a.dataObject.parentDataObject is not null")
             .getResultList();
         
-        if ( allAddresses!=null && allAddresses.size()>0 ){
-            try{
-                return allAddresses.get(0).getDataObject().getParentDataObject();
-            }catch (NullPointerException npe){
-                npe.printStackTrace();
-                return null;
+        //add-hoc temporary logic, to consider the parent data object with most addresses
+        Map<DataObject, Long> addressesCount = new HashMap<DataObject, Long>();
+        
+        for (Address address : allAddresses) {
+            DataObject parent = null;
+            if ( address.getDataObject()!=null && address.getDataObject().getParentDataObject()!=null )
+                parent = address.getDataObject().getParentDataObject();
+            if ( parent!=null ){
+                Long curValue = addressesCount.get(parent);
+                if ( curValue==null )
+                    curValue = new Long(1);
+                else
+                    curValue++;
+                addressesCount.put(parent, curValue);
             }
         }
+        
+        //find the one with most addresses
+        Long biggestCount = new Long(0);
+        DataObject choosen = null;
+        for (Map.Entry<DataObject, Long> parentEntry : addressesCount.entrySet()) {
+            if ( parentEntry.getValue()>biggestCount ){
+                biggestCount = parentEntry.getValue();
+                choosen = parentEntry.getKey();
+            }
+        }
+        
+//        if ( allAddresses!=null && allAddresses.size()>0 ){
+//            try{
+//                return allAddresses.get(0).getDataObject().getParentDataObject();
+//            }catch (NullPointerException npe){
+//                npe.printStackTrace();
+//                return null;
+//            }
+//        }
             
-        return null;
+        return choosen;
     }
 
     @Override
@@ -129,5 +166,16 @@ public class WarehouseListBean implements WarehouseListRemote {
         
         esm.persist(em, entity);
         return entity; 
+    }
+
+    @Override
+    public List<Person> getWarehouseMenForBranch(DataObject dataObject) {
+        Set<Person> persons = new HashSet<Person>();
+        List<ContactPerson> contactPersons = addressesList.getContactPersons(dataObject);
+        for (ContactPerson contactPerson : contactPersons) {
+            persons.add(contactPerson.getContact());
+        }
+        List<Person> result = new ArrayList<Person>(persons);
+        return result;
     }
 }

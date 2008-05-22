@@ -26,6 +26,7 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
+import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
@@ -51,6 +52,13 @@ public class AcaciaApplicationView extends FrameView {
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         initComponents();
+        
+        autoLogin();
+    }
+
+
+    private void autoLogin() {
+        AppSession.get().login("dummyuser","dummypassord");
     }
 
 

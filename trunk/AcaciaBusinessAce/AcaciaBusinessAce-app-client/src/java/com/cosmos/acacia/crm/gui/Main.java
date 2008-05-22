@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.junit.runner.JUnitCore;
 
+import com.cosmos.test.bl.AcaciaSessionTest;
 import com.cosmos.test.bl.PatternMaskListTest;
 import com.cosmos.test.bl.ProductCategoriesTest;
 import com.cosmos.test.bl.ProductsListTest;
@@ -85,9 +86,10 @@ public class Main {
         String[] tests = new String[]
         {
 //            DataObjectTest.class.getName(),
-            PatternMaskListTest.class.getName(),
-            ProductsListTest.class.getName(),
-            ProductCategoriesTest.class.getName()
+//            PatternMaskListTest.class.getName(),
+//            ProductsListTest.class.getName(),
+//            ProductCategoriesTest.class.getName(),
+            AcaciaSessionTest.class.getName()
         };
 
         JUnitCore.main(tests);
