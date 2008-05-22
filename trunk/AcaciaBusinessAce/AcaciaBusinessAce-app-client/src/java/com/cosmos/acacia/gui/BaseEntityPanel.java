@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -33,6 +34,8 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.listeners.NestedFormListener;
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
 
 /**
  * A base class for all panels representing a single entity
@@ -45,6 +48,26 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     protected DialogResponse modifiedResponse = null;
 
+    @EJB
+    private ClassifiersRemote classifiersFormSession;
+    
+    final protected ClassifiersRemote getClassifiersFormSession()
+    {
+        if(classifiersFormSession == null)
+        {
+            try
+            {
+                classifiersFormSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        return classifiersFormSession;
+    }
+    
     public BaseEntityPanel(DataObject dataObject)
     {
         super(dataObject);

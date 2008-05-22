@@ -40,8 +40,7 @@ import javax.persistence.Table;
         @NamedQuery
             (
                 name = "Classifier.findByCode",
-                query = "select c from Classifier c where c.classifierCode=:code"
-
+                query = "select c from Classifier c where c.classifierCode = :code and c.dataObject.deleted = :deleted"
             )
     }
 )

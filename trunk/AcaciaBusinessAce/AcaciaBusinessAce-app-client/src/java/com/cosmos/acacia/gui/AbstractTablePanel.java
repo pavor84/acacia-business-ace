@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,6 +38,9 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import java.util.LinkedList;
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
 
 /**
  *
@@ -191,7 +196,11 @@ public abstract class AbstractTablePanel
 
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
-
+    private Classifier classifier;
+    
+    @EJB
+    private ClassifiersRemote classifiersFormSession;
+            
     protected void initData()
     {
         setVisible(Button.Select, false);
@@ -283,8 +292,9 @@ public abstract class AbstractTablePanel
 
 
     /**
-     *
-     * @return
+     * Implement this method for adding new rows
+     * 
+     * @return the new row object
      */
     protected abstract Object newRow();
 
@@ -450,6 +460,8 @@ public abstract class AbstractTablePanel
         Object newRowObject = newRow();
         if(newRowObject != null)
         {
+            // Classify the new object if needed
+            classifyObject(newRowObject);
             dataTable.addRow(newRowObject);
             fireAdd(newRowObject);
         }
@@ -514,6 +526,36 @@ public abstract class AbstractTablePanel
         else
             result = message + " " + tableUserfriendly;
         return result;
+    }
+    
+    
+    protected void classifyObject(Object object) {
+        if (!(object instanceof DataObjectBean))
+            return;
+        
+        if (getClassifier() == null)
+            return;
+        
+        DataObject dataObject = ((DataObjectBean) object).getDataObject();
+        
+        getClassifiersFormSession().classifyDataObject(dataObject, getClassifier());
+    }
+    
+    protected ClassifiersRemote getClassifiersFormSession()
+    {
+        if(classifiersFormSession == null)
+        {
+            try
+            {
+                classifiersFormSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        return classifiersFormSession;
     }
     
     protected boolean showDeleteConfirmation(String message){
@@ -772,5 +814,49 @@ public abstract class AbstractTablePanel
     public void updateRowObject(Object rowObject) {
         dataTable.updateRow(rowObject);
         fireModify(rowObject);
+    }
+
+    /**
+     * Gets the classifier for the objects in this table
+     * @return
+     */
+    public Classifier getClassifier() {
+        return classifier;
+    }
+
+    /**
+     * Sets the classifier for the objects in this table
+     * @param classifier
+     */
+    public void setClassifier(Classifier classifier) {
+        this.classifier = classifier;
+        filterByClassifier();
+    }
+    
+    
+    protected void filterByClassifier() {
+        if (getClassifier() != null) {
+            List<Object> data = dataTable.getData();
+            List<Object> dataMirror = new LinkedList<Object>(data);
+            
+            List<DataObject> dataObjects = getClassifiersFormSession().getDataObjects(classifier);
+            int i = 0;            
+            for (Object obj : data) {
+                if (!(obj instanceof DataObjectBean))
+                    continue;
+
+                DataObject currentDataObject = ((DataObjectBean) obj).getDataObject();
+                
+                if (!dataObjects.contains(currentDataObject)) {
+                    dataMirror.remove(i);
+                    i--;
+                }
+                i++;
+            }
+           
+            dataTable.setData(dataMirror);
+            
+            setTitle(getTitle() + " (" + classifier.getClassifierName() + ")");
+        }
     }
 }

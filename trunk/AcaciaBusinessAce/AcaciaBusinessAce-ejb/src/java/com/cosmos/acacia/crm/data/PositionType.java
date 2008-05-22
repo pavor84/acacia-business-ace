@@ -8,6 +8,8 @@ package com.cosmos.acacia.crm.data;
 
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -37,8 +39,12 @@ import javax.persistence.Table;
              (
                  name = "PositionType.findOrganizationPositionTypes",
                  query = "select pt from PositionType pt where pt.ownerType='O' and pt.dataObject.deleted = :deleted"
+             ),
+             @NamedQuery
+             (
+                name = "PositionType.findByName",
+                query = "select pt from PositionType pt where pt.positionTypeName=:positionTypeName"
              )
-
         }
 )
 public class PositionType
@@ -57,7 +63,8 @@ public class PositionType
     private BigInteger parentId;
 
     @Column(name = "position_type_name", nullable = false)
-    @Property(title="Position Type Name")
+    @Property(title="Position Type Name", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=32))
     private String positionTypeName;
 
     @Column(name = "owner_type", nullable = false)

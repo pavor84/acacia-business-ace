@@ -264,7 +264,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @Override
     public List<DataObjectType> getDataObjectTypes() {
         Query q = em.createNamedQuery("DataObjectType.listAll");
-        return q.getResultList();
+        return shortenDataObjectTypeNames(q.getResultList());
     }
 
     @Override
@@ -291,8 +291,48 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
             result.add(cafd.getDataObjectType());
         }
         
+        return shortenDataObjectTypeNames(result);
+    }
+
+    @Override
+    public List<DataObject> getDataObjects(Classifier classifier) {
+        Query q = em.createNamedQuery("ClassifiedObject.findByClassifier");
+        q.setParameter("classifier", classifier);
+        q.setParameter("deleted", false);
+        
+        List<ClassifiedObject> cos = q.getResultList();
+        List<DataObject> result = new ArrayList<DataObject>(cos.size());
+        
+        for (ClassifiedObject co : cos) {
+            result.add(co.getDataObject());
+        }
         return result;
     }
-      
 
+    @Override
+    public Classifier getClassifier(String code) {
+        Query q = em.createNamedQuery("Classifier.findByCode");
+        q.setParameter("code", code);
+        q.setParameter("deleted", false);
+        
+        List<Classifier> result = q.getResultList();
+        
+        if (result == null || result.size() == 0)
+            return null;
+        else
+            return result.get(0);
+    }
+    
+    
+    private List<DataObjectType> shortenDataObjectTypeNames(List<DataObjectType> list) {
+        List<DataObjectType> result = new ArrayList<DataObjectType>(list.size());
+        
+        for (DataObjectType dot : list) {
+            dot.setDataObjectType(dot.getDataObjectType()
+                    .replaceAll(DataObjectType.class.getPackage().getName() + "\\.", ""));
+            result.add(dot);
+        }
+        
+        return result;
+    }
 }

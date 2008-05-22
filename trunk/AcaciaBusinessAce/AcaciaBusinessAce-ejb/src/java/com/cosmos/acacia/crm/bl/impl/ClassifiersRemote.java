@@ -68,6 +68,15 @@ public interface ClassifiersRemote {
      */
     int deleteClassifier(Classifier classifier);
 
+    /**
+     * Gets a classifier for a specified code, or null of no such exists
+     * 
+     * @param code
+     * @return the classifier
+     */
+    Classifier getClassifier(String code);
+    
+    
     /* End of methods for handling classifiers */
 
     /* Methods for handling classifier groups */
@@ -220,5 +229,13 @@ public interface ClassifiersRemote {
      * @return the list
      */
     List<DataObjectType> getDataObjectTypes();
+ 
+    /**
+     * Gets all data object for a given classifier
+     * 
+     * @param classifier
+     * @return the list
+     */
+    List<DataObject> getDataObjects(Classifier classifier);
     
 }

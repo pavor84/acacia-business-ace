@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import com.cosmos.acacia.crm.bl.contactbook.validation.PositionTypeValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.*;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
@@ -39,6 +40,9 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
     @EJB
     private EntityStoreManagerLocal esm;
 
+    @EJB
+    private PositionTypeValidatorLocal validator;
+    
     @SuppressWarnings("unchecked")
     public List<PositionType> getPositionTypes(Class ownerClass) throws Exception
     {
@@ -74,6 +78,8 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
 
     @SuppressWarnings("unchecked")
     public PositionType savePositionType(PositionType positionType, Class ownerClass) {
+        validator.validate(positionType);
+        
         if (ownerClass != null) {
             if (ownerClass == Person.class)
                 positionType.setOwnerType('P');
