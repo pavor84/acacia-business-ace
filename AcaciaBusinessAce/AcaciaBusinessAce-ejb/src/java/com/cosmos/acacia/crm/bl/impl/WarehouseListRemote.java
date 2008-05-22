@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -92,4 +93,12 @@ public interface WarehouseListRemote {
      * @return an updated instance
      */
     WarehouseProduct saveWarehouseProduct(WarehouseProduct entity);
+
+    /**
+     * Return only the persons that can be warehouse man of the given branch.
+     * The branch (Address instance) is identified by it's data object.
+     * @param dataObject
+     * @return
+     */
+    List<Person> getWarehouseMenForBranch(DataObject dataObject);
 }

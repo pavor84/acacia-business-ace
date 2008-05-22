@@ -2,6 +2,8 @@ package com.cosmos.acacia.app;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.DataObject;
+
 /**
  * Created	:	19.05.2008
  * @author	Petar Milev
@@ -9,9 +11,9 @@ import javax.ejb.Remote;
  *
  */
 @Remote
-public interface AcaciaSessionRemote {
+public interface AcaciaSessionRemote extends AcaciaSession {
 
-    public Object getValue(String name);
+    void login(String user, String password);
 
-    public void setValue(String name, Object value);
+    DataObject getLoginOrganizationDataObject();
 }

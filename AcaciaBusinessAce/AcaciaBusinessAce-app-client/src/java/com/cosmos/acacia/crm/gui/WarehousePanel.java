@@ -8,15 +8,22 @@ package com.cosmos.acacia.crm.gui;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.swing.JOptionPane;
 
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -179,7 +186,7 @@ public class WarehousePanel extends BaseEntityPanel {
         
         //branch address
         propDetails = entProps.getPropertyDetails("address");
-        branchField.bind(new AcaciaLookupProvider() {
+        branchFieldBinding = branchField.bind(new AcaciaLookupProvider() {
             
             @Override
             public Object showSelectionControl() {
@@ -191,6 +198,13 @@ public class WarehousePanel extends BaseEntityPanel {
         propDetails, 
         "${addressName}",
         UpdateStrategy.READ_WRITE);
+        branchFieldBinding.addBindingListener(new AbstractBindingListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                warehousemanField.clearSelectedValue();
+            }
+        });
         
         //warehouseman
         propDetails = entProps.getPropertyDetails("warehouseman");
@@ -214,21 +228,51 @@ public class WarehousePanel extends BaseEntityPanel {
     }
     
     protected Object onChooseWarehouseman() {
-        PersonsListPanel listPanel = new PersonsListPanel(null);
-        DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            return listPanel.getSelectedRowObject();
-        }else{
+        //nothing to select if there is no branch selected
+        if ( !branchFieldBinding.isContentValid() ){
+            JOptionPane.showMessageDialog(this, 
+                getResourceMap().getString("WarehousePanel.selectBranch"),
+                getResourceMap().getString("WarehousePanel.selectBranchTitle"),
+                JOptionPane.WARNING_MESSAGE);
             return null;
+        //if there is selected branch - show the contact persons of it
+        }else{
+            DataObject dataObject = entity.getAddress().getDataObject();
+            ContactPersonsListPanel listPanel = new ContactPersonsListPanel(dataObject);
+            listPanel.setTitle(getResourceMap().getString("ContactPersonsListPanel.title"));
+            
+//            List<Person> warehouseMen = getFormSession().getWarehouseMenForBranch(dataObject);
+//            PersonsListPanel listPanel = new PersonsListPanel(null, warehouseMen);
+//            listPanel.setVisibleButtons(ButtonVisibility.Close.getVisibilityIndex() |
+//                ButtonVisibility.Close.getVisibilityIndex() | 
+//                ButtonVisibility.Unselect.getVisibilityIndex() );
+            
+            DialogResponse dResponse = listPanel.showDialog(this);
+            if ( DialogResponse.SELECT.equals(dResponse) ){
+                ContactPerson contactPerson = (ContactPerson) listPanel.getSelectedRowObject();
+                if ( contactPerson!=null )
+                    return contactPerson.getContact();
+                else
+                    return null;
+            }else{
+                return null;
+            }
         }
     }
 
     protected Object onChooseBranch() {
-        DataObject dataObject = getFormSession().getDataObjectWithAddresses();
+        //DataObject dataObject = getFormSession().getDataObjectWithAddresses();
+        DataObject dataObject = AppSession.get().getLoginOrganizationDataObject();
         AddressListPanel listPanel = new AddressListPanel(dataObject);
+        listPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
+        Address oldBranch = entity.getAddress();  
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
-            return listPanel.getSelectedRowObject();
+            Object result = listPanel.getSelectedRowObject();
+            if ( result == null || !result.equals(oldBranch) ){
+                warehousemanField.clearSelectedValue();
+            }
+            return result;
         }else{
             return null;
         }
@@ -256,5 +300,8 @@ public class WarehousePanel extends BaseEntityPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.acacia.gui.AcaciaLookup warehousemanField;
     // End of variables declaration//GEN-END:variables
+
+    @SuppressWarnings("unchecked")
+    private Binding branchFieldBinding;
     
 }

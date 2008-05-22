@@ -1,9 +1,16 @@
 package com.cosmos.acacia.app;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Organization;
 
 /**
  * Created	:	19.05.2008
@@ -13,6 +20,8 @@ import javax.ejb.Stateful;
  */
 @Stateful
 public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLocal {
+    private static String ORGANIZATION_DATA_OBJECT_KEY = AcaciaSessionBean.class.getName()+"_ORGANIZATION_KEY"; 
+    
     Map<String, Object> values = new HashMap<String, Object>();
     
     @Override
@@ -24,5 +33,60 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public void setValue(String name, Object value) {
         values.put(name, value);
+    }
+    
+    @PersistenceContext
+    private EntityManager em;
+    
+    /**
+     * Temporal functionality to simulate Organization selection when login
+     * @return DataObject which instance is {@link Organization} and has the biggest addresses count among.
+     */
+    @SuppressWarnings("unchecked")
+    public DataObject getDataObjectWithAddresses() {
+        List<Address> allAddresses =
+            em.createQuery("select a from Address a where a.dataObject.parentDataObject is not null")
+            .getResultList();
+        
+        //add-hoc temporary logic, to consider the parent data object with most addresses
+        Map<DataObject, Long> addressesCount = new HashMap<DataObject, Long>();
+        
+        for (Address address : allAddresses) {
+            DataObject parent = null;
+            if ( address.getDataObject()!=null && address.getDataObject().getParentDataObject()!=null )
+                parent = address.getDataObject().getParentDataObject();
+            if ( parent!=null ){
+                Long curValue = addressesCount.get(parent);
+                if ( curValue==null )
+                    curValue = new Long(1);
+                else
+                    curValue++;
+                addressesCount.put(parent, curValue);
+            }
+        }
+        
+        //find the one with most addresses
+        Long biggestCount = new Long(0);
+        DataObject choosen = null;
+        for (Map.Entry<DataObject, Long> parentEntry : addressesCount.entrySet()) {
+            if ( parentEntry.getValue()>biggestCount ){
+                biggestCount = parentEntry.getValue();
+                choosen = parentEntry.getKey();
+            }
+        }
+        
+        return choosen;
+    }
+
+    @Override
+    public void login(String user, String password) {
+        DataObject loginOrganization = getDataObjectWithAddresses();
+        values.put(ORGANIZATION_DATA_OBJECT_KEY, loginOrganization);
+    }
+
+    @Override
+    public DataObject getLoginOrganizationDataObject() {
+        DataObject result = (DataObject) values.get(ORGANIZATION_DATA_OBJECT_KEY);
+        return result;
     }
 }
