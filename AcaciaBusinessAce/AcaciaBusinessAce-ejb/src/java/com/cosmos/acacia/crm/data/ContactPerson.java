@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data;
 
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -67,7 +68,8 @@ public class ContactPerson extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "contact_id")
     @ManyToOne
-    @Property(title="Person",
+    @Property(title="Person", propertyValidator=
+        @PropertyValidator(required=true),
         customDisplay="${contact.firstName} ${contact.secondName} ${contact.lastName} ${contact.extraName}")
     private Person contact;
 

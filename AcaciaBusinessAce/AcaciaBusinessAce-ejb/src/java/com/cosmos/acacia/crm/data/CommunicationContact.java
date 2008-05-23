@@ -8,6 +8,8 @@ package com.cosmos.acacia.crm.data;
 
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -72,7 +74,8 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     private DbResource communicationType;
 
     @Column(name = "communication_value", nullable = false)
-    @Property(title="Communication Value")
+    @Property(title="Communication Value", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=64))
     private String communicationValue;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "contact_person_id")

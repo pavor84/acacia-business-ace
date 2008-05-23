@@ -43,6 +43,8 @@ public class AddressListPanel extends AbstractTablePanel {
     @Override
     protected void initData() {
 
+        setTitle(getResourceMap().getString("branches.title"));
+        
         super.initData();
 
         EntityProperties entityProps = getAddressEntityProperties();

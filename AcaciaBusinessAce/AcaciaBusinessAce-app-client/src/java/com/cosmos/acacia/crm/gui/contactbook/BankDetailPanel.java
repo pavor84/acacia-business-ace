@@ -19,6 +19,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -267,8 +269,6 @@ public class BankDetailPanel extends BaseEntityPanel {
         swiftTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("swiftCode"));
         defaultCheckBox.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("isDefault"));
 
-        contactComboBox.setEnabled(false);
-
         currencyComboBox.bind(bankDetailBindingGroup,
                 getCurrencies(),
                 bankDetail,
@@ -296,8 +296,15 @@ public class BankDetailPanel extends BaseEntityPanel {
             "${addressName}",
             UpdateStrategy.READ_WRITE);
 
-        branchLookup.setEnabled(bankBinding.isContentValid());
-
+        if (branchBinding.getSourceObject() != null) {
+            contactComboBox.bind(bankDetailBindingGroup,
+                getContacts(branchBinding.getSourceObject()),
+                bankDetail,
+                entityProps.getPropertyDetails("bankContact"));
+        } else {
+            contactComboBox.setEnabled(false);
+        }
+        
         bankDetailBindingGroup.bind();
     }
 
@@ -308,7 +315,9 @@ public class BankDetailPanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            branchLookup.setEnabled(selected != null);
+            branchLookup.setSelectedItem(null);
+            branchLookup.updateText();
+            contactComboBox.setModel(new DefaultComboBoxModel());
             return selected;
         } else {
             return null;
@@ -316,6 +325,15 @@ public class BankDetailPanel extends BaseEntityPanel {
     }
 
      protected Object onChooseBankBranch() {
+        if (!bankBinding.isContentValid()) {
+            JOptionPane.showMessageDialog(this, 
+                getResourceMap().getString("BankDetailPanel.selectBank"),
+                getResourceMap().getString("BankDetailPanel.selectBankTitle"),
+                JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+            
+            
         DataObject parent = null;
         try {
             parent =
@@ -336,6 +354,12 @@ public class BankDetailPanel extends BaseEntityPanel {
                 bankDetail,
                 entityProps.getPropertyDetails("bankContact"));
             bankDetailBindingGroup.bind();
+            
+            if (selected == null)
+                contactComboBox.setModel(null);
+            
+            contactComboBox.setSelectedIndex(-1);
+            
             return selected;
         }else{
             return null;
