@@ -1,6 +1,8 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -45,19 +47,23 @@ public class BankDetail
     private BigInteger bankDetailId;
 
     @Column(name = "bank_account")
-    @Property(title="Bank Account")
+    @Property(title="Bank Account", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=22))
     private String bankAccount;
 
     @Column(name = "iban")
-    @Property(title="IBAN")
+    @Property(title="IBAN",propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=22))
     private String iban;
 
     @Column(name = "bic")
-    @Property(title="BIC")
+    @Property(title="BIC", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=12))
     private String bic;
 
     @Column(name = "swift_code")
-    @Property(title="SWIFT code")
+    @Property(title="SWIFT code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=50))
     private String swiftCode;
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")

@@ -75,6 +75,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     protected void postInitData()
     {
         String key = ownerClass == Person.class ? "title.positions.person" : "title.positions.organization";
+
         setTitle(getResourceMap().getString(key));
         
         AcaciaTable positionTypesTable = getDataTable();

@@ -35,6 +35,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
  *
@@ -388,6 +389,22 @@ public class AddressPanel extends BaseEntityPanel {
             }
 
         });
+        contactPersonsTable.addTableModificationListener(new TableModificationListener() {
+            public void rowDeleted(Object row) {
+                updateCommunicationContacts((ContactPerson) row);
+                contactPersonsTable.unselectAction();
+            }
+
+            public void rowModified(Object row) {
+                updateCommunicationContacts((ContactPerson) row);
+            }
+
+            public void rowAdded(Object row) {
+                updateCommunicationContacts((ContactPerson) row);
+                contactPersonsTable.unselectAction();
+            }
+        });
+        
         contactPersonsPanel.add(contactPersonsTable);
 
         communicationContactsTable = new CommunicationContactsListPanel(address.getDataObject());
