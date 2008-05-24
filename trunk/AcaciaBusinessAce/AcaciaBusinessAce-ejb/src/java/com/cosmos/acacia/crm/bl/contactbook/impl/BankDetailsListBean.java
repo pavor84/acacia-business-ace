@@ -43,6 +43,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
     private AddressesListLocal contactPersonsManager;
 
     @SuppressWarnings("unchecked")
+    @Override
     public List<BankDetail> getBankDetails(DataObject parent) {
         if (parent != null) {
             Query query = em.createNamedQuery("BankDetail.findByParentDataObjectAndDeleted");

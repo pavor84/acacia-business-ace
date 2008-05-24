@@ -6,6 +6,8 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -53,24 +55,28 @@ public class City
     private BigInteger cityId;
 
     @Column(name = "city_name", nullable = false)
-    @Property(title="Name")
+    @Property(title="Name", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=64))
     private String cityName;
 
-    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
+    @JoinColumn(name = "country_id", referencedColumnName = "country_id", nullable=false)
     @ManyToOne
     @Property(title="Country", customDisplay="${country.countryName}")
     private Country country;
 
     @Column(name = "postal_code")
-    @Property(title="Postal code")
+    @Property(title="Postal code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=8))
     private String postalCode;
 
     @Column(name = "city_code")
-    @Property(title="City code")
+    @Property(title="City code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=3))
     private String cityCode;
 
     @Column(name = "city_phone_code")
-    @Property(title="Phone code")
+    @Property(title="Phone code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=6))
     private String cityPhoneCode;
 
     @Column(name = "description")

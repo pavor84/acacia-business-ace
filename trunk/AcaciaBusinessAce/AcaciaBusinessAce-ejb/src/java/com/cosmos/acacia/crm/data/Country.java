@@ -6,7 +6,9 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -32,8 +34,13 @@ import javax.persistence.Table;
 		@NamedQuery
          	(
          		name = "Country.fetchAll",
-         		query = "from Country "
-         	)
+         		query = "from Country order by countryName"
+         	),
+                @NamedQuery
+                (
+                        name = "Country.findByCountryName",
+                        query = "select c from Country c where c.countryName=:countryName"
+                )
 	}
 )
 public class Country implements TextResource, Serializable {
@@ -48,23 +55,28 @@ public class Country implements TextResource, Serializable {
     private Integer countryId;
 
     @Column(name = "country_name", nullable = false)
-    @Property(title = "Name")
+    @Property(title = "Name", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=64))
     private String countryName;
 
     @Column(name = "country_code_a2")
-    @Property(title = "Country Code (A2)")
+    @Property(title = "Country Code (A2)", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=2))
     private String countryCodeA2;
 
     @Column(name = "country_code_a3")
-    @Property(title = "Country Code (A3)")
+    @Property(title = "Country Code (A3)", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=3))
     private String countryCodeA3;
 
     @Column(name = "country_code_n3")
-    @Property(title = "Country Code (N3)")
+    @Property(title = "Country Code (N3)", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=3))
     private String countryCodeN3;
 
     @Column(name = "country_phone_code")
-    @Property(title = "Phone Code")
+    @Property(title = "Phone Code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=6))
     private String countryPhoneCode;
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")

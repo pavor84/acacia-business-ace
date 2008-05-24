@@ -22,7 +22,10 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.validation.DateRangeValidator;
 import com.cosmos.swingb.DialogResponse;
+import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -242,7 +245,12 @@ public class PassportPanel extends BaseEntityPanel {
         numberTextField.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("passportNumber"));
         otherInfoTextField.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("additionalInfo"));
 
-        issueDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("issueDate"));
+        PropertyDetails issueDateProperties = entityProps.getPropertyDetails("issueDate");
+        DateRangeValidator drValidator = new DateRangeValidator();
+        drValidator.setFromDate(new Date());
+        issueDateProperties.setValidator(drValidator);
+        issueDateDatePicker.bind(passportBindingGroup, passport, issueDateProperties);
+        
         expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"));
 
         passportTypeComboBox.bind(passportBindingGroup, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
@@ -281,7 +289,9 @@ public class PassportPanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            issuerBranchLookup.setEnabled(selected != null);
+            issuerBranchLookup.setSelectedItem(null);
+            issuerBranchLookup.updateText();
+            
             return selected;
         } else {
             return null;
@@ -289,6 +299,14 @@ public class PassportPanel extends BaseEntityPanel {
     }
 
      protected Object onChooseIssuerBranch() {
+        if (!issuerBinding.isContentValid()) {
+             JOptionPane.showMessageDialog(this, 
+                getResourceMap().getString("PassportPanel.selectIssuer"),
+                getResourceMap().getString("PassportPanel.selectIssuerTitle"),
+                JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        
         DataObject parent = null;
         try {
             parent =

@@ -160,7 +160,7 @@ public class CitiesListPanel extends AbstractTablePanel {
         
         cities = null;
         
-        initData();
+        postInitData();
         
         return t;
     }

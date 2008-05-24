@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
 import com.cosmos.acacia.crm.bl.impl.*;
+import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
@@ -40,7 +41,10 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     @EJB
     private BankDetailsListLocal bankDetailsManager;
-
+    
+    @EJB
+    private GenericUniqueValidatorLocal validator;
+    
     @SuppressWarnings("unchecked")
     public List<Country> getCountries()
     {
@@ -63,6 +67,9 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public Country saveCountry(Country country) {
+        
+        validator.validate(country, "countryName");
+        
         esm.persist(em, country);
         return country;
     }
