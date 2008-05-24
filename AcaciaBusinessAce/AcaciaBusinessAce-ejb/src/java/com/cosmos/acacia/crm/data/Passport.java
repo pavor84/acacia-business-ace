@@ -21,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -61,7 +63,8 @@ public class Passport extends DataObjectBean implements Serializable {
     private DbResource passportType;
 
     @Column(name = "passport_number", nullable = false)
-    @Property(title="Passport Number")
+    @Property(title="Passport Number", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=16))
     private String passportNumber;
 
     @Column(name = "issue_date", nullable = false)
@@ -85,7 +88,8 @@ public class Passport extends DataObjectBean implements Serializable {
     private Address issuerBranch;
 
     @Column(name = "additional_info")
-    @Property(title="Additional Info")
+    @Property(title="Additional Info", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=255))
     private String additionalInfo;
 
     @JoinColumn(name = "passport_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -108,10 +112,12 @@ public class Passport extends DataObjectBean implements Serializable {
         this.passportId = passportId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
