@@ -4,12 +4,13 @@ import static com.cosmos.acacia.crm.validation.ValidationUtil.checkUnique;
 
 import com.cosmos.acacia.crm.validation.ValidationException;
 import java.lang.reflect.Method;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
-
+@Stateless
 public class GenericUniqueValidatorBean<E> implements GenericUniqueValidatorLocal<E> {
 
     protected static Logger log = Logger.getLogger(GenericUniqueValidatorBean.class);
@@ -29,7 +30,13 @@ public class GenericUniqueValidatorBean<E> implements GenericUniqueValidatorLoca
         //unique name
         String prefix = entity.getClass().getSimpleName();
         String modifiedParam = param.substring(0, 1).toUpperCase() + param.substring(1);
-        Query q = em.createNamedQuery(prefix + "." + "findBy" + modifiedParam);
+        Query q = null;
+        try {
+            q = em.createNamedQuery(prefix + "." + "findBy" + modifiedParam);
+        } catch (Exception ex) {
+            log.error("Named query not found");
+            return;
+        }
 
         Object paramValue = null;
         
@@ -38,12 +45,13 @@ public class GenericUniqueValidatorBean<E> implements GenericUniqueValidatorLoca
             paramValue = m.invoke(entity);
         } catch (Exception ex) {
             log.error("Error in invoking getter method", ex);
+            return;
         }
         
         q.setParameter(param, paramValue);
 
         if ( !checkUnique(q.getResultList(), entity))
-            ve.addMessage("positionTypeName", "PositionType.err.nameInUse");
+            ve.addMessage(param, prefix + ".err.alreadyExists");
 
         //if we have validation messages - throw the exception since not everything is OK
         if ( !ve.getMessages().isEmpty() )
