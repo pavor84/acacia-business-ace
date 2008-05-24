@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.data.ClassifierAppliedForDot;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
@@ -171,6 +172,9 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @Override
     public Classifier saveClassifier(Classifier classifier, DataObject parentDataObject) {
 
+        if (classifier.getClassifierGroup().getIsSystemGroup())
+            throw new ValidationException("Classifier.err.systemGroupForbidden");
+        
         classifier.setParentId(parentDataObject.getDataObjectId());
 
         if (classifier.getDataObject() == null){

@@ -25,6 +25,8 @@ public class ClassifierValidatorBean implements ClassifierValidatorLocal {
         //unique name
         Query q = em.createNamedQuery("Classifier.findByCode");
         q.setParameter("code", entity.getClassifierCode());
+        q.setParameter("deleted", false);
+        
         if ( !checkUnique(q.getResultList(), entity))
             ve.addMessage("Classifier.err.codeInUse");
 

@@ -6,6 +6,8 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -52,11 +54,13 @@ public class ClassifierGroup extends DataObjectBean
     private BigInteger parentId;
 
     @Column(name = "classifier_group_code", nullable = false)
-    @Property(title="Group Code")
+    @Property(title="Group Code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=32))
     private String classifierGroupCode;
 
     @Column(name = "classifier_group_name", nullable = false)
-    @Property(title="Group Name")
+    @Property(title="Group Name", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=100))
     private String classifierGroupName;
 
     @Column(name = "is_system_group", nullable = false)

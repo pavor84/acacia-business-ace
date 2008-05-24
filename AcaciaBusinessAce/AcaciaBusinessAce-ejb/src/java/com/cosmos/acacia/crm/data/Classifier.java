@@ -6,6 +6,8 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -58,11 +60,13 @@ public class Classifier extends DataObjectBean implements Serializable {
     private BigInteger parentId;
 
     @Column(name = "classifier_code", nullable = false)
-    @Property(title="Code")
+    @Property(title="Code", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=32))
     private String classifierCode;
 
     @Column(name = "classifier_name", nullable = false)
-    @Property(title="Name")
+    @Property(title="Name", propertyValidator=
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=128))
     private String classifierName;
 
     @JoinColumn(name = "parent_id", referencedColumnName = "classifier_group_id", insertable=false, updatable=false, nullable=false)
