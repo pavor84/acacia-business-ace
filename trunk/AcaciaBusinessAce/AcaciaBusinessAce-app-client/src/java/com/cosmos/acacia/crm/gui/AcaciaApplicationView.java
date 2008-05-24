@@ -43,12 +43,15 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import org.apache.log4j.Logger;
 
 /**
  * The application's main frame.
  */
 public class AcaciaApplicationView extends FrameView {
 
+    protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
+    
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         initComponents();
@@ -244,35 +247,35 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void personsListAction(){
-    	System.out.println("personsListAction");
+    	log.debug("personsListAction");
     	PersonsListPanel personsListPanel = new PersonsListPanel(null);
     	personsListPanel.showFrame();
     }
 
     @Action
     public void organizationsListAction(){
-    	System.out.println("organizationsListAction");
+    	log.debug("organizationsListAction");
     	OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(null);
     	organizationsListPanel.showFrame();
     }
      
     @Action
-    public void organizationsPositionTypesListAction(){
-    	System.out.println("organizationsPositionTypesListAction");
+    public void organizationPositionTypesListAction(){
+    	log.debug("organizationPositionTypesListAction");
     	PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class);
     	positionTypesListPanel.showFrame();
     }
     
     @Action
-    public void personsPositionTypesListAction(){
-    	System.out.println("personsPositionTypesListAction");
+    public void personPositionTypesListAction(){
+    	log.debug("personPositionTypesListAction");
     	PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class);
     	positionTypesListPanel.showFrame();
     }
         
     @Action
     public void citiesListAction(){
-    	System.out.println("citiesList");
+    	log.debug("citiesList");
     	CitiesListPanel citiesListPanel = new CitiesListPanel();
     	citiesListPanel.showFrame();
     }
@@ -280,7 +283,7 @@ public class AcaciaApplicationView extends FrameView {
           
     @Action
     public void countriesListAction(){
-    	System.out.println("cointriesList");
+    	log.debug("cointriesList");
     	CountriesListPanel countriesListPanel = new CountriesListPanel();
     	countriesListPanel.showFrame();
     }
@@ -326,9 +329,17 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu productsMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
-        JBMenu businessPartners = new JBMenu();
+        
+        /* Contact book menu items */
+        JBMenu contactBook = new JBMenu();
         JBMenuItem personsListMenuItem = new JBMenuItem();
-        JBMenuItem newPersonMenuItem = new JBMenuItem();
+        JBMenuItem organizationsListMenuItem = new JBMenuItem();
+        JBMenuItem personPositionTypesListMenuItem = new JBMenuItem();
+        JBMenuItem organizationPositionTypesListMenuItem = new JBMenuItem();
+        JBMenuItem citiesListMenuItem = new JBMenuItem();
+        JBMenuItem countriesListMenuItem = new JBMenuItem();
+        /* End of contact book menu items */
+        
         JBMenuItem patternMasksItem = new JBMenuItem();
         JBMenu warehousesMenu = new JBMenu();
         JBMenuItem warehousesItem = new JBMenuItem();
@@ -391,26 +402,58 @@ public class AcaciaApplicationView extends FrameView {
 
         menuBar.add(productsMenu);
 
-        businessPartners.setName("businessPartnersMenu");
-        businessPartners.setText(resourceMap.getString("businessPartnersMenu.text"));
+        
+        /* Contact book menu items */
+        
+        contactBook.setName("contactBookMenu");
+        contactBook.setText(resourceMap.getString("contactBookMenu.text"));
 
-        newPersonMenuItem.setAction(actionMap.get("newPersonAction"));
-        newPersonMenuItem.setName("newPersonMenuItem");
-        businessPartners.add(newPersonMenuItem);
 
         personsListMenuItem.setAction(actionMap.get("personsListAction"));
-        personsListMenuItem.setName("personsListMenuItem");
-        businessPartners.add(personsListMenuItem);
+        personsListMenuItem.setName("personsMenuItem");
+        personsListMenuItem.setText(resourceMap.getString("personsMenuItem.text"));
+        contactBook.add(personsListMenuItem);
         
-        Separator partnersSectionSeparator = new Separator();
-        businessPartners.add(partnersSectionSeparator);
+        organizationsListMenuItem.setAction(actionMap.get("organizationsListAction"));
+        organizationsListMenuItem.setName("organizationsMenuItem");
+        organizationsListMenuItem.setText(resourceMap.getString("organizationsMenuItem.text"));
+        contactBook.add(organizationsListMenuItem);
+        
+        Separator contactBookSeparator1 = new Separator();
+        contactBook.add(contactBookSeparator1);
+        
+        personPositionTypesListMenuItem.setAction(actionMap.get("personPositionTypesListAction"));
+        personPositionTypesListMenuItem.setName("personPositionTypesMenuItem");
+        personPositionTypesListMenuItem.setText(resourceMap.getString("personPositionTypesMenuItem.text"));
+        contactBook.add(personPositionTypesListMenuItem);
+        
+        organizationPositionTypesListMenuItem.setAction(actionMap.get("organizationPositionTypesListAction"));
+        organizationPositionTypesListMenuItem.setName("organizationPositionTypesMenuItem");
+        organizationPositionTypesListMenuItem.setText(resourceMap.getString("organizationPositionTypesMenuItem.text"));
+        contactBook.add(organizationPositionTypesListMenuItem);
+        
+        Separator contactBookSeparator2 = new Separator();
+        contactBook.add(contactBookSeparator2);
+        
+        citiesListMenuItem.setAction(actionMap.get("citiesListAction"));
+        citiesListMenuItem.setName("citiesMenuItem");
+        citiesListMenuItem.setText(resourceMap.getString("citiesMenuItem.text"));
+        contactBook.add(citiesListMenuItem);
+
+        countriesListMenuItem.setAction(actionMap.get("countriesListAction"));
+        countriesListMenuItem.setName("countriesMenuItem");
+        countriesListMenuItem.setText(resourceMap.getString("countriesMenuItem.text"));
+        contactBook.add(countriesListMenuItem);
+        
+        menuBar.add(contactBook);
+                
+        /* End of contact book menu items */
         
         patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
         patternMasksItem.setName("patternMasksItem");
         patternMasksItem.setText(resourceMap.getString("patternMasksItem.text"));
-        businessPartners.add(patternMasksItem);
+        productsMenu.add(patternMasksItem);
 
-        menuBar.add(businessPartners);
         
         warehousesMenu.setName("warehousesMenu"); // NOI18N
         warehousesMenu.setText(resourceMap.getString("warehousesMenu.text")); // NOI18N
