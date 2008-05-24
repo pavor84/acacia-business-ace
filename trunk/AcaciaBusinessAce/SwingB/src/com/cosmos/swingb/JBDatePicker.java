@@ -7,8 +7,10 @@ package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.BaseValidator;
+import java.awt.Color;
 import java.text.DateFormat;
 import java.util.Locale;
+import javax.swing.JFormattedTextField;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -219,5 +221,11 @@ public class JBDatePicker
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
+    }
+    
+    public void setBackground(Color color) {
+        JFormattedTextField editor = getEditor();
+        editor.setBackground(color);
+        setEditor(editor);
     }
 }
