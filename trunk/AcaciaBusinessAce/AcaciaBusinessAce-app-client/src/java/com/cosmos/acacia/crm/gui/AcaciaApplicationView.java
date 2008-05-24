@@ -340,6 +340,8 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem countriesListMenuItem = new JBMenuItem();
         /* End of contact book menu items */
         
+        JBMenu classifiersMenu = new JBMenu();
+        
         JBMenuItem patternMasksItem = new JBMenuItem();
         JBMenu warehousesMenu = new JBMenu();
         JBMenuItem warehousesItem = new JBMenuItem();
@@ -394,14 +396,29 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
         menuItem.setName("productCategoriesMenuItem"); // NOI18N
         productsMenu.add(menuItem);
+    
+        menuBar.add(productsMenu);
+        
+        /* Classifiers menu utem */
+        
+        classifiersMenu.setName("classifiersMenu");
+        classifiersMenu.setText(resourceMap.getString("classifiersMenu.text"));
+        
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("classifierGroupsAction"));
+        menuItem.setName("classifierGroupsMenuItem");
+        menuItem.setText(resourceMap.getString("classifierGroupsMenuItem.text"));
+        classifiersMenu.add(menuItem);
 
         menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("classifierGroupsAction")); // NOI18N
-        menuItem.setName("classifierGroupsMenuItem"); // NOI18N
-        productsMenu.add(menuItem);
-
-        menuBar.add(productsMenu);
-
+        menuItem.setAction(actionMap.get("classifiersAction"));
+        menuItem.setName("classifierMenuItem");
+        menuItem.setText(resourceMap.getString("classifiersMenuItem.text"));
+        classifiersMenu.add(menuItem);
+        
+        menuBar.add(classifiersMenu);
+        
+        /* End of classifiers menu item */
         
         /* Contact book menu items */
         
