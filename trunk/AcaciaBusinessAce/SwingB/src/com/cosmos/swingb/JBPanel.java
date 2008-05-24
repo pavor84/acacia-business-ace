@@ -108,6 +108,8 @@ public class JBPanel
         return showDialog(getMainFrame());
     }
 
+    protected JBDialog dialog;
+    
     public DialogResponse showDialog(Component parentComponent)
     {
         selectedValues = null;
@@ -116,7 +118,7 @@ public class JBPanel
         Window window = null;
         if(parentComponent != null)
             window = SwingUtilities.getWindowAncestor(parentComponent);
-        JBDialog dialog = new JBDialog(window, getTitle());
+        dialog = new JBDialog(window, getTitle());
         mainContainer = dialog;
 
         Container contentPane = dialog.getContentPane();
@@ -132,7 +134,10 @@ public class JBPanel
         dialog.pack();
         dialog.setMinimumSize(dialog.getPreferredSize());
         dialog.setMaximumSize(getMaximumSize());
+        
         dialog.setLocationRelativeTo(parentComponent);
+        //TODO: check if form is completely visible
+        
         dialog.setResizable(isResizable());
 
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
