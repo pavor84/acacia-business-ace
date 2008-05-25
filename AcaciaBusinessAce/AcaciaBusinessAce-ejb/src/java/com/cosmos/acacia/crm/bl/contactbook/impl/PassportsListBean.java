@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import com.cosmos.acacia.crm.bl.contactbook.validation.PassportValidatorLocal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
     @EJB
     private EntityStoreManagerLocal esm;
 
+    @EJB
+    private PassportValidatorLocal validator;
+    
     @SuppressWarnings("unchecked")
     public List<Passport> getPassports(DataObject parentDataObject)
     {
@@ -69,6 +73,8 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
 
     public Passport savePassport(Passport passport, DataObject parentDataObject) {
 
+        validator.validate(passport);
+        
         passport.setParentId(parentDataObject.getDataObjectId());
 
         if (passport.getDataObject() == null){
