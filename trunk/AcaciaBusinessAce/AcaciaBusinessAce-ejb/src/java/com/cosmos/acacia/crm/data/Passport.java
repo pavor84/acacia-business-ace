@@ -41,6 +41,11 @@ import com.cosmos.acacia.annotation.ValidationType;
                 (
                 name = "Passport.findByParentDataObjectIsNullAndDeleted",
                 query = "select p from Passport p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+                ),
+                @NamedQuery
+                (
+                    name = "Passport.findByNumber",
+                    query = "select p from Passport p where p.passportNumber=:number"
                 )
     }
 )
