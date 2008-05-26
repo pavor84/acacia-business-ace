@@ -155,6 +155,7 @@ public interface LocationsListRemote {
      * @param address
      * @return the version of the deleted address
      */
+    @Deprecated
     int deleteAddress(Address address);
 
     // End of methods for handling addresses/branches
