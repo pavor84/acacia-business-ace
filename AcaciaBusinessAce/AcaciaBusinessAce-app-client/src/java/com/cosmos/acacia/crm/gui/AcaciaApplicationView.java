@@ -4,6 +4,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.birosoft.liquid.LiquidLookAndFeel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,6 +35,7 @@ import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
+import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -43,6 +45,11 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import javax.swing.JButton;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import org.apache.log4j.Logger;
 
 /**
@@ -54,8 +61,9 @@ public class AcaciaApplicationView extends FrameView {
     
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
+        setLookAndFeel();
         initComponents();
-        
+               
         autoLogin();
     }
 
@@ -64,6 +72,24 @@ public class AcaciaApplicationView extends FrameView {
         AppSession.get().login("dummyuser","dummypassord");
     }
 
+    private void setLookAndFeel(){
+        try {
+            UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+            LiquidLookAndFeel.setShowTableGrids(false);
+            LiquidLookAndFeel.setLiquidDecorations(true);
+            
+            //tried to change the default JFrame icon (java cup), but no luck
+            
+        } catch (ClassNotFoundException ex) {
+            log.debug("Cannot get L&F library: " + ex.getMessage());
+        } catch (InstantiationException ex) {
+            log.debug("Cannot instantiate L&F: " + ex.getMessage());
+        } catch (IllegalAccessException ex) {
+            log.debug("Cannot access L&F: " + ex.getMessage());
+        } catch (UnsupportedLookAndFeelException ex) {
+            log.debug("Unsupported L&F: " + ex.getMessage());
+        }
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -343,6 +369,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu classifiersMenu = new JBMenu();
         
         JBMenuItem patternMasksItem = new JBMenuItem();
+        JBMenuItem invoicesListItem = new JBMenuItem();
         JBMenu warehousesMenu = new JBMenu();
         JBMenuItem warehousesItem = new JBMenuItem();
         JBMenuItem warehouseProductsItem = new JBMenuItem();
@@ -353,7 +380,8 @@ public class AcaciaApplicationView extends FrameView {
         ResourceMap resourceMap = getResourceMap();
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
-
+        fileMenu.setMnemonic('F');
+        
         //javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(AcaciaApplicationView.class, this);
         ActionMap actionMap = getActionMap();
         newRecordMenuItem.setAction(actionMap.get("newRecord")); // NOI18N
@@ -386,15 +414,14 @@ public class AcaciaApplicationView extends FrameView {
 
         productsMenu.setText(resourceMap.getString("productsMenu.text")); // NOI18N
         productsMenu.setName("productsMenu"); // NOI18N
-
+        productsMenu.setMnemonic('P');
+        
         JBMenuItem menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productsListAction")); // NOI18N
-        menuItem.setName("productsListMenuItem"); // NOI18N
         productsMenu.add(menuItem);
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
-        menuItem.setName("productCategoriesMenuItem"); // NOI18N
         productsMenu.add(menuItem);
     
         menuBar.add(productsMenu);
@@ -410,11 +437,34 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setText(resourceMap.getString("classifierGroupsMenuItem.text"));
         classifiersMenu.add(menuItem);
 
+        Separator productSeparator1 = new Separator();
+        productsMenu.add(productSeparator1);
+        
         menuItem = new JBMenuItem();
+
+        menuItem.setAction(actionMap.get("classifiersAction")); // NOI18N
+        productsMenu.add(menuItem);
+        
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("classifierGroupsAction")); // NOI18N
+        productsMenu.add(menuItem);
+
+        Separator productSeparator2 = new Separator();
+        productsMenu.add(productSeparator2);
+        
+        patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
+        productsMenu.add(patternMasksItem);
+        
+        invoicesListItem.setAction(actionMap.get("invoicesListAction"));
+        productsMenu.add(invoicesListItem);
+        
+        menuBar.add(productsMenu);
+
         menuItem.setAction(actionMap.get("classifiersAction"));
         menuItem.setName("classifierMenuItem");
         menuItem.setText(resourceMap.getString("classifiersMenuItem.text"));
         classifiersMenu.add(menuItem);
+
         
         menuBar.add(classifiersMenu);
         
@@ -424,78 +474,57 @@ public class AcaciaApplicationView extends FrameView {
         
         contactBook.setName("contactBookMenu");
         contactBook.setText(resourceMap.getString("contactBookMenu.text"));
-
+        contactBook.setMnemonic('C');
 
         personsListMenuItem.setAction(actionMap.get("personsListAction"));
-        personsListMenuItem.setName("personsMenuItem");
-        personsListMenuItem.setText(resourceMap.getString("personsMenuItem.text"));
         contactBook.add(personsListMenuItem);
-        
-        organizationsListMenuItem.setAction(actionMap.get("organizationsListAction"));
-        organizationsListMenuItem.setName("organizationsMenuItem");
-        organizationsListMenuItem.setText(resourceMap.getString("organizationsMenuItem.text"));
-        contactBook.add(organizationsListMenuItem);
+        personPositionTypesListMenuItem.setAction(actionMap.get("personPositionTypesListAction"));
+        contactBook.add(personPositionTypesListMenuItem);
         
         Separator contactBookSeparator1 = new Separator();
         contactBook.add(contactBookSeparator1);
         
-        personPositionTypesListMenuItem.setAction(actionMap.get("personPositionTypesListAction"));
-        personPositionTypesListMenuItem.setName("personPositionTypesMenuItem");
-        personPositionTypesListMenuItem.setText(resourceMap.getString("personPositionTypesMenuItem.text"));
-        contactBook.add(personPositionTypesListMenuItem);
-        
+        organizationsListMenuItem.setAction(actionMap.get("organizationsListAction"));
+        contactBook.add(organizationsListMenuItem);
         organizationPositionTypesListMenuItem.setAction(actionMap.get("organizationPositionTypesListAction"));
-        organizationPositionTypesListMenuItem.setName("organizationPositionTypesMenuItem");
-        organizationPositionTypesListMenuItem.setText(resourceMap.getString("organizationPositionTypesMenuItem.text"));
         contactBook.add(organizationPositionTypesListMenuItem);
         
         Separator contactBookSeparator2 = new Separator();
         contactBook.add(contactBookSeparator2);
         
         citiesListMenuItem.setAction(actionMap.get("citiesListAction"));
-        citiesListMenuItem.setName("citiesMenuItem");
-        citiesListMenuItem.setText(resourceMap.getString("citiesMenuItem.text"));
         contactBook.add(citiesListMenuItem);
-
         countriesListMenuItem.setAction(actionMap.get("countriesListAction"));
-        countriesListMenuItem.setName("countriesMenuItem");
-        countriesListMenuItem.setText(resourceMap.getString("countriesMenuItem.text"));
         contactBook.add(countriesListMenuItem);
         
         menuBar.add(contactBook);
                 
         /* End of contact book menu items */
-        
-        patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
-        patternMasksItem.setName("patternMasksItem");
-        patternMasksItem.setText(resourceMap.getString("patternMasksItem.text"));
-        productsMenu.add(patternMasksItem);
-
-        
+         
+        /* Warehouse menu items */
         warehousesMenu.setName("warehousesMenu"); // NOI18N
         warehousesMenu.setText(resourceMap.getString("warehousesMenu.text")); // NOI18N
-
-        warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
-        warehousesItem.setText(resourceMap.getString("warehousesItem.text"));
-        warehousesItem.setName("warehouseListItem"); // NOI18N
-        warehousesMenu.add(warehousesItem);
+        warehousesMenu.setMnemonic('W');
         
+        warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
+        warehousesMenu.add(warehousesItem);
         warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
-        warehouseProductsItem.setText(resourceMap.getString("warehouseProductsItem.text"));
-        warehouseProductsItem.setName("warehouseProductsItem"); // NOI18N
         warehousesMenu.add(warehouseProductsItem);
         
         menuBar.add(warehousesMenu);
-
+        /* End of Warehouse menu items */
+        
+        /* Help Menu */
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
-
+        helpMenu.setMnemonic('H');
+        
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
-        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
-
+         /* End of Help Menu */
+        
         return menuBar;
     }
 
@@ -503,13 +532,43 @@ public class AcaciaApplicationView extends FrameView {
     private JBToolBar createToolBar()
     {
         JBToolBar toolBar = new JBToolBar();
-        ActionMap actionMap = getActionMap();
-        for(Object key : actionMap.allKeys())
-        {
-            javax.swing.Action action = actionMap.get(key);
-            toolBar.add(action);
-        }
+        toolBar.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));                
+        
+        if(GeneralSettings.isDebug()){
+            ActionMap actionMap = getActionMap();
+            for(Object key : actionMap.allKeys())
+            {
+                javax.swing.Action action = actionMap.get(key);
+                toolBar.add(action);
+            }
 
+            return toolBar;
+        }
+           
+        //toolBar.setBorder(border);
+        ActionMap actionMap = getActionMap();
+                
+        JButton productsImageButton = new JButton(actionMap.get("productsListAction"));
+        productsImageButton.setText("");
+        toolBar.add(productsImageButton);
+        
+        javax.swing.Action warehousesListAction = actionMap.get("warehouseListAction");
+        JButton warehousesImageButton = new JButton(warehousesListAction);
+        warehousesImageButton.setText("");
+        toolBar.add(warehousesImageButton);
+        
+        JButton personsImageButton = new JButton(actionMap.get("personsListAction"));
+        personsImageButton.setText("");
+        toolBar.add(personsImageButton);
+         
+        JButton citiesImageButton = new JButton(actionMap.get("citiesListAction"));
+        citiesImageButton.setText("");
+        toolBar.add(citiesImageButton);
+              
+        JButton countriesImageButton = new JButton(actionMap.get("countriesListAction"));
+        countriesImageButton.setText("");
+        toolBar.add(countriesImageButton);
+                
         return toolBar;
     }
 
