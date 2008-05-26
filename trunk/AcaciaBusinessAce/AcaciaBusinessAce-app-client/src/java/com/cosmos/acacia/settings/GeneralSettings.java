@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.settings;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -18,17 +19,17 @@ import java.util.Properties;
 public class GeneralSettings {
 
     public static Properties settings;
-    
+        
     static {
-        /* TODO: load from file
-         try {
+        try {
+            settings = new Properties();        
             InputStream in = GeneralSettings.class.getResourceAsStream(
                     "settings.properties");
             settings.load(in);
         } catch (IOException ioex) {
             ioex.printStackTrace();
         }
-        */
+        
     }
     
     public static String getSetting(String settingName)
@@ -40,5 +41,9 @@ public class GeneralSettings {
     {
         //return new SimpleDateFormat(getSetting("dateFormat"));
         return new SimpleDateFormat("dd.MM.yyyy");
+    }
+    
+    public static boolean isDebug(){
+        return settings.getProperty("debug").equals("true");
     }
 }
