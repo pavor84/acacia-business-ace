@@ -246,9 +246,6 @@ public class PassportPanel extends BaseEntityPanel {
         otherInfoTextField.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("additionalInfo"));
 
         PropertyDetails issueDateProperties = entityProps.getPropertyDetails("issueDate");
-        DateRangeValidator drValidator = new DateRangeValidator();
-        drValidator.setFromDate(new Date());
-        issueDateProperties.setValidator(drValidator);
         issueDateDatePicker.bind(passportBindingGroup, passport, issueDateProperties);
         
         expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"));
