@@ -20,11 +20,10 @@ import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.beansbinding.validation.DateRangeValidator;
 import com.cosmos.swingb.DialogResponse;
-import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -282,12 +281,18 @@ public class PassportPanel extends BaseEntityPanel {
     protected Object onChooseIssuer() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
         // TODO : classifiers!
-
+        Organization oldIssuer = passport.getIssuer();
+        
+        listPanel.addTableModificationListener(new LookupRecordDeletionListener(oldIssuer, issuerLookup));
+        
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            issuerBranchLookup.setSelectedItem(null);
-            issuerBranchLookup.updateText();
+            
+            
+            if (selected == null || !selected.equals(oldIssuer)){
+                issuerBranchLookup.clearSelectedValue();
+            }
             
             return selected;
         } else {

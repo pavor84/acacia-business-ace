@@ -80,6 +80,8 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 dataObject.setDataObjectVersion(version + 1);
                 em.persist(dataObject);
             }
+        } else {
+            mustMerge = true;
         }
 
         if(mustMerge)

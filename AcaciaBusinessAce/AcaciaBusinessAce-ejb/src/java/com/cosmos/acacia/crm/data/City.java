@@ -39,7 +39,12 @@ import javax.persistence.Table;
              (
                  name = "City.findByCountry",
                  query = "select c from City c where c.country = :country"
-             )
+             ),
+         @NamedQuery
+            (
+                name = "City.findByNameAndCountry",
+                query = "select c from City c where c.country = :country and c.cityName=:cityName"
+            )
     }
 )
 public class City

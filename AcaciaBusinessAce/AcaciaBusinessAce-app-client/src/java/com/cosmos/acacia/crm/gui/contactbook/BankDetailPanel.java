@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -11,9 +12,11 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
+import com.cosmos.swingb.listeners.TableModificationListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -296,9 +299,9 @@ public class BankDetailPanel extends BaseEntityPanel {
             "${addressName}",
             UpdateStrategy.READ_WRITE);
 
-        if (branchBinding.getSourceObject() != null) {
+        if (bankDetail.getBankBranch() != null) {
             contactComboBox.bind(bankDetailBindingGroup,
-                getContacts(branchBinding.getSourceObject()),
+                getContacts(bankDetail.getBankBranch()),
                 bankDetail,
                 entityProps.getPropertyDetails("bankContact"));
         } else {
@@ -311,13 +314,23 @@ public class BankDetailPanel extends BaseEntityPanel {
     protected Object onChooseBank() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
         listPanel.setClassifier(getClassifiersFormSession().getClassifier("test"));
-
+        
+        Organization oldBank = bankDetail.getBank();
+        
+        LookupRecordDeletionListener deletionListener = new LookupRecordDeletionListener(oldBank);
+        deletionListener.addTargetLookup(bankLookup);
+        deletionListener.addTargetLookup(branchLookup);
+        deletionListener.addTargetCombo(contactComboBox);
+        listPanel.addTableModificationListener(deletionListener);
+        
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            branchLookup.setSelectedItem(null);
-            branchLookup.updateText();
             contactComboBox.setModel(new DefaultComboBoxModel());
+            
+            if (selected  == null || !selected.equals(oldBank)){
+                branchLookup.clearSelectedValue();
+            }
             return selected;
         } else {
             return null;
@@ -333,7 +346,6 @@ public class BankDetailPanel extends BaseEntityPanel {
             return null;
         }
             
-            
         DataObject parent = null;
         try {
             parent =
@@ -344,19 +356,27 @@ public class BankDetailPanel extends BaseEntityPanel {
         }
 
         AddressListPanel listPanel = new AddressListPanel(parent);
+        
+        Address oldBranch = bankDetail.getBankBranch();
+        
+        LookupRecordDeletionListener deletionListener = new LookupRecordDeletionListener(oldBranch, branchLookup);
+        deletionListener.addTargetCombo(contactComboBox);
+        listPanel.addTableModificationListener(deletionListener);
+        
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
 
+            if (selected  == null || !selected.equals(oldBranch)){
+                 contactComboBox.setModel(new DefaultComboBoxModel());
+            }
+            
             contactComboBox.setEnabled(selected != null);
             contactComboBox.bind(bankDetailBindingGroup,
                 getContacts(selected),
                 bankDetail,
                 entityProps.getPropertyDetails("bankContact"));
             bankDetailBindingGroup.bind();
-            
-            if (selected == null)
-                contactComboBox.setModel(null);
             
             contactComboBox.setSelectedIndex(-1);
             

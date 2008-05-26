@@ -64,7 +64,7 @@ public class Passport extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "passport_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Passport Type", customDisplay="${passportType.text}")
+    @Property(title="Passport Type")
     private DbResource passportType;
 
     @Column(name = "passport_number", nullable = false)
