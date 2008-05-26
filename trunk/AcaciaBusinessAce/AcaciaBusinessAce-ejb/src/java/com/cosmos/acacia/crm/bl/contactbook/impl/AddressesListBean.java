@@ -110,7 +110,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     public int deleteAddress(Address address) {
-        return locationsManager.deleteAddress(address);
+        return esm.remove(em, address);
     }
 
     public List<Address> getAddresses(DataObject parent) {

@@ -38,6 +38,8 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -57,6 +59,16 @@ public abstract class AbstractTablePanel
         super(parentDataObject);
         initComponents();
         initData();
+
+        dataTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if (e.getClickCount() == 2) {
+                    performDefaultDoubleClickAction();
+                }
+            }
+            
+        });
     }
     
     /** This method is called from within the constructor to
@@ -859,4 +871,12 @@ public abstract class AbstractTablePanel
             setTitle(getTitle() + " (" + classifier.getClassifierName() + ")");
         }
     }
+    
+    protected void performDefaultDoubleClickAction() {
+        if (isVisible(Button.Select))
+            selectAction();
+        else
+            modifyAction();
+    }
+
 }
