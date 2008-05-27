@@ -24,7 +24,10 @@ import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -262,6 +265,15 @@ public class PassportPanel extends BaseEntityPanel {
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
 
+            
+        issuerBinding.addBindingListener(new AbstractBindingListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                issuerBranchLookup.clearSelectedValue();
+            }
+        });
+        
         issuerBranchBinding = issuerBranchLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
