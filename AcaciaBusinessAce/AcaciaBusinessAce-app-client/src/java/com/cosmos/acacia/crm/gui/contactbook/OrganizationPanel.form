@@ -161,16 +161,16 @@
                       <Component id="typeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="shareCapitalTextField" pref="181" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="currencyComboBox" min="-2" pref="73" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="organizationTypeComboBox" alignment="0" min="-2" pref="259" max="-2" attributes="0"/>
                       <Component id="nicknameTextField" alignment="0" pref="260" max="32767" attributes="0"/>
                       <Component id="nameTextField" alignment="0" pref="260" max="32767" attributes="0"/>
-                      <Component id="vatNumberTextField" alignment="0" pref="260" max="32767" attributes="0"/>
+                      <Component id="vatNumberTextField" alignment="1" pref="260" max="32767" attributes="0"/>
+                      <Component id="organizationTypeComboBox" alignment="1" min="-2" pref="259" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -200,9 +200,9 @@
                       <Component id="currencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="vatNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="vatNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="vatNumberLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="vatNumberTextField" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="13" max="32767" attributes="0"/>
               </Group>
@@ -310,28 +310,19 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="administrationAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="registrationDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="registrationAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="registeringOrganizationLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="uniqueIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="registrationAddressLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="administrationAddressLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="administrativeAddressLookup" pref="229" max="32767" attributes="0"/>
+                      <Component id="registrationAddressLookup" pref="229" max="32767" attributes="0"/>
                       <Component id="registrationDateDatePicker" alignment="0" pref="229" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="registrationAddressTextField" alignment="0" pref="203" max="32767" attributes="2"/>
-                              <Component id="administrationAddressTextField" alignment="0" pref="203" max="32767" attributes="2"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="modifyAdministrationAddressButton" min="-2" pref="20" max="-2" attributes="0"/>
-                              <Component id="modifyRegistrationAddressButton" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="registeringOrganizationLookup" alignment="0" pref="229" max="32767" attributes="0"/>
                       <Component id="uniqueIdTextField" alignment="1" pref="229" max="32767" attributes="0"/>
+                      <Component id="registeringOrganizationLookup" alignment="0" pref="229" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -340,37 +331,26 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="registrationDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="registrationDateDatePicker" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="registrationAddressTextField" linkSize="1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="administrationAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="administrationAddressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="modifyRegistrationAddressButton" linkSize="1" min="-2" pref="12" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="modifyAdministrationAddressButton" min="-2" pref="20" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="registeringOrganizationLabel" pref="22" max="32767" attributes="1"/>
-                              <Component id="registeringOrganizationLookup" alignment="0" max="32767" attributes="1"/>
-                          </Group>
-                      </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="registrationDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="registrationDateDatePicker" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="registrationAddressLookup" max="32767" attributes="1"/>
+                      <Component id="registrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="administrativeAddressLookup" max="32767" attributes="1"/>
+                      <Component id="administrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="registeringOrganizationLabel" pref="22" max="32767" attributes="1"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="31" pref="31" max="31" attributes="0"/>
-                          <Component id="registrationAddressLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="registeringOrganizationLookup" pref="22" max="32767" attributes="1"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -413,38 +393,6 @@
             <Property name="name" type="java.lang.String" value="registrationDateDatePicker" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="registrationAddressTextField">
-          <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="administrationAddressTextField.background"/>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" resourceKey="registrationAddressTextField.text"/>
-            <Property name="name" type="java.lang.String" value="registrationAddressTextField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="administrationAddressTextField">
-          <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="administrationAddressTextField.background"/>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" resourceKey="administrationAddressTextField.text"/>
-            <Property name="name" type="java.lang.String" value="administrationAddressTextField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBButton" name="modifyRegistrationAddressButton">
-          <Properties>
-            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel" id="modifyRegistrationAddress" methodName="modifyRegistrationAddress"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="modifyRegistrationAddressButton" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBButton" name="modifyAdministrationAddressButton">
-          <Properties>
-            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-              <action class="com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel" id="modifyAdministrationAddress" methodName="modifyAdministrationAddress"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="modifyAdministrationAddressButton" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.swingb.JBLabel" name="uniqueIdLabel">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="uniqueIdLabel.text"/>
@@ -460,6 +408,16 @@
         <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="registeringOrganizationLookup">
           <Properties>
             <Property name="name" type="java.lang.String" value="registeringOrganizationLookup" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="administrativeAddressLookup">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="administrativeAddressLookup" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="registrationAddressLookup">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="registrationAddressLookup" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
