@@ -47,14 +47,6 @@ public interface WarehouseListRemote {
     Warehouse newWarehouse(Object object);
 
     /**
-     * Temporary method to handle the replacement of not implemented functionality with
-     * dummy one.
-     * @return data object that has some registered address.
-     * If not available - returns null
-     */
-    DataObject getDataObjectWithAddresses();
-
-    /**
      * Save operation.
      * @param entity - an entity to save (may be new, or already persisted)
      * @return the updated entity

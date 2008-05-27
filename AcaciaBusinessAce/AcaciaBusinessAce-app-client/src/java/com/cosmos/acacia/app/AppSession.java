@@ -14,7 +14,8 @@ import com.cosmos.acacia.crm.data.DataObject;
  */
 public final class AppSession implements AcaciaSession{
     
-    private static AppSession instance = new AppSession();
+    //lazy instantiation - at first request
+    private static AppSession instance = null;
     
     private AppSession(){
         try {
@@ -37,10 +38,13 @@ public final class AppSession implements AcaciaSession{
     }
     
     /**
-     * Singleton access method. Not lazy - the instance is instantiated at construction-time.
+     * Singleton access method. Lazy - the instance is instantiated at first request.
      * @return
      */
     public static AppSession get(){
+        if ( instance==null ){
+            instance = new AppSession();
+        }
         return instance;
     }
 
