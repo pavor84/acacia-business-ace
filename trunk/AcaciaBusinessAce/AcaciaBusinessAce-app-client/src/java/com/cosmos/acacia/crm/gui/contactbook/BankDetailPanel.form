@@ -16,39 +16,35 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" max="-2" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="bankLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="branchLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="contactLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="contactLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="ibanLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="accountLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="bicLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="swiftLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="contactLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="branchLookup" linkSize="2" alignment="1" min="-2" pref="303" max="-2" attributes="0"/>
-                          <Component id="bankLookup" linkSize="2" alignment="1" min="-2" pref="311" max="-2" attributes="0"/>
-                          <Component id="ibanTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
-                          <Component id="accountTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
-                          <Component id="bicTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
-                          <Component id="swiftTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
-                          <Component id="currencyComboBox" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
-                          <Component id="contactComboBox" linkSize="2" alignment="1" min="-2" pref="312" max="-2" attributes="0"/>
+                          <Component id="contactLookup" pref="312" max="32767" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                              <Component id="branchLookup" linkSize="2" alignment="1" min="-2" pref="303" max="-2" attributes="0"/>
+                              <Component id="bankLookup" linkSize="2" alignment="1" min="-2" pref="311" max="-2" attributes="0"/>
+                              <Component id="ibanTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                              <Component id="accountTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                              <Component id="bicTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                              <Component id="swiftTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                              <Component id="currencyComboBox" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="defaultCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="56" pref="56" max="56" attributes="0"/>
-                      <Component id="defaultCheckBox" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="entityFormButtonPanel" pref="364" max="32767" attributes="1"/>
-                  </Group>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="364" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -93,15 +89,15 @@
                   <Component id="contactLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="contactComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="contactLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="contactLabel" max="32767" attributes="1"/>
+                  <Component id="contactLookup" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="defaultCheckBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -178,14 +174,6 @@
         <Property name="name" type="java.lang.String" value="contactLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="contactComboBox">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new javax.swing.DefaultComboBoxModel()" type="code"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="contactComboBox" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="bankLookup">
       <Properties>
         <Property name="name" type="java.lang.String" value="bankLookup" noResource="true"/>
@@ -214,6 +202,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="contactLabel1.text"/>
         <Property name="name" type="java.lang.String" value="contactLabel1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="contactLookup">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="contactLookup" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

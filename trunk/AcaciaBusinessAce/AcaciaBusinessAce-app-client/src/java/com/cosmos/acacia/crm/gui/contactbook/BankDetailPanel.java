@@ -4,6 +4,7 @@ import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -16,19 +17,19 @@ import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
-import com.cosmos.swingb.listeners.TableModificationListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -79,12 +80,12 @@ public class BankDetailPanel extends BaseEntityPanel {
         swiftLabel = new com.cosmos.swingb.JBLabel();
         swiftTextField = new com.cosmos.swingb.JBTextField();
         contactLabel = new com.cosmos.swingb.JBLabel();
-        contactComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         bankLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         branchLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         defaultCheckBox = new com.cosmos.swingb.JBCheckBox();
         currencyComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         contactLabel1 = new com.cosmos.swingb.JBLabel();
+        contactLookup = new com.cosmos.acacia.gui.AcaciaLookup();
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
@@ -122,9 +123,6 @@ public class BankDetailPanel extends BaseEntityPanel {
         contactLabel.setText(resourceMap.getString("contactLabel.text")); // NOI18N
         contactLabel.setName("contactLabel"); // NOI18N
 
-        contactComboBox.setModel(new javax.swing.DefaultComboBoxModel());
-        contactComboBox.setName("contactComboBox"); // NOI18N
-
         bankLookup.setName("bankLookup"); // NOI18N
 
         branchLookup.setName("branchLookup"); // NOI18N
@@ -138,43 +136,42 @@ public class BankDetailPanel extends BaseEntityPanel {
         contactLabel1.setText(resourceMap.getString("contactLabel1.text")); // NOI18N
         contactLabel1.setName("contactLabel1"); // NOI18N
 
+        contactLookup.setName("contactLookup"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bankLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(branchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(contactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(contactLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ibanLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(accountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bicLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(swiftLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(swiftLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(contactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(branchLookup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bankLookup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ibanTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(accountTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bicTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(swiftTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(currencyComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(contactComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(defaultCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)))
+                            .addComponent(contactLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(branchLookup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bankLookup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ibanTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(accountTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bicTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(swiftTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(currencyComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(defaultCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {accountTextField, bankLookup, bicTextField, branchLookup, contactComboBox, currencyComboBox, ibanTextField, swiftTextField});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {accountTextField, bankLookup, bicTextField, branchLookup, currencyComboBox, ibanTextField, swiftTextField});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,14 +205,14 @@ public class BankDetailPanel extends BaseEntityPanel {
                     .addComponent(currencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(contactLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(contactComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(contactLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(contactLookup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(defaultCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(7, 7, 7))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -229,9 +226,9 @@ public class BankDetailPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField bicTextField;
     private com.cosmos.swingb.JBLabel branchLabel;
     private com.cosmos.acacia.gui.AcaciaLookup branchLookup;
-    private com.cosmos.acacia.gui.AcaciaComboBox contactComboBox;
     private com.cosmos.swingb.JBLabel contactLabel;
     private com.cosmos.swingb.JBLabel contactLabel1;
+    private com.cosmos.acacia.gui.AcaciaLookup contactLookup;
     private com.cosmos.acacia.gui.AcaciaComboBox currencyComboBox;
     private com.cosmos.swingb.JBCheckBox defaultCheckBox;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
@@ -251,7 +248,8 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     private Binding bankBinding;
     private Binding branchBinding;
-
+    private Binding contactBinding;
+    
     @Override
     protected void initData() {
         setResizable(false);
@@ -287,7 +285,15 @@ public class BankDetailPanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("bank"),
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
-
+       bankBinding.addBindingListener(new AbstractBindingListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                branchLookup.clearSelectedValue();
+                contactLookup.clearSelectedValue();
+            }
+        });
+        
         branchBinding = branchLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -299,14 +305,24 @@ public class BankDetailPanel extends BaseEntityPanel {
             "${addressName}",
             UpdateStrategy.READ_WRITE);
 
-        if (bankDetail.getBankBranch() != null) {
-            contactComboBox.bind(bankDetailBindingGroup,
-                getContacts(bankDetail.getBankBranch()),
-                bankDetail,
-                entityProps.getPropertyDetails("bankContact"));
-        } else {
-            contactComboBox.setEnabled(false);
-        }
+        branchBinding.addBindingListener(new AbstractBindingListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                contactLookup.clearSelectedValue();
+            }
+        });
+        
+        contactBinding = contactLookup.bind(new AcaciaLookupProvider() {
+                @Override
+                public Object showSelectionControl() {
+                    return onChooseContact();
+                }
+            }, bankDetailBindingGroup,
+            bankDetail,
+            entityProps.getPropertyDetails("bankContact"),
+            "${firstName} ${secondName} ${lastName}",
+            UpdateStrategy.READ_WRITE);
         
         bankDetailBindingGroup.bind();
     }
@@ -320,16 +336,16 @@ public class BankDetailPanel extends BaseEntityPanel {
         LookupRecordDeletionListener deletionListener = new LookupRecordDeletionListener(oldBank);
         deletionListener.addTargetLookup(bankLookup);
         deletionListener.addTargetLookup(branchLookup);
-        deletionListener.addTargetCombo(contactComboBox);
+        deletionListener.addTargetLookup(contactLookup);
         listPanel.addTableModificationListener(deletionListener);
         
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            contactComboBox.setModel(new DefaultComboBoxModel());
             
             if (selected  == null || !selected.equals(oldBank)){
                 branchLookup.clearSelectedValue();
+                contactLookup.clearSelectedValue();
             }
             return selected;
         } else {
@@ -360,32 +376,46 @@ public class BankDetailPanel extends BaseEntityPanel {
         Address oldBranch = bankDetail.getBankBranch();
         
         LookupRecordDeletionListener deletionListener = new LookupRecordDeletionListener(oldBranch, branchLookup);
-        deletionListener.addTargetCombo(contactComboBox);
+        deletionListener.addTargetLookup(contactLookup);
         listPanel.addTableModificationListener(deletionListener);
         
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
-            Object selected = listPanel.getSelectedRowObject();
-
-            if (selected  == null || !selected.equals(oldBranch)){
-                 contactComboBox.setModel(new DefaultComboBoxModel());
-            }
-            
-            contactComboBox.setEnabled(selected != null);
-            contactComboBox.bind(bankDetailBindingGroup,
-                getContacts(selected),
-                bankDetail,
-                entityProps.getPropertyDetails("bankContact"));
-            bankDetailBindingGroup.bind();
-            
-            contactComboBox.setSelectedIndex(-1);
-            
-            return selected;
+           Object selected = listPanel.getSelectedRowObject();
+           
+           return selected;
         }else{
             return null;
         }
     }
 
+    protected Object onChooseContact() {
+        if (!branchBinding.isContentValid()) {
+            JOptionPane.showMessageDialog(this, 
+                getResourceMap().getString("BankDetailPanel.selectBranch"),
+                getResourceMap().getString("BankDetailPanel.selectBranchTitle"),
+                JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        
+        DataObject parent = null;
+        try {
+            parent = ((Address) branchBinding.getSourceProperty()
+                    .getValue(branchBinding.getSourceObject())).getDataObject();
+        } catch (Exception ex){
+            // Ignore
+        }
+        ContactPersonsListPanel listPanel = new ContactPersonsListPanel(parent);
+        
+        DialogResponse dResponse = listPanel.showDialog(this);
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+           ContactPerson selected = (ContactPerson) listPanel.getSelectedRowObject();
+           return selected.getContact();
+        } else {
+            return null;
+        }
+        
+    }
     protected List<Person> getContacts(Object selectedObject)
     {
         if (selectedObject == null)
@@ -394,6 +424,7 @@ public class BankDetailPanel extends BaseEntityPanel {
         DataObject parent = ((DataObjectBean) selectedObject).getDataObject();
         List<Person> contacts = getFormSession().getBankContacts(parent);
 
+        log.info("Persons: " + contacts.size());
         return contacts;
     }
 
