@@ -323,18 +323,21 @@ public class AddressPanel extends BaseEntityPanel {
     protected void initData() {
         setResizable(true);
 
+      String defaultAddressName = "";
       if (getParentDataObject() != null){
             String parentObjectType = getParentDataObject().getDataObjectType().getDataObjectType();
             ResourceMap resourceMap = getResourceMap();
 
             if (parentObjectType.indexOf("Person") != -1){
                 setTitle(resourceMap.getString("address.text"));
+                defaultAddressName = resourceMap.getString("defaultAddress");
             } else if (parentObjectType.indexOf("Organization") != -1) {
                 setTitle(resourceMap.getString("branch.text"));
+                defaultAddressName = resourceMap.getString("defaultBranch");
             }
         }
 
-        log.info("initData().address: " + address);
+      log.info("initData().address: " + address);
         if(address == null)
         {
             address = getFormSession().newAddress();
@@ -423,6 +426,9 @@ public class AddressPanel extends BaseEntityPanel {
         addNestedFormListener(bankDetailsTable);
 
         addressBindingGroup.bind();
+        
+        if (isAddressFirst())
+            addressNameTextField.setText(defaultAddressName);
     }
 
      protected Object onChooseCity() {
@@ -451,6 +457,11 @@ public class AddressPanel extends BaseEntityPanel {
         updateCommunicationContactsTable(communicationContacts);
     }
 
+    private boolean isAddressFirst() {
+        List<Address> addresses = getFormSession().getAddresses(getParentDataObject());
+        return (addresses == null || addresses.size() == 0);
+    }
+    
     private void updateCommunicationContacts(ContactPerson contactPerson)
     {
         List<CommunicationContact> communicationContacts =

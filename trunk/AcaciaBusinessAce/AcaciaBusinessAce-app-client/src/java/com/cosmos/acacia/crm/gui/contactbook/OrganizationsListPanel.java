@@ -119,6 +119,10 @@ public class OrganizationsListPanel extends AbstractTablePanel {
             {
                 return organizationPanel.getSelectedValue();
             }
+            
+            if(DialogResponse.CLOSE.equals(response)) {
+                refreshAction();
+            }
         }
 
         return null;
