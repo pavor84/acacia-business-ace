@@ -22,7 +22,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="addressNameTextField" min="-2" pref="155" max="-2" attributes="2"/>
+                      <Component id="addressNameTextField" pref="155" max="32767" attributes="2"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="countryLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -34,7 +34,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="postalCodeLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="postalCodeTextField" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="postalCodeTextField" pref="55" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="contactPersonsPanel" max="32767" attributes="0"/>
@@ -70,7 +70,7 @@
                                   <Component id="countryComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="6" max="-2" attributes="1"/>
-                              <Component id="addressPanel" min="-2" max="-2" attributes="0"/>
+                              <Component id="addressPanel" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="14" pref="14" max="14" attributes="0"/>
@@ -95,14 +95,14 @@
                           <Component id="communicationContactsPanel" alignment="0" max="32767" attributes="2"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="bankDetailsPanel" min="-2" max="-2" attributes="2"/>
+                      <Component id="bankDetailsPanel" max="32767" attributes="2"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="descriptionPanel" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="entityFormButtonPanel" pref="47" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" pref="47" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -168,7 +168,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="824" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="828" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -220,7 +220,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane4" pref="824" max="32767" attributes="0"/>
+                  <Component id="jScrollPane4" pref="828" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -270,7 +270,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="412" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -295,7 +295,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="410" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="414" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -331,7 +331,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="844" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="848" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
