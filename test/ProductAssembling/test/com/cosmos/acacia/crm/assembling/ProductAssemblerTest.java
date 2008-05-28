@@ -91,8 +91,8 @@ public class ProductAssemblerTest
         OldProductAssembler assembler = new OldProductAssembler(assemblingSchema);
         AcaciaCallbackHandler cllbackHandler = new AcaciaCallbackHandler(getAlgorithmSelectItems());
         assembler.setCallbackHandler(cllbackHandler);
-        ComplexProduct complexProduct = assembler.assemblе(getParameters());
-        System.out.println("complexProduct: " + complexProduct);
+        //ComplexProduct complexProduct = assembler.assemblе(getParameters());
+        //System.out.println("complexProduct: " + complexProduct);
     }
 
     private static Map<String, Object> getParameters()
