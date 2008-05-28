@@ -429,6 +429,10 @@ public class AddressPanel extends BaseEntityPanel {
         addNestedFormListener(contactPersonsTable);
         addNestedFormListener(bankDetailsTable);
 
+        // Associating the three tables (the association is bidirectional)
+        communicationContactsTable.associateWithTable(bankDetailsTable);
+        communicationContactsTable.associateWithTable(contactPersonsTable);
+       
         addressBindingGroup.bind();
         
         int nextAddressNumber = getNewAddressNumber();

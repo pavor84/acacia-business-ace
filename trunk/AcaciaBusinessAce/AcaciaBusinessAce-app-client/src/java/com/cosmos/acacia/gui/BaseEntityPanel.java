@@ -29,6 +29,8 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.listeners.NestedFormListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
@@ -66,6 +68,12 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     public BaseEntityPanel(DataObject dataObject)
     {
         super(dataObject);
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                onKeyEvent(evt);
+            }
+        });
     }
 
 
@@ -246,6 +254,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                         }
 
                         table.setParentDataObject(getDataObject());
+                        table.setParentDataObjectToAssociatedTables(getDataObject());
                         return true;
                     }
                     return false;
@@ -319,5 +328,13 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     protected boolean isSpecialConditionPresent()
     {
         return false;
+    }
+    
+    private void onKeyEvent(KeyEvent evt) {
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+            closeAction();
+        } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() ==  KeyEvent.VK_S) {
+            saveAction();
+        }
     }
 }
