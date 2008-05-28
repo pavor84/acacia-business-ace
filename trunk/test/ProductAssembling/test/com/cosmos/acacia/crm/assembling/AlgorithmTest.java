@@ -9,7 +9,7 @@ import com.cosmos.acacia.callback.ApplicationCallbackHandler;
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
 import com.cosmos.acacia.callback.assembling.LessSelectedItemsThanAllowed;
 import com.cosmos.acacia.callback.assembling.MoreSelectedItemsThanAllowed;
-import com.cosmos.acacia.crm.assembling.Algorithm.Type;
+import com.cosmos.acacia.crm.assembling.OldAlgorithm.Type;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingAlgorithm;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
@@ -133,15 +133,15 @@ public class AlgorithmTest
             return to;
         }
 
-        private static TreeMap<Algorithm.Type, List<SchemaItemValue>> valuesByAlgorithmType;
-        public static List<SchemaItemValue> getValuesByAlgorithmType(Algorithm.Type algorithmType)
+        private static TreeMap<OldAlgorithm.Type, List<SchemaItemValue>> valuesByAlgorithmType;
+        public static List<SchemaItemValue> getValuesByAlgorithmType(OldAlgorithm.Type algorithmType)
         {
             if(valuesByAlgorithmType == null)
             {
                 valuesByAlgorithmType = new TreeMap<Type, List<AlgorithmTest.SchemaItemValue>>();
                 for(SchemaItemValue siv : SchemaItemValue.values())
                 {
-                    Algorithm.Type type = siv.getAlgorithmType();
+                    OldAlgorithm.Type type = siv.getAlgorithmType();
                     List<SchemaItemValue> sivList = valuesByAlgorithmType.get(type);
                     if(sivList == null)
                     {
@@ -202,7 +202,7 @@ public class AlgorithmTest
         em.getTransaction().begin();
         Query q = em.createNamedQuery("AssemblingAlgorithm.findByAlgorithmCode");
         AssemblingAlgorithm aAlgorithm;
-        for(Algorithm.Type algorithmType : Algorithm.Type.values())
+        for(OldAlgorithm.Type algorithmType : OldAlgorithm.Type.values())
         {
             String algorithmName = algorithmType.name();
             q.setParameter("algorithmCode", algorithmName);
@@ -318,7 +318,7 @@ public class AlgorithmTest
     private static AssemblingSchemaItem populateAssemblingSchemaItem(
             EntityManager em,
             AssemblingSchema aSchema,
-            Algorithm.Type algorithmType,
+            OldAlgorithm.Type algorithmType,
             List<VirtualProduct> virtualProducts,
             int multiplier,
             Integer minSelections,
@@ -473,7 +473,7 @@ public class AlgorithmTest
     }
     
 
-    private AssemblingSchemaItem getAssemblingSchemaItem(Algorithm.Type algorithmType)
+    private AssemblingSchemaItem getAssemblingSchemaItem(OldAlgorithm.Type algorithmType)
     {
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
         for(AssemblingSchemaItem asi : asiList)
@@ -493,7 +493,7 @@ public class AlgorithmTest
     public void UnconditionalSelection()
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.UnconditionalSelection);
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             List result = algorithm.apply(null);
@@ -514,7 +514,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.UserSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int[] selectItems = new int[] {};
@@ -553,7 +553,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.UserSingleSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int selectItems[] = new int[] {1};
@@ -593,7 +593,7 @@ public class AlgorithmTest
 
             itemValues.remove(2);
             itemValues.remove(1);
-            algorithm = new Algorithm(asi);
+            algorithm = new OldAlgorithm(asi);
             selectItems = new int[] {0};
             callbackHandler = new AcaciaCallbackHandler(selectItems);
             algorithm.setCallbackHandler(callbackHandler);
@@ -624,7 +624,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.UserMultipleSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int selectItems[] = new int[] {1, 2};
@@ -678,7 +678,7 @@ public class AlgorithmTest
 
             itemValues.remove(3);
             itemValues.remove(2);
-            algorithm = new Algorithm(asi);
+            algorithm = new OldAlgorithm(asi);
             selectItems = new int[] {0, 1};
             callbackHandler = new AcaciaCallbackHandler(selectItems);
             algorithm.setCallbackHandler(callbackHandler);
@@ -712,7 +712,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.RangeSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int[] selectItems = new int[] {};
@@ -757,7 +757,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.RangeSingleSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int selectItems[] = new int[] {1};
@@ -828,7 +828,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.RangeMultipleSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int selectItems[] = new int[] {0, 1};
@@ -912,7 +912,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.EqualsSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int[] selectItems = new int[] {};
@@ -956,7 +956,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.EqualsSingleSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int selectItems[] = new int[] {0};
@@ -1020,7 +1020,7 @@ public class AlgorithmTest
     {
         AssemblingSchemaItem asi = getAssemblingSchemaItem(Type.EqualsMultipleSelection);
         List<AssemblingSchemaItemValue> itemValues = asi.getItemValues();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         try
         {
             int selectItems[] = new int[] {0};

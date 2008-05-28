@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Miro
  */
-public class NewProductAssembler
+public class ProductAssembler
 {
     private Map parameters;
 

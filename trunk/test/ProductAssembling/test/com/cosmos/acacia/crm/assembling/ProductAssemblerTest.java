@@ -39,7 +39,7 @@ public class ProductAssemblerTest
     private static EntityManagerFactory emf;
     private EntityManager em;
 
-    private static Map<Algorithm.Type, int[]> algorithmSelectItems;
+    private static Map<OldAlgorithm.Type, int[]> algorithmSelectItems;
     private static Map<String, Object> parameters;
 
 
@@ -75,7 +75,7 @@ public class ProductAssemblerTest
     }
 
     /**
-     * Test of assemblе method, of class ProductAssembler.
+     * Test of assemblе method, of class OldProductAssembler.
      */
     @Test
     public void assemblе()
@@ -88,7 +88,7 @@ public class ProductAssemblerTest
         assemblingSchema = (AssemblingSchema)q.getSingleResult();
         em.getTransaction().commit();
 
-        ProductAssembler assembler = new ProductAssembler(assemblingSchema);
+        OldProductAssembler assembler = new OldProductAssembler(assemblingSchema);
         AcaciaCallbackHandler cllbackHandler = new AcaciaCallbackHandler(getAlgorithmSelectItems());
         assembler.setCallbackHandler(cllbackHandler);
         ComplexProduct complexProduct = assembler.assemblе(getParameters());
@@ -102,93 +102,93 @@ public class ProductAssemblerTest
             parameters = new HashMap<String, Object>();
 
             parameters.put(
-                    Algorithm.Type.UnconditionalSelection.name(),
+                    OldAlgorithm.Type.UnconditionalSelection.name(),
                     null);
 
             parameters.put(
-                    Algorithm.Type.UserSelection.name(),
+                    OldAlgorithm.Type.UserSelection.name(),
                     null);
 
             parameters.put(
-                    Algorithm.Type.UserSingleSelection.name(),
+                    OldAlgorithm.Type.UserSingleSelection.name(),
                     null);
 
             parameters.put(
-                    Algorithm.Type.UserMultipleSelection.name(),
+                    OldAlgorithm.Type.UserMultipleSelection.name(),
                     null);
 
             parameters.put(
-                    Algorithm.Type.RangeSelection.name(),
+                    OldAlgorithm.Type.RangeSelection.name(),
                     3);
 
             parameters.put(
-                    Algorithm.Type.RangeSingleSelection.name(),
+                    OldAlgorithm.Type.RangeSingleSelection.name(),
                     3);
 
             parameters.put(
-                    Algorithm.Type.RangeMultipleSelection.name(),
+                    OldAlgorithm.Type.RangeMultipleSelection.name(),
                     4);
 
             parameters.put(
-                    Algorithm.Type.EqualsSelection.name(),
+                    OldAlgorithm.Type.EqualsSelection.name(),
                     2);
 
             parameters.put(
-                    Algorithm.Type.EqualsSingleSelection.name(),
+                    OldAlgorithm.Type.EqualsSingleSelection.name(),
                     2);
 
             parameters.put(
-                    Algorithm.Type.EqualsMultipleSelection.name(),
+                    OldAlgorithm.Type.EqualsMultipleSelection.name(),
                     2);
         }
 
         return parameters;
     }
 
-    private static Map<Algorithm.Type, int[]> getAlgorithmSelectItems()
+    private static Map<OldAlgorithm.Type, int[]> getAlgorithmSelectItems()
     {
         if(algorithmSelectItems == null)
         {
-            algorithmSelectItems = new TreeMap<Algorithm.Type, int[]>();
+            algorithmSelectItems = new TreeMap<OldAlgorithm.Type, int[]>();
 
             algorithmSelectItems.put(
-                    Algorithm.Type.UnconditionalSelection,
+                    OldAlgorithm.Type.UnconditionalSelection,
                     new int[] {});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.UserSelection,
+                    OldAlgorithm.Type.UserSelection,
                     new int[] {0, 2});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.UserSingleSelection,
+                    OldAlgorithm.Type.UserSingleSelection,
                     new int[] {1});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.UserMultipleSelection,
+                    OldAlgorithm.Type.UserMultipleSelection,
                     new int[] {1, 2});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.RangeSelection,
+                    OldAlgorithm.Type.RangeSelection,
                     new int[] {0, 1});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.RangeSingleSelection,
+                    OldAlgorithm.Type.RangeSingleSelection,
                     new int[] {1});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.RangeMultipleSelection,
+                    OldAlgorithm.Type.RangeMultipleSelection,
                     new int[] {0, 1});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.EqualsSelection,
+                    OldAlgorithm.Type.EqualsSelection,
                     new int[] {0, 1});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.EqualsSingleSelection,
+                    OldAlgorithm.Type.EqualsSingleSelection,
                     new int[] {0});
 
             algorithmSelectItems.put(
-                    Algorithm.Type.EqualsMultipleSelection,
+                    OldAlgorithm.Type.EqualsMultipleSelection,
                     new int[] {1, 2});
         }
 
@@ -198,10 +198,10 @@ public class ProductAssemblerTest
     private static class AcaciaCallbackHandler
         implements ApplicationCallbackHandler
     {
-        private Map<Algorithm.Type, int[]> algorithmSelectItems;
+        private Map<OldAlgorithm.Type, int[]> algorithmSelectItems;
         private boolean invoked;
 
-        public AcaciaCallbackHandler(Map<Algorithm.Type, int[]> algorithmSelectItems)
+        public AcaciaCallbackHandler(Map<OldAlgorithm.Type, int[]> algorithmSelectItems)
         {
             this.algorithmSelectItems = algorithmSelectItems;
         }
@@ -216,8 +216,8 @@ public class ProductAssemblerTest
                 if(callback instanceof ChoiceCallback)
                 {
                     ChoiceCallback choiceCallback = (ChoiceCallback)callback;
-                    Algorithm.Type algorithmType;
-                    algorithmType = Algorithm.Type.valueOf(choiceCallback.getAssemblingSchemaItem().getAssemblingAlgorithm().getAlgorithmCode());
+                    OldAlgorithm.Type algorithmType;
+                    algorithmType = OldAlgorithm.Type.valueOf(choiceCallback.getAssemblingSchemaItem().getAssemblingAlgorithm().getAlgorithmCode());
                     int[] selectItems = algorithmSelectItems.get(algorithmType);
                     List<ConstraintRow> constraintRows = choiceCallback.getChoices();
                     List<ConstraintRow> result = new ArrayList<ConstraintRow>(selectItems.length);
