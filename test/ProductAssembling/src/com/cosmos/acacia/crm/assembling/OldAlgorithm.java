@@ -28,7 +28,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
  *
  * @author Miro
  */
-public class Algorithm
+public class OldAlgorithm
     implements Serializable
 {
     public enum Type
@@ -129,7 +129,7 @@ public class Algorithm
     private ApplicationCallbackHandler callbackHandler;
 
 
-    public Algorithm(AssemblingSchemaItem assemblingSchemaItem)
+    public OldAlgorithm(AssemblingSchemaItem assemblingSchemaItem)
     {
         this.assemblingSchemaItem = assemblingSchemaItem;
         AssemblingAlgorithm assemblingAlgorithm = assemblingSchemaItem.getAssemblingAlgorithm();

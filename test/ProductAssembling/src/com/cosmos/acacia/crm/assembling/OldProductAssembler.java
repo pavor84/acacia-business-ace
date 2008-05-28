@@ -28,7 +28,7 @@ import javax.persistence.Query;
  *
  * @author Miro
  */
-public class ProductAssembler
+public class OldProductAssembler
 {
     public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
@@ -40,7 +40,7 @@ public class ProductAssembler
 
     private ApplicationCallbackHandler callbackHandler;
 
-    public ProductAssembler(AssemblingSchema assemblingSchema)
+    public OldProductAssembler(AssemblingSchema assemblingSchema)
     {
         this.assemblingSchema = assemblingSchema;
     }
@@ -117,7 +117,7 @@ public class ProductAssembler
         throws AlgorithmException
     {
         BigDecimal iQuantity = asi.getQuantity();
-        Algorithm algorithm = new Algorithm(asi);
+        OldAlgorithm algorithm = new OldAlgorithm(asi);
         algorithm.setCallbackHandler(callbackHandler);
         Object valueAgainstConstraints = getAlgorithmValue(asi, parameters);
         List<AssemblingSchemaItemValue> itemValues = algorithm.apply(valueAgainstConstraints);
@@ -134,7 +134,7 @@ public class ProductAssembler
             if(virtualProduct instanceof AssemblingSchema)
             {
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
-                ProductAssembler assembler = new ProductAssembler(itemSchema);
+                OldProductAssembler assembler = new OldProductAssembler(itemSchema);
                 assembler.setCallbackHandler(callbackHandler);
                 itemProduct = assembler.assemble(parameters, em);
             }
@@ -212,10 +212,10 @@ public class ProductAssembler
             AssemblingSchemaItem asi,
             Map parameters)
     {
-        Algorithm.Type algorithmType;
-        algorithmType = Algorithm.Type.valueOf(asi.getAssemblingAlgorithm().getAlgorithmCode());
-        if(Algorithm.Type.RangeAlgorithms.contains(algorithmType) ||
-           Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
+        OldAlgorithm.Type algorithmType;
+        algorithmType = OldAlgorithm.Type.valueOf(asi.getAssemblingAlgorithm().getAlgorithmCode());
+        if(OldAlgorithm.Type.RangeAlgorithms.contains(algorithmType) ||
+           OldAlgorithm.Type.EqualsAlgorithms.contains(algorithmType))
         {
             String messageCode = asi.getMessageCode();
             return parameters.get(messageCode);
