@@ -167,7 +167,11 @@ public class CitiesListPanel extends AbstractTablePanel {
         
     @Override
     protected Object newRow() {
-        CityPanel cityPanel = new CityPanel();
+        CityPanel cityPanel = null;
+        if (country != null)                
+            cityPanel = new CityPanel(country);
+        else
+            cityPanel = new CityPanel();
         
         DialogResponse response = cityPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))

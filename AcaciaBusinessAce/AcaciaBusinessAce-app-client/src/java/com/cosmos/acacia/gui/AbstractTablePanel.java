@@ -38,6 +38,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -92,10 +93,20 @@ public abstract class AbstractTablePanel
         classifyButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                onKeyPressed(evt);
+            }
+        });
 
         dataScrollPane.setName("dataScrollPane"); // NOI18N
 
         dataTable.setName("dataTable"); // NOI18N
+        dataTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                onKeyPressed(evt);
+            }
+        });
         dataScrollPane.setViewportView(dataTable);
 
         buttonsPanel.setName("buttonsPanel"); // NOI18N
@@ -191,6 +202,10 @@ public abstract class AbstractTablePanel
         );
     }// </editor-fold>//GEN-END:initComponents
 
+private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyPressed
+    onKeyCommand(evt);
+}//GEN-LAST:event_onKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonsPanel;
@@ -209,6 +224,7 @@ public abstract class AbstractTablePanel
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
+    private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
     
     @EJB
     private ClassifiersRemote classifiersFormSession;
@@ -879,4 +895,26 @@ public abstract class AbstractTablePanel
             modifyAction();
     }
 
+    public void setParentDataObjectToAssociatedTables(DataObject parentDataObject) {
+        for (AbstractTablePanel table : associatedTables) {
+            table.setParentDataObject(parentDataObject);
+        }
+    }
+    
+    public void associateWithTable(AbstractTablePanel table) {
+        if (!associatedTables.contains(table)) {
+            associatedTables.add(table);
+            table.associateWithTable(this);
+        }
+    }
+    
+    public void onKeyCommand(KeyEvent evt){
+        if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_N) {
+            newAction();
+        } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_D){
+            deleteAction();
+        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE ){
+            closeAction();
+        }
+    }
 }
