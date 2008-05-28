@@ -25,7 +25,7 @@ import java.util.Set;
  *
  * @author Miro
  */
-public class NewAlgorithm
+public class Algorithm
     implements Serializable
 {
     public enum Type
@@ -125,7 +125,7 @@ public class NewAlgorithm
     private AssemblingSchemaItem assemblingSchemaItem;
 
 
-    public NewAlgorithm(AssemblingSchemaItem assemblingSchemaItem)
+    public Algorithm(AssemblingSchemaItem assemblingSchemaItem)
     {
         this.assemblingSchemaItem = assemblingSchemaItem;
         AssemblingAlgorithm assemblingAlgorithm = assemblingSchemaItem.getAssemblingAlgorithm();
