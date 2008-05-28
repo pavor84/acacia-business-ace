@@ -57,14 +57,14 @@ public class ProductAssembler
         this.callbackHandler = callbackHandler;
     }
 
-    public ComplexProduct assemblе(Map parameters)
+    public ComplexProduct assemble(Map parameters)
         throws AlgorithmException
     {
         EntityManager em = getEntityManager();
         try
         {
             em.getTransaction().begin();
-            ComplexProduct product = assemblе(parameters, em);
+            ComplexProduct product = assemble(parameters, em);
             em.getTransaction().commit();
             return product;
         }
@@ -75,7 +75,7 @@ public class ProductAssembler
         }
     }
 
-    protected ComplexProduct assemblе(Map parameters, EntityManager em)
+    protected ComplexProduct assemble(Map parameters, EntityManager em)
         throws AlgorithmException
     {
         int itemCounter = 0;
@@ -87,7 +87,7 @@ public class ProductAssembler
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(asiList.size());
         for(AssemblingSchemaItem asi : asiList)
         {
-            List<ComplexProductItem> cpiList = assemblе(asi, product, parameters, em);
+            List<ComplexProductItem> cpiList = assemble(asi, product, parameters, em);
             if(cpiList == null || cpiList.size() == 0)
                 continue;
 
@@ -109,7 +109,7 @@ public class ProductAssembler
         return product;
     }
 
-    protected List<ComplexProductItem> assemblе(
+    protected List<ComplexProductItem> assemble(
             AssemblingSchemaItem asi,
             ComplexProduct product,
             Map parameters,
@@ -136,7 +136,7 @@ public class ProductAssembler
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
                 ProductAssembler assembler = new ProductAssembler(itemSchema);
                 assembler.setCallbackHandler(callbackHandler);
-                itemProduct = assembler.assemblе(parameters, em);
+                itemProduct = assembler.assemble(parameters, em);
             }
             else
             {
