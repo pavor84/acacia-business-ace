@@ -324,16 +324,20 @@ public class AddressPanel extends BaseEntityPanel {
         setResizable(true);
 
       String defaultAddressName = "";
+      String defaultMainAddressName = "";
       if (getParentDataObject() != null){
             String parentObjectType = getParentDataObject().getDataObjectType().getDataObjectType();
             ResourceMap resourceMap = getResourceMap();
 
             if (parentObjectType.indexOf("Person") != -1){
                 setTitle(resourceMap.getString("address.text"));
+                defaultMainAddressName = resourceMap.getString("defaultMainAddress");
                 defaultAddressName = resourceMap.getString("defaultAddress");
             } else if (parentObjectType.indexOf("Organization") != -1) {
                 setTitle(resourceMap.getString("branch.text"));
+                defaultMainAddressName = resourceMap.getString("defaultMainBranch");
                 defaultAddressName = resourceMap.getString("defaultBranch");
+                
             }
         }
 
@@ -427,8 +431,11 @@ public class AddressPanel extends BaseEntityPanel {
 
         addressBindingGroup.bind();
         
-        if (isAddressFirst())
-            addressNameTextField.setText(defaultAddressName);
+        int nextAddressNumber = getNewAddressNumber();
+        if (nextAddressNumber == 0)
+            addressNameTextField.setText(defaultMainAddressName);
+        else
+            addressNameTextField.setText(defaultAddressName + " " + nextAddressNumber);
     }
 
      protected Object onChooseCity() {
@@ -457,9 +464,12 @@ public class AddressPanel extends BaseEntityPanel {
         updateCommunicationContactsTable(communicationContacts);
     }
 
-    private boolean isAddressFirst() {
+    private int getNewAddressNumber() {
         List<Address> addresses = getFormSession().getAddresses(getParentDataObject());
-        return (addresses == null || addresses.size() == 0);
+        if (addresses == null)
+            return 0;
+        
+        return addresses.size();
     }
     
     private void updateCommunicationContacts(ContactPerson contactPerson)
