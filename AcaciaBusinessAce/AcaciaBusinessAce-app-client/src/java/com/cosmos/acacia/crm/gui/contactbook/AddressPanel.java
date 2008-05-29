@@ -432,7 +432,8 @@ public class AddressPanel extends BaseEntityPanel {
         // Associating the three tables (the association is bidirectional)
         communicationContactsTable.associateWithTable(bankDetailsTable);
         communicationContactsTable.associateWithTable(contactPersonsTable);
-       
+        contactPersonsTable.associateWithTable(bankDetailsTable);
+        
         addressBindingGroup.bind();
         
         int nextAddressNumber = getNewAddressNumber();
