@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
-    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="null"/>
-    </Property>
-    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="null"/>
-    </Property>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="null"/>
-    </Property>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
@@ -27,37 +18,37 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="productCategoriesSplitPane" alignment="0" max="32767" attributes="0"/>
+          <Component id="splitPane" alignment="0" pref="1065" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="productCategoriesSplitPane" max="32767" attributes="0"/>
+          <Component id="splitPane" alignment="0" pref="412" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.cosmos.swingb.JBSplitPane" name="productCategoriesSplitPane">
+    <Container class="com.cosmos.swingb.JBSplitPane" name="splitPane">
       <Properties>
         <Property name="dividerLocation" type="int" value="240"/>
         <Property name="continuousLayout" type="boolean" value="true"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="null"/>
         </Property>
-        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="null"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="productCategoriesSplitPane" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="splitPane" noResource="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="null"/>
+          <Dimension value="[700, 3]"/>
         </Property>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
       <SubComponents>
-        <Container class="com.cosmos.swingb.JBPanel" name="listPanel">
+        <Container class="com.cosmos.swingb.JBPanel" name="simpleListPanel">
           <Properties>
-            <Property name="name" type="java.lang.String" value="listPanel" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="simpleListPanel" noResource="true"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[664, 0]"/>
+            </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
@@ -68,19 +59,19 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="770" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="819" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="423" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="410" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
         </Container>
-        <Container class="com.cosmos.swingb.JBPanel" name="jBPanel1">
+        <Container class="com.cosmos.swingb.JBPanel" name="mainPanel">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jBPanel1" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="mainPanel" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
@@ -91,7 +82,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="6" pref="6" max="6" attributes="0"/>
                       <Component id="showAllHeirsCheck" pref="233" max="32767" attributes="0"/>
                   </Group>
@@ -100,11 +91,11 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="showAllHeirsCheck" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jBScrollPane1" pref="391" max="32767" attributes="0"/>
+                      <Component id="jBScrollPane1" pref="378" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -128,9 +119,9 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Container class="javax.swing.JScrollPane" name="productCategoriesTreeScrollPane">
+                <Container class="javax.swing.JScrollPane" name="treeScrollPane">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="productCategoriesTreeScrollPane" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="treeScrollPane" noResource="true"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -138,29 +129,29 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="com.cosmos.swingb.JBTree" name="categoryTree">
+                    <Component class="com.cosmos.swingb.JBTree" name="tree">
                       <Properties>
-                        <Property name="background" type="java.awt.Color" resourceKey="categoryTree.background"/>
+                        <Property name="background" type="java.awt.Color" resourceKey="tree.background"/>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                             <EmptyBorder bottom="4" left="4" right="4" top="2"/>
                           </Border>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="categoryTree.toolTipText"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="tree.toolTipText"/>
                         <Property name="autoscrolls" type="boolean" value="true"/>
-                        <Property name="closedIcon" type="javax.swing.Icon" resourceKey="categoryTree.closedIcon"/>
+                        <Property name="closedIcon" type="javax.swing.Icon" resourceKey="tree.closedIcon"/>
                         <Property name="dragEnabled" type="boolean" value="true"/>
-                        <Property name="leafIcon" type="javax.swing.Icon" resourceKey="categoryTree.leafIcon"/>
+                        <Property name="leafIcon" type="javax.swing.Icon" resourceKey="tree.leafIcon"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[30000, 30000]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="null"/>
                         </Property>
-                        <Property name="name" type="java.lang.String" value="categoryTree" noResource="true"/>
-                        <Property name="openIcon" type="javax.swing.Icon" resourceKey="categoryTree.openIcon"/>
+                        <Property name="name" type="java.lang.String" value="tree" noResource="true"/>
+                        <Property name="openIcon" type="javax.swing.Icon" resourceKey="tree.openIcon"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="null"/>
+                          <Dimension value="[0, 0]"/>
                         </Property>
                         <Property name="visibleRowCount" type="int" value="0"/>
                       </Properties>

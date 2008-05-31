@@ -35,6 +35,7 @@ import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
@@ -268,6 +269,8 @@ public class AcaciaApplicationView extends FrameView {
     public void productCategoriesAction()
     {
         ProductCategoriesTreePanel productCategories = new ProductCategoriesTreePanel(null);
+        productCategories.getListPanel().setVisible(Button.Select, false);
+        productCategories.getListPanel().setVisible(Button.Unselect, false);
         productCategories.showFrame();
     }
 

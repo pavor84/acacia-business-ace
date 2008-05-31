@@ -1,9 +1,6 @@
 package com.cosmos.test.bl.contactbook;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
-import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -13,9 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.validation.ValidationException;
