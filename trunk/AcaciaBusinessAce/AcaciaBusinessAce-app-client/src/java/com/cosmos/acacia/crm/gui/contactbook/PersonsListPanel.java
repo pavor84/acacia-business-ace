@@ -75,7 +75,7 @@ public class PersonsListPanel extends AbstractTablePanel {
         {
             try
             {
-                formSession = InitialContext.doLookup(PersonsListRemote.class.getName());
+                formSession = getBean(PersonsListRemote.class);
             }
             catch(Exception ex)
             {
