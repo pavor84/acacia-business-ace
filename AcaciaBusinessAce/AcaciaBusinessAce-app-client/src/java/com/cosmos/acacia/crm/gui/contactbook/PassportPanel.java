@@ -292,7 +292,8 @@ public class PassportPanel extends BaseEntityPanel {
 
     protected Object onChooseIssuer() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
-        // TODO : classifiers!
+        listPanel.setClassifier(getClassifiersFormSession().getClassifier("passport_issuer"));
+        
         Organization oldIssuer = passport.getIssuer();
         
         listPanel.addTableModificationListener(new LookupRecordDeletionListener(oldIssuer, issuerLookup));
@@ -360,13 +361,6 @@ public class PassportPanel extends BaseEntityPanel {
     protected List<DbResource> getPassportTypes()
     {
         return getFormSession().getPassportTypes();
-    }
-
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
     }
 
     protected EntityProperties getPassportEntityProperties()

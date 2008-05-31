@@ -202,13 +202,6 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         return formSession;
     }
 
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-
     protected EntityProperties getClassifierGroupEntityProperties()
     {
         return getFormSession().getClassifierGroupEntityProperties();

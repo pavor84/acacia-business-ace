@@ -25,6 +25,8 @@ import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import java.util.HashSet;
+import java.util.Set;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
@@ -80,7 +82,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         if (!classifier.getClassifierGroup().getIsSystemGroup())
             return esm.remove(em, classifier);
         else
-            return 0;
+            throw new ValidationException("Classifier.err.systemGroupForbidden");
     }
 
     @Override
@@ -88,7 +90,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         if (!classifierGroup.getIsSystemGroup())
             return esm.remove(em, classifierGroup);
         else
-            return 0;
+            throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
         
     }
 
@@ -106,47 +108,42 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
         List<Classifier> result = null;
         
+        Query q;
+        if(parentDataObject != null)
+        {
+            q = em.createNamedQuery("Classifier.findByParentDataObjectAndDeleted");
+            q.setParameter("parentDataObject", parentDataObject);
+        }
+        else
+        {
+            q = em.createNamedQuery("Classifier.findAllAndDeleted");
+        }
+        q.setParameter("deleted", false);
+        result = new ArrayList(q.getResultList());
+        List<Classifier> mirror = new ArrayList<Classifier>(result);
+        
         if (dataObjectType != null) {
-            result = new ArrayList();
             Query dotQuery;
-            if (parentDataObject == null) {
-                dotQuery = em.createNamedQuery("ClassifierAppliedForDot.findByDataObjectType");
-            } else {
-                dotQuery = em.createNamedQuery("ClassifierAppliedForDot.findByDataObjectTypeAndParent");
-                dotQuery.setParameter("parent", parentDataObject);
-            }
-            dotQuery.setParameter("dataObjectType", dataObjectType);
+            dotQuery = em.createNamedQuery("ClassifierAppliedForDot.findAll");
+            Set<ClassifierAppliedForDot> cafds = new HashSet(dotQuery.getResultList());
             
-            List<ClassifierAppliedForDot> cafds = dotQuery.getResultList();
+            Set<Classifier> applicableClassifiers = new HashSet<Classifier>(cafds.size());
             
             for (ClassifierAppliedForDot cafd : cafds) {
-                log.info("Adding " + cafd.toString());
-                result.add(cafd.getClassifier());
+                applicableClassifiers.add(cafd.getClassifier());
             }
             
-            log.info("SIZE: " + cafds.size());
-            if (cafds.size() == 0)
-                dataObjectType = null;
+            for (Classifier classifier : mirror) {
+                if (applicableClassifiers.contains(classifier)) {
+                    ClassifierAppliedForDot tmpCafd = new ClassifierAppliedForDot(
+                            classifier.getClassifierId(), dataObjectType.getDataObjectTypeId());
+
+                    if (!cafds.contains(tmpCafd))
+                        result.remove(classifier);
+                }
+            }
         }
-        log.info("DOT: " + dataObjectType);
         
-        if (dataObjectType == null) {
-            
-            Query q;
-            if(parentDataObject != null)
-            {
-                q = em.createNamedQuery("Classifier.findByParentDataObjectAndDeleted");
-                q.setParameter("parentDataObject", parentDataObject);
-            }
-            else
-            {
-                q = em.createNamedQuery("Classifier.findAllAndDeleted");
-            }
-            q.setParameter("deleted", false);
-            result = new ArrayList(q.getResultList());
-            log.info("NEXTSIZE: " + result.size() + ", p:" + parentDataObject);
-        }
-                    
         return result;
     }
 
@@ -192,6 +189,9 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @Override
     public ClassifierGroup saveClassifierGroup(ClassifierGroup classifierGroup) {
+        if (classifierGroup.getIsSystemGroup())
+            throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+        
         esm.persist(em, classifierGroup);
         return classifierGroup;
     }
@@ -268,7 +268,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @Override
     public List<DataObjectType> getDataObjectTypes() {
         Query q = em.createNamedQuery("DataObjectType.listAll");
-        return shortenDataObjectTypeNames(q.getResultList());
+        return new ArrayList<DataObjectType>(q.getResultList());
     }
 
     @Override
@@ -295,7 +295,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
             result.add(cafd.getDataObjectType());
         }
         
-        return shortenDataObjectTypeNames(result);
+        return new ArrayList<DataObjectType>(result);
     }
 
     @Override
@@ -322,21 +322,8 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         List<Classifier> result = q.getResultList();
         
         if (result == null || result.size() == 0)
-            return null;
+            throw new ValidationException("No classifier found with this code");
         else
             return result.get(0);
-    }
-    
-    
-    private List<DataObjectType> shortenDataObjectTypeNames(List<DataObjectType> list) {
-        List<DataObjectType> result = new ArrayList<DataObjectType>(list.size());
-        
-        for (DataObjectType dot : list) {
-            dot.setDataObjectType(dot.getDataObjectType()
-                    .replaceAll(DataObjectType.class.getPackage().getName() + "\\.", ""));
-            result.add(dot);
-        }
-        
-        return result;
     }
 }

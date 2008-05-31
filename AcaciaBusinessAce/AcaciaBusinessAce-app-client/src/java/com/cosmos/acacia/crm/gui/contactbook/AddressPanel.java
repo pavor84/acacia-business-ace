@@ -347,7 +347,8 @@ public class AddressPanel extends BaseEntityPanel {
             address = getFormSession().newAddress();
         }
 
-        addressBindingGroup = new BindingGroup();
+        if (addressBindingGroup == null)
+            addressBindingGroup = new BindingGroup();
 
         final EntityProperties entityProps = getAddressEntityProperties();
 
@@ -506,14 +507,7 @@ public class AddressPanel extends BaseEntityPanel {
 
         return formSession;
     }
-
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-
+    
     protected EntityProperties getAddressEntityProperties()
     {
         return getFormSession().getAddressEntityProperties();

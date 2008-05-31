@@ -266,13 +266,6 @@ public class CityPanel extends BaseEntityPanel {
         return formSession;
     }
 
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-
     protected EntityProperties getCityEntityProperties()
     {
         return getFormSession().getCityEntityProperties();

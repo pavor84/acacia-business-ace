@@ -184,16 +184,17 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
             
         groupLookup.setEnabled(true);
         
-        classifiersTable = new ClassifiersListPanel(null, dataObjectToBeClassified.getDataObjectType());
-        classifiersTable.setVisibleButtons(2 + 4 + 8 + 16);
-
-        classifiersPanel.add(classifiersTable);
-        
-        
         appliedClassifiersTable = new ClassifiersListPanel(dataObjectToBeClassified);
         appliedClassifiersTable.setVisibleButtons(16);
 
         appliedClassifiersPanel.add(appliedClassifiersTable);
+        
+        
+        classifiersTable = new ClassifiersListPanel(null, dataObjectToBeClassified.getDataObjectType());
+        classifiersTable.setVisibleButtons(2 + 4 + 8 + 16);
+        filterClassifiers();
+        
+        classifiersPanel.add(classifiersTable);
     }
 
 
@@ -210,6 +211,10 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         } else {
             return null;
         }
+    }
+    
+    protected void filterClassifiers() {
+        classifiersTable.filter(appliedClassifiersTable.getClassifiers());
     }
     
     protected List<ClassifierGroup> getClassifierGroups() {
@@ -231,13 +236,6 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         }
 
         return formSession;
-    }
-
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
     }
 
     protected EntityProperties getClassifiedObjectEntityProperties()
@@ -272,13 +270,16 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
                 dataObjectToBeClassified,
                 (Classifier) classifiersTable.getDataTable().getSelectedRowObject());
         appliedClassifiersTable.refreshAction();
+        filterClassifiers();
     }
         
     @Action
     public void removeClassifierAction() {
+        Classifier classifier = (Classifier) appliedClassifiersTable.getDataTable().getSelectedRowObject();
         getFormSession().unclassifyDataObject(
                 dataObjectToBeClassified,
-                (Classifier) appliedClassifiersTable.getDataTable().getSelectedRowObject());
+                classifier);
         appliedClassifiersTable.refreshAction();
+        classifiersTable.getDataTable().addRow(classifier);
     }
 }

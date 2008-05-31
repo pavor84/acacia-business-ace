@@ -117,7 +117,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         }
     }
 
-    public void closeAction() {
+    final public void closeAction() {
         BindingGroup bindingGroup;
         if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
         {

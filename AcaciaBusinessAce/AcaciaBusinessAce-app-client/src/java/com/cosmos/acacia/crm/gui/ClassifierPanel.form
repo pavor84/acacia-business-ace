@@ -19,7 +19,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="entityFormButtonPanel" alignment="0" pref="535" max="32767" attributes="1"/>
-                  <Component id="descriptionPanel3" alignment="1" max="32767" attributes="0"/>
+                  <Component id="descriptionPanel" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="codeLabel" alignment="0" max="32767" attributes="1"/>
@@ -41,7 +41,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="dataObjectTypeComboBox" pref="408" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jBButton1" min="-2" pref="121" max="-2" attributes="0"/>
+                      <Component id="addObjectTypeButton" min="-2" pref="121" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -67,11 +67,11 @@
               <Component id="dataObjectTypesPanel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jBButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addObjectTypeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="dataObjectTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="14" max="32767" attributes="0"/>
-              <Component id="descriptionPanel3" min="-2" max="-2" attributes="0"/>
+              <Component id="descriptionPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -98,14 +98,14 @@
         <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="nameTextFieldAncestorAdded"/>
       </Events>
     </Component>
-    <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel3">
+    <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Description"/>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="descriptionPanel3" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="descriptionPanel" noResource="true"/>
       </Properties>
 
       <Layout>
@@ -139,9 +139,9 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="com.cosmos.swingb.JBTextPane" name="descriptionTextPane3">
+            <Component class="com.cosmos.swingb.JBTextPane" name="descriptionTextPane">
               <Properties>
-                <Property name="name" type="java.lang.String" value="descriptionTextPane3" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="descriptionTextPane" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -207,22 +207,17 @@
     <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="dataObjectTypeComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
         <Property name="name" type="java.lang.String" value="dataObjectTypeComboBox" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBButton" name="jBButton1">
+    <Component class="com.cosmos.swingb.JBButton" name="addObjectTypeButton">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="com.cosmos.acacia.crm.gui.ClassifierPanel" id="addConstraintAction" methodName="addConstraintAction"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="jBButton1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="addObjectTypeButton" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

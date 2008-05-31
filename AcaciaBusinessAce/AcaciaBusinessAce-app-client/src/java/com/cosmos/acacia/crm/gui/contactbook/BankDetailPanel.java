@@ -329,7 +329,7 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     protected Object onChooseBank() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
-        listPanel.setClassifier(getClassifiersFormSession().getClassifier("test"));
+        listPanel.setClassifier(getClassifiersFormSession().getClassifier("bank"));
         
         Organization oldBank = bankDetail.getBank();
         
@@ -443,13 +443,6 @@ public class BankDetailPanel extends BaseEntityPanel {
         }
 
         return formSession;
-    }
-
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
     }
 
     protected EntityProperties getBankDetailEntityProperties()
