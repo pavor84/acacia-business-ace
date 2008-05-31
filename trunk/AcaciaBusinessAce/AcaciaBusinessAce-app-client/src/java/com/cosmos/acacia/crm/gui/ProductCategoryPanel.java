@@ -208,8 +208,8 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     @SuppressWarnings("unchecked")
     protected Object onChooseCategory() {
         ProductCategoriesTreePanel panel = new ProductCategoriesTreePanel(null);
-        panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
-        panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
+        panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
+        panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
         panel.setModificationsEnabled(false);
         
         DialogResponse dResponse = panel.showDialog(this);
@@ -217,7 +217,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         if ( DialogResponse.SELECT.equals(dResponse) ){
             
             ProductCategory category = (ProductCategory)
-                panel.getCategoryListPanel().getSelectedRowObject();
+                panel.getListPanel().getSelectedRowObject();
             
 //            PatternMaskFormat oldFormat = 
 //                (PatternMaskFormat) patternMaskBinding.getTargetProperty()

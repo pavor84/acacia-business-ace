@@ -828,7 +828,7 @@ public class ProductPanel extends AcaciaPanel {
     
     @SuppressWarnings("unchecked")
     protected Object onChooseCategory() {
-        ProductCategoriesTreePanel panel = new ProductCategoriesTreePanel(null);
+        ProductCategoriesTreePanelBackup panel = new ProductCategoriesTreePanelBackup(null);
         panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
         panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
         
