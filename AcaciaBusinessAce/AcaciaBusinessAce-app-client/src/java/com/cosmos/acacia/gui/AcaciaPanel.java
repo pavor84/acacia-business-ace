@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.app.AcaciaSession;
+import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -14,12 +16,20 @@ import com.cosmos.swingb.JBTable;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 
+import java.util.Enumeration;
 import javax.ejb.EJBException;
+import javax.naming.InitialContext;
+import javax.naming.InvalidNameException;
+import javax.naming.Name;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -29,6 +39,8 @@ public abstract class AcaciaPanel
     extends JBPanel
 {
 
+    protected static Logger log = Logger.getLogger(AcaciaPanel.class);
+    
     private DataObject parentDataObject;
 
 
@@ -144,4 +156,39 @@ public abstract class AcaciaPanel
     protected Class getResourceStopClass() {
         return AcaciaPanel.class;
     }
+    
+    public <T> T getBean(Class<T> remoteInterface) {
+        try {
+            InitialContext ctx = new InitialContext();
+            T bean = (T) ctx.lookup(remoteInterface.getName());
+            InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
+           
+            T proxy = (T) Proxy.newProxyInstance(getClass().getClassLoader(),
+                new Class[]{remoteInterface}, handler);
+            
+            return proxy;
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    class RemoteBeanInvocationHandler<E> implements InvocationHandler {
+
+    private E bean;
+    
+    public RemoteBeanInvocationHandler(E bean) {
+        this.bean = bean;
+    }
+    
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        
+        AcaciaSession session = AppSession.get();
+        
+        log.info("Method called: " + method.getName());
+        
+        return method.invoke(bean, args);
+    }  
+}
 }

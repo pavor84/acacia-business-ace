@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -23,6 +22,7 @@ import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.beansbinding.EntityProperties;
+import javax.ejb.Stateless;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -33,7 +33,7 @@ import com.cosmos.beansbinding.EntityProperties;
 public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     protected Logger log = Logger.getLogger(PersonsListBean.class);
-
+    
     @PersistenceContext
     private EntityManager em;
 
