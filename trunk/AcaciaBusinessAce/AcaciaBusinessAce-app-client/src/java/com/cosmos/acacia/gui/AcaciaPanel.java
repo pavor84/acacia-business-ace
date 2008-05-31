@@ -22,11 +22,8 @@ import java.lang.reflect.Proxy;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 
-import java.util.Enumeration;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
-import javax.naming.InvalidNameException;
-import javax.naming.Name;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import org.apache.log4j.Logger;
@@ -175,20 +172,20 @@ public abstract class AcaciaPanel
     
     class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
-    private E bean;
-    
-    public RemoteBeanInvocationHandler(E bean) {
-        this.bean = bean;
+        private E bean;
+
+        public RemoteBeanInvocationHandler(E bean) {
+            this.bean = bean;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+            AcaciaSession session = AppSession.get();
+
+            log.info("Method called: " + method.getName());
+
+            return method.invoke(bean, args);
+        }  
     }
-    
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        
-        AcaciaSession session = AppSession.get();
-        
-        log.info("Method called: " + method.getName());
-        
-        return method.invoke(bean, args);
-    }  
-}
 }
