@@ -21,6 +21,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.util.ArrayList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 
@@ -72,7 +73,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         classifiersTable.setEditable(false);
     }
 
-    protected List<Classifier> getClassifiers()
+    public List<Classifier> getClassifiers()
     {
         if(classifiers == null)
         {   
@@ -127,6 +128,16 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         return getFormSession().deleteClassifier(classifier);
     }
 
+    
+    public void filter(List<Classifier> filterList) {
+        List<Classifier> classifiersMirror = new ArrayList<Classifier>(classifiers);
+        for (Classifier classifier : classifiersMirror) {
+            if (filterList.contains(classifier))
+                classifiers.remove(classifier);
+        }
+        postInitData();
+    }
+    
     @Override
     @Action
     public void selectAction(){
@@ -171,6 +182,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         classifiers = null;
         
         postInitData();
+        filterByClassifier();
         
         return t;
     }
@@ -179,7 +191,11 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            ClassifierPanel classifierPanel = new ClassifierPanel(getParentDataObject());
+            ClassifierPanel classifierPanel = null;
+            if (dataObjectType == null) 
+                classifierPanel = new ClassifierPanel(getParentDataObject());
+            else 
+                classifierPanel = new ClassifierPanel();
 
             DialogResponse response = classifierPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))

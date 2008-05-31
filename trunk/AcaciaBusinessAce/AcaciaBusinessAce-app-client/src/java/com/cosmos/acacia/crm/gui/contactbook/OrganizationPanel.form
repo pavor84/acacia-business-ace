@@ -309,20 +309,20 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="registrationDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="registeringOrganizationLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="registeringOrganizationLabel" alignment="0" max="32767" attributes="1"/>
                       <Component id="uniqueIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="registrationAddressLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="administrationAddressLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="administrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                      <Component id="registrationAddressLabel" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="administrativeAddressLookup" pref="229" max="32767" attributes="0"/>
-                      <Component id="registrationAddressLookup" pref="229" max="32767" attributes="0"/>
-                      <Component id="registrationDateDatePicker" alignment="0" pref="229" max="32767" attributes="0"/>
                       <Component id="uniqueIdTextField" alignment="1" pref="229" max="32767" attributes="0"/>
                       <Component id="registeringOrganizationLookup" alignment="0" pref="229" max="32767" attributes="0"/>
+                      <Component id="administrativeAddressLookup" alignment="1" pref="229" max="32767" attributes="0"/>
+                      <Component id="registrationAddressLookup" alignment="1" pref="229" max="32767" attributes="0"/>
+                      <Component id="registrationDateDatePicker" alignment="1" pref="229" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -336,27 +336,24 @@
                       <Component id="registrationDateDatePicker" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="registrationAddressLookup" max="32767" attributes="1"/>
-                      <Component id="registrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="registrationAddressLabel" pref="22" max="32767" attributes="1"/>
+                      <Component id="registrationAddressLookup" alignment="1" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="administrativeAddressLookup" max="32767" attributes="1"/>
-                      <Component id="administrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="administrationAddressLabel" pref="22" max="32767" attributes="1"/>
+                      <Component id="administrativeAddressLookup" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="registeringOrganizationLabel" pref="22" max="32767" attributes="1"/>
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="registeringOrganizationLookup" pref="22" max="32767" attributes="1"/>
-                      </Group>
+                      <Component id="registeringOrganizationLookup" pref="22" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="uniqueIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               </Group>

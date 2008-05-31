@@ -178,13 +178,6 @@ public class PositionTypePanel extends BaseEntityPanel {
         return formSession;
     }
 
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-
     protected EntityProperties getPositionTypeEntityProperties()
     {
         return getFormSession().getPositionTypeEntityProperties();

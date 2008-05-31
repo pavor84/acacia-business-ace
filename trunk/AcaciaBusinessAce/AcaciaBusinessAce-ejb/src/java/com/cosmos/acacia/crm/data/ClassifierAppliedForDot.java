@@ -39,6 +39,10 @@ import javax.persistence.Table;
             @NamedQuery(
                     name = "ClassifierAppliedForDot.findByDataObjectTypeAndParent",
                     query = "select cafd from ClassifierAppliedForDot cafd where cafd.dataObjectType=:dataObjectType and cafd.classifier.dataObject.parentDataObject=:parent"
+            ),
+            @NamedQuery(
+                    name = "ClassifierAppliedForDot.findAll",
+                    query = "select cafd from ClassifierAppliedForDot cafd"
             )
         }
 )

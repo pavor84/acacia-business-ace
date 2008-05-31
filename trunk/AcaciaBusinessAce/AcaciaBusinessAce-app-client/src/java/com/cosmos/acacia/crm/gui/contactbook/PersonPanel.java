@@ -396,7 +396,8 @@ public class PersonPanel extends BaseEntityPanel {
             person = getFormSession().newPerson();
         }
 
-        personBindingGroup = new BindingGroup();
+        if (personBindingGroup == null)
+            personBindingGroup = new BindingGroup();
 
         final EntityProperties entityProps = getPersonEntityProperties();
 

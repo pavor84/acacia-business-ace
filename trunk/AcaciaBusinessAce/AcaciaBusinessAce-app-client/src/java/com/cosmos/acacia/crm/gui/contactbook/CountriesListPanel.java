@@ -48,6 +48,8 @@ public class CountriesListPanel extends AbstractTablePanel {
         super.initData();
 
         setVisible(Button.Select, false);
+        setVisible(Button.Classify, false);
+        
         countriesBindingGroup = new BindingGroup();
         AcaciaTable countriesTable = getDataTable();
         JTableBinding tableBinding = countriesTable.bind(countriesBindingGroup, getCountries(), getCountryEntityProperties());

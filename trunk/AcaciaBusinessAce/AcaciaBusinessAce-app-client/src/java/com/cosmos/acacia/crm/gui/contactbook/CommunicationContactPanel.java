@@ -165,13 +165,6 @@ public class CommunicationContactPanel extends BaseEntityPanel {
         return formSession;
     }
 
-    @Action
-    @Override
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-
     protected EntityProperties getCommunicationContactEntityProperties()
     {
         return getFormSession().getCommunicationContactEntityProperties();

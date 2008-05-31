@@ -426,32 +426,9 @@ public class AcaciaApplicationView extends FrameView {
     
         menuBar.add(productsMenu);
         
-        /* Classifiers menu utem */
-        
-        classifiersMenu.setName("classifiersMenu");
-        classifiersMenu.setText(resourceMap.getString("classifiersMenu.text"));
-        
-        menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("classifierGroupsAction"));
-        menuItem.setName("classifierGroupsMenuItem");
-        menuItem.setText(resourceMap.getString("classifierGroupsMenuItem.text"));
-        classifiersMenu.add(menuItem);
-
         Separator productSeparator1 = new Separator();
         productsMenu.add(productSeparator1);
-        
-        menuItem = new JBMenuItem();
-
-        menuItem.setAction(actionMap.get("classifiersAction")); // NOI18N
-        productsMenu.add(menuItem);
-        
-        menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("classifierGroupsAction")); // NOI18N
-        productsMenu.add(menuItem);
-
-        Separator productSeparator2 = new Separator();
-        productsMenu.add(productSeparator2);
-        
+                
         patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
         productsMenu.add(patternMasksItem);
         
@@ -460,11 +437,21 @@ public class AcaciaApplicationView extends FrameView {
         
         menuBar.add(productsMenu);
 
+        
+        /* Classifiers menu item */
+        
+        classifiersMenu.setName("classifiersMenu");
+        classifiersMenu.setText(resourceMap.getString("classifiersMenu.text"));
+
+        menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("classifiersAction"));
         menuItem.setName("classifierMenuItem");
-        menuItem.setText(resourceMap.getString("classifiersMenuItem.text"));
         classifiersMenu.add(menuItem);
 
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("classifierGroupsAction"));
+        menuItem.setName("classifierGroupsMenuItem");
+        classifiersMenu.add(menuItem);
         
         menuBar.add(classifiersMenu);
         

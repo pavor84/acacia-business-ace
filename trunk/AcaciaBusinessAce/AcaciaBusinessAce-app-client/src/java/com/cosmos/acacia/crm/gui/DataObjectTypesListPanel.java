@@ -15,12 +15,12 @@ import javax.naming.InitialContext;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.ArrayList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 import org.jdesktop.observablecollections.ObservableCollections;
@@ -78,11 +78,25 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     {
         if(dataObjectTypes == null)
         {   
-            dataObjectTypes = getFormSession().getDataObjectTypes(classifier);
+            dataObjectTypes = shortenDataObjectTypeNames(getFormSession().getDataObjectTypes(classifier));
         }
         return dataObjectTypes;
     }
 
+    public List<DataObjectType> shortenDataObjectTypeNames(List<DataObjectType> list) {
+        List<DataObjectType> result = new ArrayList<DataObjectType>(list.size());
+        
+        for (DataObjectType dot : list) {
+            
+            String name = new String(dot.getDataObjectType());
+            dot.setDataObjectType(name
+                    .replaceAll(DataObjectType.class.getPackage().getName() + "\\.", ""));
+            result.add(dot);
+        }
+        
+        return result;
+    }
+    
     public DataObjectType getDataObjectType() {
         return dataObjectType;
     }
