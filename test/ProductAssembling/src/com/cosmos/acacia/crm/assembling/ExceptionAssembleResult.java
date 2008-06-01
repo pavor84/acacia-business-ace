@@ -5,22 +5,19 @@
 
 package com.cosmos.acacia.crm.assembling;
 
-import com.cosmos.acacia.crm.data.ComplexProduct;
 import java.io.Serializable;
 
 /**
  *
  * @author Miro
  */
-public class FinalAssembleResult
+public class ExceptionAssembleResult
     extends AssembleResult
     implements Serializable
 {
-
-    public FinalAssembleResult(ComplexProduct complexProduct)
+    public ExceptionAssembleResult(Exception exception)
     {
-        super(Type.Final);
-        setComplexProduct(complexProduct);
+        super(Type.Exception);
+        setException(exception);
     }
-
 }

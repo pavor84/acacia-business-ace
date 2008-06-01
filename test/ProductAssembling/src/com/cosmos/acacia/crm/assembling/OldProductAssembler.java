@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.assembling;
 
-import com.cosmos.acacia.callback.ApplicationCallbackHandler;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.Product;
@@ -38,7 +37,8 @@ public class OldProductAssembler
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> assemblingSchemaItems;
 
-    private ApplicationCallbackHandler callbackHandler;
+    private boolean initialized;
+
 
     public OldProductAssembler(AssemblingSchema assemblingSchema)
     {
@@ -49,29 +49,34 @@ public class OldProductAssembler
         return assemblingSchema;
     }
 
-    public ApplicationCallbackHandler getCallbackHandler() {
-        return callbackHandler;
-    }
-
-    public void setCallbackHandler(ApplicationCallbackHandler callbackHandler) {
-        this.callbackHandler = callbackHandler;
-    }
-
-    public ComplexProduct assemble(Map parameters)
+    public AssembleResult assemble(AssembleResult assembleResult)
         throws AlgorithmException
     {
+        AssembleResult.Type assembleResultType = assembleResult.getType();
+        if(!initialized && !AssembleResult.Type.Initialization.equals(assembleResultType))
+            return new ExceptionAssembleResult(new IllegalArgumentException("The Product Assembler is not initialized."));
+        if(initialized && AssembleResult.Type.Initialization.equals(assembleResultType))
+            return new ExceptionAssembleResult(new IllegalArgumentException("The Product Assembler is already initialized."));
+
         EntityManager em = getEntityManager();
         try
         {
+            ComplexProduct product = null;
             em.getTransaction().begin();
-            ComplexProduct product = assemble(parameters, em);
+            if(AssembleResult.Type.Initialization.equals(assembleResultType))
+            {
+                initialized = true;
+                Map parameters = ((InitializationAssembleResult)assembleResult).getParameters();
+                product = assemble(parameters, em);
+            }
+
             em.getTransaction().commit();
-            return product;
+            return new FinalAssembleResult(product);
         }
         catch(Exception ex)
         {
             em.getTransaction().rollback();
-            throw new RuntimeException(ex);
+            return new ExceptionAssembleResult(ex);
         }
     }
 
@@ -118,7 +123,6 @@ public class OldProductAssembler
     {
         BigDecimal iQuantity = asi.getQuantity();
         OldAlgorithm algorithm = new OldAlgorithm(asi);
-        algorithm.setCallbackHandler(callbackHandler);
         Object valueAgainstConstraints = getAlgorithmValue(asi, parameters);
         List<AssemblingSchemaItemValue> itemValues = algorithm.apply(valueAgainstConstraints);
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(itemValues.size());
@@ -135,7 +139,6 @@ public class OldProductAssembler
             {
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
                 OldProductAssembler assembler = new OldProductAssembler(itemSchema);
-                assembler.setCallbackHandler(callbackHandler);
                 itemProduct = assembler.assemble(parameters, em);
             }
             else
