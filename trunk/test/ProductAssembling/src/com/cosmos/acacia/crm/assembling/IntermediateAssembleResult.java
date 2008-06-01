@@ -5,8 +5,9 @@
 
 package com.cosmos.acacia.crm.assembling;
 
-import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.ComplexProductItem;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -16,17 +17,10 @@ public class IntermediateAssembleResult
     extends AssembleResult
     implements Serializable
 {
-    private ComplexProduct complexProduct;
 
-    public IntermediateAssembleResult(ComplexProduct complexProduct)
+    public IntermediateAssembleResult(List<ComplexProductItem> complexProductItems)
     {
         super(Type.Intermediate);
-        this.complexProduct = complexProduct;
-    }
-
-    @Override
-    public ComplexProduct getComplexProduct()
-    {
-        return complexProduct;
+        setComplexProductItems(complexProductItems);
     }
 }

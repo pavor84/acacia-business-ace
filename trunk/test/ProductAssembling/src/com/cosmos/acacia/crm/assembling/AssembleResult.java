@@ -7,7 +7,9 @@ package com.cosmos.acacia.crm.assembling;
 
 import com.cosmos.acacia.callback.ApplicationCallback;
 import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.ComplexProductItem;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,10 +24,18 @@ public abstract class AssembleResult
         Initialization,
         Intermediate,
         Final,
-        Callback
+        Callback,
+        Exception
     }
 
     private Type type;
+
+    private ComplexProduct complexProduct;
+    private ApplicationCallback[] applicationCallbacks;
+    private Map parameters;
+    private Exception exception;
+    private List<ComplexProductItem> complexProductItems;
+
 
     protected AssembleResult(Type type)
     {
@@ -37,19 +47,44 @@ public abstract class AssembleResult
         return type;
     }
 
-    public ComplexProduct getComplexProduct()
-    {
-        throw new UnsupportedOperationException("The method invokation is not supported in this class instance.");
+    public ApplicationCallback[] getApplicationCallbacks() {
+        return applicationCallbacks;
     }
 
-    public ApplicationCallback[] getApplicationCallbacks()
-    {
-        throw new UnsupportedOperationException("The method invokation is not supported in this class instance.");
+    public void setApplicationCallbacks(ApplicationCallback[] applicationCallbacks) {
+        this.applicationCallbacks = applicationCallbacks;
     }
 
-    public Map getParameters()
-    {
-        throw new UnsupportedOperationException("The method invokation is not supported in this class instance.");
+    public ComplexProduct getComplexProduct() {
+        return complexProduct;
+    }
+
+    public void setComplexProduct(ComplexProduct complexProduct) {
+        this.complexProduct = complexProduct;
+    }
+
+    public List<ComplexProductItem> getComplexProductItems() {
+        return complexProductItems;
+    }
+
+    public void setComplexProductItems(List<ComplexProductItem> complexProductItems) {
+        this.complexProductItems = complexProductItems;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
+    public Map getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map parameters) {
+        this.parameters = parameters;
     }
 
 }

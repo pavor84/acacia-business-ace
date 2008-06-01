@@ -16,17 +16,11 @@ public class CallbackAssembleResult
     extends AssembleResult
     implements Serializable
 {
-    private ApplicationCallback[] callbacks;
 
     public CallbackAssembleResult(ApplicationCallback[] callbacks)
     {
         super(Type.Callback);
-        this.callbacks = callbacks;
+        setApplicationCallbacks(callbacks);
     }
 
-    @Override
-    public ApplicationCallback[] getApplicationCallbacks()
-    {
-        return callbacks;
-    }
 }

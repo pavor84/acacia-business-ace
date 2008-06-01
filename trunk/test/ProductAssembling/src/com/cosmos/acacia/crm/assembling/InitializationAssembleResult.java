@@ -16,17 +16,11 @@ public class InitializationAssembleResult
     extends AssembleResult
     implements Serializable
 {
-    private Map parameters;
 
     public InitializationAssembleResult(Map parameters)
     {
         super(Type.Initialization);
-        this.parameters = parameters;
+        setParameters(parameters);
     }
 
-    @Override
-    public Map getParameters()
-    {
-        return parameters;
-    }
 }
