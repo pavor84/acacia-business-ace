@@ -30,8 +30,8 @@ public class ClientCallbackTest {
     @Test
     public void testAssembling() throws AlgorithmException {
 
-        formSession.prepareCallback();
-        CallbackImpl client = CallbackImpl.getClientInstance();
+        int id = formSession.prepareCallback();
+        CallbackImpl client = CallbackImpl.getClientInstance(id);
         formSession.assemble(null, null);
 
 
