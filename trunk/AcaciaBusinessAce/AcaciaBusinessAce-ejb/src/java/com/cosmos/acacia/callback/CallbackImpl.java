@@ -2,7 +2,7 @@ package com.cosmos.acacia.callback;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -18,6 +18,8 @@ public class CallbackImpl extends PortableRemoteObject
 
     private static final long serialVersionUID = -1422941713617179007L;
 
+    private CallbackEnabled parent;
+
     /** Indicating whether the instance is acting as server or client */
     public boolean client = false;
 
@@ -27,10 +29,18 @@ public class CallbackImpl extends PortableRemoteObject
 
     public static Callback getInstance() {
         try {
-            CallbackImpl impl = new CallbackImpl();
-            impl.init();
-            System.out.println("on init obj is: " + impl);
-            return impl;
+            try {
+                Object o = InitialContext.doLookup(Callback.NAME);
+                Callback server = (Callback) PortableRemoteObject.narrow(o, Callback.class);
+                System.out.println("getting " + server);
+                return server;
+            } catch (NamingException ex) {
+                CallbackImpl impl = new CallbackImpl();
+                impl.init();
+                return impl;
+            }
+            //System.out.println("on init obj is: " + impl);
+            //return impl;
         } catch (RemoteException ex){
             ex.printStackTrace();
             return null;
@@ -48,14 +58,17 @@ public class CallbackImpl extends PortableRemoteObject
             return null;
         }
     }
-    private Object callbackObj;  // Object on client to verify parameters.
+    private CallbackClient callbackObj;  // Object on client to verify parameters.
 
-    public Object getObj() {
-        return callbackObj;
-    }
     public void init() throws RemoteException {
         try {
-            Context ctx = new InitialContext();
+            Properties props = new Properties();
+            props.setProperty("java.naming.factory.initial", "com.sun.enterprise.naming.SerialInitContextFactory");
+            props.setProperty("java.naming.factory.url.pkgs", "com.sun.enterprise.naming");
+            props.setProperty("java.naming.factory.state","com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl");
+
+            InitialContext ctx = new InitialContext(props);
+
             ctx.rebind(Callback.NAME, this);
         } catch (NamingException ex){
             ex.printStackTrace();
@@ -63,14 +76,12 @@ public class CallbackImpl extends PortableRemoteObject
     }
 
   // remember clientobject sent to server
-    public int register(Object callbackObj) throws RemoteException
+    public int register(CallbackClient callbackObj) throws RemoteException
     {
         try {
-            System.out.println("Registering callback object " + callbackObj);
+            //System.out.println("Registering callback object " + callbackObj);
             if (callbackObj == null) return Callback.FAILURE;
             this.callbackObj = callbackObj;
-            System.out.println("on registering obj is " + callbackObj);
-            System.out.println("on registering this is " + this);
             return Callback.SUCCESS;
         } catch (Exception ex){
             ex.printStackTrace();
@@ -85,10 +96,7 @@ public class CallbackImpl extends PortableRemoteObject
      // client call_back
         System.out.println("Calling on object " + callbackObj);
 
-        if (!(callbackObj instanceof CallbackClient))
-            return null;
-
-        CallbackResult res = ((CallbackClient) callbackObj).serveResult(req);
+        CallbackResult res = callbackObj.serveResult(req);
 
         return res;
   }
@@ -109,7 +117,7 @@ public class CallbackImpl extends PortableRemoteObject
 
     public void initClient()
        {
-               Callback server = null;  // An instance of the CallbackClientIntf
+            Callback server = null;  // An instance of the CallbackClientIntf
             try
             {
                 Object o = getContext(null).lookup(Callback.NAME);
@@ -118,6 +126,7 @@ public class CallbackImpl extends PortableRemoteObject
               e.printStackTrace();
             }
 
+            System.out.println(server);
             //1: register ClientObject to server
              try
              {
@@ -139,5 +148,13 @@ public class CallbackImpl extends PortableRemoteObject
     @Override
     public String toString(){
         return super.toString() + ": " + client;
+    }
+
+    public CallbackEnabled getParent() {
+        return parent;
+    }
+
+    public void setParent(CallbackEnabled parent) {
+        this.parent = parent;
     }
 } // end CallbackImpl

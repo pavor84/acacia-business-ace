@@ -8,7 +8,6 @@ package com.cosmos.acacia.crm.bl.assembling;
 import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -39,9 +38,7 @@ public class ProductAssemblerBean
 
         ProductAssembler pa = new ProductAssembler(assemblingSchema, em);
 
-        System.out.println(callback);
-        printJNDIObject();
-
+        callback = CallbackImpl.getInstance();
         pa.setCallback(callback);
 
         System.out.println(pa.getCallback());
@@ -54,20 +51,8 @@ public class ProductAssemblerBean
     @Override
     public void prepareCallback() {
         callback = CallbackImpl.getInstance();
-        System.out.println("prepare: " + callback);
-        printJNDIObject();
     }
 
-    public void printJNDIObject(){
-        try {
-            InitialContext ctx = new InitialContext();
-            Object o = ctx.lookup(Callback.NAME);
-            System.out.println("in jndi: " + o);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
-
-    }
     // Add business logic below. (Right-click in editor and choose
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
 
