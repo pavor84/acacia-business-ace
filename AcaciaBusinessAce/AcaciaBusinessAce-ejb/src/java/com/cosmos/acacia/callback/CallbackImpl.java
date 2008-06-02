@@ -22,6 +22,7 @@ public class CallbackImpl extends PortableRemoteObject
 
     /** Indicating whether the instance is acting as server or client */
     public boolean client = false;
+    private int id;
 
     protected CallbackImpl() throws RemoteException {
         super();
@@ -68,6 +69,7 @@ public class CallbackImpl extends PortableRemoteObject
 
     public void init(int id) throws RemoteException {
         try {
+            this.id = id;
             Properties props = new Properties();
             props.setProperty("java.naming.factory.initial", "com.sun.enterprise.naming.SerialInitContextFactory");
             props.setProperty("java.naming.factory.url.pkgs", "com.sun.enterprise.naming");
@@ -162,5 +164,14 @@ public class CallbackImpl extends PortableRemoteObject
 
     public void setParent(CallbackEnabled parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public void finalize() {
+        try {
+            getContext(null).unbind(Callback.NAME + id);
+        } catch (NamingException ex) {
+            //
+        }
     }
 } // end CallbackImpl
