@@ -5,7 +5,19 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import com.cosmos.acacia.callback.ApplicationCallbackHandler;
+import com.cosmos.acacia.callback.Callback;
+import com.cosmos.acacia.callback.CallbackRequest;
+import com.cosmos.acacia.callback.CallbackResult;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.Product;
@@ -14,13 +26,6 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -36,6 +41,8 @@ public class ProductAssembler
 
     /*private EntityManagerFactory emf;
     private EntityManager entityManager;*/
+
+    private Callback callback;
 
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> assemblingSchemaItems;
@@ -69,6 +76,13 @@ public class ProductAssembler
         try
         {
             //em.getTransaction().begin();
+            CallbackRequest req = new CallbackRequest();
+            req.setId(5);
+            System.out.println("just before call");
+            System.out.println(getCallback());
+            CallbackResult result = getCallback().askClient(req);
+            System.out.println("Callback response" + result.getId());
+
             ComplexProduct product = assemblе(parameters, em);
             //em.getTransaction().commit();
             return product;
@@ -211,7 +225,7 @@ public class ProductAssembler
      * 2. As default value for the current client (recipient);
      * 3. As default value for the applied Assembling Schema Item
      * 4. Ask the operator (seller, client) using Dialog Form and Callback mechanism
-     * 
+     *
      */
     protected Object getAlgorithmValue(
             AssemblingSchemaItem asi,
@@ -262,5 +276,13 @@ public class ProductAssembler
         }
 
         return assemblingSchemaItems;
+    }
+
+    public Callback getCallback() {
+        return callback;
+    }
+
+    public void setCallback(Callback callback) {
+        this.callback = callback;
     }
 }
