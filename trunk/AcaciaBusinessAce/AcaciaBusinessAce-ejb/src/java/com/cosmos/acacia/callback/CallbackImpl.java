@@ -27,30 +27,36 @@ public class CallbackImpl extends PortableRemoteObject
         super();
     }
 
-    public static Callback getInstance() {
+    public static Callback getInstance(int id) {
         try {
-            try {
-                Object o = InitialContext.doLookup(Callback.NAME);
-                Callback server = (Callback) PortableRemoteObject.narrow(o, Callback.class);
-                System.out.println("getting " + server);
-                return server;
-            } catch (NamingException ex) {
-                CallbackImpl impl = new CallbackImpl();
-                impl.init();
-                return impl;
-            }
-            //System.out.println("on init obj is: " + impl);
-            //return impl;
-        } catch (RemoteException ex){
+            Object o = InitialContext.doLookup(Callback.NAME + id);
+            Callback server = (Callback) PortableRemoteObject.narrow(o, Callback.class);
+            System.out.println("getting " + server);
+            return server;
+        } catch (NamingException ex) {
+            int result = prepareCallback();
+            if (result != 0)
+                return getInstance(result);
+
             ex.printStackTrace();
             return null;
         }
     }
 
-    public static CallbackImpl getClientInstance() {
+    public static int prepareCallback() {
+        try {
+            int id = (int) (Math.random() * 65536);
+            CallbackImpl impl = new CallbackImpl();
+            impl.init(id);
+            return id;
+        } catch (RemoteException ex){
+            return 0;
+        }
+    }
+    public static CallbackImpl getClientInstance(int id) {
         try {
             CallbackImpl impl = new CallbackImpl();
-            impl.initClient();
+            impl.initClient(id);
             impl.client = true;
             return impl;
         } catch (Exception ex){
@@ -60,7 +66,7 @@ public class CallbackImpl extends PortableRemoteObject
     }
     private CallbackClient callbackObj;  // Object on client to verify parameters.
 
-    public void init() throws RemoteException {
+    public void init(int id) throws RemoteException {
         try {
             Properties props = new Properties();
             props.setProperty("java.naming.factory.initial", "com.sun.enterprise.naming.SerialInitContextFactory");
@@ -69,7 +75,7 @@ public class CallbackImpl extends PortableRemoteObject
 
             InitialContext ctx = new InitialContext(props);
 
-            ctx.rebind(Callback.NAME, this);
+            ctx.rebind(Callback.NAME + id, this);
         } catch (NamingException ex){
             ex.printStackTrace();
         }
@@ -115,12 +121,12 @@ public class CallbackImpl extends PortableRemoteObject
        return res;
     }
 
-    public void initClient()
+    public void initClient(int id)
        {
             Callback server = null;  // An instance of the CallbackClientIntf
             try
             {
-                Object o = getContext(null).lookup(Callback.NAME);
+                Object o = getContext(null).lookup(Callback.NAME + id);
                 server = (Callback) PortableRemoteObject.narrow(o, Callback.class);
             } catch(Exception e) {
               e.printStackTrace();

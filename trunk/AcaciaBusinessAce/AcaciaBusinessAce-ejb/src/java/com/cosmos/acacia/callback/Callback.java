@@ -12,5 +12,5 @@ public interface Callback extends Remote, Serializable
 
   public int register(CallbackClient callbackObj) throws RemoteException;
   public CallbackResult askClient(CallbackRequest request) throws RemoteException;
-  public void init() throws RemoteException;
+  public void init(int id) throws RemoteException;
 } // end Callback
