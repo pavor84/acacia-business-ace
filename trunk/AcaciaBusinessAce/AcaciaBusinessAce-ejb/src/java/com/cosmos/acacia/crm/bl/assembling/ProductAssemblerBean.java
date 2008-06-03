@@ -41,13 +41,12 @@ public class ProductAssemblerBean
         Callback callback = CallbackImpl.getInstance(callbackId);
         pa.setCallback(callback);
 
-        System.out.println(pa.getCallback());
-
         //pa.setCallbackHandler(callbackHandler);
         ComplexProduct cp = pa.assemble(parameters);
 
         return cp;
     }
+
     @Override
     public int prepareCallback() {
         callbackId = CallbackImpl.prepareCallback();

@@ -1,18 +1,28 @@
 package com.cosmos.acacia.callback;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CallbackResult implements Serializable {
 
     private static final long serialVersionUID = -2258999442638461030L;
 
-    private Integer id;
+    Map<String, Object> params = new HashMap<String, Object>();
 
-    public int getId() {
-        return id.intValue();
+    public Map<String, Object> getParams() {
+        return params;
     }
 
-    public void setId(int id) {
-        this.id = new Integer(id);
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
+    public void addParam(String key, Object value) {
+        params.put(key, value);
+    }
+
+    public Object getParam(String key) {
+        return params.get(key);
     }
 }

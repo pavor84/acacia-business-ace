@@ -9,12 +9,16 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
+import org.apache.log4j.Logger;
+
 /**
- * Implements the methods defined in the Callback remote interface.
+ * Implements the methods defined in the Callback interfaces.
  */
 public class CallbackImpl extends PortableRemoteObject
     implements Callback, CallbackClient, Serializable
 {
+
+    private static final Logger log = Logger.getLogger(CallbackImpl.class);
 
     private static final long serialVersionUID = -1422941713617179007L;
 
@@ -22,13 +26,23 @@ public class CallbackImpl extends PortableRemoteObject
 
     /** Indicating whether the instance is acting as server or client */
     public boolean client = false;
+
+    /** Identifier for this object */
     private int id;
 
     protected CallbackImpl() throws RemoteException {
         super();
     }
 
-    public static Callback getInstance(int id) {
+    /**
+     * Gets a server instance of the Callback object.
+     * @param id the identifier returned by prepareCallback()
+     * @return the server callback object
+     */
+    public static Callback getInstance(int id){
+        if (id == 0)
+            log.error("You should first call prepareCallback()" +
+                    " and pass the result as an id");
         try {
             Object o = InitialContext.doLookup(Callback.NAME + id);
             Callback server = (Callback) PortableRemoteObject.narrow(o, Callback.class);
@@ -46,7 +60,7 @@ public class CallbackImpl extends PortableRemoteObject
 
     public static int prepareCallback() {
         try {
-            int id = (int) (Math.random() * 65536);
+            int id = (int) (Math.random() * 65535) + 1;
             CallbackImpl impl = new CallbackImpl();
             impl.init(id);
             return id;
@@ -54,11 +68,26 @@ public class CallbackImpl extends PortableRemoteObject
             return 0;
         }
     }
-    public static CallbackImpl getClientInstance(int id) {
+
+    /**
+     * Gets a client instance of the Callback object.
+     *
+     * @param id the identifier returned by CallbackEnabled.prepareCallback();
+     * @param handler the request handler, specific for each case
+     * @return the client callback object
+     */
+    public static CallbackImpl getClientInstance(int id, CallbackHandler handler) {
+        if (id == 0)
+            log.error("You should first call prepareCallback()" +
+                    " and pass the result as an id");
+        if (handler == null)
+            log.error("You should provide a non-null handler for this callback");
+
         try {
             CallbackImpl impl = new CallbackImpl();
             impl.initClient(id);
             impl.client = true;
+            impl.setCallbackHandler(handler);
             return impl;
         } catch (Exception ex){
             ex.printStackTrace();
@@ -116,11 +145,10 @@ public class CallbackImpl extends PortableRemoteObject
        return new InitialContext();
     }
 
+    private CallbackHandler callbackHandler;
     @Override
     public CallbackResult serveResult(CallbackRequest req) {
-       CallbackResult res = new CallbackResult();
-       res.setId(req.getId() * 5);
-       return res;
+       return callbackHandler.handle(req);
     }
 
     public void initClient(int id)
@@ -158,12 +186,12 @@ public class CallbackImpl extends PortableRemoteObject
         return super.toString() + ": " + client;
     }
 
-    public CallbackEnabled getParent() {
-        return parent;
+    public CallbackHandler getCallbackHandler() {
+        return callbackHandler;
     }
 
-    public void setParent(CallbackEnabled parent) {
-        this.parent = parent;
+    public void setCallbackHandler(CallbackHandler handler) {
+        this.callbackHandler = handler;
     }
 
     @Override
