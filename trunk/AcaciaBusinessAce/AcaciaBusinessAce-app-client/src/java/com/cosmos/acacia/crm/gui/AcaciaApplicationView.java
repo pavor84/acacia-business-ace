@@ -275,6 +275,21 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void assemblingCategoriesAction()
+    {
+    }
+
+    @Action
+    public void assemblingSchemasAction()
+    {
+    }
+
+    @Action
+    public void productAssemblerAction()
+    {
+    }
+
+    @Action
     public void personsListAction(){
     	log.debug("personsListAction");
     	PersonsListPanel personsListPanel = new PersonsListPanel(null);
@@ -356,6 +371,7 @@ public class AcaciaApplicationView extends FrameView {
         JBSeparator jSeparator2 = new JBSeparator();
         JBMenuItem exitMenuItem = new JBMenuItem();
         JBMenu productsMenu = new JBMenu();
+        JBMenu assemblingMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
         
@@ -440,7 +456,27 @@ public class AcaciaApplicationView extends FrameView {
         
         menuBar.add(productsMenu);
 
-        
+
+        assemblingMenu.setText(resourceMap.getString("assemblingMenu.text")); // NOI18N
+        assemblingMenu.setName("assemblingMenu"); // NOI18N
+        assemblingMenu.setMnemonic('A');
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("productAssemblerAction")); // NOI18N
+        assemblingMenu.add(menuItem);
+
+        assemblingMenu.add(new JSeparator());
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("assemblingCategoriesAction")); // NOI18N
+        assemblingMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("assemblingSchemasAction")); // NOI18N
+        assemblingMenu.add(menuItem);
+
+        menuBar.add(assemblingMenu);
+
         /* Classifiers menu item */
         
         classifiersMenu.setName("classifiersMenu");
