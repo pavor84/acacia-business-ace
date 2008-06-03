@@ -46,6 +46,7 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import java.awt.MenuItem;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -258,7 +259,27 @@ public class AcaciaApplicationView extends FrameView {
         WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
         listPanel.showFrame();
     }
-    
+
+    @Action
+    public void deliveryCertificatesAction()
+    {
+    }
+
+    @Action
+    public void receiptCertificatesAction()
+    {
+    }
+
+    @Action
+    public void ordersAction()
+    {
+    }
+
+    @Action
+    public void reportsAction()
+    {
+    }
+
     @Action
     public void patternMaskListAction(){
         PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
@@ -366,6 +387,8 @@ public class AcaciaApplicationView extends FrameView {
     // TODO The result of this method must be returned from Server session bean
     private JBMenuBar createMenuBar()
     {
+        JBMenuItem menuItem;
+
         JBMenuBar menuBar = new JBMenuBar();
         JBMenu fileMenu = new JBMenu();
         JBMenuItem newRecordMenuItem = new JBMenuItem();
@@ -377,6 +400,9 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem exitMenuItem = new JBMenuItem();
         JBMenu productsMenu = new JBMenu();
         JBMenu assemblingMenu = new JBMenu();
+        JBMenu salesMenu = new JBMenu();
+        JBMenu ordersMenu = new JBMenu();
+        JBMenu reportsMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
         
@@ -436,11 +462,37 @@ public class AcaciaApplicationView extends FrameView {
 
         menuBar.add(fileMenu);
 
+        salesMenu.setText(resourceMap.getString("salesMenu.text")); // NOI18N
+        salesMenu.setName("salesMenu"); // NOI18N
+        salesMenu.setMnemonic('S');
+
+        invoicesListItem.setAction(actionMap.get("invoicesListAction"));
+        salesMenu.add(invoicesListItem);
+        menuBar.add(salesMenu);
+
+        ordersMenu.setText(resourceMap.getString("ordersMenu.text")); // NOI18N
+        ordersMenu.setName("ordersMenu"); // NOI18N
+        ordersMenu.setMnemonic('O');
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("ordersAction"));
+        ordersMenu.add(menuItem);
+        menuBar.add(ordersMenu);
+
+        reportsMenu.setText(resourceMap.getString("reportsMenu.text")); // NOI18N
+        reportsMenu.setName("reportsMenu"); // NOI18N
+        reportsMenu.setMnemonic('R');
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("reportsAction"));
+        reportsMenu.add(menuItem);
+        menuBar.add(reportsMenu);
+
         productsMenu.setText(resourceMap.getString("productsMenu.text")); // NOI18N
         productsMenu.setName("productsMenu"); // NOI18N
         productsMenu.setMnemonic('P');
         
-        JBMenuItem menuItem = new JBMenuItem();
+        menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productsListAction")); // NOI18N
         productsMenu.add(menuItem);
 
@@ -455,9 +507,6 @@ public class AcaciaApplicationView extends FrameView {
                 
         patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
         productsMenu.add(patternMasksItem);
-        
-        invoicesListItem.setAction(actionMap.get("invoicesListAction"));
-        productsMenu.add(invoicesListItem);
         
         menuBar.add(productsMenu);
 
@@ -545,7 +594,17 @@ public class AcaciaApplicationView extends FrameView {
         warehousesMenu.add(warehousesItem);
         warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
         warehousesMenu.add(warehouseProductsItem);
-        
+
+        warehousesMenu.add(new JSeparator());
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("deliveryCertificatesAction")); // NOI18N
+        warehousesMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("receiptCertificatesAction")); // NOI18N
+        warehousesMenu.add(menuItem);
+
         menuBar.add(warehousesMenu);
         /* End of Warehouse menu items */
         
