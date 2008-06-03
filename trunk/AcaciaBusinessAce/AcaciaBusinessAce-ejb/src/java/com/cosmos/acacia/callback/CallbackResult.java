@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The result of callback operation on the client
+ *
+ * @author Bozhidar Bozhanov
+ */
 public class CallbackResult implements Serializable {
 
     private static final long serialVersionUID = -2258999442638461030L;
