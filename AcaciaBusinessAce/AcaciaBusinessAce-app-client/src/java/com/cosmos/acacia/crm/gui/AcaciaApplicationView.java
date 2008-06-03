@@ -290,6 +290,11 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void algorithmsAction()
+    {
+    }
+
+    @Action
     public void personsListAction(){
     	log.debug("personsListAction");
     	PersonsListPanel personsListPanel = new PersonsListPanel(null);
@@ -468,11 +473,15 @@ public class AcaciaApplicationView extends FrameView {
         assemblingMenu.add(new JSeparator());
 
         menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("assemblingSchemasAction")); // NOI18N
+        assemblingMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("assemblingCategoriesAction")); // NOI18N
         assemblingMenu.add(menuItem);
 
         menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("assemblingSchemasAction")); // NOI18N
+        menuItem.setAction(actionMap.get("algorithmsAction")); // NOI18N
         assemblingMenu.add(menuItem);
 
         menuBar.add(assemblingMenu);
