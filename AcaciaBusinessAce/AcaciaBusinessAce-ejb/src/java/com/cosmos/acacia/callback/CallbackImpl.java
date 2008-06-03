@@ -126,11 +126,13 @@ public class CallbackImpl extends PortableRemoteObject
         }
     }
 
-  // send regular dataobject to server
-  // This method returns empty string on success or else error message.
-    public CallbackResult askClient(CallbackRequest req) throws RemoteException
-    {
-     // client call_back
+    /**
+     * Call this method when requesting information from the client
+     *
+     * @param req the request object
+     * @return a result object
+     */
+    public CallbackResult askClient(CallbackRequest req) throws RemoteException {
         System.out.println("Calling on object " + callbackObj);
 
         CallbackResult res = callbackObj.serveResult(req);

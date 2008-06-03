@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * An object used for setting parameters that will be sent to the client
+ * when callback functionality is needed
+ *
+ * @author Bozhidar Bozhanov
+ */
 public class CallbackRequest implements Serializable {
 
     private static final long serialVersionUID = -6305561316822548709L;
