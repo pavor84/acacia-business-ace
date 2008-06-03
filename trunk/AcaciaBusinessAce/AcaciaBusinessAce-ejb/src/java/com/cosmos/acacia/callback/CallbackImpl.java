@@ -22,8 +22,6 @@ public class CallbackImpl extends PortableRemoteObject
 
     private static final long serialVersionUID = -1422941713617179007L;
 
-    private CallbackEnabled parent;
-
     /** Indicating whether the instance is acting as server or client */
     public boolean client = false;
 

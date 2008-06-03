@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cosmos.acacia.callback.Callback;
+import com.cosmos.acacia.callback.CallbackBean;
 import com.cosmos.acacia.callback.CallbackImpl;
 import com.cosmos.acacia.crm.assembling.AlgorithmException;
 import com.cosmos.acacia.crm.assembling.ProductAssembler;
@@ -24,6 +25,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
  */
 @Stateless
 public class ProductAssemblerBean
+    extends CallbackBean
     implements ProductAssemblerRemote
 {
     @PersistenceContext
@@ -45,12 +47,6 @@ public class ProductAssemblerBean
         ComplexProduct cp = pa.assemble(parameters);
 
         return cp;
-    }
-
-    @Override
-    public int prepareCallback() {
-        callbackId = CallbackImpl.prepareCallback();
-        return callbackId;
     }
 
     // Add business logic below. (Right-click in editor and choose
