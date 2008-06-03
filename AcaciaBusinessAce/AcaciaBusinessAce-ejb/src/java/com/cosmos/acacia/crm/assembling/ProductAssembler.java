@@ -77,11 +77,7 @@ public class ProductAssembler
         {
             //em.getTransaction().begin();
             CallbackRequest req = new CallbackRequest();
-            req.setId(5);
-            System.out.println("just before call");
-            System.out.println(getCallback());
             CallbackResult result = getCallback().askClient(req);
-            System.out.println("Callback response" + result.getId());
 
             ComplexProduct product = assemblе(parameters, em);
             //em.getTransaction().commit();
