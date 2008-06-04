@@ -170,7 +170,7 @@ public abstract class AcaciaPanel
         }
     }
     
-    class RemoteBeanInvocationHandler<E> implements InvocationHandler {
+    static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
         private E bean;
 
@@ -187,5 +187,26 @@ public abstract class AcaciaPanel
 
             return method.invoke(bean, args);
         }  
+    }   
+
+    public static <T> T getRemoteBean(AcaciaPanel panel, Class<T> remoteInterface)
+    {
+        try
+        {
+            T bean = (T)InitialContext.doLookup(remoteInterface.getName());
+            InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
+           
+            T proxy = (T)Proxy.newProxyInstance(
+                panel.getClass().getClassLoader(),
+                new Class[]{remoteInterface},
+                handler);
+
+            return proxy;
+        }
+        catch(Exception ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
+
 }

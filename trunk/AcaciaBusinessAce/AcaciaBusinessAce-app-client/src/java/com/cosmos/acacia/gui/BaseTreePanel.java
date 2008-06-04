@@ -33,7 +33,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.swingb.DialogResponse;
@@ -519,13 +518,13 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
 
     protected int findAppropriateIndex(DefaultMutableTreeNode newParent,
             DefaultMutableTreeNode newChild) {
-        ProductCategory child = (ProductCategory) newChild.getUserObject();
+        DataObjectBean child = (DataObjectBean) newChild.getUserObject();
 
         String childStr = toStringConverter.getPreferredStringForItem(child);
 
         for (int i = 0; i < newParent.getChildCount(); i++) {
             DefaultMutableTreeNode curChildNode = (DefaultMutableTreeNode) newParent.getChildAt(i);
-            ProductCategory curChild = (ProductCategory) curChildNode.getUserObject();
+            DataObjectBean curChild = (DataObjectBean) curChildNode.getUserObject();
 
             String curChildStr = toStringConverter.getPreferredStringForItem(curChild);
 
