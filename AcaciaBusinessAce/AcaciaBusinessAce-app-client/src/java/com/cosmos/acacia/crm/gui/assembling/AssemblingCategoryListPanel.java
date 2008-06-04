@@ -6,16 +6,23 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
-import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
+import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
+import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import java.util.Collections;
+import com.cosmos.swingb.DialogResponse;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import org.jdesktop.application.Task;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -24,8 +31,10 @@ import org.jdesktop.beansbinding.BindingGroup;
 public class AssemblingCategoryListPanel
     extends AbstractTreeEnabledTablePanel<AssemblingCategory>
 {
-    private BindingGroup bindingGroup;
+    @EJB
+    private static AssemblingRemote formSession;
 
+    private BindingGroup bindingGroup;
     private EntityProperties entityProps;
 
 
@@ -104,7 +113,7 @@ public class AssemblingCategoryListPanel
     {
         super.initData();
 
-        //entityProps = getFormSession().getProductCategoryEntityProperties();
+        entityProps = getFormSession().getAssemblingCategoryEntityProperties();
 
         refreshDataTable();
     }
@@ -112,60 +121,71 @@ public class AssemblingCategoryListPanel
     @Override
     public void refreshDataTable()
     {
-        /*if ( bindingGroup!=null )
+        if ( bindingGroup!=null )
             bindingGroup.unbind();
 
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
 
-        List<ProductCategory> theList = getLister().getList();
+        List<AssemblingCategory> theList = getLister().getList();
         JTableBinding tableBinding = table.bind(bindingGroup, theList, entityProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
-        bindingGroup.bind();*/
+        bindingGroup.bind();
     }
 
     @Override
     public void deleteAction()
     {
-        /*if ( !showDeleteConfirmation(
-            getResourceMap().getString("deleteAction.ConfirmDialog.message")) ){
+        String message = getResourceMap().getString("deleteAction.ConfirmDialog.message");
+        if(!showDeleteConfirmation(message))
+        {
             return;
         }
 
         Object rowObject = getDataTable().getSelectedRowObject();
 
-        List<ProductCategory> withSubCategories = getWithSubCategories((ProductCategory)rowObject);
+        List<AssemblingCategory> withSubCategories = getWithSubCategories((AssemblingCategory)rowObject);
         boolean result = false;
-        try{
-            result = getFormSession().deleteProductCategories(withSubCategories);
-        }catch (Exception e){
-            ValidationException ve = extractValidationException(e);
-            if (ve != null) {
+        try
+        {
+            result = getFormSession().deleteAssemblingCategories(withSubCategories);
+        }
+        catch(Exception ex)
+        {
+            ValidationException ve = extractValidationException(ex);
+            if(ve != null)
+            {
                 String messagePrefix = null;
-                if ( withSubCategories.size()>1 ){
-                    messagePrefix = getResourceMap().getString("ProductCategory.err.cantDeleteMany");
+                if(withSubCategories.size() > 1)
+                {
+                    messagePrefix = getResourceMap().getString("AssemblingCategory.err.cantDeleteMany");
                 }
-                else{
+                else
+                {
                     messagePrefix = getResourceMap().getString("deleteAction.err.referenced");
                 }
 
-                String message = getTableReferencedMessage(messagePrefix, ve.getMessage());
+                message = getTableReferencedMessage(messagePrefix, ve.getMessage());
 
-                JOptionPane.showMessageDialog(this,
+                JOptionPane.showMessageDialog(
+                    this,
                     message,
-                    getResourceMap().getString("ProductCategory.err.cantDeleteTitle"),
+                    getResourceMap().getString("AssemblingCategory.err.cantDeleteTitle"),
                     JOptionPane.DEFAULT_OPTION);
-            } else {
-                log.error(e);
+            }
+            else
+            {
+                log.error(ex);
             }
             result = false;
         }
 
-        if ( result ){
+        if(result)
+        {
             removeFromTable(withSubCategories);
             fireDelete(rowObject);
-        }*/
+        }
     }
 
     /**
@@ -176,16 +196,14 @@ public class AssemblingCategoryListPanel
      */
     private String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
     {
-        /*String message = cantDeleteMessagePrefix;
-        String tableUserfriendly =
-            getResourceMap().getString("table.userfriendlyname."+table);
+        String message = cantDeleteMessagePrefix;
+        String tableUserfriendly = getResourceMap().getString("table.userfriendlyname." + table);
         String result = null;
-        if ( tableUserfriendly==null )
+        if(tableUserfriendly == null)
             result = message + " " + table.replace('_', ' ');
         else
             result = message + " " + tableUserfriendly;
-        return result;*/
-        return "No";
+        return result;
     }
 
     @Override
@@ -195,41 +213,41 @@ public class AssemblingCategoryListPanel
         return true;
     }
 
-    private void removeFromTable(List<ProductCategory> withSubCategories)
+    private void removeFromTable(List<AssemblingCategory> withSubCategories)
     {
-        /*for (ProductCategory productCategory : withSubCategories) {
-            getDataTable().removeRow(productCategory);
-        }*/
+        for(AssemblingCategory category : withSubCategories)
+        {
+            getDataTable().removeRow(category);
+        }
     }
 
     @Override
     protected Object newRow()
     {
-        /*ProductCategory category = getFormSession().newProductCategory(null);
-        ProductCategory autoParent = null;
-        TreePath selection =
-            getTree().getSelectionPath();
-        if ( selection!=null ){
-            DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selection.getLastPathComponent();
-            if ( selNode.getUserObject() instanceof ProductCategory )
-                autoParent = (ProductCategory) selNode.getUserObject();
+        AssemblingCategory category = getFormSession().newAssemblingCategory(null);
+        AssemblingCategory autoParent = null;
+        TreePath selection = getTree().getSelectionPath();
+        if(selection != null)
+        {
+            DefaultMutableTreeNode selNode = (DefaultMutableTreeNode)selection.getLastPathComponent();
+            if(selNode.getUserObject() instanceof AssemblingCategory)
+                autoParent = (AssemblingCategory)selNode.getUserObject();
         }
-            //(ProductCategory) getDataTable().getSelectedRowObject();
+            //(AssemblingCategory) getDataTable().getSelectedRowObject();
         category.setParentCategory(autoParent);
 
-        return onEditEntity(category);*/
-        return null;
+        return onEditEntity(category);
     }
 
     @Override
     protected Object onEditEntity(AssemblingCategory category)
     {
-        /*ProductCategoryPanel editPanel = new ProductCategoryPanel(category, category.getDataObject());
+        AssemblingCategoryPanel editPanel = new AssemblingCategoryPanel(category, category.getDataObject());
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
             return editPanel.getSelectedValue();
-        }*/
+        }
 
         return null;
     }
@@ -259,29 +277,20 @@ public class AssemblingCategoryListPanel
         return t;
     }
 
-    protected ProductsListRemote getFormSession()
+    protected AssemblingRemote getFormSession()
     {
-        /*if(formSession == null)
+        if(formSession == null)
         {
-            try
-            {
-                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
+            formSession = getRemoteBean(this, AssemblingRemote.class);
         }
 
-        return formSession;*/
-        return null;
+        return formSession;
     }
 
     @Override
     protected List<AssemblingCategory> getItems()
     {
-        return Collections.emptyList();
-        //return getFormSession().getProductsCategories(null);
+        return getFormSession().getAssemblingCategories(null);
     }
 
 }

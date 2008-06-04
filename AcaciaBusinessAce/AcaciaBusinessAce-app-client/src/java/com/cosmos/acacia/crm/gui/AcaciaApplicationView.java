@@ -30,6 +30,7 @@ import org.jdesktop.application.TaskMonitor;
 import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
@@ -46,7 +47,6 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
-import java.awt.MenuItem;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -298,6 +298,10 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void assemblingCategoriesAction()
     {
+        AssemblingCategoriesTreePanel assemblingCategories = new AssemblingCategoriesTreePanel(null);
+        assemblingCategories.getListPanel().setVisible(Button.Select, false);
+        assemblingCategories.getListPanel().setVisible(Button.Unselect, false);
+        assemblingCategories.showFrame();
     }
 
     @Action
