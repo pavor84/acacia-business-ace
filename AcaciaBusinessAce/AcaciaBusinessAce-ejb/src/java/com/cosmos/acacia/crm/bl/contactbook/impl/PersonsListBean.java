@@ -54,7 +54,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         if(parent != null)
         {
             q = em.createNamedQuery("Person.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {

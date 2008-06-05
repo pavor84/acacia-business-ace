@@ -102,17 +102,11 @@ public class DataObject implements Serializable {
     @Column(name = "data_object_uri")
     private String dataObjectUri;
 
-    @JoinColumn(
-            name = "parent_data_object_id",
-            referencedColumnName = "data_object_id")
-    @ManyToOne
-    private DataObject parentDataObject;
+    @Column(name = "parent_data_object_id")
+    private BigInteger parentDataObjectId;
 
-    @JoinColumn(
-            name = "linked_data_object_id",
-            referencedColumnName = "data_object_id")
-    @ManyToOne
-    private DataObject linkedDataObject;
+    @Column(name = "linked_data_object_id")
+    private BigInteger linkedDataObjectId;
 
 
     public DataObject() {
@@ -274,20 +268,20 @@ public class DataObject implements Serializable {
         this.dataObjectUri = dataObjectUri;
     }
 
-    public DataObject getParentDataObject() {
-        return parentDataObject;
+    public BigInteger getParentDataObjectId() {
+        return parentDataObjectId;
     }
 
-    public void setParentDataObject(DataObject parentDataObject) {
-        this.parentDataObject = parentDataObject;
+    public void setParentDataObjectId(BigInteger parentDataObjectId) {
+        this.parentDataObjectId = parentDataObjectId;
     }
 
-    public DataObject getLinkedDataObject() {
-        return linkedDataObject;
+    public BigInteger getLinkedDataObjectId() {
+        return linkedDataObjectId;
     }
 
-    public void setLinkedDataObject(DataObject linkedDataObject) {
-        this.linkedDataObject = linkedDataObject;
+    public void setLinkedDataObjectId(BigInteger linkedDataObjectId) {
+        this.linkedDataObjectId = linkedDataObjectId;
     }
 
     @Override

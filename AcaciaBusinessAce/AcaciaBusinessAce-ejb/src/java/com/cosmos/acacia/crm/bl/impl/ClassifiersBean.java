@@ -25,6 +25,7 @@ import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -112,7 +113,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         if(parentDataObject != null)
         {
             q = em.createNamedQuery("Classifier.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parentDataObject);
+            q.setParameter("parentDataObjectId", parentDataObject.getDataObjectId());
         }
         else
         {
@@ -171,12 +172,13 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
         if (classifier.getClassifierGroup().getIsSystemGroup())
             throw new ValidationException("Classifier.err.systemGroupForbidden");
-        
-        classifier.setParentId(parentDataObject.getDataObjectId());
+
+        BigInteger parentDataObjectId = parentDataObject.getDataObjectId();
+        classifier.setParentId(parentDataObjectId);
 
         if (classifier.getDataObject() == null){
             DataObject dataObject = new DataObject();
-            dataObject.setParentDataObject(parentDataObject);
+            dataObject.setParentDataObjectId(parentDataObjectId);
             classifier.setDataObject(dataObject);
         }
 

@@ -28,7 +28,7 @@ public class AddressValidatorBean implements AddressValidatorLocal {
         //unique name
         Query q = em.createNamedQuery("Address.findByNameAndParentDataObject");
         q.setParameter("addressName", entity.getAddressName());
-        q.setParameter("parentDataObject", entity.getDataObject().getParentDataObject());
+        q.setParameter("parentDataObjectId", entity.getDataObject().getParentDataObjectId());
 
         if ( !checkUnique(q.getResultList(), entity))
             ve.addMessage("addressName", "Address.err.nameInUse");

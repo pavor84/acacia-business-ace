@@ -33,12 +33,12 @@ import javax.persistence.Table;
         @NamedQuery
             (
                 name = "ProductCategory.findByParentDataObjectAndDeleted",
-                query = "select p from ProductCategory p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+                query = "select p from ProductCategory p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
                 name = "ProductCategory.findByParentDataObjectIsNullAndDeleted",
-                query = "select p from ProductCategory p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+                query = "select p from ProductCategory p where p.dataObject.parentDataObjectId is null and p.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (

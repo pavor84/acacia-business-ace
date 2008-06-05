@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -44,7 +45,7 @@ public class AssemblingBean
         if(parent != null)
         {
             q = em.createNamedQuery("AssemblingCategory.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {
@@ -77,7 +78,10 @@ public class AssemblingBean
     public AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory)
     {
         AssemblingCategory newObject = new AssemblingCategory();
-        newObject.setParentCategory(parentCategory);
+        //newObject.setParentCategory(parentCategory);
+        if(parentCategory != null)
+            newObject.setParentId(parentCategory.getAssemblingCategoryId());
+
         return newObject;
     }
 
@@ -91,7 +95,9 @@ public class AssemblingBean
     }
 
     @Override
-    public AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren)
+    public AssemblingCategory updateParents(
+        AssemblingCategory newParent,
+        AssemblingCategory newChild)
     {
         if(newParent != null)
         {
@@ -99,14 +105,20 @@ public class AssemblingBean
 
             // check cyclic parents
             AssemblingCategory ancestor = newParent;
+            BigInteger parentId;
             while(ancestor != null)
             {
-                if(ancestor.equals(newChildren))
+                if(ancestor.equals(newChild))
                 {
                     ve.addMessage("parentCategory", "AssemblingCategory.err.cyclicParent");
                     break;
                 }
-                ancestor = ancestor.getParentCategory();
+
+                //ancestor = ancestor.getParentCategory();
+                if((parentId = ancestor.getParentId()) != null)
+                    ancestor = em.find(AssemblingCategory.class, parentId);
+                else
+                    ancestor = null;
             }
 
             // if we have validation messages - throw the exception since not everything is OK
@@ -118,9 +130,25 @@ public class AssemblingBean
         }
 
         //newParent may be null here - but no problem
-        newChildren.setParentCategory(newParent);
-        esm.persist(em, newChildren);
+        //newChildren.setParentCategory(newParent);
+        if(newParent != null)
+            newChild.setParentId(newParent.getAssemblingCategoryId());
+        else
+            newChild.setParentId(null);
+        esm.persist(em, newChild);
 
-        return newChildren;
+        return newChild;
     }
+
+    @Override
+    public AssemblingCategory getParent(AssemblingCategory child)
+    {
+        BigInteger parentId;
+        if((parentId = child.getParentId()) == null)
+            return null;
+
+        return em.find(AssemblingCategory.class, parentId);
+    }
+
+
 }

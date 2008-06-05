@@ -23,6 +23,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  * The implementation of handling passports (see interface for more info)
@@ -48,7 +49,7 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
         if(parentDataObject != null)
         {
             q = em.createNamedQuery("Passport.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parentDataObject);
+            q.setParameter("parentDataObjectId", parentDataObject.getDataObjectId());
         }
         else
         {
@@ -71,15 +72,15 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
         return new Passport();
     }
 
-    public Passport savePassport(Passport passport, DataObject parentDataObject) {
-
+    public Passport savePassport(Passport passport, DataObject parentDataObject)
+    {
         validator.validate(passport);
-        
-        passport.setParentId(parentDataObject.getDataObjectId());
+        BigInteger parentDataObjectId = parentDataObject.getDataObjectId();
+        passport.setParentId(parentDataObjectId);
 
         if (passport.getDataObject() == null){
             DataObject dataObject = new DataObject();
-            dataObject.setParentDataObject(parentDataObject);
+            dataObject.setParentDataObjectId(parentDataObjectId);
             passport.setDataObject(dataObject);
         }
 

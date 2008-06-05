@@ -33,6 +33,7 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -94,13 +95,13 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return locationsManager.newAddress();
     }
 
-    public Address saveAddress(Address address, DataObject parentDataObject) {
-
-        address.setParentId(parentDataObject.getDataObjectId());
+    public Address saveAddress(Address address, BigInteger parentDataObjectId)
+    {
+        address.setParentId(parentDataObjectId);
 
         if (address.getDataObject() == null){
             DataObject dataObject = new DataObject();
-            dataObject.setParentDataObject(parentDataObject);
+            dataObject.setParentDataObjectId(parentDataObjectId);
             address.setDataObject(dataObject);
         }
 
@@ -127,7 +128,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         if(parent != null)
         {
             q = em.createNamedQuery("CommunicationContact.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {
@@ -161,7 +162,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         if(parent != null)
         {
             q = em.createNamedQuery("ContactPerson.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {
@@ -226,7 +227,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             communicationContact.setParentId(parentDataObject.getDataObjectId());
             if (communicationContact.getDataObject() == null){
                 DataObject dataObject = new DataObject();
-                dataObject.setParentDataObject(parentDataObject);
+                dataObject.setParentDataObjectId(parentDataObject.getDataObjectId());
                 communicationContact.setDataObject(dataObject);
             }
         }
@@ -243,7 +244,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         contactPerson.setParentId(parentDataObject.getDataObjectId());
         if (contactPerson.getDataObject() == null){
             DataObject dataObject = new DataObject();
-            dataObject.setParentDataObject(parentDataObject);
+            if(parentDataObject != null)
+                dataObject.setParentDataObjectId(parentDataObject.getDataObjectId());
             contactPerson.setDataObject(dataObject);
         }
 

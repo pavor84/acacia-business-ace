@@ -115,7 +115,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     public List<Address> getAddresses(DataObject parent) {
         if (parent != null) {
             Query query = em.createNamedQuery("Address.findByParentDataObjectAndDeleted");
-            query.setParameter("parentDataObject", parent);
+            query.setParameter("parentDataObjectId", parent.getDataObjectId());
             query.setParameter("deleted", false);
 
             return new ArrayList<Address>(query.getResultList());

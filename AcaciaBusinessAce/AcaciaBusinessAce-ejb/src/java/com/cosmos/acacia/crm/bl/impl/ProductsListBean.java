@@ -55,7 +55,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         if(parent != null)
         {
             q = em.createNamedQuery("Product.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {
@@ -72,7 +72,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         if(parent != null)
         {
             q = em.createNamedQuery("ProductCategory.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {

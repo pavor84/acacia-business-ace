@@ -50,7 +50,7 @@ public class ProductSessionBean implements ProductSessionRemote, ProductSessionL
         System.out.println("ems: " + esm);
         try
         {
-            String sql = "select p from Product p where p.dataObject.parentDataObject = null and p.dataObject.deleted = false";
+            String sql = "select p from Product p where p.dataObject.parentDataObjectId is null and p.dataObject.deleted = false";
             Query q = em.createQuery(sql);
             List<SimpleProduct> data = q.getResultList();
             if(data != null)

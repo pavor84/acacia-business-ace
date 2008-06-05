@@ -56,7 +56,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         if(parent != null)
         {
             q = em.createNamedQuery("Organization.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {

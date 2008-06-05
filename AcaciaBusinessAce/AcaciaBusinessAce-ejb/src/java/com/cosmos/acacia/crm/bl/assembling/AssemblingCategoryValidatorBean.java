@@ -64,15 +64,25 @@ public class AssemblingCategoryValidatorBean
         }
         
         //check cyclic parents
-        AssemblingCategory ancestor = entity.getParentCategory();
-        while(ancestor!=null)
+        //AssemblingCategory ancestor = entity.getParentCategory();
+        AssemblingCategory ancestor;
+        if((parentId = entity.getParentId()) != null)
+            ancestor = em.find(AssemblingCategory.class, parentId);
+        else
+            ancestor = null;
+        while(ancestor != null)
         {
             if(ancestor.equals(entity))
             {
                 ve.addMessage("parentCategory", "AssemblingCategory.err.cyclicParent");
                 break;
             }
-            ancestor = ancestor.getParentCategory();
+
+            //ancestor = ancestor.getParentCategory();
+            if((parentId = ancestor.getParentId()) != null)
+                ancestor = em.find(AssemblingCategory.class, parentId);
+            else
+                ancestor = null;
         }
         
         //if we have validation messages - throw the exception since not everything is OK

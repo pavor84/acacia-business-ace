@@ -33,12 +33,12 @@ import javax.persistence.Table;
         @NamedQuery
              (
                  name = "CommunicationContact.findByParentDataObjectAndDeleted",
-                 query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObject = :parentDataObject and cc.dataObject.deleted = :deleted"
+                 query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObjectId = :parentDataObjectId and cc.dataObject.deleted = :deleted"
              ),
        @NamedQuery
             (
                 name = "CommunicationContact.findByParentDataObjectIsNullAndDeleted",
-                query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObject is null and cc.dataObject.deleted = :deleted"
+                query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObjectId is null and cc.dataObject.deleted = :deleted"
              ),
         @NamedQuery
              (
@@ -51,7 +51,7 @@ import javax.persistence.Table;
                 query = "select cc from CommunicationContact cc where " +
                         "cc.communicationType = :communicationType and " +
                         "cc.contactPerson = :contactPerson and " +
-                        "cc.dataObject.parentDataObject = :parentDataObject"
+                        "cc.dataObject.parentDataObjectId = :parentDataObjectId"
             )
     }
 )

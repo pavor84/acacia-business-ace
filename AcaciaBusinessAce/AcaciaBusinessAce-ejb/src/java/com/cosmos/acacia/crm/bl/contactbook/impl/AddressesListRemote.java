@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  * An EJB for handling persons
@@ -68,7 +69,7 @@ public interface AddressesListRemote {
      *
      * @return the saved Address
      */
-    Address saveAddress(Address address, DataObject parentDataObject);
+    Address saveAddress(Address address, BigInteger parentDataObjectId);
 
 
     /**
