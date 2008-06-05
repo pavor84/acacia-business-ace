@@ -18,7 +18,6 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
@@ -27,6 +26,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import java.math.BigInteger;
 import javax.swing.JOptionPane;
 
 /**
@@ -40,14 +40,14 @@ public class OrganizationPanel extends BaseEntityPanel {
 
     /** Creates new form organizationPanel */
     public OrganizationPanel(Organization organization) {
-        super(organization.getDataObject().getParentDataObject());
+        super(organization.getDataObject().getParentDataObjectId());
         this.organization = organization;
         init();
     }
 
     /** Creates new form organizationPanel */
-    public OrganizationPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public OrganizationPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 
@@ -423,7 +423,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         descriptionTextPane.bind(organizationBindingGroup, organization, "description");
 
         // Using an AbstractTablePanel implementation
-        branchesTable = new AddressListPanel(organization.getDataObject());
+        branchesTable = new AddressListPanel(organization.getDataObject().getDataObjectId());
         branchesTable.setVisibleButtons(14); //Only New, Modify and Delete
 
         // Adding the nested table listener to ensure that organization is saved
@@ -485,7 +485,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseAddress() {
-        AddressListPanel listPanel = new AddressListPanel(organization.getDataObject());
+        AddressListPanel listPanel = new AddressListPanel(organization.getDataObject().getDataObjectId());
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){

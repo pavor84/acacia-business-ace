@@ -21,6 +21,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Task;
 
 /**
@@ -31,14 +32,14 @@ import org.jdesktop.application.Task;
 public class OrganizationsListPanel extends AbstractTablePanel {
 
     /** Creates new form OrganizationsListPanel */
-    public OrganizationsListPanel(DataObject parentDataObject)
+    public OrganizationsListPanel(BigInteger parentDataObjectId)
     {
-    	super(parentDataObject);
+    	super(parentDataObjectId);
     }
 
-    public OrganizationsListPanel(DataObject parentDataObject, Classifier classifier)
+    public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
         // TODO apply classifiers
     }
     @EJB
@@ -131,7 +132,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed()) {
-            OrganizationPanel organizationPanel = new OrganizationPanel(getParentDataObject());
+            OrganizationPanel organizationPanel = new OrganizationPanel(getParentDataObjectId());
             DialogResponse response = organizationPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {

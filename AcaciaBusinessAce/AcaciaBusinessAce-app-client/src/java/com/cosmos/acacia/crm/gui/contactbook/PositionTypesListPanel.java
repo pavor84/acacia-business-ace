@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import com.cosmos.acacia.app.AppSession;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -23,6 +24,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 
@@ -35,10 +37,12 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     protected static Logger log = Logger.getLogger(PositionTypesListPanel.class);
 
     /** Creates new form AddresssListPanel */
-    public PositionTypesListPanel(DataObject parentDataObject)
+    public PositionTypesListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
-        try {
+        super(parentDataObjectId);
+        try
+        {
+            DataObject parentDataObject = AppSession.getDataObject(parentDataObjectId);
             this.ownerClass = Class.forName(
                 parentDataObject.getDataObjectType().getDataObjectType());
         } catch (Exception ex) {
@@ -183,7 +187,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         
     @Override
     protected Object newRow() {
-        PositionTypePanel positionTypePanel = new PositionTypePanel(getParentDataObject(),
+        PositionTypePanel positionTypePanel = new PositionTypePanel(getParentDataObjectId(),
                     ownerClass);
 
         DialogResponse response = positionTypePanel.showDialog(this);

@@ -15,11 +15,11 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 
@@ -30,9 +30,9 @@ import org.jdesktop.application.Task;
 public class BankDetailsListPanel extends AbstractTablePanel {
 
     /** Creates new form BankDetailsListPanel */
-    public BankDetailsListPanel(DataObject parentDataObject)
+    public BankDetailsListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @EJB
@@ -145,7 +145,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            BankDetailPanel bankDetailPanel = new BankDetailPanel(getParentDataObject());
+            BankDetailPanel bankDetailPanel = new BankDetailPanel(getParentDataObjectId());
 
             DialogResponse response = bankDetailPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))

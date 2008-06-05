@@ -2,17 +2,16 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.PositionType;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
+import java.math.BigInteger;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
@@ -25,15 +24,15 @@ public class PositionTypePanel extends BaseEntityPanel {
 
     /** Creates new form PositionTypePanel */
     public PositionTypePanel(PositionType positionType, Class ownerClass) {
-        super(positionType.getDataObject().getParentDataObject());
+        super(positionType.getDataObject().getParentDataObjectId());
         this.positionType = positionType;
         this.ownerClass = ownerClass;
         init();
     }
 
     /** Creates new form PositionTypePanel */
-    public PositionTypePanel(DataObject parentDataObject, Class ownerClass) {
-        super(parentDataObject);
+    public PositionTypePanel(BigInteger parentDataObjectId, Class ownerClass) {
+        super(parentDataObjectId);
         this.ownerClass = ownerClass;
         init();
     }

@@ -29,13 +29,13 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
+import java.math.BigInteger;
 
 /**
  *
@@ -46,9 +46,9 @@ public abstract class AbstractEntityPanel
 {
     
     /** Creates new form AbstractEntityPanel */
-    public AbstractEntityPanel(DataObject parentDataObject)
+    public AbstractEntityPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
         initComponents();
         initData();
     }

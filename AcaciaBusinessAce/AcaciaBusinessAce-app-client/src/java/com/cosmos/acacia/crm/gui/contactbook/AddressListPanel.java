@@ -15,11 +15,11 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Task;
 
 /**
@@ -29,9 +29,9 @@ import org.jdesktop.application.Task;
 public class AddressListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
-    public AddressListPanel(DataObject parentDataObject)
+    public AddressListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @EJB
@@ -138,8 +138,8 @@ public class AddressListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            log.info(getParentDataObject());
-            AddressPanel addressPanel = new AddressPanel(getParentDataObject());
+            log.info(getParentDataObjectId());
+            AddressPanel addressPanel = new AddressPanel(getParentDataObjectId());
             DialogResponse response = addressPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {

@@ -7,13 +7,13 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.JOptionPane;
@@ -40,10 +40,10 @@ public class AssemblingCategoryListPanel
 
     /** Creates new form AssemblingCategoryListPanel */
     public AssemblingCategoryListPanel(
-            DataObject parentDataObject,
+            BigInteger parentDataObjectId,
             boolean removeTableContainerGaps)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
         initComponentsCustom(removeTableContainerGaps);
     }
 
@@ -234,7 +234,11 @@ public class AssemblingCategoryListPanel
                 autoParent = (AssemblingCategory)selNode.getUserObject();
         }
             //(AssemblingCategory) getDataTable().getSelectedRowObject();
-        category.setParentCategory(autoParent);
+        //category.setParentCategory(autoParent);
+        if(autoParent != null)
+            category.setParentId(autoParent.getAssemblingCategoryId());
+        else
+            category.setParentId(null);
 
         return onEditEntity(category);
     }
@@ -242,7 +246,7 @@ public class AssemblingCategoryListPanel
     @Override
     protected Object onEditEntity(AssemblingCategory category)
     {
-        AssemblingCategoryPanel editPanel = new AssemblingCategoryPanel(category, category.getDataObject());
+        AssemblingCategoryPanel editPanel = new AssemblingCategoryPanel(category);
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {

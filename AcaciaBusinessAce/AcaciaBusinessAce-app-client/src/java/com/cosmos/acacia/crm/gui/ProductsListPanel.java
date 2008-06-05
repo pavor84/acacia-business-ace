@@ -17,7 +17,6 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -26,6 +25,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  *
@@ -42,9 +42,9 @@ public class ProductsListPanel
 
     private EntityProperties entityProps;
 
-    public ProductsListPanel(DataObject parentDataObject)
+    public ProductsListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @SuppressWarnings("unchecked")
@@ -122,7 +122,7 @@ public class ProductsListPanel
 
     protected Object newRow()
     {
-        ProductPanel productPanel = new ProductPanel(getParentDataObject());
+        ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
         DialogResponse response = productPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {

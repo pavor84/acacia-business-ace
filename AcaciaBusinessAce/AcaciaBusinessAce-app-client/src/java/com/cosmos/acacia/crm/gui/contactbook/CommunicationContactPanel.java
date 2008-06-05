@@ -3,19 +3,18 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
@@ -28,15 +27,15 @@ public class CommunicationContactPanel extends BaseEntityPanel {
 
     /** Creates new form CommunicationContactPanel */
     public CommunicationContactPanel(CommunicationContact communicationContact) {
-        super(communicationContact.getDataObject().getParentDataObject());
+        super(communicationContact.getDataObject().getParentDataObjectId());
         this.communicationContact = communicationContact;
         this.contactPerson = communicationContact.getContactPerson();
         init();
     }
 
     /** Creates new form CommunicationContactPanel */
-    public CommunicationContactPanel(DataObject parentDataObject, ContactPerson contactPerson) {
-        super(parentDataObject);
+    public CommunicationContactPanel(BigInteger parentDataObjectId, ContactPerson contactPerson) {
+        super(parentDataObjectId);
         this.contactPerson = contactPerson;
         init();
     }

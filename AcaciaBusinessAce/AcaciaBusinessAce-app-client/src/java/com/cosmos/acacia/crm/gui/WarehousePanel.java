@@ -48,7 +48,7 @@ public class WarehousePanel extends BaseEntityPanel {
     
     /** Creates new form WarehousePanel */
     public WarehousePanel(Warehouse w, DataObject parent) {
-        super(parent);
+        super(parent != null ? parent.getDataObjectId() : null);
         this.entity = w;
         init();
     }
@@ -231,7 +231,7 @@ public class WarehousePanel extends BaseEntityPanel {
         //if there is selected branch - show the contact persons of it
         }else{
             DataObject dataObject = entity.getAddress().getDataObject();
-            ContactPersonsListPanel listPanel = new ContactPersonsListPanel(dataObject);
+            ContactPersonsListPanel listPanel = new ContactPersonsListPanel(dataObject.getDataObjectId());
             listPanel.setTitle(getResourceMap().getString("ContactPersonsListPanel.title"));
             
 //            List<Person> warehouseMen = getFormSession().getWarehouseMenForBranch(dataObject);
@@ -256,7 +256,7 @@ public class WarehousePanel extends BaseEntityPanel {
     protected Object onChooseBranch() {
         //DataObject dataObject = getFormSession().getDataObjectWithAddresses();
         DataObject dataObject = AppSession.get().getLoginOrganizationDataObject();
-        AddressListPanel listPanel = new AddressListPanel(dataObject);
+        AddressListPanel listPanel = new AddressListPanel(dataObject.getDataObjectId());
         listPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
         Address oldBranch = entity.getAddress();  
         DialogResponse dResponse = listPanel.showDialog(this);

@@ -204,7 +204,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             ClassifierGroup selected = (ClassifierGroup) listPanel.getSelectedRowObject();
-            classifiersTable.setParentDataObject(selected.getDataObject());
+            classifiersTable.setParentDataObjectId(selected.getDataObject().getDataObjectId());
             classifiersTable.setDataObjectType(dataObjectToBeClassified.getDataObjectType());
             classifiersTable.refreshAction();
             return selected;

@@ -20,7 +20,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
@@ -30,6 +29,7 @@ import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.event.KeyAdapter;
+import java.math.BigInteger;
 import javax.swing.JOptionPane;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
@@ -45,14 +45,14 @@ public class PersonPanel extends BaseEntityPanel {
 
     /** Creates new form PersonPanel */
     public PersonPanel(Person person) {
-        super(person.getDataObject().getParentDataObject());
+        super(person.getDataObject().getParentDataObjectId());
         this.person = person;
         init();
     }
 
     /** Creates new form PersonPanel */
-    public PersonPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public PersonPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 
@@ -433,7 +433,7 @@ public class PersonPanel extends BaseEntityPanel {
         descriptionTextPane.bind(personBindingGroup, person, "description");
 
         // Using an AbstractTablePanel implementation
-        addressesTable = new AddressListPanel(person.getDataObject());
+        addressesTable = new AddressListPanel(person.getParentId());
         addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
 
         // Adding the nested table listener to ensure that person is saved
@@ -445,7 +445,7 @@ public class PersonPanel extends BaseEntityPanel {
 
 
          // Using an AbstractTablePanel implementation
-        passportsTable = new PassportsListPanel(person.getDataObject());
+        passportsTable = new PassportsListPanel(person.getDataObject().getDataObjectId());
         passportsTable.setVisibleButtons(14); //Only New, Modify and Delete
 
         // Adding the nested table listener to ensure that person is saved

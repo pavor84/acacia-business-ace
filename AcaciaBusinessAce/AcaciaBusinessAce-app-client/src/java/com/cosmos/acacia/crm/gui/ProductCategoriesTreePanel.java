@@ -12,11 +12,11 @@ import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;
+import java.math.BigInteger;
 
 /**
  *
@@ -31,8 +31,8 @@ public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> {
 
 
     /** Creates new form ProductCategoriesPanel */
-    public ProductCategoriesTreePanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public ProductCategoriesTreePanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
     }
 
 

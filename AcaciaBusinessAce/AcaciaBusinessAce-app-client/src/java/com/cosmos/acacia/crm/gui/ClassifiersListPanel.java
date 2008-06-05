@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.app.AppSession;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -21,6 +22,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
@@ -40,9 +42,9 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
       /** Creates new form ClassifiersListPanel */
-    public ClassifiersListPanel(DataObject parentDataObject, DataObjectType dot)
+    public ClassifiersListPanel(BigInteger parentDataObjectId, DataObjectType dot)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
         this.dataObjectType = dot;
         postInitData();
     }
@@ -80,7 +82,10 @@ public class ClassifiersListPanel extends AbstractTablePanel {
             if (classifiedDataObject != null)
                 classifiers = getFormSession().getClassifiers(classifiedDataObject);
             else
-                classifiers = getFormSession().getClassifiers(getParentDataObject(), dataObjectType);
+            {
+                DataObject parentDataObject = AppSession.getDataObject(getParentDataObjectId());
+                classifiers = getFormSession().getClassifiers(parentDataObject, dataObjectType);
+            }
         }
         return classifiers;
     }
@@ -193,7 +198,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         {
             ClassifierPanel classifierPanel = null;
             if (dataObjectType == null) 
-                classifierPanel = new ClassifierPanel(getParentDataObject());
+                classifierPanel = new ClassifierPanel(getParentDataObjectId());
             else 
                 classifierPanel = new ClassifierPanel();
 

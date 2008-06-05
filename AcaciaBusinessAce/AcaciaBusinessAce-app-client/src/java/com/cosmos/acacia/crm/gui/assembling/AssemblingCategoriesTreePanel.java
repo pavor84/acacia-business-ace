@@ -7,11 +7,11 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 
@@ -29,9 +29,9 @@ public class AssemblingCategoriesTreePanel
 
 
     /** Creates new form AssemblingCategoriesTreePanel */
-    public AssemblingCategoriesTreePanel(DataObject parentDataObject)
+    public AssemblingCategoriesTreePanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
         //initComponents();
     }
 
@@ -118,13 +118,18 @@ public class AssemblingCategoriesTreePanel
     @Override
     public AssemblingCategory getParent(AssemblingCategory child)
     {
-        return child.getParentCategory();
+        return getFormSession().getParent(child);
+        //return child.getParentCategory();
     }
 
     @Override
     public void setParent(AssemblingCategory entity, AssemblingCategory parent)
     {
-        entity.setParentCategory(parent);
+        //entity.setParentCategory(parent);
+        if(parent != null)
+            entity.setParentId(parent.getAssemblingCategoryId());
+        else
+            entity.setParentId(null);
     }
 
     @Override

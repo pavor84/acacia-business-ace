@@ -19,6 +19,7 @@ import java.awt.Font;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 
@@ -38,24 +39,29 @@ public abstract class AcaciaPanel
 
     protected static Logger log = Logger.getLogger(AcaciaPanel.class);
     
-    private DataObject parentDataObject;
+    private BigInteger parentDataObjectId;
 
 
     AcaciaPanel() {
         super(AcaciaApplication.class);
     }
  
-    public AcaciaPanel(DataObject parentDataObject) {
+    public AcaciaPanel(BigInteger parentDataObjectId) {
         this();
-        this.parentDataObject = parentDataObject;
+        this.parentDataObjectId = parentDataObjectId;
     }
 
-    public DataObject getParentDataObject() {
-        return parentDataObject;
+    public BigInteger getParentDataObjectId() {
+        return parentDataObjectId;
     }
 
-    public void setParentDataObject(DataObject parentDataObject) {
-        this.parentDataObject = parentDataObject;
+    public void setParentDataObjectId(BigInteger parentDataObjectId) {
+        this.parentDataObjectId = parentDataObjectId;
+    }
+
+    public DataObject getParentDataObject()
+    {
+        return AppSession.getDataObject(getParentDataObjectId());
     }
 
     protected abstract void initData();

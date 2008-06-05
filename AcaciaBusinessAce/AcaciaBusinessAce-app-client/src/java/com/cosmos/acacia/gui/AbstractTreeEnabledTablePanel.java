@@ -8,9 +8,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.swingb.JBTree;
 import com.cosmos.util.Lister;
+import java.math.BigInteger;
 
 /**
  * Base panel for table panels that will have associated trees
@@ -21,8 +21,8 @@ import com.cosmos.util.Lister;
  */
 public abstract class AbstractTreeEnabledTablePanel<E> extends AbstractTablePanel {
 
-    public AbstractTreeEnabledTablePanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public AbstractTreeEnabledTablePanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
     }
 
 

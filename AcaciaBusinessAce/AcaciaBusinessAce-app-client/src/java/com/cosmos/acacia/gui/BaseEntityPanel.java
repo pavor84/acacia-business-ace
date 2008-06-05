@@ -31,6 +31,7 @@ import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.listeners.NestedFormListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigInteger;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
@@ -65,9 +66,9 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return classifiersFormSession;
     }
     
-    public BaseEntityPanel(DataObject dataObject)
+    public BaseEntityPanel(BigInteger parentDataObjectId)
     {
-        super(dataObject);
+        super(parentDataObjectId);
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent evt) {
@@ -253,8 +254,9 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                             return false;
                         }
 
-                        table.setParentDataObject(getDataObject());
-                        table.setParentDataObjectToAssociatedTables(getDataObject());
+                        BigInteger doId = getDataObject().getDataObjectId();
+                        table.setParentDataObjectId(doId);
+                        table.setParentDataObjectToAssociatedTables(doId);
                         return true;
                     }
                     return false;

@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -11,12 +12,12 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -31,14 +32,14 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public ContactPersonPanel(ContactPerson contactPerson) {
-        super(contactPerson.getDataObject().getParentDataObject());
+        super(contactPerson.getDataObject().getParentDataObjectId());
         this.contactPerson = contactPerson;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
-    public ContactPersonPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public ContactPersonPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 
@@ -170,11 +171,14 @@ public class ContactPersonPanel extends BaseEntityPanel {
         contactPersonBindingGroup.bind();
     }
 
-    protected Object onChooseType() {
+    protected Object onChooseType()
+    {
+        DataObject parentDataObject = getParentDataObject();
         PositionTypesListPanel listPanel =
-                new PositionTypesListPanel(getParentDataObject().getParentDataObject());
-                
-        log.info(getParentDataObject().getParentDataObject().getDataObjectType().getDataObjectType());
+                new PositionTypesListPanel(parentDataObject.getParentDataObjectId());
+
+        parentDataObject = AppSession.getDataObject(parentDataObject.getParentDataObjectId());
+        log.info(parentDataObject.getDataObjectType().getDataObjectType());
         
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
@@ -224,7 +228,9 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     private List<PositionType> getPositionTypes()
     {
-        return getFormSession().getPositionTypes(getParentDataObject().getParentDataObject());
+        DataObject parentDataObject = getParentDataObject();
+        parentDataObject = AppSession.getDataObject(parentDataObject.getParentDataObjectId());
+        return getFormSession().getPositionTypes(parentDataObject);
     }
 
     @Override

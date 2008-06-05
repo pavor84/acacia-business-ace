@@ -31,7 +31,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
@@ -40,6 +39,7 @@ import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBTree;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import com.cosmos.util.Lister;
+import java.math.BigInteger;
 
 /**
  * A base panel for all tree panels.
@@ -49,8 +49,8 @@ import com.cosmos.util.Lister;
 public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPanel {
 
     /** Creates new form BaseTreePanel */
-    public BaseTreePanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public BaseTreePanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         initComponents();
         initData();
         initComponentsCustom();
