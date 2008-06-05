@@ -149,7 +149,7 @@ public class ContactBookTest {
         Address address = addressFormSession.newAddress();
         address.setAddressName(TestUtils.getRandomString(15));
 
-        address = addressFormSession.saveAddress(address, organizationDataObject);
+        address = addressFormSession.saveAddress(address, organizationDataObject.getDataObjectId());
 
         DataObject addressDataObject = address.getDataObject();
 

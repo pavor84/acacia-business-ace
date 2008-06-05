@@ -15,11 +15,11 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 
@@ -30,9 +30,9 @@ import org.jdesktop.application.Task;
 public class ClassifierGroupsListPanel extends AbstractTablePanel {
 
     /** Creates new form ClassifierGroupsListPanel */
-    public ClassifierGroupsListPanel(DataObject parentDataObject)
+    public ClassifierGroupsListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @EJB
@@ -145,7 +145,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            ClassifierGroupPanel classifierGroupPanel = new ClassifierGroupPanel(getParentDataObject());
+            ClassifierGroupPanel classifierGroupPanel = new ClassifierGroupPanel(getParentDataObjectId());
 
             DialogResponse response = classifierGroupPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))

@@ -15,11 +15,11 @@ import javax.naming.InitialContext;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
@@ -39,9 +39,9 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     }
 
       /** Creates new form DataObjectTypesListPanel */
-    public DataObjectTypesListPanel(DataObject parentDataObject, Classifier classifier)
+    public DataObjectTypesListPanel(BigInteger parentDataObjectId, Classifier classifier)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
         this.classifier = classifier;
         postInitData();
     }

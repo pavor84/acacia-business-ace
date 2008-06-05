@@ -17,6 +17,7 @@ import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,7 +25,6 @@ import javax.naming.InitialContext;
 
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
@@ -41,14 +41,14 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public BankDetailPanel(BankDetail bankDetail) {
-        super(bankDetail.getDataObject().getParentDataObject());
+        super(bankDetail.getDataObject().getParentDataObjectId());
         this.bankDetail = bankDetail;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
-    public BankDetailPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public BankDetailPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 
@@ -371,7 +371,7 @@ public class BankDetailPanel extends BaseEntityPanel {
             // Ignore
         }
 
-        AddressListPanel listPanel = new AddressListPanel(parent);
+        AddressListPanel listPanel = new AddressListPanel(parent.getDataObjectId());
         
         Address oldBranch = bankDetail.getBankBranch();
         
@@ -405,7 +405,7 @@ public class BankDetailPanel extends BaseEntityPanel {
         } catch (Exception ex){
             // Ignore
         }
-        ContactPersonsListPanel listPanel = new ContactPersonsListPanel(parent);
+        ContactPersonsListPanel listPanel = new ContactPersonsListPanel(parent.getDataObjectId());
         
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){

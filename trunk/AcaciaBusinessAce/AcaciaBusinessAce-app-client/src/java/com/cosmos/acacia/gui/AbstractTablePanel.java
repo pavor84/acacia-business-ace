@@ -41,6 +41,7 @@ import com.cosmos.swingb.listeners.TableModificationListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigInteger;
 import java.util.LinkedList;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -56,8 +57,8 @@ public abstract class AbstractTablePanel
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
 
     /** Creates new form AbstractTablePanel */
-    public AbstractTablePanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public AbstractTablePanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         initComponents();
         initData();
 
@@ -895,9 +896,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             modifyAction();
     }
 
-    public void setParentDataObjectToAssociatedTables(DataObject parentDataObject) {
+    public void setParentDataObjectToAssociatedTables(BigInteger parentDataObjectId) {
         for (AbstractTablePanel table : associatedTables) {
-            table.setParentDataObject(parentDataObject);
+            table.setParentDataObjectId(parentDataObjectId);
         }
     }
     

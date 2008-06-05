@@ -7,7 +7,6 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -40,9 +39,9 @@ public class AssemblingCategoryPanel
         initComponents();
     }
 
-    public AssemblingCategoryPanel(AssemblingCategory category, DataObject dataObject)
+    public AssemblingCategoryPanel(AssemblingCategory category)
     {
-        super(dataObject);
+        super(category.getParentId());
         this.entity = category;
         init();
     }

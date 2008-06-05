@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -24,7 +23,7 @@ import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import javax.swing.DefaultComboBoxModel;
+import java.math.BigInteger;
 import javax.swing.JOptionPane;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.PropertyStateEvent;
@@ -39,14 +38,14 @@ public class PassportPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public PassportPanel(Passport passport) {
-        super(passport.getDataObject().getParentDataObject());
+        super(passport.getDataObject().getParentDataObjectId());
         this.passport = passport;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
-    public PassportPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public PassportPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 
@@ -331,7 +330,7 @@ public class PassportPanel extends BaseEntityPanel {
             // Ignore
         }
 
-        AddressListPanel listPanel = new AddressListPanel(parent);
+        AddressListPanel listPanel = new AddressListPanel(parent.getDataObjectId());
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             return listPanel.getSelectedRowObject();

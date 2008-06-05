@@ -16,12 +16,12 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  * 
@@ -38,9 +38,9 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     private PatternMaskListRemote formSession;
 
     /** Creates new form PersonsListPanel */
-    public PatternMaskFormatListPanel(DataObject parentDataObject)
+    public PatternMaskFormatListPanel(BigInteger parentDataObjectId)
     {
-    	super(parentDataObject);
+    	super(parentDataObjectId);
     }
     
     private BindingGroup formatsBindingGroup;

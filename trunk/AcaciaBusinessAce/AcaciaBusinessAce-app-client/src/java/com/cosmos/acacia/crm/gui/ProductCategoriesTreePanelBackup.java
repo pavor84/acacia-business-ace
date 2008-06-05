@@ -33,7 +33,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -44,6 +43,7 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBTree;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import com.cosmos.util.Lister;
+import java.math.BigInteger;
 
 /**
  *
@@ -61,8 +61,8 @@ public class ProductCategoriesTreePanelBackup extends AcaciaPanel {
 //    private JBPopupMenu treeContextMenu;
     
     /** Creates new form ProductCategoriesPanel */
-    public ProductCategoriesTreePanelBackup(DataObject parentDataObject) {
-        super(parentDataObject);
+    public ProductCategoriesTreePanelBackup(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         initComponents();
         initComponentsCustom();
         initData();

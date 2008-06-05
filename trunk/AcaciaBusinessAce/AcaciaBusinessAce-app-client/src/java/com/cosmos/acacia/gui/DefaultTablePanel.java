@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.data.DataObject;
+import java.math.BigInteger;
 
 /**
  *
@@ -14,9 +14,9 @@ import com.cosmos.acacia.crm.data.DataObject;
 public class DefaultTablePanel
     extends AbstractTablePanel
 {
-    public DefaultTablePanel(DataObject parentDataObject)
+    public DefaultTablePanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @Override

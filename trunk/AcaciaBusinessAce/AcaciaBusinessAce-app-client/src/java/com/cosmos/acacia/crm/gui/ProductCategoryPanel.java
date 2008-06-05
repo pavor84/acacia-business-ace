@@ -41,7 +41,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
     /** Creates new form ProductCategoryPanel */
     public ProductCategoryPanel(ProductCategory category, DataObject dataObject) {
-        super(dataObject);
+        super(dataObject.getDataObjectId());
         this.entity = category;
         init();
     }

@@ -8,19 +8,18 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  * Panel for listing existing persons, giving CRUD options
@@ -30,9 +29,9 @@ import com.cosmos.swingb.DialogResponse;
 public class PersonsListPanel extends AbstractTablePanel {
     
     /** Creates new form PersonsListPanel */
-    public PersonsListPanel(DataObject parentDataObject)
+    public PersonsListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @EJB
@@ -119,7 +118,7 @@ public class PersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        PersonPanel personPanel = new PersonPanel(getParentDataObject());
+        PersonPanel personPanel = new PersonPanel(getParentDataObjectId());
         DialogResponse response = personPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {

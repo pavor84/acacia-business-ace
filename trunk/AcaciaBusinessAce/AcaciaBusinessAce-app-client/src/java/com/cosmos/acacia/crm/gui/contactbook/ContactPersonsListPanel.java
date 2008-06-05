@@ -15,11 +15,11 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 
@@ -30,9 +30,9 @@ import org.jdesktop.application.Task;
 public class ContactPersonsListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
-    public ContactPersonsListPanel(DataObject parentDataObject)
+    public ContactPersonsListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @EJB
@@ -145,7 +145,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObject());
+            ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObjectId());
 
             DialogResponse response = contactPersonPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))

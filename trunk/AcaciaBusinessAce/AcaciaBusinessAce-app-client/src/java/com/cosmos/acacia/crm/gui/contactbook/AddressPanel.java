@@ -17,7 +17,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -37,6 +36,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import java.awt.Component;
+import java.math.BigInteger;
 
 /**
  *
@@ -48,14 +48,14 @@ public class AddressPanel extends BaseEntityPanel {
 
     /** Creates new form AddressPanel */
     public AddressPanel(Address address) {
-        super(address.getDataObject().getParentDataObject());
+        super(address.getDataObject().getParentDataObjectId());
         this.address = address;
         init();
     }
 
     /** Creates new form AddressPanel */
-    public AddressPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public AddressPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 
@@ -379,7 +379,13 @@ public class AddressPanel extends BaseEntityPanel {
 
         descriptionTextPane.bind(addressBindingGroup, address, "description");
 
-        final ContactPersonsListPanel contactPersonsTable = new ContactPersonsListPanel(address.getDataObject());
+        BigInteger dataObjectId;
+        DataObject dataObject;
+        if(address != null && (dataObject = address.getDataObject()) != null)
+            dataObjectId = dataObject.getDataObjectId();
+        else
+            dataObjectId = null;
+        final ContactPersonsListPanel contactPersonsTable = new ContactPersonsListPanel(dataObjectId);
         contactPersonsTable.setVisibleButtons(2 + 4 + 8 + 64);
         contactPersonsTable.getDataTable().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
@@ -414,13 +420,13 @@ public class AddressPanel extends BaseEntityPanel {
         
         contactPersonsPanel.add(contactPersonsTable);
 
-        communicationContactsTable = new CommunicationContactsListPanel(address.getDataObject());
+        communicationContactsTable = new CommunicationContactsListPanel(dataObjectId);
         communicationContactsTable.setVisibleButtons(2 + 4 + 8);
 
         communicationContactsPanel.add(communicationContactsTable);
 
 
-        bankDetailsTable = new BankDetailsListPanel(address.getDataObject());
+        bankDetailsTable = new BankDetailsListPanel(dataObjectId);
         bankDetailsTable.setVisibleButtons(2 + 4 + 8);
 
         bankDetailsPanel.add(bankDetailsTable);
@@ -537,7 +543,7 @@ public class AddressPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         log.info("Save: address: " + address);
 
-        address = getFormSession().saveAddress(address, getParentDataObject());
+        address = getFormSession().saveAddress(address, getParentDataObjectId());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(address);
         if (closeAfter) {

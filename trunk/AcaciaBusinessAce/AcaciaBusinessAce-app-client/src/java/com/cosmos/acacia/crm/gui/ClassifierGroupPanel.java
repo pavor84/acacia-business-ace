@@ -4,16 +4,15 @@ import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  *
@@ -25,14 +24,14 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public ClassifierGroupPanel(ClassifierGroup classifierGroup) {
-        super(classifierGroup.getDataObject().getParentDataObject());
+        super(classifierGroup.getDataObject().getParentDataObjectId());
         this.classifierGroup = classifierGroup;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
-    public ClassifierGroupPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public ClassifierGroupPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 

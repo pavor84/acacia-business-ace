@@ -12,12 +12,12 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  * Created	:	02.05.2008
@@ -36,8 +36,8 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     /**
      * @param parentDataObject
      */
-    public WarehouseProductListPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public WarehouseProductListPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
     }
     
     public WarehouseProductListPanel() {

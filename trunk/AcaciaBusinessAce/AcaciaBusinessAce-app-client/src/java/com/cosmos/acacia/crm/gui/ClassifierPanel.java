@@ -12,18 +12,17 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
-import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -36,14 +35,14 @@ public class ClassifierPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public ClassifierPanel(Classifier classifier) {
-        super(classifier.getDataObject().getParentDataObject());
+        super(classifier.getDataObject().getParentDataObjectId());
         this.classifier = classifier;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
-    public ClassifierPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public ClassifierPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 

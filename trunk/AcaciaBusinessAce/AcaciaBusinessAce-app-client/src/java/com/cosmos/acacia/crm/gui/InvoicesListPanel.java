@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.bl.impl.InvoicesListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -7,6 +8,7 @@ import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -26,9 +28,9 @@ public class InvoicesListPanel
     private BindingGroup invoicesBindingGroup;
     private List<Invoice> invocies;
 
-    public InvoicesListPanel(DataObject parentDataObject)
+    public InvoicesListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @Override
@@ -114,7 +116,8 @@ public class InvoicesListPanel
     {
         if(invocies == null)
         {
-            invocies = getFormSession().getInvoices(getParentDataObject());
+            DataObject parentDataObject = AppSession.getDataObject(getParentDataObjectId());
+            invocies = getFormSession().getInvoices(parentDataObject);
         }
 
         return invocies;

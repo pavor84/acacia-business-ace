@@ -20,13 +20,13 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  *
@@ -62,8 +62,8 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     }
 
     /** Creates new form ProductCategoryListPanel */
-    public ProductCategoryListPanel(DataObject parentDataObject, boolean removeTableContainerGaps) {
-        super(parentDataObject);
+    public ProductCategoryListPanel(BigInteger parentDataObjectId, boolean removeTableContainerGaps) {
+        super(parentDataObjectId);
 
         initComponentsCustom(removeTableContainerGaps);
     }

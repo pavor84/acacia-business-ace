@@ -33,7 +33,6 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -49,6 +48,7 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
+import java.math.BigInteger;
 
 /**
  *
@@ -57,14 +57,14 @@ import com.cosmos.swingb.JBTextField;
 public class ProductPanel extends AcaciaPanel {
 
     public ProductPanel(SimpleProduct product) {
-        super(product.getDataObject().getParentDataObject());
+        super(product.getDataObject().getParentDataObjectId());
         this.product = product;
         init();
     }
 
     /** Creates new form ProductPanel */
-    public ProductPanel(DataObject parentDataObject) {
-        super(parentDataObject);
+    public ProductPanel(BigInteger parentDataObjectId) {
+        super(parentDataObjectId);
         init();
     }
 

@@ -15,12 +15,12 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import org.jdesktop.application.Task;
 
 /**
@@ -30,9 +30,9 @@ import org.jdesktop.application.Task;
 public class PassportsListPanel extends AbstractTablePanel {
 
     /** Creates new form BankDetailsListPanel */
-    public PassportsListPanel(DataObject parentDataObject)
+    public PassportsListPanel(BigInteger parentDataObjectId)
     {
-        super(parentDataObject);
+        super(parentDataObjectId);
     }
 
     @EJB
@@ -145,7 +145,7 @@ public class PassportsListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
-            PassportPanel passportPanel = new PassportPanel(getParentDataObject());
+            PassportPanel passportPanel = new PassportPanel(getParentDataObjectId());
 
             DialogResponse response = passportPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
