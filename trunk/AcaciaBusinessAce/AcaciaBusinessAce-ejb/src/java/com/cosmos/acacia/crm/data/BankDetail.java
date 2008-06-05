@@ -26,12 +26,12 @@ import javax.persistence.Table;
           @NamedQuery
              (
                 name = "BankDetail.findByParentDataObjectAndDeleted",
-                query = "select bd from BankDetail bd where bd.dataObject.parentDataObject = :parentDataObject and bd.dataObject.deleted = :deleted"
+                query = "select bd from BankDetail bd where bd.dataObject.parentDataObjectId = :parentDataObjectId and bd.dataObject.deleted = :deleted"
              ),
         @NamedQuery
              (
                 name = "BankDetail.findByParentDataObjectIsNullAndDeleted",
-                query = "select bd from BankDetail bd where bd.dataObject.parentDataObject is null and bd.dataObject.deleted = :deleted"
+                query = "select bd from BankDetail bd where bd.dataObject.parentDataObjectId is null and bd.dataObject.deleted = :deleted"
               )
     }
 )

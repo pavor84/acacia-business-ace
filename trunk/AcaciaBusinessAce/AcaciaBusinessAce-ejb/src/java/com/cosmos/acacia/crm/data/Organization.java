@@ -40,12 +40,12 @@ import com.cosmos.resource.TextResource;
         @NamedQuery
             (
              name = "Organization.findByParentDataObjectAndDeleted",
-             query = "select o from Organization o where o.dataObject.parentDataObject = :parentDataObject and o.dataObject.deleted = :deleted"
+             query = "select o from Organization o where o.dataObject.parentDataObjectId = :parentDataObjectId and o.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
             name = "Organization.findByParentDataObjectIsNullAndDeleted",
-            query = "select o from Organization o where o.dataObject.parentDataObject is null and o.dataObject.deleted = :deleted"
+            query = "select o from Organization o where o.dataObject.parentDataObjectId is null and o.dataObject.deleted = :deleted"
             ),
         /**
          * All not deleted organizations.

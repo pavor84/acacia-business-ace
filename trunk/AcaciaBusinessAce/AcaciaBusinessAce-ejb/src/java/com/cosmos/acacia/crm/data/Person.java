@@ -38,12 +38,12 @@ import com.cosmos.resource.TextResource;
     @NamedQuery
              (
                  name = "Person.findByParentDataObjectAndDeleted",
-                 query = "select p from Person p where p.dataObject.parentDataObject = :parentDataObject and p.dataObject.deleted = :deleted"
+                 query = "select p from Person p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.dataObject.deleted = :deleted"
              ),
         @NamedQuery
             (
             name = "Person.findByParentDataObjectIsNullAndDeleted",
-            query = "select p from Person p where p.dataObject.parentDataObject is null and p.dataObject.deleted = :deleted"
+            query = "select p from Person p where p.dataObject.parentDataObjectId is null and p.dataObject.deleted = :deleted"
             ),
         /**
          * All not deleted persons.

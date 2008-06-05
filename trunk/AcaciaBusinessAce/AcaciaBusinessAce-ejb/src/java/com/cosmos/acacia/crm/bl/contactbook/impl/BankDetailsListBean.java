@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  * The implementation of handling locations (see interface for more info)
@@ -47,7 +48,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
     public List<BankDetail> getBankDetails(DataObject parent) {
         if (parent != null) {
             Query query = em.createNamedQuery("BankDetail.findByParentDataObjectAndDeleted");
-            query.setParameter("parentDataObject", parent);
+            query.setParameter("parentDataObjectId", parent.getDataObjectId());
             query.setParameter("deleted", false);
 
             return new ArrayList<BankDetail>(query.getResultList());
@@ -67,12 +68,14 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
         return new BankDetail();
     }
 
-    public BankDetail saveBankDetail(BankDetail bankDetail, DataObject parentDataObject) {
-        bankDetail.setParentId(parentDataObject.getDataObjectId());
+    public BankDetail saveBankDetail(BankDetail bankDetail, DataObject parentDataObject)
+    {
+        BigInteger parentDataObjectId = parentDataObject.getDataObjectId();
+        bankDetail.setParentId(parentDataObjectId);
 
         if (bankDetail.getDataObject() == null){
             DataObject dataObject = new DataObject();
-            dataObject.setParentDataObject(parentDataObject);
+            dataObject.setParentDataObjectId(parentDataObjectId);
             bankDetail.setDataObject(dataObject);
         }
 

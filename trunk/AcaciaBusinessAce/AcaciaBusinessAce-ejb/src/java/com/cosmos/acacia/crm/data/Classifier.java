@@ -32,7 +32,7 @@ import javax.persistence.Table;
         @NamedQuery
              (
                 name = "Classifier.findByParentDataObjectAndDeleted",
-                query = "select c from Classifier c where c.dataObject.parentDataObject = :parentDataObject and c.dataObject.deleted = :deleted"
+                query = "select c from Classifier c where c.dataObject.parentDataObjectId = :parentDataObjectId and c.dataObject.deleted = :deleted"
              ),
         @NamedQuery
              (

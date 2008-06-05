@@ -32,17 +32,17 @@ import javax.persistence.Table;
         @NamedQuery
              (
                 name = "Address.findByParentDataObjectAndDeleted",
-                query = "select a from Address a where a.dataObject.parentDataObject = :parentDataObject and a.dataObject.deleted = :deleted"
+                query = "select a from Address a where a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
              ),
         @NamedQuery
              (
                 name = "Address.findByParentDataObjectIsNullAndDeleted",
-                query = "select a from Address a where a.dataObject.parentDataObject is null and a.dataObject.deleted = :deleted"
+                query = "select a from Address a where a.dataObject.parentDataObjectId is null and a.dataObject.deleted = :deleted"
               ),
         @NamedQuery
             (
                 name = "Address.findByNameAndParentDataObject",
-                query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObject = :parentDataObject"
+                query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObjectId = :parentDataObjectId"
             )
     }
 )

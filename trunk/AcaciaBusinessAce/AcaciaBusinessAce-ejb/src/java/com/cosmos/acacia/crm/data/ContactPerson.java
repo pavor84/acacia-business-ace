@@ -32,18 +32,18 @@ import javax.persistence.Table;
         @NamedQuery
         (
            name = "ContactPerson.findByParentDataObjectAndDeleted",
-           query = "select cp from ContactPerson cp where cp.dataObject.parentDataObject = :parentDataObject and cp.dataObject.deleted = :deleted"
+           query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId = :parentDataObjectId and cp.dataObject.deleted = :deleted"
         ),
         @NamedQuery
         (
            name = "ContactPerson.findByParentDataObjectIsNullAndDeleted",
-           query = "select cp from ContactPerson cp where cp.dataObject.parentDataObject is null and cp.dataObject.deleted = :deleted"
+           query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId is null and cp.dataObject.deleted = :deleted"
         ),
         @NamedQuery
         (
             name = "ContactPerson.findByPersonAndTypeAndParentDataObject",
             query = "select cp from ContactPerson cp where cp.contact=:person and " +
-                    "cp.dataObject.parentDataObject=:parentDataObject and " +
+                    "cp.dataObject.parentDataObjectId = :parentDataObjectId and " +
                     "cp.positionType=:positionType"
         )
     }

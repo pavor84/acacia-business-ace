@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
+import java.math.BigInteger;
 
 /**
  * Created	:	19.05.2008
@@ -40,42 +41,51 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     
     /**
      * Temporal functionality to simulate Organization selection when login
-     * @return DataObject which instance is {@link Organization} and has the biggest addresses count among.
+     * @return DataObject which instance is {@link Organization} and has the
+     * biggest addresses count among.
      */
     @SuppressWarnings("unchecked")
-    public DataObject getDataObjectWithAddresses() {
+    public DataObject getDataObjectWithAddresses()
+    {
         List<Address> allAddresses =
-            em.createQuery("select a from Address a where a.dataObject.parentDataObject is not null")
+            em.createQuery("select a from Address a where a.dataObject.parentDataObjectId is not null")
             .getResultList();
         
         //add-hoc temporary logic, to consider the parent data object with most addresses
-        Map<DataObject, Long> addressesCount = new HashMap<DataObject, Long>();
+        Map<BigInteger, Long> addressesCount = new HashMap<BigInteger, Long>();
         
-        for (Address address : allAddresses) {
-            DataObject parent = null;
-            if ( address.getDataObject()!=null && address.getDataObject().getParentDataObject()!=null )
-                parent = address.getDataObject().getParentDataObject();
-            if ( parent!=null ){
-                Long curValue = addressesCount.get(parent);
-                if ( curValue==null )
+        for(Address address : allAddresses)
+        {
+            BigInteger parentId;
+            DataObject dataObject;
+            if((dataObject = address.getDataObject()) != null &&
+                (parentId = dataObject.getParentDataObjectId()) != null)
+            {
+                Long curValue = addressesCount.get(parentId);
+                if(curValue == null)
                     curValue = new Long(1);
                 else
                     curValue++;
-                addressesCount.put(parent, curValue);
+                addressesCount.put(parentId, curValue);
             }
         }
         
         //find the one with most addresses
         Long biggestCount = new Long(0);
-        DataObject choosen = null;
-        for (Map.Entry<DataObject, Long> parentEntry : addressesCount.entrySet()) {
-            if ( parentEntry.getValue()>biggestCount ){
+        BigInteger choosenId = null;
+        for(Map.Entry<BigInteger, Long> parentEntry : addressesCount.entrySet())
+        {
+            if(parentEntry.getValue() > biggestCount)
+            {
                 biggestCount = parentEntry.getValue();
-                choosen = parentEntry.getKey();
+                choosenId = parentEntry.getKey();
             }
         }
-        
-        return choosen;
+
+        if(choosenId == null)
+            return null;
+
+        return em.find(DataObject.class, choosenId);
     }
 
     @Override
@@ -89,4 +99,11 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         DataObject result = (DataObject) values.get(ORGANIZATION_DATA_OBJECT_KEY);
         return result;
     }
+
+    public DataObject getDataObject(BigInteger dataObjectId)
+    {
+        return em.find(DataObject.class, dataObjectId);
+    }
+
+    
 }

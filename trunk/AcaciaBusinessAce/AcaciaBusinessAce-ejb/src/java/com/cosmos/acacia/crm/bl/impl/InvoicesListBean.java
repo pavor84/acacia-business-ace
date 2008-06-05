@@ -51,7 +51,7 @@ public class InvoicesListBean implements InvoicesListRemote, InvoicesListLocal {
         if(parent != null)
         {
             q = em.createNamedQuery("Invoice.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {
@@ -66,7 +66,7 @@ public class InvoicesListBean implements InvoicesListRemote, InvoicesListLocal {
         if(parent != null)
         {
             q = em.createNamedQuery("InvoiceItem.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObject", parent);
+            q.setParameter("parentDataObjectId", parent.getDataObjectId());
         }
         else
         {

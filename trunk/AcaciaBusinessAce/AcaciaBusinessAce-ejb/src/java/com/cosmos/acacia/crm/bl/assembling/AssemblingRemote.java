@@ -24,4 +24,6 @@ public interface AssemblingRemote
     AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory);
     AssemblingCategory save(AssemblingCategory entity);
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
+    AssemblingCategory getParent(AssemblingCategory child);
+    //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);
 }

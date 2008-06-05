@@ -42,6 +42,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             DataObjectBean doBean = (DataObjectBean)entity;
             BigInteger id = doBean.getId();
             DataObject dataObject = doBean.getDataObject();
+            BigInteger parentId = doBean.getParentId();
             if(id == null)
             {
                 System.out.println("Insert Entity");
@@ -55,9 +56,31 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     if(dataObject == null)
                         dataObject = new DataObject();
 
+                    dataObject.setParentDataObjectId(parentId);
                     dataObject.setDataObjectType(dot);
                     dataObject.setDataObjectVersion(1);
                     em.persist(dataObject);
+                }
+                else
+                {
+                    BigInteger doParentId = dataObject.getParentDataObjectId();
+                    boolean mustUpdateDO = false;
+                    if(parentId != null)
+                    {
+                        if(doParentId == null || !parentId.equals(doParentId))
+                        {
+                            dataObject.setParentDataObjectId(parentId);
+                            mustUpdateDO = true;
+                        }
+                    }
+                    else if(doParentId != null)
+                    {
+                        dataObject.setParentDataObjectId(parentId);
+                        mustUpdateDO = true;
+                    }
+
+                    if(mustUpdateDO)
+                        em.persist(dataObject);
                 }
 
                 //id = new BigInteger(dataObject.getDataObjectId().toByteArray());
@@ -77,6 +100,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 else
                     dataObject = em.merge(dataObject);
                 int version = dataObject.getDataObjectVersion();
+                dataObject.setParentDataObjectId(parentId);
                 dataObject.setDataObjectVersion(version + 1);
                 em.persist(dataObject);
             }

@@ -78,7 +78,7 @@ public class WarehouseListBean implements WarehouseListRemote {
 //    @Override
 //    public DataObject getDataObjectWithAddresses() {
 //        List<Address> allAddresses =
-//            em.createQuery("select a from Address a where a.dataObject.parentDataObject is not null")
+//            em.createQuery("select a from Address a where a.dataObject.parentDataObjectId is not null")
 //            .getResultList();
 //        
 //        //add-hoc temporary logic, to consider the parent data object with most addresses
