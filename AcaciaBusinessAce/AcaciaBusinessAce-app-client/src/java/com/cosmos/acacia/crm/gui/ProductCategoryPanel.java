@@ -40,8 +40,9 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private BindingGroup bindGroup;
 
     /** Creates new form ProductCategoryPanel */
-    public ProductCategoryPanel(ProductCategory category, DataObject dataObject) {
-        super(dataObject.getDataObjectId());
+    public ProductCategoryPanel(ProductCategory category, DataObject dataObject)
+    {
+        super(dataObject != null ? dataObject.getDataObjectId() : null);
         this.entity = category;
         init();
     }

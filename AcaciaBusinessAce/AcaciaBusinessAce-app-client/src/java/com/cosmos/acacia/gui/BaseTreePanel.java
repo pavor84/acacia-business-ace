@@ -69,7 +69,6 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
         simpleListPanel = new com.cosmos.swingb.JBPanel();
         mainPanel = new com.cosmos.swingb.JBPanel();
         showAllHeirsCheck = new com.cosmos.swingb.JBCheckBox();
-        jBScrollPane1 = new com.cosmos.swingb.JBScrollPane();
         treeScrollPane = new javax.swing.JScrollPane();
         tree = new com.cosmos.swingb.JBTree();
 
@@ -105,27 +104,10 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
         showAllHeirsCheck.setText(resourceMap.getString("showAllHeirsCheck.text")); // NOI18N
         showAllHeirsCheck.setName("showAllHeirsCheck"); // NOI18N
 
-        jBScrollPane1.setBorder(null);
-        jBScrollPane1.setName("jBScrollPane1"); // NOI18N
-
         treeScrollPane.setName("treeScrollPane"); // NOI18N
 
-        tree.setBackground(resourceMap.getColor("tree.background")); // NOI18N
-        tree.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 4, 4, 4));
-        tree.setToolTipText(resourceMap.getString("tree.toolTipText")); // NOI18N
-        tree.setAutoscrolls(true);
-        tree.setClosedIcon(resourceMap.getIcon("tree.closedIcon")); // NOI18N
-        tree.setDragEnabled(true);
-        tree.setLeafIcon(resourceMap.getIcon("tree.leafIcon")); // NOI18N
-        tree.setMaximumSize(new java.awt.Dimension(30000, 30000));
-        tree.setMinimumSize(null);
         tree.setName("tree"); // NOI18N
-        tree.setOpenIcon(resourceMap.getIcon("tree.openIcon")); // NOI18N
-        tree.setPreferredSize(new java.awt.Dimension(0, 0));
-        tree.setVisibleRowCount(0);
         treeScrollPane.setViewportView(tree);
-
-        jBScrollPane1.setViewportView(treeScrollPane);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -134,7 +116,7 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
-            .addComponent(jBScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+            .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,7 +124,7 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
                 .addContainerGap()
                 .addComponent(showAllHeirsCheck, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
+                .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
         );
 
         splitPane.setLeftComponent(mainPanel);
@@ -161,7 +143,6 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBScrollPane jBScrollPane1;
     private com.cosmos.swingb.JBPanel mainPanel;
     private com.cosmos.swingb.JBCheckBox showAllHeirsCheck;
     private com.cosmos.swingb.JBPanel simpleListPanel;

@@ -44,6 +44,7 @@ import com.cosmos.swingb.JBTree;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import com.cosmos.util.Lister;
 import java.math.BigInteger;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -663,9 +664,12 @@ public class ProductCategoriesTreePanelBackup extends AcaciaPanel {
         categoryTree.setOpenIcon(resourceMap.getIcon("categoryTree.openIcon")); // NOI18N
         categoryTree.setPreferredSize(null);
         categoryTree.setVisibleRowCount(0);
-        productCategoriesTreeScrollPane.setViewportView(categoryTree);
 
-        jBScrollPane1.setViewportView(productCategoriesTreeScrollPane);
+        //productCategoriesTreeScrollPane.setViewportView(categoryTree);
+        //jBScrollPane1.setViewportView(productCategoriesTreeScrollPane);
+        jBScrollPane1.setViewportView(categoryTree);
+        jBScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jBScrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
         jBPanel1.setLayout(jBPanel1Layout);

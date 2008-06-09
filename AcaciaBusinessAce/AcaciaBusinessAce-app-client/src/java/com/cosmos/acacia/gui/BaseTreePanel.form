@@ -86,7 +86,7 @@
                       <EmptySpace min="6" pref="6" max="6" attributes="0"/>
                       <Component id="showAllHeirsCheck" pref="233" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jBScrollPane1" alignment="0" pref="239" max="32767" attributes="0"/>
+                  <Component id="treeScrollPane" alignment="0" pref="239" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -95,7 +95,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="showAllHeirsCheck" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jBScrollPane1" pref="378" max="32767" attributes="0"/>
+                      <Component id="treeScrollPane" pref="364" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -109,55 +109,21 @@
                 <Property name="name" type="java.lang.String" value="showAllHeirsCheck" noResource="true"/>
               </Properties>
             </Component>
-            <Container class="com.cosmos.swingb.JBScrollPane" name="jBScrollPane1">
+            <Container class="javax.swing.JScrollPane" name="treeScrollPane">
               <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="null"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="jBScrollPane1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="treeScrollPane" noResource="true"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Container class="javax.swing.JScrollPane" name="treeScrollPane">
+                <Component class="com.cosmos.swingb.JBTree" name="tree">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="treeScrollPane" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="tree" noResource="true"/>
                   </Properties>
-                  <AuxValues>
-                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                  </AuxValues>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                  <SubComponents>
-                    <Component class="com.cosmos.swingb.JBTree" name="tree">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" resourceKey="tree.background"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="4" left="4" right="4" top="2"/>
-                          </Border>
-                        </Property>
-                        <Property name="toolTipText" type="java.lang.String" resourceKey="tree.toolTipText"/>
-                        <Property name="autoscrolls" type="boolean" value="true"/>
-                        <Property name="closedIcon" type="javax.swing.Icon" resourceKey="tree.closedIcon"/>
-                        <Property name="dragEnabled" type="boolean" value="true"/>
-                        <Property name="leafIcon" type="javax.swing.Icon" resourceKey="tree.leafIcon"/>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[30000, 30000]"/>
-                        </Property>
-                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="null"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="tree" noResource="true"/>
-                        <Property name="openIcon" type="javax.swing.Icon" resourceKey="tree.openIcon"/>
-                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 0]"/>
-                        </Property>
-                        <Property name="visibleRowCount" type="int" value="0"/>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                </Container>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>

@@ -211,15 +211,17 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     }
 
     @Override
-    protected Object newRow() {
+    protected Object newRow()
+    {
         ProductCategory category = getFormSession().newProductCategory(null);
         ProductCategory autoParent = null;
-        TreePath selection =
-            getTree().getSelectionPath();
-        if ( selection!=null ){
-            DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selection.getLastPathComponent();
-            if ( selNode.getUserObject() instanceof ProductCategory )
-                autoParent = (ProductCategory) selNode.getUserObject();
+        TreePath selection = getTree().getSelectionPath();
+        if(selection != null)
+        {
+            DefaultMutableTreeNode selNode = (DefaultMutableTreeNode)selection.getLastPathComponent();
+            Object userObject;
+            if((userObject = selNode.getUserObject()) instanceof ProductCategory )
+                autoParent = (ProductCategory)userObject;
         }
             //(ProductCategory) getDataTable().getSelectedRowObject();
         category.setParentCategory(autoParent);
@@ -228,7 +230,8 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     }
 
     @Override
-    protected Object onEditEntity(ProductCategory category) {
+    protected Object onEditEntity(ProductCategory category)
+    {
         ProductCategoryPanel editPanel = new ProductCategoryPanel(category, category.getDataObject());
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))

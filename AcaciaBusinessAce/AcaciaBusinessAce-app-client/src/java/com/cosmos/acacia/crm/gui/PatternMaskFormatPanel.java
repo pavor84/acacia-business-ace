@@ -41,6 +41,7 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
+import java.math.BigInteger;
 
 /**
  *
@@ -53,7 +54,7 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
     
     /** Creates new form PatternMaskFormatPanel */
     public PatternMaskFormatPanel(PatternMaskFormat modelObject) {
-        super(null);
+        super((BigInteger)null);
         this.format = modelObject;
         init();
     }
