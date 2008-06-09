@@ -8,6 +8,7 @@ package com.cosmos.acacia.gui;
 import com.cosmos.acacia.app.AcaciaSession;
 import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
@@ -40,23 +41,44 @@ public abstract class AcaciaPanel
     protected static Logger log = Logger.getLogger(AcaciaPanel.class);
     
     private BigInteger parentDataObjectId;
+    private DataObjectBean mainDataObject;
 
 
-    AcaciaPanel() {
+    AcaciaPanel()
+    {
         super(AcaciaApplication.class);
     }
  
-    public AcaciaPanel(BigInteger parentDataObjectId) {
+    public AcaciaPanel(BigInteger parentDataObjectId)
+    {
         this();
         this.parentDataObjectId = parentDataObjectId;
     }
 
-    public BigInteger getParentDataObjectId() {
+    public AcaciaPanel(DataObjectBean mainDataObject)
+    {
+        this(mainDataObject != null ? mainDataObject.getParentId() : (BigInteger)null);
+        this.mainDataObject = mainDataObject;
+    }
+
+    public BigInteger getParentDataObjectId()
+    {
         return parentDataObjectId;
     }
 
-    public void setParentDataObjectId(BigInteger parentDataObjectId) {
+    public void setParentDataObjectId(BigInteger parentDataObjectId)
+    {
         this.parentDataObjectId = parentDataObjectId;
+    }
+
+    public DataObjectBean getMainDataObject()
+    {
+        return mainDataObject;
+    }
+
+    public void setMainDataObject(DataObjectBean mainDataObject)
+    {
+        this.mainDataObject = mainDataObject;
     }
 
     public DataObject getParentDataObject()
