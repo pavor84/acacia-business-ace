@@ -56,6 +56,11 @@ public abstract class AbstractTablePanel
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
 
+    public AbstractTablePanel()
+    {
+        this(null);
+    }
+
     /** Creates new form AbstractTablePanel */
     public AbstractTablePanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
