@@ -1,5 +1,6 @@
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.warehouse;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,12 +13,11 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
 
 /**
  * Created	:	02.05.2008
@@ -25,7 +25,7 @@ import java.math.BigInteger;
  * @version $Id: $
  *
  */
-public class WarehouseProductListPanel extends AbstractTablePanel {
+public class WarehouseListPanel extends AbstractTablePanel {
 
     private EntityProperties entityProps;
     
@@ -36,23 +36,21 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     /**
      * @param parentDataObject
      */
-    public WarehouseProductListPanel(BigInteger parentDataObjectId) {
+    public WarehouseListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
     
-    public WarehouseProductListPanel() {
-        this(null);
+    public WarehouseListPanel() {
+        super(null);
     }
     
     @Override
     protected void initData() {
         super.initData();
         
-        entityProps = getFormSession().getWarehouseProductEntityProperties();
+        setVisible(Button.EnterWarehouse, true);
         
-        //free quantity column - add it by hand since it's synthetic value
-        addColumn(25, getResourceMap().getString("WarehouseProduct.freeQuantity.columnName"),
-            null, entityProps);
+        entityProps = getFormSession().getWarehouseEntityProperties();
         
         refreshDataTable(entityProps);
     }
@@ -85,7 +83,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        return getFormSession().listWarehouseProducts();
+        return getFormSession().listWarehousesByName();
     }
 
     /**
@@ -115,7 +113,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     @Override
     protected boolean deleteRow(Object rowObject) {
         try{
-          getFormSession().deleteWarehouseProduct((WarehouseProduct) rowObject);
+          getFormSession().deleteWarehouse((Warehouse) rowObject);
           return true;
         }catch ( Exception e ){
             JOptionPane.showMessageDialog(this, 
@@ -130,20 +128,20 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object modifyRow(Object rowObject) {
-        WarehouseProduct wp = (WarehouseProduct) rowObject;
-        return onEditEntity(wp);
+        Warehouse w = (Warehouse) rowObject;
+        return onEditEntity(w);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
     protected Object newRow() {
-        WarehouseProduct wp = getFormSession().newWarehouseProduct();
-        return onEditEntity(wp);
+        Warehouse w = getFormSession().newWarehouse(null);
+        return onEditEntity(w);
     }
 
-    private Object onEditEntity(WarehouseProduct wp) {
-        WarehouseProductPanel editPanel = new WarehouseProductPanel(wp);
+    private Object onEditEntity(Warehouse w) {
+        WarehousePanel editPanel = new WarehousePanel(w);
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {

@@ -4,7 +4,7 @@
  * Created on Петък, 2008, Май 2, 15:27
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.warehouse;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Warehouse;
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;

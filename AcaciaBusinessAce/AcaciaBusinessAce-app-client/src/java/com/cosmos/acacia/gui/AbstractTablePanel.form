@@ -24,7 +24,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="dataScrollPane" alignment="0" pref="902" max="32767" attributes="0"/>
+                  <Component id="dataScrollPane" alignment="0" pref="916" max="32767" attributes="0"/>
                   <Component id="buttonsPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -75,7 +75,9 @@
                   <Component id="selectButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="unselectButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="136" max="32767" attributes="0"/>
+                  <EmptySpace pref="11" max="32767" attributes="0"/>
+                  <Component id="enterWarehouseButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="classifyButton" min="-2" pref="91" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="newButton" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -104,6 +106,7 @@
                       <Component id="newButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="unselectButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="classifyButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="enterWarehouseButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -174,6 +177,16 @@
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="classifyButton.text"/>
             <Property name="name" type="java.lang.String" value="classifyButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBButton" name="enterWarehouseButton">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="com.cosmos.acacia.gui.AbstractTablePanel" id="enterWarehouseAction" methodName="enterWarehouseAction"/>
+            </Property>
+            <Property name="mnemonic" type="int" value="101"/>
+            <Property name="text" type="java.lang.String" resourceKey="enterWarehouseButton.text"/>
+            <Property name="name" type="java.lang.String" value="enterWarehouseButton" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
