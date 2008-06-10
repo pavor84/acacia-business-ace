@@ -4,13 +4,13 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.birosoft.liquid.LiquidLookAndFeel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -18,8 +18,13 @@ import javax.swing.JSeparator;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JPopupMenu.Separator;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.ResourceMap;
@@ -27,6 +32,7 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
+import com.birosoft.liquid.LiquidLookAndFeel;
 import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
@@ -36,6 +42,8 @@ import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
+import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
+import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.swingb.JBDesktopPane;
@@ -47,12 +55,6 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.SoftBevelBorder;
-import org.apache.log4j.Logger;
 
 /**
  * The application's main frame.
@@ -426,7 +428,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem invoicesListItem = new JBMenuItem();
         JBMenu warehousesMenu = new JBMenu();
         JBMenuItem warehousesItem = new JBMenuItem();
-        JBMenuItem warehouseProductsItem = new JBMenuItem();
+        //JBMenuItem warehouseProductsItem = new JBMenuItem();
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -596,8 +598,8 @@ public class AcaciaApplicationView extends FrameView {
         
         warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
         warehousesMenu.add(warehousesItem);
-        warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
-        warehousesMenu.add(warehouseProductsItem);
+        //warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
+        //warehousesMenu.add(warehouseProductsItem);
 
         warehousesMenu.add(new JSeparator());
 

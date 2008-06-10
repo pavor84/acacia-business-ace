@@ -6,14 +6,19 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
-import com.cosmos.acacia.crm.data.Classifier;
 import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -29,6 +34,8 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
@@ -38,13 +45,6 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.listeners.TableModificationListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.math.BigInteger;
-import java.util.LinkedList;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 /**
  *
@@ -92,6 +92,7 @@ public abstract class AbstractTablePanel
         selectButton = new com.cosmos.swingb.JBButton();
         unselectButton = new com.cosmos.swingb.JBButton();
         classifyButton = new com.cosmos.swingb.JBButton();
+        enterWarehouseButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -139,6 +140,11 @@ public abstract class AbstractTablePanel
         classifyButton.setText(resourceMap.getString("classifyButton.text")); // NOI18N
         classifyButton.setName("classifyButton"); // NOI18N
 
+        enterWarehouseButton.setAction(actionMap.get("enterWarehouseAction")); // NOI18N
+        enterWarehouseButton.setMnemonic('e');
+        enterWarehouseButton.setText(resourceMap.getString("enterWarehouseButton.text")); // NOI18N
+        enterWarehouseButton.setName("enterWarehouseButton"); // NOI18N
+
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
         buttonsPanelLayout.setHorizontalGroup(
@@ -148,7 +154,9 @@ public abstract class AbstractTablePanel
                 .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(enterWarehouseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,7 +185,8 @@ public abstract class AbstractTablePanel
                     .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(enterWarehouseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -190,7 +199,7 @@ public abstract class AbstractTablePanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dataScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE)
+                    .addComponent(dataScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 916, Short.MAX_VALUE)
                     .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -215,6 +224,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private javax.swing.JScrollPane dataScrollPane;
     private com.cosmos.acacia.gui.AcaciaTable dataTable;
     private com.cosmos.swingb.JBButton deleteButton;
+    private com.cosmos.swingb.JBButton enterWarehouseButton;
     private com.cosmos.swingb.JBButton modifyButton;
     private com.cosmos.swingb.JBButton newButton;
     private com.cosmos.swingb.JBButton refreshButton;
@@ -234,6 +244,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         setVisible(Button.Select, false);
         setVisible(Button.Unselect, false);
+        setVisible(Button.EnterWarehouse, false);
 
         setEnabled(Button.Select, false);
         setEnabled(Button.Unselect, false);
@@ -394,8 +405,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             case Close:
                 closeButton.setVisible(visible);
                 break;
+                
             case Classify:
                 classifyButton.setVisible(visible);
+                break;
+                
+            case EnterWarehouse:
+                enterWarehouseButton.setVisible(visible);
                 break;
         }
     }
@@ -423,6 +439,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
             case Close:
                 return closeButton.isVisible();
+                
+            case EnterWarehouse:
+                return enterWarehouseButton.isVisible();
         }
 
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
@@ -661,7 +680,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Modify("modifyAction"),
         Delete("deleteAction"),
         Refresh("refreshAction"),
-        Close("closeAction");
+        Close("closeAction"),
+        EnterWarehouse("enterWarehouseAction");
+
 
         private Button(String actionName)
         {
@@ -689,7 +710,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Refresh(16, Button.Refresh),
         Close(32, Button.Close),
         Unselect(64, Button.Unselect),
-        Classify(128, Button.Classify);
+        Classify(128, Button.Classify),
+        EnterWarehouse(256, Button.EnterWarehouse);
 
         ButtonVisibility(int visibilityIndex, Button button)
         {
@@ -917,5 +939,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE ){
             closeAction();
         }
+    }
+
+    @Action
+    public void enterWarehouseAction() {
     }
 }

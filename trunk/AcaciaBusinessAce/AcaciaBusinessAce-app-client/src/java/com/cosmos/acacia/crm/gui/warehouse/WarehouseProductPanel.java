@@ -4,7 +4,7 @@
  * Created on Понеделник, 2008, Май 5, 10:55
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.warehouse;
 
 import java.math.BigDecimal;
 
@@ -20,6 +20,8 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
