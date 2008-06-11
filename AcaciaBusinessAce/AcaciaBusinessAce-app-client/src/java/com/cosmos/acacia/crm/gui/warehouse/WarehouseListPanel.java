@@ -160,4 +160,9 @@ public class WarehouseListPanel extends AbstractTablePanel {
         
         return t;
     }
+    
+    @Override
+    public void enterWarehouseAction() {
+        System.out.println("Enetering warehouse");
+    }
 }

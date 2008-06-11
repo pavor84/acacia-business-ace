@@ -255,6 +255,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         setEnabled(Button.Unselect, false);
         setEnabled(Button.Modify, false);
         setEnabled(Button.Delete, false);
+        setEnabled(Button.EnterWarehouse, false);
 
         if(selectedRowObject != null)
             dataTable.setSelectedRowObject(selectedRowObject);
@@ -758,6 +759,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Delete, false);
                     setEnabled(Button.Select, false);
                     setEnabled(Button.Unselect, false);
+                    setEnabled(Button.EnterWarehouse, false);
                 }
                 else
                 {
@@ -766,6 +768,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Delete, canDelete(selectedObject));
                     setEnabled(Button.Select, true);
                     setEnabled(Button.Unselect, true);
+                    setEnabled(Button.EnterWarehouse, true);
                 }
                 setEnabled(Button.New, canCreate());
                 selectedRowObject = null;
