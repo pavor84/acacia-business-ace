@@ -8,6 +8,9 @@ package com.cosmos.acacia.crm.bl.assembling;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
@@ -148,6 +151,21 @@ public class AssemblingBean
             return null;
 
         return em.find(AssemblingCategory.class, parentId);
+    }
+
+    public List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory)
+    {
+        return null;
+    }
+
+    public List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema)
+    {
+        return null;
+    }
+
+    public List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem)
+    {
+        return null;
     }
 
 
