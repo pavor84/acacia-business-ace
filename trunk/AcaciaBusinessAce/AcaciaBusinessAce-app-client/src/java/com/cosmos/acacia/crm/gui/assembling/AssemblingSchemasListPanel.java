@@ -6,9 +6,13 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import java.awt.Dimension;
 import java.math.BigInteger;
+import javax.ejb.EJB;
+import javax.swing.JPanel;
 
 /**
  *
@@ -17,6 +21,9 @@ import java.math.BigInteger;
 public class AssemblingSchemasListPanel
     extends AcaciaPanel
 {
+    @EJB
+    private static AssemblingRemote formSession;
+
 
     /** Creates new form AssemblingSchemasListPanel */
     public AssemblingSchemasListPanel(BigInteger parentId)
@@ -35,14 +42,48 @@ public class AssemblingSchemasListPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        assemblingSchemasPanel = new com.cosmos.swingb.JBPanel();
+        assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
+        assemblingCategoryLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        schemasTablePanel = getAssemblingSchemasTablePanel();
         assemblingSchemasSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsSplitPane = new com.cosmos.swingb.JBSplitPane();
-        schemaItemsPanel = getSchemaItemsTablePanel();
-        itemValuesPanel = getItemValuesTablePanel();
-        assemblingSchemasCategoryPanel = new com.cosmos.swingb.JBPanel();
-        assemblingCategoryLookup = new com.cosmos.acacia.gui.AcaciaLookup();
-        assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
-        assemblingSchemasPanel = getAssemblingSchemasTablePanel() ;
+        schemaItemsTitledPanel = new com.cosmos.swingb.JBTitledPanel();
+        itemValuesTitledPanel = new com.cosmos.swingb.JBTitledPanel();
+        assemblingSchemasTitledPanel = new com.cosmos.swingb.JBTitledPanel();
+
+        assemblingSchemasPanel.setName("assemblingSchemasPanel"); // NOI18N
+
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemasListPanel.class);
+        assemblingCategoryLabel.setText(resourceMap.getString("assemblingCategoryLabel.text")); // NOI18N
+        assemblingCategoryLabel.setName("assemblingCategoryLabel"); // NOI18N
+
+        assemblingCategoryLookup.setName("assemblingCategoryLookup"); // NOI18N
+
+        schemasTablePanel.setName("schemasTablePanel"); // NOI18N
+
+        javax.swing.GroupLayout assemblingSchemasPanelLayout = new javax.swing.GroupLayout(assemblingSchemasPanel);
+        assemblingSchemasPanel.setLayout(assemblingSchemasPanelLayout);
+        assemblingSchemasPanelLayout.setHorizontalGroup(
+            assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(assemblingSchemasPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+        );
+        assemblingSchemasPanelLayout.setVerticalGroup(
+            assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(assemblingSchemasPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
+        );
 
         setName("Form"); // NOI18N
         setLayout(new java.awt.BorderLayout());
@@ -54,83 +95,22 @@ public class AssemblingSchemasListPanel
         schemaItemsSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         schemaItemsSplitPane.setName("schemaItemsSplitPane"); // NOI18N
 
-        schemaItemsPanel.setName("schemaItemsPanel"); // NOI18N
+        schemaItemsTitledPanel.setTitle(resourceMap.getString("schemaItemsTitledPanel.title")); // NOI18N
+        schemaItemsTitledPanel.setContentContainer(getSchemaItemsTablePanel());
+        schemaItemsTitledPanel.setName("schemaItemsTitledPanel"); // NOI18N
+        schemaItemsSplitPane.setTopComponent(schemaItemsTitledPanel);
 
-        javax.swing.GroupLayout schemaItemsPanelLayout = new javax.swing.GroupLayout(schemaItemsPanel);
-        schemaItemsPanel.setLayout(schemaItemsPanelLayout);
-        schemaItemsPanelLayout.setHorizontalGroup(
-            schemaItemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 499, Short.MAX_VALUE)
-        );
-        schemaItemsPanelLayout.setVerticalGroup(
-            schemaItemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 299, Short.MAX_VALUE)
-        );
-
-        schemaItemsSplitPane.setTopComponent(schemaItemsPanel);
-
-        itemValuesPanel.setName("itemValuesPanel"); // NOI18N
-
-        javax.swing.GroupLayout itemValuesPanelLayout = new javax.swing.GroupLayout(itemValuesPanel);
-        itemValuesPanel.setLayout(itemValuesPanelLayout);
-        itemValuesPanelLayout.setHorizontalGroup(
-            itemValuesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 499, Short.MAX_VALUE)
-        );
-        itemValuesPanelLayout.setVerticalGroup(
-            itemValuesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
-        );
-
-        schemaItemsSplitPane.setRightComponent(itemValuesPanel);
+        itemValuesTitledPanel.setTitle(resourceMap.getString("itemValuesTitledPanel.title")); // NOI18N
+        itemValuesTitledPanel.setContentContainer(getItemValuesTablePanel());
+        itemValuesTitledPanel.setName("itemValuesTitledPanel"); // NOI18N
+        schemaItemsSplitPane.setRightComponent(itemValuesTitledPanel);
 
         assemblingSchemasSplitPane.setRightComponent(schemaItemsSplitPane);
 
-        assemblingSchemasCategoryPanel.setName("assemblingSchemasCategoryPanel"); // NOI18N
-
-        assemblingCategoryLookup.setName("assemblingCategoryLookup"); // NOI18N
-
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemasListPanel.class);
-        assemblingCategoryLabel.setText(resourceMap.getString("assemblingCategoryLabel.text")); // NOI18N
-        assemblingCategoryLabel.setName("assemblingCategoryLabel"); // NOI18N
-
-        assemblingSchemasPanel.setName("assemblingSchemasPanel"); // NOI18N
-
-        javax.swing.GroupLayout assemblingSchemasPanelLayout = new javax.swing.GroupLayout(assemblingSchemasPanel);
-        assemblingSchemasPanel.setLayout(assemblingSchemasPanelLayout);
-        assemblingSchemasPanelLayout.setHorizontalGroup(
-            assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 449, Short.MAX_VALUE)
-        );
-        assemblingSchemasPanelLayout.setVerticalGroup(
-            assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 516, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout assemblingSchemasCategoryPanelLayout = new javax.swing.GroupLayout(assemblingSchemasCategoryPanel);
-        assemblingSchemasCategoryPanel.setLayout(assemblingSchemasCategoryPanelLayout);
-        assemblingSchemasCategoryPanelLayout.setHorizontalGroup(
-            assemblingSchemasCategoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(assemblingSchemasCategoryPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(assemblingSchemasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        assemblingSchemasCategoryPanelLayout.setVerticalGroup(
-            assemblingSchemasCategoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(assemblingSchemasCategoryPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(assemblingSchemasCategoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(assemblingSchemasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        assemblingSchemasSplitPane.setLeftComponent(assemblingSchemasCategoryPanel);
+        assemblingSchemasTitledPanel.setTitle(resourceMap.getString("assemblingSchemasTitledPanel.title")); // NOI18N
+        assemblingSchemasTitledPanel.setContentContainer(assemblingSchemasPanel);
+        assemblingSchemasTitledPanel.setName("assemblingSchemasTitledPanel"); // NOI18N
+        assemblingSchemasSplitPane.setLeftComponent(assemblingSchemasTitledPanel);
 
         add(assemblingSchemasSplitPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -138,14 +118,14 @@ public class AssemblingSchemasListPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
     private com.cosmos.acacia.gui.AcaciaLookup assemblingCategoryLookup;
-    private com.cosmos.swingb.JBPanel assemblingSchemasCategoryPanel;
     private com.cosmos.swingb.JBPanel assemblingSchemasPanel;
     private com.cosmos.swingb.JBSplitPane assemblingSchemasSplitPane;
-    private com.cosmos.swingb.JBPanel itemValuesPanel;
-    private com.cosmos.swingb.JBPanel schemaItemsPanel;
+    private com.cosmos.swingb.JBTitledPanel assemblingSchemasTitledPanel;
+    private com.cosmos.swingb.JBTitledPanel itemValuesTitledPanel;
     private com.cosmos.swingb.JBSplitPane schemaItemsSplitPane;
+    private com.cosmos.swingb.JBTitledPanel schemaItemsTitledPanel;
+    private com.cosmos.swingb.JBPanel schemasTablePanel;
     // End of variables declaration//GEN-END:variables
-
 
 
     private AssemblingSchemasTablePanel assemblingSchemasTablePanel;
@@ -155,6 +135,14 @@ public class AssemblingSchemasListPanel
     @Override
     protected void initData()
     {
+        JPanel panel = getAssemblingSchemasTablePanel();
+        Dimension size = panel.getPreferredSize();
+        int width = size.width;
+        panel = getSchemaItemsTablePanel();
+        size = panel.getPreferredSize();
+        if(size.width > 0)
+            width = (width + size.width) / 2;
+        assemblingSchemasSplitPane.setDividerLocation(width);
     }
 
     private AssemblingSchemasTablePanel getAssemblingSchemasTablePanel()
@@ -188,11 +176,28 @@ public class AssemblingSchemasListPanel
     }
 
 
+    protected AssemblingRemote getFormSession()
+    {
+        if(formSession == null)
+        {
+            formSession = getRemoteBean(this, AssemblingRemote.class);
+        }
+
+        return formSession;
+    }
+
     private class AssemblingSchemasTablePanel
         extends AbstractTablePanel
     {
         public AssemblingSchemasTablePanel()
         {
+        }
+
+        @Override
+        protected void initData()
+        {
+            super.initData();
+            setVisible(AbstractTablePanel.Button.Classify, false);
         }
 
         @Override
@@ -240,6 +245,13 @@ public class AssemblingSchemasListPanel
         }
 
         @Override
+        protected void initData()
+        {
+            super.initData();
+            setVisible(AbstractTablePanel.Button.Classify, false);
+        }
+
+        @Override
         protected boolean deleteRow(Object rowObject)
         {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -281,6 +293,13 @@ public class AssemblingSchemasListPanel
     {
         public ItemValuesTablePanel()
         {
+        }
+
+        @Override
+        protected void initData()
+        {
+            super.initData();
+            setVisible(AbstractTablePanel.Button.Classify, false);
         }
 
         @Override
