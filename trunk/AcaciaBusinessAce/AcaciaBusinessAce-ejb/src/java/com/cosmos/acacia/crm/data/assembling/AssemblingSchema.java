@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.data.assembling;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -38,18 +41,33 @@ public class AssemblingSchema
 
     @JoinColumn(name = "category_id", referencedColumnName = "assembling_category_id")
     @ManyToOne
+    @Property(title="Category", propertyValidator=@PropertyValidator(required=true))
     private AssemblingCategory assemblingCategory;
 
     @Column(name = "schema_code", nullable = false)
+    @Property(
+        title="Schema Code",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=50,
+            required=true))
     private String schemaCode;
 
     @Column(name = "schema_name", nullable = false)
+    @Property(
+        title="Schema Name",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=100,
+            required=true))
     private String schemaName;
 
     @Column(name = "is_obsolete", nullable = false)
+    @Property(title="Obsolete")
     private boolean obsolete;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
 
 
