@@ -34,7 +34,7 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     /** Creates new form DataObjectTypesListPanel */
     public DataObjectTypesListPanel()
     {
-        super(null);
+        super();
         postInitData();
     }
 

@@ -32,7 +32,7 @@ public class CountriesListPanel extends AbstractTablePanel {
     /** Creates new form AddresssListPanel */
     public CountriesListPanel()
     {
-        super(null);
+        super();
     }
 
     @EJB

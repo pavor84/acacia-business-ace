@@ -1,5 +1,6 @@
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -19,9 +20,17 @@ import java.math.BigInteger;
  *
  * @param <E> the entity this form will be used with
  */
-public abstract class AbstractTreeEnabledTablePanel<E> extends AbstractTablePanel {
+public abstract class AbstractTreeEnabledTablePanel<E>
+    extends AbstractTablePanel
+{
 
-    public AbstractTreeEnabledTablePanel(BigInteger parentDataObjectId) {
+    public AbstractTreeEnabledTablePanel(DataObjectBean dataObjectBean)
+    {
+        super(dataObjectBean);
+    }
+
+    public AbstractTreeEnabledTablePanel(BigInteger parentDataObjectId)
+    {
         super(parentDataObjectId);
     }
 

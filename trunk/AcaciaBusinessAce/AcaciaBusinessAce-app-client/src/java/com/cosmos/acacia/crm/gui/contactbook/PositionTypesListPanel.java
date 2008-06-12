@@ -53,7 +53,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
 
     public PositionTypesListPanel(Class ownerClass)
     {
-        super(null);
+        super();
         this.ownerClass = ownerClass;
         postInitData();
     }

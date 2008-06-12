@@ -41,7 +41,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     }
     
     public WarehouseProductListPanel() {
-        super(null);
+        super();
     }
     
     @Override
