@@ -35,4 +35,6 @@ public interface AssemblingRemote
     List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema);
 
     List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem);
+
+    EntityProperties getAssemblingSchemaEntityProperties();
 }
