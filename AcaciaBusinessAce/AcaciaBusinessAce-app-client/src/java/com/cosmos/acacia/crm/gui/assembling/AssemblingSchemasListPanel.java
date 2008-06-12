@@ -8,21 +8,18 @@ package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
-import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
 import java.awt.Dimension;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.JPanel;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -199,7 +196,7 @@ public class AssemblingSchemasListPanel
     private class AssemblingSchemasTablePanel
         extends AbstractTablePanel
     {
-        private BindingGroup schemasBindingGroup;
+        private BindingGroup bindingGroup;
         //private List<SimpleProduct> products;
 
         private EntityProperties entityProps;
@@ -217,70 +214,46 @@ public class AssemblingSchemasListPanel
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
 
+            bindingGroup = new BindingGroup();
+
             entityProps = getFormSession().getAssemblingSchemaEntityProperties();
 
-            List<PropertyDetails> propertyDetails = 
-                new ArrayList<PropertyDetails>(entityProps.getValues());
+            if(category == null)
+                category = new AssemblingCategory();
 
-            //set custom display for 'assemblingCategory'
-            //setCustomDisplay(propertyDetails, "assemblingCategory", 
-            //    "${assemblingCategory.categoryName}");
-
-            /*
-            //set custom display for 'patternMaskFormat'
-            setCustomDisplay(propertyDetails, "patternMaskFormat", 
-                "${patternMaskFormat.patternName} (${patternMaskFormat.format})");
-
-            //set custom display for 'producer'
-            setCustomDisplay(propertyDetails, "producer", "${producer.displayName}");
-
-            //add column
-            addColumn(55, getString("ProductList.codeFormatted"), "${codeFormatted}", entityProps);
-            */
-
-            refreshDataTable(entityProps);
+            PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
+            assemblingCategoryLookup.bind(new AcaciaLookupProvider()
+                {
+                    @Override
+                    public Object showSelectionControl()
+                    {
+                        return onChooseCategory();
+                    }
+                },
+                bindingGroup,
+                category, 
+                propDetails, 
+                "${categoryName}",
+                UpdateStrategy.READ_WRITE);
         }
 
-        private void refreshDataTable(EntityProperties entProps)
+        protected AssemblingCategory onChooseCategory()
         {
-            if(schemasBindingGroup != null)
-                schemasBindingGroup.unbind();
+            AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
 
-            schemasBindingGroup = new BindingGroup();
+            log.info("onChooseCategory: " + category);
 
-            assemblingCategoryLookup.getSelectedItem();
+            DialogResponse response = listPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                AssemblingCategory selectedCategory = (AssemblingCategory)listPanel.getSelectedRowObject();
+                category = selectedCategory;
+                log.info("selectedCategory: " + selectedCategory);
 
-            AcaciaTable productsTable = getDataTable();
+                return selectedCategory;
+            }
 
-            /*JTableBinding tableBinding = productsTable.bind(schemasBindingGroup, getProducts(), entityProps, UpdateStrategy.READ);
-
-            tableBinding.setEditable(false);
-            productsTable.bindComboBoxCellEditor(schemasBindingGroup, getMeasureUnits(), entityProps.getPropertyDetails("measureUnit"));
-            productsTable.bindComboBoxCellEditor(schemasBindingGroup, getMeasureUnits(MeasurementUnit.Category.Volume), entityProps.getPropertyDetails("dimensionUnit"));
-            productsTable.bindComboBoxCellEditor(schemasBindingGroup, getMeasureUnits(MeasurementUnit.Category.MassWeight), entityProps.getPropertyDetails("weightUnit"));
-            productsTable.bindComboBoxCellEditor(schemasBindingGroup, getFormSession().getProductColors(), entityProps.getPropertyDetails("productColor"));*/
-
-            schemasBindingGroup.bind();
-        }
-
-         protected Object onChooseCity()
-         {
-            /*AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category);
-
-            log.info("Displaying cities for country: " + country);
-
-            DialogResponse dResponse = listPanel.showDialog(this);
-            if ( DialogResponse.SELECT.equals(dResponse) ){
-                City selectedCity = (City) listPanel.getSelectedRowObject();
-                if (countryComboBox.getSelectedItem() == null)
-                    countryComboBox.setSelectedItem(selectedCity.getCountry());
-
-                return selectedCity;
-            } else {
-                return null;
-            }*/
-
-             return null;
+            return null;
         }
 
         @Override
@@ -332,6 +305,7 @@ public class AssemblingSchemasListPanel
         {
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
+            setVisible(AbstractTablePanel.Button.Close, false);
         }
 
         @Override
@@ -383,6 +357,7 @@ public class AssemblingSchemasListPanel
         {
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
+            setVisible(AbstractTablePanel.Button.Close, false);
         }
 
         @Override
