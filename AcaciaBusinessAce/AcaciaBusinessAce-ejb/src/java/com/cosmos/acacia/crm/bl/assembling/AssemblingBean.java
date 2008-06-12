@@ -153,19 +153,30 @@ public class AssemblingBean
         return em.find(AssemblingCategory.class, parentId);
     }
 
+    @Override
     public List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory)
     {
         return null;
     }
 
+    @Override
     public List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema)
     {
         return null;
     }
 
+    @Override
     public List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem)
     {
         return null;
+    }
+
+    @Override
+    public EntityProperties getAssemblingSchemaEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(AssemblingSchema.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
     }
 
 
