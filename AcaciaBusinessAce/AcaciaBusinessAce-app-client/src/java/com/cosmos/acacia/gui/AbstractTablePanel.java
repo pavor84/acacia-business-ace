@@ -58,23 +58,37 @@ public abstract class AbstractTablePanel
 
     public AbstractTablePanel()
     {
-        this(null);
+        this((BigInteger)null);
     }
 
     /** Creates new form AbstractTablePanel */
-    public AbstractTablePanel(BigInteger parentDataObjectId) {
+    public AbstractTablePanel(DataObjectBean dataObjectBean)
+    {
+        super(dataObjectBean);
+        init();
+    }
+
+    public AbstractTablePanel(BigInteger parentDataObjectId)
+    {
         super(parentDataObjectId);
+        init();
+    }
+
+    private void init()
+    {
         initComponents();
         initData();
 
-        dataTable.addMouseListener(new MouseAdapter() {
+        dataTable.addMouseListener(new MouseAdapter()
+        {
             @Override
-            public void mouseClicked(MouseEvent e){
-                if (e.getClickCount() == 2) {
+            public void mouseClicked(MouseEvent event)
+            {
+                if (event.getClickCount() == 2)
+                {
                     performDefaultDoubleClickAction();
                 }
             }
-            
         });
     }
     
