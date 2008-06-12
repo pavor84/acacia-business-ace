@@ -36,7 +36,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     /** Creates new form ClassifiersListPanel */
     public ClassifiersListPanel(DataObject dataObject)
     {
-        super(null);
+        super();
         classifiedDataObject = dataObject;
         postInitData();
     }

@@ -33,13 +33,13 @@ public class CitiesListPanel extends AbstractTablePanel {
     /** Creates new form AddresssListPanel */
     public CitiesListPanel()
     {
-        super(null);
+        super();
         postInitData();
     }
     
     public CitiesListPanel(Country country)
     {
-        super(null);
+        super();
         this.country = country;
         postInitData();
     }

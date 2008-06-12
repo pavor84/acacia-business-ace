@@ -7,6 +7,7 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
@@ -40,6 +41,14 @@ public class AssemblingCategoryListPanel
 
     /** Creates new form AssemblingCategoryListPanel */
     public AssemblingCategoryListPanel(
+            DataObjectBean dataObjectBean,
+            boolean removeTableContainerGaps)
+    {
+        super(dataObjectBean);
+        initComponentsCustom(removeTableContainerGaps);
+    }
+
+    public AssemblingCategoryListPanel(
             BigInteger parentDataObjectId,
             boolean removeTableContainerGaps)
     {
@@ -48,11 +57,11 @@ public class AssemblingCategoryListPanel
     }
 
     public AssemblingCategoryListPanel(){
-        this(null, false);
+        this((BigInteger)null, false);
     }
 
     public AssemblingCategoryListPanel(boolean removeTableGaps){
-        this(null, removeTableGaps);
+        this((BigInteger)null, removeTableGaps);
     }
 
     private void initComponentsCustom(boolean removeTableContainerGaps)
