@@ -213,7 +213,8 @@ public class AssemblingSchemaPanel
         isObsoleteCheckBox.bind(bindingGroup, entity, propDetails);
 
         //description
-        descriptionTextPane.bind(bindingGroup, entity, "description");
+        propDetails = entityProps.getPropertyDetails("description");
+        descriptionTextPane.bind(bindingGroup, entity, propDetails);
 
         bindingGroup.bind();
     }
@@ -248,22 +249,6 @@ public class AssemblingSchemaPanel
 
     protected Object onChooseCategory()
     {
-        /*ProductCategoriesTreePanel panel = new ProductCategoriesTreePanel(null);
-        panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
-        panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
-        panel.setModificationsEnabled(false);
-        
-        DialogResponse dResponse = panel.showDialog(this);
-        
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            
-            ProductCategory category = (ProductCategory)
-                panel.getListPanel().getSelectedRowObject();
-
-            return category;
-        }else{
-            return null;
-        }*/
         return null;
     }
 
