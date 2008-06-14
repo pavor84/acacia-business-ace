@@ -206,10 +206,16 @@ public class ContactBookTest {
         country.setCountryName(TestUtils.getRandomString(10));
         country = locationFormSession.saveCountry(country);
 
+        country.setCountryCodeA2(TestUtils.getRandomString(1));
+        locationFormSession.saveCountry(country);
+
         City city = locationFormSession.newCity();
         city.setCountry(country);
         city.setCityName(TestUtils.getRandomString(10));
 
+        city = locationFormSession.saveCity(city);
+
+        city.setCityCode(TestUtils.getRandomString(1));
         locationFormSession.saveCity(city);
 
         // deleting
