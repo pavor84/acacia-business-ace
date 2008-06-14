@@ -31,6 +31,13 @@ import javax.persistence.Table;
             (
                 name = "AssemblingSchema.findBySchemaCode",
                 query = "select t1 from AssemblingSchema t1 where t1.schemaCode = :schemaCode"
+            ),
+        @NamedQuery
+            (
+                name = "AssemblingSchema.findByAssemblingCategory",
+                query = "select t1 from AssemblingSchema t1" +
+                        " where t1.assemblingCategory = :assemblingCategory" +
+                        " and t1.dataObject.deleted = :deleted"
             )
     })
 public class AssemblingSchema
