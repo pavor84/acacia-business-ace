@@ -60,7 +60,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     {
         if(contactPersons == null)
         {
-            contactPersons = getFormSession().getContactPersons(getParentDataObject());
+            contactPersons = getFormSession().getContactPersons(getParentDataObjectId());
         }
 
         return contactPersons;
@@ -99,7 +99,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -122,7 +122,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
                 return contactPersonPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -130,17 +130,17 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (contactPersonsBindingGroup != null)
             contactPersonsBindingGroup.unbind();
-        
+
         contactPersons = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed())
@@ -155,7 +155,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         }
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

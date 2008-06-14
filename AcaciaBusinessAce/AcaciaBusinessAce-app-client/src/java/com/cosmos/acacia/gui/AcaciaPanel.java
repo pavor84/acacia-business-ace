@@ -39,7 +39,7 @@ public abstract class AcaciaPanel
 {
 
     protected static Logger log = Logger.getLogger(AcaciaPanel.class);
-    
+
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
 
@@ -48,7 +48,7 @@ public abstract class AcaciaPanel
     {
         super(AcaciaApplication.class);
     }
- 
+
     public AcaciaPanel(BigInteger parentDataObjectId)
     {
         this();
@@ -87,7 +87,7 @@ public abstract class AcaciaPanel
     }
 
     protected abstract void initData();
-    
+
     protected void setFonts()
     {
         Component[] components = this.getComponents();
@@ -119,7 +119,7 @@ public abstract class AcaciaPanel
             component.setFont(font);
         }
     }
-    
+
     /**
      * If {@link ValidationException} is thrown by the EJB, it will be set as some inner 'cause' of
      * an EJB exception. That is way it is a little bit tricky to get it. This method implements this
@@ -149,7 +149,7 @@ public abstract class AcaciaPanel
 
         return null;
     }
-    
+
     /**
      * Iterate over all validation messages and compose one string - message per line.
      * @param ve
@@ -169,35 +169,35 @@ public abstract class AcaciaPanel
                 currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
             else
                 currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
-            
+
             msg.append(i).append(": ").append(currentMsg).append("\n\n");
             i++;
         }
         return msg.toString();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     protected Class getResourceStopClass() {
         return AcaciaPanel.class;
     }
-    
+
     public <T> T getBean(Class<T> remoteInterface) {
         try {
             InitialContext ctx = new InitialContext();
             T bean = (T) ctx.lookup(remoteInterface.getName());
             InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
-           
+
             T proxy = (T) Proxy.newProxyInstance(getClass().getClassLoader(),
                 new Class[]{remoteInterface}, handler);
-            
+
             return proxy;
         } catch (Exception ex){
             ex.printStackTrace();
             return null;
         }
     }
-    
+
     static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
         private E bean;
@@ -214,8 +214,8 @@ public abstract class AcaciaPanel
             log.info("Method called: " + method.getName());
 
             return method.invoke(bean, args);
-        }  
-    }   
+        }
+    }
 
     public static <T> T getRemoteBean(AcaciaPanel panel, Class<T> remoteInterface)
     {
@@ -223,7 +223,7 @@ public abstract class AcaciaPanel
         {
             T bean = (T)InitialContext.doLookup(remoteInterface.getName());
             InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
-           
+
             T proxy = (T)Proxy.newProxyInstance(
                 panel.getClass().getClassLoader(),
                 new Class[]{remoteInterface},

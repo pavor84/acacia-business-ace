@@ -45,10 +45,10 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<BankDetail> getBankDetails(DataObject parent) {
-        if (parent != null) {
+    public List<BankDetail> getBankDetails(BigInteger parentId) {
+        if (parentId != null) {
             Query query = em.createNamedQuery("BankDetail.findByParentDataObjectAndDeleted");
-            query.setParameter("parentDataObjectId", parent.getDataObjectId());
+            query.setParameter("parentDataObjectId", parentId);
             query.setParameter("deleted", false);
 
             return new ArrayList<BankDetail>(query.getResultList());
@@ -68,9 +68,8 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
         return new BankDetail();
     }
 
-    public BankDetail saveBankDetail(BankDetail bankDetail, DataObject parentDataObject)
+    public BankDetail saveBankDetail(BankDetail bankDetail, BigInteger parentDataObjectId)
     {
-        BigInteger parentDataObjectId = parentDataObject.getDataObjectId();
         bankDetail.setParentId(parentDataObjectId);
 
         if (bankDetail.getDataObject() == null){
@@ -87,8 +86,8 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
         return esm.remove(em, bankDetail);
     }
 
-    public List<Person> getBankContacts(DataObject parentDataObject) {
-        List<ContactPerson> contactPersons = contactPersonsManager.getContactPersons(parentDataObject);
+    public List<Person> getBankContacts(BigInteger parentDataObjectId) {
+        List<ContactPerson> contactPersons = contactPersonsManager.getContactPersons(parentDataObjectId);
 
         ArrayList<Person> persons = new ArrayList<Person>(contactPersons.size());
 

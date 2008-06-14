@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.gui.CallbackTestPanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -203,6 +204,11 @@ public class PersonPanel extends BaseEntityPanel {
 
         cityLabel.setText(resourceMap.getString("cityLabel.text")); // NOI18N
         cityLabel.setName("cityLabel"); // NOI18N
+        cityLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                testCallback(evt);
+            }
+        });
 
         personalUniqueIdTextField.setName("personalUniqueIdTextField"); // NOI18N
 
@@ -344,6 +350,11 @@ public class PersonPanel extends BaseEntityPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testCallback
+    CallbackTestPanel test = new CallbackTestPanel(null);
+    test.showDialog();
+}//GEN-LAST:event_testCallback
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

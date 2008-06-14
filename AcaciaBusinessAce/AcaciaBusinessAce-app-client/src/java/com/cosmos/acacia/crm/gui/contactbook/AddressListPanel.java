@@ -44,7 +44,7 @@ public class AddressListPanel extends AbstractTablePanel {
     protected void initData() {
 
         setTitle(getResourceMap().getString("branches.title"));
-        
+
         super.initData();
 
         EntityProperties entityProps = getAddressEntityProperties();
@@ -70,7 +70,7 @@ public class AddressListPanel extends AbstractTablePanel {
     {
         if(addresses == null)
         {
-            addresses = getFormSession().getAddresses(getParentDataObject());
+            addresses = getFormSession().getAddresses(getParentDataObjectId());
         }
 
         return addresses;
@@ -153,17 +153,17 @@ public class AddressListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (addressesBindingGroup != null)
             addressesBindingGroup.unbind();
-        
+
         addresses = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     public boolean canCreate() {
         return true;

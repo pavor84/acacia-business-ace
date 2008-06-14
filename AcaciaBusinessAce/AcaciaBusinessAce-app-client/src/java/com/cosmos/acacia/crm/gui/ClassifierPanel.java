@@ -54,7 +54,7 @@ public class ClassifierPanel extends BaseEntityPanel {
         init();
         addObjectTypeButton.setEnabled(false);
     }
-    
+
     @Override
     protected void init()
     {
@@ -243,7 +243,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     private BindingGroup classifierBindingGroup;
     private Classifier classifier;
     private DataObjectTypesListPanel dataObjectTypesTable;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -253,7 +253,7 @@ public class ClassifierPanel extends BaseEntityPanel {
         {
             classifier = getFormSession().newClassifier();
         }
-        
+
         if (classifierBindingGroup == null)
             classifierBindingGroup = new BindingGroup();
 
@@ -263,16 +263,16 @@ public class ClassifierPanel extends BaseEntityPanel {
         nameTextField.bind(classifierBindingGroup, classifier, entityProps.getPropertyDetails("classifierName"));
         groupComboBox.bind(classifierBindingGroup, getClassifierGroups(), classifier, entityProps.getPropertyDetails("classifierGroup"));
         descriptionTextPane.bind(classifierBindingGroup, classifier, entityProps.getPropertyDetails("description"));
-        
+
         dataObjectTypesTable = new DataObjectTypesListPanel(null, classifier);
         dataObjectTypesTable.setVisibleButtons(8 + 16);
         dataObjectTypesPanel.add(dataObjectTypesTable);
         addNestedFormListener(dataObjectTypesTable);
 
         populateComboBox(dataObjectTypeComboBox, getDataObjectTypes());
-        
+
         classifierBindingGroup.bind();
-        
+
 //        // Bypassing a strange bug
 //        for (BindingListener l : classifierBindingGroup.getBindingListeners()) {
 //            log.info("VALID: " + getBindingGroup().isContentValid());
@@ -284,24 +284,24 @@ public class ClassifierPanel extends BaseEntityPanel {
     protected List<ClassifierGroup> getClassifierGroups() {
         return getFormSession().getClassifierGroups();
     }
-    
+
     protected List<DataObjectType> getDataObjectTypes() {
         return dataObjectTypesTable.shortenDataObjectTypeNames(getFormSession().getDataObjectTypes());
     }
 
-    
+
     public void populateComboBox(JComboBox combo, List<DataObjectType> data) {
-    
+
         if (combo.getItemCount() == 0) {
             AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter("${dataObjectType}");
             AutoCompleteDecorator.decorate(combo, resourceToStringConverter);
-            
+
             combo.setModel(new DefaultComboBoxModel(data.toArray()));
 
             combo.setRenderer(new DataObjectTypeCellRenderer());
         }
     }
-    
+
     protected ClassifiersRemote getFormSession()
     {
         if(formSession == null)
@@ -335,8 +335,8 @@ public class ClassifierPanel extends BaseEntityPanel {
         log.info("Save: classifier: " + classifier);
         classifier = getFormSession().saveClassifier(
                 classifier,
-                classifier.getClassifierGroup().getDataObject());
-        
+                classifier.getClassifierGroup().getDataObject().getDataObjectId());
+
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(classifier);
         if (closeAfter) {
@@ -372,7 +372,7 @@ class DataObjectTypeCellRenderer extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(JList list,
             Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
-        return super.getListCellRendererComponent(list, ((DataObjectType) value).getDataObjectType(), 
+        return super.getListCellRendererComponent(list, ((DataObjectType) value).getDataObjectType(),
                 index, isSelected, cellHasFocus);
-    }   
+    }
 }

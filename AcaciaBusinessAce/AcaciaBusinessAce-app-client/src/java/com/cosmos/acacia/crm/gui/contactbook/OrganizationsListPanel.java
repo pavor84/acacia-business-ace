@@ -34,7 +34,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     /** Creates new form OrganizationsListPanel */
     public OrganizationsListPanel(BigInteger parentDataObjectId)
     {
-    	super(parentDataObjectId);
+        super(parentDataObjectId);
     }
 
     public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier)
@@ -55,8 +55,8 @@ public class OrganizationsListPanel extends AbstractTablePanel {
         organizationsBindingGroup = new BindingGroup();
         AcaciaTable organizationsTable = getDataTable();
         JTableBinding tableBinding = organizationsTable.bind(organizationsBindingGroup, getOrganizations(), getOrganizationEntityProperties());
-       
-        
+
+
         organizationsBindingGroup.bind();
 
         organizationsTable.setEditable(false);
@@ -66,7 +66,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     {
         if(organizations == null)
         {
-            organizations = getFormSession().getOrganizations(getParentDataObject());
+            organizations = getFormSession().getOrganizations(getParentDataObjectId());
         }
 
         return organizations;
@@ -120,7 +120,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
             {
                 return organizationPanel.getSelectedValue();
             }
-            
+
             if(DialogResponse.CLOSE.equals(response)) {
                 refreshAction();
             }
@@ -146,17 +146,17 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (organizationsBindingGroup != null)
             organizationsBindingGroup.unbind();
-        
+
         organizations = null;
-        
+
         initData();
-        
+
         return t;
     }
-     
+
     @Override
     public boolean canCreate() {
         return true;

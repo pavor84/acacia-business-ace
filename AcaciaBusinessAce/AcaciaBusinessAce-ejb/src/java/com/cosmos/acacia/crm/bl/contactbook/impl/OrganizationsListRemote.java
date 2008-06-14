@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -23,10 +24,10 @@ public interface OrganizationsListRemote {
      * Lists all organizations for a parent.
      * Parent should be null to display all organizations
      *
-     * @param parent
+     * @param parentId
      * @return list of organizations
      */
-    List<Organization> getOrganizations(DataObject parent);
+    List<Organization> getOrganizations(BigInteger parentId);
 
     /**
      * Lists all currencies
@@ -41,15 +42,7 @@ public interface OrganizationsListRemote {
      * @param parent
      * @return list of addresses
      */
-    List<Address> getAddresses(DataObject parent);
-
-    /**
-     * Lists all bank details for a parent data object (an Address)
-     *
-     * @param parent
-     * @return list of bank details
-     */
-    List<BankDetail> getBankDetails(DataObject parent);
+    List<Address> getAddresses(BigInteger parentId);
 
     /**
      * Lists all organization types

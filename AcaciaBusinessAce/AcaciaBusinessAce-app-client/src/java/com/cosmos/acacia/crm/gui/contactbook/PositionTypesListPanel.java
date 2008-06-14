@@ -5,28 +5,27 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.app.AppSession;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
-import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
 
 /**
  *
@@ -42,7 +41,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
         try
         {
-            DataObject parentDataObject = AppSession.getDataObject(parentDataObjectId);
+            DataObject parentDataObject = getParentDataObject();
             this.ownerClass = Class.forName(
                 parentDataObject.getDataObjectType().getDataObjectType());
         } catch (Exception ex) {
@@ -81,7 +80,7 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         String key = ownerClass == Person.class ? "title.positions.person" : "title.positions.organization";
 
         setTitle(getResourceMap().getString(key));
-        
+
         AcaciaTable positionTypesTable = getDataTable();
          try {
             JTableBinding tableBinding = positionTypesTable.bind(positionTypesBindingGroup, getPositionTypes(), getPositionTypeEntityProperties());
@@ -173,18 +172,18 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (positionTypesBindingGroup != null)
             positionTypesBindingGroup.unbind();
-        
+
         positionTypes = null;
-        
+
         initData();
         postInitData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         PositionTypePanel positionTypePanel = new PositionTypePanel(getParentDataObjectId(),

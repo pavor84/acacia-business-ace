@@ -62,7 +62,7 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     {
         if(communicationContacts == null)
         {
-            communicationContacts = getFormSession().getCommunicationContacts(getParentDataObject());
+            communicationContacts = getFormSession().getCommunicationContacts(getParentDataObjectId());
         }
 
         return communicationContacts;
@@ -102,14 +102,14 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     public void setContactPerson(ContactPerson contactPerson) {
         this.contactPerson = contactPerson;
     }
-    
+
     @Override
     @Action
     public void selectAction(){
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -125,22 +125,22 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (communicationContactsBindingGroup != null)
             communicationContactsBindingGroup.unbind();
-        
+
         communicationContacts = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            CommunicationContactPanel communicationContactPanel = 
+            CommunicationContactPanel communicationContactPanel =
                     new CommunicationContactPanel((CommunicationContact) rowObject);
             DialogResponse response = communicationContactPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
@@ -148,7 +148,7 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
                 return communicationContactPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -167,7 +167,7 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
         }
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

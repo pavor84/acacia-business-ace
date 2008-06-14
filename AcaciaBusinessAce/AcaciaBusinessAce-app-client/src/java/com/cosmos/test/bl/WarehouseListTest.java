@@ -21,23 +21,23 @@ import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
- * 
+ *
  * Created	:	06.04.2008
  * @author	Petar Milev
  * @version $Id: $
- * 
+ *
  * Business logic test for
  * {@link WarehouseListBean}
  *
  */
 public class WarehouseListTest {
-    
+
     @EJB
     private WarehouseListRemote formSession;
-    
+
     @EJB
     private AddressesListRemote addressListSession;
-    
+
     @Before
     public void setUp() {
         if ( formSession==null ){
@@ -49,18 +49,18 @@ public class WarehouseListTest {
             }
         }
     }
-    
+
     @Test
     public void methodsTest(){
-        EntityProperties entityProperties = 
+        EntityProperties entityProperties =
             formSession.getWarehouseEntityProperties();
         Assert.assertNotNull(entityProperties);
     }
-    
+
     /**
      * Test - create, retrieve, update, delete operations
      * over Warehouse
-     * @throws UncompleteUnitTestException 
+     * @throws UncompleteUnitTestException
      */
     @SuppressWarnings("unchecked")
     @Test
@@ -72,18 +72,18 @@ public class WarehouseListTest {
             if ( inserted !=null )
                 break;
         }
-        
+
         if ( inserted!=null ){
             Assert.assertNotNull(inserted.getWarehouseId());
             //delete
             formSession.deleteWarehouse(inserted);
         }
-        
+
         //retrieve
         List l = list();
         Assert.assertNotNull(l);
     }
-    
+
 
     private List<Warehouse> list() {
         return formSession.listWarehousesByName();
@@ -91,17 +91,17 @@ public class WarehouseListTest {
 
     private Warehouse createNew() throws UncompleteUnitTestException {
         AppSession.get().login("sdfs", "sdfsdf");
-        
+
         DataObject branchParent = AppSession.get().getLoginOrganizationDataObject();
-        List<Address> addresses = addressListSession.getAddresses(branchParent);
-        
+        List<Address> addresses = addressListSession.getAddresses(branchParent.getDataObjectId());
+
         if ( addresses.size()==0 )
             throw new UncompleteUnitTestException("Not available branches to select from for branchParent= dataobject.id"+branchParent.getDataObjectId());
-        
+
         Address branch = addresses.get(TestUtils.nextInteger(addresses.size()));
         Person p = null;
         for (Address address : addresses) {
-            List<Person> persons = formSession.getWarehouseMenForBranch(address.getDataObject());
+            List<Person> persons = formSession.getWarehouseMenForBranch(address.getDataObject().getDataObjectId());
             if ( persons.size()>0 ){
                 p  = persons.get(TestUtils.nextInteger(persons.size()));
             }
@@ -109,11 +109,11 @@ public class WarehouseListTest {
 
         if ( p==null )
             throw new UncompleteUnitTestException("Not available persons to select from. ");
-        
+
         Warehouse result = formSession.newWarehouse(null);
         result.setAddress(branch);
         result.setWarehouseman(p);
-        
+
         try{
             return
             formSession.saveWarehouse(result);

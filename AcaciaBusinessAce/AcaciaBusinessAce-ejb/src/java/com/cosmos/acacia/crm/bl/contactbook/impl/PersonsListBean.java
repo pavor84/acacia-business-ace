@@ -1,9 +1,11 @@
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -22,7 +24,6 @@ import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.beansbinding.EntityProperties;
-import javax.ejb.Stateless;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -33,7 +34,7 @@ import javax.ejb.Stateless;
 public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     protected Logger log = Logger.getLogger(PersonsListBean.class);
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -47,14 +48,14 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     private PersonValidatorLocal personValidator;
 
     @SuppressWarnings("unchecked")
-    public List<Person> getPersons(DataObject parent)
+    public List<Person> getPersons(BigInteger parentId)
     {
 
         Query q;
-        if(parent != null)
+        if(parentId != null)
         {
             q = em.createNamedQuery("Person.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parent.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentId);
         }
         else
         {
@@ -137,13 +138,8 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return esm.remove(em, person);
     }
 
-    public List<Address> getAddresses(DataObject parent) {
-       return locationsManager.getAddresses(parent);
-    }
-
-    public List<Passport> getPassports(DataObject parent) {
-        // TODO implement
-        return new ArrayList<Passport>();
+    public List<Address> getAddresses(BigInteger parentId) {
+       return locationsManager.getAddresses(parentId);
     }
 
     public EntityProperties getAddressEntityProperties() {

@@ -29,7 +29,7 @@ public class CommunicationContactValidatorBean implements CommunicationContactVa
         Query q = em.createNamedQuery("CommunicationContact.findByTypeAndContactPersonAndParentDataObject");
         q.setParameter("communicationType", entity.getCommunicationType());
         q.setParameter("contactPerson", entity.getContactPerson());
-        q.setParameter("parentDataObjectId", entity.getDataObject().getParentDataObjectId());
+        q.setParameter("parentDataObjectId", entity.getParentId());
 
         if ( !checkUnique(q.getResultList(), entity))
             ve.addMessage("CommunicationContact.err.exists");

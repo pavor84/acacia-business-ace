@@ -1,13 +1,13 @@
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.Country;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -124,7 +124,7 @@ public interface LocationsListRemote {
      * @param parent
      * @return list of addresses
      */
-    List<Address> getAddresses(DataObject parent);
+    List<Address> getAddresses(BigInteger parentId);
 
     /**
      * Gets the EntityProperties of Address

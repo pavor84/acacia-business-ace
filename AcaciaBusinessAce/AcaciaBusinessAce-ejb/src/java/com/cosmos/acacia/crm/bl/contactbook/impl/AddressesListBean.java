@@ -97,13 +97,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     public Address saveAddress(Address address, BigInteger parentDataObjectId)
     {
-        address.setParentId(parentDataObjectId);
-
-        if (address.getDataObject() == null){
-            DataObject dataObject = new DataObject();
-            dataObject.setParentDataObjectId(parentDataObjectId);
-            address.setDataObject(dataObject);
-        }
+        if (parentDataObjectId != null)
+            address.setParentId(parentDataObjectId);
 
         addressValidator.validate(address);
 
@@ -114,8 +109,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return esm.remove(em, address);
     }
 
-    public List<Address> getAddresses(DataObject parent) {
-       return locationsManager.getAddresses(parent);
+    public List<Address> getAddresses(BigInteger parentId) {
+       return locationsManager.getAddresses(parentId);
     }
 
     public EntityProperties getAddressEntityProperties() {
@@ -123,12 +118,12 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @SuppressWarnings("unchecked")
-    public List<CommunicationContact> getCommunicationContacts(DataObject parent) {
+    public List<CommunicationContact> getCommunicationContacts(BigInteger parentId) {
         Query q;
-        if(parent != null)
+        if(parentId != null)
         {
             q = em.createNamedQuery("CommunicationContact.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parent.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentId);
         }
         else
         {
@@ -157,12 +152,12 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @SuppressWarnings("unchecked")
-    public List<ContactPerson> getContactPersons(DataObject parent) {
+    public List<ContactPerson> getContactPersons(BigInteger parentId) {
         Query q;
-        if(parent != null)
+        if(parentId != null)
         {
             q = em.createNamedQuery("ContactPerson.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parent.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentId);
         }
         else
         {
@@ -170,7 +165,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         }
         q.setParameter("deleted", false);
 
-        log.info("Parent: " + parent);
+        log.info("Parent: " + parentId);
 
         return new ArrayList<ContactPerson>(q.getResultList());
     }
@@ -217,19 +212,14 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     @Override
     public CommunicationContact saveCommunicationContact(
             CommunicationContact communicationContact,
-            DataObject parentDataObject,
+            BigInteger parentDataObjectId,
             ContactPerson contactPerson)
     {
 
         communicationContact.setContactPerson(contactPerson);
-        if (parentDataObject != null)
+        if (parentDataObjectId != null)
         {
-            communicationContact.setParentId(parentDataObject.getDataObjectId());
-            if (communicationContact.getDataObject() == null){
-                DataObject dataObject = new DataObject();
-                dataObject.setParentDataObjectId(parentDataObject.getDataObjectId());
-                communicationContact.setDataObject(dataObject);
-            }
+            communicationContact.setParentId(parentDataObjectId);
         }
 
         communicationContactValidator.validate(communicationContact);
@@ -239,15 +229,10 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @Override
-    public ContactPerson saveContactPerson(ContactPerson contactPerson, DataObject parentDataObject) {
+    public ContactPerson saveContactPerson(ContactPerson contactPerson, BigInteger parentDataObjectId) {
 
-        contactPerson.setParentId(parentDataObject.getDataObjectId());
-        if (contactPerson.getDataObject() == null){
-            DataObject dataObject = new DataObject();
-            if(parentDataObject != null)
-                dataObject.setParentDataObjectId(parentDataObject.getDataObjectId());
-            contactPerson.setDataObject(dataObject);
-        }
+        //if (parentDataObjectId != contactPerson.getParentId())
+            contactPerson.setParentId(parentDataObjectId);
 
         contactPersonValidator.validate(contactPerson);
 
@@ -288,5 +273,4 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     {
         return locationsManager.getCities(country);
     }
-
 }

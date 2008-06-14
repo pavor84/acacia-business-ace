@@ -249,7 +249,7 @@ public class BankDetailPanel extends BaseEntityPanel {
     private Binding bankBinding;
     private Binding branchBinding;
     private Binding contactBinding;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -293,7 +293,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 contactLookup.clearSelectedValue();
             }
         });
-        
+
         branchBinding = branchLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -312,7 +312,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 contactLookup.clearSelectedValue();
             }
         });
-        
+
         contactBinding = contactLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -323,26 +323,26 @@ public class BankDetailPanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("bankContact"),
             "${firstName} ${secondName} ${lastName}",
             UpdateStrategy.READ_WRITE);
-        
+
         bankDetailBindingGroup.bind();
     }
 
     protected Object onChooseBank() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
         listPanel.setClassifier(getClassifiersFormSession().getClassifier("bank"));
-        
+
         Organization oldBank = bankDetail.getBank();
-        
+
         LookupRecordDeletionListener deletionListener = new LookupRecordDeletionListener(oldBank);
         deletionListener.addTargetLookup(bankLookup);
         deletionListener.addTargetLookup(branchLookup);
         deletionListener.addTargetLookup(contactLookup);
         listPanel.addTableModificationListener(deletionListener);
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            
+
             if (selected  == null || !selected.equals(oldBank)){
                 branchLookup.clearSelectedValue();
                 contactLookup.clearSelectedValue();
@@ -355,13 +355,13 @@ public class BankDetailPanel extends BaseEntityPanel {
 
      protected Object onChooseBankBranch() {
         if (!bankBinding.isContentValid()) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                 getResourceMap().getString("BankDetailPanel.selectBank"),
                 getResourceMap().getString("BankDetailPanel.selectBankTitle"),
                 JOptionPane.WARNING_MESSAGE);
             return null;
         }
-            
+
         DataObject parent = null;
         try {
             parent =
@@ -372,17 +372,17 @@ public class BankDetailPanel extends BaseEntityPanel {
         }
 
         AddressListPanel listPanel = new AddressListPanel(parent.getDataObjectId());
-        
+
         Address oldBranch = bankDetail.getBankBranch();
-        
+
         LookupRecordDeletionListener deletionListener = new LookupRecordDeletionListener(oldBranch, branchLookup);
         deletionListener.addTargetLookup(contactLookup);
         listPanel.addTableModificationListener(deletionListener);
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
            Object selected = listPanel.getSelectedRowObject();
-           
+
            return selected;
         }else{
             return null;
@@ -391,13 +391,13 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     protected Object onChooseContact() {
         if (!branchBinding.isContentValid()) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                 getResourceMap().getString("BankDetailPanel.selectBranch"),
                 getResourceMap().getString("BankDetailPanel.selectBranchTitle"),
                 JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        
+
         DataObject parent = null;
         try {
             parent = ((Address) branchBinding.getSourceProperty()
@@ -406,7 +406,7 @@ public class BankDetailPanel extends BaseEntityPanel {
             // Ignore
         }
         ContactPersonsListPanel listPanel = new ContactPersonsListPanel(parent.getDataObjectId());
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
            ContactPerson selected = (ContactPerson) listPanel.getSelectedRowObject();
@@ -414,15 +414,15 @@ public class BankDetailPanel extends BaseEntityPanel {
         } else {
             return null;
         }
-        
+
     }
     protected List<Person> getContacts(Object selectedObject)
     {
         if (selectedObject == null)
             return new ArrayList<Person>();
 
-        DataObject parent = ((DataObjectBean) selectedObject).getDataObject();
-        List<Person> contacts = getFormSession().getBankContacts(parent);
+        BigInteger parentId = ((DataObjectBean) selectedObject).getParentId();
+        List<Person> contacts = getFormSession().getBankContacts(parentId);
 
         log.info("Persons: " + contacts.size());
         return contacts;
@@ -464,7 +464,7 @@ public class BankDetailPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: bankDetail: " + bankDetail);
-        bankDetail = getFormSession().saveBankDetail(bankDetail, getParentDataObject());
+        bankDetail = getFormSession().saveBankDetail(bankDetail, getParentDataObjectId());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(bankDetail);
         if (closeAfter)

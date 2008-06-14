@@ -41,15 +41,15 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
 
     @EJB
     private PassportValidatorLocal validator;
-    
+
     @SuppressWarnings("unchecked")
-    public List<Passport> getPassports(DataObject parentDataObject)
+    public List<Passport> getPassports(BigInteger parentDataObjectId)
     {
         Query q;
-        if(parentDataObject != null)
+        if(parentDataObjectId != null)
         {
             q = em.createNamedQuery("Passport.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentDataObject.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentDataObjectId);
         }
         else
         {
@@ -72,12 +72,10 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
         return new Passport();
     }
 
-    public Passport savePassport(Passport passport, DataObject parentDataObject)
+    public Passport savePassport(Passport passport, BigInteger parentDataObjectId)
     {
         validator.validate(passport);
-        BigInteger parentDataObjectId = parentDataObject.getDataObjectId();
         passport.setParentId(parentDataObjectId);
-
         if (passport.getDataObject() == null){
             DataObject dataObject = new DataObject();
             dataObject.setParentDataObjectId(parentDataObjectId);

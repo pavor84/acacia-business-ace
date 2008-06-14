@@ -337,7 +337,7 @@ public class AddressPanel extends BaseEntityPanel {
                 setTitle(resourceMap.getString("branch.text"));
                 defaultMainAddressName = resourceMap.getString("defaultMainBranch");
                 defaultAddressName = resourceMap.getString("defaultBranch");
-                
+
             }
         }
 
@@ -392,7 +392,7 @@ public class AddressPanel extends BaseEntityPanel {
                 if(!event.getValueIsAdjusting()) {
                     ListSelectionModel selectionModel = (ListSelectionModel) event.getSource();
                     if (selectionModel.isSelectionEmpty()) {
-                        updateCommunicationContacts(getDataObject());
+                        updateCommunicationContacts(getDataObject().getDataObjectId());
                     } else {
                         ContactPerson contactPerson = (ContactPerson)
                                 contactPersonsTable.getDataTable().getSelectedRowObject();
@@ -417,7 +417,7 @@ public class AddressPanel extends BaseEntityPanel {
                 contactPersonsTable.unselectAction();
             }
         });
-        
+
         contactPersonsPanel.add(contactPersonsTable);
 
         communicationContactsTable = new CommunicationContactsListPanel(dataObjectId);
@@ -440,9 +440,9 @@ public class AddressPanel extends BaseEntityPanel {
         communicationContactsTable.associateWithTable(bankDetailsTable);
         communicationContactsTable.associateWithTable(contactPersonsTable);
         contactPersonsTable.associateWithTable(bankDetailsTable);
-        
+
         addressBindingGroup.bind();
-        
+
         int nextAddressNumber = getNewAddressNumber();
         if (nextAddressNumber == 0)
             addressNameTextField.setText(defaultMainAddressName);
@@ -463,27 +463,26 @@ public class AddressPanel extends BaseEntityPanel {
                 countryComboBox.setSelectedItem(selectedCity.getCountry());
 
             return selectedCity;
-        } else {
-            return null;
         }
+        return null;
     }
 
-    private void updateCommunicationContacts(DataObject parent)
+    private void updateCommunicationContacts(BigInteger parentId)
     {
         List<CommunicationContact> communicationContacts =
-                getFormSession().getCommunicationContacts(parent);
+                getFormSession().getCommunicationContacts(parentId);
         communicationContactsTable.setContactPerson(null);
         updateCommunicationContactsTable(communicationContacts);
     }
 
     private int getNewAddressNumber() {
-        List<Address> addresses = getFormSession().getAddresses(getParentDataObject());
+        List<Address> addresses = getFormSession().getAddresses(getParentDataObjectId());
         if (addresses == null)
             return 0;
-        
+
         return addresses.size();
     }
-    
+
     private void updateCommunicationContacts(ContactPerson contactPerson)
     {
         List<CommunicationContact> communicationContacts =
@@ -513,7 +512,7 @@ public class AddressPanel extends BaseEntityPanel {
 
         return formSession;
     }
-    
+
     protected EntityProperties getAddressEntityProperties()
     {
         return getFormSession().getAddressEntityProperties();
@@ -552,7 +551,7 @@ public class AddressPanel extends BaseEntityPanel {
             addressBindingGroup.unbind();
             initData();
         }
-               
+
     }
 
     @Override
@@ -564,7 +563,7 @@ public class AddressPanel extends BaseEntityPanel {
     public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
-    
+
     @Override
     public DialogResponse showDialog(Component parentComponent) {
         return super.showDialog(parentComponent);

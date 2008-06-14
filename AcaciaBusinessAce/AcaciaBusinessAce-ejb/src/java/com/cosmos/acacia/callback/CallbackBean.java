@@ -13,4 +13,13 @@ public abstract class CallbackBean {
         callbackId = CallbackImpl.prepareCallback();
         return callbackId;
     }
+    
+    /**
+     * Returns the callback object
+     * 
+     * @return the object
+     */
+    protected Callback getCallbackInstance() {
+        return CallbackImpl.getInstance(callbackId);
+    }
 }

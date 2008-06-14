@@ -28,7 +28,7 @@ public class ContactPersonValidatorBean implements ContactPersonValidatorLocal {
         //unique name
         Query q = em.createNamedQuery("ContactPerson.findByPersonAndTypeAndParentDataObject");
         q.setParameter("person", entity.getContact());
-        q.setParameter("parentDataObjectId", entity.getDataObject().getParentDataObjectId());
+        q.setParameter("parentDataObjectId", entity.getParentId());
         q.setParameter("positionType", entity.getPositionType());
 
         if ( !checkUnique(q.getResultList(), entity))

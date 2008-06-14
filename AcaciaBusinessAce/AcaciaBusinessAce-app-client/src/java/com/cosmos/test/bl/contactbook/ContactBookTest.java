@@ -149,6 +149,7 @@ public class ContactBookTest {
         Address address = addressFormSession.newAddress();
         address.setAddressName(TestUtils.getRandomString(15));
 
+        System.out.println("DOID" + organizationDataObject.getDataObjectId());
         address = addressFormSession.saveAddress(address, organizationDataObject.getDataObjectId());
 
         DataObject addressDataObject = address.getDataObject();
@@ -164,12 +165,12 @@ public class ContactBookTest {
         contactPerson.setContact(person);
         contactPerson.setDataObject(addressDataObject);
 
-        contactPerson = addressFormSession.saveContactPerson(contactPerson, addressDataObject);
+        contactPerson = addressFormSession.saveContactPerson(contactPerson, addressDataObject.getDataObjectId());
         CommunicationContact communicationContact = addressFormSession.newCommunicationContact();
         communicationContact.setCommunicationType(addressFormSession.getCommunicationTypes().get(0));
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
 
-        communicationContact = addressFormSession.saveCommunicationContact(communicationContact, addressDataObject, contactPerson);
+        communicationContact = addressFormSession.saveCommunicationContact(communicationContact, addressDataObject.getDataObjectId(), contactPerson);
 
         // Modifying the entries
 
@@ -180,10 +181,10 @@ public class ContactBookTest {
         person = personFormSession.savePerson(person);
 
         contactPerson.setContact(person);
-        contactPerson = addressFormSession.saveContactPerson(contactPerson, address.getDataObject());
+        contactPerson = addressFormSession.saveContactPerson(contactPerson, address.getDataObject().getDataObjectId());
 
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
-        communicationContact = addressFormSession.saveCommunicationContact(communicationContact, address.getDataObject(), contactPerson);
+        communicationContact = addressFormSession.saveCommunicationContact(communicationContact, address.getDataObject().getDataObjectId(), contactPerson);
 
 
         // Deleting the entries
