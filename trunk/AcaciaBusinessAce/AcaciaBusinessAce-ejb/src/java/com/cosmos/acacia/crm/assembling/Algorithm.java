@@ -138,6 +138,22 @@ public class Algorithm
 
         public final static Set MultipleSelectionAlgorithms = 
                 EnumSet.of(UserMultipleSelection, RangeMultipleSelection, EqualsMultipleSelection);
+
+        private static List<DbResource> dbResources;
+        public static List<DbResource> getDbResources()
+        {
+            if(dbResources == null)
+            {
+                dbResources = new ArrayList<DbResource>(Type.values().length);
+
+                for(Type item : Type.values())
+                {
+                    dbResources.add(item.getDbResource());
+                }
+            }
+
+            return dbResources;
+        }
     }
 
     private Type type;
@@ -193,7 +209,7 @@ public class Algorithm
     public List<AssemblingSchemaItemValue> apply(Object valueAgainstConstraints)
         throws AlgorithmException
     {
-        return apply(assemblingSchemaItem.getItemValues(), valueAgainstConstraints);
+        return apply(getAssemblingSchemaItemValue(), valueAgainstConstraints);
     }
 
     protected List<AssemblingSchemaItemValue> apply(
@@ -333,6 +349,11 @@ public class Algorithm
         return selectedRows;
     }
 
+    protected List<AssemblingSchemaItemValue> getAssemblingSchemaItemValue()
+    {
+        //return assemblingSchemaItem.getItemValues();
+        throw new UnsupportedOperationException("Not implemejted yet");
+    }
 
     protected List<AssemblingSchemaItemValue> getResultList(List<ConstraintRow> constraintRows) {
         if(resultList == null)

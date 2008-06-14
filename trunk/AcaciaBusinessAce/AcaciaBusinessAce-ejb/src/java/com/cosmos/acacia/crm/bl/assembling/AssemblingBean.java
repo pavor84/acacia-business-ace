@@ -5,12 +5,15 @@
 
 package com.cosmos.acacia.crm.bl.assembling;
 
+import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
@@ -108,6 +111,15 @@ public class AssemblingBean
     }
 
     @Override
+    public AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity)
+    {
+        //assemblingCategoryValidator.validate(entity); 
+
+        esm.persist(em, entity);
+        return entity; 
+    }
+
+    @Override
     public AssemblingCategory updateParents(
         AssemblingCategory newParent,
         AssemblingCategory newChild)
@@ -178,7 +190,13 @@ public class AssemblingBean
     @Override
     public List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema)
     {
-        return null;
+        if(assemblingSchema == null)
+            return Collections.emptyList();
+
+        Query q = em.createNamedQuery("AssemblingSchemaItem.findByAssemblingSchema");
+        q.setParameter("assemblingSchema", assemblingSchema);
+        q.setParameter("deleted", false);
+        return new ArrayList<AssemblingSchemaItem>(q.getResultList());
     }
 
     @Override
@@ -195,5 +213,24 @@ public class AssemblingBean
         return entityProperties;
     }
 
+    @Override
+    public EntityProperties getAssemblingSchemaItemEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(AssemblingSchemaItem.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public List<DbResource> getAlgorithms()
+    {
+        return Algorithm.Type.getDbResources();
+    }
+
+    @Override
+    public List<DbResource> getDataTypes()
+    {
+        return AssemblingSchemaItemDataType.getDbResources();
+    }
 
 }

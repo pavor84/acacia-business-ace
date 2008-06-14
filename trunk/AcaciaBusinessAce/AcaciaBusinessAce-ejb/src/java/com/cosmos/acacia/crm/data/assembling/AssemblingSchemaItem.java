@@ -6,23 +6,21 @@
 package com.cosmos.acacia.crm.data.assembling;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -39,12 +37,16 @@ import javax.persistence.Table;
             (
                 name = "AssemblingSchemaItem.findBySchemaAndMessageCode",
                 query = "select t1 from AssemblingSchemaItem t1" +
-                        " where t1.assemblingSchema = :assemblingSchema and t1.messageCode = :messageCode"
+                        " where t1.assemblingSchema = :assemblingSchema" +
+                        " and t1.messageCode = :messageCode" +
+                        " and t1.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
                 name = "AssemblingSchemaItem.findByAssemblingSchema",
-                query = "select t1 from AssemblingSchemaItem t1 where t1.assemblingSchema = :assemblingSchema"
+                query = "select t1 from AssemblingSchemaItem t1" +
+                        " where t1.assemblingSchema = :assemblingSchema" +
+                        " and t1.dataObject.deleted = :deleted"
             )
     })
 public class AssemblingSchemaItem
@@ -54,54 +56,75 @@ public class AssemblingSchemaItem
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     @Column(name = "item_id", nullable = false)
     private BigInteger itemId;
 
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
-
-    @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id")
+    @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id", nullable=false)
     @ManyToOne
+    @Property(title="Schema", propertyValidator=@PropertyValidator(required=true))
     private AssemblingSchema assemblingSchema;
 
-    @JoinColumn(name = "algorithm_id", referencedColumnName = "resource_id")
+    @JoinColumn(name = "algorithm_id", referencedColumnName = "resource_id", nullable=false)
     @ManyToOne
+    @Property(title="Algorithm", propertyValidator=@PropertyValidator(required=true))
     private DbResource assemblingAlgorithm;
 
     @Column(name = "message_code", nullable = false)
+    @Property(
+        title="Message Code",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=50,
+            required=true))
     private String messageCode;
 
     @Column(name = "message_text", nullable = false)
+    @Property(
+        title="Message Text",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=100,
+            required=true))
     private String messageText;
 
-    /**
-     * Data Type:
-     *   Integer
-     *   Decimal
-     *   Date
-     *   String
-     */
-    @Column(name = "data_type")
-    private String dataType;
+    @JoinColumn(name = "data_type_id", referencedColumnName = "resource_id", nullable=false)
+    @ManyToOne
+    @Property(title="Data Type", propertyValidator=@PropertyValidator(required=true))
+    private DbResource dataType;
 
     @Column(name = "min_selections")
+    @Property(
+        title="Min. Selections",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.NUMBER_RANGE,
+            minValue=0d))
     private Integer minSelections;
 
     @Column(name = "max_selections")
+    @Property(
+        title="Max. Selections",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.NUMBER_RANGE,
+            minValue=0d))
     private Integer maxSelections;
 
     @Column(name = "quantity", nullable = false)
+    @Property(
+        title="Quantity",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.NUMBER_RANGE,
+            minValue=1d,
+            required=true))
     private BigDecimal quantity = BigDecimal.ONE;
 
     @Column(name = "default_value")
+    @Property(title="Default Value")
     private Serializable defaultValue;
 
     @Column(name = "description")
+    @Property(title="Description")
     private String description;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "assemblingSchemaItem", fetch=FetchType.EAGER)
-    private List<AssemblingSchemaItemValue> itemValues;
 
     @OneToOne
     @PrimaryKeyJoinColumn
@@ -123,11 +146,11 @@ public class AssemblingSchemaItem
         this.itemId = itemId;
     }
 
-    public String getDataType() {
+    public DbResource getDataType() {
         return dataType;
     }
 
-    public void setDataType(String dataType) {
+    public void setDataType(DbResource dataType) {
         this.dataType = dataType;
     }
 
@@ -203,14 +226,6 @@ public class AssemblingSchemaItem
         this.assemblingSchema = assemblingSchema;
     }
 
-    public List<AssemblingSchemaItemValue> getItemValues() {
-        return itemValues;
-    }
-
-    public void setItemValues(List<AssemblingSchemaItemValue> itemValues) {
-        this.itemValues = itemValues;
-    }
-
 
     @Override
     public int hashCode() {
@@ -240,13 +255,15 @@ public class AssemblingSchemaItem
     @Override
     public BigInteger getParentId()
     {
-        return parentId;
+        if(assemblingSchema != null)
+            return assemblingSchema.getProductId();
+
+        return null;
     }
 
     @Override
     public void setParentId(BigInteger parentId)
     {
-        this.parentId = parentId;
     }
 
     @Override
