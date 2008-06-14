@@ -80,7 +80,10 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     }
 
                     if(mustUpdateDO)
+                    {
+                        dataObject = em.merge(dataObject);
                         em.persist(dataObject);
+                    }
                 }
 
                 //id = new BigInteger(dataObject.getDataObjectId().toByteArray());
