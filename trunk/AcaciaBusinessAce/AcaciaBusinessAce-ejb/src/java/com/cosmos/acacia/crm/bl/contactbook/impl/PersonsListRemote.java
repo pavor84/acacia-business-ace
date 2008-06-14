@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -30,10 +31,10 @@ public interface PersonsListRemote {
      * Gets the persons for a specified parent.
      * If parent is null, all persons are returned.
      *
-     * @param parent
+     * @param parentId
      * @return a list of persons
      */
-    List<Person> getPersons(DataObject parent);
+    List<Person> getPersons(BigInteger parentId);
 
     /**
      * Gets a list of all countries
@@ -60,18 +61,10 @@ public interface PersonsListRemote {
     /**
      * Lists all the addresses for a parent (Person data object)
      *
-     * @param parent
+     * @param parentId
      * @return list of addresses
      */
-    List<Address> getAddresses(DataObject parent);
-
-    /**
-     * Lists all the passports for a parent (Person data object)
-     *
-     * @param parent
-     * @return list of passports
-     */
-    List<Passport> getPassports(DataObject parent);
+    List<Address> getAddresses(BigInteger parentId);
 
     /**
      * Gets all the (two) possible genders
@@ -123,7 +116,7 @@ public interface PersonsListRemote {
      * @return the saved person or null, of the person is not unique
      */
     Person saveIfUnique(Person person);
-    
+
     /**
      * Deletes a Person
      *

@@ -5,12 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.bl.contactbook.validation.CityValidatorLocal;
-import com.cosmos.acacia.crm.bl.impl.*;
-import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.Country;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +17,12 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.bl.contactbook.validation.CityValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -42,13 +42,13 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     @EJB
     private BankDetailsListLocal bankDetailsManager;
-    
+
     @EJB
     private GenericUniqueValidatorLocal validator;
-    
+
     @EJB
     private CityValidatorLocal cityValidator;
-    
+
     @SuppressWarnings("unchecked")
     public List<Country> getCountries()
     {
@@ -71,9 +71,9 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public Country saveCountry(Country country) {
-        
+
         validator.validate(country, "countryName");
-        
+
         esm.persist(em, country);
         return country;
     }
@@ -102,7 +102,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     public City saveCity(City city) {
         cityValidator.validate(city);
-        
+
         esm.persist(em, city);
         return city;
     }
@@ -112,10 +112,10 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     @SuppressWarnings("unchecked")
-    public List<Address> getAddresses(DataObject parent) {
-        if (parent != null) {
+    public List<Address> getAddresses(BigInteger parentId) {
+        if (parentId != null) {
             Query query = em.createNamedQuery("Address.findByParentDataObjectAndDeleted");
-            query.setParameter("parentDataObjectId", parent.getDataObjectId());
+            query.setParameter("parentDataObjectId", parentId);
             query.setParameter("deleted", false);
 
             return new ArrayList<Address>(query.getResultList());

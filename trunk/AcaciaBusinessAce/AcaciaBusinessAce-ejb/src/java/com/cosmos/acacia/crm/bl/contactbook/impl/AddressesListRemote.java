@@ -65,7 +65,7 @@ public interface AddressesListRemote {
     /**
      * Saves an address for the specified parent (person or organization)
      * @param address
-     * @param parentDataObject
+     * @param parentDataObjectId
      *
      * @return the saved Address
      */
@@ -83,20 +83,20 @@ public interface AddressesListRemote {
     /**
      * Lists all addresses for a specified parent (Person or Organization)
      *
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @return list of addresses
      */
-    List<Address> getAddresses(DataObject parentDataObject);
+    List<Address> getAddresses(BigInteger parentDataObjectId);
 
     /* Handling contact persons */
 
     /**
      * Lists all contact persons for a specified parent (Address data object)
      *
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @return list of contact persons
      */
-    List<ContactPerson> getContactPersons(DataObject parentDataObject);
+    List<ContactPerson> getContactPersons(BigInteger parentDataObjectId);
 
     /**
      * Gets the EntityProperties for a ContactPerson entity
@@ -117,11 +117,11 @@ public interface AddressesListRemote {
      * Saves a ContactPerson for a specified parent (an Address data object)
      *
      * @param contactPerson
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @return the saved ContactPerson
      */
     ContactPerson saveContactPerson(ContactPerson contactPerson,
-            DataObject parentDataObject);
+            BigInteger parentDataObjectId);
 
     /**
      * Deletes a ContactPerson
@@ -163,11 +163,11 @@ public interface AddressesListRemote {
      * Lists all communication contacts belonging to
      * a specified parent (Address data object)
      *
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @return a list of communication contacts
      */
     List<CommunicationContact>
-        getCommunicationContacts(DataObject parentDataObject);
+        getCommunicationContacts(BigInteger parentDataObjectId);
 
     /**
      * Lists all communication contacts belonging to
@@ -201,13 +201,13 @@ public interface AddressesListRemote {
      * Person at that Address
      *
      * @param communicationContact
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @param contactPerson
      * @return the saved CommunicationContact
      */
     CommunicationContact saveCommunicationContact(
             CommunicationContact communicationContact,
-            DataObject parentDataObject,
+            BigInteger parentDataObjectId,
             ContactPerson contactPerson);
 
     /**

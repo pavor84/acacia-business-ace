@@ -45,7 +45,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     protected void initData() {
 
         super.initData();
-        
+
         setVisible(Button.Select, false);
         bankDetailsBindingGroup = new BindingGroup();
         AcaciaTable bankDetailsTable = getDataTable();
@@ -60,7 +60,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     {
         if(bankDetails == null)
         {
-            bankDetails = getFormSession().getBankDetails(getParentDataObject());
+            bankDetails = getFormSession().getBankDetails(getParentDataObjectId());
         }
 
         return bankDetails;
@@ -99,7 +99,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -122,7 +122,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
                 return bankDetailPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -130,17 +130,17 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (bankDetailsBindingGroup != null)
             bankDetailsBindingGroup.unbind();
-        
+
         bankDetails = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed())
@@ -153,10 +153,10 @@ public class BankDetailsListPanel extends AbstractTablePanel {
                 return bankDetailPanel.getSelectedValue();
             }
         }
-        
+
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

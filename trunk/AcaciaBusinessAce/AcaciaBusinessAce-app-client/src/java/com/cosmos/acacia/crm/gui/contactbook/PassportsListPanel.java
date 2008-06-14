@@ -60,7 +60,7 @@ public class PassportsListPanel extends AbstractTablePanel {
     {
         if(passports == null)
         {
-            passports = getFormSession().getPassports(getParentDataObject());
+            passports = getFormSession().getPassports(getParentDataObjectId());
         }
 
         return passports;
@@ -115,17 +115,17 @@ public class PassportsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (passportsBindingGroup != null)
             passportsBindingGroup.unbind();
-        
+
         passports = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)

@@ -5,11 +5,12 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
-import com.cosmos.acacia.crm.data.BankDetail;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
@@ -26,10 +27,10 @@ public interface BankDetailsListRemote {
     /**
      * Lists the bank details for a parent (an Address (branch) data object)
      *
-     * @param parent
+     * @param parentId
      * @return list of bank details
      */
-    List<BankDetail> getBankDetails(DataObject parent);
+    List<BankDetail> getBankDetails(BigInteger parentId);
 
     /**
      * Gets the EntithyProperties of BankDetail
@@ -50,10 +51,10 @@ public interface BankDetailsListRemote {
      * (an Address (branch) data object)
      *
      * @param bankDetail
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @return the saved BankDetail
      */
-    BankDetail saveBankDetail(BankDetail bankDetail, DataObject parentDataObject);
+    BankDetail saveBankDetail(BankDetail bankDetail, BigInteger parentDataObjectIdd);
 
     /**
      * Deletes a BankDetail
@@ -68,10 +69,10 @@ public interface BankDetailsListRemote {
      * In fact it lists all the corresponding persons to the retrieved
      * ContactPersons for the parent.
      *
-     * @param parentDataObject
+     * @param parentDataObjectId
      * @return list of persons
      */
-    List<Person> getBankContacts(DataObject parentDataObject);
+    List<Person> getBankContacts(BigInteger parentDataObjectId);
 
     /**
      * Lists all currencies

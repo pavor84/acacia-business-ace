@@ -27,7 +27,7 @@ import java.math.BigInteger;
  * @author  Bozhidar Bozhanov
  */
 public class PersonsListPanel extends AbstractTablePanel {
-    
+
     /** Creates new form PersonsListPanel */
     public PersonsListPanel(BigInteger parentDataObjectId)
     {
@@ -57,7 +57,7 @@ public class PersonsListPanel extends AbstractTablePanel {
     {
         if(persons == null)
         {
-            persons = getFormSession().getPersons(getParentDataObject());
+            persons = getFormSession().getPersons(getParentDataObjectId());
         }
 
         return persons;
@@ -132,17 +132,17 @@ public class PersonsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (personsBindingGroup != null)
             personsBindingGroup.unbind();
-        
+
         persons = null;
-        
+
         initData();
-        
+
         return t;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

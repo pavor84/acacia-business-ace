@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +51,13 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     private OrganizationValidatorLocal organizationValidator;
 
     @SuppressWarnings("unchecked")
-    public List<Organization> getOrganizations(DataObject parent)
+    public List<Organization> getOrganizations(BigInteger parentId)
     {
         Query q;
-        if(parent != null)
+        if(parentId != null)
         {
             q = em.createNamedQuery("Organization.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parent.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentId);
         }
         else
         {
@@ -94,14 +95,10 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return esm.remove(em, organization);
     }
 
-    public List<Address> getAddresses(DataObject parent) {
-       return locationsManager.getAddresses(parent);
+    public List<Address> getAddresses(BigInteger parentId) {
+       return locationsManager.getAddresses(parentId);
     }
 
-    public List<BankDetail> getBankDetails(DataObject parent) {
-        // TODO implement
-        return new ArrayList<BankDetail>();
-    }
 
     public EntityProperties getAddressEntityProperties() {
        return locationsManager.getAddressEntityProperties();

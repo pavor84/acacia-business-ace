@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -28,14 +29,14 @@ public interface ClassifiersRemote {
      * Returns all classifiers if the group is null;
      * Returns all existing classifiers if the object type is null;
      *
-     * @param parentDataObject the data object of the classifier group
+     * @param parentDataObjectId the data object id of the classifier group
      * @param dataObjectType the data object type of the object
      * @return the list of classifiers
      */
-    List<Classifier> getClassifiers(DataObject parentDataObject,
+    List<Classifier> getClassifiers(BigInteger parentDataObjectId,
             DataObjectType dataObjectType);
-    
-    
+
+
     /**
      * Lists all classifiers applied to a specified data object
      *
@@ -43,7 +44,7 @@ public interface ClassifiersRemote {
      * @return the list of classifiers
      */
     List<Classifier> getClassifiers(DataObject classifiedDataObject);
-    
+
     /**
      * Creates a new classifier
      *
@@ -55,10 +56,10 @@ public interface ClassifiersRemote {
      * Saves a classifier
      *
      * @param classifier the classifier to be saved
-     * @param parentDataObject the parent object (classifier group)
+     * @param parentDataObjectId the parent object id (classifier group)
      * @return the saved classifier
      */
-    Classifier saveClassifier(Classifier classifier, DataObject parentDataObject);
+    Classifier saveClassifier(Classifier classifier, BigInteger parentDataObjectId);
 
     /**
      * Deletes the specified classifier
@@ -70,13 +71,13 @@ public interface ClassifiersRemote {
 
     /**
      * Gets a classifier for a specified code, or null of no such exists
-     * 
+     *
      * @param code
      * @return the classifier
      */
     Classifier getClassifier(String code);
-    
-    
+
+
     /* End of methods for handling classifiers */
 
     /* Methods for handling classifier groups */
@@ -177,65 +178,65 @@ public interface ClassifiersRemote {
      * @param classifier
      */
     void clearDataObjectTypeConstraints(Classifier classifier);
-    
-    
+
+
     /**
      * Gets the entity properties of Classifier
-     * 
+     *
      * @return the entity properties
      */
     EntityProperties getClassifierEntityProperties();
-   
+
     /**
      * Gets the entity properties of ClassifierGroup
-     * 
+     *
      * @return the entity properties
      */
     EntityProperties getClassifierGroupEntityProperties();
-    
+
     /**
      * Gets the entity properties of ClassifierGroup
-     * 
+     *
      * @return the entity properties
      */
     EntityProperties getClassifiedObjectEntityProperties();
-    
+
     /**
      * Gets the entity properties of DataObjectType
-     * 
+     *
      * @return the entity properties
      */
     EntityProperties getDataObjectTypeEntityProperties();
-    
+
      /**
      * Creates a new classified object
-     * 
+     *
      * @return the newly created classified object
      */
     ClassifiedObject newClassifiedObject();
-    
+
     /**
      * Lists data object types applied for the specified Classifier
-     * 
+     *
      * @param classifier
      * @return the list
      */
     List<DataObjectType> getDataObjectTypes(Classifier classifier);
-    
-    
+
+
     /**
      * Lists all data object types
-     * 
+     *
      * @return the list
      */
     List<DataObjectType> getDataObjectTypes();
- 
+
     /**
      * Gets all data object for a given classifier
-     * 
+     *
      * @param classifier
      * @return the list
      */
     List<DataObject> getDataObjects(Classifier classifier);
-    
+
 }

@@ -1,5 +1,7 @@
 package com.cosmos.test.bl;
 
+import java.io.Serializable;
+
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -35,19 +37,24 @@ public class ClientCallbackTest {
 
         int id = formSession.prepareCallback();
 
-        CallbackHandler handler = new CallbackHandler() {
+        TestCallbackHandler handler = new TestCallbackHandler();
 
-            @Override
-            public CallbackResult handle(CallbackRequest req) {
-                // do nothing
-                return null;
-            }
-
-        };
         CallbackImpl client = CallbackImpl.getClientInstance(id, handler);
         formSession.assemble(null, null);
 
 
     }
 }
+
+class TestCallbackHandler implements CallbackHandler, Serializable {
+
+    private static final long serialVersionUID = -1705809011998330066L;
+
+    @Override
+    public CallbackResult handle(CallbackRequest req) {
+        // do nothing
+        return null;
+    }
+
+};
 

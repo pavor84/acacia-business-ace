@@ -48,7 +48,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         this.dataObjectType = dot;
         postInitData();
     }
-    
+
     @EJB
     private ClassifiersRemote formSession;
 
@@ -56,15 +56,15 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     private List<Classifier> classifiers;
     private DataObjectType dataObjectType;
     private DataObject classifiedDataObject;
-    
+
     @Override
     protected void initData() {
 
         super.initData();
         setVisible(Button.Select, false);
-        
+
     }
-    
+
     protected void postInitData() {
         classifiersBindingGroup = new BindingGroup();
         AcaciaTable classifiersTable = getDataTable();
@@ -78,13 +78,13 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     public List<Classifier> getClassifiers()
     {
         if(classifiers == null)
-        {   
+        {
             if (classifiedDataObject != null)
                 classifiers = getFormSession().getClassifiers(classifiedDataObject);
             else
             {
-                DataObject parentDataObject = AppSession.getDataObject(getParentDataObjectId());
-                classifiers = getFormSession().getClassifiers(parentDataObject, dataObjectType);
+
+                classifiers = getFormSession().getClassifiers(getParentDataObjectId(), dataObjectType);
             }
         }
         return classifiers;
@@ -133,7 +133,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         return getFormSession().deleteClassifier(classifier);
     }
 
-    
+
     public void filter(List<Classifier> filterList) {
         List<Classifier> classifiersMirror = new ArrayList<Classifier>(classifiers);
         for (Classifier classifier : classifiersMirror) {
@@ -142,14 +142,14 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         }
         postInitData();
     }
-    
+
     @Override
     @Action
     public void selectAction(){
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -172,7 +172,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
                 return classifierPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -180,26 +180,26 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (classifiersBindingGroup != null)
             classifiersBindingGroup.unbind();
-        
+
         classifiers = null;
-        
+
         postInitData();
         filterByClassifier();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed())
         {
             ClassifierPanel classifierPanel = null;
-            if (dataObjectType == null) 
+            if (dataObjectType == null)
                 classifierPanel = new ClassifierPanel(getParentDataObjectId());
-            else 
+            else
                 classifierPanel = new ClassifierPanel();
 
             DialogResponse response = classifierPanel.showDialog(this);
@@ -208,10 +208,10 @@ public class ClassifiersListPanel extends AbstractTablePanel {
                 return classifierPanel.getSelectedValue();
             }
         }
-        
+
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

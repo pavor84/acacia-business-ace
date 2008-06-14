@@ -92,7 +92,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
             return esm.remove(em, classifierGroup);
         else
             throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -104,16 +104,16 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Classifier> getClassifiers(DataObject parentDataObject,
+    public List<Classifier> getClassifiers(BigInteger parentDataObjectId,
             DataObjectType dataObjectType) {
 
         List<Classifier> result = null;
-        
+
         Query q;
-        if(parentDataObject != null)
+        if(parentDataObjectId != null)
         {
             q = em.createNamedQuery("Classifier.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentDataObject.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentDataObjectId);
         }
         else
         {
@@ -122,18 +122,18 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         q.setParameter("deleted", false);
         result = new ArrayList(q.getResultList());
         List<Classifier> mirror = new ArrayList<Classifier>(result);
-        
+
         if (dataObjectType != null) {
             Query dotQuery;
             dotQuery = em.createNamedQuery("ClassifierAppliedForDot.findAll");
             Set<ClassifierAppliedForDot> cafds = new HashSet(dotQuery.getResultList());
-            
+
             Set<Classifier> applicableClassifiers = new HashSet<Classifier>(cafds.size());
-            
+
             for (ClassifierAppliedForDot cafd : cafds) {
                 applicableClassifiers.add(cafd.getClassifier());
             }
-            
+
             for (Classifier classifier : mirror) {
                 if (applicableClassifiers.contains(classifier)) {
                     ClassifierAppliedForDot tmpCafd = new ClassifierAppliedForDot(
@@ -144,7 +144,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
                 }
             }
         }
-        
+
         return result;
     }
 
@@ -168,12 +168,11 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }
 
     @Override
-    public Classifier saveClassifier(Classifier classifier, DataObject parentDataObject) {
+    public Classifier saveClassifier(Classifier classifier, BigInteger parentDataObjectId) {
 
         if (classifier.getClassifierGroup().getIsSystemGroup())
             throw new ValidationException("Classifier.err.systemGroupForbidden");
 
-        BigInteger parentDataObjectId = parentDataObject.getDataObjectId();
         classifier.setParentId(parentDataObjectId);
 
         if (classifier.getDataObject() == null){
@@ -185,7 +184,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         classifierValidator.validate(classifier);
 
         esm.persist(em, classifier);
-        
+
         return classifier;
     }
 
@@ -193,7 +192,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     public ClassifierGroup saveClassifierGroup(ClassifierGroup classifierGroup) {
         if (classifierGroup.getIsSystemGroup())
             throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
-        
+
         esm.persist(em, classifierGroup);
         return classifierGroup;
     }
@@ -255,15 +254,15 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     public List<Classifier> getClassifiers(DataObject classifiedDataObject) {
         Query q = em.createNamedQuery("ClassifiedObject.findByDataObject");
         q.setParameter("dataObject", classifiedDataObject);
-        
+
         List<ClassifiedObject> classifiedObjects = q.getResultList();
-        
+
         List<Classifier> result = new ArrayList(classifiedObjects.size());
-        
+
         for (ClassifiedObject co : classifiedObjects) {
             result.add(co.getClassifier());
         }
-        
+
         return result;
     }
 
@@ -286,17 +285,17 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         if (classifier == null || classifier.getDataObject() == null) {
             return new ArrayList<DataObjectType>();
         }
-        
+
         Query q = em.createNamedQuery("ClassifierAppliedForDot.findByClassifier");
         q.setParameter("classifier", classifier);
-        
+
         List<DataObjectType> result = new ArrayList<DataObjectType>();
         List<ClassifierAppliedForDot> cafds = q.getResultList();
-        
+
         for (ClassifierAppliedForDot cafd : cafds) {
             result.add(cafd.getDataObjectType());
         }
-        
+
         return new ArrayList<DataObjectType>(result);
     }
 
@@ -305,10 +304,10 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         Query q = em.createNamedQuery("ClassifiedObject.findByClassifier");
         q.setParameter("classifier", classifier);
         q.setParameter("deleted", false);
-        
+
         List<ClassifiedObject> cos = q.getResultList();
         List<DataObject> result = new ArrayList<DataObject>(cos.size());
-        
+
         for (ClassifiedObject co : cos) {
             result.add(co.getDataObject());
         }
@@ -320,9 +319,9 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         Query q = em.createNamedQuery("Classifier.findByCode");
         q.setParameter("code", code);
         q.setParameter("deleted", false);
-        
+
         List<Classifier> result = q.getResultList();
-        
+
         if (result == null || result.size() == 0)
             throw new ValidationException("No classifier found with this code");
         else

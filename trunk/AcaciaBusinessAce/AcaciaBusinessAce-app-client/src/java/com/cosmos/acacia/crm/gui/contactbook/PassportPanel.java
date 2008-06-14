@@ -248,7 +248,7 @@ public class PassportPanel extends BaseEntityPanel {
 
         PropertyDetails issueDateProperties = entityProps.getPropertyDetails("issueDate");
         issueDateDatePicker.bind(passportBindingGroup, passport, issueDateProperties);
-        
+
         expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"));
 
         passportTypeComboBox.bind(passportBindingGroup, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
@@ -264,7 +264,7 @@ public class PassportPanel extends BaseEntityPanel {
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
 
-            
+
         issuerBinding.addBindingListener(new AbstractBindingListener() {
             @SuppressWarnings("unchecked")
             @Override
@@ -272,7 +272,7 @@ public class PassportPanel extends BaseEntityPanel {
                 issuerBranchLookup.clearSelectedValue();
             }
         });
-        
+
         issuerBranchBinding = issuerBranchLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -292,20 +292,20 @@ public class PassportPanel extends BaseEntityPanel {
     protected Object onChooseIssuer() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
         listPanel.setClassifier(getClassifiersFormSession().getClassifier("passport_issuer"));
-        
+
         Organization oldIssuer = passport.getIssuer();
-        
+
         listPanel.addTableModificationListener(new LookupRecordDeletionListener(oldIssuer, issuerLookup));
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Object selected = listPanel.getSelectedRowObject();
-            
-            
+
+
             if (selected == null || !selected.equals(oldIssuer)){
                 issuerBranchLookup.clearSelectedValue();
             }
-            
+
             return selected;
         } else {
             return null;
@@ -314,13 +314,13 @@ public class PassportPanel extends BaseEntityPanel {
 
      protected Object onChooseIssuerBranch() {
         if (!issuerBinding.isContentValid()) {
-             JOptionPane.showMessageDialog(this, 
+             JOptionPane.showMessageDialog(this,
                 getResourceMap().getString("PassportPanel.selectIssuer"),
                 getResourceMap().getString("PassportPanel.selectIssuerTitle"),
                 JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        
+
         DataObject parent = null;
         try {
             parent =
@@ -375,7 +375,7 @@ public class PassportPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: passport: " + passport);
-        passport = getFormSession().savePassport(passport, getParentDataObject());
+        passport = getFormSession().savePassport(passport, getParentDataObjectId());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(passport);
         if (closeAfter)

@@ -31,7 +31,6 @@ public class ProductAssemblerBean
     @PersistenceContext
     private EntityManager em;
 
-    private int callbackId;
 
     @Override
     public ComplexProduct assemble(AssemblingSchema assemblingSchema, Map parameters)
@@ -40,7 +39,7 @@ public class ProductAssemblerBean
 
         ProductAssembler pa = new ProductAssembler(assemblingSchema, em);
 
-        Callback callback = CallbackImpl.getInstance(callbackId);
+        Callback callback = getCallbackInstance();
         pa.setCallback(callback);
 
         //pa.setCallbackHandler(callbackHandler);

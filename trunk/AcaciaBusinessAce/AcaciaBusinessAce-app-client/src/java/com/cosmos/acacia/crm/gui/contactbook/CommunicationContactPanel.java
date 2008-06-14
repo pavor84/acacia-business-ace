@@ -183,7 +183,7 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         log.info("Save: communicationContact: " + communicationContact);
         communicationContact = getFormSession().saveCommunicationContact(
-                communicationContact, getParentDataObject(), contactPerson);
+                communicationContact, getParentDataObjectId(), contactPerson);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(communicationContact);
         if (closeAfter)

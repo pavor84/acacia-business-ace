@@ -1,5 +1,7 @@
 package com.cosmos.acacia.callback;
 
+import java.io.Serializable;
+
 
 /**
  * Implement this interface to provide specific callback
@@ -8,7 +10,7 @@ package com.cosmos.acacia.callback;
  * @author Bozhidar Bozhanov
  *
  */
-public interface CallbackHandler {
+public interface CallbackHandler extends Serializable {
 
     /**
      * Handles a callback request and returns the result

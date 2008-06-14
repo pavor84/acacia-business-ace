@@ -83,9 +83,9 @@ public class CallbackImpl extends PortableRemoteObject
 
         try {
             CallbackImpl impl = new CallbackImpl();
+            impl.setCallbackHandler(handler);
             impl.initClient(id);
             impl.client = true;
-            impl.setCallbackHandler(handler);
             return impl;
         } catch (Exception ex){
             ex.printStackTrace();
@@ -114,8 +114,8 @@ public class CallbackImpl extends PortableRemoteObject
     public int register(CallbackClient callbackObj) throws RemoteException
     {
         try {
-            //System.out.println("Registering callback object " + callbackObj);
             if (callbackObj == null) return Callback.FAILURE;
+            System.out.println("Registering callback object handler " + ((CallbackImpl)callbackObj).getCallbackHandler());
             this.callbackObj = callbackObj;
             return Callback.SUCCESS;
         } catch (Exception ex){

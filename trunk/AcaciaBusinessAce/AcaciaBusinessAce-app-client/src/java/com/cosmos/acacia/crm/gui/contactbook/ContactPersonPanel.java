@@ -129,7 +129,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     private ContactPerson contactPerson;
     private Binding typeBinding;
     private Binding personBinding;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -154,7 +154,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("positionType"),
             "${positionTypeName}",
             UpdateStrategy.READ_WRITE);
-            
+
         personBinding = personLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -173,32 +173,26 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     protected Object onChooseType()
     {
-        DataObject parentDataObject = getParentDataObject();
         PositionTypesListPanel listPanel =
-                new PositionTypesListPanel(parentDataObject.getParentDataObjectId());
+                new PositionTypesListPanel(getParentDataObjectId());
 
-        parentDataObject = AppSession.getDataObject(parentDataObject.getParentDataObjectId());
-        log.info(parentDataObject.getDataObjectType().getDataObjectType());
-        
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             return listPanel.getSelectedRowObject();
-        } else {
-            return null;
         }
+        return null;
     }
-        
+
     protected Object onChoosePerson() {
         PersonsListPanel listPanel = new PersonsListPanel(null);
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             return listPanel.getSelectedRowObject();
-        } else {
-            return null;
         }
+        return null;
     }
-    
+
     protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
@@ -228,9 +222,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     private List<PositionType> getPositionTypes()
     {
-        DataObject parentDataObject = getParentDataObject();
-        parentDataObject = AppSession.getDataObject(parentDataObject.getParentDataObjectId());
-        return getFormSession().getPositionTypes(parentDataObject);
+        return getFormSession().getPositionTypes(getParentDataObject());
     }
 
     @Override
@@ -241,7 +233,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: contactPerson: " + contactPerson);
-        contactPerson = getFormSession().saveContactPerson(contactPerson, getParentDataObject());
+        contactPerson = getFormSession().saveContactPerson(contactPerson, getParentDataObjectId());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(contactPerson);
         if (closeAfter)
