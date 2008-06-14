@@ -287,37 +287,51 @@ public class AssemblingSchemasListPanel
         @Override
         protected boolean deleteRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         protected Object modifyRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return onEditEntity((AssemblingSchema)rowObject);
         }
 
         @Override
         protected Object newRow()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            AssemblingSchema as = new AssemblingSchema();
+            as.setAssemblingCategory(category);
+            return onEditEntity(as);
+        }
+
+        private Object onEditEntity(AssemblingSchema as)
+        {
+            AssemblingSchemaPanel editPanel = new AssemblingSchemaPanel(as);
+            DialogResponse response = editPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return editPanel.getSelectedValue();
+            }
+
+            return null;
         }
 
         @Override
         public boolean canCreate()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canModify(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canDelete(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
     }
 

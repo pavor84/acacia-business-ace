@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
   </Properties>
@@ -18,13 +18,143 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="descriptionPanel" alignment="0" pref="561" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="561" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="schemaCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="schemaNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="assemblingCategoryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="isObsoleteCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="schemaNameTextField" alignment="1" pref="448" max="32767" attributes="0"/>
+                          <Component id="schemaCodeTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="assemblingCategoryLookup" alignment="1" pref="448" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="assemblingCategoryLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="assemblingCategoryLookup" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="schemaCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="schemaCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="schemaNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="schemaNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Component id="isObsoleteCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Component id="descriptionPanel" pref="171" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.swingb.JBLabel" name="assemblingCategoryLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="assemblingCategoryLabel.text"/>
+        <Property name="name" type="java.lang.String" value="assemblingCategoryLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="assemblingCategoryLookup">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="assemblingCategoryLookup" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="schemaCodeTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="schemaCodeTextField.text"/>
+        <Property name="name" type="java.lang.String" value="schemaCodeTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="schemaNameTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="schemaNameTextField.text"/>
+        <Property name="name" type="java.lang.String" value="schemaNameTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="schemaCodeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="schemaCodeLabel.text"/>
+        <Property name="name" type="java.lang.String" value="schemaCodeLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="schemaNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="schemaNameLabel.text"/>
+        <Property name="name" type="java.lang.String" value="schemaNameLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="isObsoleteCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="isObsoleteCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="isObsoleteCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Description">
+              <Property name="titleX" resourceKey="descriptionPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="descriptionPanel" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JScrollPane" name="descriptionScrollPane">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="descriptionScrollPane" noResource="true"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+              <BorderConstraints direction="Center"/>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBTextPane" name="descriptionTextPane">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="descriptionTextPane" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
 </Form>
