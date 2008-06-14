@@ -9,15 +9,18 @@ package com.cosmos.acacia.crm.gui.assembling;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.Dimension;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.JPanel;
@@ -143,6 +146,9 @@ public class AssemblingSchemasListPanel
     private SchemaItemsTablePanel schemaItemsTablePanel;
     private ItemValuesTablePanel itemValuesTablePanel;
 
+    private AssemblingSchema assemblingSchema;
+
+
     @Override
     protected void initData()
     {
@@ -161,6 +167,8 @@ public class AssemblingSchemasListPanel
         if(assemblingSchemasTablePanel == null)
         {
             assemblingSchemasTablePanel = new AssemblingSchemasTablePanel();
+            AssemblingSchemasTableListener listener = new AssemblingSchemasTableListener();
+            assemblingSchemasTablePanel.addTablePanelListener(listener);
         }
 
         return assemblingSchemasTablePanel;
@@ -186,6 +194,15 @@ public class AssemblingSchemasListPanel
         return itemValuesTablePanel;
     }
 
+    public AssemblingSchema getAssemblingSchema()
+    {
+        return assemblingSchema;
+    }
+
+    public void setAssemblingSchema(AssemblingSchema assemblingSchema)
+    {
+        this.assemblingSchema = assemblingSchema;
+    }
 
     protected AssemblingRemote getFormSession()
     {
@@ -197,12 +214,38 @@ public class AssemblingSchemasListPanel
         return formSession;
     }
 
+    private class AssemblingSchemasTableListener
+        implements TablePanelListener
+    {
+        @Override
+        public void tablePanelClose()
+        {
+        }
+
+        @Override
+        public void selectionRowChanged()
+        {
+            AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+            setAssemblingSchema((AssemblingSchema)asTablePanel.getDataTable().getSelectedRowObject());
+            getSchemaItemsTablePanel().refreshDataTable();
+        }
+
+        @Override
+        public void selectAction()
+        {
+        }
+
+        @Override
+        public void tableRefreshed()
+        {
+        }
+    }
+
     private class AssemblingSchemasTablePanel
         extends AbstractTablePanel
     {
         private BindingGroup categoryBindingGroup;
         private BindingGroup bindingGroup;
-        //private List<SimpleProduct> products;
 
         private EntityProperties entityProps;
 
@@ -338,6 +381,9 @@ public class AssemblingSchemasListPanel
     private class SchemaItemsTablePanel
         extends AbstractTablePanel
     {
+        private BindingGroup bindingGroup;
+        private EntityProperties entityProps;
+
         public SchemaItemsTablePanel()
         {
         }
@@ -348,6 +394,38 @@ public class AssemblingSchemasListPanel
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
             setVisible(AbstractTablePanel.Button.Close, false);
+
+            entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
+
+            refreshDataTable(entityProps);
+        }
+
+        public void refreshDataTable()
+        {
+            refreshDataTable(entityProps);
+        }
+
+        private void refreshDataTable(EntityProperties entityProps)
+        {
+            if(bindingGroup != null)
+                bindingGroup.unbind();
+
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+
+            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
+            tableBinding.setEditable(false);
+
+            bindingGroup.bind();
+        }
+
+        private List getList()
+        {
+            AssemblingSchema as = getAssemblingSchema();
+            if(as != null)
+                return getFormSession().getAssemblingSchemaItems(getAssemblingSchema());
+            else
+                return Collections.emptyList();
         }
 
         @Override
@@ -359,31 +437,45 @@ public class AssemblingSchemasListPanel
         @Override
         protected Object modifyRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return onEditEntity((AssemblingSchemaItem)rowObject);
         }
 
         @Override
         protected Object newRow()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            AssemblingSchemaItem asi = new AssemblingSchemaItem();
+            asi.setAssemblingSchema(getAssemblingSchema());
+            return onEditEntity(asi);
+        }
+
+        private Object onEditEntity(AssemblingSchemaItem asi)
+        {
+            AssemblingSchemaItemPanel editPanel = new AssemblingSchemaItemPanel(asi);
+            DialogResponse response = editPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return editPanel.getSelectedValue();
+            }
+
+            return null;
         }
 
         @Override
         public boolean canCreate()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canModify(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canDelete(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
     }
 
