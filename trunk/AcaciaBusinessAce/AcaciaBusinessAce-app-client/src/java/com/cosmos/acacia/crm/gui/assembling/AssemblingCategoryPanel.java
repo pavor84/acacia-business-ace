@@ -225,7 +225,7 @@ public class AssemblingCategoryPanel
     @Override
     public void performSave(boolean closeAfter)
     {
-        entity = getFormSession().save(entity);
+        entity = getFormSession().saveCategory(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
         if(closeAfter)
