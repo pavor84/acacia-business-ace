@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -156,7 +157,13 @@ public class AssemblingBean
     @Override
     public List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory)
     {
-        return null;
+        if(assemblingCategory == null)
+            return Collections.emptyList();
+
+        Query q = em.createNamedQuery("AssemblingSchema.findByAssemblingCategory");
+        q.setParameter("assemblingCategory", assemblingCategory);
+        q.setParameter("deleted", false);
+        return new ArrayList<AssemblingSchema>(q.getResultList());
     }
 
     @Override
