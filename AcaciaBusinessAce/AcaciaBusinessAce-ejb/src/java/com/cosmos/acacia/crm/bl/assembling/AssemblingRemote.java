@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
@@ -27,6 +28,7 @@ public interface AssemblingRemote
     AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory);
     AssemblingCategory saveCategory(AssemblingCategory entity);
     AssemblingSchema saveSchema(AssemblingSchema entity);
+    AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity);
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
     AssemblingCategory getParent(AssemblingCategory child);
     //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);
@@ -38,4 +40,9 @@ public interface AssemblingRemote
     List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem);
 
     EntityProperties getAssemblingSchemaEntityProperties();
+    EntityProperties getAssemblingSchemaItemEntityProperties();
+
+    List<DbResource> getAlgorithms();
+    List<DbResource> getDataTypes();
+
 }

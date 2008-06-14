@@ -117,7 +117,12 @@ public class AssemblingSchema
         return assemblingCategory;
     }
 
-    public void setAssemblingCategory(AssemblingCategory assemblingCategory) {
+    public void setAssemblingCategory(AssemblingCategory assemblingCategory)
+    {
+        if(assemblingCategory != null)
+            setParentId(assemblingCategory.getAssemblingCategoryId());
+        else
+            setParentId(null);
         this.assemblingCategory = assemblingCategory;
     }
 
