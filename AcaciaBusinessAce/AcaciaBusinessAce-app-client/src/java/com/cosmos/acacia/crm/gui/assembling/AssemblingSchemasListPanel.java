@@ -8,18 +8,22 @@ package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.Dimension;
 import java.math.BigInteger;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.JPanel;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -196,12 +200,14 @@ public class AssemblingSchemasListPanel
     private class AssemblingSchemasTablePanel
         extends AbstractTablePanel
     {
+        private BindingGroup categoryBindingGroup;
         private BindingGroup bindingGroup;
         //private List<SimpleProduct> products;
 
         private EntityProperties entityProps;
 
         private AssemblingCategory category;
+        private AssemblingSchema categorySchema;
 
 
         public AssemblingSchemasTablePanel()
@@ -214,13 +220,11 @@ public class AssemblingSchemasListPanel
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
 
-            bindingGroup = new BindingGroup();
-
             entityProps = getFormSession().getAssemblingSchemaEntityProperties();
 
-            if(category == null)
-                category = new AssemblingCategory();
-
+            categoryBindingGroup = new BindingGroup();
+            if(categorySchema == null)
+                categorySchema = new AssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
             assemblingCategoryLookup.bind(new AcaciaLookupProvider()
                 {
@@ -230,11 +234,34 @@ public class AssemblingSchemasListPanel
                         return onChooseCategory();
                     }
                 },
-                bindingGroup,
-                category, 
+                categoryBindingGroup,
+                categorySchema, 
                 propDetails, 
-                "${categoryName}",
+                "${categoryCode}, ${categoryName}",
                 UpdateStrategy.READ_WRITE);
+            categoryBindingGroup.bind();
+
+            refreshDataTable(entityProps);
+        }
+
+        @SuppressWarnings("unchecked")
+        private void refreshDataTable(EntityProperties entityProps)
+        {
+            if(bindingGroup != null)
+                bindingGroup.unbind();
+
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+
+            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
+            tableBinding.setEditable(false);
+
+            bindingGroup.bind();
+        }
+
+        private List getList()
+        {
+            return getFormSession().getAssemblingSchemas(category);
         }
 
         protected AssemblingCategory onChooseCategory()
@@ -248,6 +275,7 @@ public class AssemblingSchemasListPanel
             {
                 AssemblingCategory selectedCategory = (AssemblingCategory)listPanel.getSelectedRowObject();
                 category = selectedCategory;
+                refreshDataTable(entityProps);
                 log.info("selectedCategory: " + selectedCategory);
 
                 return selectedCategory;
