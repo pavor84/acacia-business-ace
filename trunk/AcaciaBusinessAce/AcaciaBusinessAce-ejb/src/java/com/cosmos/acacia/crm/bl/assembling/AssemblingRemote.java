@@ -25,7 +25,8 @@ public interface AssemblingRemote
     EntityProperties getAssemblingCategoryEntityProperties();
     boolean deleteAssemblingCategories(List<AssemblingCategory> categories);
     AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory);
-    AssemblingCategory save(AssemblingCategory entity);
+    AssemblingCategory saveCategory(AssemblingCategory entity);
+    AssemblingSchema saveSchema(AssemblingSchema entity);
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
     AssemblingCategory getParent(AssemblingCategory child);
     //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);

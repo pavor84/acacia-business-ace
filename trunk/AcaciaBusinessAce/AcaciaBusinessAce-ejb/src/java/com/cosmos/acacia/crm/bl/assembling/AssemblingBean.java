@@ -90,9 +90,18 @@ public class AssemblingBean
     }
 
     @Override
-    public AssemblingCategory save(AssemblingCategory entity)
+    public AssemblingCategory saveCategory(AssemblingCategory entity)
     {
         assemblingCategoryValidator.validate(entity); 
+
+        esm.persist(em, entity);
+        return entity; 
+    }
+
+    @Override
+    public AssemblingSchema saveSchema(AssemblingSchema entity)
+    {
+        //assemblingCategoryValidator.validate(entity); 
 
         esm.persist(em, entity);
         return entity; 
