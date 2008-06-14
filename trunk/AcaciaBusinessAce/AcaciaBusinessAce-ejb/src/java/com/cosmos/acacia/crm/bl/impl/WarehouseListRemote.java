@@ -1,10 +1,10 @@
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
@@ -89,8 +89,8 @@ public interface WarehouseListRemote {
     /**
      * Return only the persons that can be warehouse man of the given branch.
      * The branch (Address instance) is identified by it's data object.
-     * @param dataObject
+     * @param dataObjectId
      * @return
      */
-    List<Person> getWarehouseMenForBranch(DataObject dataObject);
+    List<Person> getWarehouseMenForBranch(BigInteger dataObjectId);
 }

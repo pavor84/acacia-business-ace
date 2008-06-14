@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListLocal;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
@@ -27,24 +27,24 @@ import com.cosmos.beansbinding.EntityProperties;
  * Created	:	04.05.2008
  * @author	Petar Milev
  * @version $Id: $
- * 
+ *
  * Implement business logic behind the Warehouse module functionality
  */
 @Stateless
 public class WarehouseListBean implements WarehouseListRemote {
     @PersistenceContext
     private EntityManager em;
-    
+
     @EJB
     private EntityStoreManagerLocal esm;
-    
+
     @EJB
     private WarehouseValidatorLocal warehouseValidator;
     @EJB
     private WarehouseProductValidatorLocal warehouseProductValidator;
     @EJB
     private AddressesListLocal addressesList;
-    
+
     @Override
     public EntityProperties getWarehouseEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(Warehouse.class);
@@ -57,9 +57,9 @@ public class WarehouseListBean implements WarehouseListRemote {
     @Override
     public List<Warehouse> listWarehousesByName() {
         Query q = em.createNamedQuery("Warehouse.findByAddressName");
-        
+
         List<Warehouse> result = q.getResultList();
-        
+
         return result;
     }
 
@@ -80,10 +80,10 @@ public class WarehouseListBean implements WarehouseListRemote {
 //        List<Address> allAddresses =
 //            em.createQuery("select a from Address a where a.dataObject.parentDataObjectId is not null")
 //            .getResultList();
-//        
+//
 //        //add-hoc temporary logic, to consider the parent data object with most addresses
 //        Map<DataObject, Long> addressesCount = new HashMap<DataObject, Long>();
-//        
+//
 //        for (Address address : allAddresses) {
 //            DataObject parent = null;
 //            if ( address.getDataObject()!=null && address.getDataObject().getParentDataObject()!=null )
@@ -97,7 +97,7 @@ public class WarehouseListBean implements WarehouseListRemote {
 //                addressesCount.put(parent, curValue);
 //            }
 //        }
-//        
+//
 //        //find the one with most addresses
 //        Long biggestCount = new Long(0);
 //        DataObject choosen = null;
@@ -107,7 +107,7 @@ public class WarehouseListBean implements WarehouseListRemote {
 //                choosen = parentEntry.getKey();
 //            }
 //        }
-//        
+//
 ////        if ( allAddresses!=null && allAddresses.size()>0 ){
 ////            try{
 ////                return allAddresses.get(0).getDataObject().getParentDataObject();
@@ -116,16 +116,16 @@ public class WarehouseListBean implements WarehouseListRemote {
 ////                return null;
 ////            }
 ////        }
-//            
+//
 //        return choosen;
 //    }
 
     @Override
     public Warehouse saveWarehouse(Warehouse entity) {
-        warehouseValidator.validate(entity); 
-        
+        warehouseValidator.validate(entity);
+
         esm.persist(em, entity);
-        return entity; 
+        return entity;
     }
 
     @Override
@@ -145,9 +145,9 @@ public class WarehouseListBean implements WarehouseListRemote {
     @Override
     public List<WarehouseProduct> listWarehouseProducts() {
         Query q = em.createNamedQuery("WarehouseProduct.findAll");
-        
+
         List<WarehouseProduct> result = q.getResultList();
-        
+
         return result;
     }
 
@@ -159,16 +159,16 @@ public class WarehouseListBean implements WarehouseListRemote {
 
     @Override
     public WarehouseProduct saveWarehouseProduct(WarehouseProduct entity) {
-        warehouseProductValidator.validate(entity); 
-        
+        warehouseProductValidator.validate(entity);
+
         esm.persist(em, entity);
-        return entity; 
+        return entity;
     }
 
     @Override
-    public List<Person> getWarehouseMenForBranch(DataObject dataObject) {
+    public List<Person> getWarehouseMenForBranch(BigInteger dataObjectId) {
         Set<Person> persons = new HashSet<Person>();
-        List<ContactPerson> contactPersons = addressesList.getContactPersons(dataObject);
+        List<ContactPerson> contactPersons = addressesList.getContactPersons(dataObjectId);
         for (ContactPerson contactPerson : contactPersons) {
             persons.add(contactPerson.getContact());
         }
