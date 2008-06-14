@@ -5,11 +5,11 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.test.bl.contactbook.ContactBookTest;
 import java.util.Date;
 
 import org.junit.runner.JUnitCore;
 
-import com.cosmos.test.bl.WarehouseListTest;
 
 /**
  *
@@ -87,7 +87,8 @@ public class Main {
 //            ProductsListTest.class.getName(),
 //            ProductCategoriesTest.class.getName(),
 //            AcaciaSessionTest.class.getName()
-            WarehouseListTest.class.getName()
+//            WarehouseListTest.class.getName()
+            ContactBookTest.class.getName()
         };
 
         JUnitCore.main(tests);
