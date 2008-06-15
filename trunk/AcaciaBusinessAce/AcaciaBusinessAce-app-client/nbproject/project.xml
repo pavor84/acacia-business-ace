@@ -23,6 +23,7 @@
             <included-library files="1">libs.junit_4.classpath</included-library>
             <included-library files="1">file.reference.log4j-1.2.11.jar</included-library>
             <included-library files="1">file.reference.liquidlnf.jar</included-library>
+            <included-library files="1">libs.absolutelayout.classpath</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>

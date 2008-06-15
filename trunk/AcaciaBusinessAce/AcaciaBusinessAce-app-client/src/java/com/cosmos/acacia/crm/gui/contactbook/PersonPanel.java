@@ -22,7 +22,6 @@ import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.gui.CallbackTestPanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -352,8 +351,6 @@ public class PersonPanel extends BaseEntityPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testCallback
-    CallbackTestPanel test = new CallbackTestPanel(null);
-    test.showDialog();
 }//GEN-LAST:event_testCallback
 
 
