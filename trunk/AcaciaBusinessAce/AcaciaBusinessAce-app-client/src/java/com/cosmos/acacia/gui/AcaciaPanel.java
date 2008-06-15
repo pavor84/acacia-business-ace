@@ -63,6 +63,7 @@ public abstract class AcaciaPanel
 
     public BigInteger getParentDataObjectId()
     {
+        log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.intValue() : "null"));
         return parentDataObjectId;
     }
 

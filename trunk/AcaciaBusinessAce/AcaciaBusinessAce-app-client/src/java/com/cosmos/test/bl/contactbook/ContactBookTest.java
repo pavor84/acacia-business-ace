@@ -180,6 +180,9 @@ public class ContactBookTest {
         person.setFirstName(TestUtils.getRandomString(6));
         person = personFormSession.savePerson(person);
 
+        person.setDescription(TestUtils.getRandomString(6));
+        person = personFormSession.savePerson(person);
+
         contactPerson.setContact(person);
         contactPerson = addressFormSession.saveContactPerson(contactPerson, address.getDataObject().getDataObjectId());
 

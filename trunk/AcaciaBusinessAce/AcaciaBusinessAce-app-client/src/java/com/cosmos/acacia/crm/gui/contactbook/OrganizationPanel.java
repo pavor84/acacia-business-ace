@@ -423,7 +423,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         descriptionTextPane.bind(organizationBindingGroup, organization, "description");
 
         // Using an AbstractTablePanel implementation
-        branchesTable = new AddressListPanel(organization.getDataObject().getDataObjectId());
+        branchesTable = new AddressListPanel(organization.getId());
         branchesTable.setVisibleButtons(14); //Only New, Modify and Delete
 
         // Adding the nested table listener to ensure that organization is saved
@@ -435,7 +435,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         //addressesTable.setButtonsTextVisibility(false);
         branchesPanel.add(branchesTable);
 
-        
+
         Binding regAddressBinding = registrationAddressLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -446,8 +446,8 @@ public class OrganizationPanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("registrationAddress"),
             "${addressName}",
             UpdateStrategy.READ_WRITE);
-            
-            
+
+
         Binding adminAddressBinding = administrativeAddressLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -458,7 +458,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("administrationAddress"),
             "${addressName}",
             UpdateStrategy.READ_WRITE);
-            
+
         organizationBindingGroup.bind();
     }
 
@@ -470,14 +470,14 @@ public class OrganizationPanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Organization result = (Organization) listPanel.getSelectedRowObject();
-            
+
             if (result.equals(organization)) {
-                JOptionPane.showMessageDialog(this, 
+                JOptionPane.showMessageDialog(this,
                         getResourceMap().getString("Organization.err.registeringOrganization"));
-                
+
                 return null;
             }
-            
+
             return result;
         } else {
             return null;
@@ -485,7 +485,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseAddress() {
-        AddressListPanel listPanel = new AddressListPanel(organization.getDataObject().getDataObjectId());
+        AddressListPanel listPanel = new AddressListPanel(organization.getId());
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
@@ -496,7 +496,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             return null;
         }
     }
-    
+
     protected OrganizationsListRemote getFormSession()
     {
         if(formSession == null)
@@ -569,7 +569,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     public EntityFormButtonPanel getButtonPanel() {
        return entityFormButtonPanel;
     }
-    
+
     class DeletionListener implements TableModificationListener {
 
         public void rowDeleted(Object row) {

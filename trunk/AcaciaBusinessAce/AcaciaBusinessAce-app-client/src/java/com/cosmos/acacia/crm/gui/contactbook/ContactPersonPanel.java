@@ -174,7 +174,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     protected Object onChooseType()
     {
         PositionTypesListPanel listPanel =
-                new PositionTypesListPanel(getParentDataObjectId());
+                new PositionTypesListPanel(getParentDataObject().getParentDataObjectId());
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){

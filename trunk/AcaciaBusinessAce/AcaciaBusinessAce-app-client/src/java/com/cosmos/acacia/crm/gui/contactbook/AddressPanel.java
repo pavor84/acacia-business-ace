@@ -443,11 +443,13 @@ public class AddressPanel extends BaseEntityPanel {
 
         addressBindingGroup.bind();
 
-        int nextAddressNumber = getNewAddressNumber();
-        if (nextAddressNumber == 0)
-            addressNameTextField.setText(defaultMainAddressName);
-        else
-            addressNameTextField.setText(defaultAddressName + " " + nextAddressNumber);
+        if (address.getParentId() == null) {
+            int nextAddressNumber = getNewAddressNumber();
+            if (nextAddressNumber == 0)
+                addressNameTextField.setText(defaultMainAddressName);
+            else
+                addressNameTextField.setText(defaultAddressName + " " + nextAddressNumber);
+        }
     }
 
      protected Object onChooseCity() {
