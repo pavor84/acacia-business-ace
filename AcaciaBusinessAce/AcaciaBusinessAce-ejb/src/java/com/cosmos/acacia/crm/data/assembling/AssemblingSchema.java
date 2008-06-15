@@ -48,7 +48,10 @@ public class AssemblingSchema
 
     @JoinColumn(name = "category_id", referencedColumnName = "assembling_category_id")
     @ManyToOne
-    @Property(title="Category", propertyValidator=@PropertyValidator(required=true))
+    @Property(
+        title="Category",
+        visible=false,
+        propertyValidator=@PropertyValidator(required=true))
     private AssemblingCategory assemblingCategory;
 
     @Column(name = "schema_code", nullable = false)

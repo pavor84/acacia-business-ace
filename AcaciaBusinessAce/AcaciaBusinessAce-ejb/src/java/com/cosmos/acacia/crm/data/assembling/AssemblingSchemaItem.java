@@ -56,13 +56,16 @@ public class AssemblingSchemaItem
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
+    @Property(title="Item Id", editable=false, readOnly=true, visible=false, hidden=true)
     @Column(name = "item_id", nullable = false)
     private BigInteger itemId;
 
     @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id", nullable=false)
     @ManyToOne
-    @Property(title="Schema", propertyValidator=@PropertyValidator(required=true))
+    @Property(
+        title="Schema",
+        visible=false,
+        propertyValidator=@PropertyValidator(required=true))
     private AssemblingSchema assemblingSchema;
 
     @JoinColumn(name = "algorithm_id", referencedColumnName = "resource_id", nullable=false)
@@ -264,6 +267,7 @@ public class AssemblingSchemaItem
     @Override
     public void setParentId(BigInteger parentId)
     {
+        throw new UnsupportedOperationException();
     }
 
     @Override

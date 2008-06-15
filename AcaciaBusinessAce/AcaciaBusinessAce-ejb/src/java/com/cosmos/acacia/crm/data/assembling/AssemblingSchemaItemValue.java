@@ -6,6 +6,8 @@
 package com.cosmos.acacia.crm.data.assembling;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.io.Serializable;
@@ -17,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -27,7 +30,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "assembling_schema_item_values")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "AssemblingSchemaItemValue.findByAssemblingSchemaItem",
+                query = "select t1 from AssemblingSchemaItemValue t1" +
+                        " where t1.assemblingSchemaItem = :assemblingSchemaItem" +
+                        " and t1.dataObject.deleted = :deleted"
+            )
+    })
 public class AssemblingSchemaItemValue
     extends DataObjectBean
     implements Serializable
@@ -36,29 +48,39 @@ public class AssemblingSchemaItemValue
 
     @Id
     @Column(name = "item_value_id", nullable = false)
+    //@Property(title="Item Value Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger itemValueId;
-
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
 
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     @ManyToOne
+    @Property(
+        title="Schema Item",
+        visible=false,
+        propertyValidator=@PropertyValidator(required=true))
     private AssemblingSchemaItem assemblingSchemaItem;
+
+    @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
+    @ManyToOne
+    @Property(title="Product/Schema", propertyValidator=@PropertyValidator(required=true))
+    private VirtualProduct virtualProduct;
 
     //@Lob
     @Column(name = "min_constraint")
+    @Property(title="Min. Value")
     private Serializable minConstraint;
 
     //@Lob
     @Column(name = "max_constraint")
+    @Property(title="Max. Value")
     private Serializable maxConstraint;
 
-    @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
-    @ManyToOne
-    private VirtualProduct virtualProduct;
-
     @Column(name = "quantity", nullable = false)
+    @Property(
+        title="Quantity",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.NUMBER_RANGE,
+            minValue=1d,
+            required=true))
     private BigDecimal quantity = BigDecimal.ONE;
 
     @OneToOne
@@ -150,13 +172,16 @@ public class AssemblingSchemaItemValue
     @Override
     public BigInteger getParentId()
     {
-        return parentId;
+        if(assemblingSchemaItem != null)
+            return assemblingSchemaItem.getItemId();
+
+        return null;
     }
 
     @Override
     public void setParentId(BigInteger parentId)
     {
-        this.parentId = parentId;
+        throw new UnsupportedOperationException();
     }
 
     @Override

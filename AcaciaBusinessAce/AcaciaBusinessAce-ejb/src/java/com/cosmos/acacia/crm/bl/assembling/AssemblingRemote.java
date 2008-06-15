@@ -29,18 +29,18 @@ public interface AssemblingRemote
     AssemblingCategory saveCategory(AssemblingCategory entity);
     AssemblingSchema saveSchema(AssemblingSchema entity);
     AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity);
+    AssemblingSchemaItemValue saveItemValue(AssemblingSchemaItemValue entity);
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
     AssemblingCategory getParent(AssemblingCategory child);
     //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);
 
     List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory);
-
     List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema);
-
     List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem);
 
     EntityProperties getAssemblingSchemaEntityProperties();
     EntityProperties getAssemblingSchemaItemEntityProperties();
+    EntityProperties getAssemblingSchemaItemValueEntityProperties();
 
     List<DbResource> getAlgorithms();
     List<DbResource> getDataTypes();

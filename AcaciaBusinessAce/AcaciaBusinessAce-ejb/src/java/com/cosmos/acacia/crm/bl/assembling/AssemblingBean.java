@@ -120,6 +120,15 @@ public class AssemblingBean
     }
 
     @Override
+    public AssemblingSchemaItemValue saveItemValue(AssemblingSchemaItemValue entity)
+    {
+        //assemblingCategoryValidator.validate(entity); 
+
+        esm.persist(em, entity);
+        return entity; 
+    }
+
+    @Override
     public AssemblingCategory updateParents(
         AssemblingCategory newParent,
         AssemblingCategory newChild)
@@ -202,7 +211,13 @@ public class AssemblingBean
     @Override
     public List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem)
     {
-        return null;
+        if(assemblingSchemaItem == null)
+            return Collections.emptyList();
+
+        Query q = em.createNamedQuery("AssemblingSchemaItemValue.findByAssemblingSchemaItem");
+        q.setParameter("assemblingSchemaItem", assemblingSchemaItem);
+        q.setParameter("deleted", false);
+        return new ArrayList<AssemblingSchemaItemValue>(q.getResultList());
     }
 
     @Override
@@ -217,6 +232,14 @@ public class AssemblingBean
     public EntityProperties getAssemblingSchemaItemEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(AssemblingSchemaItem.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getAssemblingSchemaItemValueEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(AssemblingSchemaItemValue.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
