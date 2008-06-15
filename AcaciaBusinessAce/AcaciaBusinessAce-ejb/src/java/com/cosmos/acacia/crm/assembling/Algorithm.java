@@ -5,8 +5,6 @@
 
 package com.cosmos.acacia.crm.assembling;
 
-import com.cosmos.acacia.callback.ApplicationCallback;
-import com.cosmos.acacia.callback.ApplicationCallbackHandler;
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
 import com.cosmos.acacia.callback.assembling.LessSelectedItemsThanAllowed;
 import com.cosmos.acacia.callback.assembling.MoreSelectedItemsThanAllowed;
@@ -14,6 +12,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.ejb.callback.ClientCallbackHandler;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 
@@ -163,7 +163,7 @@ public class Algorithm
 
     private AssemblingSchemaItem assemblingSchemaItem;
 
-    private ApplicationCallbackHandler callbackHandler;
+    private ClientCallbackHandler callbackHandler;
 
 
     public Algorithm(AssemblingSchemaItem assemblingSchemaItem)
@@ -198,11 +198,11 @@ public class Algorithm
         return assemblingSchemaItem;
     }
 
-    public ApplicationCallbackHandler getCallbackHandler() {
+    public ClientCallbackHandler getCallbackHandler() {
         return callbackHandler;
     }
 
-    public void setCallbackHandler(ApplicationCallbackHandler callbackHandler) {
+    public void setCallbackHandler(ClientCallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
     }
 
@@ -319,7 +319,7 @@ public class Algorithm
                 -1);
         try
         {
-            callbackHandler.handle(new ApplicationCallback[] {choiceCallback});
+            callbackHandler.handle(new Callback[] {choiceCallback});
         }
         catch(IOException ex)
         {

@@ -14,10 +14,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.callback.ApplicationCallbackHandler;
-import com.cosmos.acacia.callback.Callback;
-import com.cosmos.acacia.callback.CallbackRequest;
-import com.cosmos.acacia.callback.CallbackResult;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.Product;
@@ -26,6 +22,8 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import com.cosmos.ejb.callback.ClientCallbackHandler;
+import javax.security.auth.callback.Callback;
 
 /**
  *
@@ -47,7 +45,7 @@ public class ProductAssembler
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> assemblingSchemaItems;
 
-    private ApplicationCallbackHandler callbackHandler;
+    private ClientCallbackHandler callbackHandler;
 
     public ProductAssembler(
             AssemblingSchema assemblingSchema,
@@ -61,11 +59,11 @@ public class ProductAssembler
         return assemblingSchema;
     }
 
-    public ApplicationCallbackHandler getCallbackHandler() {
+    public ClientCallbackHandler getCallbackHandler() {
         return callbackHandler;
     }
 
-    public void setCallbackHandler(ApplicationCallbackHandler callbackHandler) {
+    public void setCallbackHandler(ClientCallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
     }
 
@@ -76,9 +74,6 @@ public class ProductAssembler
         try
         {
             //em.getTransaction().begin();
-            CallbackRequest req = new CallbackRequest();
-            CallbackResult result = getCallback().askClient(req);
-
             ComplexProduct product = assemblе(parameters, em);
             //em.getTransaction().commit();
             return product;
