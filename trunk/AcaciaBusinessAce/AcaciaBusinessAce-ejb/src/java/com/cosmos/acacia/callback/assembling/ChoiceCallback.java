@@ -11,13 +11,14 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.security.auth.callback.Callback;
 
 /**
  *
  * @author Miro
  */
 public class ChoiceCallback
-    implements AssemblingCallback, Serializable
+    implements Callback, Serializable
 {
     private AssemblingSchemaItem assemblingSchemaItem;
     private Object valueAgainstConstraints;
