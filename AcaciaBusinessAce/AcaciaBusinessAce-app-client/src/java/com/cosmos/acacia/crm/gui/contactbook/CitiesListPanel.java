@@ -36,7 +36,7 @@ public class CitiesListPanel extends AbstractTablePanel {
         super();
         postInitData();
     }
-    
+
     public CitiesListPanel(Country country)
     {
         super();
@@ -68,7 +68,7 @@ public class CitiesListPanel extends AbstractTablePanel {
 
         citiesTable.setEditable(false);
     }
-            
+
     protected List<City> getCities() {
         if(cities == null) {
             if (country == null) {
@@ -115,14 +115,14 @@ public class CitiesListPanel extends AbstractTablePanel {
     public void setContactPerson(ContactPerson contactPerson) {
         this.contactPerson = contactPerson;
     }
-    
+
     @Override
     @Action
     public void selectAction(){
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -138,7 +138,7 @@ public class CitiesListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            CityPanel cityPanel = 
+            CityPanel cityPanel =
                     new CityPanel((City) rowObject);
             DialogResponse response = cityPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
@@ -146,7 +146,7 @@ public class CitiesListPanel extends AbstractTablePanel {
                 return cityPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -154,25 +154,25 @@ public class CitiesListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (citiesBindingGroup != null)
             citiesBindingGroup.unbind();
-        
+
         cities = null;
-        
+
         postInitData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         CityPanel cityPanel = null;
-        if (country != null)                
+        if (country != null)
             cityPanel = new CityPanel(country);
         else
             cityPanel = new CityPanel();
-        
+
         DialogResponse response = cityPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -180,7 +180,7 @@ public class CitiesListPanel extends AbstractTablePanel {
         }
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

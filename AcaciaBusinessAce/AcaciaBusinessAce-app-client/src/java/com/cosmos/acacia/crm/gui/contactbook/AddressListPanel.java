@@ -15,6 +15,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -34,6 +35,9 @@ public class AddressListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
     }
 
+    public AddressListPanel(DataObjectBean parent) {
+        super(parent);
+    }
     @EJB
     private AddressesListRemote formSession;
 

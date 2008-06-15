@@ -15,6 +15,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -33,6 +34,10 @@ public class PassportsListPanel extends AbstractTablePanel {
     public PassportsListPanel(BigInteger parentDataObjectId)
     {
         super(parentDataObjectId);
+    }
+    
+    public PassportsListPanel(DataObjectBean parent) {
+        super(parent);
     }
 
     @EJB

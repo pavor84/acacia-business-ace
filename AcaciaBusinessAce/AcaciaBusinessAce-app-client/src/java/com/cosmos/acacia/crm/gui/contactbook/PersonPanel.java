@@ -397,7 +397,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     private Country country;
     private boolean namesChanged;
     private boolean isUnique;
-            
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -424,12 +424,12 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
          birthPlaceCountryComboBox.addActionListener(new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e) {               
+            public void actionPerformed(ActionEvent e) {
                 country = (Country) birthPlaceCountryComboBox.getSelectedItem();
                 cityBinding.getTargetProperty().setValue(cityLookup, null);
             }
         });
-        
+
         cityBinding = cityLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -444,7 +444,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         descriptionTextPane.bind(personBindingGroup, person, "description");
 
         // Using an AbstractTablePanel implementation
-        addressesTable = new AddressListPanel(person.getParentId());
+        addressesTable = new AddressListPanel(person.getId());
         addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
 
         // Adding the nested table listener to ensure that person is saved
@@ -456,7 +456,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
 
 
          // Using an AbstractTablePanel implementation
-        passportsTable = new PassportsListPanel(person.getDataObject().getDataObjectId());
+        passportsTable = new PassportsListPanel(person.getId());
         passportsTable.setVisibleButtons(14); //Only New, Modify and Delete
 
         // Adding the nested table listener to ensure that person is saved
@@ -468,28 +468,28 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         firstNameTextField.addKeyListener(nameChangeListener);
         secondNameTextField.addKeyListener(nameChangeListener);
         lastNameTextField.addKeyListener(nameChangeListener);
-        
+
         personBindingGroup.bind();
     }
 
     protected Object onChooseCity() {
-        
+
         CitiesListPanel listPanel = new CitiesListPanel(country);
-                
+
         log.info("Displaying cities for country: " + country);
-        
+
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             City selectedCity = (City) listPanel.getSelectedRowObject();
             if (birthPlaceCountryComboBox.getSelectedItem() == null)
                 birthPlaceCountryComboBox.setSelectedItem(selectedCity.getCountry());
-                    
+
             return selectedCity;
         } else {
             return null;
         }
     }
-    
+
     protected PersonsListRemote getFormSession()
     {
         if(formSession == null)
@@ -523,16 +523,16 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     public void performSave(boolean closeAfter)
     {
         log.info("Save: person: " + person);
-        
+
         isUnique = true;
         Person tmpPerson = null;
-        
+
         // Checking whether this is a new person or the names were changed
         // in order to invoke the uniquness check server-side
         if ((person.getDataObject() == null || namesChanged) &&
                 (tmpPerson = getFormSession().saveIfUnique(person)) == null) {
             isUnique = false;
-            
+
             int answer = JOptionPane.showConfirmDialog(
                         this, getResourceMap().getString("Person.confirm.uniqueness"), "", JOptionPane.OK_CANCEL_OPTION);
 
@@ -541,10 +541,10 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
                 isUnique = true;
             }
         }
-        
+
         if (tmpPerson != null)
             person = tmpPerson;
-        
+
         if (isUnique) {
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(person);
@@ -596,13 +596,13 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     public EntityFormButtonPanel getButtonPanel() {
        return entityFormButtonPanel;
     }
-    
+
     @Override
     protected boolean isSpecialConditionPresent()
     {
         return !isUnique;
     }
-    
+
     class NameChangeListener extends KeyAdapter {
         @Override
         public void keyTyped(KeyEvent e) {
