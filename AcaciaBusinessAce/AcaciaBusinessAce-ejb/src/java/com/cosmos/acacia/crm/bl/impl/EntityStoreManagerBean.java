@@ -113,6 +113,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
         if(mustMerge)
             entity = em.merge(entity);
+
         em.persist(entity);
     }
 
@@ -147,7 +148,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         if (ex.getCause() != null) {
             return getRootCauseMessage(ex.getCause());
         }
-        
+
         if (ex instanceof BatchUpdateException) {
             BatchUpdateException bue = (BatchUpdateException) ex;
             String message = bue.getNextException().getMessage();
@@ -160,7 +161,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         }
         return "";
     }
-    
+
     private DataObjectTypeLocal getDataObjectTypeLocal()
     {
         if(dotLocal == null)
@@ -185,7 +186,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
- 
+
 
     public EntityProperties getEntityProperties(Class entityClass)
     {

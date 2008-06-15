@@ -44,7 +44,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     private BankDetailsListLocal bankDetailsManager;
 
     @EJB
-    private GenericUniqueValidatorLocal validator;
+    private GenericUniqueValidatorLocal<Country> validator;
 
     @EJB
     private CityValidatorLocal cityValidator;
