@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -147,6 +148,7 @@ public class AssemblingSchemasListPanel
     private ItemValuesTablePanel itemValuesTablePanel;
 
     private AssemblingSchema assemblingSchema;
+    private AssemblingSchemaItem assemblingSchemaItem;
 
 
     @Override
@@ -202,6 +204,16 @@ public class AssemblingSchemasListPanel
     public void setAssemblingSchema(AssemblingSchema assemblingSchema)
     {
         this.assemblingSchema = assemblingSchema;
+    }
+
+    public AssemblingSchemaItem getAssemblingSchemaItem()
+    {
+        return assemblingSchemaItem;
+    }
+
+    public void setAssemblingSchemaItem(AssemblingSchemaItem assemblingSchemaItem)
+    {
+        this.assemblingSchemaItem = assemblingSchemaItem;
     }
 
     protected AssemblingRemote getFormSession()
@@ -423,7 +435,7 @@ public class AssemblingSchemasListPanel
         {
             AssemblingSchema as = getAssemblingSchema();
             if(as != null)
-                return getFormSession().getAssemblingSchemaItems(getAssemblingSchema());
+                return getFormSession().getAssemblingSchemaItems(as);
             else
                 return Collections.emptyList();
         }
@@ -482,6 +494,9 @@ public class AssemblingSchemasListPanel
     private class ItemValuesTablePanel
         extends AbstractTablePanel
     {
+        private BindingGroup bindingGroup;
+        private EntityProperties entityProps;
+
         public ItemValuesTablePanel()
         {
         }
@@ -492,6 +507,38 @@ public class AssemblingSchemasListPanel
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
             setVisible(AbstractTablePanel.Button.Close, false);
+
+            entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
+
+            refreshDataTable(entityProps);
+        }
+
+        public void refreshDataTable()
+        {
+            refreshDataTable(entityProps);
+        }
+
+        private void refreshDataTable(EntityProperties entityProps)
+        {
+            if(bindingGroup != null)
+                bindingGroup.unbind();
+
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+
+            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
+            tableBinding.setEditable(false);
+
+            bindingGroup.bind();
+        }
+
+        private List getList()
+        {
+            AssemblingSchemaItem asi = getAssemblingSchemaItem();
+            if(asi != null)
+                return getFormSession().getAssemblingSchemaItemValues(asi);
+            else
+                return Collections.emptyList();
         }
 
         @Override
@@ -503,31 +550,45 @@ public class AssemblingSchemasListPanel
         @Override
         protected Object modifyRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return onEditEntity((AssemblingSchemaItemValue)rowObject);
         }
 
         @Override
         protected Object newRow()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            AssemblingSchemaItemValue itemValue = new AssemblingSchemaItemValue();
+            itemValue.setAssemblingSchemaItem(getAssemblingSchemaItem());
+            return onEditEntity(itemValue);
+        }
+
+        private Object onEditEntity(AssemblingSchemaItemValue itemValue)
+        {
+            AssemblingSchemaItemValuePanel editPanel = new AssemblingSchemaItemValuePanel(itemValue);
+            DialogResponse response = editPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return editPanel.getSelectedValue();
+            }
+
+            return null;
         }
 
         @Override
         public boolean canCreate()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canModify(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canDelete(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
     }
 }
