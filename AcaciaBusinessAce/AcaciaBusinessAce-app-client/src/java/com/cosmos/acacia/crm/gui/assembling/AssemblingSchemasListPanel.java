@@ -181,6 +181,8 @@ public class AssemblingSchemasListPanel
         if(schemaItemsTablePanel == null)
         {
             schemaItemsTablePanel = new SchemaItemsTablePanel();
+            AssemblingSchemaItemsTableListener listener = new AssemblingSchemaItemsTableListener();
+            schemaItemsTablePanel.addTablePanelListener(listener);
         }
 
         return schemaItemsTablePanel;
@@ -230,9 +232,7 @@ public class AssemblingSchemasListPanel
         implements TablePanelListener
     {
         @Override
-        public void tablePanelClose()
-        {
-        }
+        public void tablePanelClose() {}
 
         @Override
         public void selectionRowChanged()
@@ -243,14 +243,31 @@ public class AssemblingSchemasListPanel
         }
 
         @Override
-        public void selectAction()
+        public void selectAction() {}
+
+        @Override
+        public void tableRefreshed() {}
+    }
+
+    private class AssemblingSchemaItemsTableListener
+        implements TablePanelListener
+    {
+        @Override
+        public void tablePanelClose() {}
+
+        @Override
+        public void selectionRowChanged()
         {
+            SchemaItemsTablePanel siTablePanel = getSchemaItemsTablePanel();
+            setAssemblingSchemaItem((AssemblingSchemaItem)siTablePanel.getDataTable().getSelectedRowObject());
+            getItemValuesTablePanel().refreshDataTable();
         }
 
         @Override
-        public void tableRefreshed()
-        {
-        }
+        public void selectAction() {}
+
+        @Override
+        public void tableRefreshed() {}
     }
 
     private class AssemblingSchemasTablePanel
