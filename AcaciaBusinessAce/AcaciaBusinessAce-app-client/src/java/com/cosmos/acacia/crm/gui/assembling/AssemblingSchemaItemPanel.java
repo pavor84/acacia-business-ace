@@ -109,21 +109,25 @@ public class AssemblingSchemaItemPanel
         schemaCodeTextField.setName("schemaCodeTextField"); // NOI18N
 
         messageCodeTextField.setName("messageCodeTextField"); // NOI18N
+        messageCodeTextField.setNextFocusableComponent(messageTextTextField);
 
         messageCodeLabel.setText(resourceMap.getString("messageCodeLabel.text")); // NOI18N
         messageCodeLabel.setName("messageCodeLabel"); // NOI18N
 
         algorithmComboBox.setName("algorithmComboBox"); // NOI18N
+        algorithmComboBox.setNextFocusableComponent(dataTypeComboBox);
 
         algorithmLabel.setText(resourceMap.getString("algorithmLabel.text")); // NOI18N
         algorithmLabel.setName("algorithmLabel"); // NOI18N
 
         minSelectionsTextField.setName("minSelectionsTextField"); // NOI18N
+        minSelectionsTextField.setNextFocusableComponent(maxSelectionsTextField);
 
         minSelectionsLabel.setText(resourceMap.getString("minSelectionsLabel.text")); // NOI18N
         minSelectionsLabel.setName("minSelectionsLabel"); // NOI18N
 
         quantityTextField.setName("quantityTextField"); // NOI18N
+        quantityTextField.setNextFocusableComponent(defaultValueTextField);
 
         quantityLabel.setText(resourceMap.getString("quantityLabel.text")); // NOI18N
         quantityLabel.setName("quantityLabel"); // NOI18N
@@ -186,21 +190,25 @@ public class AssemblingSchemaItemPanel
         schemaNameLabel.setName("schemaNameLabel"); // NOI18N
 
         messageTextTextField.setName("messageTextTextField"); // NOI18N
+        messageTextTextField.setNextFocusableComponent(algorithmComboBox);
 
         messageTextLabel.setText(resourceMap.getString("messageTextLabel.text")); // NOI18N
         messageTextLabel.setName("messageTextLabel"); // NOI18N
 
         dataTypeComboBox.setName("dataTypeComboBox"); // NOI18N
+        dataTypeComboBox.setNextFocusableComponent(minSelectionsTextField);
 
         dataTypeLabel.setText(resourceMap.getString("dataTypeLabel.text")); // NOI18N
         dataTypeLabel.setName("dataTypeLabel"); // NOI18N
 
         maxSelectionsTextField.setName("maxSelectionsTextField"); // NOI18N
+        maxSelectionsTextField.setNextFocusableComponent(quantityTextField);
 
         maxSelectionsLabel.setText(resourceMap.getString("maxSelectionsLabel.text")); // NOI18N
         maxSelectionsLabel.setName("maxSelectionsLabel"); // NOI18N
 
         defaultValueTextField.setName("defaultValueTextField"); // NOI18N
+        defaultValueTextField.setNextFocusableComponent(descriptionTextPane);
 
         defaultValueLabel.setText(resourceMap.getString("defaultValueLabel.text")); // NOI18N
         defaultValueLabel.setName("defaultValueLabel"); // NOI18N
@@ -261,11 +269,13 @@ public class AssemblingSchemaItemPanel
         descriptionScrollPane.setName("descriptionScrollPane"); // NOI18N
 
         descriptionTextPane.setName("descriptionTextPane"); // NOI18N
+        descriptionTextPane.setNextFocusableComponent(entityFormButtonPanel);
         descriptionScrollPane.setViewportView(descriptionTextPane);
 
         descriptionPanel.add(descriptionScrollPane, java.awt.BorderLayout.CENTER);
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
+        entityFormButtonPanel.setNextFocusableComponent(messageCodeTextField);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
