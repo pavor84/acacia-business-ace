@@ -132,6 +132,9 @@
             <Component class="com.cosmos.swingb.JBTextField" name="messageCodeTextField">
               <Properties>
                 <Property name="name" type="java.lang.String" value="messageCodeTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="messageTextTextField"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="messageCodeLabel">
@@ -143,6 +146,9 @@
             <Component class="com.cosmos.swingb.JBComboBox" name="algorithmComboBox">
               <Properties>
                 <Property name="name" type="java.lang.String" value="algorithmComboBox" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="dataTypeComboBox"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="algorithmLabel">
@@ -154,6 +160,9 @@
             <Component class="com.cosmos.swingb.JBTextField" name="minSelectionsTextField">
               <Properties>
                 <Property name="name" type="java.lang.String" value="minSelectionsTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="maxSelectionsTextField"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="minSelectionsLabel">
@@ -165,6 +174,9 @@
             <Component class="com.cosmos.swingb.JBTextField" name="quantityTextField">
               <Properties>
                 <Property name="name" type="java.lang.String" value="quantityTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="defaultValueTextField"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="quantityLabel">
@@ -253,6 +265,9 @@
             <Component class="com.cosmos.swingb.JBTextField" name="messageTextTextField">
               <Properties>
                 <Property name="name" type="java.lang.String" value="messageTextTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="algorithmComboBox"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="messageTextLabel">
@@ -264,6 +279,9 @@
             <Component class="com.cosmos.swingb.JBComboBox" name="dataTypeComboBox">
               <Properties>
                 <Property name="name" type="java.lang.String" value="dataTypeComboBox" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="minSelectionsTextField"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="dataTypeLabel">
@@ -275,6 +293,9 @@
             <Component class="com.cosmos.swingb.JBTextField" name="maxSelectionsTextField">
               <Properties>
                 <Property name="name" type="java.lang.String" value="maxSelectionsTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="quantityTextField"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="maxSelectionsLabel">
@@ -286,6 +307,9 @@
             <Component class="com.cosmos.swingb.JBTextField" name="defaultValueTextField">
               <Properties>
                 <Property name="name" type="java.lang.String" value="defaultValueTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="descriptionTextPane"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="defaultValueLabel">
@@ -330,6 +354,9 @@
             <Component class="com.cosmos.swingb.JBTextPane" name="descriptionTextPane">
               <Properties>
                 <Property name="name" type="java.lang.String" value="descriptionTextPane" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="entityFormButtonPanel"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -339,6 +366,9 @@
     <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
       <Properties>
         <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="messageCodeTextField"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>
