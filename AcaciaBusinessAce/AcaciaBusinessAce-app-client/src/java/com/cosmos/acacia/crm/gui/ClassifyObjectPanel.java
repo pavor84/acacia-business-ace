@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -185,13 +186,15 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         groupLookup.setEnabled(true);
         
         appliedClassifiersTable = new ClassifiersListPanel(dataObjectToBeClassified);
-        appliedClassifiersTable.setVisibleButtons(16);
+        //appliedClassifiersTable.setVisibleButtons(16);
+        appliedClassifiersTable.setVisible(AbstractTablePanel.Button.Refresh);
 
         appliedClassifiersPanel.add(appliedClassifiersTable);
         
         
         classifiersTable = new ClassifiersListPanel(null, dataObjectToBeClassified.getDataObjectType());
-        classifiersTable.setVisibleButtons(2 + 4 + 8 + 16);
+        //classifiersTable.setVisibleButtons(2 + 4 + 8 + 16);
+        classifiersTable.setVisible(AbstractTablePanel.Button.NewModifyDeleteRefresh);
         filterClassifiers();
         
         classifiersPanel.add(classifiersTable);

@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -442,7 +443,8 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
 
         // Using an AbstractTablePanel implementation
         addressesTable = new AddressListPanel(person.getId());
-        addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
+        //addressesTable.setVisibleButtons(14); //Only New, Modify and Delete
+        addressesTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
         // Adding the nested table listener to ensure that person is saved
         // before adding addresses to it
@@ -454,7 +456,8 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
 
          // Using an AbstractTablePanel implementation
         passportsTable = new PassportsListPanel(person.getId());
-        passportsTable.setVisibleButtons(14); //Only New, Modify and Delete
+        //passportsTable.setVisibleButtons(14); //Only New, Modify and Delete
+        passportsTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
         // Adding the nested table listener to ensure that person is saved
         // before adding addresses to it

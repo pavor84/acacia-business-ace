@@ -20,6 +20,7 @@ import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -424,7 +425,8 @@ public class OrganizationPanel extends BaseEntityPanel {
 
         // Using an AbstractTablePanel implementation
         branchesTable = new AddressListPanel(organization.getId());
-        branchesTable.setVisibleButtons(14); //Only New, Modify and Delete
+        //branchesTable.setVisibleButtons(14); //Only New, Modify and Delete
+        branchesTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
         // Adding the nested table listener to ensure that organization is saved
         // before adding branches to it. Also adding a deletion listener for

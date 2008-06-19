@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -265,7 +266,8 @@ public class ClassifierPanel extends BaseEntityPanel {
         descriptionTextPane.bind(classifierBindingGroup, classifier, entityProps.getPropertyDetails("description"));
 
         dataObjectTypesTable = new DataObjectTypesListPanel(null, classifier);
-        dataObjectTypesTable.setVisibleButtons(8 + 16);
+        //dataObjectTypesTable.setVisibleButtons(8 + 16);
+        dataObjectTypesTable.setVisible(AbstractTablePanel.Button.DeleteRefresh);
         dataObjectTypesPanel.add(dataObjectTypesTable);
         addNestedFormListener(dataObjectTypesTable);
 

@@ -29,6 +29,7 @@ import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -386,7 +387,8 @@ public class AddressPanel extends BaseEntityPanel {
         else
             dataObjectId = null;
         final ContactPersonsListPanel contactPersonsTable = new ContactPersonsListPanel(dataObjectId);
-        contactPersonsTable.setVisibleButtons(2 + 4 + 8 + 64);
+        //contactPersonsTable.setVisibleButtons(2 + 4 + 8 + 64);
+        contactPersonsTable.setVisible(AbstractTablePanel.Button.NewModifyDeleteUnselect);
         contactPersonsTable.getDataTable().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
                 if(!event.getValueIsAdjusting()) {
@@ -421,13 +423,15 @@ public class AddressPanel extends BaseEntityPanel {
         contactPersonsPanel.add(contactPersonsTable);
 
         communicationContactsTable = new CommunicationContactsListPanel(dataObjectId);
-        communicationContactsTable.setVisibleButtons(2 + 4 + 8);
+        //communicationContactsTable.setVisibleButtons(2 + 4 + 8);
+        communicationContactsTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
         communicationContactsPanel.add(communicationContactsTable);
 
 
         bankDetailsTable = new BankDetailsListPanel(dataObjectId);
-        bankDetailsTable.setVisibleButtons(2 + 4 + 8);
+        //bankDetailsTable.setVisibleButtons(2 + 4 + 8);
+        bankDetailsTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
         bankDetailsPanel.add(bankDetailsTable);
 
