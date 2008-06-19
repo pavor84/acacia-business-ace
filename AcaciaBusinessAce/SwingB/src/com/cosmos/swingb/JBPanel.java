@@ -45,9 +45,13 @@ public class JBPanel
     private Container mainContainer;
     private List selectedValues;
     private DialogResponse response;
+    private int windowAncestorCount;
     private Dialog.ModalityType modalityType = Dialog.ModalityType.APPLICATION_MODAL;
     private Set<NestedFormListener> nestedFormListeners = new HashSet<NestedFormListener>();
     
+    protected JBDialog dialog;
+
+
     public JBPanel()
     {
         super();
@@ -108,16 +112,12 @@ public class JBPanel
         return showDialog(getMainFrame());
     }
 
-    protected JBDialog dialog;
-    
     public DialogResponse showDialog(Component parentComponent)
     {
         selectedValues = null;
         response = DialogResponse.CLOSE;
 
-        Window window = null;
-        if(parentComponent != null)
-            window = SwingUtilities.getWindowAncestor(parentComponent);
+        Window window = getWindowAncestor(parentComponent);
         dialog = new JBDialog(window, getTitle());
         mainContainer = dialog;
 
@@ -151,6 +151,25 @@ public class JBPanel
             response = DialogResponse.CLOSE;
 
         return response;
+    }
+
+    protected Window getWindowAncestor(Component parentComponent)
+    {
+        Window window = null;
+        if(parentComponent != null)
+        {
+            int counter = getWindowAncestorCount();
+            do
+            {
+                window = SwingUtilities.getWindowAncestor(parentComponent);
+                if(window == null && parentComponent instanceof Window)
+                    return (Window)parentComponent;
+                parentComponent = window;
+            }
+            while(counter-- > 0);
+        }
+
+        return window;
     }
 
     protected DialogResponse getDialogResponse()
@@ -232,6 +251,16 @@ public class JBPanel
     public void setModalityType(Dialog.ModalityType modalityType)
     {
         this.modalityType = modalityType;
+    }
+
+    public int getWindowAncestorCount()
+    {
+        return windowAncestorCount;
+    }
+
+    public void setWindowAncestorCount(int windowAncestorCount)
+    {
+        this.windowAncestorCount = windowAncestorCount;
     }
 
     public ApplicationContext getContext()
