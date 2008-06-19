@@ -257,6 +257,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     private Map<Button, JButton> buttonsMap;
 
+    private boolean editable;
+
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
@@ -340,6 +342,28 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         return dataTable;
     }
+
+    public List getListData()
+    {
+        return getDataTable().getData();
+    }
+
+    public void setVisibleSelectButtons()
+    {
+        setVisible(Button.Select, true);
+        setVisible(Button.Unselect, true);
+    }
+
+    public void setEditable(boolean editable)
+    {
+        this.editable = editable;
+    }
+
+    public boolean isEditable()
+    {
+        return editable;
+    }
+
 
     /**
      *
@@ -646,8 +670,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @Override
     public DialogResponse showDialog(Component parentComponent)
     {
-        setVisible(Button.Select, true);
-        setVisible(Button.Unselect, true);
+        setVisibleSelectButtons();
         return super.showDialog(parentComponent);
     }
 
