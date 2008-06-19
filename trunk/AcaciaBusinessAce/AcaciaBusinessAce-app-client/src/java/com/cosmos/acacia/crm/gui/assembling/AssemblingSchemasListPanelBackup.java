@@ -34,7 +34,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author  Miro
  */
-public class AssemblingSchemasListPanel
+public class AssemblingSchemasListPanelBackup
     extends AcaciaPanel
     implements SelectableListDialog
 {
@@ -43,7 +43,7 @@ public class AssemblingSchemasListPanel
 
 
     /** Creates new form AssemblingSchemasListPanel */
-    public AssemblingSchemasListPanel(BigInteger parentId)
+    public AssemblingSchemasListPanelBackup(BigInteger parentId)
     {
         super(parentId);
         initComponents();
@@ -61,8 +61,8 @@ public class AssemblingSchemasListPanel
 
         assemblingSchemasPanel = new com.cosmos.swingb.JBPanel();
         assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
+        assemblingCategoryLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         schemasTablePanel = getAssemblingSchemasTablePanel();
-        assemblingCategoryComboList = new com.cosmos.swingb.JBComboList();
         assemblingSchemasSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsTitledPanel = new com.cosmos.swingb.JBTitledPanel();
@@ -71,13 +71,13 @@ public class AssemblingSchemasListPanel
 
         assemblingSchemasPanel.setName("assemblingSchemasPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemasListPanel.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemasListPanelBackup.class);
         assemblingCategoryLabel.setText(resourceMap.getString("assemblingCategoryLabel.text")); // NOI18N
         assemblingCategoryLabel.setName("assemblingCategoryLabel"); // NOI18N
 
-        schemasTablePanel.setName("schemasTablePanel"); // NOI18N
+        assemblingCategoryLookup.setName("assemblingCategoryLookup"); // NOI18N
 
-        assemblingCategoryComboList.setName("assemblingCategoryComboList"); // NOI18N
+        schemasTablePanel.setName("schemasTablePanel"); // NOI18N
 
         javax.swing.GroupLayout assemblingSchemasPanelLayout = new javax.swing.GroupLayout(assemblingSchemasPanel);
         assemblingSchemasPanel.setLayout(assemblingSchemasPanelLayout);
@@ -87,7 +87,7 @@ public class AssemblingSchemasListPanel
                 .addContainerGap()
                 .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
@@ -97,9 +97,9 @@ public class AssemblingSchemasListPanel
                 .addContainerGap()
                 .addGroup(assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
+                    .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
         );
 
         setName("Form"); // NOI18N
@@ -133,8 +133,8 @@ public class AssemblingSchemasListPanel
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBComboList assemblingCategoryComboList;
     private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
+    private com.cosmos.acacia.gui.AcaciaLookup assemblingCategoryLookup;
     private com.cosmos.swingb.JBPanel assemblingSchemasPanel;
     private com.cosmos.swingb.JBSplitPane assemblingSchemasSplitPane;
     private com.cosmos.swingb.JBTitledPanel assemblingSchemasTitledPanel;
@@ -343,7 +343,6 @@ public class AssemblingSchemasListPanel
             if(categorySchema == null)
                 categorySchema = new AssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
-            /*
             assemblingCategoryLookup.bind(new AcaciaLookupProvider()
                 {
                     @Override
@@ -358,7 +357,6 @@ public class AssemblingSchemasListPanel
                 "${categoryCode}, ${categoryName}",
                 UpdateStrategy.READ_WRITE);
             categoryBindingGroup.bind();
-            */
 
             refreshDataTable(entityProps);
         }
