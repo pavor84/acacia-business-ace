@@ -45,6 +45,10 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
+import javax.swing.JButton;
 
 /**
  *
@@ -251,6 +255,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
 
+    private Map<Button, JButton> buttonsMap;
+
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
@@ -259,6 +265,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @EJB
     private ClassifiersRemote classifiersFormSession;
             
+    @Override
     protected void initData()
     {
         setVisible(Button.Select, false);
@@ -395,76 +402,29 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    public void setVisible(Button button, boolean visible) {
-        switch(button)
+    public void setVisible(Button button)
+    {
+        setVisible(EnumSet.of(button));
+    }
+
+    public void setVisible(Set<Button> buttons)
+    {
+        Map<Button, JButton> bm = getButtonsMap();
+        for(Button button : bm.keySet())
         {
-            case Select:
-                selectButton.setVisible(visible);
-                break;
-
-            case Unselect:
-                unselectButton.setVisible(visible);
-                break;
-
-            case New:
-                newButton.setVisible(visible);
-                break;
-
-            case Modify:
-                modifyButton.setVisible(visible);
-                break;
-
-            case Delete:
-                deleteButton.setVisible(visible);
-                break;
-
-            case Refresh:
-                refreshButton.setVisible(visible);
-                break;
-
-            case Close:
-                closeButton.setVisible(visible);
-                break;
-                
-            case Classify:
-                classifyButton.setVisible(visible);
-                break;
-                
-            case EnterWarehouse:
-                enterWarehouseButton.setVisible(visible);
-                break;
+            JButton jb = bm.get(button);
+            jb.setVisible(buttons.contains(button));
         }
     }
 
-    public boolean isVisible(Button button) {
-        switch(button)
-        {
-            case Select:
-                return selectButton.isVisible();
+    public void setVisible(Button button, boolean visible)
+    {
+        getButtonsMap().get(button).setVisible(visible);
+    }
 
-            case Unselect:
-                return unselectButton.isVisible();
-
-            case New:
-                return newButton.isVisible();
-
-            case Modify:
-                return modifyButton.isVisible();
-
-            case Delete:
-                return deleteButton.isVisible();
-
-            case Refresh:
-                return refreshButton.isVisible();
-
-            case Close:
-                return closeButton.isVisible();
-                
-            case EnterWarehouse:
-                return enterWarehouseButton.isVisible();
-        }
-
-        throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
+    public boolean isVisible(Button button)
+    {
+        return getButtonsMap().get(button).isVisible();
     }
 
     /**
@@ -474,7 +434,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      *
      * @param visibleButtons
      */
-    public void setVisibleButtons(int visibleButtons){
+    /*public void setVisibleButtons(int visibleButtons){
         for (ButtonVisibility bv: ButtonVisibility.values())
         {
             if ((bv.getVisibilityIndex() & visibleButtons) != 0)
@@ -482,7 +442,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             else
                 setVisible(bv.getButton(), false);
         }
-    }
+    }*/
 
     /*public void setButtonsTextVisibility(boolean visible){
         selectButton.setToolTipText(selectButton.getText());
@@ -715,13 +675,40 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return actionName;
         }
 
+        public static final Set<Button> NewModifyDelete = // 2, 4, 8 (14)
+            EnumSet.of(New, Modify, Delete);
+        public static final Set<Button> NewModifyDeleteUnselect = // 2, 4, 8, 64
+            EnumSet.of(New, Modify, Delete, Unselect);
+        public static final Set<Button> NewModifyDeleteRefresh = // 2, 4, 8, 16
+            EnumSet.of(New, Modify, Delete, Refresh);
+        public static final Set<Button> DeleteRefresh = // 8, 16
+            EnumSet.of(Delete, Refresh);
     };
+
+    public Map<Button, JButton> getButtonsMap()
+    {
+        if(buttonsMap == null)
+        {
+            buttonsMap = new EnumMap<Button, JButton>(Button.class);
+            buttonsMap.put(Button.Select, selectButton);
+            buttonsMap.put(Button.New, newButton);
+            buttonsMap.put(Button.Modify, modifyButton);
+            buttonsMap.put(Button.Delete, deleteButton);
+            buttonsMap.put(Button.Refresh, refreshButton);
+            buttonsMap.put(Button.Close, closeButton);
+            buttonsMap.put(Button.Unselect, unselectButton);
+            buttonsMap.put(Button.Classify, classifyButton);
+            buttonsMap.put(Button.EnterWarehouse, enterWarehouseButton);
+        }
+
+        return buttonsMap;
+    }
 
     /**
      * Enumeration for visibility indices of buttons, used for the bitwise
      * operation in setVisibleButtons
      */
-    public enum ButtonVisibility
+    /*public enum ButtonVisibility
     {
         Select(1, Button.Select),
         New(2, Button.New),
@@ -750,7 +737,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         {
             return button;
         }
-    }
+    }*/
 
     public class TableSelectionListener
         implements ListSelectionListener
@@ -763,6 +750,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             this.table = table;
         }
 
+        @Override
         public void valueChanged(ListSelectionEvent event) {
             if(!event.getValueIsAdjusting())
             {
