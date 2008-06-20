@@ -12,7 +12,6 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.gui.AbstractTablePanel;
-import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
@@ -46,8 +45,11 @@ public class AssemblingSchemasListPanel
     public AssemblingSchemasListPanel(BigInteger parentId)
     {
         super(parentId);
+        System.out.println("1. assemblingCategoryComboList: " + assemblingCategoryComboList);
         initComponents();
+        System.out.println("2. assemblingCategoryComboList: " + assemblingCategoryComboList);
         initData();
+        System.out.println("3. assemblingCategoryComboList: " + assemblingCategoryComboList);
     }
 
     /** This method is called from within the constructor to
@@ -61,13 +63,13 @@ public class AssemblingSchemasListPanel
 
         assemblingSchemasPanel = new com.cosmos.swingb.JBPanel();
         assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
-        schemasTablePanel = getAssemblingSchemasTablePanel();
-        assemblingCategoryComboList = new com.cosmos.swingb.JBComboList();
+        assemblingCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         assemblingSchemasSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsTitledPanel = new com.cosmos.swingb.JBTitledPanel();
         itemValuesTitledPanel = new com.cosmos.swingb.JBTitledPanel();
         assemblingSchemasTitledPanel = new com.cosmos.swingb.JBTitledPanel();
+        schemasTablePanel = getAssemblingSchemasTablePanel();
 
         assemblingSchemasPanel.setName("assemblingSchemasPanel"); // NOI18N
 
@@ -95,7 +97,7 @@ public class AssemblingSchemasListPanel
             assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(assemblingSchemasPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -133,7 +135,7 @@ public class AssemblingSchemasListPanel
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBComboList assemblingCategoryComboList;
+    private com.cosmos.acacia.gui.AcaciaComboList assemblingCategoryComboList;
     private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
     private com.cosmos.swingb.JBPanel assemblingSchemasPanel;
     private com.cosmos.swingb.JBSplitPane assemblingSchemasSplitPane;
@@ -343,8 +345,17 @@ public class AssemblingSchemasListPanel
             if(categorySchema == null)
                 categorySchema = new AssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
-            /*
-            assemblingCategoryLookup.bind(new AcaciaLookupProvider()
+            AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
+            System.out.println("assemblingCategoryComboList: " + assemblingCategoryComboList);
+            assemblingCategoryComboList.bind(
+                categoryBindingGroup,
+                listPanel,
+                categorySchema,
+                propDetails,
+                "${categoryCode}, ${categoryName}",
+                UpdateStrategy.READ_WRITE);
+            
+            /*assemblingCategoryLookup.bind(new AcaciaLookupProvider()
                 {
                     @Override
                     public Object showSelectionControl()
@@ -356,9 +367,8 @@ public class AssemblingSchemasListPanel
                 categorySchema, 
                 propDetails, 
                 "${categoryCode}, ${categoryName}",
-                UpdateStrategy.READ_WRITE);
+                UpdateStrategy.READ_WRITE);*/
             categoryBindingGroup.bind();
-            */
 
             refreshDataTable(entityProps);
         }
