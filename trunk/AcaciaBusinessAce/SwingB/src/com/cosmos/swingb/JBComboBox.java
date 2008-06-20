@@ -201,7 +201,7 @@ public class JBComboBox
     }
 
 
-    public class BindingValidationListener
+    private class BindingValidationListener
         extends AbstractBindingListener
     {
         @Override
