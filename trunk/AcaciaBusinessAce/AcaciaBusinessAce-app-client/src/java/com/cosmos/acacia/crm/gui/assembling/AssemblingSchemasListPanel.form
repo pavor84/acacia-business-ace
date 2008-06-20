@@ -24,9 +24,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="assemblingCategoryLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="assemblingCategoryComboList" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="assemblingCategoryLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="assemblingCategoryComboList" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="schemasTablePanel" pref="477" max="32767" attributes="0"/>
@@ -41,6 +41,11 @@
             <Property name="name" type="java.lang.String" value="assemblingCategoryLabel" noResource="true"/>
           </Properties>
         </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="assemblingCategoryComboList">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="assemblingCategoryComboList" noResource="true"/>
+          </Properties>
+        </Component>
         <Container class="com.cosmos.swingb.JBPanel" name="schemasTablePanel">
           <Properties>
             <Property name="name" type="java.lang.String" value="schemasTablePanel" noResource="true"/>
@@ -51,11 +56,6 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
         </Container>
-        <Component class="com.cosmos.swingb.JBComboList" name="assemblingCategoryComboList">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="assemblingCategoryComboList" noResource="true"/>
-          </Properties>
-        </Component>
       </SubComponents>
     </Container>
   </NonVisualComponents>

@@ -44,6 +44,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -56,6 +57,7 @@ import javax.swing.JButton;
  */
 public abstract class AbstractTablePanel
     extends AcaciaPanel
+    implements SelectableListDialog
 {
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
