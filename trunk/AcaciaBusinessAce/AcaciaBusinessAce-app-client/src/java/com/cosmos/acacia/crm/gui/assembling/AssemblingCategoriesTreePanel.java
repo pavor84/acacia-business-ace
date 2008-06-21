@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;
+import com.cosmos.swingb.SelectableListDialog;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
@@ -21,11 +22,13 @@ import javax.ejb.EJB;
  */
 public class AssemblingCategoriesTreePanel
     extends BaseTreePanel<AssemblingCategory>
+    implements SelectableListDialog
 {
     @EJB
     private static AssemblingRemote formSession;
 
     private AssemblingCategoryListPanel categoryListPanel;
+    private boolean editable;
 
 
     /** Creates new form AssemblingCategoriesTreePanel */
@@ -146,6 +149,45 @@ public class AssemblingCategoriesTreePanel
         }
 
         return formSession;
+    }
+
+    // SelectableListDialog
+
+    @Override
+    public Object getSelectedRowObject()
+    {
+        return categoryListPanel.getSelectedRowObject();
+    }
+
+    @Override
+    public void setSelectedRowObject(Object selectedObject)
+    {
+        categoryListPanel.setSelectedRowObject(selectedObject);
+    }
+
+    @Override
+    public List getListData()
+    {
+        return categoryListPanel.getListData();
+    }
+
+    @Override
+    public void setEditable(boolean editable)
+    {
+        this.editable = editable;
+        categoryListPanel.setEditable(editable);
+    }
+
+    @Override
+    public boolean isEditable()
+    {
+        return editable;
+    }
+
+    @Override
+    public void setVisibleSelectButtons()
+    {
+        categoryListPanel.setVisibleSelectButtons();
     }
 
 }

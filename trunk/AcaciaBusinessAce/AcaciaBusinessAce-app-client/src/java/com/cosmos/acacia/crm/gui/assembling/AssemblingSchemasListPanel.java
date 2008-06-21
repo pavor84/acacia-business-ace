@@ -345,7 +345,8 @@ public class AssemblingSchemasListPanel
             if(categorySchema == null)
                 categorySchema = new AssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
-            AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
+            //AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
+            AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
             System.out.println("assemblingCategoryComboList: " + assemblingCategoryComboList);
             assemblingCategoryComboList.bind(
                 categoryBindingGroup,
