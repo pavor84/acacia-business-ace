@@ -20,6 +20,8 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
@@ -45,11 +47,8 @@ public class AssemblingSchemasListPanel
     public AssemblingSchemasListPanel(BigInteger parentId)
     {
         super(parentId);
-        System.out.println("1. assemblingCategoryComboList: " + assemblingCategoryComboList);
         initComponents();
-        System.out.println("2. assemblingCategoryComboList: " + assemblingCategoryComboList);
         initData();
-        System.out.println("3. assemblingCategoryComboList: " + assemblingCategoryComboList);
     }
 
     /** This method is called from within the constructor to
@@ -319,6 +318,7 @@ public class AssemblingSchemasListPanel
 
     private class AssemblingSchemasTablePanel
         extends AbstractTablePanel
+        implements ItemListener
     {
         private BindingGroup categoryBindingGroup;
         private BindingGroup bindingGroup;
@@ -347,7 +347,6 @@ public class AssemblingSchemasListPanel
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
             //AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
             AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
-            System.out.println("assemblingCategoryComboList: " + assemblingCategoryComboList);
             assemblingCategoryComboList.bind(
                 categoryBindingGroup,
                 listPanel,
@@ -355,20 +354,7 @@ public class AssemblingSchemasListPanel
                 propDetails,
                 "${categoryCode}, ${categoryName}",
                 UpdateStrategy.READ_WRITE);
-            
-            /*assemblingCategoryLookup.bind(new AcaciaLookupProvider()
-                {
-                    @Override
-                    public Object showSelectionControl()
-                    {
-                        return onChooseCategory();
-                    }
-                },
-                categoryBindingGroup,
-                categorySchema, 
-                propDetails, 
-                "${categoryCode}, ${categoryName}",
-                UpdateStrategy.READ_WRITE);*/
+            assemblingCategoryComboList.addItemListener(this);
             categoryBindingGroup.bind();
 
             refreshDataTable(entityProps);
@@ -394,24 +380,14 @@ public class AssemblingSchemasListPanel
             return getFormSession().getAssemblingSchemas(category);
         }
 
-        protected AssemblingCategory onChooseCategory()
+        @Override
+        public void itemStateChanged(ItemEvent event)
         {
-            AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
-
-            log.info("onChooseCategory: " + category);
-
-            DialogResponse response = listPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
+            if(event.getStateChange() > 0x700)
             {
-                AssemblingCategory selectedCategory = (AssemblingCategory)listPanel.getSelectedRowObject();
-                category = selectedCategory;
+                category = (AssemblingCategory)assemblingCategoryComboList.getSelectedItem();
                 refreshDataTable(entityProps);
-                log.info("selectedCategory: " + selectedCategory);
-
-                return selectedCategory;
             }
-
-            return null;
         }
 
         @Override

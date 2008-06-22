@@ -37,7 +37,6 @@ public class AcaciaComboList
             String elPropertyItemDisplay,
             AutoBinding.UpdateStrategy updateStrategy)
     {
-        System.out.println("AcaciaComboList.bind(...)");
         ObjectToStringConverter converter;
         if (elPropertyItemDisplay != null)
         {
