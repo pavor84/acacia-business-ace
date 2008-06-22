@@ -11,7 +11,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Arrays;
+import java.awt.ItemSelectable;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
@@ -44,6 +47,7 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
  */
 public class JBComboList
     extends JXPanel
+    implements ItemSelectable
 {
     private Application application;
     private ApplicationContext applicationContext;
@@ -82,7 +86,7 @@ public class JBComboList
     private void initComponents()
     {
         lookupButton = new JXButton();
-        comboBox = new JComboBox();
+        comboBox = new ListComboBox();
 
         setName("JBComboList"); // NOI18N
         setLayout(new BorderLayout());
@@ -119,7 +123,6 @@ public class JBComboList
     @Action
     public void lookupButtonAction()
     {
-        System.out.println("lookupButtonAction().selectableListDialog: "  + selectableListDialog);
         if(selectableListDialog != null)
         {
             selectableListDialog.setEditable(isEditable());
@@ -127,9 +130,9 @@ public class JBComboList
             selectableListDialog.setSelectedRowObject(selectedItem);
             DialogResponse response = selectableListDialog.showDialog(this);
             List listData = selectableListDialog.getListData();
-            System.out.println("lookupButtonAction.listData: " + listData);
             observableData.clear();
             observableData.addAll(listData);
+
             if(DialogResponse.SELECT.equals(response))
             {
                 comboBox.setSelectedItem(selectableListDialog.getSelectedRowObject());
@@ -172,8 +175,7 @@ public class JBComboList
         AutoCompleteDecorator.decorate(comboBox, converter);
         this.selectableListDialog = selectableListDialog;
 
-        List data = selectableListDialog.getListData();
-        System.out.println("bind.data: " + data);
+        List data = new ArrayList(selectableListDialog.getListData());
         observableData = ObservableCollections.observableList(data);
         this.propertyName = propertyDetails.getPropertyName();
         this.beanEntity = beanEntity;
@@ -234,6 +236,31 @@ public class JBComboList
     public JComboBoxBinding getComboBoxBinding()
     {
         return comboBoxBinding;
+    }
+
+    public Object[] getSelectedObjects()
+    {
+        return comboBox.getSelectedObjects();
+    }
+
+    public void addItemListener(ItemListener listener)
+    {
+        comboBox.addItemListener(listener);
+    }
+
+    public void removeItemListener(ItemListener listener)
+    {
+        comboBox.removeItemListener(listener);
+    }
+
+    public Object getSelectedItem()
+    {
+        return comboBox.getSelectedItem();
+    }
+
+    public void setSelectedItem(Object selectedItem)
+    {
+        comboBox.setSelectedItem(selectedItem);
     }
 
     public ApplicationContext getContext()
@@ -388,5 +415,44 @@ public class JBComboList
         comboBox.setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.normal.background");
         comboBox.getEditor().getEditorComponent().setBackground(color);
+    }
+
+    private class ListComboBox
+        extends JComboBox
+    {
+
+        @Override
+        public void setSelectedItem(Object anObject)
+        {
+            Object oldSelectedItem = getSelectedItem();
+            super.setSelectedItem(anObject);
+            Object newSelectedItem = getSelectedItem();
+            if(oldSelectedItem != null)
+            {
+                if(!oldSelectedItem.equals(newSelectedItem))
+                    selectedItemChanged(newSelectedItem);
+            }
+            else if(newSelectedItem != null)
+            {
+                selectedItemChanged(newSelectedItem);
+            }
+        }
+
+        protected void selectedItemChanged(Object selectedItem)
+        {
+            ItemEvent event;
+            if(selectedItem != null)
+                event = new ItemEvent(this,
+                    ItemEvent.ITEM_STATE_CHANGED,
+                    selectedItem,
+                    ItemEvent.SELECTED + 0x700);
+            else
+                event = new ItemEvent(this,
+                    ItemEvent.ITEM_STATE_CHANGED,
+                    selectedItemReminder,
+                    ItemEvent.DESELECTED + 0x700);
+
+	    fireItemStateChanged(event);
+        }
     }
 }
