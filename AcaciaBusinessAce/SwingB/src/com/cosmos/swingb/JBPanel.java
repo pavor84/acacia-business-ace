@@ -166,8 +166,11 @@ public class JBPanel
                     return (Window)parentComponent;
                 parentComponent = window;
             }
-            while(counter-- > 0);
+            while(counter-- > 0 && window != null);
         }
+
+        if(window == null && parentComponent instanceof Window)
+            return (Window)parentComponent;
 
         return window;
     }
