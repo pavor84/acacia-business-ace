@@ -288,12 +288,23 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         addListSelectionListener(dataTable);
     }
 
+    @Override
     public Object getSelectedRowObject() {
         return selectedRowObject;
     }
 
+    @Override
     public void setSelectedRowObject(Object selectedRowObject) {
         this.selectedRowObject = selectedRowObject;
+        AcaciaTable table = getDataTable();
+        if(selectedRowObject != null)
+        {
+            table.setSelectedRowObject(selectedRowObject);
+        }
+        else
+        {
+            unselect();
+        }
     }
 
     /**
@@ -506,7 +517,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     @Action
     public void unselectAction() {
-        dataTable.getSelectionModel().clearSelection();
+        unselect();
+    }
+
+    protected void unselect()
+    {
+        if(dataTable != null)
+            dataTable.getSelectionModel().clearSelection();
     }
 
     @Action

@@ -36,11 +36,12 @@ public class AssemblingCategoriesTreePanel
     {
         super(parentDataObjectId);
         //initComponents();
+        setWindowAncestorCount(1);
     }
 
     public AssemblingCategoriesTreePanel()
     {
-        super(null);
+        this(null);
     }
 
     /** This method is called from within the constructor to
