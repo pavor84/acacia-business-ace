@@ -18,15 +18,20 @@ import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.FormattedCellEditor;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.JPanel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -345,7 +350,6 @@ public class AssemblingSchemasListPanel
             if(categorySchema == null)
                 categorySchema = new AssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
-            //AssemblingCategoryListPanel listPanel = new AssemblingCategoryListPanel(category, true);
             AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
             assemblingCategoryComboList.bind(
                 categoryBindingGroup,
@@ -578,7 +582,16 @@ public class AssemblingSchemasListPanel
             AcaciaTable table = getDataTable();
 
             JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
-            tableBinding.setEditable(false);
+            tableBinding.setEditable(true);
+            table.setEditable(true);
+
+            TableCellEditor cellEditor = new FormattedCellEditor(new DecimalFormat());
+            //TableCellEditor cellEditor = new DefaultCellEditor(new JTextField());
+            TableColumn column = table.getColumn("Min. Value");
+            column.setCellEditor(cellEditor);
+            column = table.getColumn("Max. Value");
+            column.setCellEditor(cellEditor);
+            table.setDefaultEditor(Serializable.class, cellEditor);
 
             bindingGroup.bind();
         }
@@ -609,7 +622,8 @@ public class AssemblingSchemasListPanel
         {
             AssemblingSchemaItemValue itemValue = new AssemblingSchemaItemValue();
             itemValue.setAssemblingSchemaItem(getAssemblingSchemaItem());
-            return onEditEntity(itemValue);
+            return itemValue;
+            //return onEditEntity(itemValue);
         }
 
         private Object onEditEntity(AssemblingSchemaItemValue itemValue)
