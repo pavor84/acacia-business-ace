@@ -103,43 +103,59 @@ public class AssemblingSchemaItemValue
         this.itemValueId = itemValueId;
     }
 
-    public Object getMinConstraint() {
+    public Object getMinConstraint()
+    {
         return minConstraint;
     }
 
-    public void setMinConstraint(Serializable minConstraint) {
+    public void setMinConstraint(Serializable minConstraint)
+    {
+        System.out.println("setMinConstraint: " + minConstraint);
+        firePropertyChange("minConstraint", this.minConstraint, minConstraint);
         this.minConstraint = minConstraint;
     }
 
-    public Object getMaxConstraint() {
+    public Object getMaxConstraint()
+    {
         return maxConstraint;
     }
 
-    public void setMaxConstraint(Serializable maxConstraint) {
+    public void setMaxConstraint(Serializable maxConstraint)
+    {
+        firePropertyChange("maxConstraint", this.maxConstraint, maxConstraint);
         this.maxConstraint = maxConstraint;
     }
 
-    public BigDecimal getQuantity() {
+    public BigDecimal getQuantity()
+    {
         return quantity;
     }
 
-    public void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity)
+    {
+        firePropertyChange("quantity", this.quantity, quantity);
         this.quantity = quantity;
     }
 
-    public AssemblingSchemaItem getAssemblingSchemaItem() {
+    public AssemblingSchemaItem getAssemblingSchemaItem()
+    {
         return assemblingSchemaItem;
     }
 
-    public void setAssemblingSchemaItem(AssemblingSchemaItem assemblingSchemaItem) {
+    public void setAssemblingSchemaItem(AssemblingSchemaItem assemblingSchemaItem)
+    {
+        firePropertyChange("assemblingSchemaItem", this.assemblingSchemaItem, assemblingSchemaItem);
         this.assemblingSchemaItem = assemblingSchemaItem;
     }
 
-    public VirtualProduct getVirtualProduct() {
+    public VirtualProduct getVirtualProduct()
+    {
         return virtualProduct;
     }
 
-    public void setVirtualProduct(VirtualProduct virtualProduct) {
+    public void setVirtualProduct(VirtualProduct virtualProduct)
+    {
+        firePropertyChange("virtualProduct", this.virtualProduct, virtualProduct);
         this.virtualProduct = virtualProduct;
     }
 
