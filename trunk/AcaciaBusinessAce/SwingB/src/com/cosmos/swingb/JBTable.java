@@ -8,6 +8,7 @@ package com.cosmos.swingb;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.converters.ResourceConverter;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,14 +17,19 @@ import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BindingListener;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -300,6 +306,9 @@ public class JBTable
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy,
             observableData, this);
         createColumnsBinding(tableBinding, entityProperties);
+
+        tableBinding.addBindingListener(getBindingListener());
+
         tableBinding.bind();
 
         bindingGroup.addBinding(tableBinding);
@@ -373,6 +382,8 @@ public class JBTable
 
         //columnBinding.setConverter()
         //columnBinding.setValidator(arg0)
+
+        columnBinding.addBindingListener(getBindingListener());
 
         return columnBinding;
     }
@@ -575,4 +586,83 @@ public class JBTable
         return propertyDetails.getPropertyClass().getName()
                 .equals("com.cosmos.acacia.crm.data.DbResource");
     }
+
+    private static final String SerializableClassName = Serializable.class.getName();
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex)
+    {
+        boolean editable = super.isCellEditable(rowIndex, columnIndex);
+        Class columnClass = getColumnClass(columnIndex);
+        System.out.println("At row " + rowIndex + ", column " + columnIndex+
+            " the class is: " + columnClass + " and is" + (editable ? "" : " not") + " editable.");
+        if(columnClass != null && SerializableClassName.equals(columnClass.getName()))
+        {
+            System.out.println("getCellEditor(rowIndex, columnIndex): " + getCellEditor(rowIndex, columnIndex));
+            return true;
+        }
+
+        return editable;
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex)
+    {
+        System.out.println("setValueAt.value: " + value + ", row: " + rowIndex + ", col: " + columnIndex);
+        if(value != null)
+            System.out.println("value.class: " + value.getClass().getName());
+
+        //super.setValueAt(value, rowIndex, columnIndex);
+        TableModel model = getModel();
+        System.out.println("model: " + model);
+        model.setValueAt(value, convertRowIndexToModel(rowIndex),
+                              convertColumnIndexToModel(columnIndex));
+    }
+
+    private TableBindingListener tableBindingListener;
+    private BindingListener getBindingListener()
+    {
+        if(tableBindingListener == null)
+        {
+            tableBindingListener = new TableBindingListener();
+        }
+
+        return tableBindingListener;
+    }
+
+    private class TableBindingListener
+        implements BindingListener
+    {
+
+        public void bindingBecameBound(Binding binding)
+        {
+            System.out.println("bindingBecameBound: " + binding);
+        }
+
+        public void bindingBecameUnbound(Binding binding)
+        {
+            System.out.println("bindingBecameUnbound: " + binding);
+        }
+
+        public void syncFailed(Binding binding, SyncFailure syncFailure)
+        {
+            System.out.println("syncFailed: " + binding + ", syncFailure: " + syncFailure);
+        }
+
+        public void synced(Binding binding)
+        {
+            System.out.println("synced: " + binding);
+        }
+
+        public void sourceChanged(Binding binding, PropertyStateEvent event)
+        {
+            System.out.println("sourceChanged: " + binding + ", event: " + event);
+        }
+
+        public void targetChanged(Binding binding, PropertyStateEvent event)
+        {
+            System.out.println("targetChanged: " + binding + ", event: " + event);
+        }
+        
+    }
+
 }

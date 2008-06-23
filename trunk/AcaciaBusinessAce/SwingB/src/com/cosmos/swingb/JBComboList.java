@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.ItemSelectable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
  */
 public class JBComboList
     extends JXPanel
-    implements ItemSelectable
+    implements ItemSelectable, ActionListener
 {
     private Application application;
     private ApplicationContext applicationContext;
@@ -263,6 +265,26 @@ public class JBComboList
         comboBox.setSelectedItem(selectedItem);
     }
 
+    public void actionPerformed(ActionEvent event)
+    {
+        comboBox.actionPerformed(event);
+    }
+
+    public void addActionListener(ActionListener listener)
+    {
+        comboBox.addActionListener(listener);
+    }
+
+    public void removeActionListener(ActionListener listener)
+    {
+        comboBox.removeActionListener(listener);
+    }
+
+    public ActionListener[] getActionListeners()
+    {
+        return comboBox.getActionListeners();
+    }
+
     public ApplicationContext getContext()
     {
         if(applicationContext == null)
@@ -449,10 +471,11 @@ public class JBComboList
             else
                 event = new ItemEvent(this,
                     ItemEvent.ITEM_STATE_CHANGED,
-                    selectedItemReminder,
+                    selectedItem,
                     ItemEvent.DESELECTED + 0x700);
 
 	    fireItemStateChanged(event);
         }
     }
+
 }
