@@ -9,7 +9,6 @@ import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.SelectableListDialog;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JComboBoxBinding;
