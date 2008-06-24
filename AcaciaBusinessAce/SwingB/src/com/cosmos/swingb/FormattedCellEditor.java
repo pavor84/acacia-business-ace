@@ -5,12 +5,12 @@
 package com.cosmos.swingb;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.text.Format;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JFormattedTextField;
-import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
@@ -27,11 +27,18 @@ public class FormattedCellEditor
     public FormattedCellEditor(Format format)
     {
         this((new JFormattedTextField(format)));
+
+        JFormattedTextField textField = (JFormattedTextField)getComponent();
+        if(format instanceof NumberFormat)
+        {
+            textField.setHorizontalAlignment(JTextField.RIGHT);
+        }
     }
 
-    public FormattedCellEditor(final JFormattedTextField textField)
+    private FormattedCellEditor(final JFormattedTextField textField)
     {
         super(textField);
+
         delegate = new EditorDelegate()
         {
             @Override
