@@ -19,6 +19,7 @@ public class PropertyDetails
 
     private String propertyName;
     private String propertyTitle;
+    private Class propertyClass;
     private String propertyClassName;
     private boolean readOnly = false;
     private boolean editable = true;
@@ -99,13 +100,19 @@ public class PropertyDetails
         this.propertyName = propertyName;
     }
 
-    public Class getPropertyClass() {
-        if(propertyClassName != null)
+    public Class getPropertyClass()
+    {
+        if(propertyClass == null && propertyClassName != null)
         {
-            return ClassHelper.getClass(propertyClassName);
+            propertyClass = ClassHelper.getClass(propertyClassName);
         }
 
-        return null;
+        return propertyClass;
+    }
+
+    public void setPropertyClass(Class propertyClass)
+    {
+        this.propertyClass = propertyClass;
     }
 
     public String getPropertyClassName() {
