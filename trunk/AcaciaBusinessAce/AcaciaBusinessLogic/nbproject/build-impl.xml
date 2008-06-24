@@ -252,12 +252,8 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <!--
                 COMPILATION SECTION
             -->
-    <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
-        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
-    </target>
-    <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
-        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
-    </target>
+    <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps"/>
+    <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps"/>
     <target depends="init, -deps-module-jar, -deps-ear-jar" name="deps-jar"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
         <mkdir dir="${build.classes.dir}"/>
@@ -267,18 +263,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="compile" name="library-inclusion-in-archive">
-        <copy file="${reference.AcaciaAnnotations.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.beansbinding.jar}" todir="${build.classes.dir}"/>
-    </target>
+    <target depends="compile" name="library-inclusion-in-archive"/>
     <target depends="compile" name="library-inclusion-in-manifest">
-        <basename file="${reference.AcaciaAnnotations.jar}" property="included.lib.reference.AcaciaAnnotations.jar"/>
-        <copy file="${reference.AcaciaAnnotations.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.beansbinding.jar}" property="included.lib.file.reference.beansbinding.jar"/>
-        <copy file="${file.reference.beansbinding.jar}" todir="${dist.ear.dir}"/>
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.reference.AcaciaAnnotations.jar} ${included.lib.file.reference.beansbinding.jar} "/>
-        </manifest>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">
         <copy todir="${classes.dir}">
@@ -544,9 +531,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <!--
                 CLEANUP SECTION
             -->
-    <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="clean"/>
-    </target>
+    <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps"/>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
