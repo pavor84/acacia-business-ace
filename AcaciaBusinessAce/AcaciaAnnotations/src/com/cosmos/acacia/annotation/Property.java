@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property  
 {
-    public static final String NULL = "<!--[Property.NULL]-->";
+    public static final String NULL = NullClass.NULL;
 
     String title();
     boolean readOnly() default false;
