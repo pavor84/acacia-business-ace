@@ -5,6 +5,7 @@
 
 package com.cosmos.beansbinding;
 
+import com.cosmos.acacia.annotation.NullClass;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
