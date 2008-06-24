@@ -103,7 +103,7 @@ public class AssemblingSchemaItemValue
         this.itemValueId = itemValueId;
     }
 
-    public Object getMinConstraint()
+    public Serializable getMinConstraint()
     {
         return minConstraint;
     }
@@ -115,7 +115,7 @@ public class AssemblingSchemaItemValue
         this.minConstraint = minConstraint;
     }
 
-    public Object getMaxConstraint()
+    public Serializable getMaxConstraint()
     {
         return maxConstraint;
     }
