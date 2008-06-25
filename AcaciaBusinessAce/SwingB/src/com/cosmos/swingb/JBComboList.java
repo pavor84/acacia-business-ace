@@ -163,6 +163,31 @@ public class JBComboList
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
+            PropertyDetails propertyDetails)
+    {
+        return bind(bindingGroup, selectableListDialog, beanEntity, propertyDetails, null);
+    }
+
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            ObjectToStringConverter converter)
+    {
+        return bind(
+            bindingGroup,
+            selectableListDialog,
+            beanEntity,
+            propertyDetails,
+            converter,
+            AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
             PropertyDetails propertyDetails,
             ObjectToStringConverter converter,
             AutoBinding.UpdateStrategy updateStrategy)
@@ -174,6 +199,8 @@ public class JBComboList
             return null;
         }
 
+        if(converter == null)
+            converter = new BeanResourceToStringConverter(getApplication());
         AutoCompleteDecorator.decorate(comboBox, converter);
         this.selectableListDialog = selectableListDialog;
 

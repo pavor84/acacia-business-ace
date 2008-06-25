@@ -31,6 +31,7 @@ import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.table.TableColumnExt;
 
 /**
@@ -435,6 +436,60 @@ public class JBTable
         TableColumnExt categoryColumn = productsTable.getColumnExt("Category");
         categoryColumn.setCellEditor(cellEditor);
   */
+
+
+    public void bindComboListCellEditor(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            PropertyDetails propertyDetails,
+            ObjectToStringConverter converter)
+    {
+        Application app = getApplication();
+        JBComboList comboList;
+        if(app != null)
+            comboList = new JBComboList(app);
+        else
+            comboList = new JBComboList();
+
+        comboList.bind(
+            bindingGroup,
+            selectableListDialog,
+            this,
+            propertyDetails,
+            converter);
+
+        TableColumnExt column;
+        String propertyName = propertyDetails.getPropertyName();
+        try
+        {
+            column = getColumnExt(propertyName);
+        }
+        catch(Exception ex)
+        {
+            column = null;
+        }
+        if(column == null)
+        {
+            EntityProperties entityProps = getEntityProperties();
+            if(entityProps == null)
+                throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
+            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
+            if(pd != null)
+            {
+                String columnName = pd.getPropertyTitle();
+                column = getColumnExt(columnName);
+            }
+        }
+
+        if(column == null)
+            throw new IllegalArgumentException("Can not find table column for property name: " + propertyName);
+
+        ComboListCellEditor cellEditor = new ComboListCellEditor(comboList);
+        column.setCellEditor(cellEditor);
+
+        if(app != null && column.getCellRenderer() == null)
+            column.setCellRenderer(getBeanResourceCellRenderer());
+    }
 
 
     /**

@@ -25,6 +25,11 @@ public class BeanResourceToStringConverter
         beanResource = new BeanResource(applicationClass);
     }
 
+    public BeanResourceToStringConverter(Application application)
+    {
+        beanResource = new BeanResource(application);
+    }
+
     @Override
     public String[] getPossibleStringsForItem(Object item)
     {
