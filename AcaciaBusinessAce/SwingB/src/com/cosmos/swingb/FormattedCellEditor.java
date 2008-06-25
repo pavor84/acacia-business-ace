@@ -10,9 +10,10 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -21,8 +22,19 @@ import javax.swing.border.LineBorder;
 public class FormattedCellEditor
     extends DefaultCellEditor
 {
-    protected Border editStateBorder = new LineBorder(Color.black);
-    protected Border invalidStateBorder = new LineBorder(Color.red);
+    protected Color editStateBackground = Color.WHITE;
+    protected Color invalidStateBackground = Color.PINK;
+
+    public FormattedCellEditor(AbstractFormatter formatter)
+    {
+        this((new JFormattedTextField(formatter)));
+
+        JFormattedTextField textField = (JFormattedTextField)getComponent();
+        if(formatter instanceof NumberFormatter)
+        {
+            textField.setHorizontalAlignment(JTextField.RIGHT);
+        }
+    }
 
     public FormattedCellEditor(Format format)
     {
@@ -45,6 +57,15 @@ public class FormattedCellEditor
             public void setValue(Object value)
             {
                 textField.setValue(value);
+
+                if(textField.isEditValid())
+                {
+                    textField.setBackground(editStateBackground);
+                }
+                else
+                {
+                    textField.setBackground(invalidStateBackground);
+                }
             }
 
             @Override
@@ -56,11 +77,12 @@ public class FormattedCellEditor
             @Override
             public boolean stopCellEditing()
             {
-                /*if(textField.isEditValid())
+                if(textField.isEditValid())
                 {
                     try
                     {
                         textField.commitEdit();
+                        textField.setBackground(editStateBackground);
                     }
                     catch(ParseException ex)
                     {
@@ -68,20 +90,8 @@ public class FormattedCellEditor
                 }
                 else
                 {
-                    textField.setBorder(invalidStateBorder);
+                    textField.setBackground(invalidStateBackground);
                     return false;
-                }
-                return super.stopCellEditing();*/
-
-                try
-                {
-                    textField.commitEdit();
-                }
-                catch(ParseException ex)
-                {
-                    return false; // This will prevent the cell from losing focus.
-                // (User will have to enter a valid value or hit escape to revert.)
-                // Alternative is to not return anything here--cell will revert.
                 }
 
                 return super.stopCellEditing();
@@ -91,19 +101,24 @@ public class FormattedCellEditor
         textField.addActionListener(delegate);
     }
 
-    /*@Override
-    public Component getTableCellEditorComponent(
-        JTable table,
-        Object value,
-        boolean isSelected,
-        int row, int column)
+    public Color getEditStateBackground()
     {
-        delegate.setValue(value);
-        if (((JFormattedTextField)editorComponent).isEditValid())
-            editorComponent.setBorder(editStateBorder);
-        else
-            editorComponent.setBorder(invalidStateBorder);
+        return editStateBackground;
+    }
 
-        return editorComponent;
-     }*/
+    public void setEditStateBackground(Color editStateBackground)
+    {
+        this.editStateBackground = editStateBackground;
+    }
+
+    public Color getInvalidStateBackground()
+    {
+        return invalidStateBackground;
+    }
+
+    public void setInvalidStateBackground(Color invalidStateBackground)
+    {
+        this.invalidStateBackground = invalidStateBackground;
+    }
+
 }
