@@ -5,6 +5,8 @@
 package com.cosmos.swingb;
 
 import java.text.Format;
+import java.text.NumberFormat;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -14,17 +16,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class FormattedCellRenderer
     extends DefaultTableCellRenderer
 {
-    //  JFormattedTextField.AbstractFormatter
-    //      DefaultFormatter
-    //          InternationalFormatter
-    //              DateFormatter
-    //              NumberFormatter
-    //          MaskFormatter
-
     protected Format format;
     protected String nullText;
     protected String invalidText;
-
 
     public FormattedCellRenderer(Format format)
     {
@@ -44,6 +38,10 @@ public class FormattedCellRenderer
         this.format = format;
         this.nullText = nullText;
         this.invalidText = invalidText;
+        if(format instanceof NumberFormat)
+        {
+            setHorizontalAlignment(JTextField.RIGHT);
+        }
     }
 
     public void setFormat(Format format)
