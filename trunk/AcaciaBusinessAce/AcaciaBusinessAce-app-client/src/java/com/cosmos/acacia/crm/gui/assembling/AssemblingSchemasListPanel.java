@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -38,7 +39,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
-import javax.swing.text.NumberFormatter;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -616,6 +616,10 @@ public class AssemblingSchemasListPanel
             column.setCellEditor(cellEditor);
             column.setCellRenderer(cellRenderer);
             table.setDefaultEditor(Serializable.class, cellEditor);
+
+            ProductsListPanel productsListPanel = new ProductsListPanel(null);
+            PropertyDetails propDetails = entityProps.getPropertyDetails("virtualProduct");
+            table.bindComboListCellEditor(bindingGroup, productsListPanel, propDetails);
 
             bindingGroup.bind();
         }
