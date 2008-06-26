@@ -4,10 +4,15 @@
  */
 package com.cosmos.swingb;
 
+import java.io.Serializable;
+import java.text.FieldPosition;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -19,6 +24,24 @@ public class FormattedCellRenderer
     protected Format format;
     protected String nullText;
     protected String invalidText;
+
+    public FormattedCellRenderer(MaskFormatter maskFormatter)
+    {
+        this(maskFormatter, "");
+    }
+
+    public FormattedCellRenderer(MaskFormatter maskFormatter, String nullText)
+    {
+        this(maskFormatter, nullText, "");
+    }
+
+    public FormattedCellRenderer(
+        MaskFormatter maskFormatter,
+        String nullText,
+        String invalidText)
+    {
+        this(new MaskFormat(maskFormatter), nullText, invalidText);
+    }
 
     public FormattedCellRenderer(Format format)
     {
@@ -74,6 +97,7 @@ public class FormattedCellRenderer
         return invalidText;
     }
 
+    @Override
     public void setValue(Object value)
     {
         String text;
@@ -98,4 +122,50 @@ public class FormattedCellRenderer
         }
         setText(text);
     }
+
+    private static class MaskFormat
+        extends Format
+        implements Serializable
+    {
+        private MaskFormatter maskFormatter;
+
+        public MaskFormat(MaskFormatter maskFormatter)
+        {
+            this.maskFormatter = maskFormatter;
+        }
+
+        @Override
+        public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition fieldPosition)
+        {
+            try
+            {
+                return toAppendTo.append(maskFormatter.valueToString(obj));
+            }
+            catch(ParseException ex)
+            {
+                ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
+        }
+
+        @Override
+        public Object parseObject(String source, ParsePosition pos)
+        {
+            try
+            {
+                return maskFormatter.stringToValue(source);
+            }
+            catch(ParseException ex)
+            {
+                ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
+        }
+
+        public MaskFormatter getMaskFormatter()
+        {
+            return maskFormatter;
+        }
+    }
+
 }
