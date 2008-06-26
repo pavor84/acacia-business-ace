@@ -21,6 +21,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.FormattedCellEditor;
 import com.cosmos.swingb.FormattedCellRenderer;
+import com.cosmos.swingb.MaskFormat;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
@@ -596,9 +597,10 @@ public class AssemblingSchemasListPanel
             AbstractFormatter formatter;
             //formatter = new NumberFormatter((DecimalFormat)format);
             //((NumberFormatter)formatter).setMaximum(99999);
+            String mask = "##-###";
             try
             {
-                formatter = new MaskFormatter("##-###");
+                formatter = new MaskFormatter(mask);
                 ((MaskFormatter)formatter).setValueContainsLiteralCharacters(false);
             }
             catch(ParseException ex)
@@ -607,11 +609,12 @@ public class AssemblingSchemasListPanel
             }
             //TableCellEditor cellEditor = new FormattedCellEditor(format);
             TableCellEditor cellEditor = new FormattedCellEditor(formatter);
-            TableCellRenderer cellRenderer = new FormattedCellRenderer(format);
+            //TableCellRenderer cellRenderer = new FormattedCellRenderer(format);
+            TableCellRenderer cellRenderer = new FormattedCellRenderer((MaskFormatter)formatter);
             //TableCellEditor cellEditor = new DefaultCellEditor(new JTextField());
             TableColumn column = table.getColumn("Min. Value");
             column.setCellEditor(cellEditor);
-            //column.setCellRenderer(cellRenderer);
+            column.setCellRenderer(cellRenderer);
             column = table.getColumn("Max. Value");
             column.setCellEditor(cellEditor);
             column.setCellRenderer(cellRenderer);
