@@ -21,7 +21,6 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.FormattedCellEditor;
 import com.cosmos.swingb.FormattedCellRenderer;
-import com.cosmos.swingb.MaskFormat;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
