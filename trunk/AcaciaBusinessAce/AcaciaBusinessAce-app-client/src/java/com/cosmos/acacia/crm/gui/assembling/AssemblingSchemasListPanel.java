@@ -19,26 +19,20 @@ import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.FormattedCellEditor;
-import com.cosmos.swingb.FormattedCellRenderer;
+import com.cosmos.swingb.MaskFormattedCellEditor;
+import com.cosmos.swingb.MaskFormattedCellRenderer;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.text.DecimalFormat;
-import java.text.Format;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JPanel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.text.MaskFormatter;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -592,25 +586,18 @@ public class AssemblingSchemasListPanel
             tableBinding.setEditable(true);
             table.setEditable(true);
 
-            Format format = new DecimalFormat("#,##0.0#");
-            AbstractFormatter formatter;
-            //formatter = new NumberFormatter((DecimalFormat)format);
-            //((NumberFormatter)formatter).setMaximum(99999);
+            MaskFormattedCellEditor cellEditor;
             String mask = "##-###";
             try
             {
-                formatter = new MaskFormatter(mask);
-                ((MaskFormatter)formatter).setValueContainsLiteralCharacters(false);
+                cellEditor = new MaskFormattedCellEditor(mask);
             }
             catch(ParseException ex)
             {
                 throw new RuntimeException(ex);
             }
-            //TableCellEditor cellEditor = new FormattedCellEditor(format);
-            TableCellEditor cellEditor = new FormattedCellEditor(formatter);
-            //TableCellRenderer cellRenderer = new FormattedCellRenderer(format);
-            TableCellRenderer cellRenderer = new FormattedCellRenderer((MaskFormatter)formatter);
-            //TableCellEditor cellEditor = new DefaultCellEditor(new JTextField());
+            MaskFormattedCellRenderer cellRenderer =
+                new MaskFormattedCellRenderer(cellEditor);
             TableColumn column = table.getColumn("Min. Value");
             column.setCellEditor(cellEditor);
             column.setCellRenderer(cellRenderer);
