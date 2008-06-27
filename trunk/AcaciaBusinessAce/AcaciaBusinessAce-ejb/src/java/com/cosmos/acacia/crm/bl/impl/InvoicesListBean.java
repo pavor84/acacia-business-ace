@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.enums.PaymentType;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -77,7 +78,9 @@ public class InvoicesListBean implements InvoicesListRemote, InvoicesListLocal {
     }
 
     public Invoice newInvoice() {
-        return new Invoice();
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceId(new BigInteger("0001"));
+        return invoice;
     }
 
     public Invoice saveInvoice(Invoice invoice) {

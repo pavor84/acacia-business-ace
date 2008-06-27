@@ -43,6 +43,7 @@ import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
+import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;

@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="entityFormButtonPanel" alignment="0" max="32767" attributes="1"/>
+                  <Component id="itemsPanel" alignment="0" max="32767" attributes="1"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="generalInfoPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="recipientPanel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="deliveryPanel" alignment="0" max="32767" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="649" max="32767" attributes="0"/>
+              <Component id="totalLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="totalTextField" min="-2" pref="69" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="currencyComboBox" min="-2" pref="53" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="generalInfoPanel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="recipientPanel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="itemsPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="currencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="totalTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="totalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="deliveryPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="60" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="com.cosmos.swingb.JBPanel" name="recipientPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Recipient"/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="recipientPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="recipientNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientContactNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientContactLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="recipientContactNameTextField" alignment="0" max="32767" attributes="1"/>
+                      <Component id="recipientNameTextField" alignment="0" pref="282" max="32767" attributes="1"/>
+                      <Component id="recipientContactLookup" alignment="0" min="-2" pref="284" max="-2" attributes="1"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="recipientNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="recipientContactNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientContactNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="recipientContactLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientContactLookup" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBLabel" name="recipientNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="recipientNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="recipientNameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="recipientNameTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="recipientNameTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="recipientContactLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="recipientContactLabel.text"/>
+            <Property name="name" type="java.lang.String" value="recipientContactLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="recipientContactNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="recipientContactNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="recipientContactNameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="recipientContactNameTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="recipientContactNameTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="recipientContactLookup">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="recipientContactLookup" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="com.cosmos.swingb.JBPanel" name="generalInfoPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="General Info"/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="generalInfoPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="invoiceNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="typeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="dateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="dateDatePicker" alignment="1" pref="233" max="32767" attributes="1"/>
+                      <Component id="invoiceNumberTextField" alignment="0" pref="233" max="32767" attributes="1"/>
+                      <Component id="invoiceTypeComboBox" alignment="1" pref="233" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="invoiceNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="invoiceNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="dateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dateDatePicker" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="typeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="invoiceTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBLabel" name="dateLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="dateLabel.text"/>
+            <Property name="name" type="java.lang.String" value="dateLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBDatePicker" name="dateDatePicker">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="dateDatePicker" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="invoiceNumberTextField">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="invoiceNumberTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="invoiceNumberLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="invoiceNumberLabel.text"/>
+            <Property name="name" type="java.lang.String" value="invoiceNumberLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="typeLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="typeLabel.text"/>
+            <Property name="name" type="java.lang.String" value="typeLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="invoiceTypeComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="invoiceTypeComboBox" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Items"/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="itemsPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="816" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="148" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Component class="com.cosmos.swingb.JBLabel" name="totalLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="totalLabel.text"/>
+        <Property name="name" type="java.lang.String" value="totalLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="totalTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="totalTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBComboBox" name="currencyComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+        <Property name="name" type="java.lang.String" value="currencyComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="deliveryPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Delivery/Transportation"/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="deliveryPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="transportationMethodLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="shipingAgentLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="invoiceDeliveryMethodLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="transportationPriceLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="shippingAgentLookup" alignment="0" pref="651" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="transportationPriceTextField" min="-2" pref="74" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="transportationPriceCurrencyComboBox" min="-2" pref="54" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Component id="transportationMethodComboBox" alignment="0" pref="651" max="32767" attributes="1"/>
+                      <Component id="documentDeliveryMethodComboBox" alignment="0" pref="651" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="invoiceDeliveryMethodLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="documentDeliveryMethodComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="transportationMethodLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="transportationMethodComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="shippingAgentLookup" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="transportationPriceCurrencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="transportationPriceTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="transportationPriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Component id="shipingAgentLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="13" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBLabel" name="invoiceDeliveryMethodLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="invoiceDeliveryMethodLabel.text"/>
+            <Property name="name" type="java.lang.String" value="invoiceDeliveryMethodLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBComboBox" name="documentDeliveryMethodComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="documentDeliveryMethodComboBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="transportationMethodLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="transportationMethodLabel.text"/>
+            <Property name="name" type="java.lang.String" value="transportationMethodLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBComboBox" name="transportationMethodComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="transportationMethodComboBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="shipingAgentLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="shipingAgentLabel.text"/>
+            <Property name="name" type="java.lang.String" value="shipingAgentLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="transportationPriceLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="transportationPriceLabel.text"/>
+            <Property name="name" type="java.lang.String" value="transportationPriceLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="transportationPriceTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="transportationPriceTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBComboBox" name="transportationPriceCurrencyComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="transportationPriceCurrencyComboBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="shippingAgentLookup">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="shippingAgentLookup" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

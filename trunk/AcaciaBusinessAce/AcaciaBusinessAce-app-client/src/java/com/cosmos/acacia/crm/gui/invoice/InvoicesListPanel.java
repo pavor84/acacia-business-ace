@@ -1,6 +1,5 @@
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.invoice;
 
-import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.bl.impl.InvoicesListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -8,6 +7,7 @@ import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
@@ -28,9 +28,9 @@ public class InvoicesListPanel
     private BindingGroup invoicesBindingGroup;
     private List<Invoice> invocies;
 
-    public InvoicesListPanel(BigInteger parentDataObjectId)
+    public InvoicesListPanel(BigInteger parentDataObject)
     {
-        super(parentDataObjectId);
+        super(parentDataObject);
     }
 
     @Override
@@ -42,7 +42,9 @@ public class InvoicesListPanel
         invoicesBindingGroup = new BindingGroup();
         AcaciaTable invoicesTable = getDataTable();
         EntityProperties entityProp = getInvoiceEntityProperties();
-        JTableBinding tableBinding = invoicesTable.bind(invoicesBindingGroup, getInvoices(), getInvoiceEntityProperties());
+        JTableBinding tableBinding = invoicesTable.bind(invoicesBindingGroup, getInvoices(), entityProp);
+        tableBinding.setEditable(false);
+        
         invoicesTable.bindComboBoxCellEditor(invoicesBindingGroup, getCurrencies(), entityProp.getPropertyDetails("currency"));
         invoicesTable.bindComboBoxCellEditor(invoicesBindingGroup, getDeliveryTypes(), entityProp.getPropertyDetails("deliveryType"));
         invoicesTable.bindComboBoxCellEditor(invoicesBindingGroup, getDocumentDeliveryMethods(), entityProp.getPropertyDetails("documentDeliveryMethod"));
@@ -55,9 +57,10 @@ public class InvoicesListPanel
 
         invoicesBindingGroup.bind();
 
-        invoicesTable.setEditable(true);
+        invoicesTable.setEditable(false);
     }
 
+    @Override
     protected boolean deleteRow(Object rowObject)
     {
         if(rowObject != null)
@@ -69,43 +72,48 @@ public class InvoicesListPanel
         return false;
     }
 
+    @Override
     protected Object modifyRow(Object rowObject)
     {
-//        if(rowObject != null)
-//        {
-//            ProductPanel productPanel = new ProductPanel((Product)rowObject);
-//            DialogResponse response = productPanel.showDialog(this);
-//            if(DialogResponse.SAVE.equals(response))
-//            {
-//                return productPanel.getSelectedValue();
-//            }
-//        }
+        if(rowObject != null)
+        {
+            InvoicePanel invoicetPanel = new InvoicePanel((Invoice)rowObject);
+            DialogResponse response = invoicetPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return invoicetPanel.getSelectedValue();
+            }
+        }
 
         return null;
     }
 
+    @Override
     protected Object newRow()
     {
-//        ProductPanel productPanel = new ProductPanel(getParentDataObject());
-//        DialogResponse response = productPanel.showDialog(this);
-//        if(DialogResponse.SAVE.equals(response))
-//        {
-//            return productPanel.getSelectedValue();
-//        }
+        InvoicePanel invoicetPanel = new InvoicePanel(getParentDataObjectId());
+        DialogResponse response = invoicetPanel.showDialog(this);
+        if(DialogResponse.SAVE.equals(response))
+        {
+            return invoicetPanel.getSelectedValue();
+        }
 
         return null;
     }
 
+    @Override
     public boolean canCreate()
     {
         return true;
     }
 
+    @Override
     public boolean canModify(Object rowObject)
     {
         return true;
     }
 
+    @Override
     public boolean canDelete(Object rowObject)
     {
         return true;
@@ -116,8 +124,7 @@ public class InvoicesListPanel
     {
         if(invocies == null)
         {
-            DataObject parentDataObject = AppSession.getDataObject(getParentDataObjectId());
-            invocies = getFormSession().getInvoices(parentDataObject);
+            invocies = getFormSession().getInvoices(getParentDataObject());
         }
 
         return invocies;
