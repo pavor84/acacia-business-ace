@@ -12,7 +12,6 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 /**
@@ -90,11 +89,13 @@ public class FormattedCellEditor
                 }
                 else
                 {
-                    textField.setBackground(invalidStateBackground);
-                    return false;
+                    //textField.setBackground(invalidStateBackground);
+                    //return false;
                 }
 
-                return super.stopCellEditing();
+                boolean result = super.stopCellEditing();
+                System.out.println("super.stopCellEditing(): " + result);
+                return result;
             }
         };
 
