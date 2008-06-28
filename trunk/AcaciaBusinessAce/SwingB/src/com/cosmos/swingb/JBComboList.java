@@ -18,8 +18,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListDataListener;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
@@ -503,6 +505,29 @@ public class JBComboList
 
 	    fireItemStateChanged(event);
         }
+    }
+    
+    
+    public void initUnbound(
+            SelectableListDialog selectableListDialog,
+            ObjectToStringConverter converter)
+    {
+        if(converter == null)
+            converter = new BeanResourceToStringConverter(getApplication());
+        AutoCompleteDecorator.decorate(comboBox, converter);
+        
+        this.selectableListDialog = selectableListDialog;
+
+        List data = new ArrayList(selectableListDialog.getListData());
+        observableData = ObservableCollections.observableList(data);
+
+        for (Object obj : observableData) {
+            comboBox.addItem(obj);
+        }
+    }
+    
+    public void initUnbound(SelectableListDialog selectableListDialog) {
+        initUnbound(selectableListDialog, null);
     }
 
 }
