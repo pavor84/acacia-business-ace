@@ -69,12 +69,12 @@ public class AssemblingSchemasListPanel
         assemblingSchemasPanel = new com.cosmos.swingb.JBPanel();
         assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
         assemblingCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        schemasTablePanel = getAssemblingSchemasTablePanel();
         assemblingSchemasSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsTitledPanel = new com.cosmos.swingb.JBTitledPanel();
         itemValuesTitledPanel = new com.cosmos.swingb.JBTitledPanel();
         assemblingSchemasTitledPanel = new com.cosmos.swingb.JBTitledPanel();
-        schemasTablePanel = getAssemblingSchemasTablePanel();
 
         assemblingSchemasPanel.setName("assemblingSchemasPanel"); // NOI18N
 
@@ -82,9 +82,9 @@ public class AssemblingSchemasListPanel
         assemblingCategoryLabel.setText(resourceMap.getString("assemblingCategoryLabel.text")); // NOI18N
         assemblingCategoryLabel.setName("assemblingCategoryLabel"); // NOI18N
 
-        schemasTablePanel.setName("schemasTablePanel"); // NOI18N
-
         assemblingCategoryComboList.setName("assemblingCategoryComboList"); // NOI18N
+
+        schemasTablePanel.setName("schemasTablePanel"); // NOI18N
 
         javax.swing.GroupLayout assemblingSchemasPanelLayout = new javax.swing.GroupLayout(assemblingSchemasPanel);
         assemblingSchemasPanel.setLayout(assemblingSchemasPanelLayout);
@@ -113,10 +113,12 @@ public class AssemblingSchemasListPanel
         setLayout(new java.awt.BorderLayout());
 
         assemblingSchemasSplitPane.setDividerLocation(450);
+        assemblingSchemasSplitPane.setResizeWeight(0.5);
         assemblingSchemasSplitPane.setName("assemblingSchemasSplitPane"); // NOI18N
 
         schemaItemsSplitPane.setDividerLocation(300);
         schemaItemsSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        schemaItemsSplitPane.setResizeWeight(0.5);
         schemaItemsSplitPane.setName("schemaItemsSplitPane"); // NOI18N
 
         schemaItemsTitledPanel.setTitle(resourceMap.getString("schemaItemsTitledPanel.title")); // NOI18N
@@ -163,14 +165,8 @@ public class AssemblingSchemasListPanel
     @Override
     protected void initData()
     {
-        JPanel panel = getAssemblingSchemasTablePanel();
-        Dimension size = panel.getPreferredSize();
-        int width = size.width;
-        panel = getSchemaItemsTablePanel();
-        size = panel.getPreferredSize();
-        if(size.width > 0)
-            width = (width + size.width) / 2;
-        assemblingSchemasSplitPane.setDividerLocation(width);
+        setPreferredSize(new Dimension(1055, 600));
+        assemblingSchemasSplitPane.setDividerLocation(555);
     }
 
     private AssemblingSchemasTablePanel getAssemblingSchemasTablePanel()
@@ -180,6 +176,7 @@ public class AssemblingSchemasListPanel
             assemblingSchemasTablePanel = new AssemblingSchemasTablePanel();
             AssemblingSchemasTableListener listener = new AssemblingSchemasTableListener();
             assemblingSchemasTablePanel.addTablePanelListener(listener);
+            assemblingSchemasTablePanel.setPreferredSize(new Dimension(300, 400));
         }
 
         return assemblingSchemasTablePanel;
@@ -192,6 +189,7 @@ public class AssemblingSchemasListPanel
             schemaItemsTablePanel = new SchemaItemsTablePanel();
             AssemblingSchemaItemsTableListener listener = new AssemblingSchemaItemsTableListener();
             schemaItemsTablePanel.addTablePanelListener(listener);
+            schemaItemsTablePanel.setPreferredSize(new Dimension(300, 200));
         }
 
         return schemaItemsTablePanel;
@@ -202,6 +200,7 @@ public class AssemblingSchemasListPanel
         if(itemValuesTablePanel == null)
         {
             itemValuesTablePanel = new ItemValuesTablePanel();
+            itemValuesTablePanel.setPreferredSize(new Dimension(300, 200));
         }
 
         return itemValuesTablePanel;
@@ -344,6 +343,7 @@ public class AssemblingSchemasListPanel
         {
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
+            assemblingCategoryComboList.getComboBox().setPrototypeDisplayValue("123456789012345");
 
             entityProps = getFormSession().getAssemblingSchemaEntityProperties();
 

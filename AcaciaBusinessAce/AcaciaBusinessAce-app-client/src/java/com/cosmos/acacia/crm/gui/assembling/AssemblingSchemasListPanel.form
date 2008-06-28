@@ -79,6 +79,7 @@
     <Container class="com.cosmos.swingb.JBSplitPane" name="assemblingSchemasSplitPane">
       <Properties>
         <Property name="dividerLocation" type="int" value="450"/>
+        <Property name="resizeWeight" type="double" value="0.5"/>
         <Property name="name" type="java.lang.String" value="assemblingSchemasSplitPane" noResource="true"/>
       </Properties>
       <Constraints>
@@ -93,6 +94,7 @@
           <Properties>
             <Property name="dividerLocation" type="int" value="300"/>
             <Property name="orientation" type="int" value="0"/>
+            <Property name="resizeWeight" type="double" value="0.5"/>
             <Property name="name" type="java.lang.String" value="schemaItemsSplitPane" noResource="true"/>
           </Properties>
           <Constraints>
