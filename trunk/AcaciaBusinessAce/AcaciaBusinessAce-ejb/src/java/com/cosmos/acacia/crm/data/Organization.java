@@ -124,6 +124,9 @@ public class Organization
     @Property(title="Organization Type")
     private DbResource organizationType;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
     public Organization() {
     }
 
@@ -230,6 +233,15 @@ public class Organization
 
     public void setOrganizationType(DbResource organizationType) {
         this.organizationType = organizationType;
+    }
+
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
 

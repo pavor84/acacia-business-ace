@@ -16,7 +16,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;

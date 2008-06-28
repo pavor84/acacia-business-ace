@@ -17,7 +17,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;

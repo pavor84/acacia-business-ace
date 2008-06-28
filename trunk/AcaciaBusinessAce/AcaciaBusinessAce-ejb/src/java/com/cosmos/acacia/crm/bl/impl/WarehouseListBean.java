@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListLocal;
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;

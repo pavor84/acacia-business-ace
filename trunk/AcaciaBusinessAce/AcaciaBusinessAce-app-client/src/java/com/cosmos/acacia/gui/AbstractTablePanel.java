@@ -260,7 +260,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Map<Button, JButton> buttonsMap;
 
     private boolean editable;
-
+    private boolean visibilitySetChanged = false;
+    
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
@@ -272,9 +273,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @Override
     protected void initData()
     {
-        setVisible(Button.Select, false);
-        setVisible(Button.Unselect, false);
-        setVisible(Button.EnterWarehouse, false);
+        if (!visibilitySetChanged) {
+            setVisible(Button.Select, false);
+            setVisible(Button.Unselect, false);
+            setVisible(Button.EnterWarehouse, false);
+        }
 
         setEnabled(Button.Select, false);
         setEnabled(Button.Unselect, false);
@@ -456,6 +459,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     public void setVisible(Button button, boolean visible)
     {
+        if (visible)
+            visibilitySetChanged = true;
+        
         getButtonsMap().get(button).setVisible(visible);
     }
 

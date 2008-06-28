@@ -12,7 +12,7 @@ import javax.naming.InitialContext;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.DataObjectBean;

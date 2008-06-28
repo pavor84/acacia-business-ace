@@ -17,7 +17,7 @@ import javax.naming.InitialContext;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;

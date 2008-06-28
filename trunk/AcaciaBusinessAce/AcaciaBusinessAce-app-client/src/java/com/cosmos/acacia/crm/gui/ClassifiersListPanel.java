@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.app.AppSession;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -82,10 +81,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
             if (classifiedDataObject != null)
                 classifiers = getFormSession().getClassifiers(classifiedDataObject);
             else
-            {
-
                 classifiers = getFormSession().getClassifiers(getParentDataObjectId(), dataObjectType);
-            }
         }
         return classifiers;
     }
@@ -135,6 +131,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
 
 
     public void filter(List<Classifier> filterList) {
+        
         List<Classifier> classifiersMirror = new ArrayList<Classifier>(classifiers);
         for (Classifier classifier : classifiersMirror) {
             if (filterList.contains(classifier))
@@ -165,7 +162,12 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            ClassifierPanel classifierPanel = new ClassifierPanel((Classifier)rowObject);
+            boolean allowCafdModifications = dataObjectType == null;
+            
+            ClassifierPanel classifierPanel = new ClassifierPanel(
+                    (Classifier)rowObject, 
+                    allowCafdModifications);
+            
             DialogResponse response = classifierPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -179,8 +181,6 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
-        Task t = super.refreshAction();
-
         if (classifiersBindingGroup != null)
             classifiersBindingGroup.unbind();
 
@@ -189,6 +189,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         postInitData();
         filterByClassifier();
 
+        Task t = super.refreshAction();
         return t;
     }
 

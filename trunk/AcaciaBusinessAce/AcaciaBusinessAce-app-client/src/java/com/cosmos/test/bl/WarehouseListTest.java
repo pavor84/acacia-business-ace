@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.cosmos.acacia.app.AppSession;
-import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListBean;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.Address;

@@ -10,12 +10,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
-import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
-import com.cosmos.acacia.crm.bl.contactbook.impl.LocationsListRemote;
-import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
-import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
-import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.LocationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PassportsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.bl.impl.ProductsListBean;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;

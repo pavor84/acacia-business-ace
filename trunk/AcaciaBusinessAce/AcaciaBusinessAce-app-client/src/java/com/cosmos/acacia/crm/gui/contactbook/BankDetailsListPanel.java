@@ -16,7 +16,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;

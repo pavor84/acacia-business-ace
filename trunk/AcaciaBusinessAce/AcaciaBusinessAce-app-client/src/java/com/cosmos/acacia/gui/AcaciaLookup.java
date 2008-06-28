@@ -25,6 +25,7 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.BaseValidator;
+import org.jdesktop.beansbinding.Property;
 
 /**
  * @author jchan
@@ -54,6 +55,9 @@ public class AcaciaLookup extends javax.swing.JPanel {
     private ResourceMap resourceMap;
     
     private BindingValidationListener bindingListener;
+    
+    private AcaciaLookupListener listener;
+    
     @SuppressWarnings("unchecked")
     private Binding binding;
 
@@ -275,7 +279,16 @@ public class AcaciaLookup extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     public void clearSelectedValue(){
         setSelectedItem(null);
-        binding.getTargetProperty().setValue(this, null);
+        
+        try {
+            binding.getTargetProperty().setValue(this, null);
+        } catch (NullPointerException ex) {
+            field.setText(null);
+        }
+        
+        if (listener != null)
+            listener.valueCleared();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -363,6 +376,14 @@ public class AcaciaLookup extends javax.swing.JPanel {
 
     public void setLookupProvider(AcaciaLookupProvider lookupProvider) {
         this.lookupProvider = lookupProvider;
+    }
+
+    public AcaciaLookupListener getListener() {
+        return listener;
+    }
+
+    public void setListener(AcaciaLookupListener listener) {
+        this.listener = listener;
     }
     
     

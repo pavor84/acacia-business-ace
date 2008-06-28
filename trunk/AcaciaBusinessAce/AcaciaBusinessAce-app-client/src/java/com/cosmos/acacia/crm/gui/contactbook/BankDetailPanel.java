@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.BankDetailsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.Classifier;

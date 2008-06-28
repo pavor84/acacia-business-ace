@@ -13,7 +13,7 @@ import javax.naming.InitialContext;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
