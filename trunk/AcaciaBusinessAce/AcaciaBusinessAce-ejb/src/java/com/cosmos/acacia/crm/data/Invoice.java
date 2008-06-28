@@ -41,7 +41,7 @@ import javax.persistence.TemporalType;
             (
                 name = "Invoice.findByParentDataObjectIsNullAndDeleted",
                 query = "select i from Invoice i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted"
-            )
+            )      
     })
 public class Invoice extends DataObjectBean implements Serializable {
 
@@ -76,10 +76,10 @@ public class Invoice extends DataObjectBean implements Serializable {
             propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private Date invoiceDate;
 
-    @JoinColumn(name = "recipient_id", referencedColumnName = "data_object_link_id")
+    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id")
     @ManyToOne
     @Property(title="Recipient")
-    private DataObjectLink recipientLink;
+    private BusinessPartner recipient;
 
     @Column(name = "recipient_name", nullable = false)
     @Property(title="Recipient name")
@@ -94,7 +94,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Recipient contact name")
     private String recipientContactName;
 
-    @JoinColumn(name = "invoice_type_id", referencedColumnName = "resource_id")
+    @JoinColumn(name = "invoice_type_id", nullable = false, referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Type")
     private DbResource invoiceType;
@@ -288,13 +288,13 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.invoiceDate = invoiceDate;
     }
 
-    public DataObjectLink getRecipientLink() {
-        return recipientLink;
+    public BusinessPartner getRecipient() {
+        return recipient;
     }
 
-    public void setRecipientLink(DataObjectLink recipientLink) {
-        firePropertyChange("recipientLink", this.recipientLink, recipientLink);
-        this.recipientLink = recipientLink;
+    public void setRecipient(BusinessPartner recipient) {
+        firePropertyChange("recipientLink", this.recipient, recipient);
+        this.recipient = recipient;
     }
 
     public String getRecipientName() {
