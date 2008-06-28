@@ -12,11 +12,15 @@ import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.enums.DeliveryType;
+import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
 import com.cosmos.acacia.crm.enums.Gender;
+import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.OrganizationType;
 import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.acacia.crm.enums.ProductColor;
+import com.cosmos.acacia.crm.enums.TransportationMethod;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,6 +64,9 @@ public class DatabaseResourceBean
             getDbResources(PassportType.class);
             getDbResources(Algorithm.Type.class);
             getDbResources(AssemblingSchemaItemDataType.class);
+            getDbResources(InvoiceType.class);
+            getDbResources(DocumentDeliveryMethod.class);
+            getDbResources(TransportationMethod.class);
             initialized = true;
         }
     }

@@ -34,6 +34,8 @@ public class InvoiceItemPanel extends BaseEntityPanel {
     
     public InvoiceItemPanel(BigInteger parentDataobject) {
         super(parentDataobject);
+        
+        init();
     }
     
     public InvoiceItemPanel(InvoiceItem invoiceItem) {
