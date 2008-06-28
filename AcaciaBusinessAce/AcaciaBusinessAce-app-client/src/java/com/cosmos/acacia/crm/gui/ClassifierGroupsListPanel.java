@@ -46,7 +46,6 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
 
         super.initData();
         
-        setVisible(Button.Select, false);
         classifierGroupsBindingGroup = new BindingGroup();
         AcaciaTable classifierGroupsTable = getDataTable();
         JTableBinding tableBinding = classifierGroupsTable.bind(classifierGroupsBindingGroup, getClassifierGroups(), getClassifierGroupEntityProperties());

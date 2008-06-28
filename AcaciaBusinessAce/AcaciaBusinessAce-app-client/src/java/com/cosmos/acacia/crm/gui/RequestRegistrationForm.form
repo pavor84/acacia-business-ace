@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jSeparator1" alignment="1" pref="356" max="32767" attributes="0"/>
+                  <Component id="upperInfoLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="emailLabel" min="-2" pref="32" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="emailTextField" min="-2" pref="225" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="sendCodeButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="lowerInfoLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="codeLabel" min="-2" pref="37" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="codeTextField" min="-2" pref="227" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="proceedButton" pref="82" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="upperInfoLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="emailTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="sendCodeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="emailLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jSeparator1" min="-2" pref="5" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lowerInfoLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="codeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="proceedButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.swingb.JBLabel" name="upperInfoLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="upperInfoLabel.text"/>
+        <Property name="name" type="java.lang.String" value="upperInfoLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="emailLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="emailLabel.text"/>
+        <Property name="name" type="java.lang.String" value="emailLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="emailTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="emailTextField.text"/>
+        <Property name="name" type="java.lang.String" value="emailTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="sendCodeButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.RequestRegistrationForm" id="sendCode" methodName="sendCode"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="sendCodeButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="lowerInfoLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="lowerInfoLabel.text"/>
+        <Property name="name" type="java.lang.String" value="lowerInfoLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="proceedButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.RequestRegistrationForm" id="proceed" methodName="proceed"/>
+        </Property>
+        <Property name="text" type="java.lang.String" resourceKey="proceedButton.text"/>
+        <Property name="name" type="java.lang.String" value="proceedButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="codeTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="codeTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="codeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="codeLabel.text"/>
+        <Property name="name" type="java.lang.String" value="codeLabel" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

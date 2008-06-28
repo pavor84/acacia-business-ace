@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.LocationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.LocationsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.gui.BaseEntityPanel;

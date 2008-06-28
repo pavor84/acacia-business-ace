@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;

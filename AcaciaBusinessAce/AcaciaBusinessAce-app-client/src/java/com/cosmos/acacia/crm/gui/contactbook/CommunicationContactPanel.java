@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;

@@ -62,10 +62,10 @@ public class ClassifierAppliedForDotPK implements Serializable {
             return false;
         }
         ClassifierAppliedForDotPK other = (ClassifierAppliedForDotPK) object;
-        if (this.classifierId != other.classifierId) {
+        if (!this.classifierId.equals(other.classifierId)) {
             return false;
         }
-        if (this.dataObjectTypeId != other.dataObjectTypeId) {
+        if (!this.dataObjectTypeId.equals(other.dataObjectTypeId)) {
             return false;
         }
         return true;

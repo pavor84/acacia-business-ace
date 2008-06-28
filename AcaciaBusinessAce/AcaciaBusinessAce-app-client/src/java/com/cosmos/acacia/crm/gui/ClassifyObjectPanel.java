@@ -12,11 +12,14 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaLookupListener;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.listeners.TableModificationListener;
 import java.util.List;
 
 /**
@@ -184,6 +187,14 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
             });
             
         groupLookup.setEnabled(true);
+        groupLookup.setListener(new AcaciaLookupListener() {
+            @Override
+            public void valueCleared() {
+                classifiersTable.setParentDataObjectId(null);
+                classifiersTable.refreshAction();
+            }
+        });
+                
         
         appliedClassifiersTable = new ClassifiersListPanel(dataObjectToBeClassified);
         //appliedClassifiersTable.setVisibleButtons(16);
@@ -196,6 +207,9 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         //classifiersTable.setVisibleButtons(2 + 4 + 8 + 16);
         classifiersTable.setVisible(AbstractTablePanel.Button.NewModifyDeleteRefresh);
         filterClassifiers();
+        
+        classifiersTable.addTablePanelListener(new RefreshListener());
+        classifiersTable.addTableModificationListener(new NewClassifierListener());
         
         classifiersPanel.add(classifiersTable);
     }
@@ -284,5 +298,46 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
                 classifier);
         appliedClassifiersTable.refreshAction();
         classifiersTable.getDataTable().addRow(classifier);
+    }
+    
+    class RefreshListener implements TablePanelListener {
+
+        @Override
+        public void tablePanelClose() {
+           //
+        }
+
+        @Override
+        public void selectionRowChanged() {
+            //
+        }
+
+        @Override
+        public void selectAction() {
+            //
+        }
+
+        @Override
+        public void tableRefreshed() {
+            filterClassifiers();
+        }
+    }
+    
+    class NewClassifierListener implements TableModificationListener {
+
+        @Override
+        public void rowDeleted(Object row) {
+            //
+        }
+
+        @Override
+        public void rowModified(Object row) {
+            //
+        }
+
+        @Override
+        public void rowAdded(Object row) {
+            groupLookup.clearSelectedValue();
+        }   
     }
 }

@@ -13,7 +13,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -43,7 +43,6 @@ public class PersonsListPanel extends AbstractTablePanel {
     @Override
     protected void initData() {
         super.initData();
-        setVisible(Button.Select, false);
         personsBindingGroup = new BindingGroup();
         AcaciaTable personsTable = getDataTable();
         JTableBinding tableBinding = personsTable.bind(personsBindingGroup, getPersons(), getPersonEntityProperties());

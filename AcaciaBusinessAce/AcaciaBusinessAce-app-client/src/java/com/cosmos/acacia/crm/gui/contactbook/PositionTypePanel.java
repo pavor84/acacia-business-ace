@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PositionTypesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;

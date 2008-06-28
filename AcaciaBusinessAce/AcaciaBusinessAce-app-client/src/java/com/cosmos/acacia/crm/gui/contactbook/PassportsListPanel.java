@@ -14,7 +14,7 @@ import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PassportsListRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.gui.AbstractTablePanel;

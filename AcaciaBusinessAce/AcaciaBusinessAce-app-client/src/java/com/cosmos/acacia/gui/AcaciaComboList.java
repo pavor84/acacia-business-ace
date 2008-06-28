@@ -55,4 +55,14 @@ public class AcaciaComboList
             updateStrategy);
     }
 
+    @Override
+    public void initUnbound(
+            SelectableListDialog selectableListDialog,
+            ObjectToStringConverter converter)
+    {
+        if (converter == null)
+            converter = new AcaciaToStringConverter();
+        
+        super.initUnbound(selectableListDialog, converter);
+    }
 }

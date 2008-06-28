@@ -10,7 +10,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.impl.PassportsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PassportsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;

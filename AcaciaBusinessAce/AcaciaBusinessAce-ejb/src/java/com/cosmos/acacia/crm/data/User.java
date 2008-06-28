@@ -6,9 +6,9 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,10 +17,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.cosmos.acacia.annotation.Property;
 
 /**
  *
@@ -28,64 +30,143 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+@NamedQueries(
+        {
+            @NamedQuery(
+                    name = "User.login",
+                    query = "select u from User u where u.userName=:username and u.userPassword=:password"
+            ),
+            @NamedQuery(
+                    name = "User.findCreatedUsers",
+                    query = "select u from User u where u.creator=:creator"
+            ),
+            @NamedQuery(
+                    name = "User.findByEmail",
+                    query = "select u from User u where u.emailAddress=:email"
+            ),
+            @NamedQuery(
+                    name = "User.findByUsername",
+                    query = "select u from User u where u.userName=:username"
+            )
+        }
+)
+public class User extends DataObjectBean implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Property(title="User ID", visible=false, hidden=true)
+    private BigInteger userId;
+
     @Column(name = "version", nullable = false)
+    @Property(title="Version", visible=false, hidden=true)
     private int version;
+
     @Column(name = "user_name", nullable = false)
+    @Property(title="Username")
     private String userName;
+
     @Column(name = "email_address", nullable = false)
+    @Property(title="Email address")
     private String emailAddress;
+
     @Column(name = "user_password", nullable = false)
+    @Property(title="Password", visible=false, hidden=true)
     private String userPassword;
+
     @Column(name = "system_password")
+    @Property(title="System password", visible=false, hidden=true)
     private String systemPassword;
+
     @Column(name = "system_password_validity")
     @Temporal(TemporalType.DATE)
+    @Property(title="System password validity", visible=false, hidden=true)
     private Date systemPasswordValidity;
+
     @Column(name = "is_active", nullable = false)
+    @Property(title="Active")
     private boolean isActive;
+
     @Column(name = "is_new", nullable = false)
+    @Property(title="New")
     private boolean isNew;
+
     @Column(name = "creation_time", nullable = false)
+    @Property(title="Creation time")
     @Temporal(TemporalType.TIME)
     private Date creationTime;
+
     @Column(name = "description")
+    @Property(title="Description", visible=false, hidden=true)
     private String description;
+
     @Column(name = "small_image_uri")
     private String smallImageUri;
+
     @Lob
     @Column(name = "small_image")
     private byte[] smallImage;
+
     @Column(name = "medium_image_uri")
     private String mediumImageUri;
+
     @Lob
     @Column(name = "medium_image")
     private byte[] mediumImage;
+
     @Column(name = "user_uri")
     private String userUri;
+
     @Column(name = "next_action_after_login")
     private String nextActionAfterLogin;
-    @JoinColumn(name = "person_id", referencedColumnName = "data_object_id")
+
+    @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
     @ManyToOne
-    private DataObject personId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creatorId")
-    private Collection<User> userCollection;
+    private Person person;
+
     @JoinColumn(name = "creator_id", referencedColumnName = "user_id")
     @ManyToOne
-    private User creatorId;
+    private User creator;
+
+    @JoinColumn(name = "user_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @OneToOne
+    private DataObject dataObject;
+
+    /**
+     * Used to store the chosen organization during registration; persisted manually
+     */
+    private Organization organization;
+
+    /**
+     * Used to store the chosen branch during registration; persisted manually
+     */
+    private Address branch;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Address getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Address branch) {
+        this.branch = branch;
+    }
 
     public User() {
     }
 
-    public User(Long userId) {
+    public User(BigInteger userId) {
         this.userId = userId;
     }
 
-    public User(Long userId, int version, String userName, String emailAddress,
+    public User(BigInteger userId, int version, String userName, String emailAddress,
                 String userPassword, boolean isActive, boolean isNew,
                 Date creationTime) {
         this.userId = userId;
@@ -98,11 +179,11 @@ public class User implements Serializable {
         this.creationTime = creationTime;
     }
 
-    public Long getUserId() {
+    public BigInteger getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(BigInteger userId) {
         this.userId = userId;
     }
 
@@ -194,11 +275,11 @@ public class User implements Serializable {
         this.smallImageUri = smallImageUri;
     }
 
-    public byte[] getSmallImage() {
+    public byte[] getSmallUserImage() {
         return smallImage;
     }
 
-    public void setSmallImage(byte[] smallImage) {
+    public void setSmallUserImage(byte[] smallImage) {
         this.smallImage = smallImage;
     }
 
@@ -210,11 +291,11 @@ public class User implements Serializable {
         this.mediumImageUri = mediumImageUri;
     }
 
-    public byte[] getMediumImage() {
+    public byte[] getMediumUserImage() {
         return mediumImage;
     }
 
-    public void setMediumImage(byte[] mediumImage) {
+    public void setMediumUserImage(byte[] mediumImage) {
         this.mediumImage = mediumImage;
     }
 
@@ -234,28 +315,20 @@ public class User implements Serializable {
         this.nextActionAfterLogin = nextActionAfterLogin;
     }
 
-    public DataObject getPersonId() {
-        return personId;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonId(DataObject personId) {
-        this.personId = personId;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public User getCreator() {
+        return creator;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
-    }
-
-    public User getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(User creatorId) {
-        this.creatorId = creatorId;
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     @Override
@@ -284,4 +357,35 @@ public class User implements Serializable {
         return "com.cosmos.acacia.crm.data.User[userId=" + userId + "]";
     }
 
+    @Override
+    public DataObject getDataObject() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BigInteger getId() {
+        return userId;
+    }
+
+    @Override
+    public BigInteger getParentId() {
+       return dataObject.getDataObjectId();
+    }
+
+    @Override
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        this.userId = id;
+
+    }
+
+    @Override
+    public void setParentId(BigInteger parentId) {
+        //
+    }
 }

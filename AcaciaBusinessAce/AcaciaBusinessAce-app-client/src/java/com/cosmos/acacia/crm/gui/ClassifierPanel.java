@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -41,6 +42,14 @@ public class ClassifierPanel extends BaseEntityPanel {
         init();
     }
 
+    public ClassifierPanel(Classifier classifier, boolean allowCafdModifications) {
+        super(classifier.getDataObject().getParentDataObjectId());
+        this.classifier = classifier;
+        init();
+        addObjectTypeButton.setEnabled(allowCafdModifications);
+        dataObjectTypesTable.setVisible(Button.Delete, allowCafdModifications);
+    }
+    
     /** Creates new form ContactPersonPanel */
     public ClassifierPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);

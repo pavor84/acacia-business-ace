@@ -108,7 +108,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
             DataObjectType dataObjectType) {
 
         List<Classifier> result = null;
-
+        
         Query q;
         if(parentDataObjectId != null)
         {
