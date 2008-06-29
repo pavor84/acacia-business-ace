@@ -56,7 +56,7 @@ public class JBTextField
             setEnabled(false);
             return null;
         }
-        
+
         bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
