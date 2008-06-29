@@ -65,4 +65,11 @@ public class AcaciaComboList
         
         super.initUnbound(selectableListDialog, converter);
     }
+    
+    @Override
+    public void initUnbound(
+            SelectableListDialog selectableListDialog)
+    {        
+        super.initUnbound(selectableListDialog, new AcaciaToStringConverter());
+    }
 }

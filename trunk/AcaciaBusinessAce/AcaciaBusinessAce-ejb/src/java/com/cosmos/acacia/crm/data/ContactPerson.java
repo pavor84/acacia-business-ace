@@ -9,6 +9,7 @@ package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -48,7 +49,9 @@ import javax.persistence.Table;
         )
     }
 )
-public class ContactPerson extends DataObjectBean implements Serializable {
+public class ContactPerson
+        extends DataObjectBean
+        implements TextResource, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -164,6 +167,16 @@ public class ContactPerson extends DataObjectBean implements Serializable {
     @Override
     public void setId(BigInteger id) {
         contactPersonId = id;
+    }
+
+    @Override
+    public String toShortText() {
+        return getContact().toShortText();
+    }
+
+    @Override
+    public String toText() {
+        return null;
     }
 
 }

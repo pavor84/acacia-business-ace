@@ -18,6 +18,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.math.BigInteger;
@@ -63,7 +64,7 @@ public abstract class AcaciaPanel
 
     public BigInteger getParentDataObjectId()
     {
-        log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.intValue() : "null"));
+        log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.longValue() : "null"));
         return parentDataObjectId;
     }
 
@@ -129,7 +130,7 @@ public abstract class AcaciaPanel
      * @return - the ValidationException if some 'caused by' exception is {@link ValidationException},
      * null otherwise
      */
-    protected ValidationException extractValidationException(Exception ex)
+    protected ValidationException extractValidationException(Throwable ex)
     {
         Throwable e = ex;
         while(e != null)
@@ -151,6 +152,10 @@ public abstract class AcaciaPanel
         return null;
     }
 
+    protected ValidationException extractValidationException(Exception ex) {
+        return extractValidationException((Throwable) ex);
+    }
+     
     /**
      * Iterate over all validation messages and compose one string - message per line.
      * @param ve
@@ -199,7 +204,7 @@ public abstract class AcaciaPanel
         }
     }
 
-    static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
+     class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
         private E bean;
 
@@ -208,17 +213,28 @@ public abstract class AcaciaPanel
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(Object proxy, Method method, Object[] args) throws ValidationException {
 
             AcaciaSession session = AppSession.get();
 
-            log.info("Method called: " + method.getName());
+            log.info("Method called: " + method.getName() + " on bean: " + bean);
 
-            return method.invoke(bean, args);
+            try {
+                return method.invoke(bean, args);
+            } catch (Exception ex) {
+                ValidationException vex = extractValidationException(((InvocationTargetException) ex).getCause());
+                if (vex != null) {
+                    throw vex;
+                } else {
+                    ex.printStackTrace();
+                    throw new RuntimeException(ex);
+                }
+                    
+            }
         }
     }
 
-    public static <T> T getRemoteBean(AcaciaPanel panel, Class<T> remoteInterface)
+    public <T> T getRemoteBean(AcaciaPanel panel, Class<T> remoteInterface)
     {
         try
         {

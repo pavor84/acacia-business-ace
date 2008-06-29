@@ -6,16 +6,16 @@ import java.util.List;
 
 /**
  * Created : 17.03.2008
- * 
+ *
  * @author Petar Milev
- * @version $Id: $ 
- * 
+ * @version $Id: $
+ *
  *          The exception should be thrown when business logic validation
- *          fails. The exception is associated with many {@link ValidationMessage} 
+ *          fails. The exception is associated with many {@link ValidationMessage}
  *          which provide information about all failed validation checks.
  */
 public class ValidationException extends RuntimeException {
-    
+
     private List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
 
     public ValidationException() {
@@ -28,7 +28,7 @@ public class ValidationException extends RuntimeException {
      */
     public ValidationException(String arg0, Throwable arg1) {
         super(arg0, arg1);
-        
+
     }
 
     /**
@@ -36,7 +36,6 @@ public class ValidationException extends RuntimeException {
      */
     public ValidationException(String arg0) {
         super(arg0);
-        
     }
 
     /**
@@ -44,7 +43,7 @@ public class ValidationException extends RuntimeException {
      */
     public ValidationException(Throwable arg0) {
         super(arg0);
-        
+
     }
 
     /**
@@ -62,7 +61,7 @@ public class ValidationException extends RuntimeException {
     public void setMessages(List<ValidationMessage> messages) {
         this.messages = messages;
     }
-    
+
     /**
      * Add validation message to this exception.
      * @param msg
@@ -70,7 +69,7 @@ public class ValidationException extends RuntimeException {
     public void addMessage(ValidationMessage msg){
         getMessages().add(msg);
     }
-    
+
     /**
      * Add validation message to this exception.
      * @see ValidationMessage
@@ -81,7 +80,7 @@ public class ValidationException extends RuntimeException {
         ValidationMessage msg = new ValidationMessage(target, messageKey);
         addMessage(msg);
     }
-    
+
     /**
      * Add validation message to this exception.
      * @see ValidationMessage
@@ -92,10 +91,10 @@ public class ValidationException extends RuntimeException {
         ValidationMessage msg = new ValidationMessage(null, messageKey);
         addMessage(msg);
     }
-    
+
     /**
      * Add validation message to this exception.
-     * @see ValidationMessage 
+     * @see ValidationMessage
      * @param target
      * @param messageKey
      * @param arguments
@@ -104,10 +103,10 @@ public class ValidationException extends RuntimeException {
         ValidationMessage msg = new ValidationMessage(target, messageKey, arguments);
         addMessage(msg);
     }
-    
+
     /**
      * Add validation message to this exception.
-     * @see ValidationMessage 
+     * @see ValidationMessage
      * @param target
      * @param messageKey
      * @param arguments

@@ -95,7 +95,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     protected void initSaveStateListener()
     {
-        getButtonPanel().initSaveStateListener();
+        try {
+            getButtonPanel().initSaveStateListener();
+        } catch (NullPointerException ex){
+            // No button panel
+        }
     }
 
     public boolean checkFormValidity()

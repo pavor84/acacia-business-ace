@@ -4,8 +4,12 @@ import java.util.Locale;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import javax.security.auth.callback.CallbackHandler;
 
 /**
  * An EJB for handling users - registration, login, passwords
@@ -17,23 +21,23 @@ public interface UsersRemote {
 
 
     /**
-     * Performs a login operation. A ValidationException
-     * should be thrown if the data is incorrect.
+     * Performs a login operation. Note that the password must be already hashed
      *
      * @param username
      * @param password
      * @return the user
+     * @throws ValidationException if the data is incorrect.
      */
-    User login (String username, String password);
+    User login (String username, char[] password);
 
     /**
-     * Registers a new user. A ValidationException
-     * should be thrown if the data is incorrect.
+     * Registers a new user. Note that the password must be already hashed
      *
      * @param the user to be registered
      * @return the newly registered user
+     * @throws ValidationException if the data is incorrect.
      */
-    User signup (User user);
+    User signup (User user, Organization organization, Address branch);
 
     /**
      * Sends a request for registration
@@ -44,10 +48,10 @@ public interface UsersRemote {
 
     /**
      * Verifies the entered code for proceeding with registration
-     * A ValidationException should be thrown in case the code is not found
      *
      * @param code
      * @return the email.
+     * @throws ValidationException in case the code is not found
      */
     String verifyCode(String code);
 
@@ -87,4 +91,34 @@ public interface UsersRemote {
      * @return list of locales
      */
     Locale[] serveLocalesList();
+    
+    /**
+     * Sets the locale for messages
+     * @param locale
+     */
+    void setLocale(Locale locale);
+    
+    /**
+     * Encrypts a password for storing locally on the client
+     * @return
+     */
+    String encryptPassword(char[] password);
+    
+    /**
+     * Decrypts a password stored locally on the client
+     * @param password
+     * @return the encrypted password
+     */
+    char[] decryptPassword(String base64password);
+    
+    /**
+     * Gets the organization for this user. In case there are more than
+     * one organization, a message should be displayed to the user.
+     * 
+     * @param user
+     * @param callbackHandler (for displaying the message)
+     * @return organization
+     */
+    Organization getOrganization(User user, CallbackHandler callbackHandler);
+    
 }
