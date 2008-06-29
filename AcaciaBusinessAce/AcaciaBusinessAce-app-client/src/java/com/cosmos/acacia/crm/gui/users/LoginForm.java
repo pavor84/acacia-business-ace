@@ -4,17 +4,33 @@
  * Created on 25 June 2008, 19:33
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.users;
 
+import com.cosmos.acacia.app.AcaciaSession;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.math.BigInteger;
 
-import javax.naming.InitialContext;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 
-import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
-import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.app.AppSession;
+import com.cosmos.acacia.crm.gui.users.UserUtils;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.swingb.DialogResponse;
+import java.awt.event.ActionListener;
+import java.io.Serializable;
+import java.util.Locale;
+import java.util.prefs.Preferences;
+import javax.security.auth.callback.CallbackHandler;
 
 /**
  *
@@ -22,10 +38,24 @@ import com.cosmos.acacia.crm.bl.users.UsersRemote;
  */
 public class LoginForm extends AcaciaPanel {
 
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String LOCALE = "locale";
+    
+    protected static Logger log = Logger.getLogger(LoginForm.class);
+
     /** Creates new form LoginForm */
     public LoginForm(BigInteger parentId) {
         super(parentId);
         initComponents();
+        initData();
+    }
+
+    /** Creates new form LoginForm */
+    public LoginForm() {
+        super((BigInteger) null);
+        initComponents();
+        initData();
     }
 
     /** This method is called from within the constructor to
@@ -39,7 +69,6 @@ public class LoginForm extends AcaciaPanel {
 
         usernameLabel = new com.cosmos.swingb.JBLabel();
         passwordLabel = new com.cosmos.swingb.JBLabel();
-        passwordTextField = new com.cosmos.swingb.JBTextField();
         usernameTextField = new com.cosmos.swingb.JBTextField();
         loginButton = new com.cosmos.swingb.JBButton();
         rememberMeCheckBox = new com.cosmos.swingb.JBCheckBox();
@@ -50,6 +79,7 @@ public class LoginForm extends AcaciaPanel {
         jSeparator2 = new javax.swing.JSeparator();
         localeComboBox = new com.cosmos.swingb.JBComboBox();
         localeLabel = new com.cosmos.swingb.JBLabel();
+        passwordTextField = new com.cosmos.swingb.JBPasswordField();
 
         setName("Form"); // NOI18N
 
@@ -59,9 +89,6 @@ public class LoginForm extends AcaciaPanel {
 
         passwordLabel.setText(resourceMap.getString("passwordLabel.text")); // NOI18N
         passwordLabel.setName("passwordLabel"); // NOI18N
-
-        passwordTextField.setText(resourceMap.getString("passwordTextField.text")); // NOI18N
-        passwordTextField.setName("passwordTextField"); // NOI18N
 
         usernameTextField.setText(resourceMap.getString("usernameTextField.text")); // NOI18N
         usernameTextField.setName("usernameTextField"); // NOI18N
@@ -95,6 +122,9 @@ public class LoginForm extends AcaciaPanel {
         localeLabel.setText(resourceMap.getString("localeLabel.text")); // NOI18N
         localeLabel.setName("localeLabel"); // NOI18N
 
+        passwordTextField.setText(resourceMap.getString("passwordTextField.text")); // NOI18N
+        passwordTextField.setName("passwordTextField"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,35 +132,35 @@ public class LoginForm extends AcaciaPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rememberMeCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(rememberPasswordCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                        .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(usernameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)))
+                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                            .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(localeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(localeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
+                        .addComponent(localeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(forgottenPasswordButton, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(forgottenPasswordButton, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(newRegistrationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)))
+                        .addComponent(newRegistrationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         layout.setVerticalGroup(
@@ -138,8 +168,8 @@ public class LoginForm extends AcaciaPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passwordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,8 +187,8 @@ public class LoginForm extends AcaciaPanel {
                     .addComponent(localeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(forgottenPasswordButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newRegistrationButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(newRegistrationButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forgottenPasswordButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -178,7 +208,7 @@ public class LoginForm extends AcaciaPanel {
     private com.cosmos.swingb.JBButton loginButton;
     private com.cosmos.swingb.JBButton newRegistrationButton;
     private com.cosmos.swingb.JBLabel passwordLabel;
-    private com.cosmos.swingb.JBTextField passwordTextField;
+    private com.cosmos.swingb.JBPasswordField passwordTextField;
     private com.cosmos.swingb.JBCheckBox rememberMeCheckBox;
     private com.cosmos.swingb.JBCheckBox rememberPasswordCheckBox;
     private com.cosmos.swingb.JBLabel usernameLabel;
@@ -187,22 +217,102 @@ public class LoginForm extends AcaciaPanel {
 
 
     private UsersRemote formSession;
-
+    private boolean passwordLoaded = false;
+    
     @Override
     protected void initData() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        localeComboBox.removeAllItems();
+        Locale[] locales = getFormSession().serveLocalesList();
+        for (Locale locale : locales) {
+            localeComboBox.addItem(locale);
+        }
+        
+        // Load the saved preferences for this machine
+        final Preferences prefs = Preferences.userRoot();
+        
+        localeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                prefs.put(LOCALE, ((Locale) localeComboBox.getSelectedItem()).getLanguage());
+            }
+        });
+        
+        String username = prefs.get(USERNAME, null);
+        if (username != null) {
+            rememberMeCheckBox.setSelected(true);
+            usernameTextField.setText(username);
+        }
+        
+        String password = prefs.get(PASSWORD, null);
+        if (password != null) {
+            rememberPasswordCheckBox.setSelected(true);
+            try {
+                log.info("password: " + password);
+                passwordTextField.setText(new String(getFormSession().decryptPassword(password)));
+            } catch (NullPointerException ex){
+                ex.printStackTrace();
+                prefs.remove(PASSWORD);
+            }
+            
+            passwordLoaded = true;
+        }   
+        
+        String locale = prefs.get(LOCALE, null);
+        if (locale != null)
+            localeComboBox.setSelectedItem(new Locale(locale));
+        
+        // preferences loaded
+        
+        AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
+        this.requestFocus();
     }
 
     @Action
     public void login() {
+        
+        Preferences prefs = Preferences.userRoot();
         String username = usernameTextField.getText();
-        String password = passwordTextField.getText();
+        if (rememberMeCheckBox.isSelected())
+            prefs.put(USERNAME, username);
+        else
+            prefs.remove(PASSWORD);
+        
+        char[] password = passwordTextField.getPassword();
+        
 
-        getFormSession().login(username, password);
+        if (rememberPasswordCheckBox.isSelected())
+            prefs.put(PASSWORD, getFormSession().encryptPassword(password));
+        else
+            prefs.remove(PASSWORD);
+        
+        try {
+            prefs.flush();
+        } catch (Exception ex) {
+            log.error("", ex);
+        }
+        
+        try {
+            User user = getFormSession().login(username, password);
+            AppSession.get().setValue(AcaciaSession.USER_KEY, user);
+            Organization organizationDataObject = getFormSession().getOrganization(user, new OrganizationChoiceHandler());
+            AppSession.get().setValue(AcaciaSession.ORGANIZATION_KEY, organizationDataObject);
+
+            setDialogResponse(DialogResponse.LOGIN);
+            close();
+        } catch (Exception ex) {
+            ValidationException ve = extractValidationException(ex);
+            if (ve != null) {
+                JOptionPane.showMessageDialog(this, getResourceMap().getString(ve.getMessage()));
+            } else {
+                log.error(ex);
+            }
+        }
     }
 
     @Action
     public void signup() {
+        RequestRegistrationForm reqRegForm = new RequestRegistrationForm();
+        reqRegForm.showDialog(this);
     }
 
     @Action
@@ -211,19 +321,25 @@ public class LoginForm extends AcaciaPanel {
 
     protected UsersRemote getFormSession()
     {
-        if(formSession == null)
-        {
+        if (formSession == null) {
             try
             {
                 formSession = getBean(UsersRemote.class);
+                UserUtils.updateUserLocale(formSession);
             }
             catch(Exception ex)
             {
                 ex.printStackTrace();
             }
         }
-
         return formSession;
     }
+}
 
+class OrganizationChoiceHandler implements CallbackHandler, Serializable {
+
+    @Override
+    public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        //callbacks[0
+    }
 }

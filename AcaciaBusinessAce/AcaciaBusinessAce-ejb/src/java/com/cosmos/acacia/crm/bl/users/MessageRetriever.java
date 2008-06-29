@@ -12,10 +12,14 @@ public class MessageRetriever {
     }
     
     public static String get(String key, Locale locale) {
-        if (locale == null)
-            return get(key);
-        
-        ResourceBundle bundle = ResourceBundle.getBundle("EmailMessages", locale);
-        return bundle.getString(key);
+        try {
+            if (locale == null)
+                return get(key);
+
+            ResourceBundle bundle = ResourceBundle.getBundle("EmailMessages", locale);
+            return bundle.getString(key);
+        } catch (Exception ex){
+            return "";
+        }
     }
 }

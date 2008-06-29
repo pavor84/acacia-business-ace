@@ -21,10 +21,10 @@ import java.math.BigInteger;
  */
 @Stateful
 public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLocal {
-    private static String ORGANIZATION_DATA_OBJECT_KEY = AcaciaSessionBean.class.getName()+"_ORGANIZATION_KEY"; 
-    
+
+
     Map<String, Object> values = new HashMap<String, Object>();
-    
+
     @Override
     public Object getValue(String name) {
         return
@@ -35,10 +35,10 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     public void setValue(String name, Object value) {
         values.put(name, value);
     }
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     /**
      * Temporal functionality to simulate Organization selection when login
      * @return DataObject which instance is {@link Organization} and has the
@@ -50,10 +50,10 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         List<Address> allAddresses =
             em.createQuery("select a from Address a where a.dataObject.parentDataObjectId is not null")
             .getResultList();
-        
+
         //add-hoc temporary logic, to consider the parent data object with most addresses
         Map<BigInteger, Long> addressesCount = new HashMap<BigInteger, Long>();
-        
+
         for(Address address : allAddresses)
         {
             BigInteger parentId;
@@ -69,7 +69,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                 addressesCount.put(parentId, curValue);
             }
         }
-        
+
         //find the one with most addresses
         Long biggestCount = new Long(0);
         BigInteger choosenId = null;
@@ -91,12 +91,12 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public void login(String user, String password) {
         DataObject loginOrganization = getDataObjectWithAddresses();
-        values.put(ORGANIZATION_DATA_OBJECT_KEY, loginOrganization);
+        values.put(AcaciaSession.ORGANIZATION_KEY, loginOrganization);
     }
 
     @Override
     public DataObject getLoginOrganizationDataObject() {
-        DataObject result = (DataObject) values.get(ORGANIZATION_DATA_OBJECT_KEY);
+        DataObject result = (DataObject) values.get(AcaciaSession.ORGANIZATION_KEY);
         return result;
     }
 
@@ -105,5 +105,5 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return em.find(DataObject.class, dataObjectId);
     }
 
-    
+
 }

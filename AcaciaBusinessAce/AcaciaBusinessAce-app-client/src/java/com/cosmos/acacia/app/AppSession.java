@@ -10,16 +10,16 @@ import java.math.BigInteger;
  * Created	:	19.05.2008
  * @author	Petar Milev
  * @version $Id: $
- * 
+ *
  * Singleton - wrapper of acacia session stateful bean
  */
 public final class AppSession
     implements AcaciaSession
 {
-    
+
     //lazy instantiation - at first request
     private static AppSession instance = null;
-    
+
     private AppSession()
     {
         try
@@ -31,7 +31,7 @@ public final class AppSession
             throw new IllegalStateException("Remote bean can't be loaded", ex);
         }
     }
-    
+
     private AcaciaSessionRemote acaciaSession;
 
     @Override
@@ -43,7 +43,7 @@ public final class AppSession
     public void setValue(String name, Object value) {
         acaciaSession.setValue(name, value);
     }
-    
+
     /**
      * Singleton access method. Lazy - the instance is instantiated at first request.
      * @return

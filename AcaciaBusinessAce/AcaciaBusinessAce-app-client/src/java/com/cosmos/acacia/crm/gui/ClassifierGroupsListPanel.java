@@ -45,6 +45,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
     protected void initData() {
 
         super.initData();
+        this.setVisible(Button.Classify, false);
         
         classifierGroupsBindingGroup = new BindingGroup();
         AcaciaTable classifierGroupsTable = getDataTable();

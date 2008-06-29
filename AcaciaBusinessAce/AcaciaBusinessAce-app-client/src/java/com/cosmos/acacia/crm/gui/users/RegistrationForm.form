@@ -37,16 +37,16 @@
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="usernameTextField" alignment="0" pref="299" max="32767" attributes="0"/>
-                          <Component id="passwordTextField" alignment="0" pref="299" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="organizationComboList" alignment="1" pref="299" max="32767" attributes="0"/>
-                                  <Component id="passwordTextField2" alignment="0" pref="299" max="32767" attributes="0"/>
                                   <Component id="branchComboList" alignment="1" pref="299" max="32767" attributes="0"/>
                                   <Component id="personComboList" alignment="1" pref="299" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="passwordTextField" alignment="0" pref="299" max="32767" attributes="0"/>
+                          <Component id="passwordTextField2" alignment="0" pref="299" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="personLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -131,20 +131,10 @@
         <Property name="name" type="java.lang.String" value="usernameTextField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="passwordTextField">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="passwordTextField" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="passwordLabel">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="passwordLabel.text"/>
         <Property name="name" type="java.lang.String" value="passwordLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="passwordTextField2">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="passwordTextField2" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="passwordLabel2">
@@ -171,6 +161,18 @@
         </Property>
         <Property name="text" type="java.lang.String" resourceKey="registerButton.text"/>
         <Property name="name" type="java.lang.String" value="registerButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBPasswordField" name="passwordTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="passwordTextField.text"/>
+        <Property name="name" type="java.lang.String" value="passwordTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBPasswordField" name="passwordTextField2">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="passwordTextField2.text"/>
+        <Property name="name" type="java.lang.String" value="passwordTextField2" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -4,6 +4,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.gui.users.LoginForm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,7 +34,6 @@ import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
 import com.birosoft.liquid.LiquidLookAndFeel;
-import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoriesTreePanel;
@@ -48,6 +48,7 @@ import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -64,18 +65,23 @@ import com.cosmos.swingb.JBToolBar;
 public class AcaciaApplicationView extends FrameView {
 
     protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
-    
+
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         setLookAndFeel();
         initComponents();
-               
-        autoLogin();
+        
+        getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        getFrame().requestFocus();
     }
 
 
-    private void autoLogin() {
-        AppSession.get().login("dummyuser","dummypassord");
+    public void login() {
+        LoginForm loginForm = new LoginForm();
+        DialogResponse response = loginForm.showDialog(AcaciaApplication.getApplication().getMainFrame());
+        if(!DialogResponse.LOGIN.equals(response)) {
+            AcaciaApplication.getApplication().exit();
+        }
     }
 
     private void setLookAndFeel(){
@@ -83,9 +89,9 @@ public class AcaciaApplicationView extends FrameView {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
             LiquidLookAndFeel.setShowTableGrids(false);
             LiquidLookAndFeel.setLiquidDecorations(true);
-            
+
             //tried to change the default JFrame icon (java cup), but no luck
-            
+
         } catch (ClassNotFoundException ex) {
             log.debug("Cannot get L&F library: " + ex.getMessage());
         } catch (InstantiationException ex) {
@@ -251,13 +257,13 @@ public class AcaciaApplicationView extends FrameView {
         ProductsListPanel productsListPanel = new ProductsListPanel(null);
         productsListPanel.showFrame();
     }
-    
+
     @Action
     public void warehouseListAction(){
         WarehouseListPanel listPanel = new WarehouseListPanel(null);
         listPanel.showFrame();
     }
-    
+
     @Action
     public void warehouseProductListAction(){
         WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
@@ -311,9 +317,9 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void assemblingSchemasAction()
     {
-    	log.debug("personsListAction");
-    	AssemblingSchemasListPanel assemblingSchemas = new AssemblingSchemasListPanel(null);
-    	assemblingSchemas.showFrame();
+        log.debug("personsListAction");
+        AssemblingSchemasListPanel assemblingSchemas = new AssemblingSchemasListPanel(null);
+        assemblingSchemas.showFrame();
     }
 
     @Action
@@ -328,45 +334,45 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void personsListAction(){
-    	log.debug("personsListAction");
-    	PersonsListPanel personsListPanel = new PersonsListPanel(null);
-    	personsListPanel.showFrame();
+        log.debug("personsListAction");
+        PersonsListPanel personsListPanel = new PersonsListPanel(null);
+        personsListPanel.showFrame();
     }
 
     @Action
     public void organizationsListAction(){
-    	log.debug("organizationsListAction");
-    	OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(null);
-    	organizationsListPanel.showFrame();
+        log.debug("organizationsListAction");
+        OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(null);
+        organizationsListPanel.showFrame();
     }
-     
+
     @Action
     public void organizationPositionTypesListAction(){
-    	log.debug("organizationPositionTypesListAction");
-    	PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class);
-    	positionTypesListPanel.showFrame();
+        log.debug("organizationPositionTypesListAction");
+        PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class);
+        positionTypesListPanel.showFrame();
     }
-    
+
     @Action
     public void personPositionTypesListAction(){
-    	log.debug("personPositionTypesListAction");
-    	PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class);
-    	positionTypesListPanel.showFrame();
+        log.debug("personPositionTypesListAction");
+        PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class);
+        positionTypesListPanel.showFrame();
     }
-        
+
     @Action
     public void citiesListAction(){
-    	log.debug("citiesList");
-    	CitiesListPanel citiesListPanel = new CitiesListPanel();
-    	citiesListPanel.showFrame();
+        log.debug("citiesList");
+        CitiesListPanel citiesListPanel = new CitiesListPanel();
+        citiesListPanel.showFrame();
     }
-     
-          
+
+
     @Action
     public void countriesListAction(){
-    	log.debug("cointriesList");
-    	CountriesListPanel countriesListPanel = new CountriesListPanel();
-    	countriesListPanel.showFrame();
+        log.debug("cointriesList");
+        CountriesListPanel countriesListPanel = new CountriesListPanel();
+        countriesListPanel.showFrame();
     }
 
     @Action
@@ -382,14 +388,14 @@ public class AcaciaApplicationView extends FrameView {
         ClassifiersListPanel classifiers = new ClassifiersListPanel(null, null);
         classifiers.showFrame();
     }
-        
+
     @Action
     public void invoicesListAction() {
         System.out.println("invoicesListAction");
         InvoicesListPanel invoicesListPanel = new InvoicesListPanel(null);
         invoicesListPanel.showFrame();
     }
-    
+
     private ActionMap getActionMap()
     {
         return getContext().getActionMap(this);
@@ -416,7 +422,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu reportsMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
-        
+
         /* Contact book menu items */
         JBMenu contactBook = new JBMenu();
         JBMenuItem personsListMenuItem = new JBMenuItem();
@@ -426,9 +432,9 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem citiesListMenuItem = new JBMenuItem();
         JBMenuItem countriesListMenuItem = new JBMenuItem();
         /* End of contact book menu items */
-        
+
         JBMenu classifiersMenu = new JBMenu();
-        
+
         JBMenuItem patternMasksItem = new JBMenuItem();
         JBMenuItem invoicesListItem = new JBMenuItem();
         JBMenu warehousesMenu = new JBMenu();
@@ -442,7 +448,7 @@ public class AcaciaApplicationView extends FrameView {
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
         fileMenu.setMnemonic('F');
-        
+
         //javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(AcaciaApplicationView.class, this);
         ActionMap actionMap = getActionMap();
         newRecordMenuItem.setAction(actionMap.get("newRecord")); // NOI18N
@@ -502,7 +508,7 @@ public class AcaciaApplicationView extends FrameView {
         productsMenu.setText(resourceMap.getString("productsMenu.text")); // NOI18N
         productsMenu.setName("productsMenu"); // NOI18N
         productsMenu.setMnemonic('P');
-        
+
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productsListAction")); // NOI18N
         productsMenu.add(menuItem);
@@ -510,15 +516,15 @@ public class AcaciaApplicationView extends FrameView {
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
         productsMenu.add(menuItem);
-    
+
         menuBar.add(productsMenu);
-        
+
         Separator productSeparator1 = new Separator();
         productsMenu.add(productSeparator1);
-                
+
         patternMasksItem.setAction(actionMap.get("patternMaskListAction"));
         productsMenu.add(patternMasksItem);
-        
+
         menuBar.add(productsMenu);
 
 
@@ -547,7 +553,7 @@ public class AcaciaApplicationView extends FrameView {
         menuBar.add(assemblingMenu);
 
         /* Classifiers menu item */
-        
+
         classifiersMenu.setName("classifiersMenu");
         classifiersMenu.setText(resourceMap.getString("classifiersMenu.text"));
 
@@ -560,13 +566,13 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setAction(actionMap.get("classifierGroupsAction"));
         menuItem.setName("classifierGroupsMenuItem");
         classifiersMenu.add(menuItem);
-        
+
         menuBar.add(classifiersMenu);
-        
+
         /* End of classifiers menu item */
-        
+
         /* Contact book menu items */
-        
+
         contactBook.setName("contactBookMenu");
         contactBook.setText(resourceMap.getString("contactBookMenu.text"));
         contactBook.setMnemonic('C');
@@ -575,32 +581,32 @@ public class AcaciaApplicationView extends FrameView {
         contactBook.add(personsListMenuItem);
         personPositionTypesListMenuItem.setAction(actionMap.get("personPositionTypesListAction"));
         contactBook.add(personPositionTypesListMenuItem);
-        
+
         Separator contactBookSeparator1 = new Separator();
         contactBook.add(contactBookSeparator1);
-        
+
         organizationsListMenuItem.setAction(actionMap.get("organizationsListAction"));
         contactBook.add(organizationsListMenuItem);
         organizationPositionTypesListMenuItem.setAction(actionMap.get("organizationPositionTypesListAction"));
         contactBook.add(organizationPositionTypesListMenuItem);
-        
+
         Separator contactBookSeparator2 = new Separator();
         contactBook.add(contactBookSeparator2);
-        
+
         citiesListMenuItem.setAction(actionMap.get("citiesListAction"));
         contactBook.add(citiesListMenuItem);
         countriesListMenuItem.setAction(actionMap.get("countriesListAction"));
         contactBook.add(countriesListMenuItem);
-        
+
         menuBar.add(contactBook);
-                
+
         /* End of contact book menu items */
-         
+
         /* Warehouse menu items */
         warehousesMenu.setName("warehousesMenu"); // NOI18N
         warehousesMenu.setText(resourceMap.getString("warehousesMenu.text")); // NOI18N
         warehousesMenu.setMnemonic('W');
-        
+
         warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
         warehousesMenu.add(warehousesItem);
         //warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
@@ -618,18 +624,18 @@ public class AcaciaApplicationView extends FrameView {
 
         menuBar.add(warehousesMenu);
         /* End of Warehouse menu items */
-        
+
         /* Help Menu */
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
         helpMenu.setMnemonic('H');
-        
+
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
          /* End of Help Menu */
-        
+
         return menuBar;
     }
 
@@ -637,8 +643,8 @@ public class AcaciaApplicationView extends FrameView {
     private JBToolBar createToolBar()
     {
         JBToolBar toolBar = new JBToolBar();
-        toolBar.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));                
-        
+        toolBar.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
+
         if(GeneralSettings.isDebug()){
             ActionMap actionMap = getActionMap();
             for(Object key : actionMap.allKeys())
@@ -649,31 +655,31 @@ public class AcaciaApplicationView extends FrameView {
 
             return toolBar;
         }
-           
+
         //toolBar.setBorder(border);
         ActionMap actionMap = getActionMap();
-                
+
         JButton productsImageButton = new JButton(actionMap.get("productsListAction"));
         productsImageButton.setText("");
         toolBar.add(productsImageButton);
-        
+
         javax.swing.Action warehousesListAction = actionMap.get("warehouseListAction");
         JButton warehousesImageButton = new JButton(warehousesListAction);
         warehousesImageButton.setText("");
         toolBar.add(warehousesImageButton);
-        
+
         JButton personsImageButton = new JButton(actionMap.get("personsListAction"));
         personsImageButton.setText("");
         toolBar.add(personsImageButton);
-         
+
         JButton citiesImageButton = new JButton(actionMap.get("citiesListAction"));
         citiesImageButton.setText("");
         toolBar.add(citiesImageButton);
-              
+
         JButton countriesImageButton = new JButton(actionMap.get("countriesListAction"));
         countriesImageButton.setText("");
         toolBar.add(countriesImageButton);
-                
+
         return toolBar;
     }
 
@@ -736,12 +742,12 @@ public class AcaciaApplicationView extends FrameView {
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-	messageTimer = new Timer(messageTimeout, new ActionListener() {
+    messageTimer = new Timer(messageTimeout, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
             }
         });
-	messageTimer.setRepeats(false);
+    messageTimer.setRepeats(false);
         int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
         for (int i = 0; i < busyIcons.length; i++) {
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");

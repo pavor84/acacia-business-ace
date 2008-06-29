@@ -45,8 +45,8 @@ import com.cosmos.acacia.annotation.Property;
                     query = "select u from User u where u.emailAddress=:email"
             ),
             @NamedQuery(
-                    name = "User.findByUsername",
-                    query = "select u from User u where u.userName=:username"
+                    name = "User.findByUserName",
+                    query = "select u from User u where u.userName=:userName"
             )
         }
 )
@@ -72,7 +72,7 @@ public class User extends DataObjectBean implements Serializable {
     private String emailAddress;
 
     @Column(name = "user_password", nullable = false)
-    @Property(title="Password", visible=false, hidden=true)
+    @Property(title="Password", visible=false)
     private String userPassword;
 
     @Column(name = "system_password")
@@ -102,63 +102,46 @@ public class User extends DataObjectBean implements Serializable {
     private String description;
 
     @Column(name = "small_image_uri")
+    @Property(title="Small image uri")
     private String smallImageUri;
 
     @Lob
     @Column(name = "small_image")
+    @Property(title="Small image")
     private byte[] smallImage;
 
     @Column(name = "medium_image_uri")
+    @Property(title="Medium image uri")
     private String mediumImageUri;
 
     @Lob
     @Column(name = "medium_image")
+    @Property(title="Medium image")
     private byte[] mediumImage;
 
     @Column(name = "user_uri")
+    @Property(title="User uri")
     private String userUri;
 
     @Column(name = "next_action_after_login")
+    @Property(title="Next action after login")
     private String nextActionAfterLogin;
 
     @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
     @ManyToOne
+    @Property(title="Person")
     private Person person;
 
     @JoinColumn(name = "creator_id", referencedColumnName = "user_id")
     @ManyToOne
+    @Property(title="Creator")
     private User creator;
 
     @JoinColumn(name = "user_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
+    @Property(title="Data Object")
     private DataObject dataObject;
-
-    /**
-     * Used to store the chosen organization during registration; persisted manually
-     */
-    private Organization organization;
-
-    /**
-     * Used to store the chosen branch during registration; persisted manually
-     */
-    private Address branch;
-
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
-    public Address getBranch() {
-        return branch;
-    }
-
-    public void setBranch(Address branch) {
-        this.branch = branch;
-    }
-
+   
     public User() {
     }
 
@@ -370,7 +353,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Override
     public BigInteger getParentId() {
-       return dataObject.getDataObjectId();
+       return null;
     }
 
     @Override

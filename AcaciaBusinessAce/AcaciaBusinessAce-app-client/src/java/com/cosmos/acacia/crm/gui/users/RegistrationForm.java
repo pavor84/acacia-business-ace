@@ -4,24 +4,29 @@
  * Created on 25 June 2008, 20:46
  */
 
-package com.cosmos.acacia.crm.gui;
+package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Organization;
-import java.awt.event.ItemEvent;
+
+import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
+import com.cosmos.acacia.crm.gui.users.UserUtils;
+import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -29,12 +34,19 @@ import java.awt.event.ItemListener;
  */
 public class RegistrationForm extends BaseEntityPanel {
 
-    
+
     /** Creates new form RegistrationForm */
     public RegistrationForm(String email) {
         super(null);
         this.email = email;
         init();
+    }
+
+    @Override
+    protected void init()
+    {
+        initComponents();
+        super.init();
     }
 
     /** This method is called from within the constructor to
@@ -52,13 +64,13 @@ public class RegistrationForm extends BaseEntityPanel {
         branchLabel = new com.cosmos.swingb.JBLabel();
         usernameLabel = new com.cosmos.swingb.JBLabel();
         usernameTextField = new com.cosmos.swingb.JBTextField();
-        passwordTextField = new com.cosmos.swingb.JBTextField();
         passwordLabel = new com.cosmos.swingb.JBLabel();
-        passwordTextField2 = new com.cosmos.swingb.JBTextField();
         passwordLabel2 = new com.cosmos.swingb.JBLabel();
         personLabel = new com.cosmos.swingb.JBLabel();
         personComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         registerButton = new com.cosmos.swingb.JBButton();
+        passwordTextField = new com.cosmos.swingb.JBPasswordField();
+        passwordTextField2 = new com.cosmos.swingb.JBPasswordField();
 
         setName("Form"); // NOI18N
 
@@ -79,12 +91,8 @@ public class RegistrationForm extends BaseEntityPanel {
         usernameTextField.setText(resourceMap.getString("usernameTextField.text")); // NOI18N
         usernameTextField.setName("usernameTextField"); // NOI18N
 
-        passwordTextField.setName("passwordTextField"); // NOI18N
-
         passwordLabel.setText(resourceMap.getString("passwordLabel.text")); // NOI18N
         passwordLabel.setName("passwordLabel"); // NOI18N
-
-        passwordTextField2.setName("passwordTextField2"); // NOI18N
 
         passwordLabel2.setText(resourceMap.getString("passwordLabel2.text")); // NOI18N
         passwordLabel2.setName("passwordLabel2"); // NOI18N
@@ -98,6 +106,12 @@ public class RegistrationForm extends BaseEntityPanel {
         registerButton.setAction(actionMap.get("register")); // NOI18N
         registerButton.setText(resourceMap.getString("registerButton.text")); // NOI18N
         registerButton.setName("registerButton"); // NOI18N
+
+        passwordTextField.setText(resourceMap.getString("passwordTextField.text")); // NOI18N
+        passwordTextField.setName("passwordTextField"); // NOI18N
+
+        passwordTextField2.setText(resourceMap.getString("passwordTextField2.text")); // NOI18N
+        passwordTextField2.setName("passwordTextField2"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -119,14 +133,14 @@ public class RegistrationForm extends BaseEntityPanel {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(organizationComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                                    .addComponent(passwordTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                                     .addComponent(branchComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                                    .addComponent(personComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)))))
+                                    .addComponent(personComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)))
+                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                            .addComponent(passwordTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)))
                     .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(registerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -164,10 +178,6 @@ public class RegistrationForm extends BaseEntityPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    @Action
-    public void register() {
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboList branchComboList;
     private com.cosmos.swingb.JBLabel branchLabel;
@@ -175,8 +185,8 @@ public class RegistrationForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel organizationLabel;
     private com.cosmos.swingb.JBLabel passwordLabel;
     private com.cosmos.swingb.JBLabel passwordLabel2;
-    private com.cosmos.swingb.JBTextField passwordTextField;
-    private com.cosmos.swingb.JBTextField passwordTextField2;
+    private com.cosmos.swingb.JBPasswordField passwordTextField;
+    private com.cosmos.swingb.JBPasswordField passwordTextField2;
     private com.cosmos.acacia.gui.AcaciaComboList personComboList;
     private com.cosmos.swingb.JBLabel personLabel;
     private com.cosmos.swingb.JBButton registerButton;
@@ -188,41 +198,48 @@ public class RegistrationForm extends BaseEntityPanel {
     private User user;
     private UsersRemote formSession;
     private String email;
-    
+
     @Override
     protected void initData() {
+       setResizable(false);
+
        if (user == null)
            user = getFormSession().createUser();
 
+       userBindingGroup = new BindingGroup();
+
        // Setting the email address to the verified one from the code-verification step
        user.setEmailAddress(email);
-       
-       EntityProperties entityProprs = getFormSession().getUserEntityProperties();
-       usernameTextField.bind(userBindingGroup, user, entityProprs.getPropertyDetails("userName"));
-       passwordTextField.bind(userBindingGroup, user, entityProprs.getPropertyDetails("password"));
+
+       EntityProperties entityProps = getFormSession().getUserEntityProperties();
+       usernameTextField.bind(userBindingGroup, user, entityProps.getPropertyDetails("userName"));
+       passwordTextField.bind(userBindingGroup, user, entityProps.getPropertyDetails("userPassword"));
 
        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
        organizationComboList.initUnbound(organizationsTable);
-       
-       organizationComboList.addItemListener(new ItemListener() {
+
+       organizationComboList.addActionListener(new ActionListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
-                Organization organization = (Organization) e.getItem();
+            public void actionPerformed(ActionEvent e) {
+                log.info("cmd: " + e.getActionCommand());
+                log.info("mdf: " + e.getModifiers());   
+                Organization organization = (Organization) organizationComboList.getSelectedItem();
                 if (organization == null) {
                     branchComboList.getComboBox().removeAllItems();
                     branchComboList.setEnabled(false);
                     return;
                 }
-                    
+
                 branchComboList.setEnabled(true);
-                AddressListPanel branchesTable = new AddressListPanel(organization);
+                AddressListPanel branchesTable = new AddressListPanel(organization.getId());
+                branchesTable.setVisible(Button.New, false);
                 branchComboList.initUnbound(branchesTable);
-                
-                branchComboList.addItemListener(new ItemListener() {
+
+                branchComboList.addActionListener(new ActionListener() {
                     @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        Address branch = (Address) e.getItem();
-                        
+                    public void actionPerformed(ActionEvent e) {
+                        Address branch = (Address) branchComboList.getSelectedItem();
+
                         if (branch == null) {
                             personComboList.getComboBox().removeAllItems();
                             personComboList.setEnabled(false);
@@ -232,29 +249,51 @@ public class RegistrationForm extends BaseEntityPanel {
                         ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
                         personComboList.initUnbound(personsTable);
                     }
-                    
+
                 });
             }
        });
-       
+
        branchComboList.setEnabled(false);
        personComboList.setEnabled(false);
-       
+
        userBindingGroup.bind();
     }
 
-    private UsersRemote getFormSession() {
-         if(formSession == null)
-         {
+    @Action
+    public void register() {
+        try {        
+            if (user.getUserPassword().equals(new String(passwordTextField2.getPassword()))) {
+                if (personComboList.getSelectedItem() != null)
+                    user.setPerson(((ContactPerson) personComboList.getSelectedItem()).getContact());
+
+                getFormSession().signup(user,
+                        (Organization) organizationComboList.getSelectedItem(),
+                        (Address) branchComboList.getSelectedItem());
+
+                JOptionPane.showMessageDialog(this, getResourceMap().getString("signup.successful"));
+                this.close();
+            } else {
+                JOptionPane.showMessageDialog(this, getResourceMap().getString("passwords.inconsistent"));
+            }
+        } catch (Exception ex){
+            checkForValidationException(ex);
+        }
+    }
+
+    protected UsersRemote getFormSession() {
+        if (formSession == null) 
+        {
              try
              {
                  formSession = getBean(UsersRemote.class);
+                 UserUtils.updateUserLocale(formSession);
              }
              catch(Exception ex)
              {
                  ex.printStackTrace();
              }
-         }
+        }
 
          return formSession;
     }

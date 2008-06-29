@@ -19,45 +19,45 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jSeparator1" alignment="0" pref="310" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="328" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rememberMeCheckBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="rememberPasswordCheckBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="loginButton" pref="84" max="32767" attributes="0"/>
+                      <Component id="loginButton" pref="102" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="passwordLabel" max="32767" attributes="1"/>
-                          <Component id="usernameLabel" alignment="0" min="-2" pref="58" max="-2" attributes="1"/>
+                          <Component id="usernameLabel" max="32767" attributes="1"/>
+                          <Component id="passwordLabel" alignment="0" pref="69" max="32767" attributes="1"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="usernameTextField" pref="248" max="32767" attributes="1"/>
-                          <Component id="passwordTextField" alignment="0" pref="248" max="32767" attributes="1"/>
+                          <Component id="passwordTextField" pref="255" max="32767" attributes="0"/>
+                          <Component id="usernameTextField" alignment="0" pref="255" max="32767" attributes="2"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="1">
                       <Component id="localeLabel" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="localeComboBox" pref="247" max="32767" attributes="1"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Component id="localeComboBox" pref="265" max="32767" attributes="2"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="forgottenPasswordButton" min="-2" pref="151" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="newRegistrationButton" pref="153" max="32767" attributes="1"/>
+                      <Component id="forgottenPasswordButton" pref="161" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="newRegistrationButton" pref="161" max="32767" attributes="2"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jSeparator2" pref="310" max="32767" attributes="0"/>
+                  <Component id="jSeparator2" pref="328" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -68,8 +68,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="usernameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -91,8 +91,8 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="forgottenPasswordButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="newRegistrationButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="forgottenPasswordButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -117,12 +117,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="passwordLabel.text"/>
         <Property name="name" type="java.lang.String" value="passwordLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="passwordTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="passwordTextField.text"/>
-        <Property name="name" type="java.lang.String" value="passwordTextField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBTextField" name="usernameTextField">
@@ -197,6 +191,12 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="localeLabel.text"/>
         <Property name="name" type="java.lang.String" value="localeLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBPasswordField" name="passwordTextField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="passwordTextField.text"/>
+        <Property name="name" type="java.lang.String" value="passwordTextField" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

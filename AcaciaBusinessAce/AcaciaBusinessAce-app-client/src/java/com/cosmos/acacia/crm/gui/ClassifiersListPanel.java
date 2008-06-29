@@ -61,10 +61,12 @@ public class ClassifiersListPanel extends AbstractTablePanel {
 
         super.initData();
         setVisible(Button.Select, false);
+        setVisible(Button.Classify, false);
 
     }
 
     protected void postInitData() {
+        
         classifiersBindingGroup = new BindingGroup();
         AcaciaTable classifiersTable = getDataTable();
         JTableBinding tableBinding = classifiersTable.bind(classifiersBindingGroup, getClassifiers(), getClassifierEntityProperties());
