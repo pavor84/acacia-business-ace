@@ -521,9 +521,12 @@ public class JBComboList
         List data = new ArrayList(selectableListDialog.getListData());
         observableData = ObservableCollections.observableList(data);
 
+        comboBox.removeAllItems();
+        
         for (Object obj : observableData) {
             comboBox.addItem(obj);
         }
+        comboBox.setSelectedIndex(-1);
     }
     
     public void initUnbound(SelectableListDialog selectableListDialog) {
