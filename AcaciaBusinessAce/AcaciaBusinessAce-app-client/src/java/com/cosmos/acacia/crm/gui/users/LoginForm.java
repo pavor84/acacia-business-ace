@@ -13,7 +13,6 @@ import java.math.BigInteger;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
@@ -21,12 +20,12 @@ import org.jdesktop.application.Action;
 import com.cosmos.acacia.app.AppSession;
 import com.cosmos.acacia.crm.gui.users.UserUtils;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.prefs.Preferences;
@@ -41,7 +40,7 @@ public class LoginForm extends AcaciaPanel {
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String LOCALE = "locale";
-    
+
     protected static Logger log = Logger.getLogger(LoginForm.class);
 
     /** Creates new form LoginForm */
@@ -217,96 +216,101 @@ public class LoginForm extends AcaciaPanel {
 
 
     private UsersRemote formSession;
-    private boolean passwordLoaded = false;
-    
+    private int dummyCharsAdded = 0;
     @Override
     protected void initData() {
+        //loginButton.isDefaultButton();
         localeComboBox.removeAllItems();
         Locale[] locales = getFormSession().serveLocalesList();
-        for (Locale locale : locales) {
-            localeComboBox.addItem(locale);
+        if (locales != null) {
+            for (Locale locale : locales) {
+                localeComboBox.addItem(locale);
+            }
         }
-        
+
         // Load the saved preferences for this machine
         final Preferences prefs = Preferences.userRoot();
-        
+
         localeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 prefs.put(LOCALE, ((Locale) localeComboBox.getSelectedItem()).getLanguage());
             }
         });
-        
+
         String username = prefs.get(USERNAME, null);
         if (username != null) {
             rememberMeCheckBox.setSelected(true);
             usernameTextField.setText(username);
         }
-        
+
         String password = prefs.get(PASSWORD, null);
         if (password != null) {
             rememberPasswordCheckBox.setSelected(true);
             try {
-                log.info("password: " + password);
-                passwordTextField.setText(new String(getFormSession().decryptPassword(password)));
+                passwordTextField.setText(maskPassword(new String(getFormSession().decryptPassword(password))));
             } catch (NullPointerException ex){
                 ex.printStackTrace();
                 prefs.remove(PASSWORD);
             }
-            
-            passwordLoaded = true;
-        }   
+        }
+        
+        passwordTextField.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                dummyCharsAdded = 0;
+            }
+        });
         
         String locale = prefs.get(LOCALE, null);
         if (locale != null)
             localeComboBox.setSelectedItem(new Locale(locale));
-        
+
         // preferences loaded
-        
+
         AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
         this.requestFocus();
     }
 
     @Action
     public void login() {
-        
+
         Preferences prefs = Preferences.userRoot();
         String username = usernameTextField.getText();
         if (rememberMeCheckBox.isSelected())
             prefs.put(USERNAME, username);
         else
             prefs.remove(PASSWORD);
-        
-        char[] password = passwordTextField.getPassword();
-        
 
-        if (rememberPasswordCheckBox.isSelected())
-            prefs.put(PASSWORD, getFormSession().encryptPassword(password));
-        else
+        char[] password = passwordTextField.getPassword();
+
+        if (rememberPasswordCheckBox.isSelected()) {
+            String encryptedPassword = getFormSession().encryptPassword(password);
+            prefs.put(PASSWORD, encryptedPassword);
+        } else
             prefs.remove(PASSWORD);
-        
+
         try {
             prefs.flush();
         } catch (Exception ex) {
             log.error("", ex);
         }
+
+        User user = getFormSession().login(username, unmaskPassword(new String(password)).toCharArray());
         
-        try {
-            User user = getFormSession().login(username, password);
-            AppSession.get().setValue(AcaciaSession.USER_KEY, user);
-            Organization organizationDataObject = getFormSession().getOrganization(user, new OrganizationChoiceHandler());
-            AppSession.get().setValue(AcaciaSession.ORGANIZATION_KEY, organizationDataObject);
+        if (!exceptionOccurred) {
+            getFormSession().updateOrganization(user, new OrganizationChoiceHandler());
+            //Organization organizationDataObject =
+
+            log.info(AppSession.get().getValue(AcaciaSession.USER_KEY));
+            log.info(AppSession.get().getValue(AcaciaSession.ORGANIZATION_KEY));
 
             setDialogResponse(DialogResponse.LOGIN);
             close();
-        } catch (Exception ex) {
-            ValidationException ve = extractValidationException(ex);
-            if (ve != null) {
-                JOptionPane.showMessageDialog(this, getResourceMap().getString(ve.getMessage()));
-            } else {
-                log.error(ex);
-            }
+        } else {
+            exceptionOccurred = false;
         }
+            
     }
 
     @Action
@@ -318,7 +322,28 @@ public class LoginForm extends AcaciaPanel {
     @Action
     public void remindPassword() {
     }
-
+    
+    private static final int SHOW_CHARS = 32;
+    private String maskPassword(String password) {
+        if (password == null || password.length() == 0)
+            return password;
+        
+        String maskedPassword = new String(password);
+        dummyCharsAdded = 32 - password.length();
+        for (int i = 0; i < dummyCharsAdded; i ++) {
+            maskedPassword += "a";
+        }
+        return maskedPassword;
+    }
+    
+    private String unmaskPassword(String maskedPassword) {
+        if (dummyCharsAdded == 0)
+            return maskedPassword;
+        
+        String password = maskedPassword.substring(0, SHOW_CHARS - dummyCharsAdded);
+        return password;
+    }
+    
     protected UsersRemote getFormSession()
     {
         if (formSession == null) {

@@ -1,10 +1,13 @@
 package com.cosmos.acacia.app;
 
+import java.math.BigInteger;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.cosmos.acacia.crm.data.DataObject;
-import java.math.BigInteger;
+import com.cosmos.acacia.crm.data.User;
+import java.io.Serializable;
 
 /**
  * Created	:	19.05.2008
@@ -14,17 +17,19 @@ import java.math.BigInteger;
  * Singleton - wrapper of acacia session stateful bean
  */
 public final class AppSession
-    implements AcaciaSession
+    implements AcaciaSession, Serializable
 {
 
     //lazy instantiation - at first request
     private static AppSession instance = null;
+    private Integer sessionId;
 
     private AppSession()
     {
         try
         {
             acaciaSession = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
+            sessionId = acaciaSession.generateSessionId();
         }
         catch(NamingException ex)
         {
@@ -53,11 +58,25 @@ public final class AppSession
         if(instance == null)
         {
             instance = new AppSession();
+            instance.init();
         }
 
         return instance;
     }
 
+    private void init() {
+        try {
+            SessionFacadeRemote facade = InitialContext.doLookup(SessionFacadeRemote.class.getName());
+            facade.addSession(getSessionId(), this);
+        } catch (NamingException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public Integer getSessionId(){
+        return sessionId;
+    }
+    
     public void login(String user, String password)
     {
         acaciaSession.login(user, password);

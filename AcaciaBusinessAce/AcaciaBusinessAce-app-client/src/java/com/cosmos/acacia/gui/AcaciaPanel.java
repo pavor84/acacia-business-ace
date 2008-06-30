@@ -5,20 +5,10 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.app.AcaciaSession;
-import com.cosmos.acacia.app.AppSession;
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.acacia.crm.validation.ValidationException;
-import com.cosmos.acacia.crm.validation.ValidationMessage;
-import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTable;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.math.BigInteger;
@@ -27,9 +17,23 @@ import java.rmi.ServerException;
 
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
 import org.apache.log4j.Logger;
+
+import com.cosmos.acacia.app.AcaciaSession;
+import com.cosmos.acacia.app.AppSession;
+import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTable;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,7 +47,7 @@ public abstract class AcaciaPanel
 
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
-
+    protected boolean exceptionOccurred = false;
 
     AcaciaPanel()
     {
@@ -144,8 +148,10 @@ public abstract class AcaciaPanel
                 e = e.getCause();
             }
             else if(e instanceof EJBException)
+            {
                 e = ((EJBException)e).getCausedByException();
-            else
+                log.info(e);
+            } else
                 break;
         }
 
@@ -155,7 +161,7 @@ public abstract class AcaciaPanel
     protected ValidationException extractValidationException(Exception ex) {
         return extractValidationException((Throwable) ex);
     }
-     
+
     /**
      * Iterate over all validation messages and compose one string - message per line.
      * @param ve
@@ -207,29 +213,35 @@ public abstract class AcaciaPanel
      class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
         private E bean;
+        private SessionFacadeRemote sessionFacade;
 
         public RemoteBeanInvocationHandler(E bean) {
             this.bean = bean;
+            try {
+                sessionFacade = InitialContext.doLookup(SessionFacadeRemote.class.getName());
+            } catch (NamingException ex){
+                log.error("", ex);
+            }
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws ValidationException {
-
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             AcaciaSession session = AppSession.get();
-
             log.info("Method called: " + method.getName() + " on bean: " + bean);
-
             try {
-                return method.invoke(bean, args);
-            } catch (Exception ex) {
-                ValidationException vex = extractValidationException(((InvocationTargetException) ex).getCause());
-                if (vex != null) {
-                    throw vex;
+                return sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AppSession.get().getSessionId());
+            } catch (Throwable ex) {
+                exceptionOccurred = true;
+                if (AcaciaPanel.this instanceof BaseEntityPanel || AcaciaPanel.this instanceof AbstractTablePanel)
+                    throw ex;
+
+                ValidationException ve = extractValidationException(ex);
+                if (ve != null) {
+                    JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
                 } else {
-                    ex.printStackTrace();
-                    throw new RuntimeException(ex);
+                    log.error(ex);
                 }
-                    
+                return null;
             }
         }
     }

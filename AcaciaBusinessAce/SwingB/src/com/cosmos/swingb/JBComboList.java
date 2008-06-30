@@ -5,8 +5,6 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.beansbinding.validation.BaseValidator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,10 +16,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ComboBoxModel;
+
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
-import javax.swing.event.ListDataListener;
+
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
@@ -44,6 +42,10 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
+
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.validation.BaseValidator;
+import com.cosmos.swingb.listeners.ComboListEventListener;
 
 /**
  *
@@ -276,7 +278,7 @@ public class JBComboList
 
     public void addItemListener(ItemListener listener)
     {
-        comboBox.addItemListener(listener);
+        comboBox.addItemListener(new ComboListEventListener(listener));
     }
 
     public void removeItemListener(ItemListener listener)
@@ -453,14 +455,14 @@ public class JBComboList
         Color color = getResourceMap().getColor("validation.field.invalid.background");
         comboBox.getEditor().getEditorComponent().setBackground(color);
     }
-    
+
     public void setStyleValid()
     {
         comboBox.setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.valid.background");
         comboBox.getEditor().getEditorComponent().setBackground(color);
     }
-    
+
     public void setStyleNormal()
     {
         comboBox.setToolTipText(null);
@@ -503,11 +505,11 @@ public class JBComboList
                     selectedItem,
                     ItemEvent.DESELECTED + 0x700);
 
-	    fireItemStateChanged(event);
+            fireItemStateChanged(event);
         }
     }
-    
-    
+
+
     public void initUnbound(
             SelectableListDialog selectableListDialog,
             ObjectToStringConverter converter)
@@ -515,20 +517,20 @@ public class JBComboList
         if(converter == null)
             converter = new BeanResourceToStringConverter(getApplication());
         AutoCompleteDecorator.decorate(comboBox, converter);
-        
+
         this.selectableListDialog = selectableListDialog;
 
         List data = new ArrayList(selectableListDialog.getListData());
         observableData = ObservableCollections.observableList(data);
 
         comboBox.removeAllItems();
-        
+
         for (Object obj : observableData) {
             comboBox.addItem(obj);
         }
         comboBox.setSelectedIndex(-1);
     }
-    
+
     public void initUnbound(SelectableListDialog selectableListDialog) {
         initUnbound(selectableListDialog, null);
     }

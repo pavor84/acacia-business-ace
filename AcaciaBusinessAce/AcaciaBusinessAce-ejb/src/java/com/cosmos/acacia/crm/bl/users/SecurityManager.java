@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.users;
 
+import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
  *
  * @author Bozhidar Bozhanov
  */
-public class SecurityManager {
+public class SecurityManager implements Serializable {
 
     protected static Logger log = Logger.getLogger(SecurityManager.class);
     

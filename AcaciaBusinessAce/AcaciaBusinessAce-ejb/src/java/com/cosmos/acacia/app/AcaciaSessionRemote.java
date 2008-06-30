@@ -19,4 +19,6 @@ public interface AcaciaSessionRemote extends AcaciaSession {
     DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(BigInteger dataObjectId);
+    
+    Integer generateSessionId();
 }

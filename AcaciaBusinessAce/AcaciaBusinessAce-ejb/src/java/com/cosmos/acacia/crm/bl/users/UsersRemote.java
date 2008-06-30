@@ -91,34 +91,41 @@ public interface UsersRemote {
      * @return list of locales
      */
     Locale[] serveLocalesList();
-    
+
     /**
      * Sets the locale for messages
      * @param locale
      */
     void setLocale(Locale locale);
-    
+
     /**
      * Encrypts a password for storing locally on the client
      * @return
      */
     String encryptPassword(char[] password);
-    
+
     /**
      * Decrypts a password stored locally on the client
      * @param password
      * @return the encrypted password
      */
     char[] decryptPassword(String base64password);
-    
+
     /**
-     * Gets the organization for this user. In case there are more than
+     * Updates organization for the current user. In case there are more than
      * one organization, a message should be displayed to the user.
-     * 
+     *
      * @param user
      * @param callbackHandler (for displaying the message)
      * @return organization
      */
-    Organization getOrganization(User user, CallbackHandler callbackHandler);
-    
+    void updateOrganization(User user, CallbackHandler callbackHandler);
+
+    /**
+     * Makes the specified user active
+     *
+     * @param user
+     * @param active whether the user should be active or inactive
+     */
+    void activateUser(User user, boolean active);
 }

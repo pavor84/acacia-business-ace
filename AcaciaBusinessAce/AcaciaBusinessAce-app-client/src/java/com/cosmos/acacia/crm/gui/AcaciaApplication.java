@@ -4,6 +4,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.app.AppSession;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -17,6 +18,7 @@ public class AcaciaApplication extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
+        AppSession.get();
         AcaciaApplicationView view = new AcaciaApplicationView(this);
         show(view);
         view.login();
