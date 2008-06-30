@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.invoice.impl;
 
+import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.beansbinding.EntityProperties;
@@ -21,7 +22,7 @@ public interface InvoiceItemsListLocal {
 
     EntityProperties getInvoiceItemsEntityProperties();
 
-    List<InvoiceItem> getInvoiceItems(Object parentDataObject);
+    List<InvoiceItem> getInvoiceItems(DataObject parentDataObject);
 
     int deleteInvoiceItem(Object invoiceItem);
 

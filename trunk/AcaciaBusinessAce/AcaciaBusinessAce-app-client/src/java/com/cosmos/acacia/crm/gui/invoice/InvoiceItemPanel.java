@@ -59,13 +59,13 @@ public class InvoiceItemPanel extends BaseEntityPanel {
         productLabel = new com.cosmos.swingb.JBLabel();
         quantityLabel = new com.cosmos.swingb.JBLabel();
         quantityTextField = new com.cosmos.swingb.JBTextField();
-        measureUnitComboBox = new com.cosmos.swingb.JBComboBox();
         unitPriceLabel = new com.cosmos.swingb.JBLabel();
         unitPriceTextField = new com.cosmos.swingb.JBTextField();
-        productLookup = new com.cosmos.acacia.gui.AcaciaLookup();
-        wearhousePanel = new com.cosmos.swingb.JBPanel();
-        wearhouseLabel = new com.cosmos.swingb.JBLabel();
-        wearhouseLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        productComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        warehousePanel = new com.cosmos.swingb.JBPanel();
+        warehouseLabel = new com.cosmos.swingb.JBLabel();
+        warehouseComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
 
         setName("Form"); // NOI18N
@@ -83,16 +83,16 @@ public class InvoiceItemPanel extends BaseEntityPanel {
         quantityTextField.setText(resourceMap.getString("quantityTextField.text")); // NOI18N
         quantityTextField.setName("quantityTextField"); // NOI18N
 
-        measureUnitComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
-
         unitPriceLabel.setText(resourceMap.getString("unitPriceLabel.text")); // NOI18N
         unitPriceLabel.setName("unitPriceLabel"); // NOI18N
 
         unitPriceTextField.setText(resourceMap.getString("unitPriceTextField.text")); // NOI18N
         unitPriceTextField.setName("unitPriceTextField"); // NOI18N
 
-        productLookup.setName("productLookup"); // NOI18N
+        productComboList.setName("productComboList"); // NOI18N
+
+        measureUnitComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
 
         javax.swing.GroupLayout productPanelLayout = new javax.swing.GroupLayout(productPanel);
         productPanel.setLayout(productPanelLayout);
@@ -112,7 +112,7 @@ public class InvoiceItemPanel extends BaseEntityPanel {
                             .addComponent(quantityTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
-                    .addComponent(productLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
+                    .addComponent(productComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
                 .addContainerGap())
         );
         productPanelLayout.setVerticalGroup(
@@ -121,7 +121,7 @@ public class InvoiceItemPanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(productComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,35 +131,35 @@ public class InvoiceItemPanel extends BaseEntityPanel {
                 .addGroup(productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(unitPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        wearhousePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("wearhousePanel.border.title"))); // NOI18N
-        wearhousePanel.setName("wearhousePanel"); // NOI18N
+        warehousePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("warehousePanel.border.title"))); // NOI18N
+        warehousePanel.setName("warehousePanel"); // NOI18N
 
-        wearhouseLabel.setText(resourceMap.getString("wearhouseLabel.text")); // NOI18N
-        wearhouseLabel.setName("wearhouseLabel"); // NOI18N
+        warehouseLabel.setText(resourceMap.getString("warehouseLabel.text")); // NOI18N
+        warehouseLabel.setName("warehouseLabel"); // NOI18N
 
-        wearhouseLookup.setName("wearhouseLookup"); // NOI18N
+        warehouseComboList.setName("warehouseComboList"); // NOI18N
 
-        javax.swing.GroupLayout wearhousePanelLayout = new javax.swing.GroupLayout(wearhousePanel);
-        wearhousePanel.setLayout(wearhousePanelLayout);
-        wearhousePanelLayout.setHorizontalGroup(
-            wearhousePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(wearhousePanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout warehousePanelLayout = new javax.swing.GroupLayout(warehousePanel);
+        warehousePanel.setLayout(warehousePanelLayout);
+        warehousePanelLayout.setHorizontalGroup(
+            warehousePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(warehousePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(wearhouseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(wearhouseLookup, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(186, 186, 186))
+                .addComponent(warehouseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(warehouseComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        wearhousePanelLayout.setVerticalGroup(
-            wearhousePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(wearhousePanelLayout.createSequentialGroup()
+        warehousePanelLayout.setVerticalGroup(
+            warehousePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(warehousePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(wearhousePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(wearhouseLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(wearhouseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(warehousePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(warehouseComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(warehouseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -173,7 +173,7 @@ public class InvoiceItemPanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-                    .addComponent(wearhousePanel, javax.swing.GroupLayout.Alignment.LEADING, 0, 344, Short.MAX_VALUE)
+                    .addComponent(warehousePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(productPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -183,10 +183,10 @@ public class InvoiceItemPanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addComponent(productPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(wearhousePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(warehousePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -236,28 +236,6 @@ public class InvoiceItemPanel extends BaseEntityPanel {
         
         EntityProperties entityProps = getFormSession().getInvoiceItemsEntityProperties();
     
-        productBinding = productLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseProduct();
-                }
-            }, invoiceItemBindingGroup,
-            invoiceItem,
-            entityProps.getPropertyDetails("product"),
-            "${productName}",
-            UpdateStrategy.READ_WRITE);
-
-        wearhouseBinding = wearhouseLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseWearhouse();
-                }
-            }, invoiceItemBindingGroup,
-            invoiceItem,
-            entityProps.getPropertyDetails("warehouse"),
-            "${description}",
-            UpdateStrategy.READ_WRITE);
-        
         quantityTextField.bind(invoiceItemBindingGroup, invoiceItem, entityProps.getPropertyDetails("orderedQuantity"));
         unitPriceTextField.bind(invoiceItemBindingGroup, invoiceItem, entityProps.getPropertyDetails("unitPrice"));
             
@@ -265,6 +243,16 @@ public class InvoiceItemPanel extends BaseEntityPanel {
         // ComboBoxes
         measureUnitComboBox.bind(invoiceItemBindingGroup, getFormSession().getMeasureUnits(), invoiceItem,
                                  entityProps.getPropertyDetails("measureUnit"));
+        
+        ProductsListPanel productsTable = new ProductsListPanel(null);
+        productComboList.initUnbound(productsTable);
+        productComboList.bind(invoiceItemBindingGroup, productsTable,
+                              invoiceItem, entityProps.getPropertyDetails("product"));
+        
+        WarehouseListPanel warehouseTable = new WarehouseListPanel();
+        warehouseComboList.initUnbound(warehouseTable);
+        warehouseComboList.bind(invoiceItemBindingGroup, warehouseTable,
+                              invoiceItem, entityProps.getPropertyDetails("warehouse"));
 
         invoiceItemBindingGroup.bind();
     }
@@ -304,17 +292,17 @@ public class InvoiceItemPanel extends BaseEntityPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
-    private com.cosmos.swingb.JBComboBox measureUnitComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox measureUnitComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboList productComboList;
     private com.cosmos.swingb.JBLabel productLabel;
-    private com.cosmos.acacia.gui.AcaciaLookup productLookup;
     private com.cosmos.swingb.JBPanel productPanel;
     private com.cosmos.swingb.JBLabel quantityLabel;
     private com.cosmos.swingb.JBTextField quantityTextField;
     private com.cosmos.swingb.JBLabel unitPriceLabel;
     private com.cosmos.swingb.JBTextField unitPriceTextField;
-    private com.cosmos.swingb.JBLabel wearhouseLabel;
-    private com.cosmos.acacia.gui.AcaciaLookup wearhouseLookup;
-    private com.cosmos.swingb.JBPanel wearhousePanel;
+    private com.cosmos.acacia.gui.AcaciaComboList warehouseComboList;
+    private com.cosmos.swingb.JBLabel warehouseLabel;
+    private com.cosmos.swingb.JBPanel warehousePanel;
     // End of variables declaration//GEN-END:variables
 
     private InvoiceItem invoiceItem;
@@ -323,6 +311,4 @@ public class InvoiceItemPanel extends BaseEntityPanel {
     private InvoiceItemsListRemote formSession;
     
     private BindingGroup invoiceItemBindingGroup;
-    private Binding productBinding;
-    private Binding wearhouseBinding;
 }

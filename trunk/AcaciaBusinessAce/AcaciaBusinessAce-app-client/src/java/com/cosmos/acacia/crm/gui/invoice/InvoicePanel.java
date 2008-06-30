@@ -1,7 +1,13 @@
 package com.cosmos.acacia.crm.gui.invoice;
 
-import com.cosmos.acacia.crm.bl.impl.InvoicesListRemote;
+import com.cosmos.acacia.crm.bl.invoice.impl.InvoicesListRemote;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.enums.InvoiceType;
+import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
@@ -9,6 +15,10 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.math.BigInteger;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -62,7 +72,13 @@ public class InvoicePanel extends BaseEntityPanel {
         recipientContactLabel = new com.cosmos.swingb.JBLabel();
         recipientContactNameLabel = new com.cosmos.swingb.JBLabel();
         recipientContactNameTextField = new com.cosmos.swingb.JBTextField();
-        recipientContactLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        branchNameLabel = new com.cosmos.swingb.JBLabel();
+        branchNameTextField = new com.cosmos.swingb.JBTextField();
+        branchAddressLabel = new com.cosmos.swingb.JBLabel();
+        recipientOrganizationLabel = new com.cosmos.swingb.JBLabel();
+        recipientOrganizationComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        recipientContactComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        branchAddressComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         generalInfoPanel = new com.cosmos.swingb.JBPanel();
         dateLabel = new com.cosmos.swingb.JBLabel();
         dateDatePicker = new com.cosmos.swingb.JBDatePicker();
@@ -70,21 +86,38 @@ public class InvoicePanel extends BaseEntityPanel {
         invoiceNumberLabel = new com.cosmos.swingb.JBLabel();
         typeLabel = new com.cosmos.swingb.JBLabel();
         invoiceTypeComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        createdByLabel = new com.cosmos.swingb.JBLabel();
+        createdByTextField = new com.cosmos.swingb.JBTextField();
+        creatorLabel = new com.cosmos.swingb.JBLabel();
+        creatorComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         itemsPanel = new com.cosmos.acacia.gui.TableHolderPanel();
         totalLabel = new com.cosmos.swingb.JBLabel();
         totalTextField = new com.cosmos.swingb.JBTextField();
-        currencyComboBox = new com.cosmos.swingb.JBComboBox();
         deliveryPanel = new com.cosmos.swingb.JBPanel();
         invoiceDeliveryMethodLabel = new com.cosmos.swingb.JBLabel();
-        documentDeliveryMethodComboBox = new com.cosmos.swingb.JBComboBox();
         transportationMethodLabel = new com.cosmos.swingb.JBLabel();
-        transportationMethodComboBox = new com.cosmos.swingb.JBComboBox();
         shipingAgentLabel = new com.cosmos.swingb.JBLabel();
         transportationPriceLabel = new com.cosmos.swingb.JBLabel();
         transportationPriceTextField = new com.cosmos.swingb.JBTextField();
-        transportationPriceCurrencyComboBox = new com.cosmos.swingb.JBComboBox();
         shippingAgentLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        documentDeliveryMethodComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        transportationMethodComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        transportationPriceCurrencyComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        deliveryTypeLabel = new com.cosmos.swingb.JBLabel();
+        deliveryTypeComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        paymentPanel = new com.cosmos.swingb.JBPanel();
+        paymentType = new com.cosmos.swingb.JBLabel();
+        paymentTypeComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        paymentLabel = new com.cosmos.swingb.JBLabel();
+        paymentTermComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        paymentDueDateLabel = new com.cosmos.swingb.JBLabel();
+        paymentDueDateDatePicker = new com.cosmos.swingb.JBDatePicker();
+        vatPercentLabel = new com.cosmos.swingb.JBLabel();
+        vatPercentTextField = new com.cosmos.swingb.JBTextField();
+        vatValueLabel = new com.cosmos.swingb.JBLabel();
+        vatValueTextField = new com.cosmos.swingb.JBTextField();
+        currencyComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
 
         setName("Form"); // NOI18N
 
@@ -105,7 +138,23 @@ public class InvoicePanel extends BaseEntityPanel {
 
         recipientContactNameTextField.setName("recipientContactNameTextField"); // NOI18N
 
-        recipientContactLookup.setName("recipientContactLookup"); // NOI18N
+        branchNameLabel.setText(resourceMap.getString("branchNameLabel.text")); // NOI18N
+        branchNameLabel.setName("branchNameLabel"); // NOI18N
+
+        branchNameTextField.setText(resourceMap.getString("branchNameTextField.text")); // NOI18N
+        branchNameTextField.setName("branchNameTextField"); // NOI18N
+
+        branchAddressLabel.setText(resourceMap.getString("branchAddressLabel.text")); // NOI18N
+        branchAddressLabel.setName("branchAddressLabel"); // NOI18N
+
+        recipientOrganizationLabel.setText(resourceMap.getString("recipientOrganizationLabel.text")); // NOI18N
+        recipientOrganizationLabel.setName("recipientOrganizationLabel"); // NOI18N
+
+        recipientOrganizationComboList.setName("recipientOrganizationComboList"); // NOI18N
+
+        recipientContactComboList.setName("recipientContactComboList"); // NOI18N
+
+        branchAddressComboList.setName("branchAddressComboList"); // NOI18N
 
         javax.swing.GroupLayout recipientPanelLayout = new javax.swing.GroupLayout(recipientPanel);
         recipientPanel.setLayout(recipientPanelLayout);
@@ -116,13 +165,19 @@ public class InvoicePanel extends BaseEntityPanel {
                 .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(recipientNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(recipientContactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(recipientContactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(recipientContactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(branchNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(recipientOrganizationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(branchAddressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(branchAddressComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(branchNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(recipientContactComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(recipientOrganizationComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(recipientContactNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(recipientNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .addComponent(recipientContactLookup, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(recipientNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
+                .addContainerGap())
         );
         recipientPanelLayout.setVerticalGroup(
             recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,10 +190,24 @@ public class InvoicePanel extends BaseEntityPanel {
                     .addComponent(recipientContactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(recipientContactNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(recipientContactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(recipientContactLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                    .addComponent(recipientContactComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(recipientOrganizationComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(recipientOrganizationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(branchNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(recipientPanelLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(branchNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(branchAddressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(branchAddressComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         generalInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General Info"));
@@ -161,21 +230,36 @@ public class InvoicePanel extends BaseEntityPanel {
         invoiceTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         invoiceTypeComboBox.setName("invoiceTypeComboBox"); // NOI18N
 
+        createdByLabel.setText(resourceMap.getString("createdByLabel.text")); // NOI18N
+        createdByLabel.setName("createdByLabel"); // NOI18N
+
+        createdByTextField.setText(resourceMap.getString("createdByTextField.text")); // NOI18N
+        createdByTextField.setName("createdByTextField"); // NOI18N
+
+        creatorLabel.setText(resourceMap.getString("creatorLabel.text")); // NOI18N
+        creatorLabel.setName("creatorLabel"); // NOI18N
+
+        creatorComboList.setName("creatorComboList"); // NOI18N
+
         javax.swing.GroupLayout generalInfoPanelLayout = new javax.swing.GroupLayout(generalInfoPanel);
         generalInfoPanel.setLayout(generalInfoPanelLayout);
         generalInfoPanelLayout.setHorizontalGroup(
             generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalInfoPanelLayout.createSequentialGroup()
+            .addGroup(generalInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(invoiceNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(typeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateDatePicker, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                    .addComponent(invoiceNumberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                    .addComponent(invoiceTypeComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                    .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(createdByLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(creatorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(invoiceNumberTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                    .addComponent(dateDatePicker, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                    .addComponent(invoiceTypeComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                    .addComponent(createdByTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                    .addComponent(creatorComboList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE))
                 .addContainerGap())
         );
         generalInfoPanelLayout.setVerticalGroup(
@@ -192,21 +276,33 @@ public class InvoicePanel extends BaseEntityPanel {
                 .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(typeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(invoiceTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createdByLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(createdByTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(generalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(generalInfoPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(creatorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(generalInfoPanelLayout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(creatorComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         itemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Items"));
         itemsPanel.setName("itemsPanel"); // NOI18N
+        itemsPanel.setResizable(false);
 
         javax.swing.GroupLayout itemsPanelLayout = new javax.swing.GroupLayout(itemsPanel);
         itemsPanel.setLayout(itemsPanelLayout);
         itemsPanelLayout.setHorizontalGroup(
             itemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 816, Short.MAX_VALUE)
+            .addGap(0, 902, Short.MAX_VALUE)
         );
         itemsPanelLayout.setVerticalGroup(
             itemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 148, Short.MAX_VALUE)
+            .addGap(0, 139, Short.MAX_VALUE)
         );
 
         totalLabel.setText(resourceMap.getString("totalLabel.text")); // NOI18N
@@ -214,23 +310,14 @@ public class InvoicePanel extends BaseEntityPanel {
 
         totalTextField.setName("totalTextField"); // NOI18N
 
-        currencyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        currencyComboBox.setName("currencyComboBox"); // NOI18N
-
         deliveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Delivery/Transportation"));
         deliveryPanel.setName("deliveryPanel"); // NOI18N
 
         invoiceDeliveryMethodLabel.setText(resourceMap.getString("invoiceDeliveryMethodLabel.text")); // NOI18N
         invoiceDeliveryMethodLabel.setName("invoiceDeliveryMethodLabel"); // NOI18N
 
-        documentDeliveryMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        documentDeliveryMethodComboBox.setName("documentDeliveryMethodComboBox"); // NOI18N
-
         transportationMethodLabel.setText(resourceMap.getString("transportationMethodLabel.text")); // NOI18N
         transportationMethodLabel.setName("transportationMethodLabel"); // NOI18N
-
-        transportationMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        transportationMethodComboBox.setName("transportationMethodComboBox"); // NOI18N
 
         shipingAgentLabel.setText(resourceMap.getString("shipingAgentLabel.text")); // NOI18N
         shipingAgentLabel.setName("shipingAgentLabel"); // NOI18N
@@ -240,10 +327,22 @@ public class InvoicePanel extends BaseEntityPanel {
 
         transportationPriceTextField.setName("transportationPriceTextField"); // NOI18N
 
+        shippingAgentLookup.setName("shippingAgentLookup"); // NOI18N
+
+        documentDeliveryMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        documentDeliveryMethodComboBox.setName("documentDeliveryMethodComboBox"); // NOI18N
+
+        transportationMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        transportationMethodComboBox.setName("transportationMethodComboBox"); // NOI18N
+
         transportationPriceCurrencyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         transportationPriceCurrencyComboBox.setName("transportationPriceCurrencyComboBox"); // NOI18N
 
-        shippingAgentLookup.setName("shippingAgentLookup"); // NOI18N
+        deliveryTypeLabel.setText(resourceMap.getString("deliveryTypeLabel.text")); // NOI18N
+        deliveryTypeLabel.setName("deliveryTypeLabel"); // NOI18N
+
+        deliveryTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        deliveryTypeComboBox.setName("deliveryTypeComboBox"); // NOI18N
 
         javax.swing.GroupLayout deliveryPanelLayout = new javax.swing.GroupLayout(deliveryPanel);
         deliveryPanel.setLayout(deliveryPanelLayout);
@@ -252,22 +351,26 @@ public class InvoicePanel extends BaseEntityPanel {
             .addGroup(deliveryPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(transportationMethodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(shipingAgentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(invoiceDeliveryMethodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(transportationPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(deliveryPanelLayout.createSequentialGroup()
+                        .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(transportationMethodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(shipingAgentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(invoiceDeliveryMethodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(transportationPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(shippingAgentLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
                             .addGroup(deliveryPanelLayout.createSequentialGroup()
-                                .addComponent(transportationPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(transportationPriceCurrencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(transportationMethodComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
-                    .addComponent(documentDeliveryMethodComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE))
+                                .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(shippingAgentLookup, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                                    .addGroup(deliveryPanelLayout.createSequentialGroup()
+                                        .addComponent(transportationPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(transportationPriceCurrencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(deliveryTypeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)))
+                            .addComponent(transportationMethodComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                            .addComponent(documentDeliveryMethodComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)))
+                    .addComponent(deliveryTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         deliveryPanelLayout.setVerticalGroup(
@@ -286,14 +389,89 @@ public class InvoicePanel extends BaseEntityPanel {
                         .addComponent(shippingAgentLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(transportationPriceCurrencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(transportationPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(transportationPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(transportationPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(transportationPriceCurrencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(shipingAgentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(deliveryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deliveryTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deliveryTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
+
+        paymentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("paymentPanel.border.title"))); // NOI18N
+        paymentPanel.setName("paymentPanel"); // NOI18N
+
+        paymentType.setText(resourceMap.getString("paymentType.text")); // NOI18N
+        paymentType.setName("paymentType"); // NOI18N
+
+        paymentTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        paymentTypeComboBox.setName("paymentTypeComboBox"); // NOI18N
+
+        paymentLabel.setText(resourceMap.getString("paymentLabel.text")); // NOI18N
+        paymentLabel.setName("paymentLabel"); // NOI18N
+
+        paymentTermComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        paymentTermComboBox.setName("paymentTermComboBox"); // NOI18N
+
+        paymentDueDateLabel.setText(resourceMap.getString("paymentDueDateLabel.text")); // NOI18N
+        paymentDueDateLabel.setName("paymentDueDateLabel"); // NOI18N
+
+        paymentDueDateDatePicker.setName("paymentDueDateDatePicker"); // NOI18N
+
+        javax.swing.GroupLayout paymentPanelLayout = new javax.swing.GroupLayout(paymentPanel);
+        paymentPanel.setLayout(paymentPanelLayout);
+        paymentPanelLayout.setHorizontalGroup(
+            paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paymentPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(paymentDueDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paymentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(paymentDueDateDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(paymentTermComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(paymentPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(paymentTypeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        paymentPanelLayout.setVerticalGroup(
+            paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paymentPanelLayout.createSequentialGroup()
+                .addGroup(paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(paymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paymentTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(paymentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paymentTermComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(paymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(paymentDueDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paymentDueDateDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(76, Short.MAX_VALUE))
+        );
+
+        vatPercentLabel.setText(resourceMap.getString("vatPercentLabel.text")); // NOI18N
+        vatPercentLabel.setName("vatPercentLabel"); // NOI18N
+
+        vatPercentTextField.setText(resourceMap.getString("vatPercentTextField.text")); // NOI18N
+        vatPercentTextField.setName("vatPercentTextField"); // NOI18N
+
+        vatValueLabel.setText(resourceMap.getString("vatValueLabel.text")); // NOI18N
+        vatValueLabel.setName("vatValueLabel"); // NOI18N
+
+        vatValueTextField.setText(resourceMap.getString("vatValueTextField.text")); // NOI18N
+        vatValueTextField.setName("vatValueTextField"); // NOI18N
+
+        currencyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        currencyComboBox.setName("currencyComboBox"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -301,52 +479,77 @@ public class InvoicePanel extends BaseEntityPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(itemsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(generalInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 912, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(paymentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deliveryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(itemsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(generalInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(recipientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(deliveryPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(vatPercentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(vatPercentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(vatValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(vatValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)
+                        .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(totalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(currencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(649, Short.MAX_VALUE)
-                .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(totalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(currencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(generalInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(recipientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(recipientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(generalInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(itemsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(currencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(totalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vatPercentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vatPercentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vatValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vatValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(currencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deliveryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deliveryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(paymentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBComboBox currencyComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboList branchAddressComboList;
+    private com.cosmos.swingb.JBLabel branchAddressLabel;
+    private com.cosmos.swingb.JBLabel branchNameLabel;
+    private com.cosmos.swingb.JBTextField branchNameTextField;
+    private com.cosmos.swingb.JBLabel createdByLabel;
+    private com.cosmos.swingb.JBTextField createdByTextField;
+    private com.cosmos.acacia.gui.AcaciaComboList creatorComboList;
+    private com.cosmos.swingb.JBLabel creatorLabel;
+    private com.cosmos.acacia.gui.AcaciaComboBox currencyComboBox;
     private com.cosmos.swingb.JBDatePicker dateDatePicker;
     private com.cosmos.swingb.JBLabel dateLabel;
     private com.cosmos.swingb.JBPanel deliveryPanel;
-    private com.cosmos.swingb.JBComboBox documentDeliveryMethodComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox deliveryTypeComboBox;
+    private com.cosmos.swingb.JBLabel deliveryTypeLabel;
+    private com.cosmos.acacia.gui.AcaciaComboBox documentDeliveryMethodComboBox;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.swingb.JBPanel generalInfoPanel;
     private com.cosmos.swingb.JBLabel invoiceDeliveryMethodLabel;
@@ -354,23 +557,36 @@ public class InvoicePanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField invoiceNumberTextField;
     private com.cosmos.acacia.gui.AcaciaComboBox invoiceTypeComboBox;
     private com.cosmos.acacia.gui.TableHolderPanel itemsPanel;
+    private com.cosmos.swingb.JBDatePicker paymentDueDateDatePicker;
+    private com.cosmos.swingb.JBLabel paymentDueDateLabel;
+    private com.cosmos.swingb.JBLabel paymentLabel;
+    private com.cosmos.swingb.JBPanel paymentPanel;
+    private com.cosmos.acacia.gui.AcaciaComboBox paymentTermComboBox;
+    private com.cosmos.swingb.JBLabel paymentType;
+    private com.cosmos.acacia.gui.AcaciaComboBox paymentTypeComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboList recipientContactComboList;
     private com.cosmos.swingb.JBLabel recipientContactLabel;
-    private com.cosmos.acacia.gui.AcaciaLookup recipientContactLookup;
     private com.cosmos.swingb.JBLabel recipientContactNameLabel;
     private com.cosmos.swingb.JBTextField recipientContactNameTextField;
     private com.cosmos.swingb.JBLabel recipientNameLabel;
     private com.cosmos.swingb.JBTextField recipientNameTextField;
+    private com.cosmos.acacia.gui.AcaciaComboList recipientOrganizationComboList;
+    private com.cosmos.swingb.JBLabel recipientOrganizationLabel;
     private com.cosmos.swingb.JBPanel recipientPanel;
     private com.cosmos.swingb.JBLabel shipingAgentLabel;
     private com.cosmos.acacia.gui.AcaciaLookup shippingAgentLookup;
     private com.cosmos.swingb.JBLabel totalLabel;
     private com.cosmos.swingb.JBTextField totalTextField;
-    private com.cosmos.swingb.JBComboBox transportationMethodComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox transportationMethodComboBox;
     private com.cosmos.swingb.JBLabel transportationMethodLabel;
-    private com.cosmos.swingb.JBComboBox transportationPriceCurrencyComboBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox transportationPriceCurrencyComboBox;
     private com.cosmos.swingb.JBLabel transportationPriceLabel;
     private com.cosmos.swingb.JBTextField transportationPriceTextField;
     private com.cosmos.swingb.JBLabel typeLabel;
+    private com.cosmos.swingb.JBLabel vatPercentLabel;
+    private com.cosmos.swingb.JBTextField vatPercentTextField;
+    private com.cosmos.swingb.JBLabel vatValueLabel;
+    private com.cosmos.swingb.JBTextField vatValueTextField;
     // End of variables declaration//GEN-END:variables
 
     @EJB
@@ -378,7 +594,6 @@ public class InvoicePanel extends BaseEntityPanel {
 
     private Invoice invoice;
     private BindingGroup invoiceBindingGroup;
-    private Binding recipientContactBinding;
     private Binding shippingByBinding;
 
     @Override
@@ -393,42 +608,64 @@ public class InvoicePanel extends BaseEntityPanel {
         
         EntityProperties entityProps = getInvoiceEntityProperties();
     
-        System.out.println("DEBUG!!!!! entity props - " +  entityProps.getPropertyDetails("recipientContactId"));
-        recipientContactBinding = recipientContactLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChoosePerson();
-                }
-            }, invoiceBindingGroup,
-            invoice,
-            entityProps.getPropertyDetails("recipientContactId"),
-            "${firstName} ${lastName}",
-            UpdateStrategy.READ_WRITE);
-
         shippingByBinding = shippingAgentLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
-                    return onChoosePerson();
+                    Person person = (Person)onChoosePerson();
+                    if (person != null) {
+                        return getFormSession().newDataObjectLink(person);
+                    }
+                    return null;
                 }
             }, invoiceBindingGroup,
             invoice,
             entityProps.getPropertyDetails("shippingAgentLink"),
-            "${firstName} ${lastName}",
+            "${linkName}",
             UpdateStrategy.READ_WRITE);
         
         recipientNameTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("recipientName"));
         recipientContactNameTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("recipientContactName"));
         totalTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("totalInvoiceValue"));
         transportationPriceTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("transportationPrice"));
+        branchNameTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("branchName"));
+        createdByTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("creatorName"));
+        vatPercentTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("vatPercent"));
+        invoiceNumberTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("invoiceNumber"), UpdateStrategy.READ);
+        
+        vatPercentTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                vatValueTextField.setText(getFormSession().calculateVatValue(
+                                          invoice).toString());
+            }            
+        });
+        
+        vatValueTextField.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("vatValue"));
+        
+        dateDatePicker.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("invoiceDate"));
+        paymentDueDateDatePicker.bind(invoiceBindingGroup, invoice, entityProps.getPropertyDetails("paymentDueDate"));
             
         InvoiceItemsListPanel invoiceItemsTable = new InvoiceItemsListPanel(invoice.getInvoiceId());
         invoiceItemsTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
-        
+       
         itemsPanel.add(invoiceItemsTable);
         
         // ComboBoxes
         invoiceTypeComboBox.bind(invoiceBindingGroup, getFormSession().getInvoiceTypes(), invoice,
                                  entityProps.getPropertyDetails("invoiceType"));
+        invoiceTypeComboBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (!(e.getItem() instanceof DbResource)) {
+                    return;
+                }
+                
+                DbResource invoiceTypeSelected =(DbResource) e.getItem();
+                vatPercentTextField.setEnabled(InvoiceType.VatInvoice.equals(invoiceTypeSelected.getEnumValue()));
+            }
+        });
+        
         documentDeliveryMethodComboBox.bind(invoiceBindingGroup, getFormSession().getDocumentDeliveryMethods(), invoice,
                                  entityProps.getPropertyDetails("documentDeliveryMethod"));
         transportationMethodComboBox.bind(invoiceBindingGroup, getFormSession().getTransportationMethods(), invoice,
@@ -437,8 +674,40 @@ public class InvoicePanel extends BaseEntityPanel {
                                  entityProps.getPropertyDetails("currency"));
         transportationPriceCurrencyComboBox.bind(invoiceBindingGroup, getFormSession().getCurrencies(), invoice,
                                  entityProps.getPropertyDetails("currency"));
+        paymentTypeComboBox.bind(invoiceBindingGroup, getFormSession().getPaymentTypes(), invoice,
+                                 entityProps.getPropertyDetails("paymentType"));
+        paymentTermComboBox.bind(invoiceBindingGroup, getFormSession().getPaymentTerms(), invoice,
+                                 entityProps.getPropertyDetails("paymentTerms"));
+        deliveryTypeComboBox.bind(invoiceBindingGroup, getFormSession().getDeliveryTypes(), invoice,
+                                 entityProps.getPropertyDetails("deliveryType"));
+        
+        // Lookup fields
+        PersonsListPanel personsTable = new PersonsListPanel(null);
+        creatorComboList.initUnbound(personsTable);
+        
+        creatorComboList.bind(invoiceBindingGroup, personsTable, invoice,
+                              entityProps.getPropertyDetails("creator"));
+
+        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
+        recipientOrganizationComboList.initUnbound(organizationsTable);
+        
+        recipientOrganizationComboList.bind(invoiceBindingGroup, organizationsTable, invoice,
+                              entityProps.getPropertyDetails("recipient"));
+        
+        recipientContactComboList.initUnbound(personsTable);
+        
+        recipientOrganizationComboList.bind(invoiceBindingGroup, personsTable, invoice,
+                              entityProps.getPropertyDetails("recipientContactId"));
+        
+        AddressListPanel addressesTable = new AddressListPanel((BigInteger)null);
+        branchAddressComboList.initUnbound(addressesTable);
+        branchAddressComboList.bind(invoiceBindingGroup, addressesTable, invoice,
+                                    entityProps.getPropertyDetails("branch"));
         
         invoiceBindingGroup.bind();
+        
+        vatPercentTextField.setEnabled(false);
+        vatValueTextField.setEnabled(false);
     }
 
     @Override
@@ -493,6 +762,16 @@ public class InvoicePanel extends BaseEntityPanel {
     
     protected Object onChoosePerson() {
         PersonsListPanel listPanel = new PersonsListPanel(null);
+
+        DialogResponse dResponse = listPanel.showDialog(this);
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+            return listPanel.getSelectedRowObject();
+        }
+        return null;
+    }
+    
+    protected Object onChooseAddress() {
+        AddressListPanel listPanel = new AddressListPanel((DataObjectBean)null);
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){

@@ -15,12 +15,16 @@ import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.DeliveryType;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
 import com.cosmos.acacia.crm.enums.Gender;
+import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.OrganizationType;
 import com.cosmos.acacia.crm.enums.PassportType;
+import com.cosmos.acacia.crm.enums.PaymentTerm;
+import com.cosmos.acacia.crm.enums.PaymentType;
 import com.cosmos.acacia.crm.enums.ProductColor;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
+import com.cosmos.acacia.crm.enums.VatCondition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,6 +71,11 @@ public class DatabaseResourceBean
             getDbResources(InvoiceType.class);
             getDbResources(DocumentDeliveryMethod.class);
             getDbResources(TransportationMethod.class);
+            getDbResources(PaymentType.class);
+            getDbResources(PaymentTerm.class);
+            getDbResources(DeliveryType.class);
+            getDbResources(VatCondition.class);
+            getDbResources(InvoiceStatus.class);
             initialized = true;
         }
     }

@@ -40,7 +40,7 @@ public class InvoiceItemsListPanel extends AbstractTablePanel {
         EntityProperties entityProp = getFormSession().getInvoiceItemsEntityProperties();
         
         JTableBinding tableBinding = invoicesTable.bind(invoiceItemsBindingGroup, getFormSession().getInvoiceItems(
-                                                        getParentDataObjectId()), entityProp);
+                                                        getParentDataObject()), entityProp);
         tableBinding.setEditable(false);
         
         invoicesTable.bindComboBoxCellEditor(invoiceItemsBindingGroup, getFormSession().getMeasureUnits(), entityProp.getPropertyDetails("measureUnit"));
