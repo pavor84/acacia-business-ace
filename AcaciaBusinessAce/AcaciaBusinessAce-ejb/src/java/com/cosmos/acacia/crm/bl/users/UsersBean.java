@@ -283,7 +283,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         int crystal = 0;
         for (int i = 0; i < chars.length; i ++) {
             sb.append(chars[i]);
-            if (i % 2 == 0) {
+            if (i % 2 == 0 && crystal < saltChars.length) {
                 sb.append(saltChars[crystal++]);
             }
         }
