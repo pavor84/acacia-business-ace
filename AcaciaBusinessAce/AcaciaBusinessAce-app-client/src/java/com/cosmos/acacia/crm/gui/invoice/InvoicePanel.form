@@ -21,7 +21,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="entityFormButtonPanel" alignment="0" pref="912" max="32767" attributes="1"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="960" max="32767" attributes="1"/>
                   <Group type="102" alignment="0" attributes="1">
                       <Component id="paymentPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -385,7 +385,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="902" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="948" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -434,17 +434,17 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="shippingAgentLookup" alignment="0" pref="323" max="32767" attributes="0"/>
+                                      <Component id="shippingAgentLookup" alignment="0" pref="325" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="transportationPriceTextField" min="-2" pref="74" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="transportationPriceCurrencyComboBox" min="-2" pref="83" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="deliveryTypeComboBox" alignment="0" pref="323" max="32767" attributes="0"/>
+                                      <Component id="deliveryTypeComboBox" alignment="0" pref="325" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="transportationMethodComboBox" alignment="0" pref="323" max="32767" attributes="1"/>
-                              <Component id="documentDeliveryMethodComboBox" alignment="0" pref="323" max="32767" attributes="1"/>
+                              <Component id="transportationMethodComboBox" alignment="0" pref="325" max="32767" attributes="1"/>
+                              <Component id="documentDeliveryMethodComboBox" alignment="0" pref="325" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                       <Component id="deliveryTypeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
