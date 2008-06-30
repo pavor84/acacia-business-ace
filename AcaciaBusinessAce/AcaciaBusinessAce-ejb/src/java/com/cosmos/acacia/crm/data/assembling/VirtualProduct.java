@@ -17,9 +17,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -29,6 +32,17 @@ import javax.persistence.Table;
 @Table(name = "virtual_products")
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING, length=2, name="product_type")
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "VirtualProduct.findByParentId",
+                query = "select t1 from VirtualProduct t1" +
+                    " where" +
+                    "  t1.parentId = :parentId" +
+                    "  and t1.dataObject.deleted = false"
+            )
+    })
 public abstract class VirtualProduct
     extends DataObjectBean
     implements Serializable
@@ -47,6 +61,22 @@ public abstract class VirtualProduct
     @PrimaryKeyJoinColumn
     private DataObject dataObject;
 
+    @Transient
+    @Property(title="Product Type", editable=false, readOnly=true)
+    private String productType;
+
+    @Transient
+    @Property(title="Category Name", editable=false, readOnly=true)
+    private String categoryName;
+
+    @Transient
+    @Property(title="Product Code", editable=false, readOnly=true)
+    private String productCode;
+
+    @Transient
+    @Property(title="Product Name", editable=false, readOnly=true)
+    private String productName;
+
 
     public VirtualProduct()
     {
@@ -64,6 +94,17 @@ public abstract class VirtualProduct
         this.productId = productId;
     }
 
+    public abstract String getProductType();
+    public void setProductType(String productType) {}
+
+    public abstract String getCategoryName();
+    public void setCategoryName(String categoryName) {}
+
+    public abstract String getProductCode();
+    public void setProductCode(String productCode) {}
+
+    public abstract String getProductName();
+    public void setProductName(String productName) {}
 
     @Override
     public int hashCode() {

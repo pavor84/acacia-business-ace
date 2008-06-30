@@ -120,4 +120,15 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return sessionId;
     }
 
+    @Override
+    public Organization getOrganization()
+    {
+        return (Organization)getValue(AcaciaSession.ORGANIZATION_KEY);
+    }
+
+    @Override
+    public void setOrganization(Organization organization)
+    {
+        setValue(AcaciaSession.ORGANIZATION_KEY, organization);
+    }
 }

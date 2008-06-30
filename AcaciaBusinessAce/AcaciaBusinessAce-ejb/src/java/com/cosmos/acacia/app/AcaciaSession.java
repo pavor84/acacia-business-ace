@@ -1,5 +1,7 @@
 package com.cosmos.acacia.app;
 
+import com.cosmos.acacia.crm.data.Organization;
+
 /**
  * Created	:	22.05.2008
  * @author	Petar Milev
@@ -15,7 +17,7 @@ public interface AcaciaSession {
     public static final String USER_LOCALE = "LOCALE_KEY";
 
     
-    public Object getValue(String name);
-
-    public void setValue(String name, Object value);
+    Object getValue(String name);
+    void setValue(String name, Object value);
+    Organization getOrganization();
 }
