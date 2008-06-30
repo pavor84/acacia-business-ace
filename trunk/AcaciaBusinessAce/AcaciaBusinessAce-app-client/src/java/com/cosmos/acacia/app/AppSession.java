@@ -1,12 +1,12 @@
 package com.cosmos.acacia.app;
 
+import com.cosmos.acacia.crm.data.Organization;
 import java.math.BigInteger;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.User;
 import java.io.Serializable;
 
 /**
@@ -94,4 +94,12 @@ public final class AppSession
 
         return get().acaciaSession.getDataObject(dataObjectId);
     }
+
+    @Override
+    public Organization getOrganization()
+    {
+        return acaciaSession.getOrganization();
+    }
+
+    
 }

@@ -1,7 +1,6 @@
 package com.cosmos.acacia.crm.gui.invoice;
 
 import com.cosmos.acacia.crm.bl.invoice.impl.InvoicesListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.gui.AbstractTablePanel;

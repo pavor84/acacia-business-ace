@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -31,7 +32,6 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.swing.JPanel;
 import javax.swing.table.TableColumn;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -167,6 +167,15 @@ public class AssemblingSchemasListPanel
     {
         setPreferredSize(new Dimension(1055, 600));
         assemblingSchemasSplitPane.setDividerLocation(555);
+
+        EntityProperties entityProps = getFormSession().getVirtualProductItemEntityProperties();
+        for(String key : entityProps.getKeys())
+        {
+            System.out.println("key: " + key + ", PropertyDetails: " + entityProps.getPropertyDetails(key));
+        }
+
+        List<VirtualProduct> virtualProducts = getFormSession().getVirtualProducts(null);
+        System.out.println("virtualProducts: " + virtualProducts);
     }
 
     private AssemblingSchemasTablePanel getAssemblingSchemasTablePanel()
