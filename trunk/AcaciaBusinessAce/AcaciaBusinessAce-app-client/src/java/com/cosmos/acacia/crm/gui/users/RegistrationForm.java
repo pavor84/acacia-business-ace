@@ -7,26 +7,28 @@
 package com.cosmos.acacia.crm.gui.users;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.gui.users.UserUtils;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
-import com.cosmos.acacia.gui.AbstractTablePanel.Button;
+import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
@@ -218,11 +220,9 @@ public class RegistrationForm extends BaseEntityPanel {
        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
        organizationComboList.initUnbound(organizationsTable);
 
-       organizationComboList.addActionListener(new ActionListener() {
+       organizationComboList.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                log.info("cmd: " + e.getActionCommand());
-                log.info("mdf: " + e.getModifiers());   
+            public void itemStateChanged(ItemEvent e) {
                 Organization organization = (Organization) organizationComboList.getSelectedItem();
                 if (organization == null) {
                     branchComboList.getComboBox().removeAllItems();
@@ -235,9 +235,9 @@ public class RegistrationForm extends BaseEntityPanel {
                 branchesTable.setVisible(Button.New, false);
                 branchComboList.initUnbound(branchesTable);
 
-                branchComboList.addActionListener(new ActionListener() {
+                branchComboList.addItemListener(new ItemListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
+                    public void itemStateChanged(ItemEvent e) {
                         Address branch = (Address) branchComboList.getSelectedItem();
 
                         if (branch == null) {
@@ -262,7 +262,7 @@ public class RegistrationForm extends BaseEntityPanel {
 
     @Action
     public void register() {
-        try {        
+        try {
             if (user.getUserPassword().equals(new String(passwordTextField2.getPassword()))) {
                 if (personComboList.getSelectedItem() != null)
                     user.setPerson(((ContactPerson) personComboList.getSelectedItem()).getContact());
@@ -282,7 +282,7 @@ public class RegistrationForm extends BaseEntityPanel {
     }
 
     protected UsersRemote getFormSession() {
-        if (formSession == null) 
+        if (formSession == null)
         {
              try
              {

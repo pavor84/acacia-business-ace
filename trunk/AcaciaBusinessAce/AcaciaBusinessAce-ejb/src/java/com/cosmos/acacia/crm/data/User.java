@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 
 /**
  *
@@ -64,7 +65,8 @@ public class User extends DataObjectBean implements Serializable {
     private int version;
 
     @Column(name = "user_name", nullable = false)
-    @Property(title="Username")
+    @Property(title="Username", propertyValidator=@PropertyValidator(
+        minLength=3, maxLength=32))
     private String userName;
 
     @Column(name = "email_address", nullable = false)
@@ -72,7 +74,8 @@ public class User extends DataObjectBean implements Serializable {
     private String emailAddress;
 
     @Column(name = "user_password", nullable = false)
-    @Property(title="Password", visible=false)
+    @Property(title="Password", visible=false, propertyValidator=@PropertyValidator(
+        minLength=6, maxLength=32))
     private String userPassword;
 
     @Column(name = "system_password")

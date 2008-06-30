@@ -105,5 +105,19 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return em.find(DataObject.class, dataObjectId);
     }
 
+    @Override
+    public Integer generateSessionId() {
+        Map<Integer, AcaciaSession> sessions = SessionRegistry.getInstance().getSessions();
+        
+        Integer sessionId;
+        while (true) {
+            int rand = (int) (100000 + Math.random() * 899999);
+            sessionId = new Integer(rand);
+            if (!sessions.keySet().contains(sessionId))
+                break;
+        }
+        
+        return sessionId;
+    }
 
 }

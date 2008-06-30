@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import java.math.BigInteger;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
@@ -165,14 +166,22 @@ public class RequestRegistrationForm extends AcaciaPanel {
     @Action
     public void sendCode() {
         getFormSession().requestRegistration(emailTextField.getText());
-        JOptionPane.showMessageDialog(this, getResourceMap().getString("request.successful"));
+        if (!exceptionOccurred)
+            JOptionPane.showMessageDialog(this, getResourceMap().getString("request.successful"));
+        else
+            exceptionOccurred = false;
+        
     }
 
     @Action
     public void proceed() {
         String email = getFormSession().verifyCode(codeTextField.getText());
-        RegistrationForm regForm = new RegistrationForm(email);
-        regForm.showDialog(this.getParent());
-        this.close();
+        if (!exceptionOccurred) {
+            RegistrationForm regForm = new RegistrationForm(email);
+            regForm.showDialog(this.getParent());
+            this.close();
+        } else {
+            exceptionOccurred = false;
+        }
     }
 }
