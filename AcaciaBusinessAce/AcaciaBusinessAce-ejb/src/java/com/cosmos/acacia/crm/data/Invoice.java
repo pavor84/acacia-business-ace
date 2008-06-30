@@ -76,32 +76,38 @@ public class Invoice extends DataObjectBean implements Serializable {
             propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private Date invoiceDate;
 
-    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id")
+    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id", nullable=false)
     @ManyToOne
-    @Property(title="Recipient")
+    @Property(title="Recipient",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private BusinessPartner recipient;
 
     @Column(name = "recipient_name", nullable = false)
-    @Property(title="Recipient name")
+    @Property(title="Recipient name",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private String recipientName;
 
     @JoinColumn(name = "recipient_contact_id")
     @ManyToOne
-    @Property(title="Recipient contact")
+    @Property(title="Recipient contact",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private Person recipientContactId;
 
     @Column(name = "recipient_contact_name", nullable = false)
-    @Property(title="Recipient contact name")
+    @Property(title="Recipient contact name",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private String recipientContactName;
 
     @JoinColumn(name = "invoice_type_id", nullable = false, referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Type")
+    @Property(title="Type",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource invoiceType;
 
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Status")
+    @Property(title="Status",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource statusId;
 
     @Column(name = "creation_time", nullable = false)
@@ -111,21 +117,25 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "creator_id")
     @ManyToOne
-    @Property(title="Created by")
+    @Property(title="Created by",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private Person creator;
 
     @Column(name = "creator_name", nullable = false)
-    @Property(title="Created by name")
+    @Property(title="Created by name",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private String creatorName;
 
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Delivery method")
+    @Property(title="Delivery method",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource documentDeliveryMethod;
 
     @JoinColumn(name = "transportation_method_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Transportation method")
+    @Property(title="Transportation method",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource transportationMethod;
 
     @JoinColumn(name = "shipping_agent_id", referencedColumnName = "data_object_link_id")
@@ -139,7 +149,8 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Currency")
+    @Property(title="Currency",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource currency;
 
     @Column(name = "invoice_sub_value", nullable = false)
@@ -155,7 +166,8 @@ public class Invoice extends DataObjectBean implements Serializable {
     private BigDecimal discountValue;
 
     @Column(name = "invoice_value", nullable = false)
-    @Property(title="Value")
+    @Property(title="Value",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private BigDecimal invoiceValue;
 
     @Column(name = "excise_duty_percent")
@@ -185,12 +197,14 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "payment_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Payment method")
+    @Property(title="Payment method",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource paymentType;
 
     @JoinColumn(name = "payment_terms_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Payment terms")
+    @Property(title="Payment terms",
+              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource paymentTerms;
 
     @Column(name = "payment_due_date")

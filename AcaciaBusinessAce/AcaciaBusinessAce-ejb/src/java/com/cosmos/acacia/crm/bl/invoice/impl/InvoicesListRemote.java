@@ -1,10 +1,13 @@
-package com.cosmos.acacia.crm.bl.impl;
+package com.cosmos.acacia.crm.bl.invoice.impl;
 
+import com.cosmos.acacia.crm.data.DataObjectLink;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
@@ -47,4 +50,8 @@ public interface InvoicesListRemote {
     List<DbResource> getTransportationMethods();
 
     List<DbResource> getVatConditions();
+
+    DataObjectLink newDataObjectLink(DataObjectBean linkeObject);
+
+    BigDecimal calculateVatValue(Invoice invocie);
 }

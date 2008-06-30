@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.bl.invoice.impl;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -14,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
@@ -38,15 +38,19 @@ public class InvoiceItemsListBean implements InvoiceItemsListRemote, InvoiceItem
     }
 
     @Override
-    public List<InvoiceItem> getInvoiceItems(Object parentDataObject) {
-        if (parentDataObject != null) {
-            Query query = em.createNamedQuery("InvoiceItem.findByParentDataObjectAndDeleted");
-            query.setParameter("parentDataObjectId", parentDataObject);
-            query.setParameter("deleted", false);
-
-            return new ArrayList<InvoiceItem>(query.getResultList());
+    public List<InvoiceItem> getInvoiceItems(DataObject parentDataObject) {
+        Query q;
+        if(parentDataObject != null)
+        {
+            q = em.createNamedQuery("InvoiceItem.findByParentDataObjectAndDeleted");
+            q.setParameter("parentDataObjectId", parentDataObject.getDataObjectId());
         }
-        return new ArrayList<InvoiceItem>();
+        else
+        {
+            q = em.createNamedQuery("InvoiceItem.findByParentDataObjectIsNullAndDeleted");
+        }
+        q.setParameter("deleted", false);
+        return new ArrayList<InvoiceItem>(q.getResultList());
     }
 
     @Override
