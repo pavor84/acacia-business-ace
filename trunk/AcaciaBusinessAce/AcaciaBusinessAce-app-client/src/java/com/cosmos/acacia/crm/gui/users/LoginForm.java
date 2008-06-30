@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.app.AcaciaSession;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -24,12 +25,14 @@ import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 import javax.security.auth.callback.CallbackHandler;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -39,6 +42,7 @@ public class LoginForm extends AcaciaPanel {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String USERS_LIST = "password";
     private static final String LOCALE = "locale";
 
     protected static Logger log = Logger.getLogger(LoginForm.class);
@@ -68,7 +72,6 @@ public class LoginForm extends AcaciaPanel {
 
         usernameLabel = new com.cosmos.swingb.JBLabel();
         passwordLabel = new com.cosmos.swingb.JBLabel();
-        usernameTextField = new com.cosmos.swingb.JBTextField();
         loginButton = new com.cosmos.swingb.JBButton();
         rememberMeCheckBox = new com.cosmos.swingb.JBCheckBox();
         rememberPasswordCheckBox = new com.cosmos.swingb.JBCheckBox();
@@ -79,6 +82,7 @@ public class LoginForm extends AcaciaPanel {
         localeComboBox = new com.cosmos.swingb.JBComboBox();
         localeLabel = new com.cosmos.swingb.JBLabel();
         passwordTextField = new com.cosmos.swingb.JBPasswordField();
+        usernameComboBox = new com.cosmos.swingb.JBComboBox();
 
         setName("Form"); // NOI18N
 
@@ -88,9 +92,6 @@ public class LoginForm extends AcaciaPanel {
 
         passwordLabel.setText(resourceMap.getString("passwordLabel.text")); // NOI18N
         passwordLabel.setName("passwordLabel"); // NOI18N
-
-        usernameTextField.setText(resourceMap.getString("usernameTextField.text")); // NOI18N
-        usernameTextField.setName("usernameTextField"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(LoginForm.class, this);
         loginButton.setAction(actionMap.get("login")); // NOI18N
@@ -115,7 +116,6 @@ public class LoginForm extends AcaciaPanel {
 
         jSeparator2.setName("jSeparator2"); // NOI18N
 
-        localeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         localeComboBox.setName("localeComboBox"); // NOI18N
 
         localeLabel.setText(resourceMap.getString("localeLabel.text")); // NOI18N
@@ -123,6 +123,9 @@ public class LoginForm extends AcaciaPanel {
 
         passwordTextField.setText(resourceMap.getString("passwordTextField.text")); // NOI18N
         passwordTextField.setName("passwordTextField"); // NOI18N
+
+        usernameComboBox.setEditable(true);
+        usernameComboBox.setName("usernameComboBox"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -145,8 +148,8 @@ public class LoginForm extends AcaciaPanel {
                             .addComponent(passwordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
-                            .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)))
+                            .addComponent(usernameComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(localeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -167,8 +170,8 @@ public class LoginForm extends AcaciaPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usernameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passwordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,13 +213,15 @@ public class LoginForm extends AcaciaPanel {
     private com.cosmos.swingb.JBPasswordField passwordTextField;
     private com.cosmos.swingb.JBCheckBox rememberMeCheckBox;
     private com.cosmos.swingb.JBCheckBox rememberPasswordCheckBox;
+    private com.cosmos.swingb.JBComboBox usernameComboBox;
     private com.cosmos.swingb.JBLabel usernameLabel;
-    private com.cosmos.swingb.JBTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 
 
     private UsersRemote formSession;
     private int dummyCharsAdded = 0;
+    private Preferences prefs = Preferences.systemRoot();
+    
     @Override
     protected void initData() {
         //loginButton.isDefaultButton();
@@ -228,30 +233,71 @@ public class LoginForm extends AcaciaPanel {
             }
         }
 
+        usernameComboBox.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                passwordTextField.setText("");
+                dummyCharsAdded = 0;
+            }
+        });
         // Load the saved preferences for this machine
-        final Preferences prefs = Preferences.userRoot();
+        loadPreferences();
 
+        AutoCompleteDecorator.decorate(usernameComboBox);
+        
+        AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
+        this.requestFocus();
+    }
+
+    private void loadPreferences() {
         localeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prefs.put(LOCALE, ((Locale) localeComboBox.getSelectedItem()).getLanguage());
+                // 
             }
         });
+        
+        usernameComboBox.removeAllItems();
+        String usernamesString = prefs.get(USERS_LIST, null);
+        if (usernamesString != null) {
+            String[] usernamesArray = usernamesString.split(",");
+            for (String username : usernamesArray) {
+                usernameComboBox.addItem(username);
+            }
+        }
+        usernameComboBox.setSelectedIndex(-1);
+        
+        usernameComboBox.addItemListener(new ItemListener() {
 
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    String username = (String) usernameComboBox.getSelectedItem();
+                    loadUserSpecificPreferences(username);
+                    rememberMeCheckBox.setSelected(true);
+                }
+            }
+        });
+        
         String username = prefs.get(USERNAME, null);
         if (username != null) {
             rememberMeCheckBox.setSelected(true);
-            usernameTextField.setText(username);
+            usernameComboBox.setSelectedItem(username);
         }
+        if (username != null)
+            loadUserSpecificPreferences(username);
+    }
+    
+    private void loadUserSpecificPreferences(String username) {
 
-        String password = prefs.get(PASSWORD, null);
+        String password = prefs.get(username + PASSWORD, null);
         if (password != null) {
             rememberPasswordCheckBox.setSelected(true);
             try {
                 passwordTextField.setText(maskPassword(new String(getFormSession().decryptPassword(password))));
             } catch (NullPointerException ex){
-                ex.printStackTrace();
-                prefs.remove(PASSWORD);
+                passwordTextField.setText("");
+                //prefs.removeWORD);
             }
         }
         
@@ -262,33 +308,23 @@ public class LoginForm extends AcaciaPanel {
             }
         });
         
-        String locale = prefs.get(LOCALE, null);
+        String locale = prefs.get(username + LOCALE, null);
         if (locale != null)
             localeComboBox.setSelectedItem(new Locale(locale));
-
-        // preferences loaded
-
-        AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
-        this.requestFocus();
+        
     }
-
     @Action
     public void login() {
 
-        Preferences prefs = Preferences.userRoot();
-        String username = usernameTextField.getText();
-        if (rememberMeCheckBox.isSelected())
-            prefs.put(USERNAME, username);
-        else
-            prefs.remove(PASSWORD);
-
+        String username = (String) usernameComboBox.getSelectedItem();
+        
         char[] password = passwordTextField.getPassword();
 
         if (rememberPasswordCheckBox.isSelected()) {
             String encryptedPassword = getFormSession().encryptPassword(password);
-            prefs.put(PASSWORD, encryptedPassword);
+            prefs.put(username + PASSWORD, encryptedPassword);
         } else
-            prefs.remove(PASSWORD);
+            prefs.remove(username + PASSWORD);
 
         try {
             prefs.flush();
@@ -299,6 +335,34 @@ public class LoginForm extends AcaciaPanel {
         User user = getFormSession().login(username, unmaskPassword(new String(password)).toCharArray());
         
         if (!exceptionOccurred) {
+            
+            /* Preferences handling*/
+            prefs.put(username + LOCALE, ((Locale) localeComboBox.getSelectedItem()).getLanguage());
+            
+            String usersList = prefs.get(USERS_LIST, null);
+            if (rememberMeCheckBox.isSelected()) {
+                prefs.put(USERNAME, username);
+                if (usersList == null || usersList.length() == 0)
+                    prefs.put(USERS_LIST, username);
+                else {
+                    if (usersList.indexOf(username) == -1) {
+                        usersList += "," + username;
+                        prefs.put(USERS_LIST, usersList);
+                    }
+                }
+            } else {
+                prefs.remove(USERNAME);
+                prefs.remove(username + PASSWORD);
+                prefs.remove(username + LOCALE);
+                if (usersList != null && usersList.length() > 0) {
+                    usersList = usersList.replaceAll("," + username, "");
+                    usersList = usersList.replaceAll(username + ",", "");
+                    prefs.put(USERS_LIST, usersList);
+                }
+            }
+
+            /* End of preferences handling */
+        
             getFormSession().updateOrganization(user, new OrganizationChoiceHandler());
             //Organization organizationDataObject =
 
