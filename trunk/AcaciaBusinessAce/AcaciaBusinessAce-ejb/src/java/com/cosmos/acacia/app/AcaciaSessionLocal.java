@@ -1,5 +1,6 @@
 package com.cosmos.acacia.app;
 
+import com.cosmos.acacia.crm.data.Organization;
 import javax.ejb.Local;
 
 /**
@@ -9,6 +10,8 @@ import javax.ejb.Local;
  *
  */
 @Local
-public interface AcaciaSessionLocal extends AcaciaSessionRemote {
-
+public interface AcaciaSessionLocal
+    extends AcaciaSessionRemote
+{
+    void setOrganization(Organization organization);
 }

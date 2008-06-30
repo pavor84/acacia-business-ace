@@ -16,6 +16,8 @@ import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -45,13 +47,6 @@ import javax.persistence.Table;
             ),
         @NamedQuery
             (
-                name = "AssemblingCategory.findByParentDataObjectIsNullAndDeleted",
-                query = "select t1 from AssemblingCategory t1" +
-                        " where t1.dataObject.parentDataObjectId is null" +
-                        " and t1.dataObject.deleted = :deleted"
-            ),
-        @NamedQuery
-            (
                 name = "AssemblingCategory.findByNameNotDeleted",
                 query = "select t1 from AssemblingCategory t1" +
                         " where t1.parentId = :parentId" +
@@ -60,25 +55,9 @@ import javax.persistence.Table;
             ),
         @NamedQuery
             (
-                name = "AssemblingCategory.findByNameNotDeletedAndParentNull",
-                query = "select t1 from AssemblingCategory t1" +
-                        " where t1.parentId is null" +
-                        " and t1.categoryName like :categoryName" +
-                        " and t1.dataObject.deleted = false"
-            ),
-        @NamedQuery
-            (
                 name = "AssemblingCategory.findByCodeNotDeleted",
                 query = "select t1 from AssemblingCategory t1" +
                         " where t1.parentId = :parentId" +
-                        " and t1.categoryCode like :categoryCode" +
-                        " and t1.dataObject.deleted = false"
-            ),
-        @NamedQuery
-            (
-                name = "AssemblingCategory.findByCodeNotDeletedAndParentNull",
-                query = "select t1 from AssemblingCategory t1" +
-                        " where t1.parentId is null" +
                         " and t1.categoryCode like :categoryCode" +
                         " and t1.dataObject.deleted = false"
             )
@@ -109,10 +88,10 @@ public class AssemblingCategory
     @Property(title="Description")
     private String description;
 
-    /*@ManyToOne
-    @JoinColumn(name="parent_cat_id")
+    @ManyToOne
+    @JoinColumn(name="parent_category_id")
     @Property(title="Parent Category", customDisplay="${parentCategory.categoryName}")
-    private AssemblingCategory parentCategory;*/
+    private AssemblingCategory parentCategory;
 
     @OneToOne
     @PrimaryKeyJoinColumn
@@ -158,7 +137,7 @@ public class AssemblingCategory
         this.description = description;
     }
 
-    /*public AssemblingCategory getParentCategory()
+    public AssemblingCategory getParentCategory()
     {
         return parentCategory;
     }
@@ -166,7 +145,7 @@ public class AssemblingCategory
     public void setParentCategory(AssemblingCategory parentCategory)
     {
         this.parentCategory = parentCategory;
-    }*/
+    }
 
 
     @Override

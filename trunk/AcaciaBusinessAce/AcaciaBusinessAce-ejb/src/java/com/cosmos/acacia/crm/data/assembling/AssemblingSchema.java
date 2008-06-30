@@ -38,6 +38,13 @@ import javax.persistence.Table;
                 query = "select t1 from AssemblingSchema t1" +
                         " where t1.assemblingCategory = :assemblingCategory" +
                         " and t1.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "AssemblingSchema.findByParentId",
+                query = "select t1 from AssemblingSchema t1" +
+                        " where t1.parentId = :parentId" +
+                        " and t1.dataObject.deleted = :deleted"
             )
     })
 public class AssemblingSchema
@@ -122,10 +129,6 @@ public class AssemblingSchema
 
     public void setAssemblingCategory(AssemblingCategory assemblingCategory)
     {
-        if(assemblingCategory != null)
-            setParentId(assemblingCategory.getAssemblingCategoryId());
-        else
-            setParentId(null);
         this.assemblingCategory = assemblingCategory;
     }
 
@@ -135,4 +138,31 @@ public class AssemblingSchema
         return "com.cosmos.acacia.crm.data.AssemblingSchema[productId=" + getProductId() + "]";
     }
 
+    @Override
+    public String getCategoryName()
+    {
+        AssemblingCategory category;
+        if((category = getAssemblingCategory()) != null)
+            return category.getCategoryName();
+
+        return null;
+    }
+
+    @Override
+    public String getProductCode()
+    {
+        return getSchemaCode();
+    }
+
+    @Override
+    public String getProductName()
+    {
+        return getSchemaName();
+    }
+
+    @Override
+    public String getProductType()
+    {
+        return "Schema";
+    }
 }

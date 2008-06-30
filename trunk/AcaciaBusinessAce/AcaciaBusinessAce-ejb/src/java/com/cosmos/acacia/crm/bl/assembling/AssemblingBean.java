@@ -5,14 +5,19 @@
 
 package com.cosmos.acacia.crm.bl.assembling;
 
+import com.cosmos.acacia.app.Session;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.data.assembling.RealProduct;
+import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -85,9 +90,8 @@ public class AssemblingBean
     public AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory)
     {
         AssemblingCategory newObject = new AssemblingCategory();
-        //newObject.setParentCategory(parentCategory);
-        if(parentCategory != null)
-            newObject.setParentId(parentCategory.getAssemblingCategoryId());
+        newObject.setParentCategory(parentCategory);
+        newObject.setParentId(Session.getSession().getOrganization().getId());
 
         return newObject;
     }
@@ -185,6 +189,19 @@ public class AssemblingBean
     }
 
     @Override
+    public List<AssemblingSchema> getAssemblingSchemas(Organization organization)
+    {
+        BigInteger parentId;
+        if(organization == null || (parentId = organization.getId()) == null)
+            return Collections.emptyList();
+
+        Query q = em.createNamedQuery("AssemblingSchema.findByParentId");
+        q.setParameter("parentId", parentId);
+        q.setParameter("deleted", false);
+        return new ArrayList<AssemblingSchema>(q.getResultList());
+    }
+
+    @Override
     public List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory)
     {
         if(assemblingCategory == null)
@@ -221,6 +238,45 @@ public class AssemblingBean
     }
 
     @Override
+    public List<VirtualProduct> getVirtualProducts(Organization organization)
+    {
+        BigInteger parentId;
+        if(organization == null || (parentId = organization.getId()) == null)
+            return Collections.emptyList();
+
+        synchronizeRealProducts(parentId);
+        Query q = em.createNamedQuery("VirtualProduct.findByParentId");
+        q.setParameter("parentId", parentId);
+
+        return new ArrayList<VirtualProduct>(q.getResultList());
+    }
+
+    private void synchronizeRealProducts(BigInteger parentId)
+    {
+        Query q = em.createNamedQuery("RealProduct.findNewSimpleProducts");
+        q.setParameter("parentId", parentId);
+        List<SimpleProduct> newSP = q.getResultList();
+        if(newSP != null && newSP.size() > 0)
+        {
+            for(SimpleProduct sp : newSP)
+            {
+                esm.persist(em, new RealProduct(sp));
+            }
+        }
+
+        q = em.createNamedQuery("RealProduct.findDeletedSimpleProducts");
+        q.setParameter("parentId", parentId);
+        List<RealProduct> deletedRP = q.getResultList();
+        if(deletedRP != null && deletedRP.size() > 0)
+        {
+            for(RealProduct rp : deletedRP)
+            {
+                esm.remove(em, rp);
+            }
+        }
+    }
+
+    @Override
     public EntityProperties getAssemblingSchemaEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(AssemblingSchema.class);
@@ -240,6 +296,14 @@ public class AssemblingBean
     public EntityProperties getAssemblingSchemaItemValueEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(AssemblingSchemaItemValue.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getVirtualProductItemEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(VirtualProduct.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
