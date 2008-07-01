@@ -24,6 +24,7 @@ import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -66,7 +67,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Column(name = "user_name", nullable = false)
     @Property(title="Username", propertyValidator=@PropertyValidator(
-        minLength=3, maxLength=32))
+        validationType=ValidationType.LENGTH, minLength=3, maxLength=32, regex="[^,]+", tooltip="username.toolip"))
     private String userName;
 
     @Column(name = "email_address", nullable = false)
@@ -75,7 +76,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Column(name = "user_password", nullable = false)
     @Property(title="Password", visible=false, propertyValidator=@PropertyValidator(
-        minLength=6, maxLength=32))
+        validationType=ValidationType.LENGTH, minLength=6, maxLength=32, tooltip="password.tooltip"))
     private String userPassword;
 
     @Column(name = "system_password")
