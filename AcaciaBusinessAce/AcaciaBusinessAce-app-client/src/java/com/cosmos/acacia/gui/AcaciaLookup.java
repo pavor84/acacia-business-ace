@@ -174,6 +174,8 @@ public class AcaciaLookup extends javax.swing.JPanel {
         BaseValidator validator = (BaseValidator) binding.getValidator();
         if (validator != null) {
             tooltip = validator.getTooltip();
+            if (tooltip != null)
+                    getResourceMap().getString(validator.getTooltip());
             required = validator.isRequired();
         }
         

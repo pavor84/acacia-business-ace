@@ -222,6 +222,8 @@ public class JBComboBox
             if(validator != null)
             {
                 tooltip = validator.getTooltip();
+                if (tooltip != null)
+                    getResourceMap().getString(validator.getTooltip());
                 required = validator.isRequired();
             }
 
