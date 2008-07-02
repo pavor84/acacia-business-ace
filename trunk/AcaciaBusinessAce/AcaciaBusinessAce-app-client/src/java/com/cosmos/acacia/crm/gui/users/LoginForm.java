@@ -6,8 +6,6 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -243,15 +241,15 @@ public class LoginForm extends AcaciaPanel {
         loadPreferences();
         AutoCompleteDecorator.decorate(usernameComboBox);
         
-        //AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
         this.requestFocus();
     }
 
     private void loadPreferences() {
-        localeComboBox.addActionListener(new ActionListener() {
+        localeComboBox.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // 
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED && e.getItem() != null)
+                    UserUtils.setLocale(new Locale((String) e.getItem()));
             }
         });
         
@@ -308,6 +306,7 @@ public class LoginForm extends AcaciaPanel {
             localeComboBox.setSelectedItem(new Locale(locale));
         
     }
+    
     @Action
     public void login() {
 
@@ -397,7 +396,7 @@ public class LoginForm extends AcaciaPanel {
             try
             {
                 formSession = getBean(UsersRemote.class);
-                //UserUtils.updateUserLocale(formSession);
+                UserUtils.updateUserLocale(formSession);
             }
             catch(Exception ex)
             {

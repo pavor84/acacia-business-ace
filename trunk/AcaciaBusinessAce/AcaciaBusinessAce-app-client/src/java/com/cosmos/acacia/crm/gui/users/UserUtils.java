@@ -11,10 +11,15 @@ import org.apache.log4j.Logger;
 public class UserUtils {
 
     protected static Logger log = Logger.getLogger(UserUtils.class);
+    protected static Locale locale;
     
-//    public static void updateUserLocale(UsersRemote session) {
-//        session.setLocale((Locale) AppSession.get().getValue(AppSession.USER_LOCALE));
-//    }
+    public static void updateUserLocale(UsersRemote bean) {
+        bean.setLocale((Locale) locale);
+    }
+    
+    public static void setLocale(Locale locale) {
+        UserUtils.locale = locale;
+    }
     
     public static String getHash(String password) {
         try {
