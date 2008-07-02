@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -25,7 +26,8 @@ import javax.ejb.Remote;
 @Remote
 public interface ProductsListRemote {
 
-    List<SimpleProduct> getProducts(DataObject parent);
+    List<SimpleProduct> getProducts(BigInteger parentId);
+    
     List<ProductCategory> getProductsCategories(DataObject parent);
 
     EntityProperties getProductEntityProperties();

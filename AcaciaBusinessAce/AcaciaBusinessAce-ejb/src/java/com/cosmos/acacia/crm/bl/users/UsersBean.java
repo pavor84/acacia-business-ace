@@ -75,24 +75,50 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @EJB
     private AcaciaSessionLocal acaciaSessionLocal;
 
+    /** Temporary indicator that operations are concerning password change */
+    private boolean passwordChange = false;
+    
+    private static final String INCORRECT_LOGIN_DATA = "Login.data.incorrect";
+    private static final String TEMPORARY_LOGIN = "temporaryLogin";
+    private static final String LOGIN = "login";
+    
     @Override
     public Integer login(String username, char[] password) {
-        log.info("Locale is : " + locale);
-        Query loginQuery = em.createNamedQuery("User.login");
+        try {
+            return login(username, password, LOGIN);
+        } catch (ValidationException ex){
+            if (ex.getMessage().equals(INCORRECT_LOGIN_DATA))
+                return login(username, password, TEMPORARY_LOGIN);
+            else
+                throw ex;
+        }
+    }
+
+    private Integer login(String username, char[] password, String loginType) {
+        Query loginQuery = em.createNamedQuery("User." + loginType);
         loginQuery.setParameter("username", username);
         loginQuery.setParameter("password", getHash(new String(password)));
-
+        
         try {
             User user = (User) loginQuery.getSingleResult();
             if (!user.getIsActive())
                 throw new ValidationException("Login.account.inactive");
-
-            return acaciaSessionLocal.login(user);
+            
+            if (loginType.equals(TEMPORARY_LOGIN)) {
+                // Checking whether the validity period hasn't expired
+                if (System.currentTimeMillis() > user.getSystemPasswordValidity().getTime())
+                    throw new ValidationException(INCORRECT_LOGIN_DATA);
+                
+                user.setNextActionAfterLogin(CHANGE_PASSWORD);
+            }
+            if (!passwordChange)
+                return acaciaSessionLocal.login(user);
+            else
+                return null;
         } catch (NoResultException ex){
-            throw new ValidationException("Login.data.incorrect");
+            throw new ValidationException(INCORRECT_LOGIN_DATA);
         }
     }
-
     @Override
     public void remindPasswordByEmail(String email) {
         Query q = em.createNamedQuery("User.findByEmail");
@@ -100,23 +126,52 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         try {
             User user = (User) q.getSingleResult();
-            //TODO: send a temp password
+            remindPassword(user);
         } catch (NoResultException ex) {
-            throw new ValidationException("ForgottenPassword.email.missing");
+            throw new ValidationException("ForgottenPasswordForm.invalid.email");
         }
     }
 
     @Override
     public void remindPasswordByUsername(String username) {
-        // TODO Auto-generated method stub
-
+        Query q = em.createNamedQuery("User.findByUserName");
+        q.setParameter("userName", username);
+        
+        try {
+            User user = (User) q.getSingleResult();
+            remindPassword(user);
+        } catch (Exception ex) {
+            throw new ValidationException("ForgottenPasswordForm.invalid.username");
+        }
     }
-
+    
+    private static final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
+    private void remindPassword(User user) {
+        String tempPassword = generateTemporaryPassword();
+        user.setSystemPassword(getHash(tempPassword));
+        user.setSystemPasswordValidity(new Date(System.currentTimeMillis() + MILLIS_IN_DAY));
+        esm.persist(em, user);
+        
+        log.info("Pass: " + tempPassword);
+        
+        sendMail(user.getEmailAddress(),
+                MessageRetriever.get("forgottenPasswordContent", locale, tempPassword),
+                MessageRetriever.get("forgottenPasswordSubjecet", locale));
+    }
+    
+    private String generateTemporaryPassword() {
+        int length = 6 + (int) (Math.random() * 6);
+        byte[] chars = new byte[length];
+        for (int i = 0; i < chars.length; i ++) {
+            chars[i] = (byte) (33 + (Math.random() * 93));
+        }
+        return new String(chars).trim();
+    }
+    
     @Override
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
-        //BigInteger codeNumber = BigInteger.valueOf((int) (100000 + (Math.random() * 899999)));
-        BigInteger codeNumber = BigInteger.valueOf(UUID.randomUUID().getMostSignificantBits() / 1000);
+        BigInteger codeNumber = BigInteger.valueOf(UUID.randomUUID().getMostSignificantBits() / 10000);
 
         RegistrationCode code = new RegistrationCode();
         code.setEmail(email);
@@ -297,7 +352,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
             MessageDigest digest = MessageDigest.getInstance("SHA");
             password = saltPassword(password);
             digest.update(password.getBytes());
-            return getHexString(digest.digest());
+            String result = getHexString(digest.digest());
+            log.info("pr: |" + password + "|" + result);
+            return result;
         } catch (NoSuchAlgorithmException e) {
             log.error("Hashing algorithm not found");
             return password;
@@ -337,5 +394,23 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 log.error(ex); // throw validation exception
         }
      }
+
+    @Override
+    public void changePassword(char[] oldPassword, char[] newPassword) {
+        try {
+            passwordChange = true;
+
+            User user = acaciaSessionLocal.getUser();
+            // try to login; if the old pass is incorrect, exception will be thrown
+            login(user.getUserName(), oldPassword);
+            
+            user.setUserPassword(getHash(new String(newPassword)));
+            user.setSystemPassword(null);
+            esm.persist(em, user);
+        } catch (ValidationException ex) {
+            passwordChange = false;
+            throw ex;
+        }
+    }
 
 }

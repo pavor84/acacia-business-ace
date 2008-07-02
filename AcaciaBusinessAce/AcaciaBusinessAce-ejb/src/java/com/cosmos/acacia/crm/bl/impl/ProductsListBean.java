@@ -30,6 +30,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.impl.ProductCategoryValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.ProductValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  *
@@ -49,13 +50,13 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private ProductCategoryValidatorLocal productCategoryValidator;
 
     @SuppressWarnings("unchecked")
-    public List<SimpleProduct> getProducts(DataObject parent)
+    public List<SimpleProduct> getProducts(BigInteger parentId)
     {
         Query q;
-        if(parent != null)
+        if(parentId != null)
         {
             q = em.createNamedQuery("Product.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parent.getDataObjectId());
+            q.setParameter("parentDataObjectId", parentId);
         }
         else
         {
