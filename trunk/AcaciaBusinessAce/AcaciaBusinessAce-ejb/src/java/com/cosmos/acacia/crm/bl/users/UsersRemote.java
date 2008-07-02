@@ -19,7 +19,9 @@ import javax.security.auth.callback.CallbackHandler;
 @Remote
 public interface UsersRemote {
 
-
+    /** TODO: decide a better place for this */
+    public static final String CHANGE_PASSWORD = "change";
+    
     /**
      * Performs a login operation. Note that the password must be already hashed
      *
@@ -128,4 +130,12 @@ public interface UsersRemote {
      * @param active whether the user should be active or inactive
      */
     void activateUser(User user, boolean active);
+    
+    /**
+     * Performs a password change
+     * 
+     * @param oldPassword
+     * @param newPassword
+     */
+    void changePassword(char[] oldPassword, char[] newPassword);
 }

@@ -25,6 +25,7 @@ import org.jdesktop.application.Action;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.crm.bl.users.UsersBean;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
@@ -326,8 +327,6 @@ public class LoginForm extends AcaciaPanel {
             log.error("", ex);
         }
         
-        log.info("pass: " + new String(password));
-        
         Integer sessionid = getFormSession().login(username, password);
         AcaciaApplication.setSessionId(sessionid);
         
@@ -346,6 +345,16 @@ public class LoginForm extends AcaciaPanel {
             log.info(acaciaSessionRemote.getOrganization());
 
             setDialogResponse(DialogResponse.LOGIN);
+            
+            if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
+                ChangePasswordForm cpf = new ChangePasswordForm(null);
+                cpf.setCurrentPassword(new String(password));
+                DialogResponse response = cpf.showDialog(this);
+                
+                //if(!DialogResponse.OK.equals(response))
+                //    AcaciaApplication.getApplication().exit();
+            }
+            
             close();
         } else {
             exceptionOccurred = false;
@@ -388,6 +397,8 @@ public class LoginForm extends AcaciaPanel {
 
     @Action
     public void remindPassword() {
+        ForgottenPasswordForm fpf = new ForgottenPasswordForm(null);
+        fpf.showDialog();
     }
     
     protected UsersRemote getFormSession()

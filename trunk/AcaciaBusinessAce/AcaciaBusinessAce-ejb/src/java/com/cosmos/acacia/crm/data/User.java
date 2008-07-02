@@ -39,6 +39,10 @@ import com.cosmos.acacia.annotation.ValidationType;
                     query = "select u from User u where u.userName=:username and u.userPassword=:password"
             ),
             @NamedQuery(
+                    name = "User.temporaryLogin",
+                    query = "select u from User u where u.userName=:username and u.systemPassword=:password"
+            ),
+            @NamedQuery(
                     name = "User.findCreatedUsers",
                     query = "select u from User u where u.creator=:creator"
             ),
@@ -84,7 +88,7 @@ public class User extends DataObjectBean implements Serializable {
     private String systemPassword;
 
     @Column(name = "system_password_validity")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Property(title="System password validity", visible=false, hidden=true)
     private Date systemPasswordValidity;
 

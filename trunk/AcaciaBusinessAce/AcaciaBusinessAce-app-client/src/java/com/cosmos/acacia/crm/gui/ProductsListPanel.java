@@ -152,7 +152,7 @@ public class ProductsListPanel
     {
         if(products == null)
         {
-            products = getFormSession().getProducts(getParentDataObject());
+            products = getFormSession().getProducts(getParentDataObjectId());
         }
 
         return products;
