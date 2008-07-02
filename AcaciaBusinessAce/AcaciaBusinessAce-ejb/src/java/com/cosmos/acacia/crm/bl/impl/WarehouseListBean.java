@@ -1,9 +1,12 @@
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -17,6 +20,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.validation.impl.WarehouseProductValidatorLocal;
@@ -49,7 +53,7 @@ public class WarehouseListBean implements WarehouseListRemote {
     public EntityProperties getWarehouseEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(Warehouse.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-
+        
         return entityProperties;
     }
 
@@ -161,8 +165,127 @@ public class WarehouseListBean implements WarehouseListRemote {
     public WarehouseProduct saveWarehouseProduct(WarehouseProduct entity) {
         warehouseProductValidator.validate(entity);
 
+        entity = em.merge(entity);
         esm.persist(em, entity);
         return entity;
+    }
+    
+    /**
+     * @see com.cosmos.acacia.crm.bl.impl.WarehouseListRemote#getWarehouseProductsTotals()
+     */
+    public Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(){
+       List<WarehouseProduct> products = listWarehouseProducts();
+       
+       Map<WarehouseProduct, List<WarehouseProduct>> result = new HashMap<WarehouseProduct, List<WarehouseProduct>>();
+       
+       Map<SimpleProduct, WarehouseProduct> simpleProductToSummaryProduct = new HashMap<SimpleProduct, WarehouseProduct>();
+       
+       for (WarehouseProduct warehouseProduct : products) {
+           SimpleProduct simpleProduct = warehouseProduct.getProduct();
+           WarehouseProduct summaryProduct = simpleProductToSummaryProduct.get(simpleProduct);
+           
+           List<WarehouseProduct> productsList = null;
+               
+           //make sure we have entry for the summary product
+           //also create or get the products list
+           if ( summaryProduct==null ){
+               summaryProduct = createNewSummaryProduct(warehouseProduct);
+               simpleProductToSummaryProduct.put(simpleProduct, summaryProduct);
+               
+               productsList = new ArrayList<WarehouseProduct>();
+               result.put(summaryProduct, productsList);
+           }else{
+               productsList = result.get(summaryProduct);
+           }
+           
+           //modify the current summary product by adding the new encountered quantities
+           accumulateQuantities(summaryProduct, warehouseProduct);
+           
+           //register the encountered product in the list
+           productsList.add(warehouseProduct);
+       }
+       
+       return result;
+    }
+    
+    private static class SummaryWarehouseProduct extends WarehouseProduct{
+        private BigDecimal prefferedDefaultQuantity;
+        private BigDecimal prefferedMinQuantity;
+        private BigDecimal prefferedMaxQuantity;
+        private int index;
+        public BigDecimal getPrefferedDefaultQuantity() {
+            return prefferedDefaultQuantity;
+        }
+        public void setPrefferedDefaultQuantity(BigDecimal prefferedDefaultQuantity) {
+            this.prefferedDefaultQuantity = prefferedDefaultQuantity;
+        }
+        public BigDecimal getPrefferedMinQuantity() {
+            return prefferedMinQuantity;
+        }
+        public void setPrefferedMinQuantity(BigDecimal prefferedMinQuantity) {
+            this.prefferedMinQuantity = prefferedMinQuantity;
+        }
+        public BigDecimal getPrefferedMaxQuantity() {
+            return prefferedMaxQuantity;
+        }
+        public void setPrefferedMaxQuantity(BigDecimal prefferedMaxQuantity) {
+            this.prefferedMaxQuantity = prefferedMaxQuantity;
+        }
+        public int getIndex() {
+            return index;
+        }
+        public void setIndex(int index) {
+            this.index = index;
+        }
+        @Override
+        public boolean equals(Object object) {
+            if ( object instanceof SummaryWarehouseProduct ){}
+            else return false;
+            return getProduct().equals(((SummaryWarehouseProduct)object).getProduct());
+        }
+        @Override
+        public int hashCode() {
+            return getProduct().hashCode();
+        }
+    }
+    
+    private void accumulateQuantities(WarehouseProduct acc, WarehouseProduct value) {
+        //retrieve the appropriate values
+        BigDecimal defaultQuantity = value.getPrefferedDefaultQuantity()==null?BigDecimal.ZERO:value.getPrefferedDefaultQuantity();
+        BigDecimal minQuantity = value.getPrefferedMinQuantity()==null?BigDecimal.ZERO:value.getPrefferedMinQuantity();
+        BigDecimal maxQuantity = value.getPrefferedMaxQuantity()==null?BigDecimal.ZERO:value.getPrefferedMaxQuantity();
+        
+        BigDecimal quantityInStock = value.getQuantityInStock()==null?BigDecimal.ZERO:value.getQuantityInStock();
+        BigDecimal quantityDue = value.getQuantityDue()==null?BigDecimal.ZERO:value.getQuantityDue();
+        BigDecimal reservedQuantity = value.getReservedQuantity()==null?BigDecimal.ZERO:value.getReservedQuantity();
+        BigDecimal soldQuantity = value.getSoldQuantity()==null?BigDecimal.ZERO:value.getSoldQuantity();
+        BigDecimal orderedQuantity = value.getOrderedQuantity()==null?BigDecimal.ZERO:value.getOrderedQuantity();
+        
+        //set them up
+        SummaryWarehouseProduct accumulator = (SummaryWarehouseProduct) acc;
+        accumulator.setPrefferedDefaultQuantity(accumulator.getPrefferedDefaultQuantity().add(defaultQuantity));
+        accumulator.setPrefferedMinQuantity(accumulator.getPrefferedMinQuantity().add(minQuantity));
+        accumulator.setPrefferedMaxQuantity(accumulator.getPrefferedMaxQuantity().add(maxQuantity));
+        
+        accumulator.setQuantityInStock(accumulator.getQuantityInStock().add(quantityInStock));
+        accumulator.setQuantityDue(accumulator.getQuantityDue().add(quantityDue));
+        accumulator.setReservedQuantity(accumulator.getReservedQuantity().add(reservedQuantity));
+        accumulator.setSoldQuantity(accumulator.getSoldQuantity().add(soldQuantity));
+        accumulator.setOrderedQuantity(accumulator.getOrderedQuantity().add(orderedQuantity));
+    }
+
+    private WarehouseProduct createNewSummaryProduct(WarehouseProduct template) {
+        SummaryWarehouseProduct result = new SummaryWarehouseProduct();
+        result.setProduct(template.getProduct());
+        result.setPrefferedDefaultQuantity(BigDecimal.ZERO);
+        result.setPrefferedMinQuantity(BigDecimal.ZERO);
+        result.setPrefferedMaxQuantity(BigDecimal.ZERO);
+        result.setQuantityInStock(BigDecimal.ZERO);
+        result.setQuantityDue(BigDecimal.ZERO);
+        result.setReservedQuantity(BigDecimal.ZERO);
+        result.setSoldQuantity(BigDecimal.ZERO);
+        result.setOrderedQuantity(BigDecimal.ZERO);
+        return result;
     }
 
     @Override
@@ -174,5 +297,34 @@ public class WarehouseListBean implements WarehouseListRemote {
         }
         List<Person> result = new ArrayList<Person>(persons);
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<WarehouseProduct> listWarehouseProducts(Warehouse warehouse) {
+        if ( warehouse==null )
+            throw new IllegalArgumentException("Please supply not null warehouse!");
+        
+        Query q = em.createNamedQuery("WarehouseProduct.findForWarehouse");
+        q.setParameter("warehouse", warehouse);
+        
+        List<WarehouseProduct> result = q.getResultList();
+        
+        return result;
+    }
+
+    @Override
+    public EntityProperties getWarehouseProductTableProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(WarehouseProduct.class);
+        //the next two prices - are security restricted values
+        entityProperties.removePropertyDetails("salePrice");
+        entityProperties.removePropertyDetails("purchasePrice");
+        //the next tree quantities will be retrieved from synthetic accessors rather the default getters
+        entityProperties.removePropertyDetails("minimumQuantity");
+        entityProperties.removePropertyDetails("maximumQuantity");
+        entityProperties.removePropertyDetails("defaultQuantity");
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+
+        return entityProperties;
     }
 }

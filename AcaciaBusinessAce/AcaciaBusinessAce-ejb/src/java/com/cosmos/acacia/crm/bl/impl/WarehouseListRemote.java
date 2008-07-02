@@ -2,6 +2,7 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Remote;
 
@@ -93,4 +94,27 @@ public interface WarehouseListRemote {
      * @return
      */
     List<Person> getWarehouseMenForBranch(BigInteger dataObjectId);
+
+    /**
+     * List warehouse products for a given warehouse
+     * @param warehouse - not null warehouse
+     * @return - not null list of products
+     */
+    List<WarehouseProduct> listWarehouseProducts(Warehouse warehouse);
+
+    /**
+     * Returns the entity properties of warehouse product prepared for showing in table.
+     * @return
+     */
+    EntityProperties getWarehouseProductTableProperties();
+
+    /**
+     * Returns map matching a summed warehouse product (quantities for all warehouses) against
+     * a list of the actual warehouse products participating in the sum.
+     * Thus the key of the map is synthetic {@link WarehouseProduct} while the value is a List
+     * of actual persisted {@link WarehouseProduct}s
+     * @param parentId - the parent id - shouldn't be null
+     * @return not null map
+     */
+    Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals();
 }

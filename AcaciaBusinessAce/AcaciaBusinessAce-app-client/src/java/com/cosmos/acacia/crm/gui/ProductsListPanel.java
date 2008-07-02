@@ -69,7 +69,7 @@ public class ProductsListPanel
         setCustomDisplay(propertyDetails, "producer", "${producer.displayName}");
         
         //add column
-        addColumn(55, getString("ProductList.codeFormatted"), "${codeFormatted}", entityProps);
+        addColumn(55, "codeFormatted", getString("ProductList.codeFormatted"), "${codeFormatted}", entityProps);
         
         refreshDataTable(entityProps);
     }

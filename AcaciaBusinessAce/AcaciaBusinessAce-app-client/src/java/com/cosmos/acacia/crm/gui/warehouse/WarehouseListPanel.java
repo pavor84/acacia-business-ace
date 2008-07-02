@@ -163,6 +163,13 @@ public class WarehouseListPanel extends AbstractTablePanel {
     
     @Override
     public void enterWarehouseAction() {
-        System.out.println("Enetering warehouse");
+        Warehouse warehouse = (Warehouse) getDataTable().getSelectedRowObject();
+        if ( warehouse==null ){
+            log.warn("Enter warehouse action can't be executed: Warehouse instance expected but "+getSelectedRowObject()+" found! ");
+            return;
+        }
+        
+        WarehouseProductListPanel warehouseProductList = new WarehouseProductListPanel(warehouse);
+        warehouseProductList.showFrame(this);
     }
 }

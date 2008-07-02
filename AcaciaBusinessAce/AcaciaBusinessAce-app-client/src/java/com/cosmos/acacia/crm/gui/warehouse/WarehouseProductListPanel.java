@@ -12,11 +12,14 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
+import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -33,28 +36,77 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     private WarehouseListRemote formSession;
     private BindingGroup bindingGroup;
     
+    //the current warehouse in which context the list of products is shown
+    private Warehouse warehouse;
+
+    private boolean readonly;
+    
+    private List<WarehouseProduct> list;
+
+    private boolean allowDetailsView = true;
+    
+    private boolean showSummaryProducts = false;
+    
     /**
      * @param parentDataObject
      */
     public WarehouseProductListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
+        customInit();
     }
     
-    public WarehouseProductListPanel() {
+    public WarehouseProductListPanel(Warehouse warehouse) {
+        this.warehouse = warehouse;
+        customInit();
+    }
+    
+    public WarehouseProductListPanel(){
         super();
+        customInit();
     }
     
+    /**
+     * If showSummaryProducts is true - 
+     * shows only the columns that have meaning for summary products (for example all quantities columns).
+     * Hides the columns that have no summary meaning (e.g. notes column).
+     * Otherwise the same as WarehouseProductListPanel().
+     * @param b
+     */
+    public WarehouseProductListPanel(boolean showSummaryProducts){
+        super();
+        this.showSummaryProducts = showSummaryProducts;
+        customInit();
+    }
+
+    private void customInit() {
+        entityProps = getFormSession().getWarehouseProductTableProperties();
+        
+        //free quantity column - add it by hand since it's synthetic value
+        addColumn(25, "freeQuantity", getResourceMap().getString("WarehouseProduct.freeQuantity.columnName"),
+            "${freeQuantity}", entityProps);
+        //min quantity column - add it by hand since it's synthetic value
+        addColumn(26, "prefferedMinQuantity", getResourceMap().getString("WarehouseProduct.minQuantity.columnName"),
+            "${prefferedMinQuantity}", entityProps);
+        //max quantity column - add it by hand since it's synthetic value
+        addColumn(27, "prefferedMaxQuantity", getResourceMap().getString("WarehouseProduct.maxQuantity.columnName"),
+            "${prefferedMaxQuantity}", entityProps);
+        //default quantity column - add it by hand since it's synthetic value
+        addColumn(28, "prefferedDefaultQuantity", getResourceMap().getString("WarehouseProduct.defaultQuantity.columnName"),
+            "${prefferedDefaultQuantity}", entityProps);
+        
+        //remove the columns that doesn't have summary meaning if this is set to true
+        if ( showSummaryProducts ){
+            entityProps.removePropertyDetails("warehouse");
+            entityProps.removePropertyDetails("notes");
+            entityProps.removePropertyDetails("deliveryTime");
+        }
+        
+        refreshDataTable(entityProps);
+    }
+
     @Override
     protected void initData() {
         super.initData();
-        
-        entityProps = getFormSession().getWarehouseProductEntityProperties();
-        
-        //free quantity column - add it by hand since it's synthetic value
-        addColumn(25, getResourceMap().getString("WarehouseProduct.freeQuantity.columnName"),
-            null, entityProps);
-        
-        refreshDataTable(entityProps);
     }
     
     protected WarehouseListRemote getFormSession() {
@@ -85,7 +137,23 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        return getFormSession().listWarehouseProducts();
+        if ( list==null ){
+            if (warehouse==null)
+                list = getFormSession().listWarehouseProducts();
+            else
+                list = getFormSession().listWarehouseProducts(warehouse);
+        }
+        
+        return list;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void refreshList(List newList){
+        if ( newList==null )
+            throw new IllegalStateException("Null parameter is illegal!");
+        
+        list = newList;
+        refreshDataTable(entityProps);
     }
 
     /**
@@ -93,20 +161,23 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canCreate() {
-        return true;
+        return !readonly;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
     public boolean canDelete(Object rowObject) {
-        return true;
+        return !readonly;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
     public boolean canModify(Object rowObject) {
+        if ( readonly && allowDetailsView==false )
+            return false;
+        
         return true;
     }
 
@@ -139,15 +210,24 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         WarehouseProduct wp = getFormSession().newWarehouseProduct();
+        wp.setQuantityInStock(BigDecimal.ZERO);
+        wp.setOrderedQuantity(BigDecimal.ZERO);
+        wp.setSoldQuantity(BigDecimal.ZERO);
+        wp.setQuantityDue(BigDecimal.ZERO);
+        wp.setReservedQuantity(BigDecimal.ZERO);
+        wp.setWarehouse(warehouse);
         return onEditEntity(wp);
     }
 
     private Object onEditEntity(WarehouseProduct wp) {
         WarehouseProductPanel editPanel = new WarehouseProductPanel(wp);
+        if ( readonly ){
+            editPanel.setReadonlyMode(readonly);
+        }
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return editPanel.getSelectedValue();
+            return editPanel.getEntity();
         }
 
         return null;
@@ -161,5 +241,21 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         refreshDataTable(entityProps);
         
         return t;
+    }
+
+    /**
+     * @param b
+     */
+    public void setReadonly(boolean readonly, boolean allowDetailsView) {
+        this.readonly = readonly;
+        for (Button button : Button.values()) {
+            setVisible(button, !readonly);
+        }
+        
+        this.allowDetailsView = allowDetailsView;
+        if ( allowDetailsView ){
+            setVisible(Button.Modify, true);
+            getButton(Button.Modify).setText(getResourceMap().getString("button.view"));
+        }
     }
 }

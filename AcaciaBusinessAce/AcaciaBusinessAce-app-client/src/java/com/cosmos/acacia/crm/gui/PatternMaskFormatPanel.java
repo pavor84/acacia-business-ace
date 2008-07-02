@@ -6,48 +6,36 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
+import java.math.BigInteger;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.jdesktop.swingx.error.ErrorInfo;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
-import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.gui.ProductPanel.Button;
-import com.cosmos.acacia.crm.validation.ValidationException;
-import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
+import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.gui.AcaciaToStringConverter;
+import com.cosmos.acacia.gui.BaseEntityPanel;
+import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBErrorPane;
-import com.cosmos.swingb.JBTextField;
-import java.math.BigInteger;
 
 /**
  *
  * @author  jchan
  */
-public class PatternMaskFormatPanel extends AcaciaPanel {
+public class PatternMaskFormatPanel extends BaseEntityPanel {
     
     @EJB
     private PatternMaskListRemote formSession;
@@ -56,17 +44,16 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
     public PatternMaskFormatPanel(PatternMaskFormat modelObject) {
         super((BigInteger)null);
         this.format = modelObject;
-        init();
+        initComponents();
+        initData();
+    }
+    
+    public PatternMaskFormatPanel(){
+        this(null);
     }
     
     private BindingGroup bindGroup;
     private PatternMaskFormat format;
-    
-    private void init()
-    {
-        initComponents();
-        initData();
-    }
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -76,28 +63,38 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jBPanel1 = new com.cosmos.swingb.JBPanel();
         jBLabel1 = new com.cosmos.swingb.JBLabel();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
-        jBLabel3 = new com.cosmos.swingb.JBLabel();
         nameField = new com.cosmos.swingb.JBTextField();
         formatField = new com.cosmos.swingb.JBTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        descriptionField = new com.cosmos.swingb.JBTextArea();
+        descriptionField = new com.cosmos.swingb.JBTextPane();
+        jBLabel2 = new com.cosmos.swingb.JBLabel();
+        jBLabel3 = new com.cosmos.swingb.JBLabel();
+        ownerField = new com.cosmos.acacia.gui.AcaciaLookup();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
-        ownerField = new com.cosmos.acacia.gui.AcaciaComboBox();
-        saveButton = new com.cosmos.swingb.JBButton();
-        closeButton = new com.cosmos.swingb.JBButton();
+        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
 
         setName("Form"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(PatternMaskFormatPanel.class);
-        jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("formatterDetailsPanel.border.title"))); // NOI18N
-        jBPanel1.setName("formatterDetailsPanel"); // NOI18N
-        jBPanel1.setTitle(resourceMap.getString("formatterDetailsPanel.title")); // NOI18N
-
         jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
         jBLabel1.setName("jBLabel1"); // NOI18N
+
+        nameField.setText(resourceMap.getString("nameField.text")); // NOI18N
+        nameField.setName("nameField"); // NOI18N
+        nameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameFieldActionPerformed(evt);
+            }
+        });
+
+        formatField.setText(resourceMap.getString("formatField.text")); // NOI18N
+        formatField.setName("formatField"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        descriptionField.setName("descriptionField"); // NOI18N
+        jScrollPane1.setViewportView(descriptionField);
 
         jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
         jBLabel2.setName("jBLabel2"); // NOI18N
@@ -105,79 +102,12 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
         jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
         jBLabel3.setName("jBLabel3"); // NOI18N
 
-        nameField.setText(resourceMap.getString("nameField.text")); // NOI18N
-        nameField.setName("nameField"); // NOI18N
-
-        formatField.setName("formatField"); // NOI18N
-
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        descriptionField.setColumns(20);
-        descriptionField.setRows(5);
-        descriptionField.setFont(resourceMap.getFont("descriptionField.font")); // NOI18N
-        descriptionField.setName("descriptionField"); // NOI18N
-        jScrollPane1.setViewportView(descriptionField);
+        ownerField.setName("ownerField"); // NOI18N
 
         jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
         jBLabel4.setName("jBLabel4"); // NOI18N
 
-        ownerField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        ownerField.setName("ownerField"); // NOI18N
-
-        javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
-        jBPanel1.setLayout(jBPanel1Layout);
-        jBPanel1Layout.setHorizontalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jBPanel1Layout.createSequentialGroup()
-                        .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
-                        .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
-                    .addGroup(jBPanel1Layout.createSequentialGroup()
-                        .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(56, 56, 56)
-                        .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-                            .addComponent(formatField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-                            .addComponent(ownerField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        jBPanel1Layout.setVerticalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(formatField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ownerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(PatternMaskFormatPanel.class, this);
-        saveButton.setAction(actionMap.get("saveAction")); // NOI18N
-        saveButton.setText(resourceMap.getString("saveButton.text")); // NOI18N
-        saveButton.setName("saveButton"); // NOI18N
-
-        closeButton.setAction(actionMap.get("closeAction")); // NOI18N
-        closeButton.setForeground(resourceMap.getColor("closeButton.foreground")); // NOI18N
-        closeButton.setIcon(resourceMap.getIcon("closeButton.icon")); // NOI18N
-        closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
-        closeButton.setName("closeButton"); // NOI18N
+        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -186,43 +116,71 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(jBLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(jBLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(jBLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(formatField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(nameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(ownerField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(formatField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ownerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        jBPanel1.getAccessibleContext().setAccessibleName(resourceMap.getString("formatterDetailsPanel.AccessibleContext.accessibleName")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+     // TODO add your handling code here:
+     }//GEN-LAST:event_nameFieldActionPerformed
+    
     @Override
     protected void initData() {
         bindGroup = new BindingGroup(); 
         
-        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
-        AutoCompleteDecorator.decorate(ownerField, resourceToStringConverter);
-
         EntityProperties entityProps = getFormSession().getPatternMaskEntityProperties();
         
         nameField.bind(bindGroup, format, entityProps.getPropertyDetails("patternName") );
         formatField.bind(bindGroup, format, entityProps.getPropertyDetails("format") );
         descriptionField.bind(bindGroup, format, "description");
-        ownerField.bind(bindGroup, getPossibleOwners(), format, entityProps.getPropertyDetails("owner"));
-//        ownerField.bind(bindGroup, getPossibleOwners(), format, "ownerId", "partnerId", true,
-//            false, false, null, UpdateStrategy.READ_WRITE);
+        ownerField.bind(new AcaciaLookupProvider() {
+            
+            @Override
+            public Object showSelectionControl() {
+                return onChooseOwner();
+            }
+        
+        }, bindGroup, 
+        format, 
+        entityProps.getPropertyDetails("owner"), 
+        "${displayName}",
+        UpdateStrategy.READ_WRITE);
 
         bindGroup.bind();
         
@@ -242,6 +200,16 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
         }
     }
     
+    protected Object onChooseOwner() {
+        OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
+        DialogResponse dResponse = listPanel.showDialog(this);
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+            return listPanel.getSelectedRowObject();
+        }else{
+            return null;
+        }
+    }
+
     protected void setSaveActionState()
     {
         setEnabled(Button.Save, bindGroup.isContentValid());
@@ -266,24 +234,17 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
         return null;
     }
     
-    private List<BusinessPartner> getPossibleOwners() {
-        List<BusinessPartner> possibleOwners = getFormSession().getOwnersList();
-        return possibleOwners;
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBButton closeButton;
-    private com.cosmos.swingb.JBTextArea descriptionField;
+    private com.cosmos.swingb.JBTextPane descriptionField;
+    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBTextField formatField;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBLabel jBLabel3;
     private com.cosmos.swingb.JBLabel jBLabel4;
-    private com.cosmos.swingb.JBPanel jBPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.swingb.JBTextField nameField;
-    private com.cosmos.acacia.gui.AcaciaComboBox ownerField;
-    private com.cosmos.swingb.JBButton saveButton;
+    private com.cosmos.acacia.gui.AcaciaLookup ownerField;
     // End of variables declaration//GEN-END:variables
     
     
@@ -303,91 +264,33 @@ public class PatternMaskFormatPanel extends AcaciaPanel {
         return formSession;
     }
     
-    @Action
-    public void saveAction() {
-        try
-        {
-            format = getFormSession().savePatternMaskFormat(format);
-            setDialogResponse(DialogResponse.SAVE);
-            setSelectedValue(format);
-            close();
-        }
-        catch (Exception ex) {
-            ValidationException ve = extractValidationException(ex);
-            if ( ve!=null ){
-                updateFieldsStyle(ve.getMessages(), bindGroup);
-                String message = getValidationErrorsMessage(ve);
-                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
-            }else{
-                ex.printStackTrace();
-                // TODO: Log that error
-                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
-                ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
-                JBErrorPane.showDialog(this, errorInfo);
-            }
-        }
-    }
-    
-    /**
-     * @param basicMessage
-     * @param ex - may be null
-     * @return
-     */
-    private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
-        ResourceMap resource = getResourceMap();
-        String title = resource.getString("ValidationException.errorPanel.title");
-        
-        String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
-        String category = ProductPanel.class.getName() + ": saveAction.";
-        Level errorLevel = Level.WARNING;
-        
-        Map<String, String> state = new HashMap<String, String>();
-        
-        ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
-        return errorInfo;
-    }
-    
-    /**
-     * Iterates through all fields and updates there appearance to error state if 
-     * some of the messages is related to their respective property.
-     * 
-     * Note: currently - test support.
-     * @param messages
-     */
-    @SuppressWarnings("unchecked")
-    private void updateFieldsStyle(List<ValidationMessage> messages, BindingGroup bindingGroup) {
-        //compose a set for easier and faster lookup
-        bindingGroup.getBindings();
-        Set<String> errorProperties = new HashSet<String>();
-        for (ValidationMessage msg : messages) {
-            if ( msg.getTarget()!=null ){
-                String el = msg.getTarget();
-                errorProperties.add(el);
-            }
-        }
-        
-        for (Binding binding : bindingGroup.getBindings()) {
-            if ( binding.getTargetObject() instanceof JBTextField ){
-                JBTextField textField = (JBTextField)binding.getTargetObject();
-                if ( errorProperties.contains(textField.getPropertyName()) )
-                    textField.setStyleInvalid("");//temporary code, TODO fix
-            }else if ( binding.getTargetObject() instanceof JBComboBox){
-                JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
-                if ( errorProperties.contains(comboBox.getPropertyName()) )
-                    comboBox.setStyleInvalid(); 
-            }
-        }
-    }
-    
-    @Action
-    public void closeAction() {
-        setDialogResponse(DialogResponse.CLOSE);
-        close();
-    }
-    
     @SuppressWarnings("unchecked")
     @Override
     protected Class getResourceStopClass() {
         return AcaciaPanel.class;
+    }
+
+    @Override
+    public BindingGroup getBindingGroup() {
+        return bindGroup;
+    }
+
+    @Override
+    public EntityFormButtonPanel getButtonPanel() {
+        return entityFormButtonPanel1;
+    }
+
+    @Override
+    public Object getEntity() {
+        return format;
+    }
+
+    @Override
+    public void performSave(boolean closeAfter) {
+        format = getFormSession().savePatternMaskFormat(format);
+        setDialogResponse(DialogResponse.SAVE);
+        setSelectedValue(format);
+        if (closeAfter)
+            close();
     }
 }
