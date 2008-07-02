@@ -51,6 +51,16 @@ import com.cosmos.acacia.annotation.ValidationType;
         name = "WarehouseProduct.findByProductAndWarehouse",
         query = "select w from WarehouseProduct w where w.warehouse.dataObject.deleted = false " +
         		"and w.warehouse = :warehouse and w.product = :product"
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Get all warehouse products associated with a given warehouse
+         * Parameters:
+         *  - warehouse - not null
+         */
+        name = "WarehouseProduct.findForWarehouse",
+        query = "select wp from WarehouseProduct wp where wp.warehouse = :warehouse "
     )
 })
 public class WarehouseProduct implements Serializable {
@@ -63,37 +73,37 @@ public class WarehouseProduct implements Serializable {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="WarehouseProductSequenceGenerator")
     private Integer id;
 
-    @Property(title="Warehouse", propertyValidator=@PropertyValidator(required=true))
-    @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id", insertable = false, updatable = false)
+    @Property(title="Warehouse", propertyValidator=@PropertyValidator(required=true), customDisplay="${warehouse.address.addressName}")
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id", nullable=false)
     @ManyToOne
     private Warehouse warehouse;
 
-    @Property(title="Product", propertyValidator=@PropertyValidator(required=true))
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable=false)
     @ManyToOne
     private SimpleProduct product;
 
-    @Property(title="In Stock", propertyValidator=@PropertyValidator(
+    @Property(title="In Stock", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "quantity_in_stock")
     private BigDecimal quantityInStock;
 
-    @Property(title="Ordered", propertyValidator=@PropertyValidator(
+    @Property(title="Ordered", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "ordered_quantity")
     private BigDecimal orderedQuantity;
 
-    @Property(title="Reserved", propertyValidator=@PropertyValidator(
+    @Property(title="Reserved", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "reserved_quantity")
     private BigDecimal reservedQuantity;
 
-    @Property(title="Sold", propertyValidator=@PropertyValidator(
+    @Property(title="Sold", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "sold_quantity")
     private BigDecimal soldQuantity;
 
-    @Property(title="Due", propertyValidator=@PropertyValidator(
+    @Property(title="Due", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "quantity_due")
     private BigDecimal quantityDue;
@@ -132,7 +142,6 @@ public class WarehouseProduct implements Serializable {
     @Property(title="Notes")
     private String notes;
 
-
     public WarehouseProduct() {
     }
 
@@ -162,6 +171,48 @@ public class WarehouseProduct implements Serializable {
 
     public BigDecimal getSoldQuantity() {
         return soldQuantity;
+    }
+    
+    /**
+     * Synthetic getter - decides whether to get the value from warehouse product or
+     * from the associated simple product
+     * @return BigDecimal
+     */
+    public BigDecimal getPrefferedMinQuantity(){
+        if ( minimumQuantity!=null )
+            return minimumQuantity;
+        else if ( product!=null )
+            return product.getMinimumQuantity();
+        else
+            return null;
+    }
+    
+    /**
+     * Synthetic getter - decides whether to get the value from warehouse product or
+     * from the associated simple product
+     * @return BigDecimal
+     */
+    public BigDecimal getPrefferedMaxQuantity(){
+        if ( maximumQuantity!=null )
+            return maximumQuantity;
+        else if ( product!=null )
+            return product.getMaximumQuantity();
+        else
+            return null;
+    }
+    
+    /**
+     * Synthetic getter - decides whether to get the value from warehouse product or
+     * from the associated simple product
+     * @return BigDecimal
+     */
+    public BigDecimal getPrefferedDefaultQuantity(){
+        if ( defaultQuantity!=null )
+            return defaultQuantity;
+        else if ( product!=null )
+            return product.getDefaultQuantity();
+        else
+            return null;
     }
 
     public void setSoldQuantity(BigDecimal soldQuantity) {
@@ -217,84 +268,24 @@ public class WarehouseProduct implements Serializable {
         this.warehouse = warehouse;
     }
 
-    public BigDecimal getDefaultQuantity() {
-        if(defaultQuantity != null)
-            return defaultQuantity;
-
-        if(product != null)
-            return product.getDefaultQuantity();
-
-        return BigDecimal.ZERO;
-    }
-
     public void setDefaultQuantity(BigDecimal defaultQuantity) {
         this.defaultQuantity = defaultQuantity;
-    }
-
-    public Integer getDeliveryTime() {
-        if(deliveryTime != null)
-            return deliveryTime;
-
-        if(product != null)
-            return product.getDeliveryTime();
-
-        return 0;
     }
 
     public void setDeliveryTime(Integer deliveryTime) {
         this.deliveryTime = deliveryTime;
     }
 
-    public BigDecimal getMaximumQuantity() {
-        if(maximumQuantity != null)
-            return maximumQuantity;
-
-        if(product != null)
-            return product.getMaximumQuantity();
-
-        return BigDecimal.ZERO;
-    }
-
     public void setMaximumQuantity(BigDecimal maximumQuantity) {
         this.maximumQuantity = maximumQuantity;
-    }
-
-    public BigDecimal getMinimumQuantity() {
-        if(minimumQuantity != null)
-            return minimumQuantity;
-
-        if(product != null)
-            return product.getMinimumQuantity();
-
-        return BigDecimal.ZERO;
     }
 
     public void setMinimumQuantity(BigDecimal minimumQuantity) {
         this.minimumQuantity = minimumQuantity;
     }
 
-    public BigDecimal getPurchasePrice() {
-        if(purchasePrice != null)
-            return purchasePrice;
-
-        if(product != null)
-            return product.getPurchasePrice();
-
-        return BigDecimal.ZERO;
-    }
-
     public void setPurchasePrice(BigDecimal purchasePrice) {
         this.purchasePrice = purchasePrice;
-    }
-
-    public BigDecimal getSalePrice() {
-        if(salePrice != null)
-            return salePrice;
-
-        if(product != null)
-            return product.getSalePrice();
-
-        return BigDecimal.ZERO;
     }
 
     public void setSalePrice(BigDecimal salePrice) {
@@ -312,7 +303,7 @@ public class WarehouseProduct implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PatternMaskFormat)) {
+        if (!(object instanceof WarehouseProduct)) {
             return false;
         }
         WarehouseProduct other = (WarehouseProduct) object;
@@ -341,5 +332,29 @@ public class WarehouseProduct implements Serializable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public BigDecimal getMinimumQuantity() {
+        return minimumQuantity;
+    }
+
+    public BigDecimal getMaximumQuantity() {
+        return maximumQuantity;
+    }
+
+    public BigDecimal getDefaultQuantity() {
+        return defaultQuantity;
+    }
+
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public Integer getDeliveryTime() {
+        return deliveryTime;
     }
 }

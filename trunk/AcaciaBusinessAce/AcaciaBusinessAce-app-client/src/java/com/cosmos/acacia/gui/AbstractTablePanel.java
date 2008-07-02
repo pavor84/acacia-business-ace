@@ -43,6 +43,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.listeners.TableModificationListener;
@@ -326,9 +327,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return buttonsPanel;
     }
 
-    public void addColumn(int orderPosition, String columnName,
+    public void addColumn(int orderPosition, String propertyName, String columnName,
                            String customELDisplay, EntityProperties entityProperties) {
-        PropertyDetails pd = new PropertyDetails(null, columnName, null);
+        PropertyDetails pd = new PropertyDetails(propertyName, columnName, null);
         pd.setCustomDisplay(customELDisplay);
         pd.setOrderPosition(orderPosition);
         entityProperties.addPropertyDetails(pd);
@@ -469,6 +470,30 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         return getButtonsMap().get(button).isVisible();
     }
+    
+    protected JBButton getButton(Button button) {
+        switch(button)
+        {
+            case Select:
+                return selectButton;
+            case Unselect:
+                return unselectButton;
+            case New:
+                return newButton;
+            case Modify:
+                return modifyButton;
+            case Delete:
+                return deleteButton;
+            case Refresh:
+                return refreshButton;
+            case Close:
+                return closeButton;
+            case EnterWarehouse:
+                return enterWarehouseButton;
+        }
+        throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
+    }
+
 
     /**
      * Sets the visible buttons:

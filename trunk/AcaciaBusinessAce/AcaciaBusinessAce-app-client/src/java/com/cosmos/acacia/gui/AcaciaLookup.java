@@ -36,7 +36,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
     public AcaciaLookup() {
         initComponents();
 
-        // do this again explicitely - otherwise not working, but why?
+        // do this again explicitly - otherwise not working, but why?
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(
             com.cosmos.acacia.crm.gui.AcaciaApplication.class)
                 .getContext()
@@ -60,6 +60,8 @@ public class AcaciaLookup extends javax.swing.JPanel {
     
     @SuppressWarnings("unchecked")
     private Binding binding;
+
+    private boolean editable = true;
 
     public Object getSelectedItem() {
         return selectedItem;
@@ -114,7 +116,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
         this.lookupProvider = lookupProvider;
 
         if (propertyDetails == null || propertyDetails.isHiden()) {
-            setEditable(false);
+            enableControls(false);
             setEnabled(false);
             return null;
         }
@@ -139,7 +141,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
 
         boolean editable = propertyDetails.isEditable() || !propertyDetails.isReadOnly();
 
-        setEditable(editable);
+        enableControls(editable);
 
         // initialize to string converter for displaying the selected item.
         if (elPropertyItemDisplay != null) {
@@ -259,13 +261,21 @@ public class AcaciaLookup extends javax.swing.JPanel {
         onKeyCommand(evt);
     }//GEN-LAST:event_fieldKeyPressed
 
-    private void setEditable(boolean b) {
+    private void enableControls(boolean b) {
         button.setEnabled(b);
         field.setEnabled(b);
     }
     
+    public void setEditable(boolean b) {
+        button.setEnabled(b);
+        field.setEditable(b);
+        this.editable = b;
+    }
+    
     @SuppressWarnings("unchecked")
     private void onKeyCommand(KeyEvent evt){
+        if ( !editable )
+            return;
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
             clearSelectedValue();
         }else if ( evt.getKeyCode() == KeyEvent.VK_F5 ){
@@ -370,6 +380,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
     {
         super.setEnabled(enabled);
         button.setEnabled(enabled);
+        field.setEnabled(enabled);
     }
 
     public AcaciaLookupProvider getLookupProvider() {

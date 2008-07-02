@@ -44,8 +44,8 @@ import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
+import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
-import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.swingb.DialogResponse;
@@ -265,10 +265,16 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void warehouseProductListAction(){
-        WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
-        listPanel.showFrame();
+    public void productsTotalsAction(){
+        ProductsTotalsPanel panel = new ProductsTotalsPanel();
+        panel.showFrame();
     }
+    
+//    @Action
+//    public void warehouseProductListAction(){
+//        WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
+//        listPanel.showFrame();
+//    }
 
     @Action
     public void deliveryCertificatesAction()
@@ -439,6 +445,8 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem invoicesListItem = new JBMenuItem();
         JBMenu warehousesMenu = new JBMenu();
         JBMenuItem warehousesItem = new JBMenuItem();
+        JBMenuItem productsTotalsItem = new JBMenuItem();
+        
         //JBMenuItem warehouseProductsItem = new JBMenuItem();
 
         menuBar.setName("menuBar"); // NOI18N
@@ -609,6 +617,9 @@ public class AcaciaApplicationView extends FrameView {
 
         warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
         warehousesMenu.add(warehousesItem);
+        
+        productsTotalsItem.setAction(actionMap.get("productsTotalsAction")); // NOI18N
+        warehousesMenu.add(productsTotalsItem);
         //warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N
         //warehousesMenu.add(warehouseProductsItem);
 
