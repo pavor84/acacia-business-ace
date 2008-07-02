@@ -12,9 +12,9 @@ public class UserUtils {
 
     protected static Logger log = Logger.getLogger(UserUtils.class);
     
-    public static void updateUserLocale(UsersRemote session) {
-        session.setLocale((Locale) AppSession.get().getValue(AppSession.USER_LOCALE));
-    }
+//    public static void updateUserLocale(UsersRemote session) {
+//        session.setLocale((Locale) AppSession.get().getValue(AppSession.USER_LOCALE));
+//    }
     
     public static String getHash(String password) {
         try {

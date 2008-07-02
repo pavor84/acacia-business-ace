@@ -1,23 +1,27 @@
 package com.cosmos.acacia.app;
 
-import com.cosmos.acacia.crm.validation.ValidationException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
+
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import com.cosmos.acacia.crm.validation.ValidationException;
+
 @Stateless
-public class Session implements  SessionFacadeRemote, SessionFacadeLocal {
+public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLocal {
 
-    private static ThreadLocal<Integer> sessionId = new ThreadLocal<Integer>();
-
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Object call(Object bean, String methodName, Object[] args, Class[] parameterTypes, Integer sessionId) throws Throwable {
-        this.sessionId.set(sessionId);
+        
+    	//find the session
+    	SessionContext sessionContext = SessionRegistry.getSession(sessionId);
+    	//set it as current
+    	SessionRegistry.setLocalSession(sessionContext);
+    	
         Method method = bean.getClass().getMethod(methodName, parameterTypes);
         try {
             return method.invoke(bean, args);
@@ -49,17 +53,4 @@ public class Session implements  SessionFacadeRemote, SessionFacadeLocal {
         
         return t;
     }
-    public static Integer getSessionId() {
-        return sessionId.get();
-    }
-
-    public static AcaciaSession getSession() {
-        return SessionRegistry.getSession(getSessionId());
-    }
-
-    @Override
-    public void addSession(Integer sessionId, AcaciaSession session) {
-        SessionRegistry.addSession(sessionId, session);
-    }
-
 }

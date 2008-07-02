@@ -25,10 +25,10 @@ public interface UsersRemote {
      *
      * @param username
      * @param password
-     * @return the user
+     * @return the session id for the login
      * @throws ValidationException if the data is incorrect.
      */
-    User login (String username, char[] password);
+    Integer login (String username, char[] password);
 
     /**
      * Registers a new user. Note that the password must be already hashed

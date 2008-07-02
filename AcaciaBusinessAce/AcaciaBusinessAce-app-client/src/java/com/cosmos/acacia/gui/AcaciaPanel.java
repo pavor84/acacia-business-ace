@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -23,9 +24,10 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
 
-import com.cosmos.acacia.app.AcaciaSession;
-import com.cosmos.acacia.app.AppSession;
+import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.app.SessionContext;
 import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
@@ -48,6 +50,8 @@ public abstract class AcaciaPanel
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
     protected boolean exceptionOccurred = false;
+    
+    private AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
 
     AcaciaPanel()
     {
@@ -89,7 +93,7 @@ public abstract class AcaciaPanel
 
     public DataObject getParentDataObject()
     {
-        return AppSession.getDataObject(getParentDataObjectId());
+        return getAcaciaSession().getDataObject(getParentDataObjectId());
     }
 
     protected abstract void initData();
@@ -226,10 +230,9 @@ public abstract class AcaciaPanel
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            AcaciaSession session = AppSession.get();
             log.info("Method called: " + method.getName() + " on bean: " + bean);
             try {
-                return sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AppSession.get().getSessionId());
+                return sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
             } catch (Throwable ex) {
                 exceptionOccurred = true;
                 if (AcaciaPanel.this instanceof BaseEntityPanel || AcaciaPanel.this instanceof AbstractTablePanel)
@@ -266,4 +269,7 @@ public abstract class AcaciaPanel
         }
     }
 
+	public AcaciaSessionRemote getAcaciaSession() {
+		return acaciaSession;
+	}
 }

@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.app.AppSession;
+import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListBean;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
@@ -37,7 +37,7 @@ public class WarehouseListTest {
 
     @EJB
     private AddressesListRemote addressListSession;
-
+    
     @Before
     public void setUp() {
         if ( formSession==null ){
@@ -90,9 +90,8 @@ public class WarehouseListTest {
     }
 
     private Warehouse createNew() throws UncompleteUnitTestException {
-        AppSession.get().login("sdfs", "sdfsdf");
 
-        DataObject branchParent = AppSession.get().getLoginOrganizationDataObject();
+        DataObject branchParent = null;//AppSession.get().getLoginOrganizationDataObject();
         List<Address> addresses = addressListSession.getAddresses(branchParent.getDataObjectId());
 
         if ( addresses.size()==0 )

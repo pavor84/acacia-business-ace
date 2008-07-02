@@ -16,7 +16,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.app.AppSession;
+import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
@@ -45,6 +45,8 @@ public class WarehousePanel extends BaseEntityPanel {
     private EntityProperties entProps;
 
     private BindingGroup bindGroup;
+    
+    private AcaciaSessionRemote acaciaSessionRemote = getBean(AcaciaSessionRemote.class);
     
     /** Creates new form WarehousePanel */
     public WarehousePanel(Warehouse w, DataObject parent) {
@@ -255,7 +257,7 @@ public class WarehousePanel extends BaseEntityPanel {
 
     protected Object onChooseBranch() {
         //DataObject dataObject = getFormSession().getDataObjectWithAddresses();
-        DataObject dataObject = AppSession.get().getLoginOrganizationDataObject();
+        DataObject dataObject = acaciaSessionRemote.getLoginOrganizationDataObject();
         AddressListPanel listPanel = new AddressListPanel(dataObject.getDataObjectId());
         listPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
         Address oldBranch = entity.getAddress();  

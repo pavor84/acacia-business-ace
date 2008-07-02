@@ -63,7 +63,7 @@ import com.cosmos.swingb.JBToolBar;
  * The application's main frame.
  */
 public class AcaciaApplicationView extends FrameView {
-
+	
     protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
 
     public AcaciaApplicationView(SingleFrameApplication app) {

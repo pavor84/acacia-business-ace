@@ -6,33 +6,32 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.app.AcaciaSession;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Locale;
+import java.util.prefs.Preferences;
 
 import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import com.cosmos.acacia.app.AppSession;
-import com.cosmos.acacia.crm.gui.users.UserUtils;
+import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.Serializable;
-import java.util.Locale;
-import java.util.prefs.Preferences;
-import javax.security.auth.callback.CallbackHandler;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -46,6 +45,8 @@ public class LoginForm extends AcaciaPanel {
     private static final String LOCALE = "locale";
 
     protected static Logger log = Logger.getLogger(LoginForm.class);
+    
+    private AcaciaSessionRemote acaciaSessionRemote = getBean(AcaciaSessionRemote.class);
 
     /** Creates new form LoginForm */
     public LoginForm(BigInteger parentId) {
@@ -242,7 +243,7 @@ public class LoginForm extends AcaciaPanel {
         loadPreferences();
         AutoCompleteDecorator.decorate(usernameComboBox);
         
-        AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
+        //AppSession.get().setValue(AppSession.USER_LOCALE, localeComboBox.getSelectedItem());
         this.requestFocus();
     }
 
@@ -328,7 +329,10 @@ public class LoginForm extends AcaciaPanel {
         
         log.info("pass: " + new String(password));
         
-        User user = getFormSession().login(username, password);
+        Integer sessionid = getFormSession().login(username, password);
+        AcaciaApplication.setSessionId(sessionid);
+        
+        User user = acaciaSessionRemote.getUser();
         
         if (!exceptionOccurred) {
             
@@ -339,8 +343,8 @@ public class LoginForm extends AcaciaPanel {
             getFormSession().updateOrganization(user, new OrganizationChoiceHandler());
             //Organization organizationDataObject =
 
-            log.info(AppSession.get().getValue(AcaciaSession.USER_KEY));
-            log.info(AppSession.get().getValue(AcaciaSession.ORGANIZATION_KEY));
+            log.info(user);
+            log.info(acaciaSessionRemote.getOrganization());
 
             setDialogResponse(DialogResponse.LOGIN);
             close();
@@ -393,7 +397,7 @@ public class LoginForm extends AcaciaPanel {
             try
             {
                 formSession = getBean(UsersRemote.class);
-                UserUtils.updateUserLocale(formSession);
+                //UserUtils.updateUserLocale(formSession);
             }
             catch(Exception ex)
             {

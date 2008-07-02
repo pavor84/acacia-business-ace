@@ -4,7 +4,6 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.app.AppSession;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -13,12 +12,24 @@ import org.jdesktop.application.SingleFrameApplication;
  * The main class of the application.
  */
 public class AcaciaApplication extends SingleFrameApplication {
+	
+	/**
+	 * Store here the seesionid, which has application scope.
+	 */
+	private static Integer sessionid = null;
+	
+	public static Integer getSessionId(){
+		return sessionid;
+	}
+	
+	public static void setSessionId(Integer sid){
+		sessionid = sid;
+	}
 
     /**
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        AppSession.get();
         AcaciaApplicationView view = new AcaciaApplicationView(this);
         show(view);
         view.login();

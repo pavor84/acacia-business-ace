@@ -3,6 +3,9 @@ package com.cosmos.acacia.app;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.User;
+
 import java.math.BigInteger;
 
 /**
@@ -12,13 +15,13 @@ import java.math.BigInteger;
  *
  */
 @Remote
-public interface AcaciaSessionRemote extends AcaciaSession {
-
-    void login(String user, String password);
+public interface AcaciaSessionRemote {
 
     DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(BigInteger dataObjectId);
-    
-    Integer generateSessionId();
+
+	User getUser();
+
+	Organization getOrganization();
 }
