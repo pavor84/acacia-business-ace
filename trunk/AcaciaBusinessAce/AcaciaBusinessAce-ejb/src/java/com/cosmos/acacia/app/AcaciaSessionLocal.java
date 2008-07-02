@@ -1,7 +1,9 @@
 package com.cosmos.acacia.app;
 
-import com.cosmos.acacia.crm.data.Organization;
 import javax.ejb.Local;
+
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.User;
 
 /**
  * Created	:	19.05.2008
@@ -10,8 +12,18 @@ import javax.ejb.Local;
  *
  */
 @Local
-public interface AcaciaSessionLocal
-    extends AcaciaSessionRemote
-{
-    void setOrganization(Organization organization);
+public interface AcaciaSessionLocal extends AcaciaSessionRemote{
+	/**
+	 * Logs in the user, creates new session and returns the session id.
+	 * @param user
+	 * @param password
+	 * @return session id
+	 */
+    Integer login(User user);
+
+    /**
+     * Sets the current login organization for the session.
+     * @param organization
+     */
+	void setOrganization(Organization organization);
 }

@@ -5,7 +5,8 @@
 
 package com.cosmos.acacia.crm.bl.assembling;
 
-import com.cosmos.acacia.app.Session;
+import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.app.SessionFacadeBean;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -48,6 +49,9 @@ public class AssemblingBean
 
     @EJB
     private AssemblingCategoryValidatorLocal assemblingCategoryValidator;
+    
+    @EJB
+    private AcaciaSessionLocal acaciaSessionLocal;
 
 
     @Override
@@ -91,7 +95,7 @@ public class AssemblingBean
     {
         AssemblingCategory newObject = new AssemblingCategory();
         newObject.setParentCategory(parentCategory);
-        newObject.setParentId(Session.getSession().getOrganization().getId());
+        newObject.setParentId(acaciaSessionLocal.getOrganization().getId());
 
         return newObject;
     }

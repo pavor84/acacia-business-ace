@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -34,8 +35,7 @@ import javax.security.auth.callback.CallbackHandler;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.app.AcaciaSession;
-import com.cosmos.acacia.app.Session;
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
@@ -48,7 +48,6 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
-import java.util.ArrayList;
 
 /**
  * The implementation of handling users (see interface for more info)
@@ -72,9 +71,12 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @EJB
     private GenericUniqueValidatorLocal<User> validator;
+    
+    @EJB
+    private AcaciaSessionLocal acaciaSessionLocal;
 
     @Override
-    public User login(String username, char[] password) {
+    public Integer login(String username, char[] password) {
         log.info("Locale is : " + locale);
         Query loginQuery = em.createNamedQuery("User.login");
         loginQuery.setParameter("username", username);
@@ -85,8 +87,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             if (!user.getIsActive())
                 throw new ValidationException("Login.account.inactive");
 
-            Session.getSession().setValue(AcaciaSession.USER_KEY, user);
-            return user;
+            return acaciaSessionLocal.login(user);
         } catch (NoResultException ex){
             throw new ValidationException("Login.data.incorrect");
         }
@@ -237,7 +238,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
            //callbackHandler.handle(null); // add support for the message display
         } else if (organizations.size() == 1) {
             Organization organization = organizations.get(0);
-            Session.getSession().setValue(AcaciaSession.ORGANIZATION_KEY, organization);
+            acaciaSessionLocal.setOrganization(organization);
         } else {
             // free user
         }

@@ -1,40 +1,35 @@
 package com.cosmos.acacia.app;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
-import java.math.BigInteger;
+import com.cosmos.acacia.crm.data.User;
 
 /**
  * Created	:	19.05.2008
  * @author	Petar Milev
  * @version $Id: $
- *
+ * 
+ * Stateless service to use for session access.
+ * Everything related to operating the session goes through here.
+ * No other service should use {@link SessionRegistry} or {@link SessionContext}.
+ * 
+ * The work of this service depends also on {@link SessionFacadeBean}. The latter is needed
+ * to bind a {@link SessionContext} instance to the current thread of execution. 
+ * If this is not done, the behavior of {@link AcaciaSessionBean} is not defined. 
+ *  
  */
-@Stateful
+@Stateless
 public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLocal {
-
-
-    Map<String, Object> values = new HashMap<String, Object>();
-
-    @Override
-    public Object getValue(String name) {
-        return
-        values.get(name);
-    }
-
-    @Override
-    public void setValue(String name, Object value) {
-        values.put(name, value);
-    }
 
     @PersistenceContext
     private EntityManager em;
@@ -89,15 +84,34 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     @Override
-    public void login(String user, String password) {
-        DataObject loginOrganization = getDataObjectWithAddresses();
-        values.put(AcaciaSession.ORGANIZATION_KEY, loginOrganization);
+    public Integer login(User user) {
+        //create and register session
+        Integer sessionid = registerNewSession();
+        
+        SessionRegistry.getSession().setValue(SessionContext.USER_KEY, user);
+        
+        //temporal - TODO remove
+        
+        
+        return sessionid;
     }
 
-    @Override
+    private Integer registerNewSession() {
+        //create a session
+        Integer sessionid = SessionRegistry.getInstance().createNewSession();
+        //acquire the instance
+        SessionContext session = SessionRegistry.getSession(sessionid);
+        //bind to current thread
+        SessionRegistry.setLocalSession(session);
+        
+        return sessionid;
+	}
+
+	@Override
     public DataObject getLoginOrganizationDataObject() {
-        DataObject result = (DataObject) values.get(AcaciaSession.ORGANIZATION_KEY);
-        return result;
+		
+		//temoporal TODO - remove
+        return getDataObjectWithAddresses();
     }
 
     public DataObject getDataObject(BigInteger dataObjectId)
@@ -105,30 +119,18 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return em.find(DataObject.class, dataObjectId);
     }
 
-    @Override
-    public Integer generateSessionId() {
-        Map<Integer, AcaciaSession> sessions = SessionRegistry.getInstance().getSessions();
-        
-        Integer sessionId;
-        while (true) {
-            int rand = (int) (100000 + Math.random() * 899999);
-            sessionId = new Integer(rand);
-            if (!sessions.keySet().contains(sessionId))
-                break;
-        }
-        
-        return sessionId;
-    }
+	@Override
+	public void setOrganization(Organization organization) {
+		SessionRegistry.getSession().setValue(SessionContext.ORGANIZATION_KEY, organization);
+	}
 
-    @Override
-    public Organization getOrganization()
-    {
-        return (Organization)getValue(AcaciaSession.ORGANIZATION_KEY);
-    }
+	@Override
+	public Organization getOrganization() {
+		return (Organization) SessionRegistry.getSession().getValue(SessionContext.ORGANIZATION_KEY);
+	}
 
-    @Override
-    public void setOrganization(Organization organization)
-    {
-        setValue(AcaciaSession.ORGANIZATION_KEY, organization);
-    }
+	@Override
+	public User getUser() {
+		return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
+	}
 }

@@ -1,9 +1,18 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.app.AppSession;
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
+
+import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
@@ -11,16 +20,6 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-
-import java.math.BigInteger;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-
-import org.apache.log4j.Logger;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *

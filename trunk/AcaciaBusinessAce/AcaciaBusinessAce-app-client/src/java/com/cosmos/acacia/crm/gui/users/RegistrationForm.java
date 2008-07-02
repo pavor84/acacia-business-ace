@@ -287,7 +287,7 @@ public class RegistrationForm extends BaseEntityPanel {
              try
              {
                  formSession = getBean(UsersRemote.class);
-                 UserUtils.updateUserLocale(formSession);
+                 //UserUtils.updateUserLocale(formSession);
              }
              catch(Exception ex)
              {
