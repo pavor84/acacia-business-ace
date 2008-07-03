@@ -71,7 +71,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Column(name = "user_name", nullable = false)
     @Property(title="Username", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.LENGTH, minLength=3, maxLength=32, regex="[^,]+", tooltip="username.toolip"))
+        validationType=ValidationType.LENGTH, minLength=3, maxLength=32, regex="[^,]+", tooltip="username.tooltip"))
     private String userName;
 
     @Column(name = "email_address", nullable = false)
