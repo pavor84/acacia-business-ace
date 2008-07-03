@@ -107,6 +107,8 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         jBButton1 = new com.cosmos.swingb.JBButton();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         jBLabel1 = new com.cosmos.swingb.JBLabel();
+        salesPriceField = new com.cosmos.swingb.JBTextField();
+        jBLabel11 = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -337,7 +339,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -353,6 +355,13 @@ public class WarehouseProductPanel extends BaseEntityPanel {
 
         jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
         jBLabel1.setName("jBLabel1"); // NOI18N
+
+        salesPriceField.setEditable(false);
+        salesPriceField.setText(resourceMap.getString("salesPriceField.text")); // NOI18N
+        salesPriceField.setName("salesPriceField"); // NOI18N
+
+        jBLabel11.setText(resourceMap.getString("jBLabel11.text")); // NOI18N
+        jBLabel11.setName("jBLabel11"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -370,22 +379,28 @@ public class WarehouseProductPanel extends BaseEntityPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(productField, 0, 345, Short.MAX_VALUE))
                             .addComponent(jBPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jBPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(4, 4, 4)
+                                    .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(warehouseField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                                        .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(salesPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                                        .addComponent(deliveryTimeField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(deliveryTimeField, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
-                                    .addComponent(jBPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(warehouseField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))))))
+                                .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -401,10 +416,14 @@ public class WarehouseProductPanel extends BaseEntityPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(deliveryTimeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(salesPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -514,12 +533,22 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         maxQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("maximumQuantity"));
         //defaultQuantity
         defaultQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("defaultQuantity"));
+        //sale price in current form
+        final Binding salesPriceFieldBinding = salesPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
+        salesPriceField.setEditable(false);
         
         pricingPanel = new WarehouseProductPricingPanel();
         //purchase price
         pricingPanel.getPurchasePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"));
         //sale price
-        pricingPanel.getSalePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
+        Binding pricingPanelSalesBinding = pricingPanel.getSalePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
+        pricingPanelSalesBinding.addBindingListener(new AbstractBindingListener() {
+			@Override
+			public void targetChanged(Binding binding, PropertyStateEvent event) {
+				Object newValue = binding.getTargetProperty().getValue(pricingPanel.getSalePriceField());
+				salesPriceFieldBinding.getTargetProperty().setValue(salesPriceField, newValue);
+			}
+		});
         
         //delivery time
         deliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveryTime"));
@@ -632,6 +661,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBButton jBButton1;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
+    private com.cosmos.swingb.JBLabel jBLabel11;
     private com.cosmos.swingb.JBLabel jBLabel13;
     private com.cosmos.swingb.JBLabel jBLabel14;
     private com.cosmos.swingb.JBLabel jBLabel15;
@@ -659,6 +689,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField qtyOrderedField;
     private com.cosmos.swingb.JBTextField qtyReservedField;
     private com.cosmos.swingb.JBTextField qtySoldField;
+    private com.cosmos.swingb.JBTextField salesPriceField;
     private com.cosmos.acacia.gui.AcaciaLookup warehouseField;
     // End of variables declaration//GEN-END:variables
 
