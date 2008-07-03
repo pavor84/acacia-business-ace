@@ -23,7 +23,11 @@ import javax.persistence.Table;
     @NamedQuery (
             name = "UserOrganization.findByUser",
             query = "select uo from UserOrganization uo where uo.user=:user"
-            )
+    ),
+    @NamedQuery (
+            name = "UserOrganization.findByOrganization",
+            query = "select uo from UserOrganization uo where uo.organization=:organization"
+    )
 })
 public class UserOrganization implements Serializable {
 

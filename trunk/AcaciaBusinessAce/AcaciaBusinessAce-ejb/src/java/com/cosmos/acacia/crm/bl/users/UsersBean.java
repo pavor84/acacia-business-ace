@@ -172,7 +172,12 @@ public class UsersBean implements UsersRemote, UsersLocal {
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
         BigInteger codeNumber = BigInteger.valueOf(UUID.randomUUID().getMostSignificantBits() / 10000);
-
+        
+        Query q = em.createNamedQuery("User.findByEmail");
+        q.setParameter("email", email);
+        if (q.getResultList() != null && q.getResultList().size() > 0)
+            throw new ValidationException("email.taken");
+        
         RegistrationCode code = new RegistrationCode();
         code.setEmail(email);
         code.setRegistrationCode(codeNumber);
@@ -303,14 +308,21 @@ public class UsersBean implements UsersRemote, UsersLocal {
     public void activateUser(User user, boolean active) {
         user.setIsActive(active);
         esm.persist(em, user);
-        
-        List<Organization> organizations = getOrganizationsList(user);
-        for (Organization o : organizations) {
-            o.setActive(active);
-            esm.persist(em, o);
-        }
     }
     
+    @Override
+    public Organization activateOrganization(Organization organization, boolean active) {
+        organization.setActive(active);
+        esm.persist(em, organization);
+        
+        List<User> users = getUsersList(organization);
+        for (User u : users) {
+            u.setIsActive(active);
+            esm.persist(em, u);
+        }
+        
+        return organization;
+    }
     private String getHexString(byte[] array) {
         StringBuffer hexString = new StringBuffer();
         for (int i = 0; i < array.length; i++) {
@@ -331,6 +343,18 @@ public class UsersBean implements UsersRemote, UsersLocal {
         return result;
     }
     
+    private List<User> getUsersList(Organization organization) {
+        Query q = em.createNamedQuery("UserOrganization.findByOrganization");
+        q.setParameter("organization", organization);
+
+        List<UserOrganization> uoList = q.getResultList();
+        List<User> result = new ArrayList(uoList.size());
+        for (UserOrganization uo : uoList) {
+            result.add(uo.getUser());
+        }
+        return result;
+    }
+        
     private char[] saltChars = new char[] {'!', 'b', '0', 'z', 'h', 'o'};
     
     private String saltPassword(String password) {
