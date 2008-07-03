@@ -227,5 +227,10 @@ public class Passport extends DataObjectBean implements Serializable {
     public void setId(BigInteger id) {
         setPassportId(id);
     }
+    
+    @Override
+    public String getInfo() {
+        return getPassportNumber();
+    }
 
 }

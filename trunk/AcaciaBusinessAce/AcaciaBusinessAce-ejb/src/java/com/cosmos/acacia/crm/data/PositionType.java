@@ -180,5 +180,10 @@ public class PositionType
     public String toText() {
         return getPositionTypeName();
     }
+    
+    @Override
+    public String getInfo() {
+        return getPositionTypeName();
+    }
 
 }

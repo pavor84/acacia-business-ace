@@ -293,4 +293,10 @@ public class AssemblingSchemaItem
     {
         this.dataObject = dataObject;
     }
+    
+    @Override
+    public String getInfo()
+    {
+        return getMessageText();
+    }
 }

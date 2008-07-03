@@ -224,4 +224,9 @@ public class City
         //TODO
     }
 
+    @Override
+    public String getInfo() {
+        return getCityName();
+    }
+    
 }

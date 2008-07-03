@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.gui;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
@@ -20,6 +21,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -282,6 +284,20 @@ public class ClassifierPanel extends BaseEntityPanel {
 
         populateComboBox(dataObjectTypeComboBox, getDataObjectTypes());
 
+        dataObjectTypeComboBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED && e.getItem() != null) {
+                    if (dataObjectTypesTable.getDataTable().getData().contains(e.getItem()))
+                        addObjectTypeButton.setEnabled(false);
+                    else
+                        addObjectTypeButton.setEnabled(true);
+                }
+            }
+            
+        });
+       
         classifierBindingGroup.bind();
 
 //        // Bypassing a strange bug
@@ -374,6 +390,7 @@ public class ClassifierPanel extends BaseEntityPanel {
         if (dataObjectTypesTable.canNestedOperationProceed()) {
             getFormSession().addDataObjectTypeConstraint(classifier, (DataObjectType) dataObjectTypeComboBox.getSelectedItem());
             dataObjectTypesTable.refreshAction();
+            addObjectTypeButton.setEnabled(false);
         }
     }
 }

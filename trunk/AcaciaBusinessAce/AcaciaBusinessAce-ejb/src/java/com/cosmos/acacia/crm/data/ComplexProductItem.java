@@ -220,5 +220,9 @@ public class ComplexProductItem
         return "com.cosmos.acacia.crm.data.ComplexProductItem[complexProductItemId=" + complexProductItemId + "]";
     }
 
+    @Override
+    public String getInfo() {
+        return getComplexProduct().getProductName();
+    }
     
 }

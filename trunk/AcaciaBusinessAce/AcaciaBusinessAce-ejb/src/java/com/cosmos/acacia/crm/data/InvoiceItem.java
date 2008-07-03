@@ -248,4 +248,8 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
         setInvoiceItemId(id);
     }
 
+    @Override
+    public String getInfo() {
+        return getInvoiceItemId().toString();
+    }
 }

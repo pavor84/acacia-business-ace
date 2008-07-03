@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -46,7 +47,7 @@ import javax.persistence.Table;
             )
     }
 )
-public class Classifier extends DataObjectBean implements Serializable {
+public class Classifier extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -191,4 +192,18 @@ public class Classifier extends DataObjectBean implements Serializable {
         this.classifierId = id;
     }
 
+    @Override
+    public String getInfo() {
+        return getClassifierName();
+    }
+
+    @Override
+    public String toShortText() {
+        return getClassifierName();
+    }
+
+    @Override
+    public String toText() {
+        return null;
+    }
 }

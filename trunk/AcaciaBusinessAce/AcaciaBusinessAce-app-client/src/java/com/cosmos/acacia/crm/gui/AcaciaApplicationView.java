@@ -394,6 +394,13 @@ public class AcaciaApplicationView extends FrameView {
         ClassifiersListPanel classifiers = new ClassifiersListPanel(null, null);
         classifiers.showFrame();
     }
+    
+    @Action
+    public void classifiedObjectsAction()
+    {
+        ClassifiedObjectsPanel panel = new ClassifiedObjectsPanel(null);
+        panel.showFrame();
+    }
 
     @Action
     public void invoicesListAction() {
@@ -575,6 +582,11 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setName("classifierGroupsMenuItem");
         classifiersMenu.add(menuItem);
 
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("classifiedObjectsAction"));
+        menuItem.setName("classifiedObjectsMenuItem");
+        classifiersMenu.add(menuItem);
+        
         menuBar.add(classifiersMenu);
 
         /* End of classifiers menu item */

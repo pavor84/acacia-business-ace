@@ -661,4 +661,8 @@ public class Invoice extends DataObjectBean implements Serializable {
         setInvoiceId(id);
     }
 
+    @Override
+    public String getInfo() {
+        return "" + getInvoiceNumber();
+    }
 }

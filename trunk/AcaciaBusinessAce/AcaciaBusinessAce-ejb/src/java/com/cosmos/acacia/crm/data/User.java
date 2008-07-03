@@ -379,4 +379,9 @@ public class User extends DataObjectBean implements Serializable {
     public void setParentId(BigInteger parentId) {
         //
     }
+    
+    @Override
+    public String getInfo() {
+        return getUserName();
+    }
 }

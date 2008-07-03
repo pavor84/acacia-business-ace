@@ -221,4 +221,9 @@ public class Address
         return null;
     }
 
+    @Override
+    public String getInfo() {
+        return getAddressName();
+    }
+
 }

@@ -118,5 +118,9 @@ public class ComplexProduct
         this.appliedSchema = appliedSchema;
     }
 
+    @Override
+    public String getInfo() {
+        return getProductName();
+    }
 
 }

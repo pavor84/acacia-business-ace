@@ -48,6 +48,11 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         postInitData();
     }
 
+    public ClassifiersListPanel(BigInteger parentId) {
+        super(parentId);
+        postInitData();
+    }
+    
     @EJB
     private ClassifiersRemote formSession;
 
@@ -104,21 +109,15 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         this.dataObjectType = dataObjectType;
     }
 
-    protected EntityProperties getClassifierEntityProperties()
-    {
+    protected EntityProperties getClassifierEntityProperties() {
         return getFormSession().getClassifierEntityProperties();
     }
 
-    protected ClassifiersRemote getFormSession()
-    {
-        if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
+    public ClassifiersRemote getFormSession() {
+        if(formSession == null) {
+            try {
+                formSession = getBean(ClassifiersRemote.class);
+            } catch(Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -126,8 +125,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    protected int deleteClassifier(Classifier classifier)
-    {
+    protected int deleteClassifier(Classifier classifier) {
         return getFormSession().deleteClassifier(classifier);
     }
 
