@@ -6,7 +6,7 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.beansbinding.validation.BaseValidator;
+import com.cosmos.swingb.validation.Validatable;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import javax.swing.JPasswordField;
@@ -14,14 +14,12 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.Validator;
 
 /**
@@ -30,6 +28,7 @@ import org.jdesktop.beansbinding.Validator;
  */
 public class JBPasswordField
     extends JPasswordField
+    implements Validatable
 {
 
     private Application application;
@@ -124,7 +123,7 @@ public class JBPasswordField
             binding.setValidator(validator);
         }
 
-        binding.addBindingListener(new BindingValidationListener());
+        binding.addBindingListener(new BindingValidationListener(this));
 
         return binding;
     }
@@ -209,49 +208,6 @@ public class JBPasswordField
 
     public void setApplication(Application application) {
         this.application = application;
-    }
-
-    public class BindingValidationListener
-        extends AbstractBindingListener
-    {
-        @Override
-        public void bindingBecameBound(Binding binding) {
-            validate(binding);
-        }
-
-        @Override
-        public void targetChanged(Binding binding, PropertyStateEvent event) {
-            validate(binding);
-        }
-
-        public void validate(Binding binding)
-        {
-            boolean required = false;
-            String tooltip = null;
-            BaseValidator validator = (BaseValidator)binding.getValidator();
-            if(validator != null)
-            {
-                tooltip = validator.getTooltip();
-                if (tooltip != null)
-                    getResourceMap().getString(validator.getTooltip());
-                required = validator.isRequired();
-            }
-
-            if(!binding.isContentValid())
-            {
-                if(required)
-                    setStyleRequired(tooltip);
-                else
-                    setStyleInvalid(tooltip);
-            }
-            else
-            {
-                if(required)
-                    setStyleValid();
-                else
-                    setStyleNormal();
-            }
-        }
     }
 
     public void setStyleRequired(String tooltip) {
