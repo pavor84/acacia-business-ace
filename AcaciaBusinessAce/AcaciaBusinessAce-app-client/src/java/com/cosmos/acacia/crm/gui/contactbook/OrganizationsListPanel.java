@@ -14,11 +14,12 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
@@ -32,25 +33,33 @@ import org.jdesktop.application.Task;
 public class OrganizationsListPanel extends AbstractTablePanel {
 
     /** Creates new form OrganizationsListPanel */
-    public OrganizationsListPanel(BigInteger parentDataObjectId)
-    {
+    public OrganizationsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
-    public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier)
-    {
+    public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
-        // TODO apply classifiers
+        setClassifier(classifier);
+        filterByClassifier();
     }
+    
     @EJB
     private OrganizationsListRemote formSession;
+    private UsersRemote adminSession;
 
     private BindingGroup organizationsBindingGroup;
     private List<Organization> organizations;
-
+    
+    /** Indicates whether the current form is administration form for managing organizations */
+    private boolean isAdminView;
+    
     @Override
     protected void initData() {
         super.initData();
+        
+        if (getParentDataObjectId() == null)
+            initAdminView();
+            
         setVisible(Button.Select, false);
         organizationsBindingGroup = new BindingGroup();
         AcaciaTable organizationsTable = getDataTable();
@@ -62,6 +71,57 @@ public class OrganizationsListPanel extends AbstractTablePanel {
         organizationsTable.setEditable(false);
     }
 
+    private void initAdminView() {
+        isAdminView = true;
+        setSpecialCaption("activateOrganization.Action.text");
+        setVisible(Button.Special, true);
+        addTablePanelListener(new TablePanelListener() {
+            @Override
+            public void selectionRowChanged() {
+                updateButtonCaption();
+            }
+            @Override public void tablePanelClose() {
+                //
+            }
+            @Override public void selectAction() {
+                //
+            }
+            @Override public void tableRefreshed() {
+                //
+            }
+        });
+    }
+    
+    @Override
+    public void specialAction() {
+        System.out.println("AA" + isAdminView);
+        if (isAdminView) {
+            Organization org = (Organization) getDataTable().getSelectedRowObject();
+            org = getAdminSession().activateOrganization(org, !org.isActive());
+            getDataTable().setSelectedRowObject(org);
+            updateButtonCaption();
+        }
+    }
+
+    private UsersRemote getAdminSession() {
+         if(adminSession == null) {
+            try {
+                adminSession = InitialContext.doLookup(UsersRemote.class.getName());
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return adminSession;
+    }
+    
+    private void updateButtonCaption() {
+        Organization org = (Organization) getDataTable().getSelectedRowObject();
+        if (org.isActive())
+            setSpecialCaption("deactivateOrganization.Action.text");
+        else
+            setSpecialCaption("activateOrganization.Action.text");
+    }
     protected List<Organization> getOrganizations()
     {
         if(organizations == null)
@@ -79,14 +139,10 @@ public class OrganizationsListPanel extends AbstractTablePanel {
 
     protected OrganizationsListRemote getFormSession()
     {
-        if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(OrganizationsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
+        if(formSession == null) {
+            try {
+                formSession = getBean(OrganizationsListRemote.class);
+            } catch(Exception ex) {
                 ex.printStackTrace();
             }
         }

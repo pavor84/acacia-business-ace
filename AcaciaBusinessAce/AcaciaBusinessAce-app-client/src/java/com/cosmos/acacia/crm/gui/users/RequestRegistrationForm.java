@@ -7,7 +7,6 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import com.cosmos.acacia.crm.validation.ValidationException;
 import java.math.BigInteger;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
@@ -16,6 +15,7 @@ import org.jdesktop.application.Action;
  *
  * @author  Bozhidar Bozhanov
  */
+
 public class RequestRegistrationForm extends AcaciaPanel {
 
     /** Creates new form RequestRegistrationForm */

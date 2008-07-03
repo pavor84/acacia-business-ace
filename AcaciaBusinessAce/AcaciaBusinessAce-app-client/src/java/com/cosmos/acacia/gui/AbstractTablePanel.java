@@ -118,7 +118,7 @@ public abstract class AbstractTablePanel
         selectButton = new com.cosmos.swingb.JBButton();
         unselectButton = new com.cosmos.swingb.JBButton();
         classifyButton = new com.cosmos.swingb.JBButton();
-        enterWarehouseButton = new com.cosmos.swingb.JBButton();
+        specialFunctionalityButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -166,10 +166,8 @@ public abstract class AbstractTablePanel
         classifyButton.setText(resourceMap.getString("classifyButton.text")); // NOI18N
         classifyButton.setName("classifyButton"); // NOI18N
 
-        enterWarehouseButton.setAction(actionMap.get("enterWarehouseAction")); // NOI18N
-        enterWarehouseButton.setMnemonic('e');
-        enterWarehouseButton.setText(resourceMap.getString("enterWarehouseButton.text")); // NOI18N
-        enterWarehouseButton.setName("enterWarehouseButton"); // NOI18N
+        specialFunctionalityButton.setAction(actionMap.get("specialAction")); // NOI18N
+        specialFunctionalityButton.setName("specialFunctionalityButton"); // NOI18N
 
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
@@ -180,8 +178,8 @@ public abstract class AbstractTablePanel
                 .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(enterWarehouseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(specialFunctionalityButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -212,7 +210,7 @@ public abstract class AbstractTablePanel
                     .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(enterWarehouseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(specialFunctionalityButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -250,11 +248,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private javax.swing.JScrollPane dataScrollPane;
     private com.cosmos.acacia.gui.AcaciaTable dataTable;
     private com.cosmos.swingb.JBButton deleteButton;
-    private com.cosmos.swingb.JBButton enterWarehouseButton;
     private com.cosmos.swingb.JBButton modifyButton;
     private com.cosmos.swingb.JBButton newButton;
     private com.cosmos.swingb.JBButton refreshButton;
     private com.cosmos.swingb.JBButton selectButton;
+    private com.cosmos.swingb.JBButton specialFunctionalityButton;
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
 
@@ -277,14 +275,14 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         if (!visibilitySetChanged) {
             setVisible(Button.Select, false);
             setVisible(Button.Unselect, false);
-            setVisible(Button.EnterWarehouse, false);
+            setVisible(Button.Special, false);
         }
 
         setEnabled(Button.Select, false);
         setEnabled(Button.Unselect, false);
         setEnabled(Button.Modify, false);
         setEnabled(Button.Delete, false);
-        setEnabled(Button.EnterWarehouse, false);
+        setEnabled(Button.Special, false);
         setEnabled(Button.Classify, false);
         
         if(selectedRowObject != null)
@@ -489,8 +487,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                 return refreshButton;
             case Close:
                 return closeButton;
-            case EnterWarehouse:
-                return enterWarehouseButton;
+            case Special:
+                return specialFunctionalityButton;
         }
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
@@ -735,7 +733,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Delete("deleteAction"),
         Refresh("refreshAction"),
         Close("closeAction"),
-        EnterWarehouse("enterWarehouseAction");
+        Special("specialAction");
 
 
         private Button(String actionName)
@@ -772,7 +770,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             buttonsMap.put(Button.Close, closeButton);
             buttonsMap.put(Button.Unselect, unselectButton);
             buttonsMap.put(Button.Classify, classifyButton);
-            buttonsMap.put(Button.EnterWarehouse, enterWarehouseButton);
+            buttonsMap.put(Button.Special, specialFunctionalityButton);
         }
 
         return buttonsMap;
@@ -792,7 +790,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Close(32, Button.Close),
         Unselect(64, Button.Unselect),
         Classify(128, Button.Classify),
-        EnterWarehouse(256, Button.EnterWarehouse);
+        Special(256, Button.Special);
 
         ButtonVisibility(int visibilityIndex, Button button)
         {
@@ -835,7 +833,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Delete, false);
                     setEnabled(Button.Select, false);
                     setEnabled(Button.Unselect, false);
-                    setEnabled(Button.EnterWarehouse, false);
+                    setEnabled(Button.Special, false);
                     setEnabled(Button.Classify, false);
                 }
                 else
@@ -845,7 +843,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Delete, canDelete(selectedObject));
                     setEnabled(Button.Select, true);
                     setEnabled(Button.Unselect, true);
-                    setEnabled(Button.EnterWarehouse, true);
+                    setEnabled(Button.Special, true);
                     setEnabled(Button.Classify, true);
                 }
                 setEnabled(Button.New, canCreate());
@@ -1028,6 +1026,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Action
-    public void enterWarehouseAction() {
+    public void specialAction() {
+    }
+    
+    public void setSpecialCaption(String key) {
+        specialFunctionalityButton.setText(getResourceMap().getString(key));
     }
 }

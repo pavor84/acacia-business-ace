@@ -124,12 +124,21 @@ public interface UsersRemote {
     void updateOrganization(User user, CallbackHandler callbackHandler);
 
     /**
-     * Makes the specified user active
+     * Makes the specified user active or inactive
      *
      * @param user
      * @param active whether the user should be active or inactive
      */
     void activateUser(User user, boolean active);
+    
+    /**
+     * Makes the specified organization active or inactive
+     *
+     * @param organization
+     * @param active whether the organization should be active or inactive
+     * @return the updated organization
+     */
+    Organization activateOrganization(Organization organization, boolean active);
     
     /**
      * Performs a password change

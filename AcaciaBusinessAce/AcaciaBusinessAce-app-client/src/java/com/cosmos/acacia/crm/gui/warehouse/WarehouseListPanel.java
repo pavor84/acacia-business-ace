@@ -48,7 +48,9 @@ public class WarehouseListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
         
-        setVisible(Button.EnterWarehouse, true);
+        setSpecialCaption("enterWarehouse.Action.text");
+        setVisible(Button.Special, true);
+        
         
         entityProps = getFormSession().getWarehouseEntityProperties();
         
@@ -162,7 +164,7 @@ public class WarehouseListPanel extends AbstractTablePanel {
     }
     
     @Override
-    public void enterWarehouseAction() {
+    public void specialAction() {
         Warehouse warehouse = (Warehouse) getDataTable().getSelectedRowObject();
         if ( warehouse==null ){
             log.warn("Enter warehouse action can't be executed: Warehouse instance expected but "+getSelectedRowObject()+" found! ");
