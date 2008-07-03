@@ -525,4 +525,9 @@ public class SimpleProduct
     public BusinessPartner getProducer() {
         return producer;
     }
+    
+    @Override
+    public String getInfo() {
+        return getProductName();
+    }
 }

@@ -160,5 +160,10 @@ public class DataObjectLink
     public void setId(BigInteger id) {
         setDataObjectLinkId(id);
     }
+    
+    @Override
+    public String getInfo() {
+        return getLinkName();
+    }
 
 }

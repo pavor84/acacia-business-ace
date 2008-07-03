@@ -182,4 +182,8 @@ public class CommunicationContact extends DataObjectBean implements Serializable
         setCommunicationContactId(id);
     }
 
+    @Override
+    public String getInfo() {
+        return getCommunicationType().getEnumValue().toString() + getCommunicationValue();
+    }
 }

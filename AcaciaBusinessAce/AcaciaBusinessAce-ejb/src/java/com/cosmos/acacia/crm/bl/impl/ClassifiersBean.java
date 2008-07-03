@@ -19,10 +19,12 @@ import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.crm.bl.validation.ClassifierValidatorLocal;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
+import com.cosmos.acacia.crm.data.ClassifiedObjectBean;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierAppliedForDot;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import java.math.BigInteger;
@@ -301,8 +303,14 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @Override
     public List<DataObject> getDataObjects(Classifier classifier) {
-        Query q = em.createNamedQuery("ClassifiedObject.findByClassifier");
-        q.setParameter("classifier", classifier);
+        Query q;
+        if (classifier != null) {
+            q = em.createNamedQuery("ClassifiedObject.findByClassifier");
+            q.setParameter("classifier", classifier);
+        } else {
+            q = em.createNamedQuery("ClassifiedObject.findAll");
+        }
+        
         q.setParameter("deleted", false);
 
         List<ClassifiedObject> cos = q.getResultList();
@@ -326,5 +334,48 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
             throw new ValidationException("No classifier found with this code");
         else
             return result.get(0);
+    }
+    
+    @Override
+    public List<ClassifiedObjectBean> getClassifiedObjectBeans(Classifier classifier) {
+        List<DataObject> dataObjects = getDataObjects(classifier);
+        
+        List<ClassifiedObjectBean> result = new ArrayList<ClassifiedObjectBean>(dataObjects.size());
+        
+        for (DataObject dataObject : dataObjects) {
+            DataObjectBean dob = getDataObjectBean(dataObject);
+            if (dob != null) {
+                ClassifiedObjectBean cob = new ClassifiedObjectBean();
+                String type = dob.getClass().getName().replaceAll(dob.getClass().getPackage().getName() + "\\.", "");
+                
+                cob.setTitle(dob.getInfo());
+                cob.setType(type);
+                result.add(cob);
+            }
+                
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public DataObjectBean getDataObjectBean(DataObject dataObject) {
+        DataObjectType dot = dataObject.getDataObjectType();
+        try {
+            Class clazz = Class.forName(dot.getDataObjectType());
+            DataObjectBean dob = (DataObjectBean) em.find(clazz, dataObject.getDataObjectId());
+            return dob;
+        } catch (Exception ex){
+            log.error("", ex);
+            return null;
+        }
+    }
+
+    @Override
+    public EntityProperties getClassifiedObjectBeansEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(ClassifiedObjectBean.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+
+        return entityProperties;
     }
 }

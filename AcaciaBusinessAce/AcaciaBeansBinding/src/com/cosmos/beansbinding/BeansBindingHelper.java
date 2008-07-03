@@ -36,6 +36,7 @@ import com.cosmos.beansbinding.validation.NumericValidator;
 import com.cosmos.beansbinding.validation.RegexValidator;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
 import com.cosmos.util.ClassHelper;
+import javax.persistence.Transient;
 
 
 /**
@@ -60,8 +61,10 @@ public class BeansBindingHelper {
                 entityProperties.setTableName(table.name());
             }
         }
-        if(!isEntity)
-            throw new IllegalArgumentException("The class " + entityClass.getName() + " is not entity because the annotation 'javax.persistence.Entity' is not present into the declared class annotations.");
+        
+// What if not an entity ?
+//        if(!isEntity)
+//            throw new IllegalArgumentException("The class " + entityClass.getName() + " is not entity because the annotation 'javax.persistence.Entity' is not present into the declared class annotations.");
 
         if(entityProperties.getTableName() == null)
              entityProperties.setTableName(entityClass.getSimpleName());

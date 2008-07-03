@@ -129,5 +129,11 @@ public class RealProduct
     {
         return "Product";
     }
+    
+    @Override
+    public String getInfo()
+    {
+        return getProductName();
+    }
 
 }

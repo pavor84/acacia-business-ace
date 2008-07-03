@@ -194,4 +194,8 @@ public class ClassifierGroup extends DataObjectBean
         return classifierGroupName + " (" +  classifierGroupCode + ")";
     }
 
+    @Override
+    public String getInfo() {
+        return getClassifierGroupName();
+    }
 }

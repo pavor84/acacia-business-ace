@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 
@@ -119,18 +121,18 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return em.find(DataObject.class, dataObjectId);
     }
 
-	@Override
-	public void setOrganization(Organization organization) {
-		SessionRegistry.getSession().setValue(SessionContext.ORGANIZATION_KEY, organization);
-	}
+    @Override
+    public void setOrganization(Organization organization) {
+            SessionRegistry.getSession().setValue(SessionContext.ORGANIZATION_KEY, organization);
+    }
 
-	@Override
-	public Organization getOrganization() {
-		return (Organization) SessionRegistry.getSession().getValue(SessionContext.ORGANIZATION_KEY);
-	}
+    @Override
+    public Organization getOrganization() {
+            return (Organization) SessionRegistry.getSession().getValue(SessionContext.ORGANIZATION_KEY);
+    }
 
-	@Override
-	public User getUser() {
-		return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
-	}
+    @Override
+    public User getUser() {
+            return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
+    }
 }

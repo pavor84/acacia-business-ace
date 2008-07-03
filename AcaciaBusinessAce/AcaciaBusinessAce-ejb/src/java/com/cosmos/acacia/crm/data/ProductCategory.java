@@ -218,5 +218,10 @@ public class ProductCategory
     public void setParentCategory(ProductCategory parentCategory) {
         this.parentCategory = parentCategory;
     }
+    
+    @Override
+    public String getInfo() {
+        return getCategoryName();
+    }
 
 }

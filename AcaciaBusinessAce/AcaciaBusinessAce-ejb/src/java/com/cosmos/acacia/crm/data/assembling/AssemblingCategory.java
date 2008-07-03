@@ -221,5 +221,10 @@ public class AssemblingCategory
         return null;
     }
 
+    @Override
+    public String getInfo()
+    {
+        return getCategoryName();
+    }
 
 }

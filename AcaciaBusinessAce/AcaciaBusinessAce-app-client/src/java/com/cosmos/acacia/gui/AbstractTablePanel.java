@@ -285,7 +285,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         setEnabled(Button.Modify, false);
         setEnabled(Button.Delete, false);
         setEnabled(Button.EnterWarehouse, false);
-
+        setEnabled(Button.Classify, false);
+        
         if(selectedRowObject != null)
             dataTable.setSelectedRowObject(selectedRowObject);
 
@@ -502,7 +503,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      *
      * @param visibleButtons
      */
-    /*public void setVisibleButtons(int visibleButtons){
+    public void setVisibleButtons(int visibleButtons){
         for (ButtonVisibility bv: ButtonVisibility.values())
         {
             if ((bv.getVisibilityIndex() & visibleButtons) != 0)
@@ -510,7 +511,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             else
                 setVisible(bv.getButton(), false);
         }
-    }*/
+    }
 
     /*public void setButtonsTextVisibility(boolean visible){
         selectButton.setToolTipText(selectButton.getText());
@@ -781,7 +782,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * Enumeration for visibility indices of buttons, used for the bitwise
      * operation in setVisibleButtons
      */
-    /*public enum ButtonVisibility
+    public enum ButtonVisibility
     {
         Select(1, Button.Select),
         New(2, Button.New),
@@ -810,7 +811,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         {
             return button;
         }
-    }*/
+    }
 
     public class TableSelectionListener
         implements ListSelectionListener
@@ -835,6 +836,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Select, false);
                     setEnabled(Button.Unselect, false);
                     setEnabled(Button.EnterWarehouse, false);
+                    setEnabled(Button.Classify, false);
                 }
                 else
                 {
@@ -844,6 +846,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Select, true);
                     setEnabled(Button.Unselect, true);
                     setEnabled(Button.EnterWarehouse, true);
+                    setEnabled(Button.Classify, true);
                 }
                 setEnabled(Button.New, canCreate());
                 selectedRowObject = null;

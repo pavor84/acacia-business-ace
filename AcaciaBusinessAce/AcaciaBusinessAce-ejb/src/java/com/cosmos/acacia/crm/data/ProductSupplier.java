@@ -140,5 +140,10 @@ public class ProductSupplier
     public void setParentId(BigInteger parentId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public String getInfo() {
+        return getProductSupplierPK().getSupplierId().toString();
+    }
 
 }

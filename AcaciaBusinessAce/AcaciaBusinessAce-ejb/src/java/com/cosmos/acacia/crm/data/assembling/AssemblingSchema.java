@@ -165,4 +165,10 @@ public class AssemblingSchema
     {
         return "Schema";
     }
+    
+    @Override
+    public String getInfo()
+    {
+        return getSchemaName();
+    }
 }

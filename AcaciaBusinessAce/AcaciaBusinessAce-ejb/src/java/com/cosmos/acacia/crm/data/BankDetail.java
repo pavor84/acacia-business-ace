@@ -264,4 +264,9 @@ public class BankDetail
     public void setId(BigInteger id) {
         setBankDetailId(id);
     }
+    
+    @Override
+    public String getInfo() {
+        return getBankAccount();
+    }
 }

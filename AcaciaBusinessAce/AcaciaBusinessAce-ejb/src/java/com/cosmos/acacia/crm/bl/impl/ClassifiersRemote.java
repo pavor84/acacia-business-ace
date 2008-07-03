@@ -6,10 +6,12 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.ClassifiedObject;
+import com.cosmos.acacia.crm.data.ClassifiedObjectBean;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierAppliedForDot;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -238,5 +240,29 @@ public interface ClassifiersRemote {
      * @return the list
      */
     List<DataObject> getDataObjects(Classifier classifier);
+    
+    
+    /**
+     * Lists all DataObjectBeans for which the given classifier is applied.
+     * presented in readable format
+     * 
+     * @param classifier
+     * @return list of entities
+     */
+    List<ClassifiedObjectBean> getClassifiedObjectBeans(Classifier classifier);
+    
+    /**
+     * Gets the DataObjectBean for the specified DataObject
+     * @param dataObject
+     * @return dataObjectBean
+     */
+    DataObjectBean getDataObjectBean(DataObject dataObject);
 
+    
+    /**
+     * Gets the entity properties for ClassifiedObjectBean
+     * 
+     * @return
+     */
+    EntityProperties getClassifiedObjectBeansEntityProperties();
 }

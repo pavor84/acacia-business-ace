@@ -21,7 +21,8 @@ public interface AcaciaSessionRemote {
 
     DataObject getDataObject(BigInteger dataObjectId);
 
-	User getUser();
+    User getUser();
 
-	Organization getOrganization();
+    Organization getOrganization();
+    
 }

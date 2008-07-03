@@ -179,4 +179,8 @@ public class ContactPerson
         return null;
     }
 
+    @Override
+    public String getInfo() {
+        return getContact().getDisplayName() + ": " + getPositionType().getPositionTypeName();
+    }
 }

@@ -223,4 +223,10 @@ public class AssemblingSchemaItemValue
     {
         this.dataObject = dataObject;
     }
+    
+    @Override
+    public String getInfo()
+    {
+        return getItemValueId().toString();
+    }
 }
