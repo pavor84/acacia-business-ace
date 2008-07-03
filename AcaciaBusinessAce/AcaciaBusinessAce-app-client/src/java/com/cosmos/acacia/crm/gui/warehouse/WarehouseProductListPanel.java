@@ -1,5 +1,7 @@
 package com.cosmos.acacia.crm.gui.warehouse;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,9 +20,6 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * Created	:	02.05.2008
@@ -99,6 +98,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
             entityProps.removePropertyDetails("warehouse");
             entityProps.removePropertyDetails("notes");
             entityProps.removePropertyDetails("deliveryTime");
+            entityProps.removePropertyDetails("salePrice");
         }
         
         refreshDataTable(entityProps);

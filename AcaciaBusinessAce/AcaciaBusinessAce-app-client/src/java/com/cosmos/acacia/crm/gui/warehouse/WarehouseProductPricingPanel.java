@@ -130,11 +130,11 @@ public class WarehouseProductPricingPanel extends JBPanel {
     private com.cosmos.swingb.JBTextField jBTextField2;
     // End of variables declaration//GEN-END:variables
     public JBTextField getPurchasePriceField() {
-        return jBTextField2;
+        return jBTextField1;
     }
 
     public JBTextField getSalePriceField() {
-        return jBTextField1;
+        return jBTextField2;
     }
 
     @SuppressWarnings("unchecked")
