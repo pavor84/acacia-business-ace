@@ -102,16 +102,16 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
 
     ClassifiersListPanel clp;
     ClassifiedObjectBeansListPanel objectsPanel;
-    
+
     @Override
     protected void initData() {
         clp = new ClassifiersListPanel(getParentDataObjectId());
-        classifiersComboList.initUnbound(clp);
-        
+        classifiersComboList.initUnbound(clp, "${classifierName}");
+
         objectsPanel = new ClassifiedObjectBeansListPanel(getParentDataObjectId());
         objectsPanel.setVisibleButtons(0);
         tableHolderPanel1.add(objectsPanel);
-        
+
         classifiersComboList.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -119,26 +119,26 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
             }
         });
     }
-    
+
     class ClassifiedObjectBeansListPanel extends AbstractTablePanel {
         BindingGroup objectsBindingGroup;
 
         public ClassifiedObjectBeansListPanel(BigInteger parentId) {
             super(parentId);
         }
-        
+
         @Override
         public void initData() {
-            
+
             super.initData();
             if (objectsBindingGroup != null)
                 objectsBindingGroup.unbind();
-            
+
             objectsBindingGroup = new BindingGroup();
             AcaciaTable objectsTable = getDataTable();
             JTableBinding tableBinding = objectsTable.bind(
-                    objectsBindingGroup, 
-                    getObjects(), 
+                    objectsBindingGroup,
+                    getObjects(),
                     clp.getFormSession().getClassifiedObjectBeansEntityProperties());
 
             objectsBindingGroup.bind();
@@ -147,7 +147,7 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
         }
 
         private List<ClassifiedObjectBean> getObjects() {
-            return clp.getFormSession().getClassifiedObjectBeans((Classifier) classifiersComboList.getSelectedItem());               
+            return clp.getFormSession().getClassifiedObjectBeans((Classifier) classifiersComboList.getSelectedItem());
         }
 
         @Override

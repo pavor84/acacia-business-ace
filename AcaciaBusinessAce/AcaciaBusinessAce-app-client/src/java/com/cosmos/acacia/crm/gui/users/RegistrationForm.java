@@ -218,7 +218,7 @@ public class RegistrationForm extends BaseEntityPanel {
        passwordTextField.bind(userBindingGroup, user, entityProps.getPropertyDetails("userPassword"));
 
        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
-       organizationComboList.initUnbound(organizationsTable);
+       organizationComboList.initUnbound(organizationsTable, "${organizationName}");
 
        organizationComboList.addItemListener(new ItemListener() {
             @Override
@@ -233,7 +233,7 @@ public class RegistrationForm extends BaseEntityPanel {
                 branchComboList.setEnabled(true);
                 AddressListPanel branchesTable = new AddressListPanel(organization.getId());
                 branchesTable.setVisible(Button.New, false);
-                branchComboList.initUnbound(branchesTable);
+                branchComboList.initUnbound(branchesTable, "${addressName}");
 
                 branchComboList.addItemListener(new ItemListener() {
                     @Override
@@ -247,7 +247,7 @@ public class RegistrationForm extends BaseEntityPanel {
                         }
                         personComboList.setEnabled(true);
                         ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
-                        personComboList.initUnbound(personsTable);
+                        personComboList.initUnbound(personsTable, "${firstName} ${secondName} ${lastName} ${extraName}");
                     }
 
                 });

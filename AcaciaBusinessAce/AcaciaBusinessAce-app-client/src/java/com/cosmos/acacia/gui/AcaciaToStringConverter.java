@@ -73,6 +73,7 @@ public class AcaciaToStringConverter
             return "";
         try{
             Object value = property.getValue(item);
+            System.out.println("VALUE: " + value + ",elp" + property);
             if ( value==null )
                 return "";
             else 
