@@ -69,7 +69,7 @@ public class JBComboList
     private JComboBoxBinding comboBoxBinding;
 
     private SelectableListDialog selectableListDialog;
-
+    private ObjectToStringConverter converter;
 
     public JBComboList()
     {
@@ -474,7 +474,8 @@ public class JBComboList
         if(converter == null)
             converter = new BeanResourceToStringConverter(getApplication());
         AutoCompleteDecorator.decorate(comboBox, converter);
-
+        this.converter = converter;
+        
         this.selectableListDialog = selectableListDialog;
 
         List data = new ArrayList(selectableListDialog.getListData());
@@ -492,4 +493,11 @@ public class JBComboList
         initUnbound(selectableListDialog, null);
     }
 
+    public ObjectToStringConverter getConverter() {
+        return converter;
+    }
+
+    public void setConverter(ObjectToStringConverter converter) {
+        this.converter = converter;
+    }    
 }
