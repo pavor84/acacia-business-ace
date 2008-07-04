@@ -48,6 +48,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
+import java.rmi.Remote;
 
 /**
  * The implementation of handling users (see interface for more info)
@@ -55,7 +56,7 @@ import com.cosmos.util.Base64Encoder;
  * @author Bozhidar Bozhanov
  */
 @Stateless
-public class UsersBean implements UsersRemote, UsersLocal {
+public class UsersBean implements UsersRemote, UsersLocal, Remote {
 
     public static final String ENCODING = "ISO-8859-1";
 
@@ -305,13 +306,14 @@ public class UsersBean implements UsersRemote, UsersLocal {
     }
 
     @Override
-    public void activateUser(User user, boolean active) {
+    public User activateUser(User user, Boolean active) {
         user.setIsActive(active);
         esm.persist(em, user);
+        return user;
     }
     
     @Override
-    public Organization activateOrganization(Organization organization, boolean active) {
+    public Organization activateOrganization(Organization organization, Boolean active) {
         organization.setActive(active);
         esm.persist(em, organization);
         
@@ -435,6 +437,23 @@ public class UsersBean implements UsersRemote, UsersLocal {
             passwordChange = false;
             throw ex;
         }
+    }
+
+    @Override
+    public List<User> getUsers(BigInteger parentDataObjectId) {
+        List<User> result = null;
+        
+        if (parentDataObjectId != null) {
+            Organization o = em.find(Organization.class, parentDataObjectId);
+            Query q = em.createNamedQuery("UserOrganization.findByOrganization");
+            q.setParameter("organization", o);
+            result = new ArrayList<User>(q.getResultList());
+        } else {
+            Query q = em.createNamedQuery("User.findAll");
+            result = new ArrayList<User>(q.getResultList());
+        }
+        
+        return result;
     }
 
 }

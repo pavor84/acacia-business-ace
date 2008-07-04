@@ -317,7 +317,6 @@ public class RegistrationForm extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         // Not used
-
     }
 
 }

@@ -24,7 +24,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="dataScrollPane" alignment="0" pref="916" max="32767" attributes="0"/>
+                  <Component id="dataScrollPane" alignment="0" pref="985" max="32767" attributes="0"/>
                   <Component id="buttonsPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -75,8 +75,8 @@
                   <Component id="selectButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="unselectButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="27" max="32767" attributes="0"/>
-                  <Component id="specialFunctionalityButton" min="-2" pref="117" max="-2" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
+                  <Component id="specialFunctionalityButton" min="-2" pref="161" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="classifyButton" min="-2" pref="91" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>

@@ -9,6 +9,8 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
+import java.util.List;
 import javax.security.auth.callback.CallbackHandler;
 
 /**
@@ -127,9 +129,10 @@ public interface UsersRemote {
      * Makes the specified user active or inactive
      *
      * @param user
-     * @param active whether the user should be active or inactive
+     * @param active whether the user should be active or inactive\
+     * @return the updated User
      */
-    void activateUser(User user, boolean active);
+    User activateUser(User user, Boolean active);
     
     /**
      * Makes the specified organization active or inactive
@@ -138,7 +141,7 @@ public interface UsersRemote {
      * @param active whether the organization should be active or inactive
      * @return the updated organization
      */
-    Organization activateOrganization(Organization organization, boolean active);
+    Organization activateOrganization(Organization organization, Boolean active);
     
     /**
      * Performs a password change
@@ -147,4 +150,13 @@ public interface UsersRemote {
      * @param newPassword
      */
     void changePassword(char[] oldPassword, char[] newPassword);
+    
+    
+    /**
+     * Gets the users with a specified parent id (i.e. organization id)
+     * 
+     * @param parentDataObjectId
+     * @return list of users
+     */
+    List<User> getUsers(BigInteger parentDataObjectId);
 }

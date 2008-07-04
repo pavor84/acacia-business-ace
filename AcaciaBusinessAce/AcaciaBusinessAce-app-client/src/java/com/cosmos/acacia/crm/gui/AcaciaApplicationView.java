@@ -44,6 +44,7 @@ import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
+import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
@@ -403,6 +404,13 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void usersListAction()
+    {
+        UsersListPanel panel = new UsersListPanel(null);
+        panel.showFrame();
+    }
+     
+    @Action
     public void invoicesListAction() {
         System.out.println("invoicesListAction");
         InvoicesListPanel invoicesListPanel = new InvoicesListPanel(null);
@@ -444,6 +452,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem organizationPositionTypesListMenuItem = new JBMenuItem();
         JBMenuItem citiesListMenuItem = new JBMenuItem();
         JBMenuItem countriesListMenuItem = new JBMenuItem();
+        JBMenuItem usersListMenuItem = new JBMenuItem();
         /* End of contact book menu items */
 
         JBMenu classifiersMenu = new JBMenu();
@@ -618,6 +627,12 @@ public class AcaciaApplicationView extends FrameView {
         countriesListMenuItem.setAction(actionMap.get("countriesListAction"));
         contactBook.add(countriesListMenuItem);
 
+        Separator contactBookSeparator3 = new Separator();
+        contactBook.add(contactBookSeparator3);
+
+        usersListMenuItem.setAction(actionMap.get("usersListAction"));
+        contactBook.add(usersListMenuItem);
+        
         menuBar.add(contactBook);
 
         /* End of contact book menu items */
