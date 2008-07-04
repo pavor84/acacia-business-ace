@@ -13,22 +13,24 @@ import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.Validator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.swingb.BindingValidationListener;
-import com.cosmos.swingb.validation.Validatable;
+import com.cosmos.beansbinding.validation.BaseValidator;
+import org.jdesktop.beansbinding.Property;
 
 /**
  * @author jchan
  */
-public class AcaciaLookup extends javax.swing.JPanel implements Validatable {
+public class AcaciaLookup extends javax.swing.JPanel {
 
     /** Creates new form AcaciaLookup */
     public AcaciaLookup() {
@@ -132,7 +134,7 @@ public class AcaciaLookup extends javax.swing.JPanel implements Validatable {
         {
             binding.setValidator(validator);
         }
-        bindingListener = new BindingValidationListener(this);
+        bindingListener = new BindingValidationListener();
         binding.addBindingListener(bindingListener);
 
         bindingGroup.addBinding(binding);
@@ -149,6 +151,47 @@ public class AcaciaLookup extends javax.swing.JPanel implements Validatable {
         }
         
         return binding;
+    }
+    
+    public class BindingValidationListener extends AbstractBindingListener {
+        @SuppressWarnings("unchecked")
+        @Override
+        public void bindingBecameBound(Binding binding) {
+            updateText();
+            validate(binding);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void targetChanged(Binding binding, PropertyStateEvent event) {
+            updateText();
+            validate(binding);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected void validate(Binding binding) {
+        boolean required = false;
+        String tooltip = null;
+        BaseValidator validator = (BaseValidator) binding.getValidator();
+        if (validator != null) {
+            tooltip = validator.getTooltip();
+            if (tooltip != null)
+                    getResourceMap().getString(validator.getTooltip());
+            required = validator.isRequired();
+        }
+        
+        if ( !binding.isContentValid() ){
+            if (required)
+                setStyleRequired(tooltip);
+            else
+                setStyleInvalid(tooltip);
+        } else {
+            if (required)
+                setStyleValid();
+            else
+                setStyleNormal();
+        }
     }
 
     /**
@@ -303,8 +346,8 @@ public class AcaciaLookup extends javax.swing.JPanel implements Validatable {
         Color color = getResourceMap().getColor("validation.field.normal.background");
         field.setBackground(color);
     }
-           
-    public ResourceMap getResourceMap()
+    
+    protected ResourceMap getResourceMap()
     {
         if(resourceMap == null)
         {
