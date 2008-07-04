@@ -505,7 +505,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         {
             try
             {
-                formSession = InitialContext.doLookup(OrganizationsListRemote.class.getName());
+                formSession = getBean(OrganizationsListRemote.class);
             }
             catch(Exception ex)
             {

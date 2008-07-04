@@ -327,17 +327,17 @@ public class LoginForm extends AcaciaPanel {
             log.error("", ex);
         }
         
-        Integer sessionid = getFormSession().login(username, password);
-        AcaciaApplication.setSessionId(sessionid);
-        
-        User user = acaciaSessionRemote.getUser();
-        
-        if (!exceptionOccurred) {
-            
+        try {
+            Integer sessionid = getFormSession().login(username, password);
+            AcaciaApplication.setSessionId(sessionid);
+
+            User user = acaciaSessionRemote.getUser();
+
+
             setPreferences(username);
 
             /* End of preferences handling */
-        
+
             getFormSession().updateOrganization(user, new OrganizationChoiceHandler());
             //Organization organizationDataObject =
 
@@ -345,20 +345,21 @@ public class LoginForm extends AcaciaPanel {
             log.info(acaciaSessionRemote.getOrganization());
 
             setDialogResponse(DialogResponse.LOGIN);
-            
+
             if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
                 ChangePasswordForm cpf = new ChangePasswordForm(null);
                 cpf.setCurrentPassword(new String(password));
                 DialogResponse response = cpf.showDialog(this);
-                
+
                 //if(!DialogResponse.OK.equals(response))
                 //    AcaciaApplication.getApplication().exit();
             }
-            
+
             close();
-        } else {
-            exceptionOccurred = false;
+        } catch (Exception ex) {
+            handleBusinessException(ex);
         }
+        
             
     }
 

@@ -165,23 +165,26 @@ public class RequestRegistrationForm extends AcaciaPanel {
 
     @Action
     public void sendCode() {
-        getFormSession().requestRegistration(emailTextField.getText());
-        if (!exceptionOccurred)
-            JOptionPane.showMessageDialog(this, getResourceMap().getString("request.successful"));
-        else
-            exceptionOccurred = false;
+        try {
+            getFormSession().requestRegistration(emailTextField.getText());
         
+            JOptionPane.showMessageDialog(this, getResourceMap().getString("request.successful"));
+        } catch (Exception ex) {
+            handleBusinessException(ex);
+        }
     }
 
     @Action
     public void proceed() {
-        String email = getFormSession().verifyCode(codeTextField.getText());
-        if (!exceptionOccurred) {
+        try {
+            String email = getFormSession().verifyCode(codeTextField.getText());
+
             RegistrationForm regForm = new RegistrationForm(email);
             regForm.showDialog(this.getParent());
             this.close();
-        } else {
-            exceptionOccurred = false;
+        } catch (Exception ex){
+            handleBusinessException(ex);
         }
+        
     }
 }

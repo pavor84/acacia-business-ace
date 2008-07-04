@@ -129,16 +129,18 @@ public class ChangePasswordForm extends AcaciaPanel {
     @Action
     public void changePassword() {
         if (Arrays.equals(newPasswordField.getPassword(), newPasswordField2.getPassword())) {
-            getFormSession().changePassword(oldPasswordField.getPassword(),                
+            try {
+                getFormSession().changePassword(oldPasswordField.getPassword(),                
                     newPasswordField.getPassword());
-            if (!exceptionOccurred) {
+            
                 JOptionPane.showMessageDialog(this, getResourceMap().getString("password.changed"));
                 close();
+            } catch (Exception ex) {
+                handleBusinessException(ex);
             }
         } else {
             JOptionPane.showMessageDialog(this, getResourceMap().getString("passwords.inconsistent"));
         }
-        exceptionOccurred = false;
     }
 
     public void setCurrentPassword(String password) {
@@ -147,12 +149,10 @@ public class ChangePasswordForm extends AcaciaPanel {
     
     private UsersRemote getFormSession() {
         if (formSession == null) {
-            try
-            {
+            try {
                 formSession = getBean(UsersRemote.class);
-            }
-            catch(Exception ex)
-            {
+
+            } catch(Exception ex) {
                 ex.printStackTrace();
             }
         }

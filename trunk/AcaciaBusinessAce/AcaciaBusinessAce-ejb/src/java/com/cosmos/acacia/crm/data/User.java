@@ -53,6 +53,10 @@ import com.cosmos.acacia.annotation.ValidationType;
             @NamedQuery(
                     name = "User.findByUserName",
                     query = "select u from User u where u.userName=:userName"
+            ),
+            @NamedQuery(
+                    name = "User.findAll",
+                    query = "select u from User u"
             )
         }
 )
@@ -97,7 +101,6 @@ public class User extends DataObjectBean implements Serializable {
     private boolean isActive;
 
     @Column(name = "is_new", nullable = false)
-    @Property(title="New")
     private boolean isNew;
 
     @Column(name = "creation_time", nullable = false)
@@ -110,21 +113,17 @@ public class User extends DataObjectBean implements Serializable {
     private String description;
 
     @Column(name = "small_image_uri")
-    @Property(title="Small image uri")
     private String smallImageUri;
 
     @Lob
     @Column(name = "small_image")
-    @Property(title="Small image")
     private byte[] smallImage;
 
     @Column(name = "medium_image_uri")
-    @Property(title="Medium image uri")
     private String mediumImageUri;
 
     @Lob
     @Column(name = "medium_image")
-    @Property(title="Medium image")
     private byte[] mediumImage;
 
     @Column(name = "user_uri")
@@ -137,12 +136,12 @@ public class User extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
     @ManyToOne
-    @Property(title="Person")
+    @Property(title="Person", customDisplay="${person.displayName}")
     private Person person;
 
     @JoinColumn(name = "creator_id", referencedColumnName = "user_id")
     @ManyToOne
-    @Property(title="Creator")
+    @Property(title="Creator", customDisplay="${creator.userName}")
     private User creator;
 
     @JoinColumn(name = "user_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

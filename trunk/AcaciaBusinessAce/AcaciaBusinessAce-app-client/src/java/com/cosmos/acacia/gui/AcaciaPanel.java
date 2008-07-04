@@ -49,7 +49,6 @@ public abstract class AcaciaPanel
 
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
-    protected boolean exceptionOccurred = false;
     
     private AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
 
@@ -231,21 +230,7 @@ public abstract class AcaciaPanel
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             log.info("Method called: " + method.getName() + " on bean: " + bean);
-            try {
-                return sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
-            } catch (Throwable ex) {
-                exceptionOccurred = true;
-                if (AcaciaPanel.this instanceof BaseEntityPanel || AcaciaPanel.this instanceof AbstractTablePanel)
-                    throw ex;
-
-                ValidationException ve = extractValidationException(ex);
-                if (ve != null) {
-                    JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
-                } else {
-                    log.error(ex);
-                }
-                return null;
-            }
+            return sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
         }
     }
 
@@ -269,7 +254,16 @@ public abstract class AcaciaPanel
         }
     }
 
-	public AcaciaSessionRemote getAcaciaSession() {
-		return acaciaSession;
-	}
+    public AcaciaSessionRemote getAcaciaSession() {
+            return acaciaSession;
+    }
+    
+    public void handleBusinessException(Exception ex) {
+        ValidationException ve = extractValidationException(ex);
+        if (ve != null) {
+            JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
+        } else {
+            log.error(ex);
+        }
+    }
 }

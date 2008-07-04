@@ -144,20 +144,22 @@ public class ForgottenPasswordForm extends AcaciaPanel {
     @Action
     public void sendPassword() {
         
-        String username = usernameTextField.getText();
-        if (username != null && username.length() > 0)
-            getFormSession().remindPasswordByUsername(username);
-        else {
-            String email = emailTextField.getText();
-            if (email != null && email.length() > 0)
-                getFormSession().remindPasswordByEmail(email);
-            else
-                JOptionPane.showMessageDialog(this, getResourceMap().getString("ForgottenPasswordForm.no.data"));
-        }
-        
-        if (!exceptionOccurred) {
+        try {
+            String username = usernameTextField.getText();
+            if (username != null && username.length() > 0)
+                getFormSession().remindPasswordByUsername(username);
+            else {
+                String email = emailTextField.getText();
+                if (email != null && email.length() > 0)
+                    getFormSession().remindPasswordByEmail(email);
+                else
+                    JOptionPane.showMessageDialog(this, getResourceMap().getString("ForgottenPasswordForm.no.data"));
+            }
+
             JOptionPane.showMessageDialog(this, getResourceMap().getString("ForgottenPasswordForm.email.sent"));
             close();
+        } catch (Exception ex) {
+            handleBusinessException(ex);
         }
         
     }

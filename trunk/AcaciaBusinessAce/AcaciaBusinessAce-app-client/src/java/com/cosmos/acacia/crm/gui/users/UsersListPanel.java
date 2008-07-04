@@ -3,8 +3,9 @@
  *
  */
 
-package com.cosmos.acacia.crm.gui.contactbook;
+package com.cosmos.acacia.crm.gui.users;
 
+import com.cosmos.acacia.crm.gui.contactbook.*;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,10 +13,10 @@ import javax.ejb.EJB;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
@@ -29,50 +30,45 @@ import org.jdesktop.application.Task;
  *
  * @author  Bozhidar Bozhanov
  */
-public class OrganizationsListPanel extends AbstractTablePanel {
+public class UsersListPanel extends AbstractTablePanel {
 
     /** Creates new form OrganizationsListPanel */
-    public OrganizationsListPanel(BigInteger parentDataObjectId) {
+    public UsersListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
-    public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier) {
+    public UsersListPanel(BigInteger parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         setClassifier(classifier);
         filterByClassifier();
     }
     
     @EJB
-    private OrganizationsListRemote formSession;
     private UsersRemote adminSession;
 
-    private BindingGroup organizationsBindingGroup;
-    private List<Organization> organizations;
-    
-    /** Indicates whether the current form is administration form for managing organizations */
-    private boolean isAdminView;
+    private BindingGroup usersBindingGroup;
+    private List<User> users;
     
     @Override
     protected void initData() {
         super.initData();
+
+        setVisible(Button.Refresh);
         
-        if (getParentDataObjectId() == null)
-            initAdminView();
-            
-        setVisible(Button.Select, false);
-        organizationsBindingGroup = new BindingGroup();
-        AcaciaTable organizationsTable = getDataTable();
-        JTableBinding tableBinding = organizationsTable.bind(organizationsBindingGroup, getOrganizations(), getOrganizationEntityProperties());
+        initAdminView();
+        
+        usersBindingGroup = new BindingGroup();
+        AcaciaTable usersTable = getDataTable();
+        JTableBinding tableBinding = usersTable.bind(usersBindingGroup, getUsers(), getUserEntityProperties());
 
 
-        organizationsBindingGroup.bind();
+        usersBindingGroup.bind();
 
-        organizationsTable.setEditable(false);
+        usersTable.setEditable(false);
     }
 
     private void initAdminView() {
-        isAdminView = true;
-        setSpecialCaption("activateOrganization.Action.text");
+        setSpecialCaption("activateUser.Action.text");
         setVisible(Button.Special, true);
         addTablePanelListener(new TablePanelListener() {
             @Override
@@ -93,13 +89,11 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     
     @Override
     public void specialAction() {
-        if (isAdminView) {
-            Organization org = (Organization) getDataTable().getSelectedRowObject();
-            org = getAdminSession().activateOrganization(org, !org.isActive());
-            getDataTable().replaceSelectedRow(org);
-            fireModify(org);
-            updateButtonCaption();
-        }
+        User user = (User) getDataTable().getSelectedRowObject();
+        user = getAdminSession().activateUser(user, new Boolean(!user.getIsActive()));
+        getDataTable().replaceSelectedRow(user);
+        fireModify(user);
+        updateButtonCaption();
     }
 
     private UsersRemote getAdminSession() {
@@ -115,53 +109,34 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     }
     
     private void updateButtonCaption() {
-        Organization org = (Organization) getDataTable().getSelectedRowObject();
-        if (org.isActive())
-            setSpecialCaption("deactivateOrganization.Action.text");
-        else
-            setSpecialCaption("activateOrganization.Action.text");
+        User user = (User) getDataTable().getSelectedRowObject();
+        if (user != null) {
+            if (user.getIsActive())
+                setSpecialCaption("deactivateUser.Action.text");
+            else
+                setSpecialCaption("activateUser.Action.text");
+
+            if (user.equals(getAcaciaSession().getUser()))
+                setEnabled(Button.Special, false);
+        }
     }
-    protected List<Organization> getOrganizations()
+    protected List<User> getUsers()
     {
-        if(organizations == null)
+        if(users == null)
         {
-            organizations = getFormSession().getOrganizations(getParentDataObjectId());
+            users = getAdminSession().getUsers(getParentDataObjectId());
         }
 
-        return organizations;
+        return users;
     }
 
-    protected EntityProperties getOrganizationEntityProperties()
+    protected EntityProperties getUserEntityProperties()
     {
-        return getFormSession().getOrganizationEntityProperties();
+        return getAdminSession().getUserEntityProperties();
     }
-
-    protected OrganizationsListRemote getFormSession()
-    {
-        if(formSession == null) {
-            try {
-                formSession = getBean(OrganizationsListRemote.class);
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        return formSession;
-    }
-
-    protected int deleteOrganization(Organization organization)
-    {
-        return getFormSession().deleteOrganization(organization);
-    }
-
+    
     @Override
     protected boolean deleteRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            deleteOrganization((Organization) rowObject);
-            return true;
-        }
-
         return false;
     }
 
@@ -202,10 +177,10 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (organizationsBindingGroup != null)
-            organizationsBindingGroup.unbind();
+        if (usersBindingGroup != null)
+            usersBindingGroup.unbind();
 
-        organizations = null;
+        users = null;
 
         initData();
 
