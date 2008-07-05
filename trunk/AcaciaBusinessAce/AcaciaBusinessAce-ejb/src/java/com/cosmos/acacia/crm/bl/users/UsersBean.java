@@ -40,6 +40,7 @@ import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.RegistrationCode;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserOrganization;
@@ -49,6 +50,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
 import java.rmi.Remote;
+import javax.security.auth.callback.Callback;
 
 /**
  * The implementation of handling users (see interface for more info)
@@ -72,17 +74,17 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
 
     @EJB
     private GenericUniqueValidatorLocal<User> validator;
-    
+
     @EJB
     private AcaciaSessionLocal acaciaSessionLocal;
 
     /** Temporary indicator that operations are concerning password change */
     private boolean passwordChange = false;
-    
+
     private static final String INCORRECT_LOGIN_DATA = "Login.data.incorrect";
     private static final String TEMPORARY_LOGIN = "temporaryLogin";
     private static final String LOGIN = "login";
-    
+
     @Override
     public Integer login(String username, char[] password) {
         try {
@@ -99,17 +101,17 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         Query loginQuery = em.createNamedQuery("User." + loginType);
         loginQuery.setParameter("username", username);
         loginQuery.setParameter("password", getHash(new String(password)));
-        
+
         try {
             User user = (User) loginQuery.getSingleResult();
             if (!user.getIsActive())
                 throw new ValidationException("Login.account.inactive");
-            
+
             if (loginType.equals(TEMPORARY_LOGIN)) {
                 // Checking whether the validity period hasn't expired
                 if (System.currentTimeMillis() > user.getSystemPasswordValidity().getTime())
                     throw new ValidationException(INCORRECT_LOGIN_DATA);
-                
+
                 user.setNextActionAfterLogin(CHANGE_PASSWORD);
             }
             if (!passwordChange)
@@ -137,7 +139,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     public void remindPasswordByUsername(String username) {
         Query q = em.createNamedQuery("User.findByUserName");
         q.setParameter("userName", username);
-        
+
         try {
             User user = (User) q.getSingleResult();
             remindPassword(user);
@@ -145,21 +147,21 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             throw new ValidationException("ForgottenPasswordForm.invalid.username");
         }
     }
-    
+
     private static final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
     private void remindPassword(User user) {
         String tempPassword = generateTemporaryPassword();
         user.setSystemPassword(getHash(tempPassword));
         user.setSystemPasswordValidity(new Date(System.currentTimeMillis() + MILLIS_IN_DAY));
         esm.persist(em, user);
-        
+
         log.info("Pass: " + tempPassword);
-        
+
         sendMail(user.getEmailAddress(),
                 MessageRetriever.get("forgottenPasswordContent", locale, tempPassword),
                 MessageRetriever.get("forgottenPasswordSubjecet", locale));
     }
-    
+
     private String generateTemporaryPassword() {
         int length = 6 + (int) (Math.random() * 6);
         byte[] chars = new byte[length];
@@ -168,17 +170,17 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         }
         return new String(chars).trim();
     }
-    
+
     @Override
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
         BigInteger codeNumber = BigInteger.valueOf(UUID.randomUUID().getMostSignificantBits() / 10000);
-        
+
         Query q = em.createNamedQuery("User.findByEmail");
         q.setParameter("email", email);
         if (q.getResultList() != null && q.getResultList().size() > 0)
             throw new ValidationException("email.taken");
-        
+
         RegistrationCode code = new RegistrationCode();
         code.setEmail(email);
         code.setRegistrationCode(codeNumber);
@@ -196,7 +198,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     }
 
     @Override
-    public User signup(User user, Organization organization, Address branch) {
+    public User signup(User user, Organization organization, Address branch, Person person) {
 
         validator.validate(user, "userName");
 
@@ -211,6 +213,9 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
             uo.setUserOrganizationPK(pk);
             uo.setBranch(branch);
+            uo.setPerson(person);
+            uo.setUserActive(true);
+
             esm.persist(em, uo);
         }
 
@@ -294,14 +299,36 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     @Override
     public void updateOrganization(User user, CallbackHandler callbackHandler) {
         List<Organization> organizations = getOrganizationsList(user);
+        Organization organization = null;
+        
+        if (organizations != null && organizations.size() > 0) {
 
-        if (organizations.size() > 1) {
-           //callbackHandler.handle(null); // add support for the message display
-        } else if (organizations.size() == 1) {
-            Organization organization = organizations.get(0);
-            acaciaSessionLocal.setOrganization(organization);
-        } else {
-            // free user
+            if (organizations.size() > 1) {
+                OrganizationCallback callback = new OrganizationCallback(organizations);
+                try {
+                    callbackHandler.handle(new Callback[] { callback });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                organization = callback.getOrganization();
+                log.info("Organization = " + organization);
+            } else if (organizations.size() == 1) {
+                organization = organizations.get(0);
+
+            }
+
+            if (organization != null) {
+                UserOrganization uo = em.find(UserOrganization.class,
+                        new UserOrganizationPK(user.getId(), organization.getId()));
+                if (uo.isUserActive())
+                    acaciaSessionLocal.setOrganization(organization);
+                else
+                    throw new ValidationException("Login.account.inactive");
+            }
+        }
+        
+        if (organization == null) {
+            // TODO: free user
         }
     }
 
@@ -311,18 +338,34 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         esm.persist(em, user);
         return user;
     }
-    
+
+    @Override
+    public User activateUser(User user, BigInteger parentId, Boolean active) {
+        Organization o = em.find(Organization.class, parentId);
+        if (o != null) {
+            UserOrganization uo = em.find(UserOrganization.class,
+                    new UserOrganizationPK(user.getId(), o.getId()));
+
+            uo.setUserActive(active);
+            esm.persist(em, uo);
+        }
+        
+        user.setIsActive(active);
+        esm.persist(em, user);
+        return user;
+    }
+
     @Override
     public Organization activateOrganization(Organization organization, Boolean active) {
         organization.setActive(active);
         esm.persist(em, organization);
-        
+
         List<User> users = getUsersList(organization);
         for (User u : users) {
             u.setIsActive(active);
             esm.persist(em, u);
         }
-        
+
         return organization;
     }
     private String getHexString(byte[] array) {
@@ -332,7 +375,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     }
         return hexString.toString();
     }
-     
+
     private List<Organization> getOrganizationsList(User user) {
         Query q = em.createNamedQuery("UserOrganization.findByUser");
         q.setParameter("user", user);
@@ -344,7 +387,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         }
         return result;
     }
-    
+
     private List<User> getUsersList(Organization organization) {
         Query q = em.createNamedQuery("UserOrganization.findByOrganization");
         q.setParameter("organization", organization);
@@ -356,9 +399,9 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         }
         return result;
     }
-        
+
     private char[] saltChars = new char[] {'!', 'b', '0', 'z', 'h', 'o'};
-    
+
     private String saltPassword(String password) {
         StringBuffer sb = new StringBuffer();
         char[] chars = password.toCharArray();
@@ -372,7 +415,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
 
         return sb.toString();
     }
-    
+
      private String getHash(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA");
@@ -386,7 +429,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             return password;
         }
     }
-     
+
     private static String EMAIL_HOST = "localhost";
     private static String FROM = "admin@acacia.com";
 
@@ -429,7 +472,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             User user = acaciaSessionLocal.getUser();
             // try to login; if the old pass is incorrect, exception will be thrown
             login(user.getUserName(), oldPassword);
-            
+
             user.setUserPassword(getHash(new String(newPassword)));
             user.setSystemPassword(null);
             esm.persist(em, user);
@@ -442,18 +485,50 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     @Override
     public List<User> getUsers(BigInteger parentDataObjectId) {
         List<User> result = null;
-        
+
         if (parentDataObjectId != null) {
             Organization o = em.find(Organization.class, parentDataObjectId);
             Query q = em.createNamedQuery("UserOrganization.findByOrganization");
             q.setParameter("organization", o);
-            result = new ArrayList<User>(q.getResultList());
+            List<UserOrganization> uoList = q.getResultList();
+            result = new ArrayList<User>(uoList.size());
+            for (UserOrganization uo : uoList) {
+                User u = uo.getUser();
+                if (uo.getPerson() != null)
+                    u.setPersonName(uo.getPerson().getDisplayName());
+                
+                result.add(u);
+            }
         } else {
             Query q = em.createNamedQuery("User.findAll");
-            result = new ArrayList<User>(q.getResultList());
+            List<User> users = q.getResultList();
+            result = new ArrayList<User>(users.size());
+            
+            for (User user : users) {
+                Query userQ = em.createNamedQuery("UserOrganization.findByUser");
+                userQ.setParameter("user", user);
+                try {
+                    user.setPersonName(((UserOrganization)userQ.getResultList().get(0)).getPerson().getDisplayName());
+                } catch (NullPointerException ex) {
+                    //
+                }
+                result.add(user);
+            }
         }
-        
+
         return result;
     }
 
+    @Override
+    public void joinOrganization(Organization organization, Address branch, Person person) {
+        User user = acaciaSessionLocal.getUser();
+        if (user != null && organization != null) {
+            UserOrganization uo = new UserOrganization();
+            UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
+            uo.setUserOrganizationPK(pk);
+            uo.setBranch(branch);
+            uo.setPerson(person);
+            esm.persist(em, uo);
+        }
+    }
 }

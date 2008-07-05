@@ -1,14 +1,15 @@
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -47,7 +48,15 @@ public class UserOrganization implements Serializable {
     @ManyToOne
     @JoinColumn(name="branch_id", referencedColumnName="address_id", insertable=false, updatable=false)
     private Address branch;
+
+    @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
+    @ManyToOne
+    @Property(title="Person", customDisplay="${person.displayName}")
+    private Person person;
     
+    @Column(name="is_user_active")
+    private boolean isUserActive;
+
     public User getUser() {
         return user;
     }
@@ -78,5 +87,21 @@ public class UserOrganization implements Serializable {
 
     public void setBranch(Address branch) {
         this.branch = branch;
+    }
+
+    public boolean isUserActive() {
+        return isUserActive;
+    }
+
+    public void setUserActive(boolean isUserActive) {
+        this.isUserActive = isUserActive;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

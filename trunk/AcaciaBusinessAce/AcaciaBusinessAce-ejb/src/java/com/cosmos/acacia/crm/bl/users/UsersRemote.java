@@ -6,6 +6,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -23,7 +24,7 @@ public interface UsersRemote {
 
     /** TODO: decide a better place for this */
     public static final String CHANGE_PASSWORD = "change";
-    
+
     /**
      * Performs a login operation. Note that the password must be already hashed
      *
@@ -41,7 +42,7 @@ public interface UsersRemote {
      * @return the newly registered user
      * @throws ValidationException if the data is incorrect.
      */
-    User signup (User user, Organization organization, Address branch);
+    User signup (User user, Organization organization, Address branch, Person person);
 
     /**
      * Sends a request for registration
@@ -129,11 +130,22 @@ public interface UsersRemote {
      * Makes the specified user active or inactive
      *
      * @param user
-     * @param active whether the user should be active or inactive\
+     * @param active whether the user should be active or inactive
      * @return the updated User
      */
     User activateUser(User user, Boolean active);
-    
+
+
+    /**
+     * Makes the specified user active or inactive
+     * for the specified parent (i.e. Organization)
+     *
+     * @param user
+     * @param active whether the user should be active or inactive
+     * @return the updated User
+     */
+    User activateUser(User user, BigInteger parentId, Boolean active);
+
     /**
      * Makes the specified organization active or inactive
      *
@@ -142,21 +154,31 @@ public interface UsersRemote {
      * @return the updated organization
      */
     Organization activateOrganization(Organization organization, Boolean active);
-    
+
     /**
      * Performs a password change
-     * 
+     *
      * @param oldPassword
      * @param newPassword
      */
     void changePassword(char[] oldPassword, char[] newPassword);
-    
-    
+
+
     /**
      * Gets the users with a specified parent id (i.e. organization id)
-     * 
+     *
      * @param parentDataObjectId
      * @return list of users
      */
     List<User> getUsers(BigInteger parentDataObjectId);
+    
+    /**
+     * Sends a request for the current user to join the specified organization.
+     * The current user is the one logged-in (taken from the session)
+     * 
+     * @param organization
+     * @param branch
+     * @param person
+     */
+    void joinOrganization (Organization organization, Address branch, Person person);
 }

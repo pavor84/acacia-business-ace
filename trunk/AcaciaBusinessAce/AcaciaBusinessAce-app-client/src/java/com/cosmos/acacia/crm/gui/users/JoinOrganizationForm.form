@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="personLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="branchLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="organizationLabel" min="-2" pref="91" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="personComboList" pref="285" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="branchComboList" alignment="1" pref="285" max="32767" attributes="0"/>
+                          <Component id="organizationComboList" alignment="1" pref="285" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="jBButton1" alignment="1" min="-2" pref="125" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="organizationLabel" pref="25" max="32767" attributes="1"/>
+                  <Component id="organizationComboList" alignment="0" min="-2" max="-2" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="branchComboList" max="32767" attributes="1"/>
+                  <Component id="branchLabel" alignment="0" pref="25" max="32767" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="personComboList" alignment="0" max="32767" attributes="1"/>
+                  <Component id="personLabel" alignment="0" pref="25" max="32767" attributes="1"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jBButton1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="organizationComboList">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="organizationComboList" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="organizationLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="organizationLabel.text"/>
+        <Property name="name" type="java.lang.String" value="organizationLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="jBButton1">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.users.JoinOrganizationForm" id="requestJoin" methodName="requestJoin"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jBButton1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="branchLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="branchLabel.text"/>
+        <Property name="name" type="java.lang.String" value="branchLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="branchComboList">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="branchComboList" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="personLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="personLabel.text"/>
+        <Property name="name" type="java.lang.String" value="personLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="personComboList">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="personComboList" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

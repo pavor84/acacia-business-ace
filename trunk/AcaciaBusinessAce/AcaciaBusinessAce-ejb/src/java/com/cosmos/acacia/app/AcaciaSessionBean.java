@@ -41,6 +41,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
      * @return DataObject which instance is {@link Organization} and has the
      * biggest addresses count among.
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public DataObject getDataObjectWithAddresses()
     {
@@ -85,6 +86,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return em.find(DataObject.class, choosenId);
     }
 
+    @Deprecated
     @Override
     public Integer login(User user) {
         //create and register session
@@ -94,8 +96,15 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         
         //temporal - TODO remove
         
-        
         return sessionid;
+    }
+
+    @Deprecated
+    @Override
+    public DataObject getLoginOrganizationDataObject() {
+		
+		//temoporal TODO - remove
+        return getDataObjectWithAddresses();
     }
 
     private Integer registerNewSession() {
@@ -107,15 +116,9 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         SessionRegistry.setLocalSession(session);
         
         return sessionid;
-	}
-
-	@Override
-    public DataObject getLoginOrganizationDataObject() {
-		
-		//temoporal TODO - remove
-        return getDataObjectWithAddresses();
     }
-
+    
+    @Override
     public DataObject getDataObject(BigInteger dataObjectId)
     {
         return em.find(DataObject.class, dataObjectId);

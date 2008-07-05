@@ -6,18 +6,19 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.math.BigInteger;
+import java.util.List;
+
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JTableBinding;
+
 import com.cosmos.acacia.crm.data.ClassifiedObjectBean;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.math.BigInteger;
-import java.util.EnumSet;
-import java.util.List;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
