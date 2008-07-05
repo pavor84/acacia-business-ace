@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -96,6 +97,10 @@ public class User extends DataObjectBean implements Serializable {
     @Property(title="System password validity", visible=false, hidden=true)
     private Date systemPasswordValidity;
 
+    @Transient
+    @Property(title="Person")
+    private String personName;
+    
     @Column(name = "is_active", nullable = false)
     @Property(title="Active")
     private boolean isActive;
@@ -134,11 +139,6 @@ public class User extends DataObjectBean implements Serializable {
     @Property(title="Next action after login")
     private String nextActionAfterLogin;
 
-    @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
-    @ManyToOne
-    @Property(title="Person", customDisplay="${person.displayName}")
-    private Person person;
-
     @JoinColumn(name = "creator_id", referencedColumnName = "user_id")
     @ManyToOne
     @Property(title="Creator", customDisplay="${creator.userName}")
@@ -148,7 +148,7 @@ public class User extends DataObjectBean implements Serializable {
     @OneToOne
     @Property(title="Data Object")
     private DataObject dataObject;
-   
+    
     public User() {
     }
 
@@ -167,6 +167,14 @@ public class User extends DataObjectBean implements Serializable {
         this.isActive = isActive;
         this.isNew = isNew;
         this.creationTime = creationTime;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
     public BigInteger getUserId() {
@@ -303,14 +311,6 @@ public class User extends DataObjectBean implements Serializable {
 
     public void setNextActionAfterLogin(String nextActionAfterLogin) {
         this.nextActionAfterLogin = nextActionAfterLogin;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 
     public User getCreator() {

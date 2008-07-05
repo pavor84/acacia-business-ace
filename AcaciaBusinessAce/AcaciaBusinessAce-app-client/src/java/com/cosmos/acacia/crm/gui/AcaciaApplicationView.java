@@ -34,6 +34,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 
 import com.birosoft.liquid.LiquidLookAndFeel;
+import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoriesTreePanel;
@@ -44,6 +45,7 @@ import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
+import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
@@ -59,6 +61,8 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import java.math.BigInteger;
+import javax.naming.InitialContext;
 
 /**
  * The application's main frame.
@@ -85,7 +89,21 @@ public class AcaciaApplicationView extends FrameView {
         }
     }
 
-    private void setLookAndFeel(){
+    private BigInteger parentId;
+    
+    private BigInteger getParentId() {
+        if (parentId == null) {
+            try {
+                AcaciaSessionRemote acaciaSession = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
+                parentId = acaciaSession.getOrganization().getId();
+            } catch (Exception ex) {
+                // log
+            }
+        }
+        
+        return parentId;
+    }
+    public static void setLookAndFeel(){
         try {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
             LiquidLookAndFeel.setShowTableGrids(false);
@@ -406,7 +424,14 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void usersListAction()
     {
-        UsersListPanel panel = new UsersListPanel(null);
+        UsersListPanel panel = new UsersListPanel(getParentId());
+        panel.showFrame();
+    }
+    
+    @Action
+    public void joinOrganizationAction()
+    {
+        JoinOrganizationForm panel = new JoinOrganizationForm(getParentId());
         panel.showFrame();
     }
      
@@ -453,6 +478,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem citiesListMenuItem = new JBMenuItem();
         JBMenuItem countriesListMenuItem = new JBMenuItem();
         JBMenuItem usersListMenuItem = new JBMenuItem();
+        JBMenuItem joinOrganizationMenuItem = new JBMenuItem();
         /* End of contact book menu items */
 
         JBMenu classifiersMenu = new JBMenu();
@@ -632,6 +658,9 @@ public class AcaciaApplicationView extends FrameView {
 
         usersListMenuItem.setAction(actionMap.get("usersListAction"));
         contactBook.add(usersListMenuItem);
+        
+        joinOrganizationMenuItem.setAction(actionMap.get("joinOrganizationAction"));
+        contactBook.add(joinOrganizationMenuItem);
         
         menuBar.add(contactBook);
 

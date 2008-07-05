@@ -10,22 +10,16 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.bl.users.UsersBean;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
@@ -224,6 +218,7 @@ public class LoginForm extends AcaciaPanel {
     @Override
     protected void initData() {
         //loginButton.isDefaultButton();
+        currentInstanace = this;
         localeComboBox.removeAllItems();
         Locale[] locales = getFormSession().serveLocalesList();
         if (locales != null) {
@@ -338,8 +333,7 @@ public class LoginForm extends AcaciaPanel {
 
             /* End of preferences handling */
 
-            getFormSession().updateOrganization(user, new OrganizationChoiceHandler());
-            //Organization organizationDataObject =
+            getFormSession().updateOrganization(user, new OrganizationsCallbackHandler());
 
             log.info(user);
             log.info(acaciaSessionRemote.getOrganization());
@@ -417,12 +411,10 @@ public class LoginForm extends AcaciaPanel {
         }
         return formSession;
     }
-}
-
-class OrganizationChoiceHandler implements CallbackHandler, Serializable {
-
-    @Override
-    public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-        //callbacks[0
+    
+    private static AcaciaPanel currentInstanace;
+    
+    public static AcaciaPanel getCurrentInstance() {
+        return currentInstanace;
     }
 }

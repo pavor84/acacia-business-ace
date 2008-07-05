@@ -7,8 +7,6 @@
 package com.cosmos.acacia.crm.gui.users;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -21,6 +19,7 @@ import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
@@ -264,12 +263,10 @@ public class RegistrationForm extends BaseEntityPanel {
     public void register() {
         try {
             if (user.getUserPassword().equals(new String(passwordTextField2.getPassword()))) {
-                if (personComboList.getSelectedItem() != null)
-                    user.setPerson(((ContactPerson) personComboList.getSelectedItem()).getContact());
-
                 getFormSession().signup(user,
                         (Organization) organizationComboList.getSelectedItem(),
-                        (Address) branchComboList.getSelectedItem());
+                        (Address) branchComboList.getSelectedItem(),
+                        (Person) ((ContactPerson) personComboList.getSelectedItem()).getContact());
 
                 JOptionPane.showMessageDialog(this, getResourceMap().getString("signup.successful"));
                 this.close();
@@ -282,15 +279,10 @@ public class RegistrationForm extends BaseEntityPanel {
     }
 
     protected UsersRemote getFormSession() {
-        if (formSession == null)
-        {
-             try
-             {
+        if (formSession == null) {
+             try {
                  formSession = getBean(UsersRemote.class);
-                 //UserUtils.updateUserLocale(formSession);
-             }
-             catch(Exception ex)
-             {
+             } catch(Exception ex) {
                  ex.printStackTrace();
              }
         }
