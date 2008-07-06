@@ -12,6 +12,8 @@ import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
 import com.cosmos.acacia.crm.enums.DeliveryType;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
 import com.cosmos.acacia.crm.enums.Gender;
@@ -68,6 +70,8 @@ public class DatabaseResourceBean
             getDbResources(PassportType.class);
             getDbResources(Algorithm.Type.class);
             getDbResources(AssemblingSchemaItemDataType.class);
+            getDbResources(DeliveryCertificateMethodType.class);
+            getDbResources(DeliveryCertificateReason.class);
             getDbResources(InvoiceType.class);
             getDbResources(DocumentDeliveryMethod.class);
             getDbResources(TransportationMethod.class);
