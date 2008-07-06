@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "delivery_certificates")
-public class DeliveryCertificate implements Serializable {
+public class DeliveryCertificate extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,10 +53,10 @@ public class DeliveryCertificate implements Serializable {
     /**
      * The Recipient can be both Person or Organization
      */
-    @JoinColumn(name = "recipient_id", referencedColumnName = "data_object_link_id")
+    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id")
     @ManyToOne
     @Property(title="Recipient")
-    private DataObjectLink recipientLink;
+    private BusinessPartner recipient;
 
     @Column(name = "recipient_name", nullable = false)
     private String recipientName;
@@ -153,13 +153,13 @@ public class DeliveryCertificate implements Serializable {
         this.deliveryCertificateDate = deliveryCertificateDate;
     }
 
-    public DataObjectLink getRecipientLink() {
-        return recipientLink;
+    public BusinessPartner getRecipient() {
+        return recipient;
     }
 
-    public void setRecipientLink(DataObjectLink recipientLink) {
-        //firePropertyChange("recipientLink", this.recipientLink, recipientLink);
-        this.recipientLink = recipientLink;
+    public void setRecipient(BusinessPartner recipient) {
+        //firePropertyChange("recipient", this.recipient, recipient);
+        this.recipient = recipient;
     }
 
     public String getRecipientName() {
@@ -297,6 +297,16 @@ public class DeliveryCertificate implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.DeliveryCertificate[deliveryCertificateId=" + deliveryCertificateId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return this.getDeliveryCertificateId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        this.setDeliveryCertificateId(id);
     }
 
 }
