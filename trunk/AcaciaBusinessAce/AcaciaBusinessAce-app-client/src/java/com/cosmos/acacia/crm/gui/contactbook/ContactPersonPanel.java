@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -128,6 +129,8 @@ public class ContactPersonPanel extends BaseEntityPanel {
     private ContactPerson contactPerson;
     private Binding typeBinding;
     private Binding personBinding;
+    /** Indicates whether the addresses are internal to the organization */
+    private boolean isInternal;
 
     @Override
     protected void initData() {
@@ -172,13 +175,26 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     protected Object onChooseType()
     {
-        PositionTypesListPanel listPanel =
-                new PositionTypesListPanel(getParentDataObject().getParentDataObjectId());
 
-        DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            return listPanel.getSelectedRowObject();
+        if (!isInternal) {
+            PositionTypesListPanel listPanel = new PositionTypesListPanel(
+                    getParentDataObject().getParentDataObjectId(), false);
+            
+            DialogResponse dResponse = listPanel.showDialog(this);
+            if ( DialogResponse.SELECT.equals(dResponse) ){
+                return listPanel.getSelectedRowObject();
+            }
+
+        } else {
+            PositionsHierarchyTreePanel listPanel = new PositionsHierarchyTreePanel(
+                    getParentDataObject().getParentDataObjectId());
+
+            DialogResponse dResponse = listPanel.showDialog(this);
+            if ( DialogResponse.SELECT.equals(dResponse) ){
+                return listPanel.getListPanel().getSelectedRowObject();
+            }
         }
+
         return null;
     }
 
@@ -221,7 +237,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
 
     private List<PositionType> getPositionTypes()
     {
-        return getFormSession().getPositionTypes(getParentDataObject());
+        return getFormSession().getPositionTypes(getParentDataObject(), getOrganizationDataObjectId());
     }
 
     @Override
@@ -247,5 +263,9 @@ public class ContactPersonPanel extends BaseEntityPanel {
     @Override
     public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
+    }
+
+    public void setInternal(boolean isInternal) {
+        this.isInternal = isInternal;
     }
 }

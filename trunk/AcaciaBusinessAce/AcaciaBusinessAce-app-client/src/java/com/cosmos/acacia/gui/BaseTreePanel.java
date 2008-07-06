@@ -39,6 +39,7 @@ import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBTree;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import com.cosmos.util.Lister;
+import java.awt.Component;
 import java.math.BigInteger;
 
 /**
@@ -155,7 +156,8 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
 
     protected boolean modificationsEnabled = true;
     protected AcaciaToStringConverter toStringConverter;
-
+    private boolean skipFirst = true;
+    
     @Override
     protected abstract void initData();
 
@@ -349,13 +351,20 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
                 Enumeration<DefaultMutableTreeNode> e = selNode.breadthFirstEnumeration();
                 if ( e.hasMoreElements() ){
                     //skip the current
-                    e.nextElement();
+                    if (skipFirst)
+                        e.nextElement();
+                    
                     while (e.hasMoreElements()){
                         DefaultMutableTreeNode cur = e.nextElement();
-                        currentTableItems.add((E) cur.getUserObject());
+                        try {
+                            E obj = (E) cur.getUserObject();
+                            currentTableItems.add(obj);
+                        } catch (ClassCastException ex) {
+                            // in case skip is set to false and the first item is selected
+                        }
                     }
                 }
-            }else{
+            } else {
                 for (int i = 0; i < selNode.getChildCount(); i++) {
                     DefaultMutableTreeNode cur = (DefaultMutableTreeNode) selNode.getChildAt(i);
                     currentTableItems.add((E) cur.getUserObject());
@@ -672,5 +681,20 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
     protected Class getResourceStopClass() {
         return BaseTreePanel.class;
     }
+    
+    @Override
+    public DialogResponse showDialog(Component parentComponent) {
+        getListPanel().setVisibleSelectButtons();
+        return super.showDialog(parentComponent);
+    }
+
+    public boolean isSkipFirst() {
+        return skipFirst;
+    }
+
+    public void setSkipFirst(boolean skipFirst) {
+        this.skipFirst = skipFirst;
+    }
+    
     
 }

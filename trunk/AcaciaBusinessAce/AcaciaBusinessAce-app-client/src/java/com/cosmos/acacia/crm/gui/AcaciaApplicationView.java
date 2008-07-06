@@ -4,10 +4,11 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.gui.users.LoginForm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
 
+import javax.naming.NamingException;
 import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -41,11 +42,14 @@ import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
+import com.cosmos.acacia.crm.gui.users.LoginForm;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
@@ -61,21 +65,20 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
-import java.math.BigInteger;
 import javax.naming.InitialContext;
 
 /**
  * The application's main frame.
  */
 public class AcaciaApplicationView extends FrameView {
-	
+
     protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
 
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         setLookAndFeel();
         initComponents();
-        
+
         getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
         getFrame().requestFocus();
     }
@@ -90,17 +93,28 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     private BigInteger parentId;
-    
+    private AcaciaSessionRemote acaciaSession;
+
+    private AcaciaSessionRemote getSession() {
+        if (acaciaSession == null)
+            try {
+                acaciaSession = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
+            } catch (NamingException ex) {
+                ex.printStackTrace();
+            }
+        
+        return acaciaSession;
+    }
+
     private BigInteger getParentId() {
         if (parentId == null) {
             try {
-                AcaciaSessionRemote acaciaSession = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
-                parentId = acaciaSession.getOrganization().getId();
+                parentId = getSession().getOrganization().getId();
             } catch (Exception ex) {
                 // log
             }
         }
-        
+
         return parentId;
     }
     public static void setLookAndFeel(){
@@ -288,7 +302,7 @@ public class AcaciaApplicationView extends FrameView {
         ProductsTotalsPanel panel = new ProductsTotalsPanel();
         panel.showFrame();
     }
-    
+
 //    @Action
 //    public void warehouseProductListAction(){
 //        WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
@@ -374,14 +388,20 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void organizationPositionTypesListAction(){
         log.debug("organizationPositionTypesListAction");
-        PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class);
+        PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class, getParentId());
         positionTypesListPanel.showFrame();
     }
 
     @Action
+    public void organizationInternalHierarchyAction(){
+        PositionsHierarchyTreePanel panel = new PositionsHierarchyTreePanel(getParentId());
+        panel.showFrame();
+    }
+        
+    @Action
     public void personPositionTypesListAction(){
         log.debug("personPositionTypesListAction");
-        PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class);
+        PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class, getParentId());
         positionTypesListPanel.showFrame();
     }
 
@@ -401,40 +421,41 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void classifierGroupsAction()
-    {
+    public void classifierGroupsAction() {
         ClassifierGroupsListPanel classifierGroups = new ClassifierGroupsListPanel(null);
         classifierGroups.showFrame();
     }
 
     @Action
-    public void classifiersAction()
-    {
+    public void classifiersAction() {
         ClassifiersListPanel classifiers = new ClassifiersListPanel(null, null);
         classifiers.showFrame();
     }
-    
+
     @Action
-    public void classifiedObjectsAction()
-    {
+    public void classifiedObjectsAction() {
         ClassifiedObjectsPanel panel = new ClassifiedObjectsPanel(null);
         panel.showFrame();
     }
 
     @Action
-    public void usersListAction()
-    {
+    public void usersListAction() {
         UsersListPanel panel = new UsersListPanel(getParentId());
         panel.showFrame();
     }
-    
+
     @Action
-    public void joinOrganizationAction()
-    {
+    public void joinOrganizationAction() {
         JoinOrganizationForm panel = new JoinOrganizationForm(getParentId());
         panel.showFrame();
     }
-     
+
+    @Action
+    public void ownOrganizationAction() {
+        OrganizationPanel panel = new OrganizationPanel();
+        panel.showFrame();
+    }
+
     @Action
     public void invoicesListAction() {
         System.out.println("invoicesListAction");
@@ -479,6 +500,8 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem countriesListMenuItem = new JBMenuItem();
         JBMenuItem usersListMenuItem = new JBMenuItem();
         JBMenuItem joinOrganizationMenuItem = new JBMenuItem();
+        JBMenuItem ownOrganizationMenuItem = new JBMenuItem();
+        JBMenuItem organizationInternalHierarchyMenuItem = new JBMenuItem();
         /* End of contact book menu items */
 
         JBMenu classifiersMenu = new JBMenu();
@@ -488,7 +511,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu warehousesMenu = new JBMenu();
         JBMenuItem warehousesItem = new JBMenuItem();
         JBMenuItem productsTotalsItem = new JBMenuItem();
-        
+
         //JBMenuItem warehouseProductsItem = new JBMenuItem();
 
         menuBar.setName("menuBar"); // NOI18N
@@ -621,7 +644,7 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setAction(actionMap.get("classifiedObjectsAction"));
         menuItem.setName("classifiedObjectsMenuItem");
         classifiersMenu.add(menuItem);
-        
+
         menuBar.add(classifiersMenu);
 
         /* End of classifiers menu item */
@@ -644,7 +667,9 @@ public class AcaciaApplicationView extends FrameView {
         contactBook.add(organizationsListMenuItem);
         organizationPositionTypesListMenuItem.setAction(actionMap.get("organizationPositionTypesListAction"));
         contactBook.add(organizationPositionTypesListMenuItem);
-
+        organizationInternalHierarchyMenuItem.setAction(actionMap.get("organizationInternalHierarchyAction"));
+        contactBook.add(organizationInternalHierarchyMenuItem);
+        
         Separator contactBookSeparator2 = new Separator();
         contactBook.add(contactBookSeparator2);
 
@@ -658,10 +683,16 @@ public class AcaciaApplicationView extends FrameView {
 
         usersListMenuItem.setAction(actionMap.get("usersListAction"));
         contactBook.add(usersListMenuItem);
-        
+
         joinOrganizationMenuItem.setAction(actionMap.get("joinOrganizationAction"));
         contactBook.add(joinOrganizationMenuItem);
-        
+
+        Separator contactBookSeparator4 = new Separator();
+        contactBook.add(contactBookSeparator4);
+
+        ownOrganizationMenuItem.setAction(actionMap.get("ownOrganizationAction"));
+        contactBook.add(ownOrganizationMenuItem);
+
         menuBar.add(contactBook);
 
         /* End of contact book menu items */
@@ -673,7 +704,7 @@ public class AcaciaApplicationView extends FrameView {
 
         warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
         warehousesMenu.add(warehousesItem);
-        
+
         productsTotalsItem.setAction(actionMap.get("productsTotalsAction")); // NOI18N
         warehousesMenu.add(productsTotalsItem);
         //warehouseProductsItem.setAction(actionMap.get("warehouseProductListAction")); // NOI18N

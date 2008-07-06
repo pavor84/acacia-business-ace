@@ -83,8 +83,10 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return entityProperties;
     }
 
-    public Person newPerson() {
-        return new Person();
+    public Person newPerson(BigInteger parentId) {
+        Person p = new Person();
+        p.setParentId(parentId);
+        return p;
     }
 
     public Person savePerson(Person person) {

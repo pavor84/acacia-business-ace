@@ -179,35 +179,10 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
         }
     }
 
-    /**
-     * Forms the error message shown when constraint violation occurs
-     *
-     * @param the name of the table
-     * @return the message
-     */
-    private String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
-    {
-        String message = cantDeleteMessagePrefix;
-        String tableUserfriendly =
-            getResourceMap().getString("table.userfriendlyname."+table);
-        String result = null;
-        if ( tableUserfriendly==null )
-            result = message + " " + table.replace('_', ' ');
-        else
-            result = message + " " + tableUserfriendly;
-        return result;
-    }
-
     @Override
     protected boolean deleteRow(Object rowObject) {
         //does nothing - unneeded (not called), because the delete WF logic is changed
         return true;
-    }
-
-    private void removeFromTable(List<ProductCategory> withSubCategories) {
-        for (ProductCategory productCategory : withSubCategories) {
-            getDataTable().removeRow(productCategory);
-        }
     }
 
     @Override

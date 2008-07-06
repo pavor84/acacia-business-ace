@@ -315,10 +315,12 @@ public class AddressPanel extends BaseEntityPanel {
     private BindingGroup addressBindingGroup;
     private Address address;
     private CommunicationContactsListPanel communicationContactsTable;
+    private ContactPersonsListPanel contactPersonsTable;
     private BankDetailsListPanel bankDetailsTable;
-    private ContactPerson contactPerson;
     private Binding cityBinding;
     private Country country;
+    /** Indicates whether the addresses are internal to the organization */
+    private boolean isInternal;
 
     @Override
     protected void initData() {
@@ -386,7 +388,7 @@ public class AddressPanel extends BaseEntityPanel {
             dataObjectId = dataObject.getDataObjectId();
         else
             dataObjectId = null;
-        final ContactPersonsListPanel contactPersonsTable = new ContactPersonsListPanel(dataObjectId);
+        contactPersonsTable = new ContactPersonsListPanel(dataObjectId);
         //contactPersonsTable.setVisibleButtons(2 + 4 + 8 + 64);
         contactPersonsTable.setVisible(AbstractTablePanel.Button.NewModifyDeleteUnselect);
         contactPersonsTable.getDataTable().addListSelectionListener(new ListSelectionListener(){
@@ -529,16 +531,6 @@ public class AddressPanel extends BaseEntityPanel {
         return getFormSession().getCountries();
     }
 
-    private List<City> getCities()
-    {
-        return getFormSession().getCities();
-    }
-
-    private List<City> getCities(Country country)
-    {
-        return getFormSession().getCities(country);
-    }
-
     @Override
     public BindingGroup getBindingGroup() {
         return addressBindingGroup;
@@ -573,6 +565,11 @@ public class AddressPanel extends BaseEntityPanel {
     @Override
     public DialogResponse showDialog(Component parentComponent) {
         return super.showDialog(parentComponent);
+    }
+
+    public void setInternal(boolean isInternal) {
+        this.isInternal = isInternal;
+        contactPersonsTable.setInternal(isInternal);
     }
 }
 

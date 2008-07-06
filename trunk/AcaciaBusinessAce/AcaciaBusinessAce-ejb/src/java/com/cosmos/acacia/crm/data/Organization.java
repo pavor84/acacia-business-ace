@@ -5,10 +5,6 @@
 
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.annotation.ResourceDisplay;
-import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -24,7 +20,12 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 
 /**
@@ -71,7 +72,7 @@ public class Organization
 
     @Column(name = "organization_name", nullable = false)
     @Property(title="Organization Name",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=255))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=120))
     private String organizationName;
 
     @Column(name = "nickname")
@@ -126,6 +127,9 @@ public class Organization
 
     @Column(name = "is_active")
     private boolean isActive;
+
+    @Transient
+    private boolean isOwn;
 
     public Organization() {
     }
@@ -284,9 +288,17 @@ public class Organization
     public String toText() {
         return null;
     }
-    
+
     @Override
     public String getInfo() {
         return getOrganizationName();
+    }
+
+    public boolean isOwn() {
+        return isOwn;
+    }
+
+    public void setOwn(boolean isOwn) {
+        this.isOwn = isOwn;
     }
 }

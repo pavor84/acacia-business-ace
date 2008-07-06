@@ -34,7 +34,7 @@ public class OrganizationsCallbackHandler
             OrganizationCallback callback = (OrganizationCallback) callbacks[i];
 
             OrganizationChoiceForm ocf = new OrganizationChoiceForm(callback.getOrganizations());
-            AcaciaApplicationView.setLookAndFeel();
+            //AcaciaApplicationView.setLookAndFeel();
             
             DialogResponse response = ocf.showDialog();
             if(DialogResponse.SELECT.equals(response))

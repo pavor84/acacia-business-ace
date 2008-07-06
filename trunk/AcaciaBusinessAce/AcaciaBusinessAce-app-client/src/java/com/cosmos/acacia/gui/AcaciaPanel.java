@@ -49,6 +49,7 @@ public abstract class AcaciaPanel
 
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
+    private BigInteger organizationDataObjectId;
     
     private AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
 
@@ -92,7 +93,27 @@ public abstract class AcaciaPanel
 
     public DataObject getParentDataObject()
     {
-        return getAcaciaSession().getDataObject(getParentDataObjectId());
+        if (getParentDataObjectId() != null)
+            return getAcaciaSession().getDataObject(getParentDataObjectId());
+        else
+            return null;
+    }
+
+    public BigInteger getOrganizationDataObjectId() {
+        
+        // Quitting in case there is no organization data object
+        
+        if (organizationDataObjectId == null)
+            try {
+                organizationDataObjectId = getAcaciaSession().getOrganization().getId();
+            } catch (NullPointerException ex) {
+                AcaciaApplication.getApplication().exit();
+            }
+        
+        if (organizationDataObjectId == null)
+            AcaciaApplication.getApplication().exit();
+        
+        return organizationDataObjectId;
     }
 
     protected abstract void initData();
@@ -213,7 +234,7 @@ public abstract class AcaciaPanel
         }
     }
 
-     class RemoteBeanInvocationHandler<E> implements InvocationHandler {
+     static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
         private E bean;
         private SessionFacadeRemote sessionFacade;
@@ -234,7 +255,7 @@ public abstract class AcaciaPanel
         }
     }
 
-    public <T> T getRemoteBean(AcaciaPanel panel, Class<T> remoteInterface)
+    public static <T> T getRemoteBean(Object obj, Class<T> remoteInterface)
     {
         try
         {
@@ -242,7 +263,7 @@ public abstract class AcaciaPanel
             InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
 
             T proxy = (T)Proxy.newProxyInstance(
-                panel.getClass().getClassLoader(),
+                obj.getClass().getClassLoader(),
                 new Class[]{remoteInterface},
                 handler);
 
@@ -257,7 +278,7 @@ public abstract class AcaciaPanel
     public AcaciaSessionRemote getAcaciaSession() {
             return acaciaSession;
     }
-    
+
     public void handleBusinessException(Exception ex) {
         ValidationException ve = extractValidationException(ex);
         if (ve != null) {

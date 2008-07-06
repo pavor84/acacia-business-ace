@@ -402,7 +402,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         log.info("initData().person: " + person);
         if(person == null)
         {
-            person = getFormSession().newPerson();
+            person = getFormSession().newPerson(getOrganizationDataObjectId());
         }
 
         if (personBindingGroup == null)

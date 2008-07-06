@@ -52,6 +52,13 @@ public class OrganizationPanel extends BaseEntityPanel {
         init();
     }
 
+    public OrganizationPanel() {
+        super(null);
+        isInternal = true;
+        this.organization = getAcaciaSession().getOrganization();
+        init();
+    }
+    
     @Override
     protected void init()
     {
@@ -376,7 +383,8 @@ public class OrganizationPanel extends BaseEntityPanel {
     private BindingGroup organizationBindingGroup;
     private Organization organization;
     private Binding registeringOrganizationBinding;
-
+    private boolean isInternal;
+    
     @Override
     protected void initData() {
         setResizable(false);
@@ -384,7 +392,7 @@ public class OrganizationPanel extends BaseEntityPanel {
 
         if(organization == null)
         {
-            organization = getFormSession().newOrganization();
+            organization = getFormSession().newOrganization(getOrganizationDataObjectId());
         }
 
         if (organizationBindingGroup == null)
@@ -428,6 +436,9 @@ public class OrganizationPanel extends BaseEntityPanel {
         //branchesTable.setVisibleButtons(14); //Only New, Modify and Delete
         branchesTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
+        // Setting the internal flag, in case the current organization is the logged in one
+        branchesTable.setInternal(isInternal);
+        
         // Adding the nested table listener to ensure that organization is saved
         // before adding branches to it. Also adding a deletion listener for
         // callback when a branch is deleted
@@ -488,6 +499,7 @@ public class OrganizationPanel extends BaseEntityPanel {
 
     protected Object onChooseAddress() {
         AddressListPanel listPanel = new AddressListPanel(organization.getId());
+        listPanel.setInternal(organization.isOwn());
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){

@@ -20,15 +20,15 @@ import com.cosmos.acacia.crm.data.User;
  * Created	:	19.05.2008
  * @author	Petar Milev
  * @version $Id: $
- * 
+ *
  * Stateless service to use for session access.
  * Everything related to operating the session goes through here.
  * No other service should use {@link SessionRegistry} or {@link SessionContext}.
- * 
+ *
  * The work of this service depends also on {@link SessionFacadeBean}. The latter is needed
- * to bind a {@link SessionContext} instance to the current thread of execution. 
- * If this is not done, the behavior of {@link AcaciaSessionBean} is not defined. 
- *  
+ * to bind a {@link SessionContext} instance to the current thread of execution.
+ * If this is not done, the behavior of {@link AcaciaSessionBean} is not defined.
+ *
  */
 @Stateless
 public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLocal {
@@ -91,19 +91,19 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     public Integer login(User user) {
         //create and register session
         Integer sessionid = registerNewSession();
-        
+
         SessionRegistry.getSession().setValue(SessionContext.USER_KEY, user);
-        
+
         //temporal - TODO remove
-        
+
         return sessionid;
     }
 
     @Deprecated
     @Override
     public DataObject getLoginOrganizationDataObject() {
-		
-		//temoporal TODO - remove
+
+        //temoporal TODO - remove
         return getDataObjectWithAddresses();
     }
 
@@ -114,10 +114,10 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         SessionContext session = SessionRegistry.getSession(sessionid);
         //bind to current thread
         SessionRegistry.setLocalSession(session);
-        
+
         return sessionid;
     }
-    
+
     @Override
     public DataObject getDataObject(BigInteger dataObjectId)
     {
@@ -126,16 +126,17 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public void setOrganization(Organization organization) {
-            SessionRegistry.getSession().setValue(SessionContext.ORGANIZATION_KEY, organization);
+        organization.setOwn(true);
+        SessionRegistry.getSession().setValue(SessionContext.ORGANIZATION_KEY, organization);
     }
 
     @Override
     public Organization getOrganization() {
-            return (Organization) SessionRegistry.getSession().getValue(SessionContext.ORGANIZATION_KEY);
+        return (Organization) SessionRegistry.getSession().getValue(SessionContext.ORGANIZATION_KEY);
     }
 
     @Override
     public User getUser() {
-            return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
+        return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
     }
 }

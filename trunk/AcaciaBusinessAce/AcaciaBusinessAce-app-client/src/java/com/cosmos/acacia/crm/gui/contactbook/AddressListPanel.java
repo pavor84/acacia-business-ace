@@ -44,6 +44,9 @@ public class AddressListPanel extends AbstractTablePanel {
     private BindingGroup addressesBindingGroup;
     private List<Address> addresses;
 
+    /** Indicates whether the addresses are internal to the organization */
+    private boolean isInternal;
+
     @Override
     protected void initData() {
 
@@ -128,11 +131,12 @@ public class AddressListPanel extends AbstractTablePanel {
 
         if(rowObject != null)
         {
-            AddressPanel addressePanel = new AddressPanel((Address)rowObject);
-            DialogResponse response = addressePanel.showDialog(this);
+            AddressPanel addressPanel = new AddressPanel((Address)rowObject);
+            addressPanel.setInternal(isInternal);
+            DialogResponse response = addressPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return addressePanel.getSelectedValue();
+                return addressPanel.getSelectedValue();
             }
         }
         return null;
@@ -144,6 +148,7 @@ public class AddressListPanel extends AbstractTablePanel {
         {
             log.info(getParentDataObjectId());
             AddressPanel addressPanel = new AddressPanel(getParentDataObjectId());
+            addressPanel.setInternal(isInternal);
             DialogResponse response = addressPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -181,5 +186,9 @@ public class AddressListPanel extends AbstractTablePanel {
     @Override
     public boolean canDelete(Object rowObject) {
         return true;
+    }
+
+    public void setInternal(boolean isInternal) {
+        this.isInternal = isInternal;
     }
 }

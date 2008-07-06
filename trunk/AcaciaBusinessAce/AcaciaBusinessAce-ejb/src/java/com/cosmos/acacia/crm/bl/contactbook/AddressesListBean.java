@@ -241,19 +241,19 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return contactPerson;
     }
 
-    public List<PositionType> getPositionTypes(DataObject parent) {
+    public List<PositionType> getPositionTypes(DataObject parent, BigInteger parentId) {
         try {
             return getPositionTypes(
-                    Class.forName(parent.getDataObjectType().getDataObjectType()));
+                    Class.forName(parent.getDataObjectType().getDataObjectType()), parentId);
         } catch (Exception ex) {
             return new LinkedList<PositionType>();
         }
     }
 
    @SuppressWarnings("unchecked")
-   public List<PositionType> getPositionTypes(Class ownerClass) {
+   public List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentId) {
        try {
-            return positionTypesManager.getPositionTypes(ownerClass);
+            return positionTypesManager.getPositionTypes(ownerClass, parentId);
        } catch (Exception ex) {
            ex.printStackTrace();
            return new LinkedList<PositionType>();

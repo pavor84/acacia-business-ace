@@ -136,19 +136,21 @@ public interface AddressesListRemote {
      * parent object (Organization or Person)
      *
      * @param parentDataObject
+     * @param parentId the id of the current logged organization
      * @return the list of PositionType's
      */
-    List<PositionType> getPositionTypes(DataObject parentDataObject);
+    List<PositionType> getPositionTypes(DataObject parentDataObject, BigInteger parentId);
 
     /**
      * Gets a list of all position types for a specified
      * class (Organization or Parent)
      *
      * @param ownerClass
+     * @param parentId
      * @return the list of PositionType's
      */
     @SuppressWarnings("unchecked")
-    List<PositionType> getPositionTypes(Class ownerClass);
+    List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentDataObjectId);
 
     /**
      * Lists all persons

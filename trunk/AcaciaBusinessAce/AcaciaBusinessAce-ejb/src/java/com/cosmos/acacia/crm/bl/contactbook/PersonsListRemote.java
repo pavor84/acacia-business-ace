@@ -97,9 +97,10 @@ public interface PersonsListRemote {
     /**
      * Creates a new, empty Person instance
      *
+     * @param parentId the parent
      * @return the newly created Person
      */
-    Person newPerson();
+    Person newPerson(BigInteger parentId);
 
     /**
      * Saves a Person

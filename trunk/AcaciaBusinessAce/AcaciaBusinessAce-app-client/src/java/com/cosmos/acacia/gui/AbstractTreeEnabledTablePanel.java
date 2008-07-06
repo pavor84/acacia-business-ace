@@ -37,6 +37,7 @@ public abstract class AbstractTreeEnabledTablePanel<E>
 
     @Override
     protected void initData() {
+        super.initData();
         lister = new Lister<E>() {
             @Override
             public List<E> getList() {
@@ -126,6 +127,33 @@ public abstract class AbstractTreeEnabledTablePanel<E>
     protected Object modifyRow(Object rowObject) {
         E entity = (E) rowObject;
         return onEditEntity(entity);
+    }
+    
+    
+     /**
+     * Forms the error message shown when constraint violation occurs
+     *
+     * @param the name of the table
+     * @return the message
+     */
+    protected String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
+    {
+        String message = cantDeleteMessagePrefix;
+        String tableUserfriendly =
+            getResourceMap().getString("table.userfriendlyname."+table);
+        String result = null;
+        if ( tableUserfriendly==null )
+            result = message + " " + table.replace('_', ' ');
+        else
+            result = message + " " + tableUserfriendly;
+        return result;
+    }
+    
+    
+    protected void removeFromTable(List<E> withSubChildren) {
+        for (E child : withSubChildren) {
+            getDataTable().removeRow(child);
+        }
     }
 
 }
