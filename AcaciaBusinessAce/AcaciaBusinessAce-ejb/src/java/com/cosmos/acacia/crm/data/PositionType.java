@@ -17,6 +17,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -33,17 +34,22 @@ import javax.persistence.Table;
         @NamedQuery
              (
                  name = "PositionType.findPersonPositionTypes",
-                 query = "select pt from PositionType pt where pt.ownerType='P' and pt.dataObject.deleted = :deleted"
+                 query = "select pt from PositionType pt where pt.ownerType='P' and pt.dataObject.parentDataObjectId=:parentDataObjectId and pt.dataObject.deleted = :deleted and pt.isInternal=false"
              ),
                 @NamedQuery
              (
                  name = "PositionType.findOrganizationPositionTypes",
-                 query = "select pt from PositionType pt where pt.ownerType='O' and pt.dataObject.deleted = :deleted"
+                 query = "select pt from PositionType pt where pt.ownerType='O' and pt.dataObject.parentDataObjectId=:parentDataObjectId and pt.dataObject.deleted = :deleted and pt.isInternal=false"
              ),
              @NamedQuery
              (
                 name = "PositionType.findByName",
-                query = "select pt from PositionType pt where pt.positionTypeName=:positionTypeName"
+                query = "select pt from PositionType pt where pt.positionTypeName=:positionTypeName and pt.isInternal=false"
+             ),
+             @NamedQuery
+             (
+                 name = "PositionType.findInternalOrganizationPositionTypes",
+                 query = "select pt from PositionType pt where pt.ownerType='O' and pt.dataObject.parentDataObjectId=:parentDataObjectId and pt.dataObject.deleted = :deleted and pt.isInternal=true"
              )
         }
 )
@@ -78,6 +84,14 @@ public class PositionType
     @OneToOne
     private DataObject dataObject;
 
+
+    @ManyToOne
+    @JoinColumn(name="parent_position_type_id")
+    @Property(title="Higher Position Type", customDisplay="${parentPositionType.positionTypeName}")
+    private PositionType parentPositionType;
+
+    @Column(name="is_internal")
+    private boolean isInternal;
 
     public PositionType() {
     }
@@ -180,10 +194,25 @@ public class PositionType
     public String toText() {
         return getPositionTypeName();
     }
-    
+
     @Override
     public String getInfo() {
         return getPositionTypeName();
     }
 
+    public PositionType getParentPositionType() {
+        return parentPositionType;
+    }
+
+    public void setParentPositionType(PositionType parentPositionType) {
+        this.parentPositionType = parentPositionType;
+    }
+
+    public boolean isInternal() {
+        return isInternal;
+    }
+
+    public void setInternal(boolean isInternal) {
+        this.isInternal = isInternal;
+    }
 }

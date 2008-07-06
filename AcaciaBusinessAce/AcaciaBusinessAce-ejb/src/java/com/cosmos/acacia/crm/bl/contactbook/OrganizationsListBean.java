@@ -80,8 +80,10 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return entityProperties;
     }
 
-    public Organization newOrganization() {
-        return new Organization();
+    public Organization newOrganization(BigInteger parentId) {
+        Organization org = new Organization();
+        org.setParentId(parentId);
+        return org;
     }
 
     public Organization saveOrganization(Organization organization) {

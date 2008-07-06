@@ -6,8 +6,6 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.beansbinding.EntityProperties;
@@ -75,9 +73,10 @@ public interface OrganizationsListRemote {
     /**
      * Creates a new Organization
      *
+     * @param parentId the parent
      * @return the newly created organization
      */
-    Organization newOrganization();
+    Organization newOrganization(BigInteger parentId);
 
     /**
      * Saves an Organization

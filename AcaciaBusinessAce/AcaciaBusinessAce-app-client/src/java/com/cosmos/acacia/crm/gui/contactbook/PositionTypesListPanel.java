@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
@@ -20,39 +22,51 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
-import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Bozhidar Bozhanov
  */
-public class PositionTypesListPanel extends AbstractTablePanel {
+public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<PositionType> {
 
     protected static Logger log = Logger.getLogger(PositionTypesListPanel.class);
 
     /** Creates new form AddresssListPanel */
-    public PositionTypesListPanel(BigInteger parentDataObjectId)
+    public PositionTypesListPanel(BigInteger parentDataObjectId, boolean isInternal)
     {
         super(parentDataObjectId);
         try
         {
-            DataObject parentDataObject = getParentDataObject();
-            this.ownerClass = Class.forName(
-                parentDataObject.getDataObjectType().getDataObjectType());
+            if (getAcaciaSession().getOrganization().getId().equals(parentDataObjectId)) {
+                this.ownerClass = Organization.class;
+            } else {
+                DataObject parentDataObject = getParentDataObject();
+                if (parentDataObject != null) {
+                    this.ownerClass = Class.forName(
+                        parentDataObject.getDataObjectType().getDataObjectType());
+                }
+            }
         } catch (Exception ex) {
             log.error("constructor", ex);
         }
+
+        this.isInternal = isInternal;
         postInitData();
     }
 
-    public PositionTypesListPanel(Class ownerClass)
+    public PositionTypesListPanel(Class ownerClass, BigInteger parentDataObjectId)
     {
-        super();
+        super(parentDataObjectId);
         this.ownerClass = ownerClass;
         postInitData();
     }
@@ -64,36 +78,40 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     private List<PositionType> positionTypes;
     private ContactPerson contactPerson;
     private Class ownerClass;
+    private boolean isInternal;
 
     @Override
     protected void initData(){
 
         super.initData();
-
-        setVisible(Button.Select, false);
-        positionTypesBindingGroup = new BindingGroup();
-        positionTypesBindingGroup.bind();
     }
 
     protected void postInitData()
     {
+        positionTypesBindingGroup = new BindingGroup();
         String key = ownerClass == Person.class ? "title.positions.person" : "title.positions.organization";
 
         setTitle(getResourceMap().getString(key));
 
         AcaciaTable positionTypesTable = getDataTable();
-         try {
+        try {
             JTableBinding tableBinding = positionTypesTable.bind(positionTypesBindingGroup, getPositionTypes(), getPositionTypeEntityProperties());
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
         positionTypesTable.setEditable(false);
+        positionTypesBindingGroup.bind();
     }
     protected List<PositionType> getPositionTypes() throws Exception
     {
-        if(positionTypes == null)
-        {
-            positionTypes = getFormSession().getPositionTypes(ownerClass);
+        if(positionTypes == null) {
+
+            if (!isInternal) {
+                positionTypes = getFormSession().getPositionTypes(ownerClass, getOrganizationDataObjectId());
+            } else {
+                positionTypes = getFormSession()
+                    .getInternalOrganizationPositionTypes(getOrganizationDataObjectId());
+            }
         }
 
         return positionTypes;
@@ -143,12 +161,44 @@ public class PositionTypesListPanel extends AbstractTablePanel {
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
+        if(rowObject != null)
         {
-            deletePositionType((PositionType) rowObject);
-            return true;
-        }
+            List<PositionType> withSubPositions = null;
+            if (isInternal)
+                withSubPositions = getWithSubCategories((PositionType) rowObject);
+            
+            try {
+                if (isInternal) {
+                    getFormSession().deletePositionTypes(withSubPositions);
+                    removeFromTable(withSubPositions);
+                } else {
+                    deletePositionType((PositionType) rowObject);
+                }
+                
+                return true;
+            } catch (Exception e){
+                ValidationException ve = extractValidationException(e);
+                if (ve != null) {
+                    String messagePrefix = null;
+                    if ( withSubPositions.size()>1 ){
+                        messagePrefix = getResourceMap().getString("TreeItem.err.cantDeleteMany");
+                    }
+                    else{
+                        messagePrefix = getResourceMap().getString("deleteAction.err.referenced");
+                    }
 
+                    String message = getTableReferencedMessage(messagePrefix, ve.getMessage());
+
+                    JOptionPane.showMessageDialog(this,
+                        message,
+                        getResourceMap().getString("ProductCategory.err.cantDeleteTitle"),
+                        JOptionPane.DEFAULT_OPTION);
+                } else {
+                    log.error(e);
+                }
+            }
+            
+        }
         return false;
     }
 
@@ -158,6 +208,8 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         {
             PositionTypePanel positionTypePanel =
                     new PositionTypePanel((PositionType) rowObject, ownerClass);
+            positionTypePanel.setInternal(isInternal);
+
             DialogResponse response = positionTypePanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -176,19 +228,32 @@ public class PositionTypesListPanel extends AbstractTablePanel {
         if (positionTypesBindingGroup != null)
             positionTypesBindingGroup.unbind();
 
-        positionTypes = null;
-
-        initData();
-        postInitData();
+        refreshDataTable();
 
         return t;
     }
 
     @Override
     protected Object newRow() {
-        PositionTypePanel positionTypePanel = new PositionTypePanel(getParentDataObjectId(),
+        PositionTypePanel positionTypePanel = new PositionTypePanel(getOrganizationDataObjectId(),
                     ownerClass);
 
+        positionTypePanel.setInternal(isInternal);
+
+        if (isInternal) {
+            PositionType autoParent = null;
+            TreePath selection = getTree().getSelectionPath();
+            if(selection != null)
+            {
+                DefaultMutableTreeNode selNode = (DefaultMutableTreeNode)selection.getLastPathComponent();
+                Object userObject;
+                if((userObject = selNode.getUserObject()) instanceof PositionType)
+                    autoParent = (PositionType) userObject;
+
+                positionTypePanel.setParentPosition(autoParent);
+            }
+        }
+        
         DialogResponse response = positionTypePanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -210,6 +275,23 @@ public class PositionTypesListPanel extends AbstractTablePanel {
     @Override
     public boolean canDelete(Object rowObject) {
         return true;
+    }
+
+    @Override
+    protected List<PositionType> getItems() {
+        return getFormSession().getInternalOrganizationPositionTypes(getOrganizationDataObjectId());
+    }
+
+    @Override
+    protected Object onEditEntity(PositionType entity) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void refreshDataTable() {
+        positionTypes = getLister().getList();
+        postInitData();
     }
 
 }

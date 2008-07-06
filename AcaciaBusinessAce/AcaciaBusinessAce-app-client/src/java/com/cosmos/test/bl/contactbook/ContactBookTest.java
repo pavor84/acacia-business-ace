@@ -140,7 +140,7 @@ public class ContactBookTest {
 
         // Creating the entities
 
-        Organization organization = organizationFormSession.newOrganization();
+        Organization organization = organizationFormSession.newOrganization(null);
         organization.setOrganizationName(TestUtils.getRandomString(15));
 
         organization = organizationFormSession.saveOrganization(organization);
@@ -155,7 +155,7 @@ public class ContactBookTest {
         DataObject addressDataObject = address.getDataObject();
 
         ContactPerson contactPerson = addressFormSession.newContactPerson();
-        Person person = personFormSession.newPerson();
+        Person person = personFormSession.newPerson(null);
         person.setFirstName(TestUtils.getRandomString(5));
         person.setSecondName(TestUtils.getRandomString(5));
         person.setLastName(TestUtils.getRandomString(5));

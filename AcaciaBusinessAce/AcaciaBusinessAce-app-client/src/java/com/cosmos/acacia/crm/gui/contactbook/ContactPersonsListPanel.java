@@ -40,6 +40,8 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
     private BindingGroup contactPersonsBindingGroup;
     private List<ContactPerson> contactPersons;
+    /** Indicates whether the addresses are internal to the organization */
+    private boolean isInternal;
 
     @Override
     protected void initData() {
@@ -116,6 +118,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         if(rowObject != null)
         {
             ContactPersonPanel contactPersonPanel = new ContactPersonPanel((ContactPerson)rowObject);
+            contactPersonPanel.setInternal(isInternal);
             DialogResponse response = contactPersonPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -143,9 +146,11 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
+        log.info("Internal : " + isInternal);
         if (canNestedOperationProceed())
         {
             ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObjectId());
+            contactPersonPanel.setInternal(isInternal);
 
             DialogResponse response = contactPersonPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
@@ -169,6 +174,10 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     @Override
     public boolean canDelete(Object rowObject) {
         return true;
+    }
+
+    public void setInternal(boolean isInternal) {
+        this.isInternal = isInternal;
     }
 
 }

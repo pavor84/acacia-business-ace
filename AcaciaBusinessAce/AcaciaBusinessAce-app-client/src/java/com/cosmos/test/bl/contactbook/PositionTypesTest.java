@@ -41,10 +41,10 @@ public class PositionTypesTest {
 
     @Test
     public void methodsTest() throws Exception {
-        List<PositionType> personPositions = formSession.getPositionTypes(Person.class);
+        List<PositionType> personPositions = formSession.getPositionTypes(Person.class, null);
         Assert.assertNotNull(personPositions);
 
-        List<PositionType> organizationPositions = formSession.getPositionTypes(Organization.class);
+        List<PositionType> organizationPositions = formSession.getPositionTypes(Organization.class, null);
 
         EntityProperties entityProperties =
             formSession.getPositionTypeEntityProperties();
@@ -101,11 +101,11 @@ public class PositionTypesTest {
     }
 
     private List<PositionType> list() throws Exception {
-        return formSession.getPositionTypes(Organization.class);
+        return formSession.getPositionTypes(Organization.class, null);
     }
 
     private PositionType createNew(String nameInsert) {
-        PositionType result = formSession.newPositionType();
+        PositionType result = formSession.newPositionType(null);
         result.setPositionTypeName(nameInsert);
 
         return formSession.savePositionType(result, Organization.class);

@@ -88,6 +88,7 @@ public class OrganizationChoiceForm extends AcaciaPanel {
     
     @Override
     public void initData() {
+        requestFocus();
         organizationsComboBox.removeAllItems();
         for (Organization org : organizations) {
             organizationsComboBox.addItem(org);

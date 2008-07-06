@@ -139,6 +139,7 @@ public class PositionTypePanel extends BaseEntityPanel {
     private BindingGroup positionTypeBindingGroup;
     private PositionType positionType;
     private Class ownerClass;
+    private boolean isInternal;
 
     @Override
     protected void initData() {
@@ -147,7 +148,7 @@ public class PositionTypePanel extends BaseEntityPanel {
         log.info("initData().positionType: " + positionType);
         if(positionType == null)
         {
-            positionType = getFormSession().newPositionType();
+            positionType = getFormSession().newPositionType(getOrganizationDataObjectId());
         }
 
         positionTypeBindingGroup = new BindingGroup();
@@ -191,6 +192,7 @@ public class PositionTypePanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: positionType: " + positionType);
+        positionType.setInternal(isInternal);
         positionType = getFormSession().savePositionType(positionType, ownerClass);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(positionType);
@@ -206,5 +208,13 @@ public class PositionTypePanel extends BaseEntityPanel {
     @Override
     public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
+    }
+
+    public void setInternal(boolean isInternal) {
+        this.isInternal = isInternal;
+    }
+
+    public void setParentPosition(PositionType parent) {
+        positionType.setParentPositionType(parent);
     }
 }
