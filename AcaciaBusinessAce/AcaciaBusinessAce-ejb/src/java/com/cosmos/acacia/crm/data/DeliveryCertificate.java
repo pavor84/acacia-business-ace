@@ -309,4 +309,8 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.setDeliveryCertificateId(id);
     }
 
+    @Override
+    public String getInfo() {
+        return "" + getDeliveryCertificateNumber();
+    }
 }
