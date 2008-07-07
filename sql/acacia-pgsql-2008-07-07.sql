@@ -15,7 +15,7 @@ SET escape_string_warning = off;
 -- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: postgres
 --
 
-CREATE PROCEDURAL LANGUAGE plpgsql;
+--CREATE PROCEDURAL LANGUAGE plpgsql;
 
 
 ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
@@ -152,11 +152,11 @@ ALTER TABLE public.bank_details OWNER TO postgres;
 -- Name: breakpoint; Type: TYPE; Schema: public; Owner: postgres
 --
 
-CREATE TYPE breakpoint AS (
+/*CREATE TYPE breakpoint AS (
 	func oid,
 	linenumber integer,
 	targetname text
-);
+);*/
 
 
 ALTER TYPE public.breakpoint OWNER TO postgres;
@@ -544,13 +544,13 @@ ALTER TABLE public.enum_classes OWNER TO postgres;
 -- Name: frame; Type: TYPE; Schema: public; Owner: postgres
 --
 
-CREATE TYPE frame AS (
+/*CREATE TYPE frame AS (
 	level integer,
 	targetname text,
 	func oid,
 	linenumber integer,
 	args text
-);
+);*/
 
 
 ALTER TYPE public.frame OWNER TO postgres;
@@ -875,12 +875,12 @@ ALTER TABLE public.products OWNER TO postgres;
 -- Name: proxyinfo; Type: TYPE; Schema: public; Owner: postgres
 --
 
-CREATE TYPE proxyinfo AS (
+/*CREATE TYPE proxyinfo AS (
 	serverversionstr text,
 	serverversionnum integer,
 	proxyapiver integer,
 	serverprocessid integer
-);
+);*/
 
 
 ALTER TYPE public.proxyinfo OWNER TO postgres;
@@ -1112,7 +1112,7 @@ ALTER TABLE public.simple_products OWNER TO postgres;
 -- Name: targetinfo; Type: TYPE; Schema: public; Owner: postgres
 --
 
-CREATE TYPE targetinfo AS (
+/*CREATE TYPE targetinfo AS (
 	target oid,
 	schema oid,
 	nargs integer,
@@ -1124,7 +1124,7 @@ CREATE TYPE targetinfo AS (
 	fqname text,
 	returnsset boolean,
 	returntype oid
-);
+);*/
 
 
 ALTER TYPE public.targetinfo OWNER TO postgres;
@@ -1182,7 +1182,7 @@ ALTER TABLE public.users_organizations OWNER TO postgres;
 -- Name: var; Type: TYPE; Schema: public; Owner: postgres
 --
 
-CREATE TYPE var AS (
+/*CREATE TYPE var AS (
 	name text,
 	varclass character(1),
 	linenumber integer,
@@ -1191,7 +1191,7 @@ CREATE TYPE var AS (
 	isnotnull boolean,
 	dtype oid,
 	value text
-);
+);*/
 
 
 ALTER TYPE public.var OWNER TO postgres;
