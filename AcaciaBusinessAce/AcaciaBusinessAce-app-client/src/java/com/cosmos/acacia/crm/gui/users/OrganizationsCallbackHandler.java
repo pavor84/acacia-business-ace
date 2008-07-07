@@ -7,8 +7,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 
 import com.cosmos.acacia.crm.bl.users.OrganizationCallback;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.gui.AcaciaApplicationView;
-import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.ejb.callback.ClientCallbackHandler;
 import com.cosmos.swingb.DialogResponse;
 import java.io.Serializable;
@@ -16,10 +14,10 @@ import java.io.Serializable;
 public class OrganizationsCallbackHandler
     implements ClientCallbackHandler, Serializable {
 
-    private static transient AcaciaPanel parentPanel;
+    private String defaultOrganization;
     
-    public OrganizationsCallbackHandler(AcaciaPanel parentPanel) {
-        OrganizationsCallbackHandler.parentPanel = parentPanel;
+    public OrganizationsCallbackHandler(String defaultOrganization) {
+        this.defaultOrganization = defaultOrganization;
     }
     
     public OrganizationsCallbackHandler() {
@@ -33,13 +31,16 @@ public class OrganizationsCallbackHandler
         for (int i = 0; i < callbacks.length; i ++) {
             OrganizationCallback callback = (OrganizationCallback) callbacks[i];
 
-            OrganizationChoiceForm ocf = new OrganizationChoiceForm(callback.getOrganizations());
+            OrganizationChoiceForm form = new OrganizationChoiceForm(null);
+            form.setDefaultOrganizationString(defaultOrganization);
+            form.init(callback.getOrganizations());
+            
             //AcaciaApplicationView.setLookAndFeel();
             
-            DialogResponse response = ocf.showDialog();
+            DialogResponse response = form.showDialog();
             if(DialogResponse.SELECT.equals(response))
             {
-                callback.setOrganization((Organization) ocf.getSelectedValue());
+                callback.setOrganization((Organization) form.getSelectedValue());
             }
             
             callbacks[i] = callback;

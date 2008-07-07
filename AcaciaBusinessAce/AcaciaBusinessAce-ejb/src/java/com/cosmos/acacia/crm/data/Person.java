@@ -24,6 +24,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
+import javax.persistence.Transient;
 
 /**
  *
@@ -242,6 +243,13 @@ public class Person extends BusinessPartner
         return firstName + " " + secondName + " " + lastName + " " + extraName;
     }
 
+    @Transient
+    private String displayName;
+    
+    public void setDisplayName(String displayName) {
+        //
+    }
+    
     @Override
     public String getDisplayName() {
         return toText();

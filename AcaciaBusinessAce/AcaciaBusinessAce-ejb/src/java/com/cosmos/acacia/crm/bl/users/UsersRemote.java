@@ -181,4 +181,20 @@ public interface UsersRemote {
      * @param person
      */
     void joinOrganization (Organization organization, Address branch, Person person);
+    
+    
+    /**
+     * Leaves the specified organization
+     * 
+     * @param organization
+     */
+    void leaveOrganization (Organization organization);
+    
+    /**
+     * Lists all organizations for the specified user
+     * 
+     * @param user
+     * @return list
+     */
+    List<Organization> getOrganizationsList(User user);
 }

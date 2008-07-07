@@ -284,7 +284,7 @@ public abstract class AcaciaPanel
         if (ve != null) {
             JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
         } else {
-            log.error(ex);
+            log.error("error", ex);
         }
     }
 }

@@ -246,7 +246,7 @@ public class RegistrationForm extends BaseEntityPanel {
                         }
                         personComboList.setEnabled(true);
                         ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
-                        personComboList.initUnbound(personsTable, "${firstName} ${secondName} ${lastName} ${extraName}");
+                        personComboList.initUnbound(personsTable, "${contact.displayName} (${positionType.positionTypeName})");
                     }
 
                 });

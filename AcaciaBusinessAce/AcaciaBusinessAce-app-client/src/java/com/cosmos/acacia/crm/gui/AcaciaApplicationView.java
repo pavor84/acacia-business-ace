@@ -49,6 +49,7 @@ import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
+import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
@@ -450,6 +451,12 @@ public class AcaciaApplicationView extends FrameView {
         JoinOrganizationForm panel = new JoinOrganizationForm(getParentId());
         panel.showFrame();
     }
+    
+    @Action
+    public void leaveOrganizationAction() {
+        LeaveOrganizationForm panel = new LeaveOrganizationForm(getParentId());
+        panel.showFrame();
+    }
 
     @Action
     public void ownOrganizationAction() {
@@ -501,6 +508,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem countriesListMenuItem = new JBMenuItem();
         JBMenuItem usersListMenuItem = new JBMenuItem();
         JBMenuItem joinOrganizationMenuItem = new JBMenuItem();
+        JBMenuItem leaveOrganizationMenuItem = new JBMenuItem();
         JBMenuItem ownOrganizationMenuItem = new JBMenuItem();
         JBMenuItem organizationInternalHierarchyMenuItem = new JBMenuItem();
         /* End of contact book menu items */
@@ -688,6 +696,9 @@ public class AcaciaApplicationView extends FrameView {
         joinOrganizationMenuItem.setAction(actionMap.get("joinOrganizationAction"));
         contactBook.add(joinOrganizationMenuItem);
 
+        leaveOrganizationMenuItem.setAction(actionMap.get("leaveOrganizationAction"));
+        contactBook.add(leaveOrganizationMenuItem);
+        
         Separator contactBookSeparator4 = new Separator();
         contactBook.add(contactBookSeparator4);
 
