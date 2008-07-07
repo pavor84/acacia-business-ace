@@ -54,7 +54,7 @@ public class JBPanel
 
     public JBPanel()
     {
-        super();
+        this(Application.getInstance());
     }
 
     public JBPanel(Class<? extends Application> applicationClass)
@@ -64,7 +64,6 @@ public class JBPanel
 
     public JBPanel(Application application)
     {
-        this();
         this.application = application;
     }
 
