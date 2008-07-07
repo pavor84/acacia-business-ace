@@ -40,7 +40,7 @@ import javax.persistence.Table;
             ),
         @NamedQuery
             (
-                name = "AssemblingCategory.findByParentDataObjectAndDeleted",
+                name = "AssemblingCategory.findByParentIdAndDeleted",
                 query = "select t1 from AssemblingCategory t1" +
                         " where t1.dataObject.parentDataObjectId = :parentDataObjectId" +
                         " and t1.dataObject.deleted = :deleted"
