@@ -45,8 +45,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
     @Override
     protected void treeValueChanged(TreeNode treeNode)
     {
-        System.out.println("treeValueChanged: " + treeNode);
-        //refreshDataTable();
+        refreshDataTable();
     }
 
     @Override
@@ -143,12 +142,11 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         return true;
     }
 
-    protected void initDataTable()
+    protected void initDataTable(AcaciaTable table)
     {
+        log.info("initDataTable()");
         EntityProperties entityProps = getEntityProperties();
         BindingGroup bg = getBindingGroup();
-
-        AcaciaTable table = getDataTable();
 
         E parent = (E)getSelectionDataObjectBean();
         List children = getChildren(parent, isShowAllHeirs());
@@ -164,12 +162,11 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
 
     protected void refreshDataTable()
     {
+        log.info("refreshDataTable()");
         List listData = getListData();
-        System.out.println("listData: " + listData);
         listData.clear();
         E parent = (E)getSelectionDataObjectBean();
         List children = getChildren(parent, isShowAllHeirs());
-        System.out.println("children: " + children);
         listData.addAll(children);
     }
 
@@ -181,7 +178,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         protected void initData()
         {
             super.initData();
-            initDataTable();
+            initDataTable(getDataTable());
         }
 
         @Override
