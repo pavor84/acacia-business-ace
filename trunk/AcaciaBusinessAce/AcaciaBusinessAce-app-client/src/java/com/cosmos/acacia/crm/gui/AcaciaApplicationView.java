@@ -38,7 +38,7 @@ import com.birosoft.liquid.LiquidLookAndFeel;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoriesTreePanel;
+import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
@@ -347,9 +347,10 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void assemblingCategoriesAction()
     {
-        AssemblingCategoriesTreePanel assemblingCategories = new AssemblingCategoriesTreePanel(null);
-        assemblingCategories.getListPanel().setVisible(Button.Select, false);
-        assemblingCategories.getListPanel().setVisible(Button.Unselect, false);
+        AssemblingCategoryTreeTablePanel assemblingCategories = new AssemblingCategoryTreeTablePanel(null);
+        //AssemblingCategoriesTreePanel assemblingCategories = new AssemblingCategoriesTreePanel(null);
+        //assemblingCategories.getListPanel().setVisible(Button.Select, false);
+        //assemblingCategories.getListPanel().setVisible(Button.Unselect, false);
         assemblingCategories.showFrame();
     }
 

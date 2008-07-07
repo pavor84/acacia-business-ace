@@ -167,15 +167,6 @@ public class AssemblingSchemasListPanel
     {
         setPreferredSize(new Dimension(1055, 600));
         assemblingSchemasSplitPane.setDividerLocation(555);
-
-        EntityProperties entityProps = getFormSession().getVirtualProductItemEntityProperties();
-        for(String key : entityProps.getKeys())
-        {
-            System.out.println("key: " + key + ", PropertyDetails: " + entityProps.getPropertyDetails(key));
-        }
-
-        List<VirtualProduct> virtualProducts = getFormSession().getVirtualProducts(null);
-        System.out.println("virtualProducts: " + virtualProducts);
     }
 
     private AssemblingSchemasTablePanel getAssemblingSchemasTablePanel()
