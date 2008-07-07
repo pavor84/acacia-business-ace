@@ -174,7 +174,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     @Override
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
-        BigInteger codeNumber = BigInteger.valueOf(UUID.randomUUID().getMostSignificantBits() / 10000);
+        BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 100000l);
 
         Query q = em.createNamedQuery("User.findByEmail");
         q.setParameter("email", email);
@@ -314,7 +314,6 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
                 log.info("Organization = " + organization);
             } else if (organizations.size() == 1) {
                 organization = organizations.get(0);
-
             }
 
             if (organization != null) {
@@ -376,7 +375,11 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         return hexString.toString();
     }
 
-    private List<Organization> getOrganizationsList(User user) {
+    @Override
+    public List<Organization> getOrganizationsList(User user) {
+        if (user == null)
+            user = acaciaSessionLocal.getUser();
+        
         Query q = em.createNamedQuery("UserOrganization.findByUser");
         q.setParameter("user", user);
 
@@ -422,7 +425,6 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             password = saltPassword(password);
             digest.update(password.getBytes());
             String result = getHexString(digest.digest());
-            log.info("pr: |" + password + "|" + result);
             return result;
         } catch (NoSuchAlgorithmException e) {
             log.error("Hashing algorithm not found");
@@ -530,5 +532,17 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             uo.setPerson(person);
             esm.persist(em, uo);
         }
+    }
+    
+    @Override
+    public void leaveOrganization(Organization organization) {
+        User user = acaciaSessionLocal.getUser();
+        List<Organization> list = getOrganizationsList(user);
+        if (list != null && list.size() == 1)
+            throw new ValidationException("Leave.impossible");
+        
+        UserOrganization uo = new UserOrganization();
+        uo.setUserOrganizationPK(new UserOrganizationPK(user.getId(), organization.getId()));
+        esm.remove(em, uo);
     }
 }

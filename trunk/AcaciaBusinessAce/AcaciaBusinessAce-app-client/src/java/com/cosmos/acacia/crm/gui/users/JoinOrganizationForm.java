@@ -187,7 +187,7 @@ public class JoinOrganizationForm extends AcaciaPanel{
             getFormSession().joinOrganization(organization, branch, person);
         
         JOptionPane.showMessageDialog(this, getResourceMap().getString("JoinOrganizationForm.request.sent"));
-        
+        close();
     }
     
      protected UsersRemote getFormSession() {

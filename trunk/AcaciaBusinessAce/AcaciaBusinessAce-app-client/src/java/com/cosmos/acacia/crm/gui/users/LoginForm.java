@@ -21,6 +21,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -36,6 +37,7 @@ public class LoginForm extends AcaciaPanel {
     private static final String PASSWORD = "password";
     private static final String USERS_LIST = "password";
     private static final String LOCALE = "locale";
+    private static final String ORGANIZATION = "organization";
 
     protected static Logger log = Logger.getLogger(LoginForm.class);
     
@@ -332,11 +334,9 @@ public class LoginForm extends AcaciaPanel {
             setPreferences(username);
 
             /* End of preferences handling */
-
-            getFormSession().updateOrganization(user, new OrganizationsCallbackHandler());
-
-            log.info(user);
-            log.info(acaciaSessionRemote.getOrganization());
+            String defaultOrganization = prefs.get(username + ORGANIZATION, null);
+            getFormSession().updateOrganization(user, new OrganizationsCallbackHandler(defaultOrganization));
+            prefs.put(username + ORGANIZATION, getAcaciaSession().getOrganization().getOrganizationName());
 
             setDialogResponse(DialogResponse.LOGIN);
 

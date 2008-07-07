@@ -6,26 +6,26 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
+import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 
 /**
  *
  * @author  Bozhidar Bozhanov
  */
-public class OrganizationChoiceForm extends AcaciaPanel {
+public class LeaveOrganizationForm extends AcaciaPanel {
 
     /** Creates new form OrganizationChoiceForm */
-    public OrganizationChoiceForm(List<Organization> organizations) {
-        super((BigInteger) null);
-        this.organizations = organizations;
+    public LeaveOrganizationForm(BigInteger parentId) {
+        super(parentId);
         initComponents();
-        if (organizations != null)
-            initData();
+        initData();
     }
 
     /** This method is called from within the constructor to
@@ -45,12 +45,12 @@ public class OrganizationChoiceForm extends AcaciaPanel {
 
         organizationsComboBox.setName("organizationsComboBox"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(OrganizationChoiceForm.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(LeaveOrganizationForm.class);
         organizationLabel.setText(resourceMap.getString("organizationLabel.text")); // NOI18N
         organizationLabel.setName("organizationLabel"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(OrganizationChoiceForm.class, this);
-        proceedButton.setAction(actionMap.get("proceed")); // NOI18N
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(LeaveOrganizationForm.class, this);
+        proceedButton.setAction(actionMap.get("leave")); // NOI18N
         proceedButton.setName("proceedButton"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -86,36 +86,50 @@ public class OrganizationChoiceForm extends AcaciaPanel {
     // End of variables declaration//GEN-END:variables
 
     private List<Organization> organizations;
-    private String defaultOrganization;
+    private UsersRemote formSession;
     
     @Override
     public void initData() {
         organizationsComboBox.removeAllItems();
         int idx = -1;
+        organizations = getFormSession().getOrganizationsList(null);
         for (Organization org : organizations) {
-            if (org.getOrganizationName().equals(defaultOrganization))
-                idx = organizationsComboBox.getItemCount();
-            
             organizationsComboBox.addItem(org);
         }
         organizationsComboBox.setSelectedIndex(idx);
     }
-            
-    public void init(List<Organization> data) {
-        requestFocus();
-        this.organizations = data;
-        initData();
-    }
-            
-    @Action
-    public void proceed() {
-        setDialogResponse(DialogResponse.SELECT);
-        setSelectedValue(organizationsComboBox.getSelectedItem());
-        close();
+ 
+    protected UsersRemote getFormSession() {
+        if (formSession == null) {
+            formSession = getBean(UsersRemote.class);
+        }
+        return formSession;
     }
     
-    public void setDefaultOrganizationString(String defOrgStr) {
-        this.defaultOrganization = defOrgStr;
+    
+    @Action
+    public void leave() {
+        try {
+            Organization org = (Organization) organizationsComboBox.getSelectedItem();
+            if (org != null) {
+                if (JOptionPane.showConfirmDialog(this,
+                        getResourceMap().getString("Leave.confirm"),
+                        getResourceMap().getString("Leave.confirm.title"),
+                        JOptionPane.YES_NO_OPTION) ==  JOptionPane.YES_OPTION)
+                {
+                    getFormSession().leaveOrganization(org);
+                    JOptionPane.showMessageDialog(this, getResourceMap().getString("Leave.successful"));
+
+                    // Quit if the current organization has been abandoned
+                    if (org.equals(getAcaciaSession().getOrganization()))
+                        AcaciaApplication.getApplication().exit();
+                    
+                    close();
+                }
+            }
+        } catch (Exception ex) {
+            handleBusinessException(ex);
+        }
     }
 
 }
