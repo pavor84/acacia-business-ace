@@ -92,7 +92,15 @@ public class AssemblingBean
 
     @Override
     public List<AssemblingCategory> getAssemblingCategories(
-        AssemblingCategory parent, Boolean allHeirs)
+        AssemblingCategory parent,
+        Boolean allHeirs)
+    {
+        return getChildrenAssemblingCategories(parent, allHeirs);
+    }
+
+    private List<AssemblingCategory> getChildrenAssemblingCategories(
+        AssemblingCategory parent,
+        boolean allHeirs)
     {
         Query q;
         if(parent != null)
@@ -107,7 +115,19 @@ public class AssemblingBean
         q.setParameter("deleted", false);
         Organization organization = acaciaSessionLocal.getOrganization();
         q.setParameter("parentId", organization.getId());
-        return new ArrayList<AssemblingCategory>(q.getResultList());
+        List<AssemblingCategory> result = new ArrayList<AssemblingCategory>(q.getResultList());
+
+        int size;
+        if(allHeirs && (size = result.size()) > 0)
+        {
+            for(int i = 0; i < size; i++)
+            {
+                AssemblingCategory category = result.get(i);
+                result.addAll(getChildrenAssemblingCategories(category, allHeirs));
+            }
+        }
+
+        return result;
     }
 
     @Override
