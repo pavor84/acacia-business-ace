@@ -117,7 +117,7 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
             @Override
             public void valueChanged(TreeSelectionEvent event)
             {
-                treeValueChanged(getSelectionNode());
+                AbstractTreePanel.this.treeValueChanged(getSelectionNode());
             }
         });
 
@@ -126,7 +126,7 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
             @Override
             public void itemStateChanged(ItemEvent event)
             {
-                itemStateChanged(event);
+                AbstractTreePanel.this.itemStateChanged(getSelectionNode());
             }
         });
     }
@@ -161,7 +161,7 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
         return null;
     }
 
-    public DataObjectBean getSelectionDataObjectBean()
+    public E getSelectionDataObjectBean()
     {
         return getDataObjectBean((AbstractDynamicTreeNode)getSelectionNode());
     }
@@ -170,9 +170,9 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
     {
     }
 
-    protected void itemStateChanged(ItemEvent event)
+    protected void itemStateChanged(TreeNode treeNode)
     {
-        treeValueChanged(getSelectionNode());
+        treeValueChanged(treeNode);
     }
 
     protected AbstractDynamicTreeNode getRootNode()
@@ -234,8 +234,10 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
         @Override
         protected int getChildrenCount()
         {
-            E dataObject = (E)getUserObject();
-            return AbstractTreePanel.this.getChildCount(dataObject);
+            if(isRoot())
+                return AbstractTreePanel.this.getChildCount(null);
+            else
+                return AbstractTreePanel.this.getChildCount((E)getUserObject());
         }
     }
 }

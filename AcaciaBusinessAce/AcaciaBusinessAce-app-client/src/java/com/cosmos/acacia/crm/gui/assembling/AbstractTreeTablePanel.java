@@ -7,9 +7,14 @@ package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.SelectableListDialog;
 import java.util.List;
 import javax.swing.tree.TreeNode;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -21,6 +26,9 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
 {
     private TablePanel tablePanel;
     private boolean editable;
+    private BindingGroup bindingGroup;
+    private JTableBinding tableBinding;
+
 
     public AbstractTreeTablePanel(E dataObjectBean)
     {
@@ -37,17 +45,20 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
     @Override
     protected void treeValueChanged(TreeNode treeNode)
     {
+        System.out.println("treeValueChanged: " + treeNode);
+        //refreshDataTable();
     }
 
     @Override
-    protected final List<E> getChildren(DataObjectBean parent)
+    protected List<E> getChildren(DataObjectBean parent)
     {
-        return getChildren(parent, false);
+        return getChildren((E)parent, false);
     }
 
-    protected abstract List<E> getChildren(DataObjectBean parent, boolean allHeirs);
-    protected abstract E onEditEntity(DataObjectBean entity);
-    protected abstract E newEntity(DataObjectBean parentEntity);
+    protected abstract List<E> getChildren(E parent, boolean allHeirs);
+    protected abstract E onEditEntity(E entity);
+    protected abstract E newEntity(E parentEntity);
+    protected abstract EntityProperties getEntityProperties();
 
 
     @Override
@@ -87,7 +98,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         getTablePanel().setVisibleSelectButtons();
     }
 
-    protected TablePanel getTablePanel()
+    public TablePanel getTablePanel()
     {
         if(tablePanel == null)
         {
@@ -95,6 +106,26 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         }
 
         return tablePanel;
+    }
+
+    protected AcaciaTable getDataTable()
+    {
+        return getTablePanel().getDataTable();
+    }
+
+    protected BindingGroup getBindingGroup()
+    {
+        if(bindingGroup == null)
+        {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
+    }
+
+    protected JTableBinding getTableBinding()
+    {
+        return tableBinding;
     }
 
     protected boolean canCreate()
@@ -112,9 +143,46 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         return true;
     }
 
+    protected void initDataTable()
+    {
+        EntityProperties entityProps = getEntityProperties();
+        BindingGroup bg = getBindingGroup();
+
+        AcaciaTable table = getDataTable();
+
+        E parent = (E)getSelectionDataObjectBean();
+        List children = getChildren(parent, isShowAllHeirs());
+        tableBinding = table.bind(
+            bg,
+            children,
+            entityProps,
+            UpdateStrategy.READ);
+        tableBinding.setEditable(false);
+
+        bg.bind();
+    }
+
+    protected void refreshDataTable()
+    {
+        List listData = getListData();
+        System.out.println("listData: " + listData);
+        listData.clear();
+        E parent = (E)getSelectionDataObjectBean();
+        List children = getChildren(parent, isShowAllHeirs());
+        System.out.println("children: " + children);
+        listData.addAll(children);
+    }
+
     protected class TablePanel
         extends AbstractTablePanel
     {
+
+        @Override
+        protected void initData()
+        {
+            super.initData();
+            initDataTable();
+        }
 
         @Override
         protected boolean deleteRow(Object rowObject)
@@ -131,7 +199,8 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         @Override
         protected Object newRow()
         {
-            return onEditEntity(newEntity(getSelectionDataObjectBean()));
+            E entity = newEntity((E)getSelectionDataObjectBean());
+            return onEditEntity(entity);
         }
 
         @Override
