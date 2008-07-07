@@ -34,32 +34,35 @@ import javax.persistence.Table;
     {
         @NamedQuery
             (
-                name = "AssemblingCategory.findByCategoryCode",
+                name = "AssemblingCategory.findByParentCategory",
                 query = "select t1 from AssemblingCategory t1" +
-                        " where t1.categoryCode = :categoryCode"
-            ),
-        @NamedQuery
-            (
-                name = "AssemblingCategory.findByParentIdAndDeleted",
-                query = "select t1 from AssemblingCategory t1" +
-                        " where t1.dataObject.parentDataObjectId = :parentDataObjectId" +
+                        " where t1.parentId = :parentId" +
+                        " and t1.parentCategory = :parentCategory" +
                         " and t1.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
-                name = "AssemblingCategory.findByNameNotDeleted",
+                name = "AssemblingCategory.findByParentCategoryIsNull",
                 query = "select t1 from AssemblingCategory t1" +
                         " where t1.parentId = :parentId" +
-                        " and t1.categoryName like :categoryName" +
-                        " and t1.dataObject.deleted = false"
+                        " and t1.parentCategory is null" +
+                        " and t1.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
-                name = "AssemblingCategory.findByCodeNotDeleted",
-                query = "select t1 from AssemblingCategory t1" +
+                name = "AssemblingCategory.findChildCountByParentCategory",
+                query = "select count(t1) from AssemblingCategory t1" +
                         " where t1.parentId = :parentId" +
-                        " and t1.categoryCode like :categoryCode" +
-                        " and t1.dataObject.deleted = false"
+                        " and t1.parentCategory = :parentCategory" +
+                        " and t1.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "AssemblingCategory.findChildCountByParentCategoryIsNull",
+                query = "select count(t1) from AssemblingCategory t1" +
+                        " where t1.parentId = :parentId" +
+                        " and t1.parentCategory is null" +
+                        " and t1.dataObject.deleted = :deleted"
             )
     })
 public class AssemblingCategory
