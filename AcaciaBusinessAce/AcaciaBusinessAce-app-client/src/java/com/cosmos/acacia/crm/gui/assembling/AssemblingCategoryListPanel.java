@@ -204,7 +204,7 @@ public class AssemblingCategoryListPanel
      * @param the name of the table
      * @return the message
      */
-    private String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
+    protected String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
     {
         String message = cantDeleteMessagePrefix;
         String tableUserfriendly = getResourceMap().getString("table.userfriendlyname." + table);
@@ -223,7 +223,7 @@ public class AssemblingCategoryListPanel
         return true;
     }
 
-    private void removeFromTable(List<AssemblingCategory> withSubCategories)
+    protected void removeFromTable(List<AssemblingCategory> withSubCategories)
     {
         for(AssemblingCategory category : withSubCategories)
         {
