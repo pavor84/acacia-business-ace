@@ -8,7 +8,7 @@ CREATE SEQUENCE data_object_type_seq
   MAXVALUE 2147483647
   START 36
   CACHE 1;
-ALTER TABLE data_object_type_seq OWNER TO "PostgreSQL";
+ALTER TABLE data_object_type_seq OWNER TO "postgres";
 
 -- Sequence: data_objects_seq
 
@@ -20,7 +20,7 @@ CREATE SEQUENCE data_objects_seq
   MAXVALUE 999999999999999999
   START 2
   CACHE 1;
-ALTER TABLE data_objects_seq OWNER TO "PostgreSQL";
+ALTER TABLE data_objects_seq OWNER TO "postgres";
 
 -- Sequence: hello_world_hello_world_id_seq
 
@@ -32,7 +32,7 @@ CREATE SEQUENCE hello_world_hello_world_id_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE hello_world_hello_world_id_seq OWNER TO "PostgreSQL";
+ALTER TABLE hello_world_hello_world_id_seq OWNER TO "postgres";
 
 -- Sequence: sequence_identifiers_seq_id_key_seq
 
@@ -44,7 +44,7 @@ CREATE SEQUENCE sequence_identifiers_seq_id_key_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE sequence_identifiers_seq_id_key_seq OWNER TO "PostgreSQL";
+ALTER TABLE sequence_identifiers_seq_id_key_seq OWNER TO "postgres";
 
 -- Table: "TestTable"
 
@@ -60,7 +60,7 @@ CREATE TABLE "TestTable"
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (OIDS=FALSE);
-ALTER TABLE "TestTable" OWNER TO "PostgreSQL";
+ALTER TABLE "TestTable" OWNER TO "postgres";
 
 -- Table: data_object_types
 
@@ -79,7 +79,7 @@ CREATE TABLE data_object_types
   CONSTRAINT uk_dot_data_object_type UNIQUE (data_object_type)
 )
 WITH (OIDS=FALSE);
-ALTER TABLE data_object_types OWNER TO "PostgreSQL";
+ALTER TABLE data_object_types OWNER TO "postgres";
 
 -- Table: data_objects
 
@@ -129,7 +129,7 @@ CREATE TABLE data_objects
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (OIDS=FALSE);
-ALTER TABLE data_objects OWNER TO "PostgreSQL";
+ALTER TABLE data_objects OWNER TO "postgres";
 
 -- Table: hello_world
 
@@ -142,7 +142,7 @@ CREATE TABLE hello_world
   CONSTRAINT pk_hello_world PRIMARY KEY (hello_world_id)
 )
 WITH (OIDS=FALSE);
-ALTER TABLE hello_world OWNER TO "PostgreSQL";
+ALTER TABLE hello_world OWNER TO "postgres";
 
 -- Table: object_identifiers
 
@@ -155,7 +155,7 @@ CREATE TABLE object_identifiers
   CONSTRAINT pk_object_identifiers PRIMARY KEY (object_id)
 )
 WITH (OIDS=FALSE);
-ALTER TABLE object_identifiers OWNER TO "PostgreSQL";
+ALTER TABLE object_identifiers OWNER TO "postgres";
 
 -- Table: products
 
@@ -197,7 +197,7 @@ CREATE TABLE products
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (OIDS=FALSE);
-ALTER TABLE products OWNER TO "PostgreSQL";
+ALTER TABLE products OWNER TO "postgres";
 
 -- Table: sequence_identifiers
 
@@ -211,7 +211,7 @@ CREATE TABLE sequence_identifiers
   CONSTRAINT uk_seq_id_name UNIQUE (seq_id_name)
 )
 WITH (OIDS=FALSE);
-ALTER TABLE sequence_identifiers OWNER TO "PostgreSQL";
+ALTER TABLE sequence_identifiers OWNER TO "postgres";
 
 -- Table: users
 
@@ -255,4 +255,4 @@ CREATE TABLE users
   CONSTRAINT uk_users_user_name UNIQUE (user_name)
 )
 WITH (OIDS=FALSE);
-ALTER TABLE users OWNER TO "PostgreSQL";
+ALTER TABLE users OWNER TO "postgres";
