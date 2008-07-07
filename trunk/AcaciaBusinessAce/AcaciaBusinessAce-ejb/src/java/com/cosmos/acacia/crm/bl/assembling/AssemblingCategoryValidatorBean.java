@@ -31,7 +31,7 @@ public class AssemblingCategoryValidatorBean
     {
         ValidationException ve = new ValidationException();
         
-        BigInteger parentId = entity.getParentId();
+        /*BigInteger parentId = entity.getParentId();
         if(parentId != null)
         {
             //unique code
@@ -83,7 +83,7 @@ public class AssemblingCategoryValidatorBean
                 ancestor = em.find(AssemblingCategory.class, parentId);
             else
                 ancestor = null;
-        }
+        }*/
         
         //if we have validation messages - throw the exception since not everything is OK
         if(!ve.getMessages().isEmpty())

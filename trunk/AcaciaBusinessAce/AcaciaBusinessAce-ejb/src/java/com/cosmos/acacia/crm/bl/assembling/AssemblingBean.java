@@ -91,6 +91,46 @@ public class AssemblingBean
     }
 
     @Override
+    public List<AssemblingCategory> getAssemblingCategories(
+        AssemblingCategory parent, Boolean allHeirs)
+    {
+        Query q;
+        if(parent != null)
+        {
+            q = em.createNamedQuery("AssemblingCategory.findByParentCategory");
+            q.setParameter("parentCategory", parent);
+        }
+        else
+        {
+            q = em.createNamedQuery("AssemblingCategory.findByParentCategoryIsNull");
+        }
+        q.setParameter("deleted", false);
+        Organization organization = acaciaSessionLocal.getOrganization();
+        q.setParameter("parentId", organization.getId());
+        return new ArrayList<AssemblingCategory>(q.getResultList());
+    }
+
+    @Override
+    public int getAssemblingCategoryChildCount(AssemblingCategory parent)
+    {
+        Query q;
+        if(parent != null)
+        {
+            q = em.createNamedQuery("AssemblingCategory.findChildCountByParentCategory");
+            q.setParameter("parentCategory", parent);
+        }
+        else
+        {
+            q = em.createNamedQuery("AssemblingCategory.findChildCountByParentCategoryIsNull");
+        }
+        q.setParameter("deleted", false);
+        Organization organization = acaciaSessionLocal.getOrganization();
+        q.setParameter("parentId", organization.getId());
+        Long count = (Long)q.getSingleResult();
+        return count.intValue();
+    }
+
+    @Override
     public AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory)
     {
         AssemblingCategory newObject = new AssemblingCategory();
