@@ -106,6 +106,7 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
 
     @Override
     protected void initData() {
+        setResizable(false);
         clp = new ClassifiersListPanel(getParentDataObjectId());
         classifiersComboList.initUnbound(clp, "${classifierName}");
 
