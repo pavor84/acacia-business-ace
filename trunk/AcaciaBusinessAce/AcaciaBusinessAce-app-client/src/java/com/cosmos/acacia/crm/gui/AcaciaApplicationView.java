@@ -313,6 +313,8 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void deliveryCertificatesAction()
     {
+        DeliveryCertificatesListPanel listPanel = new DeliveryCertificatesListPanel(null);
+        listPanel.showFrame();
     }
 
     @Action
@@ -724,9 +726,12 @@ public class AcaciaApplicationView extends FrameView {
 
         warehousesMenu.add(new JSeparator());
 
-        menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("deliveryCertificatesAction")); // NOI18N
-        warehousesMenu.add(menuItem);
+        //menuItem = new JBMenuItem();
+        //menuItem.setAction(actionMap.get("deliveryCertificatesAction")); // NOI18N
+        //warehousesMenu.add(menuItem);
+        JComponent deliveryCertificatesMenu = createDeliveryCertificatesMenu();
+        warehousesMenu.add(deliveryCertificatesMenu);
+          
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("receiptCertificatesAction")); // NOI18N
@@ -912,4 +917,30 @@ public class AcaciaApplicationView extends FrameView {
         desktopPane.setName("desktopPane"); // NOI18N
         return desktopPane;
     }
+    
+    
+    /** NOT IMPLEMENTED
+     * This method will dynamically populate DeliveryCertificates menu,
+     * when implemented. 
+     * Logged user should be retrieved. Only these warehouses to which the 
+     * user has access should be listed in the menu. 
+     * @return
+     */
+    private JComponent createDeliveryCertificatesMenu(){
+         
+        JBMenu menu = new JBMenu();
+        ActionMap actionMap = getActionMap();
+        
+        menu.setName("DeliveryCertificates");
+        menu.setText("DeliveryCertificates(TODO)");
+        
+        JBMenuItem warehouse = new JBMenuItem();
+        warehouse.setAction(actionMap.get("deliveryCertificatesAction")); 
+        warehouse.setText("Hardcoded Warehouse");
+        warehouse.setActionCommand("warehouse id");
+        
+        menu.add(warehouse);
+        return menu;
+    }
+    
 }
