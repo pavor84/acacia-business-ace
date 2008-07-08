@@ -12,7 +12,6 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
-import com.cosmos.ejb.callback.ClientCallbackHandler;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 
@@ -163,7 +163,7 @@ public class Algorithm
 
     private AssemblingSchemaItem assemblingSchemaItem;
 
-    private ClientCallbackHandler callbackHandler;
+    private CallbackHandler callbackHandler;
 
 
     public Algorithm(AssemblingSchemaItem assemblingSchemaItem)
@@ -198,11 +198,11 @@ public class Algorithm
         return assemblingSchemaItem;
     }
 
-    public ClientCallbackHandler getCallbackHandler() {
+    public CallbackHandler getCallbackHandler() {
         return callbackHandler;
     }
 
-    public void setCallbackHandler(ClientCallbackHandler callbackHandler) {
+    public void setCallbackHandler(CallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
     }
 
