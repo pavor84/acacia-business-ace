@@ -7,12 +7,12 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 
 import com.cosmos.acacia.crm.bl.users.OrganizationCallback;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.ejb.callback.ClientCallbackHandler;
 import com.cosmos.swingb.DialogResponse;
 import java.io.Serializable;
+import javax.security.auth.callback.CallbackHandler;
 
 public class OrganizationsCallbackHandler
-    implements ClientCallbackHandler, Serializable {
+    implements CallbackHandler, Serializable {
 
     private String defaultOrganization;
     

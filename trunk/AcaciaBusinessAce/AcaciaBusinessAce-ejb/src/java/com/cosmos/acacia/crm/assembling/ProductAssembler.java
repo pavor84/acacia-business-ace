@@ -22,8 +22,8 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
-import com.cosmos.ejb.callback.ClientCallbackHandler;
 import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
 
 /**
  *
@@ -45,7 +45,7 @@ public class ProductAssembler
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> assemblingSchemaItems;
 
-    private ClientCallbackHandler callbackHandler;
+    private CallbackHandler callbackHandler;
 
     public ProductAssembler(
             AssemblingSchema assemblingSchema,
@@ -59,11 +59,11 @@ public class ProductAssembler
         return assemblingSchema;
     }
 
-    public ClientCallbackHandler getCallbackHandler() {
+    public CallbackHandler getCallbackHandler() {
         return callbackHandler;
     }
 
-    public void setCallbackHandler(ClientCallbackHandler callbackHandler) {
+    public void setCallbackHandler(CallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
     }
 
