@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,6 +27,18 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "delivery_certificates")
+@NamedQueries({ 
+    @NamedQuery
+    ( 
+        /**
+         * Get all mask formats for a given name - at most one should exist
+         * Parameters:
+         * - name - the name of the pattern mask
+         */
+        name = "DeliveryCertificate.findByWarehouse",
+        query = "select ds from DeliveryCertificate ds where ds.dataObject.deleted = false"
+    )
+})
 public class DeliveryCertificate extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +58,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     private String warehouseName;
 
     @Column(name = "delivery_certificate_number", nullable = false)
+    @Property(title="Serial Number")
     private long deliveryCertificateNumber;
 
     @Column(name = "delivery_certificate_date", nullable = false)
@@ -55,10 +70,10 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
      */
     @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id")
     @ManyToOne
-    @Property(title="Recipient")
     private BusinessPartner recipient;
 
     @Column(name = "recipient_name", nullable = false)
+    @Property(title="Recipient")
     private String recipientName;
 
     @JoinColumn(name = "recipient_contact_id")
@@ -85,6 +100,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     private Person creator;
 
     @Column(name = "creator_name", nullable = false)
+    @Property(title="Creator")
     private String creatorName;
 
     @JoinColumn(name = "forwarder_id", insertable = false, updatable = false)
