@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -175,11 +176,20 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
         treeValueChanged(treeNode);
     }
 
+    protected void fireNodeStructureChanged(TreeNode treeNode)
+    {
+        if(treeNode != null)
+            ((DefaultTreeModel)tree.getModel()).nodeStructureChanged(treeNode);
+        else
+            ((DefaultTreeModel)tree.getModel()).nodeStructureChanged(getRootNode());
+    }
+
     protected AbstractDynamicTreeNode getRootNode()
     {
         if(rootNode == null)
         {
             rootNode = new DynamicTreeNode("Root");
+            rootNode.setNotifyOnStructureChanged(false);
         }
 
         return rootNode;

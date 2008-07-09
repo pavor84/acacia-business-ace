@@ -54,6 +54,12 @@ public class AssemblingCategoryTreeTablePanel
     }
 
     @Override
+    protected boolean deleteRow(AssemblingCategory entity)
+    {
+        return getFormSession().deleteAssemblingCategory(entity);
+    }
+
+    @Override
     protected int getChildCount(DataObjectBean parent)
     {
         return getFormSession().getAssemblingCategoryChildCount((AssemblingCategory)parent);

@@ -57,6 +57,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
     protected abstract List<E> getChildren(E parent, boolean allHeirs);
     protected abstract E onEditEntity(E entity);
     protected abstract E newEntity(E parentEntity);
+    protected abstract boolean deleteRow(E entity);
     protected abstract EntityProperties getEntityProperties();
 
 
@@ -170,6 +171,11 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         listData.addAll(children);
     }
 
+    protected void fireNodeStructureChanged()
+    {
+        fireNodeStructureChanged(getSelectionNode());
+    }
+
     protected class TablePanel
         extends AbstractTablePanel
     {
@@ -184,20 +190,29 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         @Override
         protected boolean deleteRow(Object rowObject)
         {
-            return true;
+            boolean result = AbstractTreeTablePanel.this.deleteRow((E)rowObject);
+            if(result)
+                fireNodeStructureChanged();
+            return result;
         }
 
         @Override
         protected Object modifyRow(Object rowObject)
         {
-            return onEditEntity((E)rowObject);
+            E entity = onEditEntity((E)rowObject);
+            if(entity != null)
+                fireNodeStructureChanged();
+            return entity;
         }
 
         @Override
         protected Object newRow()
         {
             E entity = newEntity((E)getSelectionDataObjectBean());
-            return onEditEntity(entity);
+            entity = onEditEntity(entity);
+            if(entity != null)
+                fireNodeStructureChanged();
+            return entity;
         }
 
         @Override
