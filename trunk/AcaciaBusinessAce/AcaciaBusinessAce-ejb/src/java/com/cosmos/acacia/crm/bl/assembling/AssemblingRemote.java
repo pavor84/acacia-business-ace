@@ -30,6 +30,7 @@ public interface AssemblingRemote
     List<AssemblingCategory> getAssemblingCategories(DataObject parent);
     EntityProperties getAssemblingCategoryEntityProperties();
     boolean deleteAssemblingCategories(List<AssemblingCategory> categories);
+    boolean deleteAssemblingCategory(AssemblingCategory assemblingCategory);
     AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory);
     AssemblingCategory saveCategory(AssemblingCategory entity);
     AssemblingSchema saveSchema(AssemblingSchema entity);
