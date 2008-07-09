@@ -112,6 +112,7 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
         
         DynamicTreeModel treeModel = new DynamicTreeModel(getRootNode());
         tree.setModel(treeModel);
+        tree.setSelectionRow(0);
 
         tree.addTreeSelectionListener(new TreeSelectionListener()
         {

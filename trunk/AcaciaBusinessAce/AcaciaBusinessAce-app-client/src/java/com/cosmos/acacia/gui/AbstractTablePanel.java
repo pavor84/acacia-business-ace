@@ -359,22 +359,26 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return dataTable;
     }
 
+    @Override
     public List getListData()
     {
         return getDataTable().getData();
     }
 
+    @Override
     public void setVisibleSelectButtons()
     {
         setVisible(Button.Select, true);
         setVisible(Button.Unselect, true);
     }
 
+    @Override
     public void setEditable(boolean editable)
     {
         this.editable = editable;
     }
 
+    @Override
     public boolean isEditable()
     {
         return editable;
