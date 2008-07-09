@@ -23,6 +23,7 @@ public abstract class AbstractDynamicTreeNode
 {
     protected boolean areChildrenLoaded;
     protected DefaultTreeModel treeModel;
+    private boolean notifyOnStructureChanged;
 
 
     public AbstractDynamicTreeNode()
@@ -38,6 +39,7 @@ public abstract class AbstractDynamicTreeNode
     public AbstractDynamicTreeNode(Object userObject, boolean allowsChildren)
     {
         super(userObject, allowsChildren);
+        notifyOnStructureChanged = true;
     }
 
     public DefaultTreeModel getTreeModel()
@@ -88,8 +90,18 @@ public abstract class AbstractDynamicTreeNode
 
     public void nodeStructureChanged()
     {
-        if(treeModel != null)
+        if(notifyOnStructureChanged && treeModel != null)
             treeModel.nodeStructureChanged(this);
+    }
+
+    public boolean isNotifyOnStructureChanged()
+    {
+        return notifyOnStructureChanged;
+    }
+
+    public void setNotifyOnStructureChanged(boolean notifyOnStructureChanged)
+    {
+        this.notifyOnStructureChanged = notifyOnStructureChanged;
     }
 
     @Override
@@ -158,14 +170,22 @@ public abstract class AbstractDynamicTreeNode
         children.add(newChild);
 
         if(newChild instanceof AbstractDynamicTreeNode)
-            ((AbstractDynamicTreeNode)newChild).setTreeModel(treeModel);
+        {
+            AbstractDynamicTreeNode dynamicTreeNode = (AbstractDynamicTreeNode)newChild;
+            dynamicTreeNode.setTreeModel(treeModel);
+            dynamicTreeNode.setNotifyOnStructureChanged(isNotifyOnStructureChanged());
+        }
     }
 
     @Override
     public void insert(MutableTreeNode newChild, int childIndex)
     {
         if(newChild instanceof AbstractDynamicTreeNode)
-            ((AbstractDynamicTreeNode)newChild).setTreeModel(treeModel);
+        {
+            AbstractDynamicTreeNode dynamicTreeNode = (AbstractDynamicTreeNode)newChild;
+            dynamicTreeNode.setTreeModel(treeModel);
+            dynamicTreeNode.setNotifyOnStructureChanged(isNotifyOnStructureChanged());
+        }
 
         super.insert(newChild, childIndex);
     }
