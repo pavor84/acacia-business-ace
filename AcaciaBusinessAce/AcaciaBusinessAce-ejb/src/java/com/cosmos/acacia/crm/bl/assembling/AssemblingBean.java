@@ -6,7 +6,6 @@
 package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.app.SessionFacadeBean;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -77,6 +76,13 @@ public class AssemblingBean
         EntityProperties entityProperties = esm.getEntityProperties(AssemblingCategory.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
+    }
+
+    @Override
+    public boolean deleteAssemblingCategory(AssemblingCategory assemblingCategory)
+    {
+        esm.remove(em, assemblingCategory);
+        return true;
     }
 
     @Override
