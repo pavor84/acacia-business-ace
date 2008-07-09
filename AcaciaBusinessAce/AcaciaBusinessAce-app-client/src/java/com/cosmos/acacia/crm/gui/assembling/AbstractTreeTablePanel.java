@@ -10,6 +10,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.SelectableListDialog;
+import java.awt.Dimension;
 import java.util.List;
 import javax.swing.tree.TreeNode;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -185,6 +186,9 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
         {
             super.initData();
             initDataTable(getDataTable());
+            setVisible(Button.Classify, false);
+            setVisibleSelectButtons();
+            setPreferredSize(new Dimension(400, 300));
         }
 
         @Override
