@@ -10,11 +10,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.test.bl.TestUtils;
 
@@ -31,11 +33,7 @@ public class PositionTypesTest {
     @Before
     public void setUp() {
         if ( formSession==null ){
-            try {
-                formSession = InitialContext.doLookup(PositionTypesListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            formSession = AcaciaPanel.getRemoteBean(this, PositionTypesListRemote.class);;
         }
     }
 
@@ -45,6 +43,7 @@ public class PositionTypesTest {
         Assert.assertNotNull(personPositions);
 
         List<PositionType> organizationPositions = formSession.getPositionTypes(Organization.class, null);
+        Assert.assertNotNull(organizationPositions);
 
         EntityProperties entityProperties =
             formSession.getPositionTypeEntityProperties();

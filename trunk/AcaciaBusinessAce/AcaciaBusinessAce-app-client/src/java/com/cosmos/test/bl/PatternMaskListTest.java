@@ -17,44 +17,40 @@ import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
- * 
+ *
  * Created	:	06.04.2008
  * @author	Petar Milev
  * @version $Id: $
- * 
+ *
  * Business logic test for
  * {@link PatternMaskListBean}
  *
  */
 public class PatternMaskListTest {
-    
+
     @EJB
     private PatternMaskListRemote formSession;
-    
+
     @Before
     public void setUp() {
-        if ( formSession==null ){
-            try {
-                formSession = InitialContext.doLookup(PatternMaskListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
-        }
+        if ( formSession==null )
+                formSession = AcaciaPanel.getRemoteBean(this, PatternMaskListRemote.class);
     }
-    
+
     @Test
     public void methodsTest(){
         List<BusinessPartner> possibleOwners = formSession.getOwnersList();
         Assert.assertNotNull(possibleOwners);
-        
-        EntityProperties entityProperties = 
+
+        EntityProperties entityProperties =
             formSession.getPatternMaskEntityProperties();
         Assert.assertNotNull(entityProperties);
     }
-    
+
     /**
      * Test - create, retrieve, update, delete operations
      * over PatternMaskFormat
@@ -62,34 +58,34 @@ public class PatternMaskListTest {
     @Test
     public void crudTest(){
         String nameInsert = TestUtils.getRandomString(16);
-        
+
         //create
         PatternMaskFormat inserted = createNew(nameInsert);
         Assert.assertNotNull(inserted);
         Assert.assertNotNull(inserted.getPatternMaskFormatId());
-        
+
         businessValidationTest(inserted);
-        
+
         //retrieve
-        List<PatternMaskFormat> formats = 
+        List<PatternMaskFormat> formats =
             list();
         Assert.assertNotNull(formats);
-        
+
         //find
         PatternMaskFormat found = find(formats, inserted);
         Assert.assertNotNull(found);
-        
+
         //update
         String nameUpdate = TestUtils.getRandomString(16);
         found.setPatternName(nameUpdate);
         PatternMaskFormat updated = updateFormat(found);
         Assert.assertEquals(nameUpdate, updated.getPatternName());
-        
+
         //delete
         boolean deleted = formSession.deletePatternMaskFormat(updated);
         Assert.assertTrue(deleted);
     }
-    
+
     private PatternMaskFormat updateFormat(PatternMaskFormat found) {
         return
         formSession.savePatternMaskFormat(found);
@@ -100,7 +96,7 @@ public class PatternMaskListTest {
             if ( inserted.getPatternMaskFormatId().equals(patternMaskFormat.getPatternMaskFormatId()))
                 return patternMaskFormat;
         }
-        
+
         Assert.fail("Format with id: "+inserted.getPatternMaskFormatId()+" not found after insertion!");
         return null;
     }
@@ -113,9 +109,9 @@ public class PatternMaskListTest {
         PatternMaskFormat result = formSession.newPatternMaskFormat();
         result.setPatternName(nameInsert);
         result.setFormat("1234");
-        
+
         Random r = new SecureRandom();
-        
+
         List<BusinessPartner> owners = formSession.getOwnersList();
         Assert.assertNotNull(owners);
         if ( !owners.isEmpty() ){
@@ -123,11 +119,11 @@ public class PatternMaskListTest {
             BusinessPartner owner = owners.get(randomIdx);
             result.setOwner(owner);
         }
-        
+
         return
         formSession.savePatternMaskFormat(result);
     }
-    
+
     /**
      * Test inserting/updating invalid pattern mask formats
      * @param existing - test duplication errors against

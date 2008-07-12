@@ -7,26 +7,28 @@ import java.util.Random;
 
 import javax.ejb.EJBException;
 
+import org.apache.log4j.Logger;
+
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**
  * Created	:	18.04.2008
  * @author	Petar Milev
  * @version $Id: $
- * 
+ *
  * Some useful methods
  *
  */
 public abstract class TestUtils {
     private static Random r = new SecureRandom();
-    
+
     /**
      * Nobody wants to make it concrete
      */
     private TestUtils(){
-        
+
     }
-    
+
     /**
      * Get random string with a given length
      * @param charactersLength
@@ -40,16 +42,16 @@ public abstract class TestUtils {
         }
         return b.toString();
     }
-    
+
     /**
-     * Return random positive integer between 0 and mod-1 inclusive 
+     * Return random positive integer between 0 and mod-1 inclusive
      * @param mod
      * @return
      */
     public static int nextInteger(int mod){
         return r.nextInt(mod);
     }
-    
+
     /**
      * Extract the validation exception ( @see {@link ValidationException} )
      * from a {@link RemoteException} or any other exception.
@@ -71,6 +73,13 @@ public abstract class TestUtils {
             else
                 break;
         }
+        System.out.println("ER: " + (e instanceof EJBException));
+        Logger.getLogger(TestUtils.class).error("ERROR: ", e);
         return null;
+    }
+
+
+    public static String getRandomEmail() {
+        return getRandomString(8) + "@" + getRandomString(7) + ".com";
     }
 }
