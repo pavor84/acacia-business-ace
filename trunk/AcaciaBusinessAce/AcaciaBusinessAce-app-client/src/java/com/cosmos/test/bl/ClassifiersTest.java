@@ -58,7 +58,7 @@ public class ClassifiersTest {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void crudTest() throws UncompleteUnitTestException{
+    public void crudTest(){
 
         // Creating a classifier group
         ClassifierGroup group = formSession.newClassifierGroup();
@@ -89,7 +89,7 @@ public class ClassifiersTest {
 
         // Retrieve all classifiers for the group
         List cList = formSession.getClassifiers(group.getId(), dataObject.getDataObjectType());
-        Assert.assertTrue(list != null && list.size() == 1);
+        Assert.assertTrue(cList != null && cList.size() == 1);
 
         // Cleanup actions
 

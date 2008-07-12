@@ -1,6 +1,5 @@
 package com.cosmos.test.bl.contactbook;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
