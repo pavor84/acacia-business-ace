@@ -108,7 +108,8 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 em.persist(dataObject);
             }
         } else {
-            mustMerge = true;
+            mustMerge = !(entity.hashCode() == 0);
+
         }
 
         if(mustMerge)

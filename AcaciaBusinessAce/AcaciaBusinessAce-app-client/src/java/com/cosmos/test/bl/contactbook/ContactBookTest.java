@@ -3,8 +3,6 @@ package com.cosmos.test.bl.contactbook;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +24,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.test.bl.TestUtils;
@@ -187,7 +186,14 @@ public class ContactBookTest {
         country = locationFormSession.saveCountry(country);
 
         country.setCountryCodeA2(TestUtils.getRandomString(1));
-        locationFormSession.saveCountry(country);
+//        try {
+            locationFormSession.saveCountry(country);
+//            Assert.fail("Should throw validation exception");
+//        } catch (Exception ex) {
+//            ValidationException vex = TestUtils.extractValidationException(ex);
+//            Assert.assertNotNull(vex);
+//            Assert.assertTrue(vex.getMessages().size() > 0);
+//        }
 
         City city = locationFormSession.newCity();
         city.setCountry(country);

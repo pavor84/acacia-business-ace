@@ -7,6 +7,7 @@ import java.rmi.ServerException;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.rmi.CORBA.ClassDesc;
 
 import org.apache.log4j.Logger;
 
@@ -25,6 +26,12 @@ public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLoc
         SessionContext sessionContext = SessionRegistry.getSession(sessionId);
         //set it as current
         SessionRegistry.setLocalSession(sessionContext);
+
+        // Hack to override the marshalization of Class arguments
+        for (int i = 0; i < parameterTypes.length; i ++) {
+            if (parameterTypes[i].equals(ClassDesc.class))
+                parameterTypes[i] = Class.class;
+        }
 
         Method method = bean.getClass().getMethod(methodName, parameterTypes);
         try {
