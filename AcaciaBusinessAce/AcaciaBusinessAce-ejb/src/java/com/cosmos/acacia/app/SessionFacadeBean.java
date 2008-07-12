@@ -8,20 +8,24 @@ import java.rmi.ServerException;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 
+import org.apache.log4j.Logger;
+
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 @Stateless
 public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLocal {
 
+    protected Logger log = Logger.getLogger(SessionFacadeBean.class);
+
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public Object call(Object bean, String methodName, Object[] args, Class[] parameterTypes, Integer sessionId) throws Throwable {
-        
-    	//find the session
-    	SessionContext sessionContext = SessionRegistry.getSession(sessionId);
-    	//set it as current
-    	SessionRegistry.setLocalSession(sessionContext);
-    	
+
+        //find the session
+        SessionContext sessionContext = SessionRegistry.getSession(sessionId);
+        //set it as current
+        SessionRegistry.setLocalSession(sessionContext);
+
         Method method = bean.getClass().getMethod(methodName, parameterTypes);
         try {
             return method.invoke(bean, args);
@@ -39,9 +43,14 @@ public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLoc
                 }
                 else if(t instanceof EJBException)
                 {
-                    t = ((EJBException)t).getCausedByException();
+                    EJBException tmp = (EJBException) t;
+                    t = tmp.getCausedByException();
+                    if (t == null)
+                        t = tmp.getCause();
+
                 } else
                     break;
+
             }
             throw ex.getCause();
         }
@@ -50,7 +59,7 @@ public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLoc
     private Throwable getRootCause(Throwable t) {
         while (t.getCause() != null)
             t = t.getCause();
-        
+
         return t;
     }
 }

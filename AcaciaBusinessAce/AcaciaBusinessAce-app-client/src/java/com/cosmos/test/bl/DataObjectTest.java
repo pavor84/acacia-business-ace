@@ -5,17 +5,21 @@
 
 package com.cosmos.test.bl;
 
-import com.cosmos.acacia.crm.bl.impl.DataObjectTypeRemote;
-import com.cosmos.acacia.crm.data.DataObjectType;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import com.cosmos.acacia.crm.bl.impl.DataObjectTypeRemote;
+import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
  *
@@ -38,14 +42,7 @@ public class DataObjectTest
     public void setUp() {
         if(doh == null)
         {
-            try
-            {
-                doh = InitialContext.doLookup(DataObjectTypeRemote.class.getName());
-            }
-            catch(NamingException ex)
-            {
-                throw new RuntimeException(ex);
-            }
+            doh = AcaciaPanel.getRemoteBean(this, DataObjectTypeRemote.class);
         }
     }
 

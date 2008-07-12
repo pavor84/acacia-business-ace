@@ -3,14 +3,11 @@ package com.cosmos.test.bl;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListBean;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
@@ -18,6 +15,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -37,16 +35,12 @@ public class WarehouseListTest {
 
     @EJB
     private AddressesListRemote addressListSession;
-    
+
     @Before
     public void setUp() {
         if ( formSession==null ){
-            try {
-                formSession = InitialContext.doLookup(WarehouseListRemote.class.getName());
-                addressListSession = InitialContext.doLookup(AddressesListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            formSession = AcaciaPanel.getRemoteBean(this, WarehouseListRemote.class);
+            addressListSession = AcaciaPanel.getRemoteBean(this, AddressesListRemote.class);
         }
     }
 

@@ -3,8 +3,6 @@ package com.cosmos.test.bl;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +13,7 @@ import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -35,13 +34,8 @@ public class ClassifiersTest {
 
     @Before
     public void setUp() {
-        if ( formSession==null ){
-            try {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
-        }
+        if ( formSession==null )
+                formSession = AcaciaPanel.getRemoteBean(this, ClassifiersRemote.class);
     }
 
     @Test

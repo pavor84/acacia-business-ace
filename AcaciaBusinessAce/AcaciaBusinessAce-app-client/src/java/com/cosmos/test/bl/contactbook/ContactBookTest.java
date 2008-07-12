@@ -26,6 +26,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.test.bl.TestUtils;
 
@@ -62,51 +63,27 @@ public class ContactBookTest {
     @Before
     public void setUp() {
         if (addressFormSession == null){
-            try {
-                addressFormSession = InitialContext.doLookup(AddressesListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            addressFormSession = AcaciaPanel.getRemoteBean(this, AddressesListRemote.class);
         }
 
         if (organizationFormSession == null){
-            try {
-                organizationFormSession = InitialContext.doLookup(OrganizationsListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            organizationFormSession = AcaciaPanel.getRemoteBean(this, OrganizationsListRemote.class);
         }
 
         if (personFormSession == null){
-            try {
-                personFormSession = InitialContext.doLookup(PersonsListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            personFormSession = AcaciaPanel.getRemoteBean(this, PersonsListRemote.class);;
         }
 
         if (bankDetailsFormSession == null){
-            try {
-                bankDetailsFormSession = InitialContext.doLookup(BankDetailsListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            bankDetailsFormSession = AcaciaPanel.getRemoteBean(this, BankDetailsListRemote.class);
         }
 
         if (passportFormSession == null){
-            try {
-                passportFormSession = InitialContext.doLookup(PassportsListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            passportFormSession = AcaciaPanel.getRemoteBean(this, PassportsListRemote.class);
         }
 
         if (locationFormSession == null){
-            try {
-                locationFormSession = InitialContext.doLookup(LocationsListRemote.class.getName());
-            } catch (NamingException e) {
-                throw new IllegalStateException("Remote bean can't be loaded", e);
-            }
+            locationFormSession = AcaciaPanel.getRemoteBean(this, LocationsListRemote.class);
         }
     }
 

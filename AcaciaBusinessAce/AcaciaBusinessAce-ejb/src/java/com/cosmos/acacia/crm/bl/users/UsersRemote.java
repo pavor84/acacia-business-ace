@@ -122,7 +122,6 @@ public interface UsersRemote {
      *
      * @param user
      * @param callbackHandler (for displaying the message)
-     * @return organization
      */
     void updateOrganization(User user, CallbackHandler callbackHandler);
 
@@ -141,6 +140,7 @@ public interface UsersRemote {
      * for the specified parent (i.e. Organization)
      *
      * @param user
+     * @param parentId
      * @param active whether the user should be active or inactive
      * @return the updated User
      */
@@ -171,30 +171,38 @@ public interface UsersRemote {
      * @return list of users
      */
     List<User> getUsers(BigInteger parentDataObjectId);
-    
+
     /**
      * Sends a request for the current user to join the specified organization.
      * The current user is the one logged-in (taken from the session)
-     * 
+     *
      * @param organization
      * @param branch
      * @param person
      */
     void joinOrganization (Organization organization, Address branch, Person person);
-    
-    
+
+
     /**
      * Leaves the specified organization
-     * 
+     *
      * @param organization
      */
     void leaveOrganization (Organization organization);
-    
+
     /**
      * Lists all organizations for the specified user
-     * 
+     *
      * @param user
      * @return list
      */
     List<Organization> getOrganizationsList(User user);
+
+    /**
+     * Deletes the specified user
+     *
+     * @param user
+     * @return version
+     */
+    int deleteUser(User user);
 }
