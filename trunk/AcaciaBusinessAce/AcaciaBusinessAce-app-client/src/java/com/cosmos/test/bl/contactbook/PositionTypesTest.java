@@ -1,16 +1,15 @@
 package com.cosmos.test.bl.contactbook;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
@@ -30,11 +29,18 @@ public class PositionTypesTest {
     @EJB
     private PositionTypesListRemote formSession;
 
+    @EJB
+    private OrganizationsListRemote orgSession;
+
+    private Organization org;
+
     @Before
     public void setUp() {
-        if ( formSession==null ){
-            formSession = AcaciaPanel.getRemoteBean(this, PositionTypesListRemote.class);;
-        }
+        if (formSession == null)
+            formSession = AcaciaPanel.getRemoteBean(this, PositionTypesListRemote.class);
+
+        if (orgSession == null)
+            orgSession = AcaciaPanel.getRemoteBean(this, OrganizationsListRemote.class);
     }
 
     @Test
@@ -59,6 +65,10 @@ public class PositionTypesTest {
     public void crudTest() throws Exception {
         String nameInsert = TestUtils.getRandomString(16);
 
+        org = orgSession.newOrganization(null);
+        org.setOrganizationName(TestUtils.getRandomString(10));
+        org = orgSession.saveOrganization(org);
+
         //create
         PositionType inserted = createNew(nameInsert);
         Assert.assertNotNull(inserted);
@@ -69,6 +79,7 @@ public class PositionTypesTest {
         //retrieve
         List<PositionType> types = list();
         Assert.assertNotNull(types);
+        Assert.assertTrue(types.size() > 0);
 
         //find
         PositionType found = find(types, inserted);
@@ -83,6 +94,7 @@ public class PositionTypesTest {
         //delete
         formSession.deletePositionType(updated);
 
+        orgSession.deleteOrganization(org);
         Assert.assertNull(find(list(), updated));
     }
 
@@ -100,11 +112,11 @@ public class PositionTypesTest {
     }
 
     private List<PositionType> list() throws Exception {
-        return formSession.getPositionTypes(Organization.class, null);
+        return formSession.getPositionTypes(Organization.class, org.getId());
     }
 
     private PositionType createNew(String nameInsert) {
-        PositionType result = formSession.newPositionType(null);
+        PositionType result = formSession.newPositionType(org.getId());
         result.setPositionTypeName(nameInsert);
 
         return formSession.savePositionType(result, Organization.class);
