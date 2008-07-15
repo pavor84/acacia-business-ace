@@ -8,15 +8,21 @@ package com.cosmos.acacia.crm.data;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 
 /**
  *
@@ -24,7 +30,21 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "purchase_orders")
-public class PurchaseOrder implements Serializable {
+@NamedQueries(
+    {
+        /**
+         * Parameters: 
+         *  - parentDataObjectId - not null, the parent object id
+         *  - deleted - not null - true/false
+         */
+        @NamedQuery
+            (
+                name = "PurchaseOrder.findForParentAndDeleted",
+                query = "select po from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId " +
+                		"and po.dataObject.deleted = :deleted"
+            )
+    })
+public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,78 +54,100 @@ public class PurchaseOrder implements Serializable {
 
     @Column(name = "parent_id")
     private BigInteger parentId;
-
+    
+    @Property(title="Order Number", readOnly=true)
+    @Column(name = "order_number", nullable = false)
+    private long orderNumber;
+    
+    @Property(title="Supp. Order Number", readOnly=true)
+    @Column(name = "supplier_order_number")
+    private String supplierOrderNumber;
+    
+    @Property(title="Branch", customDisplay="${address.addressName}", propertyValidator=@PropertyValidator(required=true), readOnly=true)
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
     private Address branch;
 
+    @Property(title="Branch Name", readOnly=true)
     @Column(name = "branch_name", nullable = false)
     private String branchName;
-
-    @Column(name = "order_number", nullable = false)
-    private long orderNumber;
-
-    /**
-     * The Supplier can be both Person or Organization
-     */
-    @JoinColumn(name = "supplier_id", referencedColumnName = "data_object_link_id")
-    @ManyToOne
-    private DataObjectLink supplierLink;
-
-    @Column(name = "supplier_name", nullable = false)
-    private String supplierName;
-
-    @Column(name = "supplier_order_number")
-    private String supplierOrderNumber;
-
-    @JoinColumn(name = "supplier_contact_id")
-    @ManyToOne
-    private Person supplierContact;
-
-    @Column(name = "supplier_contact_name")
-    private String supplierContactName;
-
+    
+    @Property(title="Status")
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource status;
-
-    @Column(name = "creation_time", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date creationTime;
-
-    @JoinColumn(name = "creator_id")
-    @ManyToOne
-    private Person creator;
-
-    @Column(name = "creator_name", nullable = false)
-    private String creatorName;
-
+    
+    @Property(title="Delivery Method")
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource documentDeliveryMethod;
 
+    /**
+     * The Supplier can be both Person or Organization
+     */
+    @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true))
+    @ManyToOne
+    private BusinessPartner supplier;
+    
+    @Property(title="Supplier Name", readOnly=true)
+    @Column(name = "supplier_name", nullable = false)
+    private String supplierName;
+
+    @Property(title="Supplier Contact", propertyValidator=@PropertyValidator(required=true))
+    @JoinColumn(name = "supplier_contact_id")
+    @ManyToOne
+    private Person supplierContact;
+
+    @Property(title="Contact Name")
+    @Column(name = "supplier_contact_name")
+    private String supplierContactName;
+    
+    @Property(title="Creator")
+    @JoinColumn(name = "creator_id")
+    @ManyToOne
+    private Person creator;
+    
+    @Property(title="Creator Name", readOnly=true)
+    @Column(name = "creator_name", nullable = false)
+    private String creatorName;
+    
+    @Property(title="Created At", readOnly=true)
+    @Column(name = "creation_time", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date creationTime;
+    
+    @Property(title="Sender")
+    @JoinColumn(name = "sender_id")
+    @ManyToOne
+    private Person sender;
+    
+    @Property(title="Sender Name", readOnly=true)
+    @Column(name = "sender_name")
+    private String senderName;
+    
+    @Property(title="Sent At", readOnly=true)
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
     private Date sentTime;
 
-    @JoinColumn(name = "sender_id")
-    @ManyToOne
-    private Person sender;
+    @Property(title="Finalized At", readOnly=true)
+    @Column(name = "finalizing_time")
+    @Temporal(TemporalType.DATE)
+    private Date finalizingTime;
 
-    @Column(name = "sender_name")
-    private String senderName;
-
+    @Property(title="First Delivery", readOnly=true)
     @Column(name = "first_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date firstDeliveryTime;
 
+    @Property(title="Last Delivery", readOnly=true)
     @Column(name = "last_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date lastDeliveryTime;
-
-    @Column(name = "finalizing_time")
-    @Temporal(TemporalType.DATE)
-    private Date finalizingTime;
+    
+    @Column(name = "notes")
+    @Property(title="Notes")
+    private String notes;
 
     @JoinColumn(name = "purchase_order_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -141,14 +183,6 @@ public class PurchaseOrder implements Serializable {
 
     public void setOrderNumber(long orderNumber) {
         this.orderNumber = orderNumber;
-    }
-
-    public DataObjectLink getSupplierLink() {
-        return supplierLink;
-    }
-
-    public void setSupplierLink(DataObjectLink supplierLink) {
-        this.supplierLink = supplierLink;
     }
 
     public String getSupplierName() {
@@ -319,6 +353,36 @@ public class PurchaseOrder implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.PurchaseOrder[purchaseOrderId=" + purchaseOrderId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return null;
+    }
+
+    @Override
+    public String getInfo() {
+        return null;
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+    }
+
+    public BusinessPartner getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(BusinessPartner supplier) {
+        this.supplier = supplier;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
 }

@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigInteger;
 
-import javax.naming.NamingException;
 import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -48,12 +47,14 @@ import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
+import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.swingb.DialogResponse;
@@ -66,7 +67,6 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
-import javax.naming.InitialContext;
 
 /**
  * The application's main frame.
@@ -98,11 +98,7 @@ public class AcaciaApplicationView extends FrameView {
 
     private AcaciaSessionRemote getSession() {
         if (acaciaSession == null)
-            try {
-                acaciaSession = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
-            } catch (NamingException ex) {
-                ex.printStackTrace();
-            }
+            acaciaSession = AcaciaPanel.getBean(AcaciaSessionRemote.class);
         
         return acaciaSession;
     }
@@ -323,11 +319,6 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void ordersAction()
-    {
-    }
-
-    @Action
     public void reportsAction()
     {
     }
@@ -457,6 +448,13 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void leaveOrganizationAction() {
         LeaveOrganizationForm panel = new LeaveOrganizationForm(getParentId());
+        panel.showFrame();
+    }
+    
+    @Action
+    public void ordersAction() {
+        BigInteger parentId = getParentId();
+        PurchaseOrderListPanel panel = new PurchaseOrderListPanel(parentId);
         panel.showFrame();
     }
 

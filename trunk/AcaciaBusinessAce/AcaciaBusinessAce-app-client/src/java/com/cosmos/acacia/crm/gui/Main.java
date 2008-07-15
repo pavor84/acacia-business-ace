@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.bl.users.UsersTest;
 import com.cosmos.test.bl.contactbook.ContactBookTest;
 import java.util.Date;
 
@@ -73,7 +74,7 @@ public class Main {
             }
         });*/
         
-//        mainTest();
+        //mainTest();
 
         AcaciaApplication.launch(AcaciaApplication.class, args);
 
@@ -88,7 +89,8 @@ public class Main {
 //            ProductCategoriesTest.class.getName(),
 //            AcaciaSessionTest.class.getName()
 //            WarehouseListTest.class.getName()
-            ContactBookTest.class.getName()
+//            ContactBookTest.class.getName()
+            UsersTest.class.getName()
         };
 
         JUnitCore.main(tests);
