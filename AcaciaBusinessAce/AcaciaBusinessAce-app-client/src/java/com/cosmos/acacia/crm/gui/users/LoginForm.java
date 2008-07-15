@@ -20,13 +20,13 @@ import org.jdesktop.application.Action;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.bl.users.OrganizationsCallbackHandler;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
+import java.awt.Component;
+import java.awt.event.KeyListener;
 
 /**
  *
@@ -217,11 +217,10 @@ public class LoginForm extends AcaciaPanel {
 
     private UsersRemote formSession;
     private Preferences prefs = Preferences.systemRoot();
+    private String lastUserLoaded = null;
     
     @Override
     protected void initData() {
-        //loginButton.isDefaultButton();
-        currentInstanace = this;
         localeComboBox.removeAllItems();
         Locale[] locales = getFormSession().serveLocalesList();
         if (locales != null) {
@@ -230,17 +229,12 @@ public class LoginForm extends AcaciaPanel {
             }
         }
 
-        usernameComboBox.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                passwordTextField.setText("");
-            }
-        });
         // Load the saved preferences for this machine
         loadPreferences();
         AutoCompleteDecorator.decorate(usernameComboBox);
         
         this.requestFocus();
+        addKeyListeners();
     }
 
     private void loadPreferences() {
@@ -263,15 +257,17 @@ public class LoginForm extends AcaciaPanel {
         usernameComboBox.setSelectedIndex(-1);
         
         usernameComboBox.addItemListener(new ItemListener() {
-
+            private boolean isReal = true;
             @Override
             public void itemStateChanged(ItemEvent e) {
+                
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     String username = (String) usernameComboBox.getSelectedItem();
-                    if (username != null && username.length() > 0) {
+                    if (isReal && username != null && username.length() > 0) {
                         loadUserSpecificPreferences(username);
                         rememberMeCheckBox.setSelected(true);
                     }
+                    isReal = !isReal;
                 }
             }
         });
@@ -284,7 +280,12 @@ public class LoginForm extends AcaciaPanel {
     }
     
     private void loadUserSpecificPreferences(String username) {
-
+        
+        //preventing calls each time a letter is typed in the combo
+        if (username.equals(lastUserLoaded))
+            return;
+        lastUserLoaded = username;
+        
         String password = prefs.get(username + PASSWORD, null);
         if (password != null) {
             rememberPasswordCheckBox.setSelected(true);
@@ -413,9 +414,20 @@ public class LoginForm extends AcaciaPanel {
         return formSession;
     }
     
-    private static AcaciaPanel currentInstanace;
+    private void addKeyListeners() {
+        Component[] components = this.getComponents();
+        EnterPressedListener l = new EnterPressedListener();
+        for (Component c : components) {
+            c.addKeyListener(l);
+        }
+    }
     
-    public static AcaciaPanel getCurrentInstance() {
-        return currentInstanace;
+    class EnterPressedListener extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                login();
+            }
+        }
     }
 }

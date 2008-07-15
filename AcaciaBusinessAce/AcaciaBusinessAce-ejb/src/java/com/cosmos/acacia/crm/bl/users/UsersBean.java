@@ -172,7 +172,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     @Override
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
-        BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 100000l);
+        BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 1000000l);
 
         Query q = em.createNamedQuery("User.findByEmail");
         q.setParameter("email", email);
