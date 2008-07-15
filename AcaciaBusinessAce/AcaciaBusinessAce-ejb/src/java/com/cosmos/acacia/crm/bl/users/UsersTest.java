@@ -1,4 +1,4 @@
-package com.cosmos.test.bl;
+package com.cosmos.acacia.crm.bl.users;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,15 +16,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
-import com.cosmos.acacia.crm.bl.users.OrganizationCallback;
-import com.cosmos.acacia.crm.bl.users.UsersBean;
-import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.test.bl.TestUtils;
 
 
 

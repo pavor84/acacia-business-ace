@@ -1,12 +1,12 @@
-package com.cosmos.acacia.crm.gui.users;
+package com.cosmos.acacia.crm.bl.users;
 
 import java.io.IOException;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
-import com.cosmos.acacia.crm.bl.users.OrganizationCallback;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.gui.users.OrganizationChoiceForm;
 import com.cosmos.swingb.DialogResponse;
 import java.io.Serializable;
 import javax.security.auth.callback.CallbackHandler;
