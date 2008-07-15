@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -172,7 +173,10 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     @Override
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
-        BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 1000000l);
+        //BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 1000000l);
+
+        SecureRandom random = new SecureRandom();
+        BigInteger codeNumber = BigInteger.valueOf(random.nextLong() / 100000l);
 
         Query q = em.createNamedQuery("User.findByEmail");
         q.setParameter("email", email);
