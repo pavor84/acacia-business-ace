@@ -5,8 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.bl.users.UsersTest;
-import com.cosmos.test.bl.contactbook.ContactBookTest;
+import com.cosmos.test.bl.UsersTest;
 import java.util.Date;
 
 import org.junit.runner.JUnitCore;

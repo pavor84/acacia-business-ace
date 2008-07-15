@@ -1,5 +1,6 @@
-package com.cosmos.acacia.crm.bl.users;
+package com.cosmos.acacia.crm.gui.users;
 
+import com.cosmos.acacia.crm.bl.users.*;
 import java.io.IOException;
 
 import javax.security.auth.callback.Callback;

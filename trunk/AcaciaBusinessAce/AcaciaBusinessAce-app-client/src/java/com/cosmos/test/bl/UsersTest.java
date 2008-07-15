@@ -1,5 +1,6 @@
-package com.cosmos.acacia.crm.bl.users;
+package com.cosmos.test.bl;
 
+import com.cosmos.acacia.crm.bl.users.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;

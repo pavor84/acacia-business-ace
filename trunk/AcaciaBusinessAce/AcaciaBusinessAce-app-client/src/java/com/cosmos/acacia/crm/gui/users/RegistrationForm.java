@@ -263,10 +263,15 @@ public class RegistrationForm extends BaseEntityPanel {
     public void register() {
         try {
             if (user.getUserPassword().equals(new String(passwordTextField2.getPassword()))) {
+                Person person = null;
+                ContactPerson contactPerson = (ContactPerson) personComboList.getSelectedItem();
+                if (contactPerson != null)
+                        person = contactPerson.getContact();
+                
                 getFormSession().signup(user,
                         (Organization) organizationComboList.getSelectedItem(),
                         (Address) branchComboList.getSelectedItem(),
-                        (Person) ((ContactPerson) personComboList.getSelectedItem()).getContact());
+                        person);
 
                 JOptionPane.showMessageDialog(this, getResourceMap().getString("signup.successful"));
                 this.close();
