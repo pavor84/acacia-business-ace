@@ -218,13 +218,13 @@ public abstract class AcaciaPanel
         return AcaciaPanel.class;
     }
 
-    public <T> T getBean(Class<T> remoteInterface) {
+    public static <T> T getBean(Class<T> remoteInterface) {
         try {
             InitialContext ctx = new InitialContext();
             T bean = (T) ctx.lookup(remoteInterface.getName());
             InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
 
-            T proxy = (T) Proxy.newProxyInstance(getClass().getClassLoader(),
+            T proxy = (T) Proxy.newProxyInstance(AcaciaPanel.class.getClassLoader(),
                 new Class[]{remoteInterface}, handler);
 
             return proxy;
