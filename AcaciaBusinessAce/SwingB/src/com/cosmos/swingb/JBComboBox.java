@@ -8,6 +8,7 @@ package com.cosmos.swingb;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
+import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
@@ -229,6 +230,18 @@ public class JBComboBox
     }
 
 
+    @Override
+    public void addKeyListener(KeyListener listener) {
+        super.addKeyListener(listener);
+        getEditor().getEditorComponent().addKeyListener(listener);
+    }
+    
+    @Override
+    public void removeKeyListener(KeyListener listener) {
+        super.removeKeyListener(listener);
+        getEditor().getEditorComponent().removeKeyListener(listener);
+    }
+    
     private class AcaciaComboBoxEditor
         extends BasicComboBoxEditor
     {
