@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.bl.purchaseorder;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,8 +12,14 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
+import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
+import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -29,7 +36,10 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote {
 
     @EJB
     private EntityStoreManagerLocal esm;
-
+    
+    @EJB
+    private AcaciaSessionLocal acaciaSession;
+    
     @Override
     public EntityProperties getListingEntityProperties() {
         
@@ -75,8 +85,33 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote {
 
     @Override
     public PurchaseOrder newPurchaseOrder(BigInteger parentDataObjectId) {
+        
         PurchaseOrder order = new PurchaseOrder();
-        order.setParentId(parentDataObjectId);
+        
+        Address branch = acaciaSession.getBranch();
+        Person person = acaciaSession.getPerson();
+        
+        order.setBranch(branch);
+        order.setBranchName(branch.getAddressName());
+        order.setCreationTime(new Date());
+        order.setCreator(person);
+        order.setCreatorName(person.getDisplayName());
+        order.setDocumentDeliveryMethod(DocumentDeliveryMethod.Courier.getDbResource());
+        order.setStatus(PurchaseOrderStatus.Open.getDbResource());
+        
         return order;
+    }
+
+    @Override
+    public List<DbResource> getDeliveryMethods() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public EntityProperties getDetailEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(PurchaseOrder.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
     }
 }

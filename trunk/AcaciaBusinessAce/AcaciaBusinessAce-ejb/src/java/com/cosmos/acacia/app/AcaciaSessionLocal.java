@@ -2,7 +2,9 @@ package com.cosmos.acacia.app;
 
 import javax.ejb.Local;
 
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 
 /**
@@ -26,4 +28,16 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * @param organization
      */
 	void setOrganization(Organization organization);
+
+	/**
+	 * Set the current login branch for the session.
+	 * @param branch 
+	 */
+    void setBranch(Address branch);
+
+    /**
+     * Set the currently logged person. 
+     * @param person
+     */
+    void setPerson(Person person);
 }

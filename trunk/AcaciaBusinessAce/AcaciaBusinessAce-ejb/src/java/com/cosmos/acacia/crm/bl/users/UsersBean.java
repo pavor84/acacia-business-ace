@@ -302,7 +302,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     public void updateOrganization(User user, CallbackHandler callbackHandler) {
         List<Organization> organizations = getOrganizationsList(user);
         Organization organization = null;
-
+        
         if (organizations != null && organizations.size() > 0) {
 
             if (organizations.size() > 1) {
@@ -321,8 +321,12 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
             if (organization != null) {
                 UserOrganization uo = em.find(UserOrganization.class,
                         new UserOrganizationPK(user.getId(), organization.getId()));
-                if (uo.isUserActive())
+                if (uo.isUserActive()){
                     acaciaSessionLocal.setOrganization(organization);
+                    acaciaSessionLocal.setBranch(uo.getBranch());
+                    acaciaSessionLocal.setPerson(uo.getPerson());
+                    
+                }
                 else
                     throw new ValidationException("Login.account.inactive");
             }
