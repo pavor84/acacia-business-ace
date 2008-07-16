@@ -193,8 +193,7 @@ public class UsersTest implements Serializable {
         loginTest();
 
         formSession.joinOrganization(org, null, null);
-        formSession.updateOrganization(user,
-                new UsersTestCallbackHandler(organization));
+        formSession.updateOrganization(user, null);
 
         List<Organization> orgs = formSession.getOrganizationsList(user);
         Assert.assertNotNull(orgs);

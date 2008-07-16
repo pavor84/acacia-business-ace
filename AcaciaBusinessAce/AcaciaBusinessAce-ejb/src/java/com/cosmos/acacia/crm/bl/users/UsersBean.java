@@ -298,6 +298,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         }
     }
 
+    
     @Override
     public void updateOrganization(User user, CallbackHandler callbackHandler) {
         List<Organization> organizations = getOrganizationsList(user);
@@ -305,7 +306,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         
         if (organizations != null && organizations.size() > 0) {
 
-            if (organizations.size() > 1) {
+            if (callbackHandler != null && organizations.size() > 1) {
                 OrganizationCallback callback = new OrganizationCallback(organizations);
                 try {
                     callbackHandler.handle(new Callback[] { callback });

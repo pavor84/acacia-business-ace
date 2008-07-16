@@ -337,7 +337,7 @@ public class LoginForm extends AcaciaPanel {
 
             /* End of preferences handling */
             String defaultOrganization = prefs.get(username + ORGANIZATION, null);
-            getFormSession().updateOrganization(user, new OrganizationsCallbackHandler(defaultOrganization));
+            getFormSession().updateOrganization(user, null);
             prefs.put(username + ORGANIZATION, getAcaciaSession().getOrganization().getOrganizationName());
 
             setDialogResponse(DialogResponse.LOGIN);
