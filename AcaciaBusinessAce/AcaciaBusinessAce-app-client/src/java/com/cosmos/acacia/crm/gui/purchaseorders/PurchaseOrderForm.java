@@ -6,11 +6,19 @@
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
-import org.jdesktop.beansbinding.BindingGroup;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
+import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.beansbinding.EntityProperties;
 
 /**
  * 
@@ -22,13 +30,25 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 public class PurchaseOrderForm extends BaseEntityPanel {
     
     private PurchaseOrder entity;
+    
+    private EntityProperties entProps;
+
+    private BindingGroup bindGroup;
+    
+    private PurchaseOrderListRemote formSession = getBean(PurchaseOrderListRemote.class);
 
     /** Creates new form PurchaseOrderFormDraft */
     public PurchaseOrderForm(PurchaseOrder order) {
         super(order.getParentId());
         this.entity = order;
+        initialize();
     }
-
+    
+    private void initialize() {
+        initComponents();
+        init();
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -40,17 +60,13 @@ public class PurchaseOrderForm extends BaseEntityPanel {
 
         jBPanel1 = new com.cosmos.swingb.JBPanel();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
-        supplierContactField = new com.cosmos.acacia.gui.AcaciaLookup();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
-        supplierField = new com.cosmos.acacia.gui.AcaciaLookup();
-        jBLabel4 = new com.cosmos.swingb.JBLabel();
-        supplierName = new com.cosmos.swingb.JBTextField();
-        jBLabel7 = new com.cosmos.swingb.JBLabel();
-        contactNameField = new com.cosmos.swingb.JBTextField();
         firstDeliveryField = new com.cosmos.swingb.JBTextField();
         jBLabel13 = new com.cosmos.swingb.JBLabel();
         lastDeliveryField = new com.cosmos.swingb.JBTextField();
         jBLabel14 = new com.cosmos.swingb.JBLabel();
+        supplierField = new com.cosmos.acacia.gui.AcaciaComboList();
+        supplierContactField = new com.cosmos.acacia.gui.AcaciaComboList();
         jBPanel2 = new com.cosmos.swingb.JBPanel();
         jBLabel9 = new com.cosmos.swingb.JBLabel();
         jBLabel11 = new com.cosmos.swingb.JBLabel();
@@ -58,14 +74,10 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         sentAtField = new com.cosmos.swingb.JBTextField();
         jBLabel15 = new com.cosmos.swingb.JBLabel();
         finalizedAtField = new com.cosmos.swingb.JBTextField();
-        creatorNameField = new com.cosmos.swingb.JBTextField();
-        jBLabel17 = new com.cosmos.swingb.JBLabel();
-        senderNameField = new com.cosmos.swingb.JBTextField();
-        jBLabel18 = new com.cosmos.swingb.JBLabel();
+        creatorField = new com.cosmos.swingb.JBTextField();
+        senderField = new com.cosmos.swingb.JBTextField();
         createdAtField = new com.cosmos.swingb.JBTextField();
         jBLabel19 = new com.cosmos.swingb.JBLabel();
-        creatorField = new com.cosmos.acacia.gui.AcaciaLookup();
-        senderField = new com.cosmos.acacia.gui.AcaciaLookup();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         entityFormButtonPanel2 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         jBPanel3 = new com.cosmos.swingb.JBPanel();
@@ -78,9 +90,7 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         jBLabel10 = new com.cosmos.swingb.JBLabel();
         documentDeliveryField = new com.cosmos.acacia.gui.AcaciaComboBox();
-        branchField = new com.cosmos.acacia.gui.AcaciaLookup();
-        branchNameField = new com.cosmos.swingb.JBTextField();
-        jBLabel16 = new com.cosmos.swingb.JBLabel();
+        branchField = new com.cosmos.swingb.JBTextField();
         orderItemsPanel = new com.cosmos.swingb.JBPanel();
         jBPanel4 = new com.cosmos.swingb.JBPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -95,34 +105,8 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         jBLabel6.setText(resourceMap.getString("jBLabel6.text")); // NOI18N
         jBLabel6.setName("jBLabel6"); // NOI18N
 
-        supplierContactField.setName("supplierContactField"); // NOI18N
-
         jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
         jBLabel3.setName("jBLabel3"); // NOI18N
-
-        supplierField.setName("supplierField"); // NOI18N
-
-        jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
-        jBLabel4.setName("jBLabel4"); // NOI18N
-
-        supplierName.setEditable(false);
-        supplierName.setName("supplierName"); // NOI18N
-        supplierName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supplierNameActionPerformed(evt);
-            }
-        });
-
-        jBLabel7.setText(resourceMap.getString("jBLabel7.text")); // NOI18N
-        jBLabel7.setName("jBLabel7"); // NOI18N
-
-        contactNameField.setEditable(false);
-        contactNameField.setName("contactNameField"); // NOI18N
-        contactNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contactNameFieldActionPerformed(evt);
-            }
-        });
 
         firstDeliveryField.setEditable(false);
         firstDeliveryField.setName("firstDeliveryField"); // NOI18N
@@ -146,6 +130,10 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         jBLabel14.setText(resourceMap.getString("jBLabel14.text")); // NOI18N
         jBLabel14.setName("jBLabel14"); // NOI18N
 
+        supplierField.setName("supplierField"); // NOI18N
+
+        supplierContactField.setName("supplierContactField"); // NOI18N
+
         javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
         jBPanel1.setLayout(jBPanel1Layout);
         jBPanel1Layout.setHorizontalGroup(
@@ -154,49 +142,34 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel1Layout.createSequentialGroup()
-                        .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(supplierContactField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
-                    .addGroup(jBPanel1Layout.createSequentialGroup()
-                        .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(supplierField, 0, 0, Short.MAX_VALUE))
-                    .addGroup(jBPanel1Layout.createSequentialGroup()
-                        .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(supplierName, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
-                    .addGroup(jBPanel1Layout.createSequentialGroup()
                         .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jBLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jBLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jBLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                            .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(firstDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                            .addComponent(contactNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                            .addComponent(lastDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))))
+                        .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(supplierField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(supplierContactField, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel1Layout.createSequentialGroup()
+                        .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                            .addComponent(jBLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(firstDeliveryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(lastDeliveryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jBPanel1Layout.setVerticalGroup(
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(supplierField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(supplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(supplierContactField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contactNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(firstDeliveryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -205,7 +178,7 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lastDeliveryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         jBPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel2.border.title"))); // NOI18N
@@ -239,27 +212,21 @@ public class PurchaseOrderForm extends BaseEntityPanel {
             }
         });
 
-        creatorNameField.setEditable(false);
-        creatorNameField.setName("creatorNameField"); // NOI18N
-        creatorNameField.addActionListener(new java.awt.event.ActionListener() {
+        creatorField.setEditable(false);
+        creatorField.setName("creatorField"); // NOI18N
+        creatorField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                creatorNameFieldActionPerformed(evt);
+                creatorFieldActionPerformed(evt);
             }
         });
 
-        jBLabel17.setText(resourceMap.getString("jBLabel17.text")); // NOI18N
-        jBLabel17.setName("jBLabel17"); // NOI18N
-
-        senderNameField.setEditable(false);
-        senderNameField.setName("senderNameField"); // NOI18N
-        senderNameField.addActionListener(new java.awt.event.ActionListener() {
+        senderField.setEditable(false);
+        senderField.setName("senderField"); // NOI18N
+        senderField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                senderNameFieldActionPerformed(evt);
+                senderFieldActionPerformed(evt);
             }
         });
-
-        jBLabel18.setText(resourceMap.getString("jBLabel18.text")); // NOI18N
-        jBLabel18.setName("jBLabel18"); // NOI18N
 
         createdAtField.setEditable(false);
         createdAtField.setName("createdAtField"); // NOI18N
@@ -272,10 +239,6 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         jBLabel19.setText(resourceMap.getString("jBLabel19.text")); // NOI18N
         jBLabel19.setName("jBLabel19"); // NOI18N
 
-        creatorField.setName("creatorField"); // NOI18N
-
-        senderField.setName("senderField"); // NOI18N
-
         javax.swing.GroupLayout jBPanel2Layout = new javax.swing.GroupLayout(jBPanel2);
         jBPanel2.setLayout(jBPanel2Layout);
         jBPanel2Layout.setHorizontalGroup(
@@ -284,67 +247,51 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(creatorField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(creatorNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(createdAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                        .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                            .addComponent(jBLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(finalizedAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sentAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                        .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                        .addGap(7, 7, 7))
                     .addGroup(jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(senderField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(senderNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)))
+                        .addComponent(jBLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                        .addGap(7, 7, 7))
+                    .addGroup(jBPanel2Layout.createSequentialGroup()
+                        .addComponent(jBLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                        .addGap(7, 7, 7)))
+                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(finalizedAtField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                    .addComponent(sentAtField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                    .addComponent(senderField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                    .addComponent(creatorField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                    .addComponent(createdAtField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel2Layout.setVerticalGroup(
             jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jBLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(creatorField, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(creatorNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(creatorField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createdAtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                    .addComponent(senderField, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
+                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(senderField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(senderNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sentAtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sentAtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(finalizedAtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11))
+                .addContainerGap())
         );
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
@@ -393,14 +340,13 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         documentDeliveryField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         documentDeliveryField.setName("documentDeliveryField"); // NOI18N
 
+        branchField.setEditable(false);
         branchField.setName("branchField"); // NOI18N
-
-        branchNameField.setEditable(false);
-        branchNameField.setText(resourceMap.getString("branchNameField.text")); // NOI18N
-        branchNameField.setName("branchNameField"); // NOI18N
-
-        jBLabel16.setText(resourceMap.getString("jBLabel16.text")); // NOI18N
-        jBLabel16.setName("jBLabel16"); // NOI18N
+        branchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                branchFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jBPanel3Layout = new javax.swing.GroupLayout(jBPanel3);
         jBPanel3.setLayout(jBPanel3Layout);
@@ -408,56 +354,46 @@ public class PurchaseOrderForm extends BaseEntityPanel {
             jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jBPanel3Layout.createSequentialGroup()
-                        .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(orderNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                            .addComponent(supplierOrderNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)))
-                    .addGroup(jBPanel3Layout.createSequentialGroup()
-                        .addComponent(jBLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(orderStatusField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
+                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jBLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(orderStatusField, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(supplierOrderNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(orderNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel3Layout.createSequentialGroup()
-                        .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(branchField, 0, 0, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)
+                        .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                     .addGroup(jBPanel3Layout.createSequentialGroup()
-                        .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jBLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
-                        .addGap(8, 8, 8)
-                        .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(branchNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                            .addComponent(documentDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                    .addComponent(branchField, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel3Layout.setVerticalGroup(
             jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel3Layout.createSequentialGroup()
-                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(orderNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                    .addComponent(branchField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(branchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(supplierOrderNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(branchNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierOrderNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(orderStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(orderStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -468,11 +404,11 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         orderItemsPanel.setLayout(orderItemsPanelLayout);
         orderItemsPanelLayout.setHorizontalGroup(
             orderItemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 780, Short.MAX_VALUE)
+            .addGap(0, 1029, Short.MAX_VALUE)
         );
         orderItemsPanelLayout.setVerticalGroup(
             orderItemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 232, Short.MAX_VALUE)
+            .addGap(0, 280, Short.MAX_VALUE)
         );
 
         jBPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel4.border.title"))); // NOI18N
@@ -489,13 +425,13 @@ public class PurchaseOrderForm extends BaseEntityPanel {
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jBPanel4Layout.setVerticalGroup(
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -503,17 +439,17 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(orderItemsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(orderItemsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
-                    .addComponent(jBPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(entityFormButtonPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
+                    .addComponent(jBPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -538,54 +474,47 @@ private void supplierOrderNumberFieldActionPerformed(java.awt.event.ActionEvent 
 // TODO add your handling code here:
 }//GEN-LAST:event_supplierOrderNumberFieldActionPerformed
 
-private void supplierNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierNameActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_supplierNameActionPerformed
-
 private void orderNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderNumberFieldActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_orderNumberFieldActionPerformed
-
-private void contactNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactNameFieldActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_contactNameFieldActionPerformed
 
 private void sentAtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sentAtFieldActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_sentAtFieldActionPerformed
 
-private void firstDeliveryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstDeliveryFieldActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_firstDeliveryFieldActionPerformed
-
-private void lastDeliveryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastDeliveryFieldActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_lastDeliveryFieldActionPerformed
-
 private void finalizedAtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizedAtFieldActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_finalizedAtFieldActionPerformed
 
-private void creatorNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creatorNameFieldActionPerformed
+private void creatorFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creatorFieldActionPerformed
 // TODO add your handling code here:
-}//GEN-LAST:event_creatorNameFieldActionPerformed
+}//GEN-LAST:event_creatorFieldActionPerformed
 
-private void senderNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senderNameFieldActionPerformed
+private void senderFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senderFieldActionPerformed
 // TODO add your handling code here:
-}//GEN-LAST:event_senderNameFieldActionPerformed
+}//GEN-LAST:event_senderFieldActionPerformed
 
 private void createdAtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdAtFieldActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_createdAtFieldActionPerformed
 
+private void lastDeliveryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastDeliveryFieldActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_lastDeliveryFieldActionPerformed
+
+private void firstDeliveryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstDeliveryFieldActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_firstDeliveryFieldActionPerformed
+
+private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_branchFieldActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_branchFieldActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.acacia.gui.AcaciaLookup branchField;
-    private com.cosmos.swingb.JBTextField branchNameField;
-    private com.cosmos.swingb.JBTextField contactNameField;
+    private com.cosmos.swingb.JBTextField branchField;
     private com.cosmos.swingb.JBTextField createdAtField;
-    private com.cosmos.acacia.gui.AcaciaLookup creatorField;
-    private com.cosmos.swingb.JBTextField creatorNameField;
+    private com.cosmos.swingb.JBTextField creatorField;
     private com.cosmos.acacia.gui.AcaciaComboBox documentDeliveryField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel2;
@@ -598,16 +527,11 @@ private void createdAtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private com.cosmos.swingb.JBLabel jBLabel13;
     private com.cosmos.swingb.JBLabel jBLabel14;
     private com.cosmos.swingb.JBLabel jBLabel15;
-    private com.cosmos.swingb.JBLabel jBLabel16;
-    private com.cosmos.swingb.JBLabel jBLabel17;
-    private com.cosmos.swingb.JBLabel jBLabel18;
     private com.cosmos.swingb.JBLabel jBLabel19;
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBLabel jBLabel3;
-    private com.cosmos.swingb.JBLabel jBLabel4;
     private com.cosmos.swingb.JBLabel jBLabel5;
     private com.cosmos.swingb.JBLabel jBLabel6;
-    private com.cosmos.swingb.JBLabel jBLabel7;
     private com.cosmos.swingb.JBLabel jBLabel8;
     private com.cosmos.swingb.JBLabel jBLabel9;
     private com.cosmos.swingb.JBPanel jBPanel1;
@@ -620,12 +544,10 @@ private void createdAtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private com.cosmos.swingb.JBPanel orderItemsPanel;
     private com.cosmos.swingb.JBTextField orderNumberField;
     private com.cosmos.acacia.gui.AcaciaComboBox orderStatusField;
-    private com.cosmos.acacia.gui.AcaciaLookup senderField;
-    private com.cosmos.swingb.JBTextField senderNameField;
+    private com.cosmos.swingb.JBTextField senderField;
     private com.cosmos.swingb.JBTextField sentAtField;
-    private com.cosmos.acacia.gui.AcaciaLookup supplierContactField;
-    private com.cosmos.acacia.gui.AcaciaLookup supplierField;
-    private com.cosmos.swingb.JBTextField supplierName;
+    private com.cosmos.acacia.gui.AcaciaComboList supplierContactField;
+    private com.cosmos.acacia.gui.AcaciaComboList supplierField;
     private com.cosmos.swingb.JBTextField supplierOrderNumberField;
     // End of variables declaration//GEN-END:variables
     @Override
@@ -652,10 +574,35 @@ private void createdAtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GE
         
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        // TODO Auto-generated method stub
         
+        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+        AutoCompleteDecorator.decorate(orderStatusField, resourceToStringConverter);
+        AutoCompleteDecorator.decorate(documentDeliveryField, resourceToStringConverter);
+        
+        entProps = getFormSession().getDetailEntityProperties();
+        
+        bindGroup = new BindingGroup();
+        
+        //order number
+        orderNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("orderNumber"));
+        //supplier order number
+        supplierOrderNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("supplierOrderNumber"));
+        //order status
+        orderStatusField.bind(bindGroup, new ArrayList(), entity, entProps.getPropertyDetails("status"));
+        //branch
+        branchField.bind(bindGroup, entity, entProps.getPropertyDetails("branchName"));
+        //document delivery
+        documentDeliveryField.bind(bindGroup, getDeliveryMethods(), entity, entProps.getPropertyDetails("documentDeliveryMethod"));
+    }
+    
+    private List<DbResource> getDeliveryMethods() {
+        return getFormSession().getDeliveryMethods();
     }
 
+    public PurchaseOrderListRemote getFormSession() {
+        return formSession;
+    }
 }

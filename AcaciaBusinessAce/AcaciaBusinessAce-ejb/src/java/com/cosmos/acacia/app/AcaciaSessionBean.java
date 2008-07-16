@@ -12,7 +12,10 @@ import javax.persistence.PersistenceContext;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
+
+import static com.cosmos.acacia.app.SessionContext.*;
 
 /**
  * Created	:	19.05.2008
@@ -136,5 +139,29 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public User getUser() {
         return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
+    }
+
+    @Override
+    public void setBranch(Address branch) {
+        getSession().setValue(BRANCH_KEY, branch);
+    }
+    
+    private SessionContext getSession(){
+        return SessionRegistry.getSession();
+    }
+
+    @Override
+    public Address getBranch() {
+        return (Address) getSession().getValue(BRANCH_KEY);
+    }
+
+    @Override
+    public Person getPerson() {
+        return (Person) getSession().getValue(PERSON_KEY);
+    }
+
+    @Override
+    public void setPerson(Person person) { 
+        getSession().setValue(PERSON_KEY, person);
     }
 }

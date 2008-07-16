@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -45,5 +46,16 @@ public interface PurchaseOrderListRemote {
      */
     PurchaseOrder newPurchaseOrder(BigInteger parentDataObjectId);
 
+    /**
+     * Return entity properties for detailed view
+     * @return not null
+     */
+    EntityProperties getDetailEntityProperties();
+
+    /**
+     * List possible delivery methods 
+     * @return not null list
+     */
+    List<DbResource> getDeliveryMethods();
     
 }

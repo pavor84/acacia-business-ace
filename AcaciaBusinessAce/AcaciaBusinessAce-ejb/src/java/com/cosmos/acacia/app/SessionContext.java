@@ -17,6 +17,10 @@ public interface SessionContext {
     static String USER_KEY = "USER_KEY";
     /** Current user's locale */
     static String USER_LOCALE = "LOCALE_KEY";
+    /** Current user's login branch */
+    static String BRANCH_KEY = "BRANCH_KEY";
+    /** Currently logged person */
+    static String PERSON_KEY = "PERSON_KEY";
 
     /**
      * Value read.

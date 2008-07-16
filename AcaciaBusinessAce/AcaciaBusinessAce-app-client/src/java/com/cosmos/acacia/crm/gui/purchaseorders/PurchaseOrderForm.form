@@ -18,17 +18,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="orderItemsPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="jBPanel3" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="jBPanel1" max="32767" attributes="2"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jBPanel2" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="entityFormButtonPanel2" alignment="1" pref="792" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel2" alignment="1" pref="1041" max="32767" attributes="0"/>
                   <Component id="jBPanel4" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -71,37 +71,29 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jBLabel6" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="supplierContactField" pref="250" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jBLabel3" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="supplierField" min="0" pref="0" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jBLabel4" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="supplierName" pref="250" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jBLabel14" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                  <Component id="jBLabel7" min="-2" pref="100" max="-2" attributes="0"/>
-                                  <Component id="jBLabel13" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jBLabel3" alignment="0" pref="138" max="32767" attributes="1"/>
+                              <Component id="jBLabel6" pref="138" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="firstDeliveryField" alignment="0" pref="250" max="32767" attributes="1"/>
-                              <Component id="contactNameField" alignment="0" pref="250" max="32767" attributes="1"/>
-                              <Component id="lastDeliveryField" alignment="0" pref="250" max="32767" attributes="1"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="supplierField" alignment="0" pref="345" max="32767" attributes="0"/>
+                              <Component id="supplierContactField" alignment="1" pref="345" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jBLabel14" alignment="0" pref="138" max="32767" attributes="1"/>
+                              <Component id="jBLabel13" alignment="0" pref="138" max="32767" attributes="1"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="firstDeliveryField" alignment="0" pref="345" max="32767" attributes="1"/>
+                              <Component id="lastDeliveryField" alignment="0" pref="345" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                   </Group>
@@ -113,24 +105,14 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="jBLabel3" max="32767" attributes="1"/>
-                      <Component id="supplierField" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="supplierField" alignment="1" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jBLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="supplierName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jBLabel6" max="32767" attributes="1"/>
-                      <Component id="supplierContactField" alignment="0" min="-2" max="-2" attributes="1"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jBLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="contactNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jBLabel6" min="-2" pref="24" max="-2" attributes="1"/>
+                      <Component id="supplierContactField" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -142,7 +124,7 @@
                       <Component id="lastDeliveryField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jBLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="41" max="32767" attributes="0"/>
+                  <EmptySpace pref="32" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -154,51 +136,11 @@
             <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="supplierContactField">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="supplierContactField" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.swingb.JBLabel" name="jBLabel3">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jBLabel3.text"/>
             <Property name="name" type="java.lang.String" value="jBLabel3" noResource="true"/>
           </Properties>
-        </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="supplierField">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="supplierField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel4">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jBLabel4.text"/>
-            <Property name="name" type="java.lang.String" value="jBLabel4" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="supplierName">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="supplierName" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="supplierNameActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel7">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jBLabel7.text"/>
-            <Property name="name" type="java.lang.String" value="jBLabel7" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="contactNameField">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="contactNameField" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contactNameFieldActionPerformed"/>
-          </Events>
         </Component>
         <Component class="com.cosmos.swingb.JBTextField" name="firstDeliveryField">
           <Properties>
@@ -230,6 +172,16 @@
             <Property name="name" type="java.lang.String" value="jBLabel14" noResource="true"/>
           </Properties>
         </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="supplierField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="supplierField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="supplierContactField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="supplierContactField" noResource="true"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="com.cosmos.swingb.JBPanel" name="jBPanel2">
@@ -251,42 +203,33 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jBLabel9" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jBLabel19" pref="106" max="32767" attributes="0"/>
+                              <Component id="jBLabel9" pref="106" max="32767" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="creatorField" pref="264" max="32767" attributes="1"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jBLabel17" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="creatorNameField" pref="264" max="32767" attributes="1"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jBLabel11" pref="103" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jBLabel19" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="createdAtField" pref="264" max="32767" attributes="1"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jBLabel12" pref="103" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jBLabel15" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="finalizedAtField" pref="264" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jBLabel12" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="sentAtField" pref="264" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jBLabel11" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="senderField" pref="264" max="32767" attributes="1"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jBLabel18" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="senderNameField" pref="264" max="32767" attributes="1"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jBLabel15" pref="103" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="finalizedAtField" alignment="1" pref="374" max="32767" attributes="1"/>
+                      <Component id="sentAtField" alignment="1" pref="374" max="32767" attributes="1"/>
+                      <Component id="senderField" alignment="1" pref="374" max="32767" attributes="1"/>
+                      <Component id="creatorField" alignment="1" pref="374" max="32767" attributes="1"/>
+                      <Component id="createdAtField" alignment="1" pref="374" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -294,14 +237,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="jBLabel9" max="32767" attributes="1"/>
-                      <Component id="creatorField" alignment="1" pref="24" max="32767" attributes="1"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="creatorNameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jBLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBLabel9" alignment="3" min="-2" max="-2" attributes="1"/>
+                      <Component id="creatorField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -309,26 +247,21 @@
                       <Component id="jBLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jBLabel11" pref="24" max="32767" attributes="0"/>
-                      <Component id="senderField" alignment="0" pref="24" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jBLabel11" alignment="3" pref="25" max="32767" attributes="0"/>
+                      <Component id="senderField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="senderNameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jBLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="sentAtField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jBLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sentAtField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jBLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="finalizedAtField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -376,35 +309,23 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="finalizedAtFieldActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="creatorNameField">
+        <Component class="com.cosmos.swingb.JBTextField" name="creatorField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="creatorNameField" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="creatorField" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="creatorNameFieldActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="creatorFieldActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel17">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jBLabel17.text"/>
-            <Property name="name" type="java.lang.String" value="jBLabel17" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="senderNameField">
+        <Component class="com.cosmos.swingb.JBTextField" name="senderField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="senderNameField" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="senderField" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="senderNameFieldActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="senderFieldActionPerformed"/>
           </Events>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel18">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jBLabel18.text"/>
-            <Property name="name" type="java.lang.String" value="jBLabel18" noResource="true"/>
-          </Properties>
         </Component>
         <Component class="com.cosmos.swingb.JBTextField" name="createdAtField">
           <Properties>
@@ -419,16 +340,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jBLabel19.text"/>
             <Property name="name" type="java.lang.String" value="jBLabel19" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="creatorField">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="creatorField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="senderField">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="senderField" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -459,43 +370,32 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jBLabel5" alignment="1" max="32767" attributes="1"/>
-                              <Component id="jBLabel1" alignment="1" min="-2" pref="100" max="-2" attributes="1"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="orderNumberField" pref="267" max="32767" attributes="1"/>
-                              <Component id="supplierOrderNumberField" alignment="0" pref="267" max="32767" attributes="1"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jBLabel8" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="orderStatusField" pref="267" max="32767" attributes="1"/>
-                      </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jBLabel1" alignment="0" pref="118" max="32767" attributes="2"/>
+                      <Component id="jBLabel5" alignment="0" pref="118" max="32767" attributes="2"/>
+                      <Component id="jBLabel8" alignment="0" pref="118" max="32767" attributes="2"/>
                   </Group>
-                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="orderStatusField" pref="376" max="32767" attributes="2"/>
+                      <Component id="supplierOrderNumberField" alignment="0" pref="376" max="32767" attributes="2"/>
+                      <Component id="orderNumberField" alignment="0" pref="376" max="32767" attributes="2"/>
+                  </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jBLabel2" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="branchField" min="0" pref="0" max="32767" attributes="1"/>
+                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                          <Component id="jBLabel2" pref="100" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jBLabel16" max="32767" attributes="1"/>
-                              <Component id="jBLabel10" alignment="0" pref="96" max="32767" attributes="1"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="branchNameField" alignment="0" pref="267" max="32767" attributes="0"/>
-                              <Component id="documentDeliveryField" alignment="0" pref="267" max="32767" attributes="1"/>
-                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jBLabel10" pref="102" max="32767" attributes="2"/>
                       </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="documentDeliveryField" pref="395" max="32767" attributes="2"/>
+                      <Component id="branchField" pref="395" max="32767" attributes="2"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -504,27 +404,23 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="jBLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="orderNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBLabel2" alignment="3" pref="24" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="branchField" alignment="1" min="-2" pref="24" max="-2" attributes="1"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jBLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBLabel2" alignment="3" min="-2" pref="22" max="-2" attributes="1"/>
+                      <Component id="orderNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="branchField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jBLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="supplierOrderNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="branchNameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jBLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="orderStatusField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jBLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jBLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="documentDeliveryField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="orderStatusField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -608,23 +504,14 @@
             <Property name="name" type="java.lang.String" value="documentDeliveryField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="branchField">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="branchField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="branchNameField">
+        <Component class="com.cosmos.swingb.JBTextField" name="branchField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" resourceKey="branchNameField.text"/>
-            <Property name="name" type="java.lang.String" value="branchNameField" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="branchField" noResource="true"/>
           </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel16">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jBLabel16.text"/>
-            <Property name="name" type="java.lang.String" value="jBLabel16" noResource="true"/>
-          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="branchFieldActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -643,12 +530,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="780" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="1029" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="232" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="280" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -670,7 +557,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="760" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="1009" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -678,7 +565,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="89" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="96" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
