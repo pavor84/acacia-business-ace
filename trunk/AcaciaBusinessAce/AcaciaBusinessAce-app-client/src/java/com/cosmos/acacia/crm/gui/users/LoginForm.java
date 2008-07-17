@@ -26,6 +26,7 @@ import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
+import java.util.List;
 
 /**
  *
@@ -336,16 +337,24 @@ public class LoginForm extends AcaciaPanel {
 
             /* End of preferences handling */
 
-            String defaultOrganization = prefs.get(username + ORGANIZATION, null);
-            
-            OrganizationChoiceForm form = new OrganizationChoiceForm(null);
-            form.setDefaultOrganizationString(defaultOrganization);
-            form.init(getFormSession().getOrganizationsList(user));
-            DialogResponse response = form.showDialog();
-            if(DialogResponse.SELECT.equals(response))
-            {
-                getFormSession().setOrganization((Organization) form.getSelectedValue());
+            List<Organization> organizations = getFormSession().getOrganizationsList(user);
+            Organization organization = null;
+            if (organizations.size() > 1) {
+                String defaultOrganization = prefs.get(username + ORGANIZATION, null);
+                OrganizationChoiceForm form = new OrganizationChoiceForm(null);
+                form.setDefaultOrganizationString(defaultOrganization);
+                form.init(organizations);
+                DialogResponse response = form.showDialog();
+                if(DialogResponse.SELECT.equals(response))
+                {
+                    organization = (Organization) form.getSelectedValue();
+                }
+                prefs.put(username + ORGANIZATION, organization.getOrganizationName());
+            } else if (organizations.size() == 1) {
+                organization = organizations.get(0);
             }
+            
+            getFormSession().setOrganization(organization);
 
             
 //            try {
@@ -358,8 +367,6 @@ public class LoginForm extends AcaciaPanel {
 //            }
 
 
-            prefs.put(username + ORGANIZATION, getAcaciaSession().getOrganization().getOrganizationName());
-
             setDialogResponse(DialogResponse.LOGIN);
 
             if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
@@ -367,7 +374,7 @@ public class LoginForm extends AcaciaPanel {
                 cpf.setCurrentPassword(new String(password));
                 DialogResponse response1 = cpf.showDialog(this);
 
-                //if(!DialogResponse.OK.equals(response))
+                //if(!DialogResponse.OK.equals(response1))
                 //    AcaciaApplication.getApplication().exit();
             }
 
