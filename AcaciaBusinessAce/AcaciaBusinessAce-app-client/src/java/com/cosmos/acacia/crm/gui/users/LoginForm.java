@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -14,19 +15,17 @@ import java.math.BigInteger;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 
-
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
-import java.awt.Component;
-import java.awt.event.KeyListener;
 
 /**
  *
@@ -41,7 +40,7 @@ public class LoginForm extends AcaciaPanel {
     private static final String ORGANIZATION = "organization";
 
     protected static Logger log = Logger.getLogger(LoginForm.class);
-    
+
     private AcaciaSessionRemote acaciaSessionRemote = getBean(AcaciaSessionRemote.class);
 
     /** Creates new form LoginForm */
@@ -218,7 +217,7 @@ public class LoginForm extends AcaciaPanel {
     private UsersRemote formSession;
     private Preferences prefs = Preferences.systemRoot();
     private String lastUserLoaded = null;
-    
+
     @Override
     protected void initData() {
         localeComboBox.removeAllItems();
@@ -232,7 +231,7 @@ public class LoginForm extends AcaciaPanel {
         // Load the saved preferences for this machine
         loadPreferences();
         AutoCompleteDecorator.decorate(usernameComboBox);
-        
+
         this.requestFocus();
         addKeyListeners();
     }
@@ -245,7 +244,7 @@ public class LoginForm extends AcaciaPanel {
                     UserUtils.setLocale(new Locale((String) e.getItem()));
             }
         });
-        
+
         usernameComboBox.removeAllItems();
         String usernamesString = prefs.get(USERS_LIST, null);
         if (usernamesString != null) {
@@ -255,12 +254,12 @@ public class LoginForm extends AcaciaPanel {
             }
         }
         usernameComboBox.setSelectedIndex(-1);
-        
+
         usernameComboBox.addItemListener(new ItemListener() {
             private boolean isReal = true;
             @Override
             public void itemStateChanged(ItemEvent e) {
-                
+
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     String username = (String) usernameComboBox.getSelectedItem();
                     if (isReal && username != null && username.length() > 0) {
@@ -271,21 +270,21 @@ public class LoginForm extends AcaciaPanel {
                 }
             }
         });
-        
+
         String username = prefs.get(USERNAME, null);
         if (username != null) {
             rememberMeCheckBox.setSelected(true);
             usernameComboBox.setSelectedItem(username);
         }
     }
-    
+
     private void loadUserSpecificPreferences(String username) {
-        
+
         //preventing calls each time a letter is typed in the combo
         if (username.equals(lastUserLoaded))
             return;
         lastUserLoaded = username;
-        
+
         String password = prefs.get(username + PASSWORD, null);
         if (password != null) {
             rememberPasswordCheckBox.setSelected(true);
@@ -300,18 +299,18 @@ public class LoginForm extends AcaciaPanel {
             passwordTextField.setText("");
             rememberPasswordCheckBox.setSelected(false);
         }
-                
+
         String locale = prefs.get(username + LOCALE, null);
         if (locale != null)
             localeComboBox.setSelectedItem(new Locale(locale));
-        
+
     }
-    
+
     @Action
     public void login() {
 
         String username = (String) usernameComboBox.getSelectedItem();
-        
+
         char[] password = passwordTextField.getPassword();
 
         if (rememberPasswordCheckBox.isSelected()) {
@@ -325,7 +324,7 @@ public class LoginForm extends AcaciaPanel {
         } catch (Exception ex) {
             log.error("", ex);
         }
-        
+
         try {
             Integer sessionid = getFormSession().login(username, password);
             AcaciaApplication.setSessionId(sessionid);
@@ -336,8 +335,29 @@ public class LoginForm extends AcaciaPanel {
             setPreferences(username);
 
             /* End of preferences handling */
+
             String defaultOrganization = prefs.get(username + ORGANIZATION, null);
-            getFormSession().updateOrganization(user, null);
+            
+            OrganizationChoiceForm form = new OrganizationChoiceForm(null);
+            form.setDefaultOrganizationString(defaultOrganization);
+            form.init(getFormSession().getOrganizationsList(user));
+            DialogResponse response = form.showDialog();
+            if(DialogResponse.SELECT.equals(response))
+            {
+                getFormSession().setOrganization((Organization) form.getSelectedValue());
+            }
+
+            
+//            try {
+//                OrganizationsCallbackHandler handler = new OrganizationsCallbackHandler(defaultOrganization);
+//                getFormSession().updateOrganization(user,
+//                        GenericCallbackHandler.createCallbackHandler(handler));
+//
+//            } catch (Exception ex){
+//                ex.printStackTrace();
+//            }
+
+
             prefs.put(username + ORGANIZATION, getAcaciaSession().getOrganization().getOrganizationName());
 
             setDialogResponse(DialogResponse.LOGIN);
@@ -345,7 +365,7 @@ public class LoginForm extends AcaciaPanel {
             if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
                 ChangePasswordForm cpf = new ChangePasswordForm(null);
                 cpf.setCurrentPassword(new String(password));
-                DialogResponse response = cpf.showDialog(this);
+                DialogResponse response1 = cpf.showDialog(this);
 
                 //if(!DialogResponse.OK.equals(response))
                 //    AcaciaApplication.getApplication().exit();
@@ -355,8 +375,8 @@ public class LoginForm extends AcaciaPanel {
         } catch (Exception ex) {
             handleBusinessException(ex);
         }
-        
-            
+
+
     }
 
     private void setPreferences(String username) {
@@ -385,7 +405,7 @@ public class LoginForm extends AcaciaPanel {
             }
         }
     }
-    
+
     @Action
     public void signup() {
         RequestRegistrationForm reqRegForm = new RequestRegistrationForm();
@@ -397,7 +417,7 @@ public class LoginForm extends AcaciaPanel {
         ForgottenPasswordForm fpf = new ForgottenPasswordForm(null);
         fpf.showDialog();
     }
-    
+
     protected UsersRemote getFormSession()
     {
         if (formSession == null) {
@@ -413,7 +433,7 @@ public class LoginForm extends AcaciaPanel {
         }
         return formSession;
     }
-    
+
     private void addKeyListeners() {
         Component[] components = this.getComponents();
         EnterPressedListener l = new EnterPressedListener();
@@ -421,7 +441,7 @@ public class LoginForm extends AcaciaPanel {
             c.addKeyListener(l);
         }
     }
-    
+
     class EnterPressedListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
