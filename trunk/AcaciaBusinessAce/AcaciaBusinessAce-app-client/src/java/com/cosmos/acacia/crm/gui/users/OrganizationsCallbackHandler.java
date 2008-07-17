@@ -1,50 +1,43 @@
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.bl.users.*;
-import java.io.IOException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.UnsupportedCallbackException;
-
+import com.cosmos.acacia.callback.CallbackTransportObject;
+import com.cosmos.acacia.callback.Callbackable;
+import com.cosmos.acacia.crm.bl.users.UsersBean;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.gui.users.OrganizationChoiceForm;
 import com.cosmos.swingb.DialogResponse;
-import java.io.Serializable;
-import javax.security.auth.callback.CallbackHandler;
 
-public class OrganizationsCallbackHandler
-    implements CallbackHandler, Serializable {
+public class OrganizationsCallbackHandler implements Callbackable {
 
     private String defaultOrganization;
-    
-    public OrganizationsCallbackHandler(String defaultOrganization) {
+
+    public OrganizationsCallbackHandler(String defaultOrganization)  {
         this.defaultOrganization = defaultOrganization;
     }
-    
+
     public OrganizationsCallbackHandler() {
-        
+        super();
     }
-    
+
     @Override
-    public void handle(Callback[] callbacks) throws IOException,
-            UnsupportedCallbackException {
+    public CallbackTransportObject callback(CallbackTransportObject req) {
 
-        for (int i = 0; i < callbacks.length; i ++) {
-            OrganizationCallback callback = (OrganizationCallback) callbacks[i];
+        System.out.println("HANDLED");
+       
+        OrganizationChoiceForm form = new OrganizationChoiceForm(null);
+        form.setDefaultOrganizationString(defaultOrganization);
+        form.init((List<Organization>) req.get(UsersBean.ORGANIZATIONS_KEY));
 
-            OrganizationChoiceForm form = new OrganizationChoiceForm(null);
-            form.setDefaultOrganizationString(defaultOrganization);
-            form.init(callback.getOrganizations());
-            
-            //AcaciaApplicationView.setLookAndFeel();
-            
-            DialogResponse response = form.showDialog();
-            if(DialogResponse.SELECT.equals(response))
-            {
-                callback.setOrganization((Organization) form.getSelectedValue());
-            }
-            
-            callbacks[i] = callback;
+        CallbackTransportObject result = new CallbackTransportObject();
+        DialogResponse response = form.showDialog();
+        if(DialogResponse.SELECT.equals(response))
+        {
+            result.put(UsersBean.ORGANIZATION_KEY, form.getSelectedValue());
         }
+
+        return result;
     }
 }

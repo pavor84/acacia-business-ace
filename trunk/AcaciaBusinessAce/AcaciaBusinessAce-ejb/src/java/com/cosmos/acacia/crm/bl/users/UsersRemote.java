@@ -1,18 +1,18 @@
 package com.cosmos.acacia.crm.bl.users;
 
+import java.math.BigInteger;
+import java.util.List;
 import java.util.Locale;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.callback.CallbackHandler;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
-import java.util.List;
-import javax.security.auth.callback.CallbackHandler;
 
 /**
  * An EJB for handling users - registration, login, passwords
@@ -123,7 +123,7 @@ public interface UsersRemote {
      * @param user
      * @param callbackHandler (for displaying the message)
      */
-    void updateOrganization(User user, CallbackHandler callbackHandler);
+    void updateOrganization(User user, CallbackHandler handler);
 
     /**
      * Makes the specified user active or inactive
@@ -205,4 +205,11 @@ public interface UsersRemote {
      * @return version
      */
     int deleteUser(User user);
+    
+    /**
+     * Sets the organization in the session. May be called only when there is no organizatin in the session
+     * 
+     * @param organization
+     */
+    void setOrganization(Organization organization);
 }

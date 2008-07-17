@@ -134,6 +134,9 @@ public class JoinOrganizationForm extends AcaciaPanel{
        setResizable(false);
        
        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
+       // Filtering current organization
+       organizationsTable.getDataTable().getData().remove(getAcaciaSession().getOrganization());
+       
        organizationComboList.initUnbound(organizationsTable, "${organizationName}");
 
        organizationComboList.addItemListener(new ItemListener() {
@@ -163,7 +166,7 @@ public class JoinOrganizationForm extends AcaciaPanel{
                         }
                         personComboList.setEnabled(true);
                         ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
-                        personComboList.initUnbound(personsTable, "${firstName} ${secondName} ${lastName} ${extraName}");
+                        personComboList.initUnbound(personsTable, "${contact.displayName} (${positionType.positionTypeName})");
                     }
 
                 });

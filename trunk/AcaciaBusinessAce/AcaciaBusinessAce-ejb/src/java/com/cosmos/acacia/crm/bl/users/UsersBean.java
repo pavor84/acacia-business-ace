@@ -16,11 +16,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
@@ -31,12 +31,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.security.auth.callback.CallbackHandler;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.callback.CallbackHandler;
+import com.cosmos.acacia.callback.CallbackLocal;
+import com.cosmos.acacia.callback.CallbackTransportObject;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
@@ -50,8 +52,6 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
-import java.rmi.Remote;
-import javax.security.auth.callback.Callback;
 
 /**
  * The implementation of handling users (see interface for more info)
@@ -59,7 +59,11 @@ import javax.security.auth.callback.Callback;
  * @author Bozhidar Bozhanov
  */
 @Stateless
-public class UsersBean implements UsersRemote, UsersLocal, Remote {
+public class UsersBean implements UsersRemote, UsersLocal {
+
+    public static final String ORGANIZATIONS_KEY = "organizations";
+
+    public static final String ORGANIZATION_KEY = "organization";
 
     public static final String ENCODING = "ISO-8859-1";
 
@@ -78,6 +82,9 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
 
     @EJB
     private AcaciaSessionLocal acaciaSessionLocal;
+
+    @EJB
+    private CallbackLocal callbackHandler;
 
     /** Temporary indicator that operations are concerning password change */
     private boolean passwordChange = false;
@@ -298,22 +305,24 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         }
     }
 
-    
+
     @Override
-    public void updateOrganization(User user, CallbackHandler callbackHandler) {
+    public void updateOrganization(User user, CallbackHandler handler) {
+
         List<Organization> organizations = getOrganizationsList(user);
         Organization organization = null;
-        
-        if (organizations != null && organizations.size() > 0) {
 
-            if (callbackHandler != null && organizations.size() > 1) {
-                OrganizationCallback callback = new OrganizationCallback(organizations);
+        if (organizations != null && organizations.size() > 0) {
+            log.info("Organizations size: " + organizations.size());
+            if (organizations.size() > 1) {
                 try {
-                    callbackHandler.handle(new Callback[] { callback });
+                    CallbackTransportObject request = new CallbackTransportObject();
+                    request.put(ORGANIZATIONS_KEY, organizations);
+                    CallbackTransportObject result = callbackHandler.handle(handler, request);
+                    organization = (Organization) result.get(ORGANIZATION_KEY);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                organization = callback.getOrganization();
                 log.info("Organization = " + organization);
             } else if (organizations.size() == 1) {
                 organization = organizations.get(0);
@@ -326,7 +335,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
                     acaciaSessionLocal.setOrganization(organization);
                     acaciaSessionLocal.setBranch(uo.getBranch());
                     acaciaSessionLocal.setPerson(uo.getPerson());
-                    
+
                 }
                 else
                     throw new ValidationException("Login.account.inactive");
@@ -400,7 +409,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
 
     private List<User> getUsersList(Organization organization) {
         Query q = em.createNamedQuery("UserOrganization.findByOrganization");
-        q.setParameter("organization", organization);
+        q.setParameter(ORGANIZATION_KEY, organization);
 
         List<UserOrganization> uoList = q.getResultList();
         List<User> result = new ArrayList(uoList.size());
@@ -498,7 +507,7 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
         if (parentDataObjectId != null) {
             Organization o = em.find(Organization.class, parentDataObjectId);
             Query q = em.createNamedQuery("UserOrganization.findByOrganization");
-            q.setParameter("organization", o);
+            q.setParameter(ORGANIZATION_KEY, o);
             List<UserOrganization> uoList = q.getResultList();
             result = new ArrayList<User>(uoList.size());
             for (UserOrganization uo : uoList) {
@@ -556,5 +565,11 @@ public class UsersBean implements UsersRemote, UsersLocal, Remote {
     @Override
     public int deleteUser(User user) {
         return esm.remove(em, user);
+    }
+
+    @Override
+    public void setOrganization(Organization organization) {
+        if (acaciaSessionLocal.getOrganization() == null)
+            acaciaSessionLocal.setOrganization(organization);
     }
 }
