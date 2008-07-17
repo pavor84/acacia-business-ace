@@ -46,7 +46,7 @@ public class UserOrganization implements Serializable {
     private Organization organization;
 
     @ManyToOne
-    @JoinColumn(name="branch_id", referencedColumnName="address_id", insertable=false, updatable=false)
+    @JoinColumn(name="branch_id", referencedColumnName="address_id")
     private Address branch;
 
     @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
