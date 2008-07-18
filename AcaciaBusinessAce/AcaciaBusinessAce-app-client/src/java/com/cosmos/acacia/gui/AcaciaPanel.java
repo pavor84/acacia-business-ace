@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.cosmos.acacia.gui;
 
 import java.awt.Component;
@@ -15,7 +10,6 @@ import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 
-import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -25,9 +19,7 @@ import javax.swing.border.TitledBorder;
 import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.app.SessionContext;
 import com.cosmos.acacia.app.SessionFacadeRemote;
-import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
@@ -35,7 +27,9 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
+import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import javax.swing.JOptionPane;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -50,7 +44,7 @@ public abstract class AcaciaPanel
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
     private BigInteger organizationDataObjectId;
-    
+
     private AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
 
     AcaciaPanel()
@@ -100,19 +94,19 @@ public abstract class AcaciaPanel
     }
 
     public BigInteger getOrganizationDataObjectId() {
-        
+
         // Quitting in case there is no organization data object
-        
+
         if (organizationDataObjectId == null)
             try {
                 organizationDataObjectId = getAcaciaSession().getOrganization().getId();
             } catch (NullPointerException ex) {
                 AcaciaApplication.getApplication().exit();
             }
-        
+
         if (organizationDataObjectId == null)
             AcaciaApplication.getApplication().exit();
-        
+
         return organizationDataObjectId;
     }
 

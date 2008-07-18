@@ -6,6 +6,8 @@
 package com.cosmos.swingb;
 
 import com.cosmos.swingb.listeners.NestedFormListener;
+import com.cosmos.swingb.menus.JBContextMenuCreaetor;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -22,6 +24,8 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.text.JTextComponent;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -48,7 +52,7 @@ public class JBPanel
     private int windowAncestorCount;
     private Dialog.ModalityType modalityType = Dialog.ModalityType.APPLICATION_MODAL;
     private Set<NestedFormListener> nestedFormListeners = new HashSet<NestedFormListener>();
-    
+
     protected JBDialog dialog;
 
 
@@ -87,6 +91,7 @@ public class JBPanel
 
     public void showFrame(Component parentComponent)
     {
+        addContextMenus();
         JBFrame frame = new JBFrame();
         frame.setDefaultCloseOperation(JBFrame.DISPOSE_ON_CLOSE);
         frame.setTitle(getTitle());
@@ -113,6 +118,7 @@ public class JBPanel
 
     public DialogResponse showDialog(Component parentComponent)
     {
+        addContextMenus();
         selectedValues = null;
         response = DialogResponse.CLOSE;
 
@@ -133,10 +139,10 @@ public class JBPanel
         dialog.pack();
         dialog.setMinimumSize(dialog.getPreferredSize());
         dialog.setMaximumSize(getMaximumSize());
-        
+
         dialog.setLocationRelativeTo(parentComponent);
         //TODO: check if form is completely visible
-        
+
         dialog.setResizable(isResizable());
 
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -150,6 +156,18 @@ public class JBPanel
             response = DialogResponse.CLOSE;
 
         return response;
+    }
+
+
+    protected void addContextMenus()
+    {
+        Component[] components = this.getComponents();
+
+        for (Component component : components) {
+            if (component instanceof JTextComponent) {
+                component.addMouseListener(new JBContextMenuCreaetor());
+            }
+        }
     }
 
     protected Window getWindowAncestor(Component parentComponent)
@@ -329,7 +347,7 @@ public class JBPanel
         this.application = application;
     }
 
-    
+
 
     public boolean isResizable() {
         return resizable;
@@ -363,20 +381,20 @@ public class JBPanel
             dialogWindowClosing(event);
         }
     }
-    
+
     public void addNestedFormListener(NestedFormListener listener)
     {
         nestedFormListeners.add(listener);
     }
-    
+
     public Set<NestedFormListener> getNestedFormListeners()
     {
         return nestedFormListeners;
     }
     /**
-     * Asks all listeners to perform their actions and returns 
+     * Asks all listeners to perform their actions and returns
      * whether all of them allow the nested operation to proceed
-     * 
+     *
      * @return boolean whether the nested operation can proceed
      */
     public boolean canNestedOperationProceed()

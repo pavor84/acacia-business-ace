@@ -6,6 +6,7 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
 import java.awt.event.KeyListener;
@@ -51,7 +52,7 @@ public class JBComboBox
     public JBComboBox()
     {
         super();
-        setEditor(new AcaciaComboBoxEditor());
+        setEditor(new JBComboBoxEditor());
     }
 
     public JBComboBox(Class<? extends Application> applicationClass)
@@ -242,8 +243,12 @@ public class JBComboBox
         getEditor().getEditorComponent().removeKeyListener(listener);
     }
     
-    private class AcaciaComboBoxEditor
+    private class JBComboBoxEditor
         extends BasicComboBoxEditor
     {
+        public JBComboBoxEditor() {
+            super();
+            getEditorComponent().addMouseListener(new JBContextMenuCreaetor());
+        }
     }
 }
