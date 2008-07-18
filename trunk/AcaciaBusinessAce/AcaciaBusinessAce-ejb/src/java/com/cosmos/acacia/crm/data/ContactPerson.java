@@ -73,7 +73,7 @@ public class ContactPerson
     @ManyToOne
     @Property(title="Person", propertyValidator=
         @PropertyValidator(required=true),
-        customDisplay="${contact.firstName} ${contact.secondName} ${contact.lastName} ${contact.extraName}")
+        customDisplay="${contact.displayName}")
     private Person contact;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

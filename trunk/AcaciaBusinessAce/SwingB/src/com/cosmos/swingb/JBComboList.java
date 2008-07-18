@@ -471,9 +471,12 @@ public class JBComboList
             SelectableListDialog selectableListDialog,
             ObjectToStringConverter converter)
     {
+        
+        comboBox.removeAllItems();
+        
         if(converter == null)
             converter = new BeanResourceToStringConverter(getApplication());
-        AutoCompleteDecorator.decorate(comboBox, converter);
+        
         this.converter = converter;
         
         this.selectableListDialog = selectableListDialog;
@@ -481,12 +484,12 @@ public class JBComboList
         List data = new ArrayList(selectableListDialog.getListData());
         observableData = ObservableCollections.observableList(data);
 
-        comboBox.removeAllItems();
-
         for (Object obj : observableData) {
             comboBox.addItem(obj);
         }
         comboBox.setSelectedIndex(-1);
+        
+        AutoCompleteDecorator.decorate(comboBox, converter);
     }
 
     public void initUnbound(SelectableListDialog selectableListDialog) {

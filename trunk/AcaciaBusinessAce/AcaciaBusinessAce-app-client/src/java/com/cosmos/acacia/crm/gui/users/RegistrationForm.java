@@ -238,7 +238,6 @@ public class RegistrationForm extends BaseEntityPanel {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
                         Address branch = (Address) branchComboList.getSelectedItem();
-
                         if (branch == null) {
                             personComboList.getComboBox().removeAllItems();
                             personComboList.setEnabled(false);
