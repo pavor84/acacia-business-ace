@@ -569,7 +569,24 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public void setOrganization(Organization organization) {
-        if (acaciaSessionLocal.getOrganization() == null)
-            acaciaSessionLocal.setOrganization(organization);
+        User user = acaciaSessionLocal.getUser();
+        if (user != null) {
+            if (acaciaSessionLocal.getOrganization() == null)
+                acaciaSessionLocal.setOrganization(organization);
+
+            if (organization != null) {
+                UserOrganization uo = em.find(UserOrganization.class,
+                        new UserOrganizationPK(user.getId(), organization.getId()));
+                if (uo.isUserActive()){
+                    acaciaSessionLocal.setOrganization(organization);
+                    acaciaSessionLocal.setBranch(uo.getBranch());
+                    acaciaSessionLocal.setPerson(uo.getPerson());
+                } else {
+                    throw new ValidationException("Login.account.inactive");
+                }
+            } else {
+                // TODO: free user
+            }
+        }
     }
 }
