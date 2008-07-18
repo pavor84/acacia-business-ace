@@ -72,6 +72,9 @@ public class AcaciaToStringConverter
         if ( item==null )
             return "";
         try{
+            if (item instanceof String)
+                return (String) item;
+            
             Object value = property.getValue(item);
             if ( value==null )
                 return "";

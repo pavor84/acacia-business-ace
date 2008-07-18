@@ -41,24 +41,24 @@ public class OrganizationsListPanel extends AbstractTablePanel {
         setClassifier(classifier);
         filterByClassifier();
     }
-    
+
     @EJB
     private OrganizationsListRemote formSession;
     private UsersRemote adminSession;
 
     private BindingGroup organizationsBindingGroup;
     private List<Organization> organizations;
-    
+
     /** Indicates whether the current form is administration form for managing organizations */
     private boolean isAdminView;
-    
+
     @Override
     protected void initData() {
         super.initData();
-        
+
         if (getParentDataObjectId() == null)
             initAdminView();
-            
+
         setVisible(Button.Select, false);
         organizationsBindingGroup = new BindingGroup();
         AcaciaTable organizationsTable = getDataTable();
@@ -90,7 +90,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
             }
         });
     }
-    
+
     @Override
     public void specialAction() {
         if (isAdminView) {
@@ -113,13 +113,15 @@ public class OrganizationsListPanel extends AbstractTablePanel {
 
         return adminSession;
     }
-    
+
     private void updateButtonCaption() {
         Organization org = (Organization) getDataTable().getSelectedRowObject();
-        if (org.isActive())
-            setSpecialCaption("deactivateOrganization.Action.text");
-        else
-            setSpecialCaption("activateOrganization.Action.text");
+        if (org != null) {
+            if (org.isActive())
+                setSpecialCaption("deactivateOrganization.Action.text");
+            else
+                setSpecialCaption("activateOrganization.Action.text");
+        }
     }
     protected List<Organization> getOrganizations()
     {
