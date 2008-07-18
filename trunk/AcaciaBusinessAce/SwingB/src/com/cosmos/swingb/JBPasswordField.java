@@ -24,7 +24,7 @@ import org.jdesktop.beansbinding.Validator;
 
 /**
  *
- * @author Miro
+ * @author Bozhidar Bozhanov
  */
 public class JBPasswordField
     extends JPasswordField
@@ -41,16 +41,16 @@ public class JBPasswordField
     private Object beanEntity;
 
     private boolean maskable;
-    
+
     private int dummyCharsAdded = 0;
     private static final char DUMMY_CHAR = 'a';
     private static final int SHOW_CHARS = 32;
-    
+
     @Override
     public void setText(String password) {
         super.setText(maskPassword(password));
     }
-    
+
     @Override
     public char[] getPassword() {
         return unmaskPassword(super.getPassword());
@@ -61,21 +61,21 @@ public class JBPasswordField
         super.processKeyEvent(e);
         dummyCharsAdded = 0;
     }
-    
+
     public void setMaskable(boolean maskable) {
         this.maskable = maskable;
     }
-    
+
     public boolean isMaskable() {
         return maskable;
     }
-    
+
     private String maskPassword(String password) {
         if (password == null || password.length() == 0) {
             dummyCharsAdded = 0;
             return password;
         }
-        
+
         String maskedPassword = new String(password);
         dummyCharsAdded = 32 - password.length();
         for (int i = 0; i < dummyCharsAdded; i ++) {
@@ -83,17 +83,17 @@ public class JBPasswordField
         }
         return maskedPassword;
     }
-    
+
     private char[] unmaskPassword(char[] maskedPassword) {
         if (dummyCharsAdded == 0)
             return maskedPassword;
-        
+
         char[] password = Arrays.copyOf(maskedPassword, SHOW_CHARS - dummyCharsAdded);
-        
+
         return password;
     }
-    
-    
+
+
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails)
@@ -219,12 +219,12 @@ public class JBPasswordField
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
-    
+
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
-    
+
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
