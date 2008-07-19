@@ -81,7 +81,17 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(rowObject != null)
+        {
+            DeliveryCertificatePanel deliveryCertificatePanel = new DeliveryCertificatePanel((DeliveryCertificate)rowObject);
+            DialogResponse response = deliveryCertificatePanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return deliveryCertificatePanel.getSelectedValue();
+            }
+        }
+
+        return null;
     }
 
     @Override
