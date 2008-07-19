@@ -81,6 +81,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     private Person recipientContact;
 
     @Column(name = "recipient_contact_name")
+    @Property(title="Recipient Contact Name")
     private String recipientContactName;
 
     @JoinColumn(name = "delivery_cert_method_type_id", referencedColumnName = "resource_id")
@@ -89,10 +90,12 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     @JoinColumn(name = "delivery_cert_reason_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Reason")
     private DbResource deliveryCertificateReason;
 
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Property(title="Creation Time")
     private Date creationTime;
 
     @JoinColumn(name = "creator_id")
@@ -105,6 +108,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     @JoinColumn(name = "forwarder_id", insertable = false, updatable = false)
     @ManyToOne
+    @Property(title="Forwarder")
     private Organization forwarder;
 
     @JoinColumn(name = "forwarder_contact_id")
