@@ -9,13 +9,16 @@ import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,9 +34,9 @@ import javax.persistence.TemporalType;
     @NamedQuery
     ( 
         /**
-         * Get all mask formats for a given name - at most one should exist
+         * Get all delivery certificates for a given warehouse 
          * Parameters:
-         * - name - the name of the pattern mask
+         * - warehouse - an warehouse
          */
         name = "DeliveryCertificate.findByWarehouse",
         query = "select ds from DeliveryCertificate ds where ds.dataObject.deleted = false"
@@ -63,6 +66,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     @Column(name = "delivery_certificate_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Property(title="Certificate date")
     private Date deliveryCertificateDate;
 
     /**
@@ -75,6 +79,11 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Column(name = "recipient_name", nullable = false)
     @Property(title="Recipient")
     private String recipientName;
+    
+    @JoinColumn(name = "recipient_branch_id")
+    @ManyToOne
+    @Property(title="Recipient Branch")
+    private Address recipientBranch;
 
     @JoinColumn(name = "recipient_contact_id")
     @ManyToOne
@@ -86,12 +95,18 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     @JoinColumn(name = "delivery_cert_method_type_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Delivery Method")
     private DbResource deliveryCertificateMethodType;
 
     @JoinColumn(name = "delivery_cert_reason_id", referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Reason")
     private DbResource deliveryCertificateReason;
+
+    @JoinColumn(name="delivery_certificate_id")
+    @OneToMany
+    @Property(title="Assignment", visible=false)
+    private List<DeliveryCertificateAssignment> assignments;
 
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -106,13 +121,19 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Property(title="Creator")
     private String creatorName;
 
-    @JoinColumn(name = "forwarder_id", insertable = false, updatable = false)
+    @JoinColumn(name = "forwarder_id", updatable = false)
     @ManyToOne
-    @Property(title="Forwarder")
+    @Property(title="Forwarder", customDisplay="${forwarder.organizationName}")
     private Organization forwarder;
+    
+    @JoinColumn(name = "forwarder_branch_id")
+    @ManyToOne
+    @Property(title="Forwarder Branch", visible=false)
+    private Address forwarderBranch;
 
     @JoinColumn(name = "forwarder_contact_id")
     @ManyToOne
+    @Property(title="Forwarder Contact", visible=false)
     private Person forwarderContact;
 
     @Column(name = "forwarder_name")
@@ -189,6 +210,14 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     public void setRecipientName(String recipientName) {
         this.recipientName = recipientName;
     }
+    
+    public Address getRecipientBranch() {
+        return recipientBranch;
+    }
+
+    public void setRecipientBranch(Address recipientAddress) {
+        this.recipientBranch = recipientAddress;
+    }
 
     public String getRecipientContactName() {
         return recipientContactName;
@@ -236,6 +265,14 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     public void setForwarderName(String forwarderName) {
         this.forwarderName = forwarderName;
+    }
+    
+    public Address getForwarderBranch() {
+        return forwarderBranch;
+    }
+
+    public void setForwarderBrunch(Address forwarderBranch) {
+        this.forwarderBranch = forwarderBranch;
     }
 
     public String getForwarderContactName() {
@@ -286,6 +323,14 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.deliveryCertificateReason = deliveryCertificateReason;
     }
 
+    public List<DeliveryCertificateAssignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<DeliveryCertificateAssignment> assignment) {
+        this.assignments = assignments;
+    }
+    
     public Warehouse getWarehouse() {
         return warehouse;
     }
