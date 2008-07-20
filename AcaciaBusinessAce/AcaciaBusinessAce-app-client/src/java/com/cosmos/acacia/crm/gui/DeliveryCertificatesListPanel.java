@@ -9,6 +9,8 @@ package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.DeliveryCertificateAssignmentPK;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -98,6 +100,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     protected Object newRow() {
         DeliveryCertificate ds = getFormSession().newDeliveryCertificate(null);
         return onEditEntity(ds);
+       
     }
 
     private Object onEditEntity(DeliveryCertificate ds) {
