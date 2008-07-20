@@ -5,10 +5,15 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
+import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListLocal;
+import com.cosmos.acacia.crm.bl.invoice.impl.InvoicesListLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
@@ -26,6 +31,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.DeliveryCertificateAssignmentPK;
+import com.cosmos.acacia.crm.data.Invoice;
 
 /**
  *
@@ -45,7 +53,14 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     private AddressesListLocal addressesBean;
     @EJB
     private PersonsListLocal personsBean;
+    @EJB
+    private OrganizationsListLocal organizationsBean;
+    @EJB
+    private AcaciaSessionLocal session;
+    @EJB
+    private InvoicesListLocal invoicesBean;
     
+    @Deprecated
     public DeliveryCertificate createStubDeliveryCert() {
         
         /*
@@ -99,6 +114,58 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         
         return ds;
          **/
+        /**
+        DeliveryCertificate ds = new DeliveryCertificate();
+        
+        Query q1 = em.createNamedQuery("Warehouse.findById");
+        q1.setParameter("id", new BigInteger("1213952129954"));
+        Warehouse warehouse = (Warehouse)q1.getResultList().get(0);
+        System.out.println("Warehouse: " + warehouse.getDescription());
+        ds.setWarehouse(warehouse);
+        ds.setWarehouseName(warehouse.getDescription());
+        
+        ds.setDeliveryCertificateNumber(2111525321);
+        ds.setDeliveryCertificateDate(new Date());
+        
+        ds.setDeliveryCertificateMethodType(DeliveryCertificateMethodType.Forwarder.getDbResource());
+        ds.setDeliveryCertificateReason(DeliveryCertificateReason.Invoice.getDbResource());
+        
+        Query q7 = em.createNamedQuery("Organization.findByName");
+        q7.setParameter("organizationName", "SmartMinds");
+        List<Organization> forwarders = q7.getResultList();
+        ds.setForwarder(forwarders.get(0));
+        ds.setForwarderName(forwarders.get(0).getOrganizationName());
+        
+        Query q = em.createNamedQuery("Person.findByName");
+        q.setParameter("firstName", "Daniel");
+        Person creator = (Person)q.getResultList().get(0);
+        ds.setCreator(creator);
+        ds.setCreatorName(creator.getLastName());
+        
+        Query q2 = em.createNamedQuery("Organization.findByName");
+        q2.setParameter("organizationName", "IBM");
+        List<Organization> organizations = q2.getResultList();
+
+        BusinessPartner recipient = organizations.get(0);
+        if(recipient != null){
+            ds.setRecipientName(((Organization)recipient).getOrganizationName());
+            ds.setRecipient(recipient);
+        }
+
+        Query q3 = em.createNamedQuery("Person.findByName");
+        q3.setParameter("firstName", "Radoslav");
+        Person recipientContact = (Person)q3.getResultList().get(0);
+        if(recipientContact != null){
+            ds.setRecipientContact(recipientContact);
+            ds.setRecipientContactName(recipientContact.getFirstName() + " " + recipientContact.getLastName());
+        }
+        
+        ds.setCreationTime(new Date());
+        
+        esm.persist(em, ds);
+        
+        return ds;
+         */
         return null;
     }
 
@@ -123,6 +190,25 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
 
     public DeliveryCertificate newDeliveryCertificate(Object parent) {
         DeliveryCertificate ds = new DeliveryCertificate();
+        
+        if(session.getOrganization() != null){
+            String userOrganizationName = session.getOrganization().getOrganizationName();
+            System.out.println("Organization name: " + userOrganizationName);
+        }else{
+            System.out.println("User Organization is NULL");
+        }
+        
+        if(session.getPerson() != null){
+            String userDisplayName = session.getPerson().getDisplayName();
+            System.out.println("User display name: " + userDisplayName);
+            ds.setCreator(session.getPerson());
+            ds.setCreatorName(userDisplayName);
+        }else{
+            System.out.println("User is NULL");
+        }
+        
+        ds.setDeliveryCertificateMethodType(DeliveryCertificateMethodType.InPlace.getDbResource());
+        
         return ds;
     }
 
@@ -130,6 +216,37 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     public List<DbResource> getReasons() {
         return DeliveryCertificateReason.getDbResources();
     }
+
+    @Override
+    public List<DbResource> getDeliveryTypes() {
+        return DeliveryCertificateMethodType.getDbResources();
+    }
+
+    @Override
+    public List<Organization> getForwarders() {
+        return organizationsBean.getOrganizations(null);
+    }
+
+    @Override
+    public List<DeliveryCertificateAssignment> getDocuments(DeliveryCertificateReason reason) {
+        if(reason == DeliveryCertificateReason.Invoice){
+            Query q1 = em.createNamedQuery("DeliveryCertificateAssignment.findAll");
+            return q1.getResultList();
+            //return invoicesBean.getInvoices(null);
+        }else{
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+
+    @Deprecated
+    public void mapDeliveryCertificateToInvoice(BigInteger deliveryCertificateId, BigInteger documentId) {
+        
+        DeliveryCertificateAssignment assignment = new DeliveryCertificateAssignment();
+        DeliveryCertificateAssignmentPK pk = new DeliveryCertificateAssignmentPK(deliveryCertificateId, documentId);
+        assignment.setDeliveryCertificateAssignmentPK(pk);
+        esm.persist(em, assignment);
+    }
+    
     
     
     // Add business logic below. (Right-click in editor and choose
