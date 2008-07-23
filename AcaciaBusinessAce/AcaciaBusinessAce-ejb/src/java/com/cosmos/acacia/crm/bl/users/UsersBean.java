@@ -112,8 +112,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         try {
             User user = (User) loginQuery.getSingleResult();
-            if (!user.getIsActive())
-                throw new ValidationException("Login.account.inactive");
+//            if (!user.getIsActive())
+//                throw new ValidationException("Login.account.inactive");
 
             if (loginType.equals(TEMPORARY_LOGIN)) {
                 // Checking whether the validity period hasn't expired
@@ -347,12 +347,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
     }
 
-    @Override
-    public User activateUser(User user, Boolean active) {
-        user.setIsActive(active);
-        esm.persist(em, user);
-        return user;
-    }
 
     @Override
     public User activateUser(User user, BigInteger parentId, Boolean active) {
@@ -365,8 +359,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             esm.persist(em, uo);
         }
 
-        user.setIsActive(active);
-        esm.persist(em, user);
+        user.setActive(active);
         return user;
     }
 
@@ -374,12 +367,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
     public Organization activateOrganization(Organization organization, Boolean active) {
         organization.setActive(active);
         esm.persist(em, organization);
-
-        List<User> users = getUsersList(organization);
-        for (User u : users) {
-            u.setIsActive(active);
-            esm.persist(em, u);
-        }
 
         return organization;
     }
@@ -403,18 +390,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
         List<Organization> result = new ArrayList(uoList.size());
         for (UserOrganization uo : uoList) {
             result.add(uo.getOrganization());
-        }
-        return result;
-    }
-
-    private List<User> getUsersList(Organization organization) {
-        Query q = em.createNamedQuery("UserOrganization.findByOrganization");
-        q.setParameter(ORGANIZATION_KEY, organization);
-
-        List<UserOrganization> uoList = q.getResultList();
-        List<User> result = new ArrayList(uoList.size());
-        for (UserOrganization uo : uoList) {
-            result.add(uo.getUser());
         }
         return result;
     }
@@ -512,9 +487,14 @@ public class UsersBean implements UsersRemote, UsersLocal {
             result = new ArrayList<User>(uoList.size());
             for (UserOrganization uo : uoList) {
                 User u = uo.getUser();
+                if (uo.getBranch() != null)
+                    u.setBranchName(uo.getBranch().getAddressName());
+                
                 if (uo.getPerson() != null)
                     u.setPersonName(uo.getPerson().getDisplayName());
-
+                
+                u.setActive(uo.isUserActive());
+                
                 result.add(u);
             }
         } else {
@@ -575,9 +555,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 acaciaSessionLocal.setOrganization(organization);
 
             if (organization != null) {
-                UserOrganization uo = em.find(UserOrganization.class,
-                        new UserOrganizationPK(user.getId(), organization.getId()));
-                if (uo.isUserActive()){
+                UserOrganization uo = getUserOrganization(user, organization);
+                if (uo.isUserActive() && uo.getOrganization().isActive()){
                     acaciaSessionLocal.setOrganization(organization);
                     acaciaSessionLocal.setBranch(uo.getBranch());
                     acaciaSessionLocal.setPerson(uo.getPerson());
@@ -588,5 +567,26 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 // TODO: free user
             }
         }
+    }
+
+    @Override
+    public UserOrganization getUserOrganization(User user, Organization organization) {
+        UserOrganization uo = em.find(UserOrganization.class,
+                        new UserOrganizationPK(user.getId(), organization.getId()));
+        return uo;
+    }
+
+    @Override
+    public UserOrganization saveUserOrganization(UserOrganization uo) {
+        esm.persist(em, uo);
+        return uo;
+    }
+
+    @Override
+    public EntityProperties getUserOrganizationEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(UserOrganization.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+
+        return entityProperties;
     }
 }
