@@ -15,15 +15,14 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.LinkedList;
 
 /**
  *
@@ -158,7 +157,8 @@ public class UserPanel extends BaseEntityPanel {
     private BindingGroup bindingGroup;
     private UserOrganization userOrganization;
     private UsersRemote formSession;
-
+    ContactPersonsListPanel personsTable;
+    
     @Override
     protected void initData() {
        setResizable(false);
@@ -173,25 +173,28 @@ public class UserPanel extends BaseEntityPanel {
        userTextField.setText(userOrganization.getUser().getUserName());
        organizationTextField.setText(userOrganization.getOrganization().getOrganizationName());
 
-        branchComboList.setEnabled(true);
-        AddressListPanel branchesTable = new AddressListPanel(userOrganization.getOrganization().getId());
-        branchesTable.setVisible(Button.New, false);
-        branchComboList.initUnbound(branchesTable, "${addressName}");
-        branchComboList.bind(bindingGroup, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"));
-
-        branchComboList.addItemListener(new ItemListener() {
+       branchComboList.setEnabled(true);
+       AddressListPanel branchesTable = new AddressListPanel(userOrganization.getOrganization().getId());
+       branchesTable.setVisible(Button.New, false);
+       branchComboList.bind(bindingGroup, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"), "${addressName}");
+       
+       if (userOrganization.getBranch() != null) {
+            personsTable = new ContactPersonsListPanel(userOrganization.getBranch().getId());
+            personComboList.bind(bindingGroup, personsTable, userOrganization, entityProps.getPropertyDetails("person"), "${contact.displayName}");
+       }
+       
+       branchComboList.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 System.out.println("state changed");
                 Address branch = (Address) branchComboList.getSelectedItem();
                 if (branch == null) {
-                    personComboList.getComboBox().removeAllItems();
                     personComboList.setEnabled(false);
                     return;
                 }
                 personComboList.setEnabled(true);
-                ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
-                personComboList.bind(bindingGroup, personsTable, userOrganization, entityProps.getPropertyDetails("person"));
+                
+                personsTable = new ContactPersonsListPanel(branch.getId());
             }
 
         });

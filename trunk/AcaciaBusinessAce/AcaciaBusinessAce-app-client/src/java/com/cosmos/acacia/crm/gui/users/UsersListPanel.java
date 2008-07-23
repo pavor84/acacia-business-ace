@@ -117,7 +117,6 @@ public class UsersListPanel extends AbstractTablePanel {
     private void updateButtonCaption() {
         User user = (User) getDataTable().getSelectedRowObject();
         if (user != null) {
-            System.out.println("UACTIVE: " + user.isActive());
             if (user.isActive())
                 setSpecialCaption("deactivateUser.Action.text");
             else

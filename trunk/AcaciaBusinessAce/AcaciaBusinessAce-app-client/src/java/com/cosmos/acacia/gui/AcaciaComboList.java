@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBComboList;
@@ -14,6 +13,7 @@ import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
@@ -32,6 +32,21 @@ public class AcaciaComboList
     }
 
 
+     public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            String elPropertyItemDisplay)
+    {
+        return bind(bindingGroup,
+                selectableListDialog,
+                beanEntity,
+                propertyDetails,
+                elPropertyItemDisplay,
+                UpdateStrategy.READ_WRITE);
+    }
+    
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
