@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.gui.contactbook.*;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -17,6 +16,7 @@ import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
@@ -48,13 +48,15 @@ public class UsersListPanel extends AbstractTablePanel {
 
     private BindingGroup usersBindingGroup;
     private List<User> users;
+    private User ownUser;
     
     @Override
     protected void initData() {
         super.initData();
 
-        setVisible(Button.Refresh);
+        setVisibleButtons(4 + 16 + 32);
         
+        ownUser = getAcaciaSession().getUser();
         initAdminView();
         
         usersBindingGroup = new BindingGroup();
@@ -90,7 +92,11 @@ public class UsersListPanel extends AbstractTablePanel {
     @Override
     public void specialAction() {
         User user = (User) getDataTable().getSelectedRowObject();
-        user = getAdminSession().activateUser(user, new Boolean(!user.getIsActive()));
+        user = getAdminSession().activateUser(
+                user,
+                getAcaciaSession().getOrganization().getId(),
+                new Boolean(!user.isActive()));
+        
         getDataTable().replaceSelectedRow(user);
         fireModify(user);
         updateButtonCaption();
@@ -111,12 +117,13 @@ public class UsersListPanel extends AbstractTablePanel {
     private void updateButtonCaption() {
         User user = (User) getDataTable().getSelectedRowObject();
         if (user != null) {
-            if (user.getIsActive())
+            System.out.println("UACTIVE: " + user.isActive());
+            if (user.isActive())
                 setSpecialCaption("deactivateUser.Action.text");
             else
                 setSpecialCaption("activateUser.Action.text");
 
-            if (user.equals(getAcaciaSession().getUser()))
+            if (user.equals(ownUser))
                 setEnabled(Button.Special, false);
         }
     }
@@ -144,7 +151,10 @@ public class UsersListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            OrganizationPanel organizationPanel = new OrganizationPanel((Organization)rowObject);
+            User user = (User)rowObject;
+            Organization org = getAcaciaSession().getOrganization();
+            UserOrganization uo = getAdminSession().getUserOrganization(user, org);
+            UserPanel organizationPanel = new UserPanel(uo);
             DialogResponse response = organizationPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -161,14 +171,6 @@ public class UsersListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        if (canNestedOperationProceed()) {
-            OrganizationPanel organizationPanel = new OrganizationPanel(getParentDataObjectId());
-            DialogResponse response = organizationPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return organizationPanel.getSelectedValue();
-            }
-        }
            return null;
     }
 

@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -127,16 +128,6 @@ public interface UsersRemote {
 
     /**
      * Makes the specified user active or inactive
-     *
-     * @param user
-     * @param active whether the user should be active or inactive
-     * @return the updated User
-     */
-    User activateUser(User user, Boolean active);
-
-
-    /**
-     * Makes the specified user active or inactive
      * for the specified parent (i.e. Organization)
      *
      * @param user
@@ -212,4 +203,29 @@ public interface UsersRemote {
      * @param organization
      */
     void setOrganization(Organization organization);
+    
+    /**
+     * Gets the UserOrganization object corresponding to the specified params
+     * 
+     * @param user
+     * @param organization
+     * @return the UserOrganization object
+     */
+    UserOrganization getUserOrganization(User user, Organization organization);
+    
+    /**
+     * Saves changes to a specified UserOrganization objecet
+     * 
+     * @param uo
+     * @return the saved entity
+     */
+    UserOrganization saveUserOrganization(UserOrganization uo);
+    
+    
+    /**
+     * Gets the entity properties for UserOrganization
+     * 
+     * @return the entity properties
+     */
+    EntityProperties getUserOrganizationEntityProperties();
 }

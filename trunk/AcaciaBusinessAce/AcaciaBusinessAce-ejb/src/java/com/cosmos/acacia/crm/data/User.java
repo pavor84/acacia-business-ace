@@ -101,9 +101,13 @@ public class User extends DataObjectBean implements Serializable {
     @Property(title="Person")
     private String personName;
     
-    @Column(name = "is_active", nullable = false)
+    @Transient
+    @Property(title="Branch")
+    private String branchName;
+       
+    @Transient
     @Property(title="Active")
-    private boolean isActive;
+    private boolean active;
 
     @Column(name = "is_new", nullable = false)
     private boolean isNew;
@@ -157,16 +161,24 @@ public class User extends DataObjectBean implements Serializable {
     }
 
     public User(BigInteger userId, int version, String userName, String emailAddress,
-                String userPassword, boolean isActive, boolean isNew,
+                String userPassword, boolean active, boolean isNew,
                 Date creationTime) {
         this.userId = userId;
         this.version = version;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.userPassword = userPassword;
-        this.isActive = isActive;
+        this.active = active;
         this.isNew = isNew;
         this.creationTime = creationTime;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
     }
 
     public String getPersonName() {
@@ -233,12 +245,12 @@ public class User extends DataObjectBean implements Serializable {
         this.systemPasswordValidity = systemPasswordValidity;
     }
 
-    public boolean getIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public boolean getIsNew() {
