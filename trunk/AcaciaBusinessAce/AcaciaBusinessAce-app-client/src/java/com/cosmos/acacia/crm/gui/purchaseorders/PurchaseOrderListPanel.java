@@ -12,6 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -29,18 +30,28 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     
     private PurchaseOrderListRemote formSession;
     private BindingGroup bindingGroup;
+
+    private List<PurchaseOrder> list;
     
     /**
+     * @param pendingOrders 
      * @param parentDataObject
      */
     public PurchaseOrderListPanel(BigInteger parentDataObjectId) {
-        super(parentDataObjectId);
+        this(parentDataObjectId, null);
     }
     
-    @Override
-    protected void initData() {
-        super.initData();
-        
+    /**
+     * @param pendingOrders 
+     * @param parentDataObject
+     */
+    public PurchaseOrderListPanel(BigInteger parentDataObjectId, List<PurchaseOrder> pendingOrders) {
+        super(parentDataObjectId);
+        this.list = pendingOrders;
+        bindComponents();
+    }
+    
+    protected void bindComponents(){
         entityProps = getFormSession().getListingEntityProperties();
         
         refreshDataTable(entityProps);
@@ -68,7 +79,9 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        return getFormSession().listPurchaseOrders(getParentDataObjectId());
+        if ( list==null )
+            list = getFormSession().listPurchaseOrders(getParentDataObjectId());
+        return list;
     }
 
     /**
@@ -78,19 +91,27 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     public boolean canCreate() {
         return true;
     }
+    
+    private boolean isInBranch(PurchaseOrder order){
+        Address userBranch = getUserBranch();
+        if ( order.getBranch().equals(userBranch) ){
+            return true;
+        }else
+            return false;
+    }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
     public boolean canDelete(Object rowObject) {
-        return true;
+        return isInBranch((PurchaseOrder) rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
     public boolean canModify(Object rowObject) {
-        return true;
+        return isInBranch((PurchaseOrder) rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
@@ -106,7 +127,7 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     @Override
     protected Object modifyRow(Object rowObject) {
         PurchaseOrder o = (PurchaseOrder) rowObject;
-        return onEditEntity(o);
+        return showDetailsForm(o, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
@@ -114,11 +135,13 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         PurchaseOrder o = getFormSession().newPurchaseOrder(getParentDataObjectId());
-        return onEditEntity(o);
+        return showDetailsForm(o, true);
     }
 
-    private Object onEditEntity(PurchaseOrder o) {
+    private Object showDetailsForm(PurchaseOrder o, boolean editable) {
         PurchaseOrderForm editPanel = new PurchaseOrderForm(o);
+        if ( !editable )
+            editPanel.setReadonly();
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -126,6 +149,11 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
         }
 
         return null;
+    }
+    
+    @Override
+    protected void viewRow(Object rowObject) {
+        showDetailsForm((PurchaseOrder) rowObject, false);
     }
     
     @SuppressWarnings("unchecked")

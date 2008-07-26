@@ -9,10 +9,13 @@ import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -20,6 +23,7 @@ import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
@@ -27,9 +31,6 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
-import com.cosmos.swingb.menus.JBContextMenuCreaetor;
-import javax.swing.JOptionPane;
-import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -38,7 +39,6 @@ import javax.swing.text.JTextComponent;
 public abstract class AcaciaPanel
     extends JBPanel
 {
-
     protected static Logger log = Logger.getLogger(AcaciaPanel.class);
 
     private BigInteger parentDataObjectId;
@@ -46,6 +46,9 @@ public abstract class AcaciaPanel
     private BigInteger organizationDataObjectId;
 
     private AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
+    
+    private static final String SESSION_BRANCH = "SESSION_BRANCH";
+    private static Map<String, Object> sessionCache = new HashMap<String, Object>();
 
     AcaciaPanel()
     {
@@ -280,5 +283,31 @@ public abstract class AcaciaPanel
         } else {
             log.error("error", ex);
         }
+    }
+    
+    public void handleValidationException(Exception ex){
+        ValidationException ve = extractValidationException(ex);
+        if ( ve!=null ){
+            String message = getValidationErrorsMessage(ve);
+            JOptionPane.showConfirmDialog(this.getParent(),
+                message,
+                getResourceMap().getString("ValidationException.errorsListFollow"),
+                JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+        } else{
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Gets logged user's branch
+     * @return
+     */
+    public Address getUserBranch() {
+        Address branch = (Address) sessionCache.get(SESSION_BRANCH);
+        if ( branch == null ){
+            branch = getAcaciaSession().getBranch();
+            sessionCache.put(SESSION_BRANCH, branch);
+        }
+        return branch;
     }
 }

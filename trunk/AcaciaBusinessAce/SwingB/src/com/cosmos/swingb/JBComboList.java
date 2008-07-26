@@ -7,6 +7,7 @@ package com.cosmos.swingb;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.ItemSelectable;
@@ -17,7 +18,10 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 
 import org.jdesktop.application.Action;
@@ -61,7 +65,8 @@ public class JBComboList
     private JXButton lookupButton;
     private JBComboBox comboBox;
 
-    private boolean editable;
+    //edit-able by default
+    private boolean editable = true;
 
     private ObservableList observableData;
     private String propertyName;
@@ -133,17 +138,20 @@ public class JBComboList
             Object selectedItem = comboBox.getSelectedItem();
             selectableListDialog.setSelectedRowObject(selectedItem);
             DialogResponse response = selectableListDialog.showDialog(this);
-            List listData = selectableListDialog.getListData();
-            observableData.clear();
-            observableData.addAll(listData);
-
-            if(DialogResponse.SELECT.equals(response))
-            {
-                comboBox.setSelectedItem(selectableListDialog.getSelectedRowObject());
-            }
-            else
-            {
-                comboBox.setSelectedItem(selectedItem);
+            
+            if ( isEditable() ){
+                List listData = selectableListDialog.getListData();
+                observableData.clear();
+                observableData.addAll(listData);
+    
+                if(DialogResponse.SELECT.equals(response))
+                {
+                    comboBox.setSelectedItem(selectableListDialog.getSelectedRowObject());
+                }
+                else
+                {
+                    comboBox.setSelectedItem(selectedItem);//commented by Pesho
+                }
             }
         }
     }
@@ -216,7 +224,7 @@ public class JBComboList
                 observableData,
                 comboBox);
         bindingGroup.addBinding(comboBoxBinding);
-
+        
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         Binding binding = Bindings.createAutoBinding(
@@ -250,6 +258,9 @@ public class JBComboList
     {
         this.editable = editable;
         comboBox.setEditable(editable);
+        comboBox.setEnabled(editable);
+        if ( selectableListDialog!=null )
+            selectableListDialog.setVisibleSelectButtons(editable);
     }
 
     public ObservableList getData() {
@@ -461,7 +472,6 @@ public class JBComboList
                     ItemEvent.ITEM_STATE_CHANGED,
                     selectedItem,
                     ItemEvent.DESELECTED + 0x700);
-
             fireItemStateChanged(event);
         }
     }
@@ -497,7 +507,7 @@ public class JBComboList
     }
 
     public ObjectToStringConverter getConverter() {
-        return converter;
+        return converter; 
     }
 
     public void setConverter(ObjectToStringConverter converter) {

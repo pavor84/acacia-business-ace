@@ -186,9 +186,9 @@ public class AssemblingCategoriesTreePanel
     }
 
     @Override
-    public void setVisibleSelectButtons()
+    public void setVisibleSelectButtons(boolean visible)
     {
-        categoryListPanel.setVisibleSelectButtons();
+        categoryListPanel.setVisibleSelectButtons(visible);
     }
 
 }

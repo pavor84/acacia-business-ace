@@ -1,9 +1,13 @@
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
+import java.awt.Component;
+import java.awt.TextComponent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,8 +15,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.ResourceMap;
@@ -20,20 +27,18 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.listeners.NestedFormListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.math.BigInteger;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 /**
  * A base class for all panels representing a single entity
@@ -48,6 +53,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     @EJB
     private ClassifiersRemote classifiersFormSession;
+
+    private boolean editable = true;
     
     final protected ClassifiersRemote getClassifiersFormSession()
     {
@@ -123,11 +130,13 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     final public void closeAction() {
-        BindingGroup bindingGroup;
-        if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
-        {
-            if(!closeDialogConfirmation())
-                return;
+        if ( isEditable() ){
+            BindingGroup bindingGroup;
+            if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
+            {
+                if(!closeDialogConfirmation())
+                    return;
+            }
         }
 
         if (modifiedResponse != null)
@@ -275,12 +284,15 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     @Override
     protected void dialogWindowClosing(WindowEvent event)
     {
-        BindingGroup bindingGroup;
-        if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
-        {
-            if(!closeDialogConfirmation())
-                return;
+        if ( isEditable() ){
+            BindingGroup bindingGroup;
+            if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
+            {
+                if(!closeDialogConfirmation())
+                    return;
+            }
         }
+        
         if (modifiedResponse != null)
             setDialogResponse(modifiedResponse);
         else
@@ -302,6 +314,18 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 icon);
+        return JOptionPane.YES_OPTION == result;
+    }
+    
+    protected boolean showConfirmationDialog(String msg){
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("ConfirmDialog.areYouSureTitle");
+        int result = JOptionPane.showConfirmDialog(
+                this.getParent(),
+                msg,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
         return JOptionPane.YES_OPTION == result;
     }
 
@@ -340,7 +364,42 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE){
             closeAction();
         } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() ==  KeyEvent.VK_S) {
-            saveAction();
+            if ( isEditable() )
+                saveAction();
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void setReadonly(){
+        this.editable = false;
+        getButtonPanel().getButton(Button.Save).setVisible(editable);
+        getButtonPanel().getButton(Button.Problems).setVisible(editable);
+        
+        BindingGroup bindGroup = getBindingGroup();
+        if ( bindGroup!=null ){
+            for (Binding binding : bindGroup.getBindings()) {
+                Object targetObject = binding.getTargetObject();
+                if ( targetObject instanceof JBComboList ){
+                    JBComboList c = (JBComboList) targetObject;
+                    c.setEditable(editable);
+                }
+                else if ( targetObject instanceof JTextComponent ){
+                    JTextComponent c = (JTextComponent) targetObject;
+                    c.setEditable(editable);
+                }
+                else if ( targetObject instanceof TextComponent ){
+                    TextComponent c = (TextComponent) targetObject;
+                    c.setEditable(editable);
+                }
+                else if ( targetObject instanceof Component ){
+                    Component c = (Component) targetObject;
+                    c.setEnabled(editable);
+                }
+            }
+        }
+    }
+
+    public boolean isEditable() {
+        return editable;
     }
 }

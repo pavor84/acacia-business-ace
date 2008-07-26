@@ -5,6 +5,18 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
@@ -20,23 +32,15 @@ import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.enums.OrderConfirmationType;
 import com.cosmos.acacia.crm.enums.OrganizationType;
 import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.acacia.crm.enums.PaymentTerm;
 import com.cosmos.acacia.crm.enums.PaymentType;
 import com.cosmos.acacia.crm.enums.ProductColor;
+import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 /**
  *
@@ -80,6 +84,8 @@ public class DatabaseResourceBean
             getDbResources(DeliveryType.class);
             getDbResources(VatCondition.class);
             getDbResources(InvoiceStatus.class);
+            getDbResources(PurchaseOrderStatus.class);
+            getDbResources(OrderConfirmationType.class);
             initialized = true;
         }
     }

@@ -8,19 +8,23 @@ package com.cosmos.acacia.crm.data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 
 /**
  *
@@ -28,7 +32,23 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "order_confirmations")
-public class OrderConfirmation implements Serializable {
+@NamedQueries(
+    {
+        /**
+         * Parameters: 
+         *  - parentDataObjectId - not null, the parent object id
+         *  - deleted - not null - true/false
+         *  - branch - may be null
+         */
+        @NamedQuery
+            (
+                name = "OrderConfirmation.findForParentAndDeleted",
+                query = "select o from OrderConfirmation o where o.dataObject.parentDataObjectId = :parentDataObjectId " +
+                        "and o.dataObject.deleted = :deleted " +
+                        "and (o.branch = :branch or :branch is null)"
+            )
+    })
+public class OrderConfirmation extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,52 +58,88 @@ public class OrderConfirmation implements Serializable {
 
     @Column(name = "parent_id")
     private BigInteger parentId;
-
-    @JoinColumn(name = "purchase_order_id", referencedColumnName = "purchase_order_id")
+    
+    @Property(title="Branch", customDisplay="${branch.addressName}", editable=false)
+    @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
-    private PurchaseOrder purchaseOrder;
+    private Address branch;
 
-    @Column(name = "invoice_number", nullable = false)
-    private String invoiceNumber;
+    @Property(title="Document Number", propertyValidator=@PropertyValidator(maxLength=255, required=true))
+    @Column(name = "document_number", nullable = false)
+    private String documentNumber;
 
-    @Column(name = "invoice_date", nullable = false)
+    @Property(title="Document Date", propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "documentDate_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date invoiceDate;
-
-    @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
+    private Date documentDate;
+    
+    @Property(title="Type", propertyValidator=@PropertyValidator(required=true))
+    @JoinColumn(name = "document_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    private DbResource status;
-
-    @JoinColumn(name = "sender_id")
+    private DbResource documentType;
+    
+    /**
+     * The Supplier can be both Person or Organization
+     */
+    @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplier.displayName}")
     @ManyToOne
-    private Person sender;
+    private BusinessPartner supplier;
+    
+    @Property(title="Supplier Name", editable=false)
+    @Column(name = "supplier_name", nullable = false)
+    private String supplierName;
+    
+    @Property(title="Supplier Contact", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplierContact.contact.displayName}")
+    @JoinColumn(name = "supplier_contact_id")
+    @ManyToOne
+    private ContactPerson supplierContact;
 
-    @Column(name = "sender_name")
-    private String senderName;
+    @Property(title="Contact Name")
+    @Column(name = "supplier_contact_name")
+    private String supplierContactName;
 
+    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource currency;
-
-    @Column(name = "transportation_price")
-    private BigDecimal transportationPrice;
-
+    
+    @Property(title="Invoice Sub Value", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "invoice_sub_value", nullable = false)
     private BigDecimal invoiceSubValue;
-
+    
+    @Property(title="Vat %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
+    @Column(name = "vat", nullable = false)
+    private BigDecimal vat;
+    
+    @Property(title="Discount", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "discount_amount")
+    private BigDecimal discountAmount;
+    
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
     @Column(name = "discount_percent")
     private BigDecimal discountPercent;
+    
+    @Property(title="Transport Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "transport_price")
+    private BigDecimal transportationPrice;
 
-    @Column(name = "discount_value")
-    private BigDecimal discountValue;
-
-    @Column(name = "invoice_value", nullable = false)
-    private BigDecimal invoiceValue;
+    @Property(title="Total Value", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d, required=true))
+    @Column(name = "total_value", nullable = false)
+    private BigDecimal totalValue;
+    
+    @Column(name = "notes")
+    @Property(title="Notes")
+    private String notes;
 
     @JoinColumn(name = "order_confirmation_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-
 
     public OrderConfirmation() {
     }
@@ -106,30 +162,6 @@ public class OrderConfirmation implements Serializable {
 
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
-    }
-
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
-    public Date getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate(Date invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
     }
 
     public BigDecimal getTransportationPrice() {
@@ -156,22 +188,6 @@ public class OrderConfirmation implements Serializable {
         this.discountPercent = discountPercent;
     }
 
-    public BigDecimal getDiscountValue() {
-        return discountValue;
-    }
-
-    public void setDiscountValue(BigDecimal discountValue) {
-        this.discountValue = discountValue;
-    }
-
-    public BigDecimal getInvoiceValue() {
-        return invoiceValue;
-    }
-
-    public void setInvoiceValue(BigDecimal invoiceValue) {
-        this.invoiceValue = invoiceValue;
-    }
-
     public DataObject getDataObject() {
         return dataObject;
     }
@@ -180,36 +196,12 @@ public class OrderConfirmation implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public Person getSender() {
-        return sender;
-    }
-
-    public void setSender(Person sender) {
-        this.sender = sender;
-    }
-
-    public PurchaseOrder getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
-
     public DbResource getCurrency() {
         return currency;
     }
 
     public void setCurrency(DbResource currency) {
         this.currency = currency;
-    }
-
-    public DbResource getStatus() {
-        return status;
-    }
-
-    public void setStatus(DbResource status) {
-        this.status = status;
     }
 
     @Override
@@ -235,6 +227,117 @@ public class OrderConfirmation implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.OrderConfirmation[orderConfirmationId=" + orderConfirmationId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getOrderConfirmationId();
+    }
+
+    @Override
+    public String getInfo() {
+        return toString();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setOrderConfirmationId(id);
+    }
+
+    public Address getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Address branch) {
+        this.branch = branch;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public Date getDocumentDate() {
+        return documentDate;
+    }
+
+    public void setDocumentDate(Date documentDate) {
+        this.documentDate = documentDate;
+    }
+
+    public DbResource getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(DbResource documentType) {
+        this.documentType = documentType;
+    }
+
+    public BusinessPartner getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(BusinessPartner supplier) {
+        this.supplier = supplier;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public ContactPerson getSupplierContact() {
+        return supplierContact;
+    }
+
+    public void setSupplierContact(ContactPerson supplierContact) {
+        this.supplierContact = supplierContact;
+    }
+
+    public String getSupplierContactName() {
+        return supplierContactName;
+    }
+
+    public void setSupplierContactName(String supplierContactName) {
+        this.supplierContactName = supplierContactName;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public BigDecimal getVat() {
+        return vat;
+    }
+
+    public void setVat(BigDecimal vat) {
+        this.vat = vat;
+    }
+
+    public BigDecimal getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
 }

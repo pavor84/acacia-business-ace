@@ -83,7 +83,7 @@ public class AcaciaToStringConverter
         }catch (Exception e){
             //notify in logs but don't fail
             e.printStackTrace();
-            return "";
+            return super.getPreferredStringForItem(item);
         }
         
     }
