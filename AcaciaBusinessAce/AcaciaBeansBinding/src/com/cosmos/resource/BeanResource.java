@@ -24,7 +24,7 @@ public class BeanResource
 
     public BeanResource(Class<? extends Application> applicationClass)
     {
-        this(Application.getInstance(applicationClass));
+        this(applicationClass != null ? Application.getInstance(applicationClass) : null);
     }
 
     public BeanResource(Application application)
