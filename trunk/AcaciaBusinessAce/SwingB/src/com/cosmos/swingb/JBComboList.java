@@ -59,7 +59,7 @@ public class JBComboList
     private ResourceMap resourceMap;
 
     private JXButton lookupButton;
-    private JComboBox comboBox;
+    private JBComboBox comboBox;
 
     private boolean editable;
 
@@ -114,7 +114,7 @@ public class JBComboList
         add(comboBox, BorderLayout.CENTER);
     }
 
-    public JComboBox getComboBox()
+    public JBComboBox getComboBox()
     {
         return comboBox;
     }
@@ -428,7 +428,7 @@ public class JBComboList
     }
 
     private class ListComboBox
-        extends JComboBox
+        extends JBComboBox
     {
 
         @Override

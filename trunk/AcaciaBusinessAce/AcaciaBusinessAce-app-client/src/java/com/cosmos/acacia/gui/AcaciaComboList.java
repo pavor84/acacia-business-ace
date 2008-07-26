@@ -65,6 +65,7 @@ public class AcaciaComboList
             converter = new AcaciaToStringConverter();
         }
 
+        getComboBox().setConverter(converter);
         return super.bind(
             bindingGroup,
             selectableListDialog,
@@ -79,11 +80,11 @@ public class AcaciaComboList
             SelectableListDialog selectableListDialog,
             ObjectToStringConverter converter)
     {
-        getComboBox().setRenderer(new CustomCellRenderer());
-        
         if (converter == null)
             converter = new AcaciaToStringConverter();
 
+        getComboBox().setConverter(converter);
+        
         super.initUnbound(selectableListDialog, converter);
     }
 
@@ -109,16 +110,4 @@ public class AcaciaComboList
 
         initUnbound(selectableListDialog, converter);
     }
-    class CustomCellRenderer extends DefaultListCellRenderer {
-        @Override
-        public Component getListCellRendererComponent(JList list,
-                Object value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            value = getConverter().getPreferredStringForItem(value);
-            
-            return super.getListCellRendererComponent(list, value,
-                    index, isSelected, cellHasFocus);
-        }
-    }
- 
 }

@@ -9,9 +9,12 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.KeyListener;
 import java.util.List;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
@@ -28,6 +31,7 @@ import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 /**
  *
@@ -53,6 +57,11 @@ public class JBComboBox
     {
         super();
         setEditor(new JBComboBoxEditor());
+        Class appClass = null;
+        if (application != null)
+            appClass = application.getClass();
+        
+        setRenderer(new CustomCellRenderer(appClass));
     }
 
     public JBComboBox(Class<? extends Application> applicationClass)
@@ -64,7 +73,6 @@ public class JBComboBox
     {
         this();
         this.application = application;
-        setRenderer(new BeanListCellRenderer(application.getClass()));
     }
 
     public JComboBoxBinding bind(
@@ -249,6 +257,37 @@ public class JBComboBox
         public JBComboBoxEditor() {
             super();
             getEditorComponent().addMouseListener(new JBContextMenuCreaetor());
+        }
+    }
+    
+    /** Handling coversions */
+    
+    private ObjectToStringConverter converter;
+    
+    public ObjectToStringConverter getConverter() {
+        return converter;
+    }
+
+    public void setConverter(ObjectToStringConverter converter) {
+        this.converter = converter;
+    }
+    
+    
+    class CustomCellRenderer extends BeanListCellRenderer {
+        
+        public CustomCellRenderer(Class appClass) {
+            super(appClass);
+        }
+        
+        @Override
+        public Component getListCellRendererComponent(JList list,
+                Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+            if (getConverter() != null)
+                value = getConverter().getPreferredStringForItem(value);
+            
+            return super.getListCellRendererComponent(list, value,
+                    index, isSelected, cellHasFocus);
         }
     }
 }
