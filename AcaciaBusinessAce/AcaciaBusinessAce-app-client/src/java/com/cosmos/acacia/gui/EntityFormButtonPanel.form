@@ -23,7 +23,9 @@
               <Component id="saveButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="problemsButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="161" max="32767" attributes="0"/>
+              <EmptySpace pref="74" max="32767" attributes="0"/>
+              <Component id="customButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="closeButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -37,6 +39,7 @@
                   <Component id="saveButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="closeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="problemsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="customButton" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -69,6 +72,13 @@
         </Property>
         <Property name="toolTipText" type="java.lang.String" resourceKey="problemsButton.toolTipText"/>
         <Property name="name" type="java.lang.String" value="problemsButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="customButton">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="customButton.icon"/>
+        <Property name="text" type="java.lang.String" resourceKey="customButton.text"/>
+        <Property name="name" type="java.lang.String" value="customButton" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

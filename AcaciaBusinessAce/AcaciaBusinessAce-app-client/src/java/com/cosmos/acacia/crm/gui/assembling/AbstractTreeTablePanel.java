@@ -94,9 +94,9 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
     }
 
     @Override
-    public void setVisibleSelectButtons()
+    public void setVisibleSelectButtons(boolean visible)
     {
-        getTablePanel().setVisibleSelectButtons();
+        getTablePanel().setVisibleSelectButtons(visible);
     }
 
     public TablePanel getTablePanel()
@@ -187,7 +187,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
             super.initData();
             initDataTable(getDataTable());
             setVisible(Button.Classify, false);
-            setVisibleSelectButtons();
+            setVisibleSelectButtons(true);
             setPreferredSize(new Dimension(400, 300));
         }
 

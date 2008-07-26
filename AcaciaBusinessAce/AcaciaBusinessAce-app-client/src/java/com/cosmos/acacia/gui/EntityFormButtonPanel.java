@@ -15,6 +15,8 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 
+import com.cosmos.swingb.JBButton;
+
 
 /**
  *
@@ -28,6 +30,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     public EntityFormButtonPanel() {
         super();
         initComponents();
+        initData();
     }
 
     /** This method is called from within the constructor to
@@ -41,6 +44,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         saveButton = new com.cosmos.swingb.JBButton();
         closeButton = new com.cosmos.swingb.JBButton();
         problemsButton = new com.cosmos.swingb.JBButton();
+        customButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -58,6 +62,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         problemsButton.setToolTipText(resourceMap.getString("problemsButton.toolTipText")); // NOI18N
         problemsButton.setName("problemsButton"); // NOI18N
 
+        customButton.setIcon(resourceMap.getIcon("customButton.icon")); // NOI18N
+        customButton.setText(resourceMap.getString("customButton.text")); // NOI18N
+        customButton.setName("customButton"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -67,7 +75,9 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(problemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addComponent(customButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -78,7 +88,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(problemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(problemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -86,12 +97,13 @@ public class EntityFormButtonPanel extends AcaciaPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBButton closeButton;
+    private com.cosmos.swingb.JBButton customButton;
     private com.cosmos.swingb.JBButton problemsButton;
     private com.cosmos.swingb.JBButton saveButton;
     // End of variables declaration//GEN-END:variables
 
 
-      @Action
+    @Action
     public void saveAction()
     {
         try {
@@ -148,13 +160,14 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         }
     }
 
-    protected void setSaveActionState(BaseEntityPanel parent)
+    public void setSaveActionState(BaseEntityPanel parent)
     {
         BindingGroup bindingGroup;
         if((bindingGroup = parent.getBindingGroup()) != null)
         {
             setEnabled(Button.Save, bindingGroup.isContentValid());
             setEnabled(Button.Problems, !bindingGroup.isContentValid());
+            setEnabled(Button.Custom, bindingGroup.isContentValid());
         }
     }
 
@@ -163,7 +176,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     {
         Save("saveAction"),
         Close("closeAction"),
-        Problems("problemsAction");
+        Problems("problemsAction"),
+        Custom("customButton");
 
         private Button(String actionName)
         {
@@ -194,6 +208,15 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         if(action != null)
         {
             action.setEnabled(enabled);
+        }else{
+            if ( button.equals(Button.Save) )
+                saveButton.setEnabled(enabled);
+            else if ( button.equals(Button.Close) )
+                closeButton.setEnabled(enabled);
+            else if ( button.equals(Button.Problems) )
+                problemsButton.setEnabled(enabled);
+            else if ( button.equals(Button.Custom) )
+                customButton.setEnabled(enabled);
         }
     }
 
@@ -219,6 +242,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             case Problems:
                 problemsButton.setVisible(visible);
                 break;
+                
+            case Custom:
+                customButton.setVisible(visible);
+                break;
         }
     }
 
@@ -231,8 +258,11 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             case Close:
                 return closeButton.isVisible();
                 
-           case Problems:
+            case Problems:
                 return problemsButton.isVisible();
+                
+            case Custom:
+                return customButton.isVisible();
         }
         
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
@@ -240,6 +270,29 @@ public class EntityFormButtonPanel extends AcaciaPanel {
 
     @Override
     protected void initData() {
-
+        setVisible(Button.Custom, false);
     }
+
+    public com.cosmos.swingb.JBButton getCustomButton() {
+        return customButton;
+    }
+    
+    public JBButton getButton(Button button){
+        switch(button)
+        {
+            case Save:
+                return saveButton;
+
+            case Close:
+                return closeButton;
+                
+            case Problems:
+                return problemsButton;
+                
+            case Custom:
+                return customButton;
+        }
+        throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
+    }
+    
 }

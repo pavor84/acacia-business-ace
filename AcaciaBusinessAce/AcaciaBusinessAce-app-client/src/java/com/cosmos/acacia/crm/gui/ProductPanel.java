@@ -696,6 +696,7 @@ public class ProductPanel extends AcaciaPanel {
         if(product == null)
         {
             product = getFormSession().newProduct();
+            product.setParentId(getParentDataObjectId());
         }
 
         BindingGroup bindingGroup = getBindingGroup();

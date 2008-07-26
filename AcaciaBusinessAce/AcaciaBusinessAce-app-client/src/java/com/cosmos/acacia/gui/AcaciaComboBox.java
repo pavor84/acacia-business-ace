@@ -5,33 +5,53 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.swingb.JBComboBox;
-import java.awt.Component;
 import java.util.List;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
+
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
+
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.JBComboBox;
 
 /**
  *
  * @author miro
  */
-public class AcaciaComboBox
-    extends JBComboBox
-{
+public class AcaciaComboBox extends JBComboBox {
 
-    public AcaciaComboBox()
-    {
+    public AcaciaComboBox() {
         super(AcaciaApplication.class);
     }
 
     @SuppressWarnings("unchecked")
+    @Override
+    public JComboBoxBinding bind(BindingGroup bindingGroup, List data, Object beanEntity,
+                                 PropertyDetails propertyDetails, UpdateStrategy updateStrategy) {
+        AcaciaToStringConverter resourceToStringConverter = createToStringConverter(propertyDetails);
+        
+        AutoCompleteDecorator.decorate(this, resourceToStringConverter);
+        setConverter(resourceToStringConverter);
+        return super.bind(bindingGroup, data, beanEntity, propertyDetails,
+            AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+    
+    private AcaciaToStringConverter createToStringConverter(PropertyDetails propertyDetails) {
+        String customElProperty = propertyDetails.getCustomDisplay();
+        if ( customElProperty==null )
+            return new AcaciaToStringConverter();
+        else{
+            //cut the first part of all properties, since it is the name of the property in the entity object.
+            customElProperty = customElProperty.replaceAll(propertyDetails.getPropertyName()+".", "");
+            return new AcaciaToStringConverter(customElProperty);
+        }
+    }
+
+   @SuppressWarnings("unchecked")
     @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,

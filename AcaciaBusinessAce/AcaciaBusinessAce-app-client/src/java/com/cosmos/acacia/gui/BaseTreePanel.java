@@ -684,7 +684,7 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
     
     @Override
     public DialogResponse showDialog(Component parentComponent) {
-        getListPanel().setVisibleSelectButtons();
+        getListPanel().setVisibleSelectButtons(true);
         return super.showDialog(parentComponent);
     }
 

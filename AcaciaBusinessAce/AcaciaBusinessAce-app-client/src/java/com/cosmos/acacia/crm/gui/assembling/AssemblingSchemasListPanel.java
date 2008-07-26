@@ -272,10 +272,10 @@ public class AssemblingSchemasListPanel
     }
 
     @Override
-    public void setVisibleSelectButtons()
+    public void setVisibleSelectButtons(boolean visible)
     {
         AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
-        asTablePanel.setVisibleSelectButtons();
+        asTablePanel.setVisibleSelectButtons(visible);
     }
 
 

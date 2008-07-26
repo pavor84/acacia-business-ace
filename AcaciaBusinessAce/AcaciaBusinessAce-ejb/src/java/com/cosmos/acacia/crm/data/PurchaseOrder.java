@@ -41,7 +41,55 @@ import com.cosmos.acacia.annotation.PropertyValidator;
             (
                 name = "PurchaseOrder.findForParentAndDeleted",
                 query = "select po from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId " +
-                		"and po.dataObject.deleted = :deleted"
+                        "and po.dataObject.deleted = :deleted"
+            ),
+        /**
+         * Parameters: 
+         *  - parentDataObjectId - not null, the parent object id
+         *  - supplier - not null
+         */
+        @NamedQuery
+            (
+                name = "PurchaseOrder.maxSupplierOrderNumberForSupplier",
+                query = "select max(po.supplierOrderNumber) from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId " +
+                        "and po.supplier = :supplier"
+            ),
+        /**
+         * Parameters: 
+         *  - branch - not null
+         */
+        @NamedQuery
+            (
+                name = "PurchaseOrder.maxOrderNumberForBranch",
+                query = "select max(po.orderNumber) from PurchaseOrder po where po.branch = :branch "
+            ),
+        /**
+         * Parameters: 
+         *  - parentDataObjectId - not null
+         */
+        @NamedQuery
+            (
+                name = "PurchaseOrder.maxOrderNumber",
+                query = "select max(po.orderNumber) from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId "
+            ),
+        /**
+         * 
+         * Parameters: 
+         *  - parentDataObjectId - not null, the parent object id
+         *  - deleted - not null - true/false
+         *  - status_sent - should be the value {@link PurchaseOrderStatus#Sent#getDbResource()}
+         *  - status_partlyConfirmed - should be the value {@link PurchaseOrderStatus#PartlyConfirmed#getDbResource()}
+         *  - supplier - may be null
+         *  - branch - may be null
+         */
+        @NamedQuery
+            (
+                name = "PurchaseOrder.findPendingForParentAndDeleted",
+                query = "select po from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId " +
+                        "and po.dataObject.deleted = :deleted " +
+                        "and (po.status = :status_sent or po.status = :status_partlyConfirmed) " +
+                        "and (po.supplier = :supplier or :supplier is null) " +
+                        "and (po.branch = :branch or :branch is null)"
             )
     })
 public class PurchaseOrder extends DataObjectBean implements Serializable {
@@ -52,32 +100,32 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @Column(name = "purchase_order_id", nullable = false)
     private BigInteger purchaseOrderId;
 
-    @Column(name = "parent_id")
+    @Column(name = "parent_id", precision=0, length=18)
     private BigInteger parentId;
     
-    @Property(title="Order Number", readOnly=true)
+    @Property(title="Order Number", editable=false)
     @Column(name = "order_number", nullable = false)
-    private long orderNumber;
+    private BigInteger orderNumber;
     
-    @Property(title="Supp. Order Number", readOnly=true)
+    @Property(title="Supp. Order Number", editable=false)
     @Column(name = "supplier_order_number")
-    private String supplierOrderNumber;
+    private BigInteger supplierOrderNumber;
     
-    @Property(title="Branch", customDisplay="${address.addressName}", propertyValidator=@PropertyValidator(required=true), readOnly=true)
+    @Property(title="Branch", customDisplay="${branch.addressName}", editable=false)
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
     private Address branch;
 
-    @Property(title="Branch Name", readOnly=true)
+    @Property(title="Branch Name", editable=false)
     @Column(name = "branch_name", nullable = false)
     private String branchName;
     
-    @Property(title="Status")
+    @Property(title="Status", readOnly=true, propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource status;
     
-    @Property(title="Delivery Method")
+    @Property(title="Delivery Method", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource documentDeliveryMethod;
@@ -85,33 +133,33 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     /**
      * The Supplier can be both Person or Organization
      */
-    @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplier.displayName}")
     @ManyToOne
     private BusinessPartner supplier;
     
-    @Property(title="Supplier Name", readOnly=true)
+    @Property(title="Supplier Name", editable=false)
     @Column(name = "supplier_name", nullable = false)
     private String supplierName;
 
-    @Property(title="Supplier Contact", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Supplier Contact", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplierContact.contact.displayName}")
     @JoinColumn(name = "supplier_contact_id")
     @ManyToOne
-    private Person supplierContact;
+    private ContactPerson supplierContact;
 
     @Property(title="Contact Name")
     @Column(name = "supplier_contact_name")
     private String supplierContactName;
     
-    @Property(title="Creator")
+    @Property(title="Creator", customDisplay="${creator.displayName}")
     @JoinColumn(name = "creator_id")
     @ManyToOne
     private Person creator;
     
-    @Property(title="Creator Name", readOnly=true)
+    @Property(title="Creator Name", editable=false)
     @Column(name = "creator_name", nullable = false)
     private String creatorName;
     
-    @Property(title="Created At", readOnly=true)
+    @Property(title="Created At", editable=false)
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date creationTime;
@@ -121,26 +169,26 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @ManyToOne
     private Person sender;
     
-    @Property(title="Sender Name", readOnly=true)
+    @Property(title="Sender Name", editable=false)
     @Column(name = "sender_name")
     private String senderName;
     
-    @Property(title="Sent At", readOnly=true)
+    @Property(title="Sent At", editable=false)
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
     private Date sentTime;
 
-    @Property(title="Finalized At", readOnly=true)
+    @Property(title="Finalized At", editable=false)
     @Column(name = "finalizing_time")
     @Temporal(TemporalType.DATE)
     private Date finalizingTime;
 
-    @Property(title="First Delivery", readOnly=true)
+    @Property(title="First Delivery", editable=false)
     @Column(name = "first_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date firstDeliveryTime;
 
-    @Property(title="Last Delivery", readOnly=true)
+    @Property(title="Last Delivery", editable=false)
     @Column(name = "last_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date lastDeliveryTime;
@@ -177,36 +225,12 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
         this.parentId = parentId;
     }
 
-    public long getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(long orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
     public String getSupplierName() {
         return supplierName;
     }
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
-    }
-
-    public String getSupplierOrderNumber() {
-        return supplierOrderNumber;
-    }
-
-    public void setSupplierOrderNumber(String supplierOrderNumber) {
-        this.supplierOrderNumber = supplierOrderNumber;
-    }
-
-    public Date getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
     }
 
     public Date getSentTime() {
@@ -249,11 +273,11 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public Person getSupplierContact() {
+    public ContactPerson getSupplierContact() {
         return supplierContact;
     }
 
-    public void setSupplierContact(Person supplierContact) {
+    public void setSupplierContact(ContactPerson supplierContact) {
         this.supplierContact = supplierContact;
     }
 
@@ -357,16 +381,17 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     @Override
     public BigInteger getId() {
-        return null;
+        return purchaseOrderId;
     }
 
     @Override
     public String getInfo() {
-        return null;
+        return orderNumber+": "+supplierOrderNumber;
     }
 
     @Override
     public void setId(BigInteger id) {
+        purchaseOrderId = id;
     }
 
     public BusinessPartner getSupplier() {
@@ -383,6 +408,30 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public BigInteger getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(BigInteger orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public BigInteger getSupplierOrderNumber() {
+        return supplierOrderNumber;
+    }
+
+    public void setSupplierOrderNumber(BigInteger supplierOrderNumber) {
+        this.supplierOrderNumber = supplierOrderNumber;
     }
 
 }

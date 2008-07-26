@@ -5,8 +5,15 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
+import com.cosmos.acacia.crm.data.PurchaseOrderItem;
+import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -57,5 +64,115 @@ public interface PurchaseOrderListRemote {
      * @return not null list
      */
     List<DbResource> getDeliveryMethods();
+
+    /**
+     * List possible statuses
+     * @return not null list
+     */
+    List<DbResource> getStatuses();
+
+    /**
+     * Returns all contacts associated with this business partner for all his addresses/branches.
+     * @param supplier
+     * @return
+     */
+    List<ContactPerson> getSupplierContacts(BusinessPartner supplier);
+
+    /**
+     * Persists the current purchase order, fails with {@link ValidationException} if something is
+     * not right
+     * @param po
+     */
+    PurchaseOrder savePurchaseOrder(PurchaseOrder po);
+
+    /**
+     * Update the status of the order. The order is also validated before save.
+     * @param order
+     * @param status
+     * @return - the updated order
+     */
+    PurchaseOrder updateOrderStatus(PurchaseOrder order, PurchaseOrderStatus status);
+
+    /**
+     * Return the entity properties for listing items.
+     * @return
+     */
+    EntityProperties getItemsListEntityProperties();
+
+    /**
+     * List order items for a given order
+     * @param parentDataObjectId
+     * @return
+     */
+    List<PurchaseOrderItem> getOrderItems(BigInteger parentDataObjectId);
+
+    /**
+     * Delete order item
+     * @param item
+     */
+    void deleteOrderItem(PurchaseOrderItem item);
+
+    /**
+     * Create new order item for a given order
+     * @param parentDataObjectId
+     * @return
+     */
+    PurchaseOrderItem newOrderItem(BigInteger parentDataObjectId);
+
+    /**
+     * Save an item
+     * @param entity
+     * @return
+     */
+    PurchaseOrderItem saveOrderItem(PurchaseOrderItem entity);
+
+    /**
+     * Find warehouse product for a given product. 
+     * @param product
+     * @return
+     */
+    WarehouseProduct getWarehouseProduct(SimpleProduct product);
+
+    /**
+     * Item details entity properties
+     * @return
+     */
+    EntityProperties getItemDetailEntityProperties();
+
+    /**
+     * Currency enum
+     * @return
+     */
+    List<DbResource> getCurrencies();
+
+    /**
+     * Persist all items in one transaction. Throws {@link ValidationException} if something fails.
+     * @param orderItems
+     */
+    void saveOrderItems(List<PurchaseOrderItem> orderItems);
+
+    /**
+     * Get all orders in status {@link PurchaseOrderStatus#Sent} or {@link PurchaseOrderStatus#PartlyConfirmed}
+     * @param parentDataObjectId
+     * @param branch for branch
+     * @return
+     */
+    List<PurchaseOrder> getPendingOrders(BigInteger parentDataObjectId, Address branch);
+
+    /**
+     * Get all orders in status {@link PurchaseOrderStatus#Sent} or {@link PurchaseOrderStatus#PartlyConfirmed}
+     * for a given supplier in a given branch ( or all branches if null )
+     * @param parentDataObjectId - not null
+     * @param supplier - not null
+     * @param branch - may be null
+     * @return
+     */
+    List<PurchaseOrder> getPendingOrders(BigInteger parentDataObjectId, BusinessPartner supplier, Address branch);
     
+    /**
+     * Get an order by its id
+     * @param parentId
+     * @return
+     */
+    PurchaseOrder getPurchaseOrder(BigInteger id);
 }

@@ -47,6 +47,8 @@ import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
+import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
+import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
@@ -284,13 +286,13 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void productsListAction() {
         System.out.println("productsListAction");
-        ProductsListPanel productsListPanel = new ProductsListPanel(null);
+        ProductsListPanel productsListPanel = new ProductsListPanel(getParentId());
         productsListPanel.showFrame();
     }
 
     @Action
     public void warehouseListAction(){
-        WarehouseListPanel listPanel = new WarehouseListPanel(null);
+        WarehouseListPanel listPanel = new WarehouseListPanel(getParentId());
         listPanel.showFrame();
     }
 
@@ -325,14 +327,14 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void patternMaskListAction(){
-        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
+        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(getParentId());
         listPanel.showFrame();
     }
 
     @Action
     public void productCategoriesAction()
     {
-        ProductCategoriesTreePanel productCategories = new ProductCategoriesTreePanel(null);
+        ProductCategoriesTreePanel productCategories = new ProductCategoriesTreePanel(getParentId());
         productCategories.getListPanel().setVisible(Button.Select, false);
         productCategories.getListPanel().setVisible(Button.Unselect, false);
         productCategories.showFrame();
@@ -457,9 +459,23 @@ public class AcaciaApplicationView extends FrameView {
         PurchaseOrderListPanel panel = new PurchaseOrderListPanel(parentId);
         panel.showFrame();
     }
+    
+    @Action
+    public void ordersMatchingAction() {
+        BigInteger parentId = getParentId();
+        OrdersMatchingForm panel = new OrdersMatchingForm(parentId);
+        panel.showFrame();
+    }
+    
+    @Action
+    public void orderConfirmationsAction() {
+        BigInteger parentId = getParentId();
+        OrderConfirmationListPanel panel = new OrderConfirmationListPanel(parentId);
+        panel.showFrame();
+    }
 
     @Action
-    public void ownOrganizationAction() {
+    public void ownOrganizationAction() { 
         OrganizationPanel panel = new OrganizationPanel();
         panel.showFrame();
     }
@@ -575,8 +591,21 @@ public class AcaciaApplicationView extends FrameView {
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("ordersAction"));
+        menuItem.setMnemonic('P');
         ordersMenu.add(menuItem);
         menuBar.add(ordersMenu);
+        
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("orderConfirmationsAction"));
+        menuItem.setMnemonic('C');
+        ordersMenu.add(menuItem);
+        
+        ordersMenu.add(new Separator());
+        
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("ordersMatchingAction"));
+        menuItem.setMnemonic('M');
+        ordersMenu.add(menuItem);
 
         reportsMenu.setText(resourceMap.getString("reportsMenu.text")); // NOI18N
         reportsMenu.setName("reportsMenu"); // NOI18N

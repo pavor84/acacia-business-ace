@@ -61,6 +61,18 @@ import com.cosmos.acacia.annotation.ValidationType;
          */
         name = "WarehouseProduct.findForWarehouse",
         query = "select wp from WarehouseProduct wp where wp.warehouse = :warehouse "
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Get the warehouse product for a given branch and product
+         * Parameters:
+         *  - product - not null
+         *  - branch - not null
+         */
+        name = "WarehouseProduct.findByProductAndBranch",
+        query = "select w from WarehouseProduct w where w.warehouse.address = :branch " +
+                "and w.product = :product"
     )
 })
 public class WarehouseProduct implements Serializable {

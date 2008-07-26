@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="formButtonPanel" alignment="1" pref="510" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jBLabel1" pref="182" max="32767" attributes="1"/>
+                                  <Component id="jBLabel3" alignment="0" pref="182" max="32767" attributes="1"/>
+                                  <Component id="jBLabel2" alignment="0" pref="182" max="32767" attributes="1"/>
+                                  <Component id="jBLabel4" pref="182" max="32767" attributes="1"/>
+                                  <Component id="jBLabel5" pref="182" max="32767" attributes="1"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jBLabel6" pref="186" max="32767" attributes="1"/>
+                          <Component id="jBLabel7" alignment="0" pref="186" max="32767" attributes="1"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jBLabel8" pref="184" max="32767" attributes="1"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jBLabel10" pref="186" max="32767" attributes="1"/>
+                          <Component id="jBLabel9" alignment="1" pref="186" max="32767" attributes="1"/>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="shipDateToField" alignment="1" pref="324" max="32767" attributes="0"/>
+                          <Component id="shipDateFromField" alignment="1" pref="324" max="32767" attributes="0"/>
+                          <Component id="purchasePriceField" alignment="1" pref="324" max="32767" attributes="1"/>
+                          <Component id="deliveredQuantityField" alignment="1" pref="324" max="32767" attributes="1"/>
+                          <Component id="confirmedQuantityField" alignment="1" pref="324" max="32767" attributes="1"/>
+                          <Component id="orderedQuantityField" alignment="0" pref="324" max="32767" attributes="2"/>
+                          <Component id="measureUnitField" alignment="1" min="-2" pref="324" max="-2" attributes="3"/>
+                          <Component id="productField" alignment="1" min="-2" pref="324" max="-2" attributes="1"/>
+                          <Component id="currencyField" alignment="1" pref="324" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="1" pref="324" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jBLabel1" min="-2" pref="25" max="-2" attributes="1"/>
+                  <Component id="productField" min="-2" max="-2" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="measureUnitField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="orderedQuantityField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="confirmedQuantityField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="deliveredQuantityField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="purchasePriceField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="currencyField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="shipDateFromField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="shipDateToField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jBLabel10" min="-2" pref="24" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="99" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="formButtonPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBComboBox" name="measureUnitField">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="measureUnitField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel2.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel2" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel3">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel3.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel3" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="orderedQuantityField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="orderedQuantityField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="confirmedQuantityField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="name" type="java.lang.String" value="confirmedQuantityField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel4">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel4.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel4" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel5.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="deliveredQuantityField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="name" type="java.lang.String" value="deliveredQuantityField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel6">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel6.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="purchasePriceField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="purchasePriceField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="currencyField">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="currencyField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel7">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel7.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel7" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel8">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel8.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel8" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBDatePicker" name="shipDateFromField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="shipDateFromField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="formButtonPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="formButtonPanel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="productField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="productField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBDatePicker" name="shipDateToField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="shipDateToField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel9">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel9.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel9" noResource="true"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBTextPane" name="notesField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="notesField" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel10">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel10.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel10" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

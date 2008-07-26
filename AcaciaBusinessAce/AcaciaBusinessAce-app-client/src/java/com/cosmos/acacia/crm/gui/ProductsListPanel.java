@@ -157,7 +157,7 @@ public class ProductsListPanel
 
         return products;
     }
-
+    
     private List<DbResource> getMeasureUnits()
     {
         return getFormSession().getMeasureUnits();
