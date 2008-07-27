@@ -360,6 +360,9 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     
     @Override
     public DataObjectBean getDataObjectBean(DataObject dataObject) {
+        if (dataObject == null)
+            return null;
+        
         DataObjectType dot = dataObject.getDataObjectType();
         try {
             Class clazz = Class.forName(dot.getDataObjectType());

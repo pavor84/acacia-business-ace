@@ -15,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -52,9 +53,13 @@ public class UserRight implements Serializable {
     @Property(title="Object Type", customDisplay="${dataObjectType.dataObjectType}")
     private DataObjectType dataObjectType;
 
+    @Transient
+    @Property(title="Object")
+    private String objectInfo;
+    
     @ManyToOne
     @JoinColumn(name="data_object_id", referencedColumnName="data_object_id")
-    @Property(title="Object", customDisplay="[Object]")
+    @Property(title="Data Object", hidden=true)
     private DataObject dataObject;
 
     @Column(name="can_read")
@@ -72,7 +77,7 @@ public class UserRight implements Serializable {
     @Column(name="can_delete")
     @Property(title="Delete")
     private boolean delete;
-
+            
     public Long getUserRightId() {
         return userRightId;
     }
@@ -206,5 +211,13 @@ public class UserRight implements Serializable {
 
     public boolean isRead() {
         return read;
+    }
+
+    public String getObjectInfo() {
+        return objectInfo;
+    }
+
+    public void setObjectInfo(String objectInfo) {
+        this.objectInfo = objectInfo;
     }
 }

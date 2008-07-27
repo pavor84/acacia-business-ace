@@ -2,7 +2,6 @@ package com.cosmos.acacia.crm.bl.users;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,9 +25,12 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.UserRight;
+import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashSet;
 import org.apache.log4j.Logger;
 
 @Stateless
@@ -127,7 +129,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
         Query q = em.createNamedQuery("UserRight.findByUser");
         q.setParameter("user", user);
 
-        return new HashSet<UserRight>(q.getResultList());
+        return getUserRightsWithInfo(q.getResultList());
     }
 
     @SuppressWarnings("unchecked")
@@ -135,8 +137,21 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     public Set<UserRight> getUserRights(UserGroup userGroup) {
         Query q = em.createNamedQuery("UserRight.findByUserGroup");
         q.setParameter("userGroup", userGroup);
-
-        return new HashSet<UserRight>(q.getResultList());
+        
+        return getUserRightsWithInfo(q.getResultList());
+    }
+    
+    private Set<UserRight> getUserRightsWithInfo(List list) {
+        Set<UserRight> rights = new HashSet<UserRight>(list);
+        for (UserRight right : rights) {
+            DataObjectBean dob = getDataObjectBean(right.getDataObject());
+            if (dob != null)
+                right.setObjectInfo(dob.getInfo());
+            
+            log.info("DO : " + right.getDataObject());
+        }
+        
+        return rights;
     }
 
     @Override

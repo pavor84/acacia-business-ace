@@ -204,14 +204,21 @@ public class RightsPanel extends BaseEntityPanel {
         dataObjectComboBox.removeAllItems();
         List<DataObjectBean> dataObjectBeans = getDataObjectBeans(type);
 
+        boolean isPreChosen = false;
         for (DataObjectBean dob : dataObjectBeans) {
             dataObjectComboBox.addItem(dob);
             
-            if (dob.equals(right.getDataObject()))
+            if (dob.equals(right.getDataObject())) {
                 dataObjectComboBox.setSelectedItem(dob);
+                isPreChosen = true;
+            }
         }
+        
+        if (!isPreChosen)
+            dataObjectComboBox.setSelectedIndex(-1);
 
     }
+    
     protected UserRightsRemote getFormSession() {
         if (formSession == null)
             formSession = getBean(UserRightsRemote.class);
@@ -247,8 +254,11 @@ public class RightsPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        right.setDataObject(((DataObjectBean)
-                dataObjectComboBox.getSelectedItem()).getDataObject());
+        DataObjectBean dob = (DataObjectBean) dataObjectComboBox.getSelectedItem();
+        if (dob != null) {
+            right.setDataObject(dob.getDataObject());
+            right.setObjectInfo(dob.getInfo());
+        }
         
         setSelectedValue(right);
         setDialogResponse(DialogResponse.SAVE);
