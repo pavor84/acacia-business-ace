@@ -39,6 +39,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel;
@@ -376,14 +377,14 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void personsListAction(){
         log.debug("personsListAction");
-        PersonsListPanel personsListPanel = new PersonsListPanel(null);
+        PersonsListPanel personsListPanel = new PersonsListPanel(getParentId());
         personsListPanel.showFrame();
     }
 
     @Action
     public void organizationsListAction(){
         log.debug("organizationsListAction");
-        OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(null);
+        OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(getParentId());
         organizationsListPanel.showFrame();
     }
 
@@ -399,7 +400,13 @@ public class AcaciaApplicationView extends FrameView {
         PositionsHierarchyTreePanel panel = new PositionsHierarchyTreePanel(getParentId());
         panel.showFrame();
     }
-
+    
+    @Action
+    public void businessPartnersListAction(){
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(getParentId());
+        listPanel.showFrame();
+    }
+        
     @Action
     public void personPositionTypesListAction(){
         log.debug("personPositionTypesListAction");
@@ -725,6 +732,12 @@ public class AcaciaApplicationView extends FrameView {
 
         Separator contactBookSeparator2 = new Separator();
         contactBook.add(contactBookSeparator2);
+        
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("businessPartnersListAction"));
+        contactBook.add(menuItem);
+        
+        contactBook.add(new Separator());
 
         citiesListMenuItem.setAction(actionMap.get("citiesListAction"));
         contactBook.add(citiesListMenuItem);

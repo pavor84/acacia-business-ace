@@ -58,8 +58,8 @@ import com.cosmos.resource.TextResource;
             ),
         @NamedQuery
             (
-                name = "Organization.findByName",
-                query = "select o from Organization o where o.organizationName=:organizationName"
+            name = "Organization.findByName",
+            query = "select o from Organization o where o.organizationName=:organizationName"
             )
     }
 )
