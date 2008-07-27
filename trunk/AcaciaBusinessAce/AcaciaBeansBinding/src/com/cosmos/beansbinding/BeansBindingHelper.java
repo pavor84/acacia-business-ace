@@ -6,7 +6,9 @@
 package com.cosmos.beansbinding;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +38,6 @@ import com.cosmos.beansbinding.validation.NumericValidator;
 import com.cosmos.beansbinding.validation.RegexValidator;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
 import com.cosmos.util.ClassHelper;
-import javax.persistence.Transient;
 
 
 /**
@@ -74,203 +75,258 @@ public class BeansBindingHelper {
         List<PropertyDetails> properties = new ArrayList<PropertyDetails>(fields.length);
         for(Field field : fields)
         {
-            Property property = field.getAnnotation(Property.class);
-            if(property != null)
-            {
-                PropertyDetails pd = new PropertyDetails();
-                pd.setOrderPosition(orderPosition+=10);//increase by 10 - let have it possible to put columns in between
-                pd.setPropertyName(field.getName());
-                pd.setPropertyClassName(ClassHelper.getClassName(field.getType()));
-                pd.setPropertyTitle(property.title());
-                pd.setReadOnly(property.readOnly());
-                pd.setEditable(property.editable());
-                pd.setVisible(property.visible());
-                pd.setHiden(property.hidden());
-                pd.setResourceDisplayInTable(property.resourceDisplayInTable());
-
-                if ( !Property.NULL.equals(property.customDisplay()) )
-                    pd.setCustomDisplay(property.customDisplay());
-
-                /* Setting validation-related values */
-                PropertyValidator propertyValidator = property.propertyValidator();
-
-                if(propertyValidator.validationType() != ValidationType.NONE || propertyValidator.required())
-                {
-                    BaseValidator validator = new BaseValidator();
-
-                    validator.setRequired(propertyValidator.required());
-
-                    if (propertyValidator.validator() != com.cosmos.beansbinding.validation.NoneValidator.class) {
-                        try {
-                            validator.addValidator((Validator) propertyValidator.validator().newInstance());
-                        } catch (Exception ex){
-                            // Log it!
-                            ex.printStackTrace();
-                        }
-                    }
-
-                    if(propertyValidator.validationType() == ValidationType.DATE)
-                    {
-                        String strValue = propertyValidator.datePattern();
-                        if(strValue != null && (strValue = strValue.trim()).length() > 0){
-                            DateValidator dateValidator = new DateValidator();
-
-                            dateValidator.setDatePattern(strValue);
-                            validator.addValidator(dateValidator);
-                        }
-                    }
-
-                    if (propertyValidator.validationType() == ValidationType.DATE_RANGE)
-                    {
-                        DateRangeValidator dateRangeValidator = new DateRangeValidator();
-                        String strValue = propertyValidator.fromDate();
-                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                        {
-                            Date date = now(strValue);
-                            if(date != null)
-                                dateRangeValidator.setFromDate(date);
-                            else
-                                dateRangeValidator.setFromDate(strValue);
-                        }
-
-                        strValue = propertyValidator.toDate();
-                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                        {
-                            Date date = now(strValue);
-                            if(date != null)
-                                dateRangeValidator.setToDate(date);
-                            else
-                                dateRangeValidator.setToDate(strValue);
-                        }
-
-                        validator.addValidator(dateRangeValidator);
-                    }
-
-                    if(propertyValidator.validationType() == ValidationType.NUMBER)
-                    {
-                        NumericValidator numericValidator = new NumericValidator();
-                        validator.addValidator(numericValidator);
-                        numericValidator.setFloating(propertyValidator.floating());
-                    }
-
-                    if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
-                    {
-                        NumericRangeValidator numericRangeValidator = new NumericRangeValidator();
-                        numericRangeValidator.setMaxValue(propertyValidator.maxValue());
-                        numericRangeValidator.setMinValue(propertyValidator.minValue());
-                        validator.addValidator(numericRangeValidator);
-                        numericRangeValidator.setFloating(propertyValidator.floating());
-                    }
-
-                    if(propertyValidator.validationType() == ValidationType.LENGTH)
-                    {
-                        TextLengthValidator rangeValidator = new TextLengthValidator();
-                        rangeValidator.setMaxLength(propertyValidator.maxLength());
-                        rangeValidator.setMinLength(propertyValidator.minLength());
-                        validator.addValidator(rangeValidator);
-                    }
-
-                    if(propertyValidator.validationType() == ValidationType.REGEX
-                            || propertyValidator.regex() != null)
-                    {
-                        String strValue = propertyValidator.regex();
-                        if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                        {
-                            RegexValidator regexValidator = new RegexValidator();
-                            regexValidator.setPattern(strValue);
-                            validator.addValidator(regexValidator);
-                        }
-                    }
-
-                    if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
-                    {
-                        MaskFormatterValidator v = new MaskFormatterValidator();
-                        v.setMaxLength(propertyValidator.maxLength());
-                        v.setMinLength(propertyValidator.minLength());
-                        validator.addValidator(v);
-                    }
-
-                    String strValue = propertyValidator.tooltip();
-                    if(strValue != null && (strValue = strValue.trim()).length() > 0)
-                        validator.setTooltip(strValue);
-
-                    pd.setValidator(validator);
-                }
-
-                Object value = property.sourceUnreadableValue();
-                if(!Property.NULL.equals(value))
-                    pd.setSourceUnreadableValue(value);
-
-                String columnName = null;
-                boolean nullable = true;
-
-                Annotation column = field.getAnnotation(Column.class);
-                if (column == null) column = field.getAnnotation(JoinColumn.class);
-                if (column == null) column = field.getAnnotation(PrimaryKeyJoinColumn.class);
-                if (column == null) column = field.getAnnotation(DiscriminatorColumn.class);
-
-                if(column != null)
-                {
-                    try {
-                        columnName = (String) column.getClass().getDeclaredMethod("name").invoke(column);
-                        nullable = (Boolean) column.getClass().getDeclaredMethod("nullable").invoke(column);
-                    } catch (NoSuchMethodException ex){
-                        nullable = false;
-                    } catch (Exception ex){
-                        ex.printStackTrace();
-                    }
-                }
-
-                if(columnName != null)
-                    pd.setColumnName(columnName);
-                else
-                    pd.setColumnName(pd.getPropertyName());
-
-                Id id = field.getAnnotation(Id.class);
-                IdClass idClass = field.getAnnotation(IdClass.class);
-                EmbeddedId embeddedId = field.getAnnotation(EmbeddedId.class);
-                if(id != null || idClass != null || embeddedId != null)
-                {
-                    pd.setReadOnly(true);
-                    pd.setEditable(false);
-                    pd.setVisible(false);
-                    pd.setHiden(true);
-                    pd.setRequired(true);
-                }
-
-                if(!pd.isRequired() && column != null && !nullable)
-                {
-                    System.out.println("Auto-required: " + columnName);
-                    pd.setRequired(true);
-                }
-
-                if(pd.isRequired()){
-                    BaseValidator validator = (BaseValidator) pd.getValidator();
-                    if (validator == null)
-                        validator = new BaseValidator();
-
-                    if (!validator.isRequired())
-                    {
-                        validator.setRequired(true);
-                        pd.setValidator(validator);
-                    }
-                }
-
-                // Setting custom display for Dates
-                if (pd.getPropertyClass() == Date.class && pd.getCustomDisplay() == Property.NULL)
-                {
-                    log.info("Setting date custom display for property " + pd.getPropertyName());
-
-                    String name = pd.getPropertyName();
-                    pd.setCustomDisplay("${" + name + ".date}.${" + name + ".month}.${" + name + ".year}");
-                }
-                properties.add(pd);
-            }
+            PropertyDetails detailsForField = createPropertyDetails(
+                    field,
+                    field.getName(),
+                    ClassHelper.getClassName(field.getType()),
+                    orderPosition+=10);
+            
+            if ( detailsForField!=null )
+                properties.add(detailsForField);
         }
 
         entityProperties.setBeanProperties(properties);
 
         return entityProperties;
+    }
+    
+    /**
+     * Create single property details for a given class and property name
+     * @param entityClass - not null
+     * @param propertyName - not null
+     * @param orderPosition - may be null
+     * @return - null if the field for such property is not found
+     */
+    @SuppressWarnings("unchecked")
+    public static PropertyDetails createPropertyDetails(Class entityClass, String propertyName, Integer orderPosition) {
+        try {
+            Field field = null;
+            //search for annotated field
+            Field[] fields = entityClass.getDeclaredFields();
+            for (Field f : fields) {
+                if ( f.getName().equals(propertyName)){
+                    field = f;
+                    break;
+                }
+            }
+            //if no field found - search for annotated getter
+            if ( field==null ){
+                String firstLetter = ""+propertyName.charAt(0);
+                firstLetter.toUpperCase();
+                String propertyNameMod = firstLetter + propertyName.substring(1);
+                String getterName = "get"+propertyNameMod;
+                Method getter = entityClass.getMethod(getterName);
+                
+                return
+                createPropertyDetails(getter, propertyName, 
+                    ClassHelper.getClassName(getter.getReturnType()), orderPosition);
+            //otherwise use the field
+            }else{
+                return createPropertyDetails(field, field.getName(), ClassHelper.getClassName(field.getType()), orderPosition);
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static PropertyDetails createPropertyDetails(AccessibleObject accessibleObject, String propertyName, String propertyClassName, Integer orderPosition) {
+        Property property = accessibleObject.getAnnotation(Property.class);
+        if(property != null)
+        {
+            PropertyDetails pd = new PropertyDetails();
+            if ( orderPosition!=null )
+                pd.setOrderPosition(orderPosition);
+            pd.setPropertyName(propertyName);
+            pd.setPropertyClassName(propertyClassName);//
+            pd.setPropertyTitle(property.title());
+            pd.setReadOnly(property.readOnly());
+            pd.setEditable(property.editable());
+            pd.setVisible(property.visible());
+            pd.setHiden(property.hidden());
+            pd.setResourceDisplayInTable(property.resourceDisplayInTable());
+
+            if ( !Property.NULL.equals(property.customDisplay()) )
+                pd.setCustomDisplay(property.customDisplay());
+
+            /* Setting validation-related values */
+            PropertyValidator propertyValidator = property.propertyValidator();
+
+            if(propertyValidator.validationType() != ValidationType.NONE || propertyValidator.required())
+            {
+                BaseValidator validator = new BaseValidator();
+
+                validator.setRequired(propertyValidator.required());
+
+                if (propertyValidator.validator() != com.cosmos.beansbinding.validation.NoneValidator.class) {
+                    try {
+                        validator.addValidator((Validator) propertyValidator.validator().newInstance());
+                    } catch (Exception ex){
+                        // Log it!
+                        ex.printStackTrace();
+                    }
+                }
+
+                if(propertyValidator.validationType() == ValidationType.DATE)
+                {
+                    String strValue = propertyValidator.datePattern();
+                    if(strValue != null && (strValue = strValue.trim()).length() > 0){
+                        DateValidator dateValidator = new DateValidator();
+
+                        dateValidator.setDatePattern(strValue);
+                        validator.addValidator(dateValidator);
+                    }
+                }
+
+                if (propertyValidator.validationType() == ValidationType.DATE_RANGE)
+                {
+                    DateRangeValidator dateRangeValidator = new DateRangeValidator();
+                    String strValue = propertyValidator.fromDate();
+                    if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                    {
+                        Date date = now(strValue);
+                        if(date != null)
+                            dateRangeValidator.setFromDate(date);
+                        else
+                            dateRangeValidator.setFromDate(strValue);
+                    }
+
+                    strValue = propertyValidator.toDate();
+                    if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                    {
+                        Date date = now(strValue);
+                        if(date != null)
+                            dateRangeValidator.setToDate(date);
+                        else
+                            dateRangeValidator.setToDate(strValue);
+                    }
+
+                    validator.addValidator(dateRangeValidator);
+                }
+
+                if(propertyValidator.validationType() == ValidationType.NUMBER)
+                {
+                    NumericValidator numericValidator = new NumericValidator();
+                    validator.addValidator(numericValidator);
+                    numericValidator.setFloating(propertyValidator.floating());
+                }
+
+                if(propertyValidator.validationType() == ValidationType.NUMBER_RANGE)
+                {
+                    NumericRangeValidator numericRangeValidator = new NumericRangeValidator();
+                    numericRangeValidator.setMaxValue(propertyValidator.maxValue());
+                    numericRangeValidator.setMinValue(propertyValidator.minValue());
+                    validator.addValidator(numericRangeValidator);
+                    numericRangeValidator.setFloating(propertyValidator.floating());
+                }
+
+                if(propertyValidator.validationType() == ValidationType.LENGTH)
+                {
+                    TextLengthValidator rangeValidator = new TextLengthValidator();
+                    rangeValidator.setMaxLength(propertyValidator.maxLength());
+                    rangeValidator.setMinLength(propertyValidator.minLength());
+                    validator.addValidator(rangeValidator);
+                }
+
+                if(propertyValidator.validationType() == ValidationType.REGEX
+                        || propertyValidator.regex() != null)
+                {
+                    String strValue = propertyValidator.regex();
+                    if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                    {
+                        RegexValidator regexValidator = new RegexValidator();
+                        regexValidator.setPattern(strValue);
+                        validator.addValidator(regexValidator);
+                    }
+                }
+
+                if(propertyValidator.validationType() == ValidationType.MASK_FORMATTER)
+                {
+                    MaskFormatterValidator v = new MaskFormatterValidator();
+                    v.setMaxLength(propertyValidator.maxLength());
+                    v.setMinLength(propertyValidator.minLength());
+                    validator.addValidator(v);
+                }
+
+                String strValue = propertyValidator.tooltip();
+                if(strValue != null && (strValue = strValue.trim()).length() > 0)
+                    validator.setTooltip(strValue);
+
+                pd.setValidator(validator);
+            }
+
+            Object value = property.sourceUnreadableValue();
+            if(!Property.NULL.equals(value))
+                pd.setSourceUnreadableValue(value);
+
+            String columnName = null;
+            boolean nullable = true;
+
+            Annotation column = accessibleObject.getAnnotation(Column.class);
+            if (column == null) column = accessibleObject.getAnnotation(JoinColumn.class);
+            if (column == null) column = accessibleObject.getAnnotation(PrimaryKeyJoinColumn.class);
+            if (column == null) column = accessibleObject.getAnnotation(DiscriminatorColumn.class);
+
+            if(column != null)
+            {
+                try {
+                    columnName = (String) column.getClass().getDeclaredMethod("name").invoke(column);
+                    nullable = (Boolean) column.getClass().getDeclaredMethod("nullable").invoke(column);
+                } catch (NoSuchMethodException ex){
+                    nullable = false;
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+
+            if(columnName != null)
+                pd.setColumnName(columnName);
+            else
+                pd.setColumnName(pd.getPropertyName());
+
+            Id id = accessibleObject.getAnnotation(Id.class);
+            IdClass idClass = accessibleObject.getAnnotation(IdClass.class);
+            EmbeddedId embeddedId = accessibleObject.getAnnotation(EmbeddedId.class);
+            if(id != null || idClass != null || embeddedId != null)
+            {
+                pd.setReadOnly(true);
+                pd.setEditable(false);
+                pd.setVisible(false);
+                pd.setHiden(true);
+                pd.setRequired(true);
+            }
+
+            if(!pd.isRequired() && column != null && !nullable)
+            {
+                System.out.println("Auto-required: " + columnName);
+                pd.setRequired(true);
+            }
+
+            if(pd.isRequired()){
+                BaseValidator validator = (BaseValidator) pd.getValidator();
+                if (validator == null)
+                    validator = new BaseValidator();
+
+                if (!validator.isRequired())
+                {
+                    validator.setRequired(true);
+                    pd.setValidator(validator);
+                }
+            }
+
+            // Setting custom display for Dates
+            if (pd.getPropertyClass() == Date.class && pd.getCustomDisplay() == Property.NULL)
+            {
+                log.info("Setting date custom display for property " + pd.getPropertyName());
+
+                String name = pd.getPropertyName();
+                pd.setCustomDisplay("${" + name + ".date}.${" + name + ".month}.${" + name + ".year}");
+            }
+            return pd;
+        }
+        return null;
     }
 
     private static Date now(String now)

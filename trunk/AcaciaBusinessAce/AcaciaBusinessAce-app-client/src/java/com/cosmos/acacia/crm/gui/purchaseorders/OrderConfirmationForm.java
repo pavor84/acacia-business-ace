@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -29,12 +30,13 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.OrderConfirmationListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmation;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.enums.OrderConfirmationType;
-import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -539,7 +541,8 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         supplierContactField.setModel(new DefaultComboBoxModel());
         
         //supplier
-        OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
+        Classifier supplierClassifier = getClassifiersFormSession().getClassifier("provider");
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(getParentDataObjectId(), supplierClassifier);
         supplierField.bind(
             bindGroup,
             listPanel,
@@ -553,6 +556,12 @@ public class OrderConfirmationForm extends BaseEntityPanel {
                 onSelectSupplier();
             }
         });
+        
+        //if once saved - the supplier is not changeable
+        if ( entity.getId()!=null && entity.getId().compareTo(new BigInteger("0"))>0 ){
+            supplierField.setEditable(false);
+            supplierField.setEnabled(false);
+        }
         
         //supplier contact
         supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), 

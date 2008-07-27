@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 
 import java.math.BigInteger;
 import java.sql.BatchUpdateException;
@@ -200,6 +201,11 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         }
 
         return (EntityProperties)entityProperties.clone();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position){
+        return BeansBindingHelper.createPropertyDetails(entityClass, propertyName, position);
     }
 
 }

@@ -25,10 +25,12 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -662,7 +664,8 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         supplierContactField.setModel(new DefaultComboBoxModel());
         
         //supplier
-        OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
+        Classifier supplierClassifier = getClassifiersFormSession().getClassifier("provider");
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(getParentDataObjectId(), supplierClassifier);
         supplierField.bind(
             bindGroup,
             listPanel,

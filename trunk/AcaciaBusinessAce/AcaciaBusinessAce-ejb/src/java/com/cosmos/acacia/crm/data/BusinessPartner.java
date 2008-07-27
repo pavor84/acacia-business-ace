@@ -2,6 +2,7 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +35,21 @@ import javax.persistence.PrimaryKeyJoinColumn;
         (
             name = "BusinessPartner.getAllNotDeleted",
             query = "select bp from BusinessPartner bp where bp.dataObject.deleted = false"
-        )
+        ),
+        /**
+         * Get all for parent and deleted
+         * Parameters:
+         * - parentDataObjectId - may be null, then all partners are returned
+         * - deleted - not null
+         */
+        @NamedQuery
+            (
+             name = "BusinessPartner.findForParentAndDeletedById",
+             query = "select b from BusinessPartner b where " +
+             		"(b.dataObject.parentDataObjectId = :parentDataObjectId or :parentDataObjectId is null) " +
+             		"and b.dataObject.deleted = :deleted " +
+             		"order by b.partnerId"
+            )
     }
 )
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {
@@ -121,4 +136,30 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     }
 
     public abstract String getDisplayName();
+    
+    /**
+     * Dispatch method that knows the possible sub classes and makes a decision what to
+     * return.
+     */
+    public String getUniqueCode(){
+        if ( this instanceof Organization ){
+            return ((Organization)this).getUniqueIdentifierCode();
+        }else if ( this instanceof Person ){
+            return ((Person)this).getPersonalUniqueId();
+        }
+        return null;
+    }
+    
+    /**
+     * Dispatch method that knows the possible sub classes and makes a decision what to
+     * return.
+     */
+    public Date getBirthOrRegistration(){
+        if ( this instanceof Organization ){
+            return ((Organization)this).getRegistrationDate();
+        }else if ( this instanceof Person ){
+            return ((Person)this).getBirthDate();
+        }
+        return null;
+    }
 }
