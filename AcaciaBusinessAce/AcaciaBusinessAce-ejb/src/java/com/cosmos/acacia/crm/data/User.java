@@ -100,11 +100,11 @@ public class User extends DataObjectBean implements Serializable {
     @Transient
     @Property(title="Person")
     private String personName;
-    
+
     @Transient
     @Property(title="Branch")
     private String branchName;
-       
+
     @Transient
     @Property(title="Active")
     private boolean active;
@@ -152,7 +152,7 @@ public class User extends DataObjectBean implements Serializable {
     @OneToOne
     @Property(title="Data Object")
     private DataObject dataObject;
-    
+
     public User() {
     }
 
@@ -248,7 +248,7 @@ public class User extends DataObjectBean implements Serializable {
     public boolean isActive() {
         return active;
     }
-    
+
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -361,8 +361,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Override
     public DataObject getDataObject() {
-        // TODO Auto-generated method stub
-        return null;
+        return dataObject;
     }
 
     @Override
@@ -390,7 +389,7 @@ public class User extends DataObjectBean implements Serializable {
     public void setParentId(BigInteger parentId) {
         //
     }
-    
+
     @Override
     public String getInfo() {
         return getUserName();

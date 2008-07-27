@@ -34,7 +34,7 @@ public class JoinOrganizationForm extends AcaciaPanel{
         initComponents();
         initData();
     }
-     
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -128,15 +128,15 @@ public class JoinOrganizationForm extends AcaciaPanel{
     // End of variables declaration//GEN-END:variables
 
     private UsersRemote formSession;
-    
+
     @Override
     protected void initData() {
        setResizable(false);
-       
+
        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
        // Filtering current organization
        organizationsTable.getDataTable().getData().remove(getAcaciaSession().getOrganization());
-       
+
        organizationComboList.initUnbound(organizationsTable, "${organizationName}");
 
        organizationComboList.addItemListener(new ItemListener() {
@@ -183,16 +183,16 @@ public class JoinOrganizationForm extends AcaciaPanel{
         Address branch = (Address) branchComboList.getSelectedItem();
         Person person = null;
         if (personComboList.getSelectedItem() != null)
-             person = (Person) ((ContactPerson) personComboList.getSelectedItem()).getContact();
-        
-        
+             person = ((ContactPerson) personComboList.getSelectedItem()).getContact();
+
+
         if (organization != null)
             getFormSession().joinOrganization(organization, branch, person);
-        
+
         JOptionPane.showMessageDialog(this, getResourceMap().getString("JoinOrganizationForm.request.sent"));
         close();
     }
-    
+
      protected UsersRemote getFormSession() {
         if (formSession == null) {
              try {
@@ -204,5 +204,5 @@ public class JoinOrganizationForm extends AcaciaPanel{
 
          return formSession;
     }
-     
+
 }

@@ -328,7 +328,7 @@ public class BankDetailPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseBank() {
-        OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
+        OrganizationsListPanel listPanel = new OrganizationsListPanel(getOrganizationDataObjectId(), null);
         listPanel.setClassifier(getClassifiersFormSession().getClassifier("bank"));
 
         Organization oldBank = bankDetail.getBank();

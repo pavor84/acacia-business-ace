@@ -53,6 +53,7 @@ import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
+import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
@@ -101,7 +102,7 @@ public class AcaciaApplicationView extends FrameView {
     private AcaciaSessionRemote getSession() {
         if (acaciaSession == null)
             acaciaSession = AcaciaPanel.getBean(AcaciaSessionRemote.class);
-        
+
         return acaciaSession;
     }
 
@@ -204,11 +205,13 @@ public class AcaciaApplicationView extends FrameView {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Action(enabledProperty = "saveNeeded")
     public Task save() {
         return new SaveTask(getApplication());
     }
 
+    @SuppressWarnings("unchecked")
     private class SaveTask extends Task {
         SaveTask(org.jdesktop.application.Application app) {
             super(app);
@@ -231,11 +234,13 @@ public class AcaciaApplicationView extends FrameView {
      * artificial 'Thread.sleep' calls making the task long enough to see the
      * progress visualization - remove the sleeps for real application.
      */
+    @SuppressWarnings("unchecked")
     @Action
     public Task refresh() {
        return new RefreshTask(getApplication());
     }
 
+    @SuppressWarnings("unchecked")
     private class RefreshTask extends Task {
         RefreshTask(org.jdesktop.application.Application app) {
             super(app);
@@ -394,7 +399,7 @@ public class AcaciaApplicationView extends FrameView {
         PositionsHierarchyTreePanel panel = new PositionsHierarchyTreePanel(getParentId());
         panel.showFrame();
     }
-        
+
     @Action
     public void personPositionTypesListAction(){
         log.debug("personPositionTypesListAction");
@@ -446,27 +451,27 @@ public class AcaciaApplicationView extends FrameView {
         JoinOrganizationForm panel = new JoinOrganizationForm(getParentId());
         panel.showFrame();
     }
-    
+
     @Action
     public void leaveOrganizationAction() {
         LeaveOrganizationForm panel = new LeaveOrganizationForm(getParentId());
         panel.showFrame();
     }
-    
+
     @Action
     public void ordersAction() {
         BigInteger parentId = getParentId();
         PurchaseOrderListPanel panel = new PurchaseOrderListPanel(parentId);
         panel.showFrame();
     }
-    
+
     @Action
     public void ordersMatchingAction() {
         BigInteger parentId = getParentId();
         OrdersMatchingForm panel = new OrdersMatchingForm(parentId);
         panel.showFrame();
     }
-    
+
     @Action
     public void orderConfirmationsAction() {
         BigInteger parentId = getParentId();
@@ -475,7 +480,7 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void ownOrganizationAction() { 
+    public void ownOrganizationAction() {
         OrganizationPanel panel = new OrganizationPanel();
         panel.showFrame();
     }
@@ -485,6 +490,13 @@ public class AcaciaApplicationView extends FrameView {
         System.out.println("invoicesListAction");
         InvoicesListPanel invoicesListPanel = new InvoicesListPanel(null);
         invoicesListPanel.showFrame();
+    }
+
+
+    @Action
+    public void userGroupsListAction() {
+        UserGroupsListPanel panel = new UserGroupsListPanel(getParentId());
+        panel.showFrame();
     }
 
     private ActionMap getActionMap()
@@ -522,7 +534,6 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem organizationPositionTypesListMenuItem = new JBMenuItem();
         JBMenuItem citiesListMenuItem = new JBMenuItem();
         JBMenuItem countriesListMenuItem = new JBMenuItem();
-        JBMenuItem usersListMenuItem = new JBMenuItem();
         JBMenuItem joinOrganizationMenuItem = new JBMenuItem();
         JBMenuItem leaveOrganizationMenuItem = new JBMenuItem();
         JBMenuItem ownOrganizationMenuItem = new JBMenuItem();
@@ -530,6 +541,10 @@ public class AcaciaApplicationView extends FrameView {
         /* End of contact book menu items */
 
         JBMenu classifiersMenu = new JBMenu();
+
+        JBMenu adminMenu = new JBMenu();
+        JBMenuItem usersListMenuItem = new JBMenuItem();
+        JBMenuItem userGroupsMenuItem = new JBMenuItem();
 
         JBMenuItem patternMasksItem = new JBMenuItem();
         JBMenuItem invoicesListItem = new JBMenuItem();
@@ -594,14 +609,14 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setMnemonic('P');
         ordersMenu.add(menuItem);
         menuBar.add(ordersMenu);
-        
+
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("orderConfirmationsAction"));
         menuItem.setMnemonic('C');
         ordersMenu.add(menuItem);
-        
+
         ordersMenu.add(new Separator());
-        
+
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("ordersMatchingAction"));
         menuItem.setMnemonic('M');
@@ -707,7 +722,7 @@ public class AcaciaApplicationView extends FrameView {
         contactBook.add(organizationPositionTypesListMenuItem);
         organizationInternalHierarchyMenuItem.setAction(actionMap.get("organizationInternalHierarchyAction"));
         contactBook.add(organizationInternalHierarchyMenuItem);
-        
+
         Separator contactBookSeparator2 = new Separator();
         contactBook.add(contactBookSeparator2);
 
@@ -719,15 +734,12 @@ public class AcaciaApplicationView extends FrameView {
         Separator contactBookSeparator3 = new Separator();
         contactBook.add(contactBookSeparator3);
 
-        usersListMenuItem.setAction(actionMap.get("usersListAction"));
-        contactBook.add(usersListMenuItem);
-
         joinOrganizationMenuItem.setAction(actionMap.get("joinOrganizationAction"));
         contactBook.add(joinOrganizationMenuItem);
 
         leaveOrganizationMenuItem.setAction(actionMap.get("leaveOrganizationAction"));
         contactBook.add(leaveOrganizationMenuItem);
-        
+
         Separator contactBookSeparator4 = new Separator();
         contactBook.add(contactBookSeparator4);
 
@@ -737,6 +749,21 @@ public class AcaciaApplicationView extends FrameView {
         menuBar.add(contactBook);
 
         /* End of contact book menu items */
+
+
+        /* Admin menu */
+        adminMenu.setName("adminMenu");
+        adminMenu.setText(resourceMap.getString("adminMenu.text"));
+        adminMenu.setMnemonic('D');
+
+        usersListMenuItem.setAction(actionMap.get("usersListAction"));
+        adminMenu.add(usersListMenuItem);
+
+        userGroupsMenuItem.setAction(actionMap.get("userGroupsListAction"));
+        adminMenu.add(userGroupsMenuItem);
+
+        menuBar.add(adminMenu);
+        /* End of admin menu */
 
         /* Warehouse menu items */
         warehousesMenu.setName("warehousesMenu"); // NOI18N
@@ -758,7 +785,7 @@ public class AcaciaApplicationView extends FrameView {
         //warehousesMenu.add(menuItem);
         JComponent deliveryCertificatesMenu = createDeliveryCertificatesMenu();
         warehousesMenu.add(deliveryCertificatesMenu);
-          
+
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("receiptCertificatesAction")); // NOI18N
@@ -944,30 +971,30 @@ public class AcaciaApplicationView extends FrameView {
         desktopPane.setName("desktopPane"); // NOI18N
         return desktopPane;
     }
-    
-    
+
+
     /** NOT IMPLEMENTED
      * This method will dynamically populate DeliveryCertificates menu,
-     * when implemented. 
-     * Logged user should be retrieved. Only these warehouses to which the 
-     * user has access should be listed in the menu. 
+     * when implemented.
+     * Logged user should be retrieved. Only these warehouses to which the
+     * user has access should be listed in the menu.
      * @return
      */
     private JComponent createDeliveryCertificatesMenu(){
-         
+
         JBMenu menu = new JBMenu();
         ActionMap actionMap = getActionMap();
-        
+
         menu.setName("DeliveryCertificates");
         menu.setText("DeliveryCertificates(TODO)");
-        
+
         JBMenuItem warehouse = new JBMenuItem();
-        warehouse.setAction(actionMap.get("deliveryCertificatesAction")); 
+        warehouse.setAction(actionMap.get("deliveryCertificatesAction"));
         warehouse.setText("Hardcoded Warehouse");
         warehouse.setActionCommand("warehouse id");
-        
+
         menu.add(warehouse);
         return menu;
     }
-    
+
 }

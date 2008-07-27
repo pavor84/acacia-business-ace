@@ -45,7 +45,7 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
         this.classifier = classifier;
         postInitData();
     }
-    
+
     @EJB
     private ClassifiersRemote formSession;
 
@@ -53,22 +53,22 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     private List<DataObjectType> dataObjectTypes;
     private DataObjectType dataObjectType;
     private Classifier classifier;
-    
+
     @Override
     protected void initData() {
 
         super.initData();
         setVisible(Button.Select, false);
-        
+
     }
-    
+
     protected void postInitData() {
         dataObjectTypesBindingGroup = new BindingGroup();
         AcaciaTable dataObjectTypesTable = getDataTable();
         JTableBinding tableBinding = dataObjectTypesTable.bind(dataObjectTypesBindingGroup, getDataObjectTypes(), getDataObjectTypeEntityProperties());
-        
+
         List<DataObjectType> l = ObservableCollections.observableList(getDataObjectTypes());
-        
+
         dataObjectTypesBindingGroup.bind();
 
         dataObjectTypesTable.setEditable(false);
@@ -77,26 +77,26 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     protected List<DataObjectType> getDataObjectTypes()
     {
         if(dataObjectTypes == null)
-        {   
+        {
             dataObjectTypes = shortenDataObjectTypeNames(getFormSession().getDataObjectTypes(classifier));
         }
         return dataObjectTypes;
     }
 
-    public List<DataObjectType> shortenDataObjectTypeNames(List<DataObjectType> list) {
+    public static List<DataObjectType> shortenDataObjectTypeNames(List<DataObjectType> list) {
         List<DataObjectType> result = new ArrayList<DataObjectType>(list.size());
-        
+
         for (DataObjectType dot : list) {
-            
+
             String name = new String(dot.getDataObjectType());
             dot.setDataObjectType(name
                     .replaceAll(DataObjectType.class.getPackage().getName() + "\\.", ""));
             result.add(dot);
         }
-        
+
         return result;
     }
-    
+
     public DataObjectType getDataObjectType() {
         return dataObjectType;
     }
@@ -138,7 +138,7 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -159,22 +159,22 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (dataObjectTypesBindingGroup != null)
             dataObjectTypesBindingGroup.unbind();
-        
+
         dataObjectTypes = null;
-        
+
         postInitData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

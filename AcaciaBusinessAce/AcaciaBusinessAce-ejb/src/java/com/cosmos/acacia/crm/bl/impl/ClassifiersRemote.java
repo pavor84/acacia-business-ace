@@ -240,28 +240,29 @@ public interface ClassifiersRemote {
      * @return the list
      */
     List<DataObject> getDataObjects(Classifier classifier);
-    
-    
+
+
     /**
      * Lists all DataObjectBeans for which the given classifier is applied.
      * presented in readable format
-     * 
+     *
      * @param classifier
      * @return list of entities
      */
     List<ClassifiedObjectBean> getClassifiedObjectBeans(Classifier classifier);
-    
+
     /**
      * Gets the DataObjectBean for the specified DataObject
+     *
      * @param dataObject
      * @return dataObjectBean
      */
     DataObjectBean getDataObjectBean(DataObject dataObject);
 
-    
+
     /**
      * Gets the entity properties for ClassifiedObjectBean
-     * 
+     *
      * @return
      */
     EntityProperties getClassifiedObjectBeansEntityProperties();

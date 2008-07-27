@@ -39,7 +39,6 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         setClassifier(classifier);
-        filterByClassifier();
     }
 
     @EJB
