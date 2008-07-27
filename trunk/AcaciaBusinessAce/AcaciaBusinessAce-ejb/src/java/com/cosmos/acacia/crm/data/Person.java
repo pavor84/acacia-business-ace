@@ -243,18 +243,19 @@ public class Person extends BusinessPartner
         return firstName + " " + secondName + " " + lastName + " " + extraName;
     }
 
+    @SuppressWarnings("unused")
     @Transient
     private String displayName;
-    
+
     public void setDisplayName(String displayName) {
         //
     }
-    
+
     @Override
     public String getDisplayName() {
         return toText();
     }
-    
+
     @Override
     public String getInfo() {
         return toText();

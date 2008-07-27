@@ -40,6 +40,7 @@ public class LoginForm extends AcaciaPanel {
     private static final String LOCALE = "locale";
     private static final String ORGANIZATION = "organization";
 
+    @SuppressWarnings("hiding")
     protected static Logger log = Logger.getLogger(LoginForm.class);
 
     private AcaciaSessionRemote acaciaSessionRemote = getBean(AcaciaSessionRemote.class);
@@ -348,15 +349,15 @@ public class LoginForm extends AcaciaPanel {
                 if(DialogResponse.SELECT.equals(response))
                 {
                     organization = (Organization) form.getSelectedValue();
+                    prefs.put(username + ORGANIZATION, organization.getOrganizationName());
                 }
-                prefs.put(username + ORGANIZATION, organization.getOrganizationName());
             } else if (organizations.size() == 1) {
                 organization = organizations.get(0);
             }
-            
+
             getFormSession().setOrganization(organization);
 
-            
+
 //            try {
 //                OrganizationsCallbackHandler handler = new OrganizationsCallbackHandler(defaultOrganization);
 //                getFormSession().updateOrganization(user,
@@ -372,7 +373,7 @@ public class LoginForm extends AcaciaPanel {
             if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
                 ChangePasswordForm cpf = new ChangePasswordForm(null);
                 cpf.setCurrentPassword(new String(password));
-                DialogResponse response1 = cpf.showDialog(this);
+                cpf.showDialog(this);
 
                 //if(!DialogResponse.OK.equals(response1))
                 //    AcaciaApplication.getApplication().exit();

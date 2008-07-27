@@ -41,6 +41,7 @@ import com.cosmos.acacia.crm.enums.ProductColor;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 
 /**
  *
@@ -86,6 +87,7 @@ public class DatabaseResourceBean
             getDbResources(InvoiceStatus.class);
             getDbResources(PurchaseOrderStatus.class);
             getDbResources(OrderConfirmationType.class);
+            getDbResources(SpecialPermission.class);
             initialized = true;
         }
     }
@@ -110,7 +112,7 @@ public class DatabaseResourceBean
         return dbResources;
     }
 
-  
+
     // Add business logic below. (Right-click in editor and choose
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
 

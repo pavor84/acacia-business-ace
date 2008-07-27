@@ -177,10 +177,12 @@ public class Passport extends DataObjectBean implements Serializable {
         this.issuerBranch = issuerBranch;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -227,7 +229,7 @@ public class Passport extends DataObjectBean implements Serializable {
     public void setId(BigInteger id) {
         setPassportId(id);
     }
-    
+
     @Override
     public String getInfo() {
         return getPassportNumber();

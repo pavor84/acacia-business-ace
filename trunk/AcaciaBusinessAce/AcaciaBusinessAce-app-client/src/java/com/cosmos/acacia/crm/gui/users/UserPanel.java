@@ -10,7 +10,6 @@ package com.cosmos.acacia.crm.gui.users;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
@@ -22,7 +21,6 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
-import java.util.LinkedList;
 
 /**
  *
@@ -158,7 +156,7 @@ public class UserPanel extends BaseEntityPanel {
     private UserOrganization userOrganization;
     private UsersRemote formSession;
     ContactPersonsListPanel personsTable;
-    
+
     @Override
     protected void initData() {
        setResizable(false);
@@ -177,12 +175,12 @@ public class UserPanel extends BaseEntityPanel {
        AddressListPanel branchesTable = new AddressListPanel(userOrganization.getOrganization().getId());
        branchesTable.setVisible(Button.New, false);
        branchComboList.bind(bindingGroup, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"), "${addressName}");
-       
+
        if (userOrganization.getBranch() != null) {
             personsTable = new ContactPersonsListPanel(userOrganization.getBranch().getId());
             personComboList.bind(bindingGroup, personsTable, userOrganization, entityProps.getPropertyDetails("person"), "${contact.displayName}");
        }
-       
+
        branchComboList.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -193,7 +191,7 @@ public class UserPanel extends BaseEntityPanel {
                     return;
                 }
                 personComboList.setEnabled(true);
-                
+
                 personsTable = new ContactPersonsListPanel(branch.getId());
             }
 

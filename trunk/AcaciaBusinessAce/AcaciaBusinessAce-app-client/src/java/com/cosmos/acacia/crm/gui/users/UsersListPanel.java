@@ -5,12 +5,13 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
 
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
@@ -22,8 +23,6 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import org.jdesktop.application.Task;
 
 /**
  * Panel for listing existing organizations, giving CRUD options
@@ -40,28 +39,27 @@ public class UsersListPanel extends AbstractTablePanel {
     public UsersListPanel(BigInteger parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         setClassifier(classifier);
-        filterByClassifier();
     }
-    
+
     @EJB
     private UsersRemote adminSession;
 
     private BindingGroup usersBindingGroup;
     private List<User> users;
     private User ownUser;
-    
+
     @Override
     protected void initData() {
         super.initData();
 
         setVisibleButtons(4 + 16 + 32);
-        
+
         ownUser = getAcaciaSession().getUser();
         initAdminView();
-        
+
         usersBindingGroup = new BindingGroup();
         AcaciaTable usersTable = getDataTable();
-        JTableBinding tableBinding = usersTable.bind(usersBindingGroup, getUsers(), getUserEntityProperties());
+        usersTable.bind(usersBindingGroup, getUsers(), getUserEntityProperties());
 
 
         usersBindingGroup.bind();
@@ -88,7 +86,7 @@ public class UsersListPanel extends AbstractTablePanel {
             }
         });
     }
-    
+
     @Override
     public void specialAction() {
         User user = (User) getDataTable().getSelectedRowObject();
@@ -96,7 +94,7 @@ public class UsersListPanel extends AbstractTablePanel {
                 user,
                 getAcaciaSession().getOrganization().getId(),
                 new Boolean(!user.isActive()));
-        
+
         getDataTable().replaceSelectedRow(user);
         fireModify(user);
         updateButtonCaption();
@@ -113,7 +111,7 @@ public class UsersListPanel extends AbstractTablePanel {
 
         return adminSession;
     }
-    
+
     private void updateButtonCaption() {
         User user = (User) getDataTable().getSelectedRowObject();
         if (user != null) {
@@ -140,7 +138,7 @@ public class UsersListPanel extends AbstractTablePanel {
     {
         return getAdminSession().getUserEntityProperties();
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
         return false;

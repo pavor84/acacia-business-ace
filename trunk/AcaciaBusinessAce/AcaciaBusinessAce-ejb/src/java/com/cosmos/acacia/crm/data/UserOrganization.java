@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -11,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
 
 /**
  *
@@ -49,16 +50,28 @@ public class UserOrganization implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="branch_id", referencedColumnName="address_id")
-    @Property(title="Branch")
+    @Property(title="Branch", customDisplay="${branch.addressName}")
     private Address branch;
 
     @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
     @ManyToOne
     @Property(title="Person", customDisplay="${person.displayName}")
     private Person person;
-    
+
     @Column(name="is_user_active")
     private boolean isUserActive;
+
+    @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
+    @ManyToOne
+    private UserGroup userGroup;
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+    }
 
     public User getUser() {
         return user;

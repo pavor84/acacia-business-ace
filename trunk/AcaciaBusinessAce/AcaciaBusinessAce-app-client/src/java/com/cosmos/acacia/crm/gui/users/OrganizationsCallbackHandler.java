@@ -1,7 +1,5 @@
 package com.cosmos.acacia.crm.gui.users;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 import com.cosmos.acacia.callback.CallbackTransportObject;
@@ -22,11 +20,12 @@ public class OrganizationsCallbackHandler implements Callbackable {
         super();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public CallbackTransportObject callback(CallbackTransportObject req) {
 
         System.out.println("HANDLED");
-       
+
         OrganizationChoiceForm form = new OrganizationChoiceForm(null);
         form.setDefaultOrganizationString(defaultOrganization);
         form.init((List<Organization>) req.get(UsersBean.ORGANIZATIONS_KEY));

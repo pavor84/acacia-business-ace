@@ -20,7 +20,6 @@ import java.util.Properties;
 import javax.crypto.Cipher;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
@@ -100,8 +99,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
         } catch (ValidationException ex){
             if (ex.getMessage().equals(INCORRECT_LOGIN_DATA))
                 return login(username, password, TEMPORARY_LOGIN);
-            else
-                throw ex;
+
+            throw ex;
         }
     }
 
@@ -124,8 +123,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
             }
             if (!passwordChange)
                 return acaciaSessionLocal.login(user);
-            else
-                return null;
+
+            return null;
         } catch (NoResultException ex){
             throw new ValidationException(INCORRECT_LOGIN_DATA);
         }
@@ -183,7 +182,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         //BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 1000000l);
 
         SecureRandom random = new SecureRandom();
-        BigInteger codeNumber = BigInteger.valueOf(random.nextLong() / 100000l);
+        BigInteger codeNumber = BigInteger.valueOf(random.nextInt(10000000));
 
         Query q = em.createNamedQuery("User.findByEmail");
         q.setParameter("email", email);
@@ -378,6 +377,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
         return hexString.toString();
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
     public List<Organization> getOrganizationsList(User user) {
         if (user == null)
@@ -475,6 +476,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<User> getUsers(BigInteger parentDataObjectId) {
         List<User> result = null;
@@ -489,12 +491,12 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 User u = uo.getUser();
                 if (uo.getBranch() != null)
                     u.setBranchName(uo.getBranch().getAddressName());
-                
+
                 if (uo.getPerson() != null)
                     u.setPersonName(uo.getPerson().getDisplayName());
-                
+
                 u.setActive(uo.isUserActive());
-                
+
                 result.add(u);
             }
         } else {

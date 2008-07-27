@@ -5,7 +5,9 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -21,5 +23,13 @@ public interface DataObjectTypeRemote {
     DataObjectType persist(DataObjectType dataObjectType);
 
     void remove(DataObjectType dataObjectType);
+    
+    /**
+     * Lists all objects for the specified data object types
+     * 
+     * @param dataObjectType
+     * @return list of DataObjectBeans
+     */
+    List<DataObjectBean> getDataObjectBeans(DataObjectType dataObjectType);
     
 }

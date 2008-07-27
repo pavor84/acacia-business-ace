@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="readCheckBox" linkSize="1" min="-2" pref="87" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="32767" attributes="1"/>
+                      <Component id="createCheckBox" linkSize="1" min="-2" pref="89" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="modifyCheckBox" linkSize="1" min="-2" pref="91" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="deleteCheckBox" linkSize="1" min="-2" pref="93" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="entityFormButtonPanel" alignment="1" pref="378" max="32767" attributes="2"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="dataObjectLabel" pref="82" max="32767" attributes="1"/>
+                          <Component id="dataObjectTypeLabel" alignment="1" pref="82" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="dataObjectTypeComboBox" min="-2" pref="292" max="-2" attributes="1"/>
+                          <Component id="dataObjectComboBox" alignment="1" min="-2" pref="292" max="-2" attributes="1"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="dataObjectTypeLabel" alignment="3" min="-2" max="-2" attributes="1"/>
+                  <Component id="dataObjectTypeComboBox" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="dataObjectComboBox" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="dataObjectLabel" alignment="3" min="-2" pref="17" max="-2" attributes="1"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="readCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="createCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="modifyCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="deleteCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="13" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.swingb.JBLabel" name="dataObjectTypeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="dataObjectTypeLabel.text"/>
+        <Property name="name" type="java.lang.String" value="dataObjectTypeLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="dataObjectLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="dataObjectLabel.text"/>
+        <Property name="name" type="java.lang.String" value="dataObjectLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="readCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="readCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="readCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="createCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="createCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="createCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="modifyCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="modifyCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="modifyCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="deleteCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="deleteCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="deleteCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="dataObjectTypeComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="dataObjectTypeComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="dataObjectComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="dataObjectComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

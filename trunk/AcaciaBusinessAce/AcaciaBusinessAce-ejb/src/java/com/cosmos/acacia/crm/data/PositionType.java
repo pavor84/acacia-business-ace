@@ -80,6 +80,10 @@ public class PositionType
     @Property(title="Description")
     private String description;
 
+    @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
+    @OneToOne
+    private UserGroup userGroup;
+
     @JoinColumn(name = "position_type_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -214,5 +218,13 @@ public class PositionType
 
     public void setInternal(boolean isInternal) {
         this.isInternal = isInternal;
+    }
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
     }
 }
