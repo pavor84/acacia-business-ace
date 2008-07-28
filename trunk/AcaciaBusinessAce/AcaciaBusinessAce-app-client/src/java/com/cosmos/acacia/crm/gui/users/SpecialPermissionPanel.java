@@ -25,7 +25,6 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -153,7 +152,6 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
         
         AcaciaToStringConverter converter = new AcaciaToStringConverter("${dataObjectType}");
         PropertyDetails pDetails = entityProps.getPropertyDetails("dataObjectType");
-        pDetails.setValidator(null);
         dataObjectTypeComboBox.bind(rightsBindingGroup,
                 getDataObjectTypes(),
                 right,
