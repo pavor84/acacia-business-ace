@@ -63,8 +63,7 @@ public class UserRight implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="data_object_type_id", referencedColumnName="data_object_type_id")
-    @Property(title="Object Type", customDisplay="${dataObjectType.dataObjectType}",
-            propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Object Type", customDisplay="${dataObjectType.dataObjectType}")
     private DataObjectType dataObjectType;
 
     @Transient
