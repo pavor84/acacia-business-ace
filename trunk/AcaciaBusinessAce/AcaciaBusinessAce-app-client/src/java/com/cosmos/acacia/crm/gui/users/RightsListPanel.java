@@ -23,6 +23,7 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
@@ -39,15 +40,22 @@ public class RightsListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
     }
 
-    public RightsListPanel(User user) {
+    public static enum Type {
+        GeneralRightsPanel,
+        SpecialPermissionsPanel
+    }
+    
+    public RightsListPanel(User user, Type type) {
         super(user.getId());
         this.user = user;
+        this.type = type;
         postInitData();
     }
 
-    public RightsListPanel(UserGroup userGroup) {
+    public RightsListPanel(UserGroup userGroup, Type type) {
         super(userGroup.getId());
         this.userGroup = userGroup;
+        this.type = type;
         postInitData();
     }
 
@@ -58,7 +66,8 @@ public class RightsListPanel extends AbstractTablePanel {
     private Set<UserRight> rights;
     private User user;
     private UserGroup userGroup;
-
+    private Type type;
+    
     @Override
     protected void initData() {
         super.initData();
@@ -95,13 +104,25 @@ public class RightsListPanel extends AbstractTablePanel {
     @SuppressWarnings("unchecked")
     protected List<UserRight> getRights()
     {
-        if(rights == null) {
-            if (user != null && user.getId() != null)
-                rights = getFormSession().getUserRights(user);
+        if (rights == null) {
+            
+            if (user != null && user.getId() != null) {
+                if (type == Type.GeneralRightsPanel)
+                    rights = getFormSession().getUserRights(user);
+                
+                if (type == Type.SpecialPermissionsPanel)
+                    rights = getFormSession().getSpecialPermissions(user);
+            }
+                
 
-            if (userGroup != null && userGroup.getId() != null)
-                rights = getFormSession().getUserRights(userGroup);
-
+            if (userGroup != null && userGroup.getId() != null) {
+                if (type == Type.GeneralRightsPanel)
+                    rights = getFormSession().getUserRights(userGroup);
+                
+                if (type == Type.SpecialPermissionsPanel)
+                    rights = getFormSession().getSpecialPermissions(userGroup);
+            }
+            
             if (rights == null)
                 rights = Collections.EMPTY_SET;
             
@@ -131,6 +152,16 @@ public class RightsListPanel extends AbstractTablePanel {
         if (userGroup == null)
             entityProps.removePropertyDetails("userGroup");
 
+        if (type == Type.GeneralRightsPanel)
+            entityProps.removePropertyDetails("specialPermission");
+        
+        if (type == Type.SpecialPermissionsPanel) {
+            entityProps.removePropertyDetails("read");
+            entityProps.removePropertyDetails("create");
+            entityProps.removePropertyDetails("modify");
+            entityProps.removePropertyDetails("delete");
+        }
+        
         return entityProps;
     }
 
@@ -144,11 +175,17 @@ public class RightsListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null && canNestedOperationProceed())
         {
-            RightsPanel rightsPanel = new RightsPanel((UserRight) rowObject);
-            DialogResponse response = rightsPanel.showDialog(this);
+            AcaciaPanel panel = null;
+            if (type == Type.GeneralRightsPanel)
+                panel = new RightsPanel((UserRight) rowObject);
+            
+            if (type == Type.SpecialPermissionsPanel)
+                panel = new SpecialPermissionPanel((UserRight) rowObject);
+            
+            DialogResponse response = panel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return rightsPanel.getSelectedValue();
+                return panel.getSelectedValue();
             }
         }
 
@@ -165,11 +202,18 @@ public class RightsListPanel extends AbstractTablePanel {
             if (userGroup != null)
                 right.setUserGroup(userGroup);
 
-            RightsPanel rightsPanel = new RightsPanel(right);
-            DialogResponse response = rightsPanel.showDialog(this);
+            
+            AcaciaPanel panel = null;
+            if (type == Type.GeneralRightsPanel)
+                panel = new RightsPanel(right);
+            
+            if (type == Type.SpecialPermissionsPanel)
+                panel = new SpecialPermissionPanel(right);
+            
+            DialogResponse response = panel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                UserRight result  = (UserRight) rightsPanel.getSelectedValue();
+                UserRight result  = (UserRight) panel.getSelectedValue();
                 rights.add(result);
                 return right;
             }

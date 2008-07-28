@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.callback.CallbackHandler;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
@@ -228,4 +229,5 @@ public interface UsersRemote {
      * @return the entity properties
      */
     EntityProperties getUserOrganizationEntityProperties();
+    
 }

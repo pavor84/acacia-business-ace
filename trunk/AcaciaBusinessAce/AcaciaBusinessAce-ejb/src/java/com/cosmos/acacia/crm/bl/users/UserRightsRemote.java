@@ -3,6 +3,7 @@ package com.cosmos.acacia.crm.bl.users;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.DbResource;
 import java.math.BigInteger;
 import java.util.Set;
 
@@ -22,12 +23,12 @@ public interface UserRightsRemote {
 
     /**
      * Gets the list of user groups for the specified parentId
-     * 
+     *
      * @param parentId
      * @return the list
      */
     List<UserGroup> getUserGroups(BigInteger parentId);
-    
+
     /**
      * Persists the specified user group
      *
@@ -59,7 +60,7 @@ public interface UserRightsRemote {
      */
     EntityProperties getUserGroupEntityProperties();
 
-    
+
     /**
      * Gets the entity properties of UserRight
      *
@@ -67,8 +68,8 @@ public interface UserRightsRemote {
      */
     EntityProperties getUserRightEntityProperties();
 
-    
-    
+
+
     /**
      * Assigns a specified user group to a position type
      *
@@ -108,7 +109,7 @@ public interface UserRightsRemote {
      * @param user
      */
     void assignSpecialPermissionsToUser(
-            Set<SpecialPermission> permissions,
+            Set<UserRight> permissions,
             User user);
 
     /**
@@ -118,45 +119,18 @@ public interface UserRightsRemote {
      * @param group
      */
     void assignSpecialPermissionsToGroup(
-            Set<SpecialPermission> permissions,
+            Set<UserRight> permissions,
             UserGroup group);
 
 
     /**
-     * Removes a set of general rights from a user
+     * Removes a set of rights.
      *
      * @param rights
      * @param user
      */
-    void removeRightsFromUser(Set<UserRight> rights, User user);
+    void removeRights(Set<UserRight> rights);
 
-    /**
-     * Removes a set of general rights from a group
-     *
-     * @param rights
-     * @param group
-     */
-    void removeRightsFromGroup(Set<UserRight> rights, UserGroup group);
-
-    /**
-     * Removes a set of specific rights from a user
-     *
-     * @param permissions
-     * @param user
-     */
-    void removeSpecialPermissionsFromUser(
-            Set<SpecialPermission> permissions,
-            User user);
-
-    /**
-     * Removes a set of specific rights from a group
-     *
-     * @param permissions
-     * @param group
-     */
-    void removeSpecialPermissionsFromGroup(
-            Set<SpecialPermission> permissions,
-            UserGroup group);
 
     /**
      * Lists the general rights for a user
@@ -180,28 +154,43 @@ public interface UserRightsRemote {
      * @param user
      * @return the set of rights
      */
-    Set<SpecialPermission> getSpecialPermissions(User user);
+    Set<UserRight> getSpecialPermissions(User user);
+
+    /**
+     * Lists the special permissions (specific rights) for a user group
+     *
+     * @param userGroup
+     * @return the set of rights
+     */
+    Set<UserRight> getSpecialPermissions(UserGroup userGroup);
 
     /**
      * Lists data object types
-     * 
+     *
      * @return the list
      */
     List<DataObjectType> getDataObjectTypes();
-    
+
     /**
      * Returns a list of all entities (DataObjectBean) for a given type
-     * 
+     *
      * @param dataObjectType
      * @return list of data object beans
      */
     List<DataObjectBean> getDataObjectBeans(DataObjectType dataObjectType);
-    
+
     /**
      * Gets the DataObjectBean corresponding to a given data object
-     * 
+     *
      * @param dataObject
      * @return data object bean
      */
     DataObjectBean getDataObjectBean(DataObject dataObject);
+    
+    /**
+     * Lists all special permissions avialable in the system
+     * 
+     * @return a list of DbResource
+     */
+    List<DbResource> getSpecialPermissions();
 }

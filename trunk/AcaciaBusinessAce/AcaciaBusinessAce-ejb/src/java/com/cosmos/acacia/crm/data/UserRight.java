@@ -15,6 +15,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 
@@ -23,11 +28,19 @@ import javax.persistence.Transient;
 @NamedQueries({
         @NamedQuery(
                 name = "UserRight.findByUser",
-                query = "select ur from UserRight ur where ur.user=:user"
+                query = "select ur from UserRight ur where ur.user=:user and ur.specialPermission is null"
         ),
         @NamedQuery(
                 name = "UserRight.findByUserGroup",
-                query = "select ur from UserRight ur where ur.userGroup=:userGroup"
+                query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is null"
+        ),
+        @NamedQuery(
+                name = "UserRight.findSpecialByUser",
+                query = "select ur from UserRight ur where ur.user=:user and ur.specialPermission is not null"
+        ),
+        @NamedQuery(
+                name = "UserRight.findSpecialByUserGroup",
+                query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is not null"
         )
 })
 public class UserRight implements Serializable {
@@ -50,13 +63,14 @@ public class UserRight implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="data_object_type_id", referencedColumnName="data_object_type_id")
-    @Property(title="Object Type", customDisplay="${dataObjectType.dataObjectType}")
+    @Property(title="Object Type", customDisplay="${dataObjectType.dataObjectType}",
+            propertyValidator=@PropertyValidator(required=true))
     private DataObjectType dataObjectType;
 
     @Transient
     @Property(title="Object")
     private String objectInfo;
-    
+
     @ManyToOne
     @JoinColumn(name="data_object_id", referencedColumnName="data_object_id")
     @Property(title="Data Object", hidden=true)
@@ -77,7 +91,21 @@ public class UserRight implements Serializable {
     @Column(name="can_delete")
     @Property(title="Delete")
     private boolean delete;
-            
+
+    @ManyToOne
+    @JoinColumn(name = "special_permission_id", referencedColumnName = "resource_id")
+    @Property(title="Special permission")
+    private DbResource specialPermission;
+
+    @Temporal(value=TemporalType.TIMESTAMP)
+    @Column(name="expires")
+    @Property(title="Expires")
+    private Date expires;
+
+    @Column(name="excluded")
+    @Property(title="Excluded")
+    private boolean excluded;
+     
     public Long getUserRightId() {
         return userRightId;
     }
@@ -113,11 +141,19 @@ public class UserRight implements Serializable {
     public DataObjectType getDataObjectType() {
         return dataObjectType;
     }
-
+    
     public void setDataObjectType(DataObjectType dataObjectType) {
         this.dataObjectType = dataObjectType;
     }
 
+    public Date getExpires() {
+        return expires;
+    }
+
+    public void setExpires(Date expires) {
+        this.expires = expires;
+    }
+    
     public boolean canRead() {
         return read;
     }
@@ -150,6 +186,15 @@ public class UserRight implements Serializable {
         this.delete = delete;
     }
 
+    public boolean isExcluded() {
+        return excluded;
+    }
+
+    public void setExcluded(boolean excluded) {
+        this.excluded = excluded;
+    }
+
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -158,6 +203,10 @@ public class UserRight implements Serializable {
                 + ((dataObject == null) ? 0 : dataObject.hashCode());
         result = prime * result
                 + ((dataObjectType == null) ? 0 : dataObjectType.hashCode());
+        result = prime
+                * result
+                + ((specialPermission == null) ? 0 : specialPermission
+                        .hashCode());
         result = prime * result + ((user == null) ? 0 : user.hashCode());
         result = prime * result
                 + ((userGroup == null) ? 0 : userGroup.hashCode());
@@ -182,6 +231,11 @@ public class UserRight implements Serializable {
             if (other.dataObjectType != null)
                 return false;
         } else if (!dataObjectType.equals(other.dataObjectType))
+            return false;
+        if (specialPermission == null) {
+            if (other.specialPermission != null)
+                return false;
+        } else if (!specialPermission.equals(other.specialPermission))
             return false;
         if (user == null) {
             if (other.user != null)
@@ -219,5 +273,13 @@ public class UserRight implements Serializable {
 
     public void setObjectInfo(String objectInfo) {
         this.objectInfo = objectInfo;
+    }
+
+    public DbResource getSpecialPermission() {
+        return specialPermission;
+    }
+
+    public void setSpecialPermission(DbResource specialPermission) {
+        this.specialPermission = specialPermission;
     }
 }
