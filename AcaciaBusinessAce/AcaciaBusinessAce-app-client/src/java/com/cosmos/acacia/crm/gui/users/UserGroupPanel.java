@@ -59,6 +59,7 @@ public class UserGroupPanel extends BaseEntityPanel {
         groupName = new com.cosmos.swingb.JBLabel();
         nameTextField = new com.cosmos.swingb.JBTextField();
         generalRightsHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
+        specialPermissionsHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
@@ -77,7 +78,7 @@ public class UserGroupPanel extends BaseEntityPanel {
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, descriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 884, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionPanelLayout.setVerticalGroup(
@@ -100,10 +101,24 @@ public class UserGroupPanel extends BaseEntityPanel {
         generalRightsHolderPanel.setLayout(generalRightsHolderPanelLayout);
         generalRightsHolderPanelLayout.setHorizontalGroup(
             generalRightsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 710, Short.MAX_VALUE)
+            .addGap(0, 904, Short.MAX_VALUE)
         );
         generalRightsHolderPanelLayout.setVerticalGroup(
             generalRightsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 231, Short.MAX_VALUE)
+        );
+
+        specialPermissionsHolderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("specialPermissionsHolderPanel.border.title"))); // NOI18N
+        specialPermissionsHolderPanel.setName("specialPermissionsHolderPanel"); // NOI18N
+
+        javax.swing.GroupLayout specialPermissionsHolderPanelLayout = new javax.swing.GroupLayout(specialPermissionsHolderPanel);
+        specialPermissionsHolderPanel.setLayout(specialPermissionsHolderPanelLayout);
+        specialPermissionsHolderPanelLayout.setHorizontalGroup(
+            specialPermissionsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 904, Short.MAX_VALUE)
+        );
+        specialPermissionsHolderPanelLayout.setVerticalGroup(
+            specialPermissionsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 174, Short.MAX_VALUE)
         );
 
@@ -111,16 +126,17 @@ public class UserGroupPanel extends BaseEntityPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generalRightsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(groupName, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(generalRightsHolderPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(specialPermissionsHolderPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(groupName, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -131,8 +147,10 @@ public class UserGroupPanel extends BaseEntityPanel {
                     .addComponent(groupName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(generalRightsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(generalRightsHolderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(specialPermissionsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,6 +167,7 @@ public class UserGroupPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel groupName;
     private javax.swing.JScrollPane jScrollPane6;
     private com.cosmos.swingb.JBTextField nameTextField;
+    private com.cosmos.acacia.gui.TableHolderPanel specialPermissionsHolderPanel;
     // End of variables declaration//GEN-END:variables
 
     @EJB
@@ -159,6 +178,7 @@ public class UserGroupPanel extends BaseEntityPanel {
     private BindingGroup passportBindingGroup;
     private UserGroup userGroup;
     private RightsListPanel rightsTable;
+    private RightsListPanel specialPermissionsTable;
 
     @Override
     protected void initData() {
@@ -178,11 +198,17 @@ public class UserGroupPanel extends BaseEntityPanel {
         nameTextField.bind(passportBindingGroup, userGroup, entityProps.getPropertyDetails("name"));
         descriptionTextPane.bind(passportBindingGroup, userGroup, entityProps.getPropertyDetails("description"));
         
-        rightsTable = new RightsListPanel(userGroup);
+        rightsTable = new RightsListPanel(userGroup, RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);
         generalRightsHolderPanel.add(rightsTable);
         addNestedFormListener(rightsTable);
 
+        
+        specialPermissionsTable = new RightsListPanel(userGroup, RightsListPanel.Type.SpecialPermissionsPanel);
+        specialPermissionsTable.setVisibleButtons(2 + 4 + 8 + 16);
+        specialPermissionsHolderPanel.add(specialPermissionsTable);
+        addNestedFormListener(specialPermissionsTable);
+        
         passportBindingGroup.bind();
     }
 
@@ -210,7 +236,11 @@ public class UserGroupPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         log.info("Save: userGroup: " + userGroup);
         userGroup = getFormSession().saveUserGroup(userGroup);
+        
+        // Flushing modifications to the rights tables
         rightsTable.flushRights();
+        specialPermissionsTable.flushRights();
+        
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(userGroup);
         if (closeAfter)

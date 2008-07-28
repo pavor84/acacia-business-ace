@@ -1,6 +1,8 @@
 package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Enumeration listing all special permissions
@@ -10,11 +12,11 @@ import com.cosmos.acacia.crm.data.DbResource;
  */
 public enum SpecialPermission implements DatabaseResource {
     SpecialPermission1,
-    SpecialPermission2,
+    SpecialPermission2
     ;
 
     private DbResource dbResource;
-
+    
     @Override
     public DbResource getDbResource() {
         return dbResource;
@@ -28,13 +30,28 @@ public enum SpecialPermission implements DatabaseResource {
 
     @Override
     public String toShortText() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String toText() {
-        // TODO Auto-generated method stub
         return null;
+    }
+    
+    
+    private static List<DbResource> dbResources;
+    public static List<DbResource> getDbResources()
+    {
+        if(dbResources == null)
+        {
+            dbResources = new ArrayList<DbResource>(SpecialPermission.values().length);
+
+            for(SpecialPermission specialPermission : SpecialPermission.values())
+            {
+                dbResources.add(specialPermission.getDbResource());
+            }
+        }
+
+        return dbResources;
     }
 }
