@@ -34,12 +34,19 @@ public class BaseTest {
     
     protected Random random = new Random();
     
+    private boolean sessionCaching = true;
+    
     @Before
     public void setUp() {
         login("admin", "admin");
     }
 
     protected void login(String userName, String password) {
+        User loggedUser = getUser();
+        //already logged - so return
+        if ( loggedUser!=null && loggedUser.getUserName().equals(userName))
+            return;
+        
         Integer sessionid = usersRemote.login(userName, password.toCharArray());
         AcaciaApplication.setSessionId(sessionid);
 
@@ -80,5 +87,19 @@ public class BaseTest {
             sessionCache.put("branch", result);
         }
         return result;
+    }
+
+    public boolean isSessionCaching() {
+        return sessionCaching;
+    }
+    
+    protected void clearSessionCache(){
+        sessionCache.clear();
+    }
+
+    public void setSessionCaching(boolean sessionCaching) {
+        this.sessionCaching = sessionCaching;
+        if ( !sessionCaching )
+            sessionCache.clear();
     }
 }
