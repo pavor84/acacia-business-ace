@@ -54,13 +54,9 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         customInit();
     }
     
-    public WarehouseProductListPanel(Warehouse warehouse) {
+    public WarehouseProductListPanel(BigInteger parentDataObjectId, Warehouse warehouse) {
+        super(parentDataObjectId);
         this.warehouse = warehouse;
-        customInit();
-    }
-    
-    public WarehouseProductListPanel(){
-        super();
         customInit();
     }
     
@@ -71,8 +67,8 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
      * Otherwise the same as WarehouseProductListPanel().
      * @param b
      */
-    public WarehouseProductListPanel(boolean showSummaryProducts){
-        super();
+    public WarehouseProductListPanel(BigInteger parentId, boolean showSummaryProducts){
+        super(parentId);
         this.showSummaryProducts = showSummaryProducts;
         customInit();
     }
@@ -139,7 +135,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     private List getList() {
         if ( list==null ){
             if (warehouse==null)
-                list = getFormSession().listWarehouseProducts();
+                list = getFormSession().listWarehouseProducts(getParentDataObjectId());
             else
                 list = getFormSession().listWarehouseProducts(warehouse);
         }
@@ -202,27 +198,27 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     @Override
     protected Object modifyRow(Object rowObject) {
         WarehouseProduct wp = (WarehouseProduct) rowObject;
-        return onEditEntity(wp);
+        return onEditEntity(wp, false);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
     protected Object newRow() {
-        WarehouseProduct wp = getFormSession().newWarehouseProduct();
+        WarehouseProduct wp = getFormSession().newWarehouseProduct(getParentDataObjectId());
         wp.setQuantityInStock(BigDecimal.ZERO);
         wp.setOrderedQuantity(BigDecimal.ZERO);
         wp.setSoldQuantity(BigDecimal.ZERO);
-        wp.setQuantityDue(BigDecimal.ZERO);
+        wp.setQuantityDue(BigDecimal.ZERO); 
         wp.setReservedQuantity(BigDecimal.ZERO);
         wp.setWarehouse(warehouse);
-        return onEditEntity(wp);
+        return onEditEntity(wp, false);
     }
 
-    private Object onEditEntity(WarehouseProduct wp) {
-        WarehouseProductPanel editPanel = new WarehouseProductPanel(wp);
-        if ( readonly ){
-            editPanel.setReadonlyMode(readonly);
+    private Object onEditEntity(WarehouseProduct wp, boolean readonlyMode) {
+        WarehouseProductPanel editPanel = new WarehouseProductPanel(wp, getParentDataObjectId());
+        if ( readonlyMode ){
+            editPanel.setReadonlyMode(readonlyMode);
         }
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
@@ -241,6 +237,12 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         refreshDataTable(entityProps);
         
         return t;
+    }
+    
+    @Override
+    protected void viewRow(Object rowObject) {
+        WarehouseProduct wp = (WarehouseProduct) rowObject;
+        onEditEntity(wp, true);
     }
 
     /**

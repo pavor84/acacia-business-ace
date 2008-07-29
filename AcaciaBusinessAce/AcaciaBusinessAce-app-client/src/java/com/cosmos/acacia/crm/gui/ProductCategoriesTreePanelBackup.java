@@ -70,7 +70,7 @@ public class ProductCategoriesTreePanelBackup extends AcaciaPanel {
     }
     
     private void initComponentsCustom() {
-        categoryListPanel = new ProductCategoryListPanel(true);
+        categoryListPanel = new ProductCategoryListPanel(getParentDataObjectId(), true);
         categoryListPanel.addTablePanelListener(new TablePanelListener() {
             @Override
             public void tablePanelClose() {

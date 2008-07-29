@@ -2,10 +2,6 @@ package com.cosmos.test.bl;
 
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +9,6 @@ import org.junit.Test;
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
 import com.cosmos.acacia.crm.bl.impl.ProductsListBean;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.ProductCategory;
@@ -33,27 +28,19 @@ import com.cosmos.beansbinding.EntityProperties;
  * {@link ProductsListBean}
  *
  */
-public class ProductsListTest {
+public class ProductsListTest extends BaseTest {
 
-    @EJB
-    private ProductsListRemote formSession;
+    private ProductsListRemote formSession = AcaciaPanel.getBean(ProductsListRemote.class);
 
-    @EJB
-    private PatternMaskListRemote patternMaskListSession;
+    private PatternMaskListRemote patternMaskListSession = AcaciaPanel.getBean(PatternMaskListRemote.class);;
 
     @Before
     public void setUp() {
-        if ( formSession==null ){
-            formSession = AcaciaPanel.getRemoteBean(this, ProductsListRemote.class);
-            patternMaskListSession = AcaciaPanel.getRemoteBean(this, PatternMaskListRemote.class);
-        }
+        super.setUp();
     }
 
     @Test
     public void methodsTest(){
-        List<BusinessPartner> possibleOwners = formSession.getProducers();
-        Assert.assertNotNull(possibleOwners);
-
         List<DbResource> mu = formSession.getMeasureUnits();
         Assert.assertNotNull(mu);
 
@@ -139,11 +126,11 @@ public class ProductsListTest {
     }
 
     private List<SimpleProduct> list() {
-        return formSession.getProducts(null);
+        return formSession.getProducts(getOrganizationId());
     }
 
     private SimpleProduct createNew(String nameInsert, String codeInsert) throws UncompleteUnitTestException{
-        SimpleProduct result = formSession.newProduct();
+        SimpleProduct result = formSession.newProduct(getOrganizationId());
         result.setProductName(nameInsert);
         result.setProductCode(codeInsert);
 
@@ -156,7 +143,7 @@ public class ProductsListTest {
             throw new UncompleteUnitTestException("At least one ProductCategory needed in database!");
         }
 
-        List<PatternMaskFormat> formats = patternMaskListSession.listPatternsByName();
+        List<PatternMaskFormat> formats = patternMaskListSession.listPatternsByName(getOrganizationId());
         if ( formats.size()>0 )
             result.setPatternMaskFormat(formats.get(TestUtils.nextInteger(formats.size())));
         else{

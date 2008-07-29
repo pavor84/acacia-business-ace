@@ -101,6 +101,8 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
     @SuppressWarnings("unchecked")
     @Override
     public List<BusinessPartner> getBusinessPartners(BigInteger parentDataObjectId) {
+        if ( parentDataObjectId==null )
+            throw new IllegalArgumentException("parentDataObjectId is required!");
         Query q = em.createNamedQuery("BusinessPartner.findForParentAndDeletedById");
         q.setParameter("parentDataObjectId", parentDataObjectId);
         q.setParameter("deleted", false);

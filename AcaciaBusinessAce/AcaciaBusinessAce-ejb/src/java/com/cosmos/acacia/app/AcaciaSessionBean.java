@@ -1,9 +1,9 @@
 package com.cosmos.acacia.app;
 
+import static com.cosmos.acacia.app.SessionContext.BRANCH_KEY;
+import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
+
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,14 +15,12 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 
-import static com.cosmos.acacia.app.SessionContext.*;
-
 /**
  * Created	:	19.05.2008
  * @author	Petar Milev
  * @version $Id: $
  *
- * Stateless service to use for session access.
+ * State-less service to use for session access.
  * Everything related to operating the session goes through here.
  * No other service should use {@link SessionRegistry} or {@link SessionContext}.
  *
@@ -37,57 +35,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @PersistenceContext
     private EntityManager em;
 
-    /**
-     * Temporal functionality to simulate Organization selection when login
-     * @return DataObject which instance is {@link Organization} and has the
-     * biggest addresses count among.
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public DataObject getDataObjectWithAddresses()
-    {
-        List<Address> allAddresses =
-            em.createQuery("select a from Address a where a.dataObject.parentDataObjectId is not null")
-            .getResultList();
-
-        //add-hoc temporary logic, to consider the parent data object with most addresses
-        Map<BigInteger, Long> addressesCount = new HashMap<BigInteger, Long>();
-
-        for(Address address : allAddresses)
-        {
-            BigInteger parentId;
-            DataObject dataObject;
-            if((dataObject = address.getDataObject()) != null &&
-                (parentId = dataObject.getParentDataObjectId()) != null)
-            {
-                Long curValue = addressesCount.get(parentId);
-                if(curValue == null)
-                    curValue = new Long(1);
-                else
-                    curValue++;
-                addressesCount.put(parentId, curValue);
-            }
-        }
-
-        //find the one with most addresses
-        Long biggestCount = new Long(0);
-        BigInteger choosenId = null;
-        for(Map.Entry<BigInteger, Long> parentEntry : addressesCount.entrySet())
-        {
-            if(parentEntry.getValue() > biggestCount)
-            {
-                biggestCount = parentEntry.getValue();
-                choosenId = parentEntry.getKey();
-            }
-        }
-
-        if(choosenId == null)
-            return null;
-
-        return em.find(DataObject.class, choosenId);
-    }
-
-    @Deprecated
+    
     @Override
     public Integer login(User user) {
         //create and register session
@@ -95,17 +43,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
         SessionRegistry.getSession().setValue(SessionContext.USER_KEY, user);
 
-        //temporal - TODO remove
-
         return sessionid;
-    }
-
-    @Deprecated
-    @Override
-    public DataObject getLoginOrganizationDataObject() {
-
-        //temoporal TODO - remove
-        return getDataObjectWithAddresses();
     }
 
     private Integer registerNewSession() {

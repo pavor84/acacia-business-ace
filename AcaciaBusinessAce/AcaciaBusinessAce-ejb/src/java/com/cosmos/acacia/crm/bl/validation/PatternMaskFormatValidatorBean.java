@@ -27,6 +27,7 @@ public class PatternMaskFormatValidatorBean implements PatternMaskFormatValidato
         //unique name 
         Query getByName = em.createNamedQuery("PatternMaskFormat.findByName");
         getByName.setParameter("patternName", entity.getPatternName());
+        getByName.setParameter("parentDataObjectId", entity.getParentId());
         if ( !checkUnique(getByName.getResultList(), entity))
             ve.addMessage("patternName", "PatternMaskFormat.err.nameInUse");
         

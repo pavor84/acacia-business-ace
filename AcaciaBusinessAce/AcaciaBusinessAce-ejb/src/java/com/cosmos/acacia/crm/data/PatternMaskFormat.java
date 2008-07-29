@@ -6,17 +6,16 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
@@ -24,8 +23,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 
 /**
- *
- * @author miro
+ * 
  */
 @Entity
 @Table(name = "pattern_mask_formats")
@@ -34,10 +32,12 @@ import com.cosmos.acacia.annotation.ValidationType;
     (
         /**
          * Parameters:
-         * - productCode - find all undeleted products with the same code (at most one should exist)
+         * - parentDataObjectId - parent id - not null
          */
         name = "PatternMaskFormat.findForParentByName",
-        query = "select p from PatternMaskFormat p order by p.patternName"
+        query = "select p from PatternMaskFormat p where " +
+        		"p.dataObject.deleted = false and p.dataObject.parentDataObjectId = :parentDataObjectId " +
+        		"order by p.patternName"
     ),
     @NamedQuery
     ( 
@@ -45,20 +45,22 @@ import com.cosmos.acacia.annotation.ValidationType;
          * Get all mask formats for a given name - at most one should exist
          * Parameters:
          * - name - the name of the pattern mask
+         * - parentDataObjectId - parent id - not null
          */
         name = "PatternMaskFormat.findByName",
-        query = "select p from PatternMaskFormat p where p.patternName like :patternName"
+        query = "select p from PatternMaskFormat p where " +
+        "p.dataObject.deleted = false and p.dataObject.parentDataObjectId = :parentDataObjectId "+
+        "and p.patternName like :patternName " +
+        "order by p.patternName"
     )
 })
-public class PatternMaskFormat implements Serializable {
+public class PatternMaskFormat extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "pattern_mask_format_id", nullable = false)
-    @SequenceGenerator(name="PatternMaskFormatSequenceGenerator", sequenceName="pattern_mask_formats_seq", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PatternMaskFormatSequenceGenerator")
-    private Integer patternMaskFormatId;
+    private BigInteger patternMaskFormatId;
 
     @Column(name = "pattern_name", nullable = false)
     @Property(title="Name",
@@ -78,34 +80,37 @@ public class PatternMaskFormat implements Serializable {
     @Column(name = "description")
     private String description;
     
-//    @Column(name = "owner_id")
-//    @Property(title="Owner")
-//    private BigInteger ownerId;
-    
     @ManyToOne
     @JoinColumn (name="owner_id")
     @Property(title="Owner")
     private BusinessPartner owner;
+    
+    @JoinColumn(name = "pattern_mask_format_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @OneToOne
+    private DataObject dataObject;
+
+    @Column(name = "parent_id")
+    private BigInteger parentId;
 
     public PatternMaskFormat() {
     }
 
-    public PatternMaskFormat(Integer patternMaskFormatId) {
+    public PatternMaskFormat(BigInteger patternMaskFormatId) {
         this.patternMaskFormatId = patternMaskFormatId;
     }
 
-    public PatternMaskFormat(Integer patternMaskFormatId, String patternName, char formatType, String format) {
+    public PatternMaskFormat(BigInteger patternMaskFormatId, String patternName, char formatType, String format) {
         this.patternMaskFormatId = patternMaskFormatId;
         this.patternName = patternName;
         this.formatType = formatType;
         this.format = format;
     }
 
-    public Integer getPatternMaskFormatId() {
+    public BigInteger getPatternMaskFormatId() {
         return patternMaskFormatId;
     }
 
-    public void setPatternMaskFormatId(Integer patternMaskFormatId) {
+    public void setPatternMaskFormatId(BigInteger patternMaskFormatId) {
         this.patternMaskFormatId = patternMaskFormatId;
     }
 
@@ -181,5 +186,40 @@ public class PatternMaskFormat implements Serializable {
      */
     public void setOwner(BusinessPartner owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public DataObject getDataObject() {
+        return dataObject;
+    }
+
+    @Override
+    public BigInteger getId() {
+        return getPatternMaskFormatId();
+    }
+
+    @Override
+    public String getInfo() {
+        return getPatternName();
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        return parentId;
+    }
+
+    @Override
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setPatternMaskFormatId(id);
+    }
+
+    @Override
+    public void setParentId(BigInteger parentId) {
+        this.parentId = parentId;
     }
 }

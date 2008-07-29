@@ -19,7 +19,7 @@ import java.math.BigInteger;
 @Remote
 public interface AcaciaSessionRemote {
 
-    DataObject getLoginOrganizationDataObject();
+//    DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(BigInteger dataObjectId);
 

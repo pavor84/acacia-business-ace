@@ -44,12 +44,11 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
 
     private EntityProperties entityProps;
 
-    public ProductCategoryListPanel(){
-        this(null, false);
-    }
+    /** Creates new form ProductCategoryListPanel */
+    public ProductCategoryListPanel(BigInteger parentDataObjectId, boolean removeTableContainerGaps) {
+        super(parentDataObjectId);
 
-    public ProductCategoryListPanel(boolean removeTableGaps){
-        this(null, removeTableGaps);
+        initComponentsCustom(removeTableContainerGaps);
     }
 
     @Override
@@ -59,13 +58,6 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
         entityProps = getFormSession().getProductCategoryEntityProperties();
 
         refreshDataTable();
-    }
-
-    /** Creates new form ProductCategoryListPanel */
-    public ProductCategoryListPanel(BigInteger parentDataObjectId, boolean removeTableContainerGaps) {
-        super(parentDataObjectId);
-
-        initComponentsCustom(removeTableContainerGaps);
     }
 
     private void initComponentsCustom(boolean removeTableContainerGaps) {
@@ -207,7 +199,7 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     @Override
     protected Object onEditEntity(ProductCategory category)
     {
-        ProductCategoryPanel editPanel = new ProductCategoryPanel(category, category.getDataObject());
+        ProductCategoryPanel editPanel = new ProductCategoryPanel(category, getParentDataObjectId());
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -263,8 +255,5 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     protected List<ProductCategory> getItems() {
         return getFormSession().getProductsCategories(null);
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
 
 }

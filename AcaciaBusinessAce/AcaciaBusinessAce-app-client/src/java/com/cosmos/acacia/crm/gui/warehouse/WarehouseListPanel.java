@@ -40,10 +40,6 @@ public class WarehouseListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
     }
     
-    public WarehouseListPanel() {
-        super();
-    }
-    
     @Override
     protected void initData() {
         super.initData();
@@ -85,7 +81,7 @@ public class WarehouseListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        return getFormSession().listWarehousesByName();
+        return getFormSession().listWarehousesByName(getParentDataObjectId());
     }
 
     /**
@@ -138,7 +134,7 @@ public class WarehouseListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object newRow() {
-        Warehouse w = getFormSession().newWarehouse(null);
+        Warehouse w = getFormSession().newWarehouse(getParentDataObjectId());
         return onEditEntity(w);
     }
 
@@ -171,7 +167,7 @@ public class WarehouseListPanel extends AbstractTablePanel {
             return;
         }
         
-        WarehouseProductListPanel warehouseProductList = new WarehouseProductListPanel(warehouse);
+        WarehouseProductListPanel warehouseProductList = new WarehouseProductListPanel(getParentDataObjectId(), warehouse);
         warehouseProductList.showFrame(this);
     }
 }

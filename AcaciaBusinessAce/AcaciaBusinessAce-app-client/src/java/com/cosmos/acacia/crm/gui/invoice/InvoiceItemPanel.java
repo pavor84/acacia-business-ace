@@ -249,7 +249,7 @@ public class InvoiceItemPanel extends BaseEntityPanel {
         productComboList.bind(invoiceItemBindingGroup, productsTable,
                               invoiceItem, entityProps.getPropertyDetails("product"));
         
-        WarehouseListPanel warehouseTable = new WarehouseListPanel();
+        WarehouseListPanel warehouseTable = new WarehouseListPanel(getParentDataObjectId());
         warehouseComboList.initUnbound(warehouseTable);
         warehouseComboList.bind(invoiceItemBindingGroup, warehouseTable,
                               invoiceItem, entityProps.getPropertyDetails("warehouse"));

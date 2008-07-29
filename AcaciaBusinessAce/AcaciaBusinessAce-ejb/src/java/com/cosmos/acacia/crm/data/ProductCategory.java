@@ -184,7 +184,6 @@ public class ProductCategory
         return "com.cosmos.acacia.crm.data.ProductCategory[productCategoryId=" + productCategoryId + "]";
     }
 
-
     @Override
     public BigInteger getId() {
         return getProductCategoryId();

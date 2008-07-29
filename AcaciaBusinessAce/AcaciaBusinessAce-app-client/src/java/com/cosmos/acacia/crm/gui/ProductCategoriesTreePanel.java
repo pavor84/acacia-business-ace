@@ -61,7 +61,7 @@ public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> {
     @Override
     protected void initData()
     {
-        categoryListPanel = new ProductCategoryListPanel(true);
+        categoryListPanel = new ProductCategoryListPanel(getParentDataObjectId(), true);
 
         toStringConverter = new AcaciaToStringConverter("${categoryName}");
         getTree().setToStringConverter(toStringConverter);

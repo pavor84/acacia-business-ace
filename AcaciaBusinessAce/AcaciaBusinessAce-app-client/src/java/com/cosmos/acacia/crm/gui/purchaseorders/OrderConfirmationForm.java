@@ -30,7 +30,6 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.OrderConfirmationListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmation;
@@ -61,7 +60,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     private BindingGroup bindGroup;
     
     private OrderConfirmationListRemote formSession = getBean(OrderConfirmationListRemote.class);
-
+    
     /** Creates new form OrderConfirmationFormDraft */
     public OrderConfirmationForm(OrderConfirmation confirmation) {
         super(confirmation.getParentId());
@@ -541,8 +540,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         supplierContactField.setModel(new DefaultComboBoxModel());
         
         //supplier
-        Classifier supplierClassifier = getClassifiersFormSession().getClassifier("provider");
-        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(getParentDataObjectId(), supplierClassifier);
+        BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createProvidersPanel(getParentDataObjectId());
         supplierField.bind(
             bindGroup,
             listPanel,

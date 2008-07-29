@@ -29,6 +29,7 @@ public class WarehouseValidator implements WarehouseValidatorLocal {
         
         //unique by address 
         Query getByAddress = em.createNamedQuery("Warehouse.findByAddress");
+        getByAddress.setParameter("parentDataObjectId", entity.getParentId());
         getByAddress.setParameter("address", entity.getAddress());
         if ( !checkUnique(getByAddress.getResultList(), entity))
             ve.addMessage("address", "Warehouse.err.alreadyWareOnThisAddress");

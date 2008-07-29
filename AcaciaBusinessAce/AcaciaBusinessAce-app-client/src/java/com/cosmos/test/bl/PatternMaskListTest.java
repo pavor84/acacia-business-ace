@@ -4,14 +4,11 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListBean;
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
@@ -30,22 +27,19 @@ import com.cosmos.beansbinding.EntityProperties;
  * {@link PatternMaskListBean}
  *
  */
-public class PatternMaskListTest {
+public class PatternMaskListTest extends BaseTest{
 
-    @EJB
-    private PatternMaskListRemote formSession;
+    private PatternMaskListRemote formSession = AcaciaPanel.getBean(PatternMaskListRemote.class);
+    
+    private BusinessPartnersListRemote businessPartnersListRemote = AcaciaPanel.getBean(BusinessPartnersListRemote.class);
 
     @Before
     public void setUp() {
-        if ( formSession==null )
-                formSession = AcaciaPanel.getRemoteBean(this, PatternMaskListRemote.class);
+        super.setUp();
     }
 
     @Test
     public void methodsTest(){
-        List<BusinessPartner> possibleOwners = formSession.getOwnersList();
-        Assert.assertNotNull(possibleOwners);
-
         EntityProperties entityProperties =
             formSession.getPatternMaskEntityProperties();
         Assert.assertNotNull(entityProperties);
@@ -102,17 +96,17 @@ public class PatternMaskListTest {
     }
 
     private List<PatternMaskFormat> list() {
-        return formSession.listPatternsByName();
+        return formSession.listPatternsByName(getOrganizationId());
     }
 
     private PatternMaskFormat createNew(String nameInsert) {
-        PatternMaskFormat result = formSession.newPatternMaskFormat();
+        PatternMaskFormat result = formSession.newPatternMaskFormat(getOrganizationId());
         result.setPatternName(nameInsert);
         result.setFormat("1234");
 
         Random r = new SecureRandom();
 
-        List<BusinessPartner> owners = formSession.getOwnersList();
+        List<BusinessPartner> owners = businessPartnersListRemote.getBusinessPartners(getOrganizationId());
         Assert.assertNotNull(owners);
         if ( !owners.isEmpty() ){
             int randomIdx = r.nextInt(owners.size());

@@ -28,20 +28,17 @@ import com.cosmos.beansbinding.EntityProperties;
  * {@link WarehouseListBean}
  *
  */
-public class WarehouseListTest {
+public class WarehouseListTest extends BaseTest{
 
     @EJB
-    private WarehouseListRemote formSession;
+    private WarehouseListRemote formSession = AcaciaPanel.getBean(WarehouseListRemote.class);
 
     @EJB
-    private AddressesListRemote addressListSession;
+    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class);
 
     @Before
     public void setUp() {
-        if ( formSession==null ){
-            formSession = AcaciaPanel.getRemoteBean(this, WarehouseListRemote.class);
-            addressListSession = AcaciaPanel.getRemoteBean(this, AddressesListRemote.class);
-        }
+        super.setUp();
     }
 
     @Test
@@ -80,12 +77,12 @@ public class WarehouseListTest {
 
 
     private List<Warehouse> list() {
-        return formSession.listWarehousesByName();
+        return formSession.listWarehousesByName(getOrganizationId());
     }
 
     private Warehouse createNew() throws UncompleteUnitTestException {
 
-        DataObject branchParent = null;//AppSession.get().getLoginOrganizationDataObject();
+        DataObject branchParent = getOrganization().getDataObject();
         List<Address> addresses = addressListSession.getAddresses(branchParent.getDataObjectId());
 
         if ( addresses.size()==0 )
@@ -103,7 +100,7 @@ public class WarehouseListTest {
         if ( p==null )
             throw new UncompleteUnitTestException("Not available persons to select from. ");
 
-        Warehouse result = formSession.newWarehouse(null);
+        Warehouse result = formSession.newWarehouse(getOrganizationId());
         result.setAddress(branch);
         result.setWarehouseman(p);
 

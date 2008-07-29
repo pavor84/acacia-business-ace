@@ -29,9 +29,10 @@ public interface WarehouseListRemote {
 
     /**
      * All warehouses sorted by name
+     * @param bigInteger 
      * @return not-empty list
      */
-    List<Warehouse> listWarehousesByName();
+    List<Warehouse> listWarehousesByName(BigInteger bigInteger);
 
     /**
      * Remove the object.
@@ -42,10 +43,10 @@ public interface WarehouseListRemote {
 
     /**
      * Create new empty (not persisted) instance.
-     * @param object
+     * @param parentId
      * @return not null Warehouse
      */
-    Warehouse newWarehouse(Object object);
+    Warehouse newWarehouse(BigInteger parentId);
 
     /**
      * Save operation.
@@ -64,7 +65,7 @@ public interface WarehouseListRemote {
      * Return all warehouse products
      * @return not null list
      */
-    List<WarehouseProduct> listWarehouseProducts();
+    List<WarehouseProduct> listWarehouseProducts(BigInteger parentId);
 
     /**
      * Remove the supplied product.
@@ -75,9 +76,10 @@ public interface WarehouseListRemote {
 
     /**
      * Create empty entity which is not persisted.
+     * @param parentId 
      * @return not null
      */
-    WarehouseProduct newWarehouseProduct();
+    WarehouseProduct newWarehouseProduct(BigInteger parentId);
 
     /**
      * Try to save a given warehouse product. If the entity is invalid,
@@ -116,5 +118,5 @@ public interface WarehouseListRemote {
      * @param parentId - the parent id - shouldn't be null
      * @return not null map
      */
-    Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals();
+    Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(BigInteger parentId);
 }

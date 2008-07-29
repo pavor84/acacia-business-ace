@@ -26,15 +26,14 @@ import com.cosmos.beansbinding.EntityProperties;
  * serve the product categories presentation logic
  *
  */
-public class ProductCategoriesTest {
+public class ProductCategoriesTest extends BaseTest{
 
     @EJB
-    private ProductsListRemote formSession;
+    private ProductsListRemote formSession = AcaciaPanel.getBean(ProductsListRemote.class);
 
     @Before
     public void setUp() {
-        if ( formSession==null )
-            formSession = AcaciaPanel.getRemoteBean(this, ProductsListRemote.class);
+        super.setUp();
     }
 
     @Test
