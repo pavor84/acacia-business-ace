@@ -5,10 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.test.bl.UsersTest;
 import java.util.Date;
-
-import org.junit.runner.JUnitCore;
 
 
 /**
@@ -19,8 +16,8 @@ public class Main {
 
     //@EJB
     //private static ProductSessionRemote prodSess;
-
     /**
+     * FOR UNIT TEST SEE CLASS {@link MainTest}
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -73,25 +70,11 @@ public class Main {
             }
         });*/
         
-        //mainTest();
-
         AcaciaApplication.launch(AcaciaApplication.class, args);
 
     }
 
-    public static void mainTest() {
-        String[] tests = new String[]
-        {
-//            DataObjectTest.class.getName(),
-//            PatternMaskListTest.class.getName(),
-//            ProductsListTest.class.getName(),
-//            ProductCategoriesTest.class.getName(),
-//            AcaciaSessionTest.class.getName()
-//            WarehouseListTest.class.getName()
-//            ContactBookTest.class.getName()
-            UsersTest.class.getName()
-        };
-
-        JUnitCore.main(tests);
-    }
+    /**
+     * FOR UNIT TEST SEE CLASS {@link MainTest}
+     */
 }

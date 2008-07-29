@@ -33,9 +33,12 @@ import com.cosmos.acacia.annotation.PropertyValidator;
          * Get all mask formats for a given name - at most one should exist
          * Parameters:
          * - name - the name of the pattern mask
+         * - parentDataObjectId - not null
          */
         name = "Warehouse.findByAddressName",
-        query = "select w from Warehouse w where w.dataObject.deleted = false order by w.address.addressName asc"
+        query = "select w from Warehouse w where " +
+        		"w.dataObject.deleted = false and w.dataObject.parentDataObjectId = :parentDataObjectId "+
+        		"order by w.address.addressName asc"
     ),
     @NamedQuery
     ( 
@@ -43,9 +46,12 @@ import com.cosmos.acacia.annotation.PropertyValidator;
          * Get all mask formats for a given name - at most one should exist
          * Parameters:
          * - name - the name of the pattern mask
+         * - parentDataObjectId - not null
          */
         name = "Warehouse.findByAddress",
-        query = "select w from Warehouse w where w.dataObject.deleted = false and w.address = :address"
+        query = "select w from Warehouse w where " +
+                "w.dataObject.deleted = false and w.dataObject.parentDataObjectId = :parentDataObjectId "+
+        		"and w.address = :address"
     )
 })
 public class Warehouse extends DataObjectBean implements Serializable {

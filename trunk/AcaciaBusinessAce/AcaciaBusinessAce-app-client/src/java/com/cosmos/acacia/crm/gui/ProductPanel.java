@@ -51,13 +51,15 @@ import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 
 /**
+ * 
+ * Created	:	28.07.2008
+ * @author	Petar Milev
  *
- * @author  miro
  */
 public class ProductPanel extends AcaciaPanel {
 
     public ProductPanel(SimpleProduct product) {
-        super(product.getDataObject().getParentDataObjectId());
+        super(product.getParentId());
         this.product = product;
         init();
     }
@@ -695,8 +697,7 @@ public class ProductPanel extends AcaciaPanel {
         System.out.println("initData().product: " + product);
         if(product == null)
         {
-            product = getFormSession().newProduct();
-            product.setParentId(getParentDataObjectId());
+            product = getFormSession().newProduct(getParentDataObjectId());
         }
 
         BindingGroup bindingGroup = getBindingGroup();
@@ -929,7 +930,7 @@ public class ProductPanel extends AcaciaPanel {
 //    }
 
     protected Object onChoosePatternMask() {
-        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
+        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             return listPanel.getSelectedRowObject();

@@ -16,6 +16,7 @@ import javax.naming.InitialContext;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.TablePanelListener;
 
@@ -31,20 +32,26 @@ public class ProductsTotalsPanel extends AcaciaPanel {
     private Map<WarehouseProduct, List<WarehouseProduct>> warehouseProductsData;
 
     /** Creates new form ProductsTotalsPanel */
-    public ProductsTotalsPanel() {
-        super((BigInteger)null);
+    public ProductsTotalsPanel(BigInteger parentId) {
+        super(parentId);
         initComponents();
         initComponentsCustom();
         initData();
     }
 
     private void initComponentsCustom() {
-        totalsListPanel = new WarehouseProductListPanel(true);
+        totalsListPanel = new WarehouseProductListPanel(getParentDataObjectId(), true);
         totalsListPanel.setReadonly(true, false);
         totalsPanel.setContentContainer(totalsListPanel);
         
-        byWarehousesListPanel = new WarehouseProductListPanel();
-        byWarehousesListPanel.setReadonly(true, true);
+        byWarehousesListPanel = new WarehouseProductListPanel(getParentDataObjectId());
+        byWarehousesListPanel.setReadonly();
+        byWarehousesListPanel.addTablePanelListener(new AbstractTablePanelListener() {
+            @Override
+            public void tablePanelClose() {
+                close();
+            }
+        });
         byWarehousePanel.setContentContainer(byWarehousesListPanel);
     }
 
@@ -98,7 +105,7 @@ public class ProductsTotalsPanel extends AcaciaPanel {
     // End of variables declaration//GEN-END:variables
     @Override
     protected void initData() {
-        warehouseProductsData = getFormSession().getWarehouseProductsTotals();
+        warehouseProductsData = getFormSession().getWarehouseProductsTotals(getParentDataObjectId());
         List<WarehouseProduct> productsSummary = new ArrayList<WarehouseProduct>(
                 warehouseProductsData.keySet());
         totalsListPanel.addTablePanelListener(new TablePanelListener() {
@@ -110,7 +117,6 @@ public class ProductsTotalsPanel extends AcaciaPanel {
             @Override
             public void tablePanelClose() {
             }
-        
             @Override
             public void selectionRowChanged() {
                 onSummaryProductSelected();
@@ -142,4 +148,5 @@ public class ProductsTotalsPanel extends AcaciaPanel {
 
         return formSession;
     }
+    
 }

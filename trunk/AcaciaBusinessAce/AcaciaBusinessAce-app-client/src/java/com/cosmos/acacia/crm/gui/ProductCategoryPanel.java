@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.math.BigInteger;
+
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
 
@@ -13,7 +15,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -40,9 +41,9 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private BindingGroup bindGroup;
 
     /** Creates new form ProductCategoryPanel */
-    public ProductCategoryPanel(ProductCategory category, DataObject dataObject)
+    public ProductCategoryPanel(ProductCategory category, BigInteger parentId)
     {
-        super(dataObject != null ? dataObject.getDataObjectId() : null);
+        super(parentId);
         this.entity = category;
         init();
     }
@@ -236,7 +237,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     protected Object onChoosePatternMask() {
-        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(null);
+        PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             return listPanel.getSelectedRowObject();

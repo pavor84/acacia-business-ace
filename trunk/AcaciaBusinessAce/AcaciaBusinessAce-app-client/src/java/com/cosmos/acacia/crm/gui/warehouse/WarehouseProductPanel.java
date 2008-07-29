@@ -7,6 +7,7 @@
 package com.cosmos.acacia.crm.gui.warehouse;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -44,15 +45,10 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private WarehouseProduct entity;
     private BindingGroup bindGroup;
     private EntityProperties entProps;
-    /** Creates new form WarehouseProductPanel */
-    public WarehouseProductPanel() {
-        super(null);
-        init();
-    }
     
     /** Creates new form WarehouseProductPanel */
-    public WarehouseProductPanel(WarehouseProduct warehouseProduct) {
-        super(null);
+    public WarehouseProductPanel(WarehouseProduct warehouseProduct, BigInteger parentId) {
+        super(parentId);
         this.entity = warehouseProduct;
         init();
     }
@@ -589,7 +585,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseProduct() {
-        ProductsListPanel listPanel = new ProductsListPanel(null);
+        ProductsListPanel listPanel = new ProductsListPanel(getParentDataObjectId());
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             return listPanel.getSelectedRowObject();

@@ -7,17 +7,16 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
@@ -35,9 +34,11 @@ import com.cosmos.acacia.annotation.ValidationType;
     ( 
         /**
          * Get all warehouse products which are not deleted (i.e. their warehouse is not deleted)
+         * - parentDataObjectId - not null
          */
         name = "WarehouseProduct.findAll",
-        query = "select w from WarehouseProduct w where w.warehouse.dataObject.deleted = false"
+        query = "select w from WarehouseProduct w where " +
+                "w.dataObject.deleted = false and w.dataObject.parentDataObjectId = :parentDataObjectId "
     ),
     @NamedQuery
     ( 
@@ -75,15 +76,13 @@ import com.cosmos.acacia.annotation.ValidationType;
                 "and w.product = :product"
     )
 })
-public class WarehouseProduct implements Serializable {
+public class WarehouseProduct extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @Id
     @Column(name = "warehouse_product_id", nullable = false)
-    @SequenceGenerator(name="WarehouseProductSequenceGenerator", sequenceName="warehouse_product_seq", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="WarehouseProductSequenceGenerator")
-    private Integer id;
+    private BigInteger id;
 
     @Property(title="Warehouse", propertyValidator=@PropertyValidator(required=true), customDisplay="${warehouse.address.addressName}")
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id", nullable=false)
@@ -153,6 +152,13 @@ public class WarehouseProduct implements Serializable {
     @Column(name = "notes")
     @Property(title="Notes")
     private String notes;
+    
+    @JoinColumn(name = "warehouse_product_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @OneToOne
+    private DataObject dataObject;
+    
+    @Column(name = "parent_id")
+    private BigInteger parentId;
 
     public WarehouseProduct() {
     }
@@ -330,22 +336,6 @@ public class WarehouseProduct implements Serializable {
         return "com.cosmos.acacia.crm.data.WarehouseProduct[id=" + id + "]";
     }
 
-    /**
-     * Getter for id
-     * @return Integer
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * Setter for id
-     * @param id - Integer
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public BigDecimal getMinimumQuantity() {
         return minimumQuantity;
     }
@@ -368,5 +358,42 @@ public class WarehouseProduct implements Serializable {
 
     public Integer getDeliveryTime() {
         return deliveryTime;
+    }
+    
+    @Override
+    public DataObject getDataObject() {
+        return dataObject;
+    }
+
+    @Override
+    public String getInfo() {
+        if ( getProduct()!=null )
+            return getProduct().getProductName();
+        return "";
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        return parentId;
+    }
+
+    @Override
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
+    }
+
+    @Override
+    public void setParentId(BigInteger parentId) {
+        this.parentId = parentId;
+    }
+
+    @Override
+    public BigInteger getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        this.id = id;
     }
 }

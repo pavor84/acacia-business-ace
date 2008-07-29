@@ -59,8 +59,9 @@ public class WarehouseListBean implements WarehouseListRemote {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Warehouse> listWarehousesByName() {
+    public List<Warehouse> listWarehousesByName(BigInteger parentId) {
         Query q = em.createNamedQuery("Warehouse.findByAddressName");
+        q.setParameter("parentDataObjectId", parentId);
 
         List<Warehouse> result = q.getResultList();
 
@@ -73,8 +74,9 @@ public class WarehouseListBean implements WarehouseListRemote {
     }
 
     @Override
-    public Warehouse newWarehouse(Object object) {
+    public Warehouse newWarehouse(BigInteger parentId) {
         Warehouse w = new Warehouse();
+        w.setParentId(parentId);
         return w;
     }
 
@@ -147,17 +149,19 @@ public class WarehouseListBean implements WarehouseListRemote {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<WarehouseProduct> listWarehouseProducts() {
+    public List<WarehouseProduct> listWarehouseProducts(BigInteger parentId) {
         Query q = em.createNamedQuery("WarehouseProduct.findAll");
-
+        q.setParameter("parentDataObjectId", parentId);
+ 
         List<WarehouseProduct> result = q.getResultList();
 
         return result;
     }
 
     @Override
-    public WarehouseProduct newWarehouseProduct() {
+    public WarehouseProduct newWarehouseProduct(BigInteger parentId) {
         WarehouseProduct wp = new WarehouseProduct();
+        wp.setParentId(parentId);
         return wp;
     }
 
@@ -165,7 +169,6 @@ public class WarehouseListBean implements WarehouseListRemote {
     public WarehouseProduct saveWarehouseProduct(WarehouseProduct entity) {
         warehouseProductValidator.validate(entity);
 
-        entity = em.merge(entity);
         esm.persist(em, entity);
         return entity;
     }
@@ -173,8 +176,8 @@ public class WarehouseListBean implements WarehouseListRemote {
     /**
      * @see com.cosmos.acacia.crm.bl.impl.WarehouseListRemote#getWarehouseProductsTotals()
      */
-    public Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(){
-       List<WarehouseProduct> products = listWarehouseProducts();
+    public Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(BigInteger parentId){
+       List<WarehouseProduct> products = listWarehouseProducts(parentId);
        
        Map<WarehouseProduct, List<WarehouseProduct>> result = new HashMap<WarehouseProduct, List<WarehouseProduct>>();
        

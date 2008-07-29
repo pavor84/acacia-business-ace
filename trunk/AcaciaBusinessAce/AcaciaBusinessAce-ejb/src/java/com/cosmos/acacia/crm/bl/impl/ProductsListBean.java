@@ -6,9 +6,8 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -19,7 +18,6 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
@@ -30,7 +28,6 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.impl.ProductCategoryValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.ProductValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
 
 /**
  *
@@ -108,8 +105,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return entityProperties;
     }
 
-    public SimpleProduct newProduct() {
+    public SimpleProduct newProduct(BigInteger parentId) {
         SimpleProduct product = new SimpleProduct();
+        product.setParentId(parentId);
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         product.setPurchasePrice(BigDecimal.valueOf(100.00));
         product.setSalePrice(BigDecimal.valueOf(100.00));
@@ -140,41 +138,6 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     
     public List<DbResource> getProductColors() {
         return ProductColor.getDbResourcesByCategory(ProductColor.Category.DesktopComputer);
-    }
-
-    /**
-     * @see com.cosmos.acacia.crm.bl.impl.ProductsListRemote#getProducers()
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<BusinessPartner> getProducers() {
-        
-        try{
-            Query q = em.createNamedQuery("BusinessPartner.getAllNotDeleted");
-            List<BusinessPartner> result = q.getResultList();
-            
-            /**
-             * Sort by name
-             */
-            Collections.sort(result, new Comparator<BusinessPartner>() {
-            
-                @Override
-                public int compare(BusinessPartner o1, BusinessPartner o2) {
-                    String name1 = o1.getDisplayName();
-                    String name2 = o2.getDisplayName();
-                    if ( name1 !=null && name2!=null )
-                        return o1.getDisplayName().compareTo(o2.getDisplayName());
-                    return -1;
-                }
-            
-            });
-            
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        
-        return null;
     }
 
     /**

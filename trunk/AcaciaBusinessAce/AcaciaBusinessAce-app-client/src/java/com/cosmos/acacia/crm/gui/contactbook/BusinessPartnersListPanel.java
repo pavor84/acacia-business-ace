@@ -14,6 +14,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
@@ -31,7 +32,7 @@ import com.cosmos.swingb.DialogResponse;
  * @author Petar Milev
  */
 public class BusinessPartnersListPanel extends AbstractTablePanel {
-
+    
     /** Creates new form BusinessPartnersListPanel */
     public BusinessPartnersListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
@@ -176,5 +177,18 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     @Override
     public boolean canDelete(Object rowObject) {
         return true;
+    }
+
+    /**
+     * Factory method - returns {@link BusinessPartnersListPanel} with applied classifier for 
+     * providers
+     * @param parentDataObjectId
+     * @return
+     */
+    public static BusinessPartnersListPanel createProvidersPanel(BigInteger parentDataObjectId) {
+        ClassifiersRemote classifiersFormSession = getBean(ClassifiersRemote.class);
+        Classifier supplierClassifier = classifiersFormSession.getClassifier("provider");
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(parentDataObjectId, supplierClassifier);
+        return listPanel;
     }
 }

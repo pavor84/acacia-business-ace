@@ -38,8 +38,7 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     private PatternMaskListRemote formSession;
 
     /** Creates new form PersonsListPanel */
-    public PatternMaskFormatListPanel(BigInteger parentDataObjectId)
-    {
+    public PatternMaskFormatListPanel(BigInteger parentDataObjectId){
     	super(parentDataObjectId);
     }
     
@@ -61,7 +60,7 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     
     protected List<PatternMaskFormat> getFormats()
     {
-        formats = getFormSession().listPatternsByName();
+        formats = getFormSession().listPatternsByName(getParentDataObjectId());
         return formats;
     }
     
@@ -116,7 +115,7 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        PatternMaskFormat newFormat = getFormSession().newPatternMaskFormat();
+        PatternMaskFormat newFormat = getFormSession().newPatternMaskFormat(getParentDataObjectId());
         
         PatternMaskFormatPanel formatPanel = new PatternMaskFormatPanel(newFormat);
         DialogResponse response = formatPanel.showDialog(this);

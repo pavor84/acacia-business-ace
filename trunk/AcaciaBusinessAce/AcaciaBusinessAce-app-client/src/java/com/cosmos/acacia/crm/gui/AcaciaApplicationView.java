@@ -304,7 +304,7 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void productsTotalsAction(){
-        ProductsTotalsPanel panel = new ProductsTotalsPanel();
+        ProductsTotalsPanel panel = new ProductsTotalsPanel(getParentId());
         panel.showFrame();
     }
 
