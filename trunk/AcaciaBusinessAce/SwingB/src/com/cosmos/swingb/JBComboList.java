@@ -146,7 +146,9 @@ public class JBComboList
     
                 if(DialogResponse.SELECT.equals(response))
                 {
-                    comboBox.setSelectedItem(selectableListDialog.getSelectedRowObject());
+                    Object result = selectableListDialog.getSelectedRowObject();
+                    comboBox.setSelectedItem(result);
+                    comboBox.addItem(result);
                 }
                 else
                 {
