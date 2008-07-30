@@ -6,7 +6,6 @@
 package com.cosmos.acacia.crm.gui.users;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +26,7 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.util.HashSet;
 
 /**
  * Panel for listing existing organizations, giving CRUD options
@@ -101,7 +101,6 @@ public class RightsListPanel extends AbstractTablePanel {
     }
 
 
-    @SuppressWarnings("unchecked")
     protected List<UserRight> getRights()
     {
         if (rights == null) {
@@ -124,7 +123,7 @@ public class RightsListPanel extends AbstractTablePanel {
             }
             
             if (rights == null)
-                rights = Collections.EMPTY_SET;
+                rights = new HashSet<UserRight>();
             
             List<DataObjectType> dots = 
                     DataObjectTypesListPanel.shortenDataObjectTypeNames(getFormSession().getDataObjectTypes());
@@ -214,6 +213,7 @@ public class RightsListPanel extends AbstractTablePanel {
             if(DialogResponse.SAVE.equals(response))
             {
                 UserRight result  = (UserRight) panel.getSelectedValue();
+                
                 rights.add(result);
                 return right;
             }
@@ -237,12 +237,22 @@ public class RightsListPanel extends AbstractTablePanel {
     }
 
     public void flushRights() {
-        log.info("Flushed");
-        if (user != null)
-            getFormSession().assignRightsToUser(rights, user);
+        log.info(rights.size() + " rights flushed");
+        if (type == Type.GeneralRightsPanel) {
+            if (user != null)
+                getFormSession().assignRightsToUser(rights, user);
 
-        if (userGroup != null)
-            getFormSession().assignRightsToGroup(rights, userGroup);
+            if (userGroup != null)
+                getFormSession().assignRightsToGroup(rights, userGroup);
+        }
+        
+        if (type == Type.SpecialPermissionsPanel) {
+            if (user != null)
+                getFormSession().assignSpecialPermissionsToUser(rights, user);
+
+            if (userGroup != null)
+                getFormSession().assignSpecialPermissionsToGroup(rights, userGroup);
+        }
     }
 
     @Override
@@ -258,5 +268,21 @@ public class RightsListPanel extends AbstractTablePanel {
     @Override
     public boolean canDelete(Object rowObject) {
         return true;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
     }
 }

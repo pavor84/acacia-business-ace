@@ -76,7 +76,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
         // Logic for optimal queries to DB. First remove all existing rights
         // which do not match any of the new set, and then persist only those
         // of the new set, which are not already present in the DB.
-
+        
         Set<UserRight> currentRightsMirror = new HashSet<UserRight>(currentRights);
         for (UserRight right : currentRightsMirror) {
             if (!rights.contains(right)) {

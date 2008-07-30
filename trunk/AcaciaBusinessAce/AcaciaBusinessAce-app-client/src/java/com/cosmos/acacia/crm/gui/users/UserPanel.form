@@ -18,30 +18,35 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="generalRightsHolderPanel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="branchLabel" pref="103" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="branchLabel" pref="78" max="32767" attributes="1"/>
+                          <Component id="organizationLabel1" alignment="0" min="-2" pref="78" max="-2" attributes="1"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="branchComboList" pref="273" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="1">
+                              <Component id="branchComboList" max="32767" attributes="1"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="personLabel" min="-2" pref="77" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="personComboList" min="-2" pref="273" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="userTextField" min="-2" pref="273" max="-2" attributes="1"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="organizationLabel" min="-2" pref="77" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="organizationTextField" min="-2" pref="273" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="personLabel" pref="103" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="personComboList" pref="273" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="organizationLabel" pref="103" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="organizationTextField" min="-2" pref="273" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="organizationLabel1" pref="103" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="userTextField" min="-2" pref="273" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="entityFormButtonPanel1" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="specialPermissionsHolderPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel1" alignment="1" pref="727" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -54,25 +59,25 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="organizationLabel1" alignment="3" min="-2" max="-2" attributes="1"/>
                   <Component id="userTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="organizationLabel" alignment="3" min="-2" max="-2" attributes="1"/>
                   <Component id="organizationTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="branchLabel" max="32767" attributes="1"/>
-                  <Component id="branchComboList" alignment="0" min="-2" pref="20" max="-2" attributes="1"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="personComboList" alignment="1" min="-2" pref="20" max="-2" attributes="1"/>
-                  <Component id="personLabel" pref="20" max="32767" attributes="1"/>
+                  <Component id="personLabel" alignment="0" min="-2" max="-2" attributes="1"/>
+                  <Component id="personComboList" alignment="0" min="-2" pref="20" max="-2" attributes="1"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="branchLabel" alignment="0" max="32767" attributes="1"/>
+                      <Component id="branchComboList" alignment="0" pref="20" max="32767" attributes="1"/>
+                  </Group>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="generalRightsHolderPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="specialPermissionsHolderPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -129,5 +134,53 @@
         <Property name="name" type="java.lang.String" value="organizationTextField" noResource="true"/>
       </Properties>
     </Component>
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="generalRightsHolderPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="General rights">
+              <Property name="titleX" resourceKey="generalRightsHolderPanel.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="generalRightsHolderPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="711" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="194" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="specialPermissionsHolderPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="General rights"/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="specialPermissionsHolderPanel" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="711" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="172" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
   </SubComponents>
 </Form>
