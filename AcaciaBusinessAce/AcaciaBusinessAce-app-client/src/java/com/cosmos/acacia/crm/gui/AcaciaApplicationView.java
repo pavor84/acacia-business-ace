@@ -82,19 +82,15 @@ public class AcaciaApplicationView extends FrameView {
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         setLookAndFeel();
-
-
-        getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        getFrame().requestFocus();
     }
 
     public void init() {
-        System.out.println("loaded");
+        getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
         initComponents();
-        getRootPane().repaint();
     }
 
     public void login() {
+        getFrame().requestFocus();
         LoginForm loginForm = new LoginForm();
         DialogResponse response = loginForm.showDialog(AcaciaApplication.getApplication().getMainFrame());
         if(!DialogResponse.LOGIN.equals(response)) {
