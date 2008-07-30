@@ -82,12 +82,17 @@ public class AcaciaApplicationView extends FrameView {
     public AcaciaApplicationView(SingleFrameApplication app) {
         super(app);
         setLookAndFeel();
-        initComponents();
+
 
         getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
         getFrame().requestFocus();
     }
 
+    public void init() {
+        System.out.println("loaded");
+        initComponents();
+        getRootPane().repaint();
+    }
 
     public void login() {
         LoginForm loginForm = new LoginForm();
@@ -400,13 +405,13 @@ public class AcaciaApplicationView extends FrameView {
         PositionsHierarchyTreePanel panel = new PositionsHierarchyTreePanel(getParentId());
         panel.showFrame();
     }
-    
+
     @Action
     public void businessPartnersListAction(){
         BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(getParentId());
         listPanel.showFrame();
     }
-        
+
     @Action
     public void personPositionTypesListAction(){
         log.debug("personPositionTypesListAction");
@@ -732,11 +737,11 @@ public class AcaciaApplicationView extends FrameView {
 
         Separator contactBookSeparator2 = new Separator();
         contactBook.add(contactBookSeparator2);
-        
+
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("businessPartnersListAction"));
         contactBook.add(menuItem);
-        
+
         contactBook.add(new Separator());
 
         citiesListMenuItem.setAction(actionMap.get("citiesListAction"));
