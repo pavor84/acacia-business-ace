@@ -236,15 +236,17 @@ public class UserGroupPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         log.info("Save: userGroup: " + userGroup);
         userGroup = getFormSession().saveUserGroup(userGroup);
-        
-        // Flushing modifications to the rights tables
-        rightsTable.flushRights();
-        specialPermissionsTable.flushRights();
+        rightsTable.setUserGroup(userGroup);
+        specialPermissionsTable.setUserGroup(userGroup);
         
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(userGroup);
-        if (closeAfter)
+        if (closeAfter) {
+            // Flushing modifications to the rights tables
+            rightsTable.flushRights();
+            specialPermissionsTable.flushRights();
             close();
+        }
     }
 
     @Override

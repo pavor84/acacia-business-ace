@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,14 +14,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.PropertyValidator;
-
-import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import com.cosmos.acacia.annotation.Property;
 
 
 @Entity
@@ -28,19 +26,19 @@ import javax.persistence.Transient;
 @NamedQueries({
         @NamedQuery(
                 name = "UserRight.findByUser",
-                query = "select ur from UserRight ur where ur.user=:user and ur.specialPermission is null"
+                query = "select ur from UserRight ur where ur.user=:user and ur.specialPermission is null order by dataObjectType,excluded"
         ),
         @NamedQuery(
                 name = "UserRight.findByUserGroup",
-                query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is null"
+                query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is null order by dataObjectType,excluded"
         ),
         @NamedQuery(
                 name = "UserRight.findSpecialByUser",
-                query = "select ur from UserRight ur where ur.user=:user and ur.specialPermission is not null"
+                query = "select ur from UserRight ur where ur.user=:user and ur.specialPermission is not null order by dataObjectType,excluded"
         ),
         @NamedQuery(
                 name = "UserRight.findSpecialByUserGroup",
-                query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is not null"
+                query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is not null order by dataObjectType,excluded"
         )
 })
 public class UserRight implements Serializable {
@@ -104,7 +102,7 @@ public class UserRight implements Serializable {
     @Column(name="excluded")
     @Property(title="Excluded")
     private boolean excluded;
-     
+
     public Long getUserRightId() {
         return userRightId;
     }
@@ -140,7 +138,7 @@ public class UserRight implements Serializable {
     public DataObjectType getDataObjectType() {
         return dataObjectType;
     }
-    
+
     public void setDataObjectType(DataObjectType dataObjectType) {
         this.dataObjectType = dataObjectType;
     }
@@ -152,7 +150,7 @@ public class UserRight implements Serializable {
     public void setExpires(Date expires) {
         this.expires = expires;
     }
-    
+
     public boolean canRead() {
         return read;
     }
@@ -193,7 +191,7 @@ public class UserRight implements Serializable {
         this.excluded = excluded;
     }
 
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
