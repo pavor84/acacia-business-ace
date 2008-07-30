@@ -392,7 +392,10 @@ public class OrganizationPanel extends BaseEntityPanel {
 
         if(organization == null)
         {
-            organization = getFormSession().newOrganization(getOrganizationDataObjectId());
+            if (getParentDataObjectId() == null)
+                organization = getFormSession().newOrganization(null);
+            else
+                organization = getFormSession().newOrganization(getOrganizationDataObjectId());
         }
 
         if (organizationBindingGroup == null)

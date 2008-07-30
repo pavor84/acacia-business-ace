@@ -53,12 +53,14 @@ public class OrganizationsListPanel extends AbstractTablePanel {
 
     @Override
     protected void initData() {
-        super.initData();
-
-        if (getParentDataObjectId() == null)
+        log.info("parent: " + getParentDataObjectId() + " ,vis" + isVisible(Button.Select));
+        
+        // show admin options only if it is a frame, and not dialog
+        if (getParentDataObjectId() == null && !isVisible(Button.Select))
             initAdminView();
-
-        setVisible(Button.Select, false);
+        
+        super.initData();
+        
         organizationsBindingGroup = new BindingGroup();
         AcaciaTable organizationsTable = getDataTable();
         JTableBinding tableBinding = organizationsTable.bind(organizationsBindingGroup, getOrganizations(), getOrganizationEntityProperties());
