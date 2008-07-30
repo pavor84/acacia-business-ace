@@ -217,7 +217,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
         esm.persist(em, user);
 
         if (organization != null) {
-            boolean newOrganization = organization.getDataObject() == null;
 
             UserOrganization uo = new UserOrganization();
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
@@ -229,7 +228,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             esm.persist(em, uo);
 
 
-            if (!newOrganization && (branch == null || person == null))
+            if (organization.isActive() && (branch == null || person == null))
                 throw new ValidationException("User.err.branchAndPersonRequired");
 
         }
