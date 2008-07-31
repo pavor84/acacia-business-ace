@@ -231,7 +231,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
             uo.setUserOrganizationPK(pk);
             uo.setBranch(branch);
-            uo.setUserActive(true);
+            uo.setUserActive(false);
 
             esm.persist(em, uo);
 
