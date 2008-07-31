@@ -64,22 +64,22 @@ public class Person extends BusinessPartner
 
     @Column(name = "first_name", nullable = false)
     @Property(title="First Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=255))
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String firstName;
 
     @Column(name = "second_name")
     @Property(title="Second Name",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=255))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String secondName;
 
     @Column(name = "last_name", nullable = false)
     @Property(title="Last Name",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=255))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String lastName;
 
     @Column(name = "extra_name")
     @Property(title="Extra Name",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=255))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String extraName;
 
     @Column(name = "personal_unique_id")
