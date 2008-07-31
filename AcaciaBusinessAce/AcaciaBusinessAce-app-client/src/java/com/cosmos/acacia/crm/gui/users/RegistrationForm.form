@@ -24,24 +24,22 @@
                   <Component id="personalDataPanel" alignment="0" max="32767" attributes="1"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="organizationLabel" pref="80" max="32767" attributes="0"/>
+                          <Component id="organizationLabel" pref="104" max="32767" attributes="0"/>
                           <Component id="passwordLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="usernameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="passwordLabel2" alignment="0" pref="80" max="32767" attributes="1"/>
                           <Component id="branchLabel" min="-2" pref="80" max="-2" attributes="0"/>
+                          <Component id="passwordLabel2" alignment="0" min="-2" max="-2" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="usernameTextField" alignment="0" pref="296" max="32767" attributes="0"/>
                           <Component id="passwordTextField" alignment="0" pref="296" max="32767" attributes="0"/>
-                          <Component id="passwordTextField2" alignment="0" pref="296" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="organizationComboList" alignment="0" pref="296" max="32767" attributes="0"/>
-                                  <Component id="branchComboList" alignment="0" pref="296" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="branchComboList" pref="296" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="passwordTextField2" alignment="1" pref="296" max="32767" attributes="0"/>
+                          <Component id="organizationComboList" alignment="1" pref="296" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="registerButton" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
@@ -69,9 +67,9 @@
                   <Component id="passwordTextField2" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="organizationLabel" max="32767" attributes="1"/>
-                  <Component id="organizationComboList" linkSize="1" alignment="0" pref="20" max="32767" attributes="1"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="organizationLabel" min="-2" max="-2" attributes="1"/>
+                  <Component id="organizationComboList" linkSize="1" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
