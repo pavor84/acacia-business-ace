@@ -69,9 +69,7 @@ public class Main {
                 new HelloWorldFrame().setVisible(true);
             }
         });*/
-        
-        AcaciaApplication.launch(AcaciaApplication.class, args);
-
+        AcaciaApplicationView.login();
     }
 
     /**
