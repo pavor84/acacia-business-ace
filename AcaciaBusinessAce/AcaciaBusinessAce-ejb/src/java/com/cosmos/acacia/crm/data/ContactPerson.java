@@ -46,6 +46,12 @@ import javax.persistence.Table;
             query = "select cp from ContactPerson cp where cp.contact=:person and " +
                     "cp.dataObject.parentDataObjectId = :parentDataObjectId and " +
                     "cp.positionType=:positionType"
+        ),
+        @NamedQuery
+        (
+            name = "ContactPerson.findByPersonAndParentDataObject",
+            query = "select cp from ContactPerson cp where cp.contact=:person" +
+                    " and cp.dataObject.parentDataObjectId=:parentDataObjectId"
         )
     }
 )

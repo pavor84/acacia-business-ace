@@ -1,0 +1,38 @@
+Use cases for user rights
+
+Factors: user, user group, data object, data object type, excluded
+
+The test cases will cover only CREATE right. Others are identical.
+
+1.
+Group has right on the data object, with no create right
+User has right on the data object, with create right
+
+2.
+Group has right on the data object, with create right
+User has right on the data object, with no create right
+
+
+3.
+Group has right on the data object type, with create right
+User has right on the data object, with no create right
+
+4.
+Group has right on the data object type, with no create right
+User has right on the data object, with create right
+
+5.
+User has right on data object type, with create right
+User has right on data object, excluded.
+
+6.
+Group has right on data object type, with create right
+User has right on data object, excluded.
+
+7.
+User has right on data object type, with create right
+Group has right on data object, excluded.
+
+8.
+Group has right on data object type, with create right
+User has right on data object, excluded.

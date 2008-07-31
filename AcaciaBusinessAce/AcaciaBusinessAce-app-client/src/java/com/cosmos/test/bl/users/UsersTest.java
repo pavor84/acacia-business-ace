@@ -1,4 +1,4 @@
-package com.cosmos.test.bl;
+package com.cosmos.test.bl.users;
 
 import com.cosmos.acacia.crm.bl.users.*;
 import java.io.IOException;
@@ -46,6 +46,7 @@ public class UsersTest implements Serializable {
     String password;
     Organization organization;
     OrganizationsListRemote orgSession;
+
     @Before
     public void setUp() {
         if (formSession == null)
