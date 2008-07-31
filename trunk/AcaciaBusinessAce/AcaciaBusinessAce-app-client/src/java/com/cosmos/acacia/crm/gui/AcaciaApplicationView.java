@@ -89,13 +89,9 @@ public class AcaciaApplicationView extends FrameView {
         initComponents();
     }
 
-    public void login() {
-        getFrame().requestFocus();
+    public static void login() {
         LoginForm loginForm = new LoginForm();
-        DialogResponse response = loginForm.showDialog(AcaciaApplication.getApplication().getMainFrame());
-        if(!DialogResponse.LOGIN.equals(response)) {
-            AcaciaApplication.getApplication().exit();
-        }
+        loginForm.showFrame();
     }
 
     private BigInteger parentId;

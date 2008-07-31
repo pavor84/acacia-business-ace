@@ -31,7 +31,6 @@ public class AcaciaApplication extends SingleFrameApplication {
      */
     @Override protected void startup() {
         AcaciaApplicationView view = new AcaciaApplicationView(this);
-        view.login();
         view.init();
         show(view);
     }
