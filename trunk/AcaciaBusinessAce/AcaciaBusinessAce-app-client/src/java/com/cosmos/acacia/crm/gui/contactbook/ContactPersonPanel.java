@@ -199,7 +199,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     }
 
     protected Object onChoosePerson() {
-        PersonsListPanel listPanel = new PersonsListPanel(null);
+        PersonsListPanel listPanel = new PersonsListPanel(getOrganizationDataObjectId(), isInternal);
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
