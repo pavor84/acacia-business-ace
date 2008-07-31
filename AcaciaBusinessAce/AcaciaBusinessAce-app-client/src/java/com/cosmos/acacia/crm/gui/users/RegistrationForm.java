@@ -17,12 +17,11 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -67,11 +66,18 @@ public class RegistrationForm extends BaseEntityPanel {
         usernameTextField = new com.cosmos.swingb.JBTextField();
         passwordLabel = new com.cosmos.swingb.JBLabel();
         passwordLabel2 = new com.cosmos.swingb.JBLabel();
-        personLabel = new com.cosmos.swingb.JBLabel();
-        personComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         registerButton = new com.cosmos.swingb.JBButton();
         passwordTextField = new com.cosmos.swingb.JBPasswordField();
         passwordTextField2 = new com.cosmos.swingb.JBPasswordField();
+        personalDataPanel = new com.cosmos.swingb.JBPanel();
+        firstNameLabel = new javax.swing.JLabel();
+        secondNameLabel = new javax.swing.JLabel();
+        lastNameLabel = new javax.swing.JLabel();
+        extraNameLabel = new javax.swing.JLabel();
+        firstNameTextField = new com.cosmos.swingb.JBTextField();
+        secondNameTextField = new com.cosmos.swingb.JBTextField();
+        lastNameTextField = new com.cosmos.swingb.JBTextField();
+        extraNameTextField = new com.cosmos.swingb.JBTextField();
 
         setName("Form"); // NOI18N
 
@@ -98,11 +104,6 @@ public class RegistrationForm extends BaseEntityPanel {
         passwordLabel2.setText(resourceMap.getString("passwordLabel2.text")); // NOI18N
         passwordLabel2.setName("passwordLabel2"); // NOI18N
 
-        personLabel.setText(resourceMap.getString("personLabel.text")); // NOI18N
-        personLabel.setName("personLabel"); // NOI18N
-
-        personComboList.setName("personComboList"); // NOI18N
-
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(RegistrationForm.class, this);
         registerButton.setAction(actionMap.get("register")); // NOI18N
         registerButton.setText(resourceMap.getString("registerButton.text")); // NOI18N
@@ -114,6 +115,69 @@ public class RegistrationForm extends BaseEntityPanel {
         passwordTextField2.setText(resourceMap.getString("passwordTextField2.text")); // NOI18N
         passwordTextField2.setName("passwordTextField2"); // NOI18N
 
+        personalDataPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Personal Info"));
+        personalDataPanel.setName("personalDataPanel"); // NOI18N
+        personalDataPanel.setTitle(resourceMap.getString("personalDataPanel.title")); // NOI18N
+
+        firstNameLabel.setText(resourceMap.getString("firstNameLabel.text")); // NOI18N
+        firstNameLabel.setName("firstNameLabel"); // NOI18N
+
+        secondNameLabel.setText(resourceMap.getString("secondNameLabel.text")); // NOI18N
+        secondNameLabel.setName("secondNameLabel"); // NOI18N
+
+        lastNameLabel.setText(resourceMap.getString("lastNameLabel.text")); // NOI18N
+        lastNameLabel.setName("lastNameLabel"); // NOI18N
+
+        extraNameLabel.setText(resourceMap.getString("extraNameLabel.text")); // NOI18N
+        extraNameLabel.setName("extraNameLabel"); // NOI18N
+
+        firstNameTextField.setName("firstNameTextField"); // NOI18N
+
+        secondNameTextField.setName("secondNameTextField"); // NOI18N
+
+        lastNameTextField.setName("lastNameTextField"); // NOI18N
+
+        extraNameTextField.setName("extraNameTextField"); // NOI18N
+
+        javax.swing.GroupLayout personalDataPanelLayout = new javax.swing.GroupLayout(personalDataPanel);
+        personalDataPanel.setLayout(personalDataPanelLayout);
+        personalDataPanelLayout.setHorizontalGroup(
+            personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(personalDataPanelLayout.createSequentialGroup()
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(extraNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(lastNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(secondNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(firstNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(secondNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addComponent(firstNameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addComponent(lastNameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addComponent(extraNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        personalDataPanelLayout.setVerticalGroup(
+            personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, personalDataPanelLayout.createSequentialGroup()
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(firstNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(secondNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(secondNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lastNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personalDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(extraNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(extraNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(5, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,27 +187,23 @@ public class RegistrationForm extends BaseEntityPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(branchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(32, 32, 32))
-                                .addComponent(organizationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                            .addComponent(organizationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
                             .addComponent(passwordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(passwordLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
+                            .addComponent(passwordLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                            .addComponent(branchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                            .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                            .addComponent(passwordTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(organizationComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                                    .addComponent(branchComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                                    .addComponent(personComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)))
-                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                            .addComponent(passwordTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)))
-                    .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(registerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(organizationComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                                    .addComponent(branchComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)))))
+                    .addComponent(registerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(personalDataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -162,18 +222,16 @@ public class RegistrationForm extends BaseEntityPanel {
                     .addComponent(passwordLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(passwordTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(organizationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(organizationComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(organizationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(organizationComboList, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(branchComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(branchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(branchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(branchComboList, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(personComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(personLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(personalDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -182,15 +240,22 @@ public class RegistrationForm extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboList branchComboList;
     private com.cosmos.swingb.JBLabel branchLabel;
+    private javax.swing.JLabel extraNameLabel;
+    private com.cosmos.swingb.JBTextField extraNameTextField;
+    private javax.swing.JLabel firstNameLabel;
+    private com.cosmos.swingb.JBTextField firstNameTextField;
+    private javax.swing.JLabel lastNameLabel;
+    private com.cosmos.swingb.JBTextField lastNameTextField;
     private com.cosmos.acacia.gui.AcaciaComboList organizationComboList;
     private com.cosmos.swingb.JBLabel organizationLabel;
     private com.cosmos.swingb.JBLabel passwordLabel;
     private com.cosmos.swingb.JBLabel passwordLabel2;
     private com.cosmos.swingb.JBPasswordField passwordTextField;
     private com.cosmos.swingb.JBPasswordField passwordTextField2;
-    private com.cosmos.acacia.gui.AcaciaComboList personComboList;
-    private com.cosmos.swingb.JBLabel personLabel;
+    private com.cosmos.swingb.JBPanel personalDataPanel;
     private com.cosmos.swingb.JBButton registerButton;
+    private javax.swing.JLabel secondNameLabel;
+    private com.cosmos.swingb.JBTextField secondNameTextField;
     private com.cosmos.swingb.JBLabel usernameLabel;
     private com.cosmos.swingb.JBTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
@@ -233,28 +298,10 @@ public class RegistrationForm extends BaseEntityPanel {
                 AddressListPanel branchesTable = new AddressListPanel(organization.getId());
                 branchesTable.setVisible(Button.New, false);
                 branchComboList.initUnbound(branchesTable, "${addressName}");
-
-                branchComboList.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        Address branch = (Address) branchComboList.getSelectedItem();
-                        if (branch == null) {
-                            personComboList.getComboBox().removeAllItems();
-                            personComboList.setEnabled(false);
-                            return;
-                        }
-                        personComboList.setEnabled(true);
-                        ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
-                        personComboList.initUnbound(personsTable, "${contact.displayName} (${positionType.positionTypeName})");
-                    }
-
-                });
             }
        });
-
+       
        branchComboList.setEnabled(false);
-       personComboList.setEnabled(false);
-
        userBindingGroup.bind();
     }
 
@@ -262,10 +309,11 @@ public class RegistrationForm extends BaseEntityPanel {
     public void register() {
         try {
             if (user.getUserPassword().equals(new String(passwordTextField2.getPassword()))) {
-                Person person = null;
-                ContactPerson contactPerson = (ContactPerson) personComboList.getSelectedItem();
-                if (contactPerson != null)
-                        person = contactPerson.getContact();
+                Person person = new Person();
+                person.setFirstName(firstNameTextField.getText());
+                person.setSecondName(secondNameTextField.getText());
+                person.setLastName(lastNameTextField.getText());
+                person.setExtraName(extraNameTextField.getText());
                 
                 getFormSession().signup(user,
                         (Organization) organizationComboList.getSelectedItem(),

@@ -21,36 +21,30 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="branchLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="organizationLabel" pref="71" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="organizationLabel" pref="80" max="32767" attributes="0"/>
                           <Component id="passwordLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="usernameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="passwordLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="passwordLabel2" alignment="0" pref="80" max="32767" attributes="1"/>
+                          <Component id="branchLabel" min="-2" pref="80" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="usernameTextField" alignment="0" pref="299" max="32767" attributes="0"/>
+                          <Component id="usernameTextField" alignment="0" pref="296" max="32767" attributes="0"/>
+                          <Component id="passwordTextField" alignment="0" pref="296" max="32767" attributes="0"/>
+                          <Component id="passwordTextField2" alignment="0" pref="296" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="organizationComboList" alignment="1" pref="299" max="32767" attributes="0"/>
-                                  <Component id="branchComboList" alignment="1" pref="299" max="32767" attributes="0"/>
-                                  <Component id="personComboList" alignment="1" pref="299" max="32767" attributes="0"/>
+                                  <Component id="organizationComboList" alignment="0" pref="296" max="32767" attributes="0"/>
+                                  <Component id="branchComboList" alignment="0" pref="296" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="passwordTextField" alignment="0" pref="299" max="32767" attributes="0"/>
-                          <Component id="passwordTextField2" alignment="0" pref="299" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="personLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="registerButton" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
+                  <Component id="personalDataPanel" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -75,21 +69,18 @@
                   <Component id="passwordTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="organizationLabel" pref="25" max="32767" attributes="1"/>
-                  <Component id="organizationComboList" min="-2" max="-2" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="organizationLabel" max="32767" attributes="1"/>
+                  <Component id="organizationComboList" alignment="0" pref="20" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="branchComboList" max="32767" attributes="1"/>
-                  <Component id="branchLabel" alignment="0" pref="25" max="32767" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="branchLabel" max="32767" attributes="1"/>
+                  <Component id="branchComboList" alignment="0" pref="20" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="personComboList" max="32767" attributes="1"/>
-                  <Component id="personLabel" alignment="0" pref="25" max="32767" attributes="1"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="personalDataPanel" min="-2" pref="133" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="registerButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -143,17 +134,6 @@
         <Property name="name" type="java.lang.String" value="passwordLabel2" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="personLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="personLabel.text"/>
-        <Property name="name" type="java.lang.String" value="personLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="personComboList">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="personComboList" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBButton" name="registerButton">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -175,5 +155,111 @@
         <Property name="name" type="java.lang.String" value="passwordTextField2" noResource="true"/>
       </Properties>
     </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="personalDataPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Personal Info"/>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="personalDataPanel" noResource="true"/>
+        <Property name="title" type="java.lang.String" resourceKey="personalDataPanel.title"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="extraNameLabel" alignment="0" pref="78" max="32767" attributes="1"/>
+                      <Component id="lastNameLabel" alignment="0" max="32767" attributes="1"/>
+                      <Component id="secondNameLabel" alignment="0" max="32767" attributes="1"/>
+                      <Component id="firstNameLabel" alignment="0" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="secondNameTextField" alignment="0" pref="272" max="32767" attributes="1"/>
+                      <Component id="firstNameTextField" alignment="1" pref="272" max="32767" attributes="1"/>
+                      <Component id="lastNameTextField" alignment="1" pref="272" max="32767" attributes="1"/>
+                      <Component id="extraNameTextField" alignment="0" pref="272" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="firstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="firstNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="secondNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="secondNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lastNameLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="extraNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="extraNameLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="5" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="firstNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="firstNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="firstNameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="secondNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="secondNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="secondNameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lastNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="lastNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="lastNameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="extraNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="extraNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="extraNameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="firstNameTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="firstNameTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="secondNameTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="secondNameTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="lastNameTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="lastNameTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="extraNameTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="extraNameTextField" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

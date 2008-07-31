@@ -32,17 +32,33 @@ public class PersonsListPanel extends AbstractTablePanel {
     public PersonsListPanel(BigInteger parentDataObjectId)
     {
         super(parentDataObjectId);
+        postInitData();
     }
 
+    /** Creates new form PersonsListPanel */
+    public PersonsListPanel(BigInteger parentDataObjectId, boolean staff)
+    {
+        super(parentDataObjectId);
+        this.staff = staff;
+        postInitData();
+    }
+    
     @EJB
     private PersonsListRemote formSession;
 
     private BindingGroup personsBindingGroup;
     private List<Person> persons;
-
+    private boolean staff = false;
+    
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    protected void postInitData() {
+        if (staff)
+            setTitle(getResourceMap().getString("Form.altTitle"));
+        
         personsBindingGroup = new BindingGroup();
         AcaciaTable personsTable = getDataTable();
         JTableBinding tableBinding = personsTable.bind(personsBindingGroup, getPersons(), getPersonEntityProperties());
@@ -51,12 +67,14 @@ public class PersonsListPanel extends AbstractTablePanel {
 
         personsTable.setEditable(false);
     }
-
+    
     protected List<Person> getPersons()
     {
-        if(persons == null)
-        {
-            persons = getFormSession().getPersons(getParentDataObjectId());
+        if(persons == null) {
+            if (!staff)
+                persons = getFormSession().getPersons(getParentDataObjectId());
+            else
+                persons = getFormSession().getStaff();
         }
 
         return persons;

@@ -197,7 +197,7 @@ public class UserPanel extends BaseEntityPanel {
     ContactPersonsListPanel personsTable;
     RightsListPanel rightsTable;
     RightsListPanel specialPermissionsTable;
-    
+
     @Override
     protected void initData() {
        setResizable(false);
@@ -245,7 +245,7 @@ public class UserPanel extends BaseEntityPanel {
         specialPermissionsTable = new RightsListPanel(userOrganization.getUser(), RightsListPanel.Type.SpecialPermissionsPanel);
         specialPermissionsTable.setVisibleButtons(2 + 4 + 8 + 16);
         specialPermissionsHolderPanel.add(specialPermissionsTable);
-        
+
         bindingGroup.bind();
         userTextField.setEnabled(false);
         organizationTextField.setEnabled(false);
@@ -282,18 +282,15 @@ public class UserPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         userOrganization = getFormSession().saveUserOrganization(userOrganization);
         User u = userOrganization.getUser();
-        
+
         rightsTable.setUser(u);
         specialPermissionsTable.setUser(u);
-        
+
         if (userOrganization.getBranch() != null)
                 u.setBranchName(userOrganization.getBranch().getAddressName());
 
-        if (userOrganization.getPerson() != null)
-                u.setPersonName(userOrganization.getPerson().getDisplayName());
-
         u.setActive(userOrganization.isUserActive());
-        
+
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(userOrganization.getUser());
         if (closeAfter) {

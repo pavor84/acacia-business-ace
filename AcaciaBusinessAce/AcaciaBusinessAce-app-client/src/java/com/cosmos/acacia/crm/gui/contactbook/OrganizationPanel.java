@@ -480,7 +480,7 @@ public class OrganizationPanel extends BaseEntityPanel {
 
     protected Object onChooseRegisteringOrganization() {
         OrganizationsListPanel listPanel =
-                new OrganizationsListPanel(null);
+                new OrganizationsListPanel(getOrganizationDataObjectId());
         // TODO: Classifiers
 
         DialogResponse dResponse = listPanel.showDialog(this);

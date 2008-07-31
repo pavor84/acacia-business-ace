@@ -290,7 +290,8 @@ public class PassportPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseIssuer() {
-        OrganizationsListPanel listPanel = new OrganizationsListPanel(null, new Classifier());
+        OrganizationsListPanel listPanel = 
+                new OrganizationsListPanel(getOrganizationDataObjectId());
         listPanel.setClassifier(getClassifiersFormSession().getClassifier("passport_issuer"));
 
         Organization oldIssuer = passport.getIssuer();

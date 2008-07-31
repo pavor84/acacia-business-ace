@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,14 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.bl.users.UsersLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -47,6 +49,12 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     @EJB
     private PersonValidatorLocal personValidator;
 
+    @EJB
+    private AcaciaSessionLocal session;
+    
+    @EJB
+    private UsersLocal usersManager;
+    
     @SuppressWarnings("unchecked")
     public List<Person> getPersons(BigInteger parentId)
     {
@@ -162,5 +170,17 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     @Override
     public List<City> getCities(Country country) {
         return locationsManager.getCities(country);
+    }
+
+    @Override
+    public List<Person> getStaff() {
+        List<User> users = usersManager.getUsers(session.getOrganization().getId());
+        List<Person> result = new ArrayList<Person>(users.size());
+        for (User user : users) {
+            Person person = user.getPerson();
+            if (person != null)
+                result.add(person);
+        }
+        return result;
     }
 }
