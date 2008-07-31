@@ -38,6 +38,7 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.callback.CallbackHandler;
 import com.cosmos.acacia.callback.CallbackLocal;
 import com.cosmos.acacia.callback.CallbackTransportObject;
+import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
@@ -78,6 +79,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @EJB
     private GenericUniqueValidatorLocal<User> validator;
+
+    @EJB
+    private PersonValidatorLocal personValidator;
 
     @EJB
     private AcaciaSessionLocal acaciaSessionLocal;
@@ -209,12 +213,17 @@ public class UsersBean implements UsersRemote, UsersLocal {
     public User signup(User user, Organization organization, Address branch, Person person) {
 
         validator.validate(user, "userName");
+        personValidator.validate(person);
+
+        esm.persist(em, person);
 
         user.setUserPassword(getHash(user.getUserPassword()));
+        user.setPerson(person);
         user.setCreationTime(new Date());
         esm.persist(em, user);
         user.setCreator(user);
         esm.persist(em, user);
+
 
         if (organization != null) {
 
@@ -222,7 +231,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
             uo.setUserOrganizationPK(pk);
             uo.setBranch(branch);
-            uo.setPerson(person);
             uo.setUserActive(true);
 
             esm.persist(em, uo);
@@ -339,7 +347,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 if (uo.isUserActive()){
                     acaciaSessionLocal.setOrganization(organization);
                     acaciaSessionLocal.setBranch(uo.getBranch());
-                    acaciaSessionLocal.setPerson(uo.getPerson());
+                    acaciaSessionLocal.setPerson(user.getPerson());
 
                 }
                 else
@@ -498,42 +506,26 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 if (uo.getBranch() != null)
                     u.setBranchName(uo.getBranch().getAddressName());
 
-                if (uo.getPerson() != null)
-                    u.setPersonName(uo.getPerson().getDisplayName());
-
                 u.setActive(uo.isUserActive());
 
                 result.add(u);
             }
         } else {
             Query q = em.createNamedQuery("User.findAll");
-            List<User> users = q.getResultList();
-            result = new ArrayList<User>(users.size());
-
-            for (User user : users) {
-                Query userQ = em.createNamedQuery("UserOrganization.findByUser");
-                userQ.setParameter("user", user);
-                try {
-                    user.setPersonName(((UserOrganization)userQ.getResultList().get(0)).getPerson().getDisplayName());
-                } catch (NullPointerException ex) {
-                    //
-                }
-                result.add(user);
-            }
+            result = new ArrayList<User>(q.getResultList());
         }
 
         return result;
     }
 
     @Override
-    public void joinOrganization(Organization organization, Address branch, Person person) {
+    public void joinOrganization(Organization organization, Address branch) {
         User user = acaciaSessionLocal.getUser();
         if (user != null && organization != null) {
             UserOrganization uo = new UserOrganization();
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
             uo.setUserOrganizationPK(pk);
             uo.setBranch(branch);
-            uo.setPerson(person);
             esm.persist(em, uo);
         }
     }
@@ -567,7 +559,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 if (uo.isUserActive() && uo.getOrganization().isActive()){
                     acaciaSessionLocal.setOrganization(organization);
                     acaciaSessionLocal.setBranch(uo.getBranch());
-                    acaciaSessionLocal.setPerson(uo.getPerson());
+                    acaciaSessionLocal.setPerson(user.getPerson());
                 } else {
                     throw new ValidationException("Login.account.inactive");
                 }

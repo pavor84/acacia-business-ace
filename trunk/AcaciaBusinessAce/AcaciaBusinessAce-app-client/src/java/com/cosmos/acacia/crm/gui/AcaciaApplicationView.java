@@ -44,6 +44,7 @@ import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.PersonPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
@@ -61,7 +62,6 @@ import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
-import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -85,7 +85,7 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     public void init() {
-        getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        //getFrame().setExtendedState(getFrame().getExtendedState() | JFrame.MAXIMIZED_BOTH);
         initComponents();
     }
 
@@ -379,6 +379,23 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void staffListAction(){
+        log.debug("staffListAction");
+        PersonsListPanel personsListPanel = new PersonsListPanel(getParentId(), true);
+        personsListPanel.showFrame();
+    }
+    
+    @Action
+    public void editOwnPersonAction(){
+        log.debug("editOwnPersonAction");
+        Person person = getSession().getPerson();
+        if (person != null) {
+            PersonPanel personsListPanel = new PersonPanel(person);
+            personsListPanel.showFrame();
+        }
+    }
+    
+    @Action
     public void organizationsListAction(){
         log.debug("organizationsListAction");
         OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(getParentId());
@@ -533,6 +550,8 @@ public class AcaciaApplicationView extends FrameView {
         /* Contact book menu items */
         JBMenu contactBook = new JBMenu();
         JBMenuItem personsListMenuItem = new JBMenuItem();
+        JBMenuItem staffListMenuItem = new JBMenuItem();
+        JBMenuItem editOwnPersonMenuItem = new JBMenuItem();
         JBMenuItem organizationsListMenuItem = new JBMenuItem();
         JBMenuItem personPositionTypesListMenuItem = new JBMenuItem();
         JBMenuItem organizationPositionTypesListMenuItem = new JBMenuItem();
@@ -714,6 +733,10 @@ public class AcaciaApplicationView extends FrameView {
 
         personsListMenuItem.setAction(actionMap.get("personsListAction"));
         contactBook.add(personsListMenuItem);
+        
+        staffListMenuItem.setAction(actionMap.get("staffListAction"));
+        contactBook.add(staffListMenuItem);
+        
         personPositionTypesListMenuItem.setAction(actionMap.get("personPositionTypesListAction"));
         contactBook.add(personPositionTypesListMenuItem);
 
@@ -753,6 +776,9 @@ public class AcaciaApplicationView extends FrameView {
         Separator contactBookSeparator4 = new Separator();
         contactBook.add(contactBookSeparator4);
 
+        editOwnPersonMenuItem.setAction(actionMap.get("editOwnPersonAction"));
+        contactBook.add(editOwnPersonMenuItem);
+        
         ownOrganizationMenuItem.setAction(actionMap.get("ownOrganizationAction"));
         contactBook.add(ownOrganizationMenuItem);
 

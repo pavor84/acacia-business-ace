@@ -327,6 +327,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         Query q = em.createNamedQuery("Classifier.findByCode");
         q.setParameter("code", code);
         q.setParameter("deleted", false);
+        //TODO: owner id!
 
         List<Classifier> result = q.getResultList();
 

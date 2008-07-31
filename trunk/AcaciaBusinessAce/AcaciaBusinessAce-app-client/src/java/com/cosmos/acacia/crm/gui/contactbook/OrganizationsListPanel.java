@@ -53,7 +53,6 @@ public class OrganizationsListPanel extends AbstractTablePanel {
 
     @Override
     protected void initData() {
-        log.info("parent: " + getParentDataObjectId() + " ,vis" + isVisible(Button.Select));
         
         // show admin options only if it is a frame, and not dialog
         if (getParentDataObjectId() == null && !isVisible(Button.Select))

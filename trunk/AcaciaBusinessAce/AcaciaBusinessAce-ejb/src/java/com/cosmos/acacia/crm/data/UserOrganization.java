@@ -53,11 +53,6 @@ public class UserOrganization implements Serializable {
     @Property(title="Branch", customDisplay="${branch.addressName}")
     private Address branch;
 
-    @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
-    @ManyToOne
-    @Property(title="Person", customDisplay="${person.displayName}")
-    private Person person;
-
     @Column(name="is_user_active")
     private boolean isUserActive;
 
@@ -111,13 +106,5 @@ public class UserOrganization implements Serializable {
 
     public void setUserActive(boolean isUserActive) {
         this.isUserActive = isUserActive;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 }

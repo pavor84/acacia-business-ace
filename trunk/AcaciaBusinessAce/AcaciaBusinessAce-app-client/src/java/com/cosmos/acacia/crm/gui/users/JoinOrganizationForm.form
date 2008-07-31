@@ -21,18 +21,13 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="personLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="branchLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="organizationLabel" min="-2" pref="91" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="personComboList" pref="291" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="branchComboList" alignment="1" pref="291" max="32767" attributes="0"/>
                           <Component id="organizationComboList" alignment="1" pref="291" max="32767" attributes="0"/>
                       </Group>
@@ -55,11 +50,6 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="branchComboList" max="32767" attributes="1"/>
                   <Component id="branchLabel" alignment="0" pref="25" max="32767" attributes="1"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="personComboList" alignment="0" max="32767" attributes="1"/>
-                  <Component id="personLabel" alignment="0" pref="25" max="32767" attributes="1"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jBButton1" min="-2" max="-2" attributes="0"/>
@@ -97,17 +87,6 @@
     <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="branchComboList">
       <Properties>
         <Property name="name" type="java.lang.String" value="branchComboList" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="personLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="personLabel.text"/>
-        <Property name="name" type="java.lang.String" value="personLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="personComboList">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="personComboList" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

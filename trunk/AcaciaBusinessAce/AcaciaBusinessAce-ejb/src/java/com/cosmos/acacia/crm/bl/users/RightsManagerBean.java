@@ -183,7 +183,7 @@ public class RightsManagerBean
             Address branch = uo.getBranch();
             if (branch != null) {
                 Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
-                q.setParameter("person", uo.getPerson());
+                q.setParameter("person", user.getPerson());
                 q.setParameter("parentDataObjectId", branch.getAddressId());
 
                 try {

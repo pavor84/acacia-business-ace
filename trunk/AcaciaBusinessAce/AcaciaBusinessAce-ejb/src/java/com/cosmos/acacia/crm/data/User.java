@@ -97,9 +97,14 @@ public class User extends DataObjectBean implements Serializable {
     @Property(title="System password validity", visible=false, hidden=true)
     private Date systemPasswordValidity;
 
-    @Transient
-    @Property(title="Person")
-    private String personName;
+//    @Transient
+//    @Property(title="Person")
+//    private String personName;
+
+    @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
+    @ManyToOne
+    @Property(title="Person", customDisplay="${person.displayName}")
+    private Person person;
 
     @Transient
     @Property(title="Branch")
@@ -181,12 +186,12 @@ public class User extends DataObjectBean implements Serializable {
         this.branchName = branchName;
     }
 
-    public String getPersonName() {
-        return personName;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonName(String personName) {
-        this.personName = personName;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public BigInteger getUserId() {

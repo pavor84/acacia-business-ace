@@ -8,11 +8,8 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -49,8 +46,6 @@ public class JoinOrganizationForm extends AcaciaPanel{
         jBButton1 = new com.cosmos.swingb.JBButton();
         branchLabel = new com.cosmos.swingb.JBLabel();
         branchComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        personLabel = new com.cosmos.swingb.JBLabel();
-        personComboList = new com.cosmos.acacia.gui.AcaciaComboList();
 
         setName("Form"); // NOI18N
 
@@ -69,11 +64,6 @@ public class JoinOrganizationForm extends AcaciaPanel{
 
         branchComboList.setName("branchComboList"); // NOI18N
 
-        personLabel.setText(resourceMap.getString("personLabel.text")); // NOI18N
-        personLabel.setName("personLabel"); // NOI18N
-
-        personComboList.setName("personComboList"); // NOI18N
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,16 +71,12 @@ public class JoinOrganizationForm extends AcaciaPanel{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(branchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(organizationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(personComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
                             .addComponent(branchComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                             .addComponent(organizationComboList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)))
                     .addComponent(jBButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -107,10 +93,6 @@ public class JoinOrganizationForm extends AcaciaPanel{
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(branchComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(branchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(personComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(personLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -123,8 +105,6 @@ public class JoinOrganizationForm extends AcaciaPanel{
     private com.cosmos.swingb.JBButton jBButton1;
     private com.cosmos.acacia.gui.AcaciaComboList organizationComboList;
     private com.cosmos.swingb.JBLabel organizationLabel;
-    private com.cosmos.acacia.gui.AcaciaComboList personComboList;
-    private com.cosmos.swingb.JBLabel personLabel;
     // End of variables declaration//GEN-END:variables
 
     private UsersRemote formSession;
@@ -153,41 +133,19 @@ public class JoinOrganizationForm extends AcaciaPanel{
                 AddressListPanel branchesTable = new AddressListPanel(organization.getId());
                 branchesTable.setVisible(Button.New, false);
                 branchComboList.initUnbound(branchesTable, "${addressName}");
-
-                branchComboList.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        Address branch = (Address) branchComboList.getSelectedItem();
-
-                        if (branch == null) {
-                            personComboList.getComboBox().removeAllItems();
-                            personComboList.setEnabled(false);
-                            return;
-                        }
-                        personComboList.setEnabled(true);
-                        ContactPersonsListPanel personsTable = new ContactPersonsListPanel(branch.getId());
-                        personComboList.initUnbound(personsTable, "${contact.displayName} (${positionType.positionTypeName})");
-                    }
-
-                });
             }
        });
 
        branchComboList.setEnabled(false);
-       personComboList.setEnabled(false);
     }
 
     @Action
     public void requestJoin() {
         Organization organization = (Organization) organizationComboList.getSelectedItem();
         Address branch = (Address) branchComboList.getSelectedItem();
-        Person person = null;
-        if (personComboList.getSelectedItem() != null)
-             person = ((ContactPerson) personComboList.getSelectedItem()).getContact();
-
-
+       
         if (organization != null)
-            getFormSession().joinOrganization(organization, branch, person);
+            getFormSession().joinOrganization(organization, branch);
 
         JOptionPane.showMessageDialog(this, getResourceMap().getString("JoinOrganizationForm.request.sent"));
         close();

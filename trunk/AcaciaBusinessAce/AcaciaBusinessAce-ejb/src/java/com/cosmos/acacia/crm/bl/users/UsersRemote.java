@@ -170,9 +170,8 @@ public interface UsersRemote {
      *
      * @param organization
      * @param branch
-     * @param person
      */
-    void joinOrganization (Organization organization, Address branch, Person person);
+    void joinOrganization (Organization organization, Address branch);
 
 
     /**

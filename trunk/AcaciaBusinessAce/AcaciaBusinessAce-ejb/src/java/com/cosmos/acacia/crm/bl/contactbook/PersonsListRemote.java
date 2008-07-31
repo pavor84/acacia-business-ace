@@ -125,4 +125,11 @@ public interface PersonsListRemote {
      * @return the version of the deleted Person
      */
     int deletePerson(Person person);
+    
+    /**
+     * Lists all the persons registered with the current organization
+     * @param parentDataObjecetId
+     * @return list of staff persons
+     */
+    List<Person> getStaff();
 }

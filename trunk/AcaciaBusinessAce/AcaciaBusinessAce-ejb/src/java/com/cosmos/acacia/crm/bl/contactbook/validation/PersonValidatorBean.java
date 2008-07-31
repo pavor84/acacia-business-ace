@@ -23,6 +23,12 @@ public class PersonValidatorBean implements PersonValidatorLocal {
     public void validate(Person entity) throws ValidationException {
         ValidationException ve = new ValidationException();
 
+        try {
+            if (entity.getFirstName().length() < 1 || entity.getLastName().length() < 1)
+                throw new Exception();
+        } catch (Exception ex) {
+            ve.addMessage("Person.err.namesRequired");
+        }
         //if we have validation messages - throw the exception since not everything is OK
         if ( !ve.getMessages().isEmpty() )
             throw ve;
