@@ -368,7 +368,7 @@ public class LoginForm extends AcaciaPanel {
 //            }
 
 
-            setDialogResponse(DialogResponse.LOGIN);
+            //setDialogResponse(DialogResponse.LOGIN);
 
             if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
                 ChangePasswordForm cpf = new ChangePasswordForm(null);
@@ -379,7 +379,8 @@ public class LoginForm extends AcaciaPanel {
                 //    AcaciaApplication.getApplication().exit();
             }
 
-            close();
+            close(false);
+            AcaciaApplication.launch(AcaciaApplication.class, null);
         } catch (Exception ex) {
             handleBusinessException(ex);
         }
@@ -448,6 +449,17 @@ public class LoginForm extends AcaciaPanel {
         for (Component c : components) {
             c.addKeyListener(l);
         }
+    }
+    
+    @Override
+    public void close() {
+        close(true);
+    }
+    
+    public void close(boolean exit) {
+        super.close();
+        if (exit)
+            AcaciaApplication.getApplication().exit();
     }
 
     class EnterPressedListener extends KeyAdapter {
