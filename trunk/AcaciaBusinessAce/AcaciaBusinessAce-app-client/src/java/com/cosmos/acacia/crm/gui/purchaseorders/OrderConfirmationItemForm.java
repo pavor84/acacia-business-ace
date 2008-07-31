@@ -10,6 +10,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -65,7 +67,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         jBLabel1 = new com.cosmos.swingb.JBLabel();
         productField = new com.cosmos.acacia.gui.AcaciaComboList();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
-        measureUnitField = new com.cosmos.acacia.gui.AcaciaComboBox();
+        measureUnitField = new com.cosmos.swingb.JBComboBox();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
         confirmedQuantityField = new com.cosmos.swingb.JBTextField();
         unitPriceField = new com.cosmos.swingb.JBTextField();
@@ -80,8 +82,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         notesField = new com.cosmos.swingb.JBTextPane();
         formButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
+        currencyField = new com.cosmos.swingb.JBComboBox();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
+        shipWeekField = new com.cosmos.swingb.JBTextField();
+        jBLabel5 = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -137,6 +141,12 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
         jBLabel4.setName("jBLabel4"); // NOI18N
 
+        shipWeekField.setText(resourceMap.getString("shipWeekField.text")); // NOI18N
+        shipWeekField.setName("shipWeekField"); // NOI18N
+
+        jBLabel5.setText(resourceMap.getString("jBLabel5.text")); // NOI18N
+        jBLabel5.setName("jBLabel5"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,9 +169,20 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                         .addComponent(unitPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                        .addComponent(extendedPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
+                    .addComponent(formButtonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(currencyField, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(shipWeekField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                            .addComponent(extendedPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -169,15 +190,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
                                 .addGap(2, 2, 2))
                             .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                             .addComponent(jBLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(shipDateToField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                            .addComponent(shipDateFromField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)))
-                    .addComponent(formButtonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(currencyField, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(shipDateToField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                            .addComponent(shipDateFromField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -209,6 +225,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
                     .addComponent(extendedPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(shipWeekField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(shipDateFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -218,7 +238,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(formButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -228,7 +248,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBTextField confirmedQuantityField;
-    private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
+    private com.cosmos.swingb.JBComboBox currencyField;
     private com.cosmos.swingb.JBTextField extendedPriceField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel formButtonPanel;
     private com.cosmos.swingb.JBLabel jBLabel1;
@@ -237,15 +257,17 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBLabel jBLabel3;
     private com.cosmos.swingb.JBLabel jBLabel4;
+    private com.cosmos.swingb.JBLabel jBLabel5;
     private com.cosmos.swingb.JBLabel jBLabel6;
     private com.cosmos.swingb.JBLabel jBLabel8;
     private com.cosmos.swingb.JBLabel jBLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.cosmos.acacia.gui.AcaciaComboBox measureUnitField;
+    private com.cosmos.swingb.JBComboBox measureUnitField;
     private com.cosmos.swingb.JBTextPane notesField;
     private com.cosmos.acacia.gui.AcaciaComboList productField;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
+    private com.cosmos.swingb.JBTextField shipWeekField;
     private com.cosmos.swingb.JBTextField unitPriceField;
     // End of variables declaration//GEN-END:variables
 
@@ -253,6 +275,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
     private OrderConfirmationListRemote formSession;
     private EntityProperties entProps;
     private ProductsListRemote productListRemote;
+    private boolean updatingShipDates;
     
     @Override
     public BindingGroup getBindingGroup() {
@@ -296,7 +319,6 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(measureUnitField, resourceToStringConverter);
         AutoCompleteDecorator.decorate(currencyField, resourceToStringConverter);
-        
         
         bindGroup = new BindingGroup();
         
@@ -345,16 +367,101 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         //extended price
         extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"));
         
+        //ship week
+        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"))
+            .addBindingListener(new AbstractBindingListener() {
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    calculateShipDates(binding.isContentValid());
+                }
+            });
+        
         //ship date from
-        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"));
+        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"))
+            .addBindingListener(new AbstractBindingListener() {
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    calculateShipWeek(binding.isContentValid(), true);
+                }
+            });
         
         //ship date to
-        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"));
+        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"))
+            .addBindingListener(new AbstractBindingListener() {
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    calculateShipWeek(binding.isContentValid(), false);
+                }
+            });
         
         //notes
         notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
         
+        calculateShipWeek(true, true);
+        
         bindGroup.bind();   
+    }
+
+    protected void calculateShipWeek(boolean contentValid, boolean fromDateChanged) {
+        //avoid update cycle
+        if ( updatingShipDates )
+            return;
+        
+        updatingShipDates = true;
+        
+        if ( !contentValid ){
+            shipWeekField.setText("");
+        }else{
+
+            Date dateToUse = null;
+            
+            //if no 'to' date - use the 'from'
+            if ( entity.getShipDateFrom()==null ){
+                dateToUse = entity.getShipDateTo();
+            //otherwise use the 'to'
+            }else{
+                dateToUse = entity.getShipDateFrom();
+            }
+            
+            if ( dateToUse==null ){
+                shipWeekField.setText("");
+            }else{
+                Calendar c = Calendar.getInstance();
+                c.setTime(dateToUse);
+                Integer week = c.get(Calendar.WEEK_OF_YEAR);
+                shipWeekField.setText(""+week);
+            }
+        }
+        
+        updatingShipDates = false;
+    }
+
+    protected void calculateShipDates(boolean contentValid) {
+        if ( updatingShipDates )
+            return;
+        
+        updatingShipDates = true;
+        
+        if ( !contentValid || "".equals(shipWeekField.getText())){
+            shipDateFromField.setDate(null);
+            shipDateToField.setDate(null);
+        }else{
+            Integer week = null;
+            
+            try{
+                week = new Integer(shipWeekField.getText());
+                
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.WEEK_OF_YEAR, week);
+                
+                shipDateFromField.setDate(c.getTime());
+                c.add(Calendar.DAY_OF_WEEK, 5);
+                shipDateToField.setDate(c.getTime());
+            }catch (NumberFormatException e){
+            }            
+        }
+        
+        updatingShipDates = false;
     }
 
     protected void updateExtendedPrice(boolean contentValid) {
