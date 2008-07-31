@@ -152,7 +152,7 @@ public class JBComboList
                 }
                 else
                 {
-                    comboBox.setSelectedItem(selectedItem);//commented by Pesho
+                    comboBox.setSelectedItem(selectedItem);
                 }
             }
         }

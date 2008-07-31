@@ -96,6 +96,10 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
     @ManyToOne
     private DbResource currency;
 
+    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))
+    @Column(name = "ship_week")
+    private Integer shipWeek;
+    
     @Property(title="Ship Date From")
     @Column(name = "ship_date_from")
     @Temporal(TemporalType.DATE)
@@ -288,5 +292,13 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
 
     public void setMatchedQuantity(BigDecimal matchedQuantity) {
         this.matchedQuantity = matchedQuantity;
+    }
+
+    public Integer getShipWeek() {
+        return shipWeek;
+    }
+
+    public void setShipWeek(Integer shipWeek) {
+        this.shipWeek = shipWeek;
     }
 }

@@ -40,9 +40,24 @@
                       <Component id="jBLabel6" pref="187" max="32767" attributes="1"/>
                       <Component id="unitPriceField" pref="324" max="32767" attributes="1"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jBLabel8" pref="187" max="32767" attributes="1"/>
-                      <Component id="extendedPriceField" pref="324" max="32767" attributes="1"/>
+                  <Component id="formButtonPanel" alignment="1" pref="511" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="jBLabel4" pref="183" max="32767" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="currencyField" min="-2" pref="324" max="-2" attributes="3"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jBLabel8" pref="187" max="32767" attributes="1"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jBLabel5" min="-2" pref="174" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="shipWeekField" alignment="0" pref="324" max="32767" attributes="0"/>
+                          <Component id="extendedPriceField" alignment="1" pref="324" max="32767" attributes="1"/>
+                      </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -53,17 +68,11 @@
                           <Component id="jBLabel11" alignment="0" pref="187" max="32767" attributes="1"/>
                           <Component id="jBLabel10" alignment="1" pref="187" max="32767" attributes="1"/>
                       </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="shipDateToField" alignment="1" pref="324" max="32767" attributes="0"/>
                           <Component id="shipDateFromField" alignment="1" pref="324" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" alignment="1" pref="324" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="324" max="32767" attributes="0"/>
                       </Group>
-                  </Group>
-                  <Component id="formButtonPanel" alignment="1" pref="511" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jBLabel4" pref="183" max="32767" attributes="1"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="currencyField" min="-2" pref="324" max="-2" attributes="3"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -73,22 +82,22 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jBLabel1" alignment="0" min="-2" pref="25" max="-2" attributes="1"/>
                   <Component id="productField" alignment="0" min="-2" max="-2" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jBLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="measureUnitField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="confirmedQuantityField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="currencyField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -98,29 +107,34 @@
                   <Component id="jBLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="unitPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jBLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="extendedPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="shipWeekField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jBLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="shipDateFromField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jBLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="shipDateToField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jBLabel11" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" alignment="0" pref="93" max="32767" attributes="0"/>
+                  <Component id="jBLabel11" min="-2" pref="24" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="159" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="formButtonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -247,6 +261,18 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="jBLabel4.text"/>
         <Property name="name" type="java.lang.String" value="jBLabel4" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="shipWeekField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="shipWeekField.text"/>
+        <Property name="name" type="java.lang.String" value="shipWeekField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel5.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
