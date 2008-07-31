@@ -37,8 +37,7 @@ public class UserGroupPanel extends BaseEntityPanel {
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -197,18 +196,18 @@ public class UserGroupPanel extends BaseEntityPanel {
 
         nameTextField.bind(passportBindingGroup, userGroup, entityProps.getPropertyDetails("name"));
         descriptionTextPane.bind(passportBindingGroup, userGroup, entityProps.getPropertyDetails("description"));
-        
+
         rightsTable = new RightsListPanel(userGroup, RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);
         generalRightsHolderPanel.add(rightsTable);
         addNestedFormListener(rightsTable);
 
-        
+
         specialPermissionsTable = new RightsListPanel(userGroup, RightsListPanel.Type.SpecialPermissionsPanel);
         specialPermissionsTable.setVisibleButtons(2 + 4 + 8 + 16);
         specialPermissionsHolderPanel.add(specialPermissionsTable);
         addNestedFormListener(specialPermissionsTable);
-        
+
         passportBindingGroup.bind();
     }
 
@@ -238,7 +237,7 @@ public class UserGroupPanel extends BaseEntityPanel {
         userGroup = getFormSession().saveUserGroup(userGroup);
         rightsTable.setUserGroup(userGroup);
         specialPermissionsTable.setUserGroup(userGroup);
-        
+
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(userGroup);
         if (closeAfter) {

@@ -48,10 +48,10 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     private AcaciaSessionLocal session;
 
     @EJB
-    private ClassifiersLocal classifiersSession;
+    private ClassifiersLocal classifiersManager;
 
     @EJB
-    private DataObjectTypeLocal dataObjectTypesSession;
+    private DataObjectTypeLocal dataObjectTypesManager;
 
     @Override
     public void assignGroupToPosition(UserGroup group, PositionType position) {
@@ -76,7 +76,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
         // Logic for optimal queries to DB. First remove all existing rights
         // which do not match any of the new set, and then persist only those
         // of the new set, which are not already present in the DB.
-        
+
         Set<UserRight> currentRightsMirror = new HashSet<UserRight>(currentRights);
         for (UserRight right : currentRightsMirror) {
             if (!rights.contains(right)) {
@@ -128,7 +128,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     public Set<UserRight> getSpecialPermissions(UserGroup userGroup) {
         Query q = em.createNamedQuery("UserRight.findSpecialByUserGroup");
         q.setParameter("userGroup", userGroup);
-        
+
         return getUserRightsWithInfo(q.getResultList());
     }
 
@@ -144,7 +144,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     public Set<UserRight> getUserRights(UserGroup userGroup) {
         Query q = em.createNamedQuery("UserRight.findByUserGroup");
         q.setParameter("userGroup", userGroup);
-        
+
         return getUserRightsWithInfo(q.getResultList());
     }
 
@@ -213,17 +213,17 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
 
     @Override
     public List<DataObjectType> getDataObjectTypes() {
-        return classifiersSession.getDataObjectTypes();
+        return classifiersManager.getDataObjectTypes();
     }
 
     @Override
     public List<DataObjectBean> getDataObjectBeans(DataObjectType dataObjectType) {
-        return dataObjectTypesSession.getDataObjectBeans(dataObjectType);
+        return dataObjectTypesManager.getDataObjectBeans(dataObjectType);
     }
 
     @Override
     public DataObjectBean getDataObjectBean(DataObject dataObject) {
-        return classifiersSession.getDataObjectBean(dataObject);
+        return classifiersManager.getDataObjectBean(dataObject);
     }
 
     @Override
@@ -232,9 +232,9 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
             esm.remove(em, right);
         }
     }
-    
+
     @Override
     public List<DbResource> getSpecialPermissions() {
         return SpecialPermission.getDbResources();
-    }    
+    }
 }
