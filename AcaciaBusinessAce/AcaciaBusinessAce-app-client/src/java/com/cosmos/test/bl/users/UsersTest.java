@@ -193,7 +193,7 @@ public class UsersTest implements Serializable {
         org = orgSession.saveOrganization(org);
         loginTest();
 
-        formSession.joinOrganization(org, null, null);
+        formSession.joinOrganization(org, null);
         formSession.updateOrganization(user, null);
 
         List<Organization> orgs = formSession.getOrganizationsList(user);
