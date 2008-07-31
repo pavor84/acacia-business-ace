@@ -110,6 +110,10 @@ public class User extends DataObjectBean implements Serializable {
     @Property(title="Branch")
     private String branchName;
 
+    /**
+     * The property is used to temporarily store activeness of a user
+     * for the current organization
+     */
     @Transient
     @Property(title="Active")
     private boolean active;

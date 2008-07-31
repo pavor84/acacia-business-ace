@@ -42,6 +42,7 @@ import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.RegistrationCode;
@@ -235,10 +236,15 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
             esm.persist(em, uo);
 
-
             if (organization.isActive() && (branch == null || person == null))
                 throw new ValidationException("User.err.branchAndPersonRequired");
-
+            
+            if (branch != null) {
+                ContactPerson cp = new ContactPerson();
+                cp.setParentId(branch.getId());
+                cp.setContact(person);
+                esm.persist(em,cp);
+            }
         }
 
         return user;
