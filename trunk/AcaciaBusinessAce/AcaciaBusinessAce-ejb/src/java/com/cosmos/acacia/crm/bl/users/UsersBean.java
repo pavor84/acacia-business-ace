@@ -595,4 +595,21 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         return entityProperties;
     }
+    
+    @Override
+    public void changeBranch(User user, Address oldBranch, Address newBranch) {
+        Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
+        q.setParameter("parentDataObjectId", oldBranch.getId());
+        q.setParameter("person", user.getPerson());
+        try {
+            ContactPerson cp = (ContactPerson) q.getSingleResult();
+            cp.setParentId(newBranch.getId());
+            esm.persist(em, cp);
+            
+        } catch (Exception ex) {
+            // Ignored
+        }
+        
+    }
+    
 }

@@ -56,13 +56,9 @@ public class UserPanel extends BaseEntityPanel {
 
         branchComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         branchLabel = new com.cosmos.swingb.JBLabel();
-        personLabel = new com.cosmos.swingb.JBLabel();
-        personComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        organizationLabel = new com.cosmos.swingb.JBLabel();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         organizationLabel1 = new com.cosmos.swingb.JBLabel();
         userTextField = new com.cosmos.swingb.JBTextField();
-        organizationTextField = new com.cosmos.swingb.JBTextField();
         generalRightsHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
         specialPermissionsHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
 
@@ -74,14 +70,6 @@ public class UserPanel extends BaseEntityPanel {
         branchLabel.setText(resourceMap.getString("branchLabel.text")); // NOI18N
         branchLabel.setName("branchLabel"); // NOI18N
 
-        personLabel.setText(resourceMap.getString("personLabel.text")); // NOI18N
-        personLabel.setName("personLabel"); // NOI18N
-
-        personComboList.setName("personComboList"); // NOI18N
-
-        organizationLabel.setText(resourceMap.getString("organizationLabel.text")); // NOI18N
-        organizationLabel.setName("organizationLabel"); // NOI18N
-
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
 
         organizationLabel1.setText(resourceMap.getString("organizationLabel1.text")); // NOI18N
@@ -90,9 +78,6 @@ public class UserPanel extends BaseEntityPanel {
         userTextField.setText(resourceMap.getString("userTextField.text")); // NOI18N
         userTextField.setName("userTextField"); // NOI18N
 
-        organizationTextField.setText(resourceMap.getString("organizationTextField.text")); // NOI18N
-        organizationTextField.setName("organizationTextField"); // NOI18N
-
         generalRightsHolderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("generalRightsHolderPanel.border.title"))); // NOI18N
         generalRightsHolderPanel.setName("generalRightsHolderPanel"); // NOI18N
 
@@ -100,7 +85,7 @@ public class UserPanel extends BaseEntityPanel {
         generalRightsHolderPanel.setLayout(generalRightsHolderPanelLayout);
         generalRightsHolderPanelLayout.setHorizontalGroup(
             generalRightsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
+            .addGap(0, 756, Short.MAX_VALUE)
         );
         generalRightsHolderPanelLayout.setVerticalGroup(
             generalRightsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,7 +99,7 @@ public class UserPanel extends BaseEntityPanel {
         specialPermissionsHolderPanel.setLayout(specialPermissionsHolderPanelLayout);
         specialPermissionsHolderPanelLayout.setHorizontalGroup(
             specialPermissionsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
+            .addGap(0, 756, Short.MAX_VALUE)
         );
         specialPermissionsHolderPanelLayout.setVerticalGroup(
             specialPermissionsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,45 +114,29 @@ public class UserPanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(generalRightsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(branchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
-                            .addComponent(organizationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(organizationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(branchComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(personComboList, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(organizationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(organizationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(branchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(branchComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE))
                     .addComponent(specialPermissionsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE))
+                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 772, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(organizationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(organizationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(organizationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(organizationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(branchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(branchComboList, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(personLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(personComboList, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(branchLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(branchComboList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
                 .addComponent(generalRightsHolderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(specialPermissionsHolderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -182,11 +151,7 @@ public class UserPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel branchLabel;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.acacia.gui.TableHolderPanel generalRightsHolderPanel;
-    private com.cosmos.swingb.JBLabel organizationLabel;
     private com.cosmos.swingb.JBLabel organizationLabel1;
-    private com.cosmos.swingb.JBTextField organizationTextField;
-    private com.cosmos.acacia.gui.AcaciaComboList personComboList;
-    private com.cosmos.swingb.JBLabel personLabel;
     private com.cosmos.acacia.gui.TableHolderPanel specialPermissionsHolderPanel;
     private com.cosmos.swingb.JBTextField userTextField;
     // End of variables declaration//GEN-END:variables
@@ -197,7 +162,8 @@ public class UserPanel extends BaseEntityPanel {
     ContactPersonsListPanel personsTable;
     RightsListPanel rightsTable;
     RightsListPanel specialPermissionsTable;
-
+    private Address branch;
+    
     @Override
     protected void initData() {
        setResizable(false);
@@ -206,37 +172,18 @@ public class UserPanel extends BaseEntityPanel {
        if (userOrganization == null)
            close();
 
+       branch = userOrganization.getBranch();
+       
        bindingGroup = new BindingGroup();
 
        final EntityProperties entityProps = getFormSession().getUserOrganizationEntityProperties();
        userTextField.setText(userOrganization.getUser().getUserName());
-       organizationTextField.setText(userOrganization.getOrganization().getOrganizationName());
 
        branchComboList.setEnabled(true);
        AddressListPanel branchesTable = new AddressListPanel(userOrganization.getOrganization().getId());
        branchesTable.setVisible(Button.New, false);
        branchComboList.bind(bindingGroup, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"));
 
-       if (userOrganization.getBranch() != null) {
-            personsTable = new ContactPersonsListPanel(userOrganization.getBranch().getId());
-            personComboList.bind(bindingGroup, personsTable, userOrganization, entityProps.getPropertyDetails("person"));
-       }
-
-       branchComboList.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                System.out.println("state changed");
-                Address branch = (Address) branchComboList.getSelectedItem();
-                if (branch == null) {
-                    personComboList.setEnabled(false);
-                    return;
-                }
-                personComboList.setEnabled(true);
-
-                personsTable = new ContactPersonsListPanel(branch.getId());
-            }
-
-        });
 
         rightsTable = new RightsListPanel(userOrganization.getUser(), RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);
@@ -248,7 +195,6 @@ public class UserPanel extends BaseEntityPanel {
 
         bindingGroup.bind();
         userTextField.setEnabled(false);
-        organizationTextField.setEnabled(false);
     }
 
     protected UsersRemote getFormSession() {
@@ -289,6 +235,9 @@ public class UserPanel extends BaseEntityPanel {
         if (userOrganization.getBranch() != null)
                 u.setBranchName(userOrganization.getBranch().getAddressName());
 
+        if (!userOrganization.getBranch().equals(branch))
+            getFormSession().changeBranch(u, branch, userOrganization.getBranch());
+        
         u.setActive(userOrganization.isUserActive());
 
         setDialogResponse(DialogResponse.SAVE);

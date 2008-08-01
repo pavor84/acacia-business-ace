@@ -228,5 +228,14 @@ public interface UsersRemote {
      * @return the entity properties
      */
     EntityProperties getUserOrganizationEntityProperties();
+
+    /**
+     * Changes the branch of a user
+     * 
+     * @param user
+     * @param oldBranch
+     * @param newBranch
+     */
+    public void changeBranch(User user, Address oldBranch, Address newBranch);
     
 }
