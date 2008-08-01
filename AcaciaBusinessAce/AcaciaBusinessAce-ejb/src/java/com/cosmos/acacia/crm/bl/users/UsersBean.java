@@ -216,6 +216,29 @@ public class UsersBean implements UsersRemote, UsersLocal {
         validator.validate(user, "userName");
         personValidator.validate(person);
 
+        Query q = em.createQuery("SELECT p FROM Person p where p.firstName=:firstName and " +
+                "p.secondName=:secondName and " +
+                "p.lastName=:lastName and " +
+                "p.extraName=:extraName");
+
+        q.setParameter("firstName", person.getFirstName());
+        q.setParameter("secondName", person.getSecondName());
+        q.setParameter("lastName", person.getLastName());
+        q.setParameter("extraName", person.getExtraName());
+        
+        try {
+            q.getSingleResult();
+            // if there is an existing person with this combination,
+            // set the username as extra name
+            if (person.getExtraName() == null
+                    || person.getExtraName().length() == 0) {
+
+                person.setExtraName(user.getUserName());
+            }
+
+        } catch (Exception ex) {
+            // No existing user found.
+        }
         esm.persist(em, person);
 
         user.setUserPassword(getHash(user.getUserPassword()));
@@ -238,7 +261,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
             if (organization.isActive() && (branch == null || person == null))
                 throw new ValidationException("User.err.branchAndPersonRequired");
-            
+
             if (branch != null) {
                 ContactPerson cp = new ContactPerson();
                 cp.setParentId(branch.getId());
@@ -595,7 +618,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         return entityProperties;
     }
-    
+
     @Override
     public void changeBranch(User user, Address oldBranch, Address newBranch) {
         Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
@@ -605,11 +628,11 @@ public class UsersBean implements UsersRemote, UsersLocal {
             ContactPerson cp = (ContactPerson) q.getSingleResult();
             cp.setParentId(newBranch.getId());
             esm.persist(em, cp);
-            
+
         } catch (Exception ex) {
             // Ignored
         }
-        
+
     }
-    
+
 }

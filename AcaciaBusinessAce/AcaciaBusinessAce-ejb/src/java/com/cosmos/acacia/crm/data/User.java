@@ -159,7 +159,6 @@ public class User extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "user_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
-    @Property(title="Data Object")
     private DataObject dataObject;
 
     public User() {
