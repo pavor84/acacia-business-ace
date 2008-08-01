@@ -18,28 +18,25 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="personalDataPanel" alignment="0" max="32767" attributes="1"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="organizationLabel" pref="104" max="32767" attributes="0"/>
                           <Component id="passwordLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="usernameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="branchLabel" min="-2" pref="80" max="-2" attributes="0"/>
+                          <Component id="branchLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="passwordLabel2" alignment="0" min="-2" max="-2" attributes="1"/>
+                          <Component id="organizationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="usernameTextField" alignment="0" pref="296" max="32767" attributes="0"/>
-                          <Component id="passwordTextField" alignment="0" pref="296" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="branchComboList" pref="296" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="passwordTextField2" alignment="1" pref="296" max="32767" attributes="0"/>
-                          <Component id="organizationComboList" alignment="1" pref="296" max="32767" attributes="0"/>
+                      <EmptySpace pref="9" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="branchComboList" pref="324" max="32767" attributes="0"/>
+                          <Component id="organizationComboList" alignment="0" pref="324" max="32767" attributes="0"/>
+                          <Component id="passwordTextField2" alignment="1" pref="324" max="32767" attributes="0"/>
+                          <Component id="passwordTextField" alignment="0" pref="324" max="32767" attributes="0"/>
+                          <Component id="usernameTextField" alignment="0" pref="324" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="registerButton" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
@@ -54,31 +51,36 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="usernameTextField" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="usernameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="passwordLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="passwordTextField" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="passwordTextField" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="passwordLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="passwordTextField2" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="passwordTextField2" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="organizationLabel" min="-2" max="-2" attributes="1"/>
-                  <Component id="organizationComboList" linkSize="1" max="32767" attributes="1"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <Component id="organizationLabel" min="-2" max="-2" attributes="1"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="organizationComboList" linkSize="2" min="-2" pref="18" max="-2" attributes="1"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="branchLabel" max="32767" attributes="1"/>
-                  <Component id="branchComboList" linkSize="1" alignment="0" pref="20" max="32767" attributes="1"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="branchLabel" alignment="1" min="-2" max="-2" attributes="1"/>
+                  <Component id="branchComboList" linkSize="2" pref="20" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="personalDataPanel" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="personalDataPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="registerButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -169,17 +171,17 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="extraNameLabel" alignment="0" pref="78" max="32767" attributes="1"/>
+                      <Component id="extraNameLabel" alignment="0" max="32767" attributes="1"/>
                       <Component id="lastNameLabel" alignment="0" max="32767" attributes="1"/>
                       <Component id="secondNameLabel" alignment="0" max="32767" attributes="1"/>
                       <Component id="firstNameLabel" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="secondNameTextField" alignment="0" pref="272" max="32767" attributes="1"/>
-                      <Component id="firstNameTextField" alignment="1" pref="272" max="32767" attributes="1"/>
-                      <Component id="lastNameTextField" alignment="1" pref="272" max="32767" attributes="1"/>
-                      <Component id="extraNameTextField" alignment="0" pref="272" max="32767" attributes="1"/>
+                      <Component id="secondNameTextField" alignment="0" pref="306" max="32767" attributes="1"/>
+                      <Component id="firstNameTextField" alignment="1" pref="306" max="32767" attributes="1"/>
+                      <Component id="lastNameTextField" alignment="1" pref="306" max="32767" attributes="1"/>
+                      <Component id="extraNameTextField" alignment="0" pref="306" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -200,12 +202,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lastNameLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
+                      <Component id="lastNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="extraNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="extraNameLabel" alignment="3" min="-2" pref="12" max="-2" attributes="0"/>
+                      <Component id="extraNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
