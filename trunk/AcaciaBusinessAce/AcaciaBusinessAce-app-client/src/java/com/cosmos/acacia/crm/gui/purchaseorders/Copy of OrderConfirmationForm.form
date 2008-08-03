@@ -191,7 +191,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel4" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="supplierContactField">
+        <Component class="com.cosmos.swingb.JBComboBox" name="supplierContactField">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
@@ -205,7 +205,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="documentTypeField">
+        <Component class="com.cosmos.swingb.JBComboBox" name="documentTypeField">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
@@ -318,7 +318,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="currencyField">
+        <Component class="com.cosmos.swingb.JBComboBox" name="currencyField">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>

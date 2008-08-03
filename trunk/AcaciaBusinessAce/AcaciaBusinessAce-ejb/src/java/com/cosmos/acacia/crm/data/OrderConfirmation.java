@@ -136,6 +136,20 @@ public class OrderConfirmation extends DataObjectBean implements Serializable {
     @Column(name = "notes")
     @Property(title="Notes")
     private String notes;
+    
+    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53, required=true))
+    @Column(name = "ship_week")
+    private Integer shipWeek;
+    
+    @Property(title="Ship Date From", propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "ship_date_from")
+    @Temporal(TemporalType.DATE)
+    private Date shipDateFrom;
+    
+    @Property(title="Ship Date To", propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "ship_date_to")
+    @Temporal(TemporalType.DATE)
+    private Date shipDateTo;
 
     @JoinColumn(name = "order_confirmation_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -338,6 +352,30 @@ public class OrderConfirmation extends DataObjectBean implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Integer getShipWeek() {
+        return shipWeek;
+    }
+
+    public void setShipWeek(Integer shipWeek) {
+        this.shipWeek = shipWeek;
+    }
+
+    public Date getShipDateFrom() {
+        return shipDateFrom;
+    }
+
+    public void setShipDateFrom(Date shipDateFrom) {
+        this.shipDateFrom = shipDateFrom;
+    }
+
+    public Date getShipDateTo() {
+        return shipDateTo;
+    }
+
+    public void setShipDateTo(Date shipDateTo) {
+        this.shipDateTo = shipDateTo;
     }
 
 }

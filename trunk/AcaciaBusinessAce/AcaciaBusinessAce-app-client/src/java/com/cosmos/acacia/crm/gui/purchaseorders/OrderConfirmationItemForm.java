@@ -67,7 +67,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         jBLabel1 = new com.cosmos.swingb.JBLabel();
         productField = new com.cosmos.acacia.gui.AcaciaComboList();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
-        measureUnitField = new com.cosmos.swingb.JBComboBox();
+        measureUnitField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
         confirmedQuantityField = new com.cosmos.swingb.JBTextField();
         unitPriceField = new com.cosmos.swingb.JBTextField();
@@ -82,7 +82,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         notesField = new com.cosmos.swingb.JBTextPane();
         formButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        currencyField = new com.cosmos.swingb.JBComboBox();
+        currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
         shipWeekField = new com.cosmos.swingb.JBTextField();
         jBLabel5 = new com.cosmos.swingb.JBLabel();
@@ -248,7 +248,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBTextField confirmedQuantityField;
-    private com.cosmos.swingb.JBComboBox currencyField;
+    private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
     private com.cosmos.swingb.JBTextField extendedPriceField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel formButtonPanel;
     private com.cosmos.swingb.JBLabel jBLabel1;
@@ -262,7 +262,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel8;
     private com.cosmos.swingb.JBLabel jBLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.cosmos.swingb.JBComboBox measureUnitField;
+    private com.cosmos.acacia.gui.AcaciaComboBox measureUnitField;
     private com.cosmos.swingb.JBTextPane notesField;
     private com.cosmos.acacia.gui.AcaciaComboList productField;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
@@ -276,6 +276,8 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
     private EntityProperties entProps;
     private ProductsListRemote productListRemote;
     private boolean updatingShipDates;
+    private Date lastShipDateFrom;
+//    private static Date lastShipDateTo;
     
     @Override
     public BindingGroup getBindingGroup() {
@@ -321,6 +323,12 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         AutoCompleteDecorator.decorate(currencyField, resourceToStringConverter);
         
         bindGroup = new BindingGroup();
+        
+        //auto set the dates if the item is new
+//        if ( entity.getId()==null && (lastShipDateTo!=null || lastShipDateFrom!=null) ){
+//            entity.setShipDateFrom(lastShipDateFrom);
+//            entity.setShipDateTo(lastShipDateTo);
+//        }
         
         //product
         PropertyDetails pd = entProps.getPropertyDetails("product");
@@ -381,7 +389,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    calculateShipWeek(binding.isContentValid(), true);
+                    calculateShipWeek(binding.isContentValid(), true, true);
                 }
             });
         
@@ -390,19 +398,19 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    calculateShipWeek(binding.isContentValid(), false);
+                    calculateShipWeek(binding.isContentValid(), false, true);
                 }
             });
         
         //notes
         notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
         
-        calculateShipWeek(true, true);
+        bindGroup.bind(); 
         
-        bindGroup.bind();   
+        calculateShipWeek(true, true, false);
     }
 
-    protected void calculateShipWeek(boolean contentValid, boolean fromDateChanged) {
+    protected void calculateShipWeek(boolean contentValid, boolean fromDateChanged, boolean event) {
         //avoid update cycle
         if ( updatingShipDates )
             return;
@@ -415,12 +423,22 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
 
             Date dateToUse = null;
             
-            //if no 'to' date - use the 'from'
+            //if no 'from' date - use the 'to'
             if ( entity.getShipDateFrom()==null ){
                 dateToUse = entity.getShipDateTo();
-            //otherwise use the 'to'
+            //otherwise use the 'from'
             }else{
                 dateToUse = entity.getShipDateFrom();
+            }
+            
+            //auto set the 'to' date, if it is NULL or is the same as 'from' date 
+            if ( event && fromDateChanged && entity.getShipDateFrom()!=null && 
+                    (entity.getShipDateTo()==null 
+                    //also if the 'to' date is before 'from' date, overwrite the 'to' with 'from'
+                    || (entity.getShipDateFrom()!=null && entity.getShipDateFrom().after(entity.getShipDateTo()))
+                    //at last if the previous value of 'from' date is the same as the current 'to', then update 'to' also
+                    || (lastShipDateFrom!=null && lastShipDateFrom.equals(entity.getShipDateTo())))){
+                shipDateToField.setDate(entity.getShipDateFrom());
             }
             
             if ( dateToUse==null ){
@@ -430,6 +448,11 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
                 c.setTime(dateToUse);
                 Integer week = c.get(Calendar.WEEK_OF_YEAR);
                 shipWeekField.setText(""+week);
+            }
+            
+            if ( event ){
+                lastShipDateFrom = entity.getShipDateFrom();
+//                lastShipDateTo = entity.getShipDateTo();
             }
         }
         
@@ -460,6 +483,9 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             }catch (NumberFormatException e){
             }            
         }
+        
+        lastShipDateFrom = entity.getShipDateFrom();
+//        lastShipDateTo = entity.getShipDateTo();
         
         updatingShipDates = false;
     }
