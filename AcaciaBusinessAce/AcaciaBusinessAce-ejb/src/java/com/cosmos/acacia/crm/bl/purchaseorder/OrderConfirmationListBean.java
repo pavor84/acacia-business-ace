@@ -36,6 +36,7 @@ import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.OrderConfirmationType;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.validation.impl.OrderConfirmationItemValidatorLocal;
+import com.cosmos.acacia.crm.validation.impl.OrderConfirmationValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -64,6 +65,9 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     
     @EJB
     private OrderConfirmationItemValidatorLocal orderConfirmationItemValidator;
+    
+    @EJB
+    private OrderConfirmationValidatorLocal orderConfirmationValidator;
 
     @EJB
     private PurchaseOrderListLocal purchaseOrderListLocal;
@@ -154,6 +158,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
 
     
     public OrderConfirmation saveOrderConfirmation(OrderConfirmation po) {
+        orderConfirmationValidator.validate(po);
         
         esm.persist(em, po);
         
