@@ -8,10 +8,12 @@ package com.cosmos.acacia.crm.bl.assembling;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
@@ -27,7 +29,6 @@ public interface AssemblingRemote
     //List<AssemblingCategory> getAssemblingCategories(DataObject parent);
     List<AssemblingCategory> getAssemblingCategories(AssemblingCategory parent, Boolean allHeirs);
     int getAssemblingCategoryChildCount(AssemblingCategory parentEntity);
-    EntityProperties getAssemblingCategoryEntityProperties();
     boolean deleteAssemblingCategories(List<AssemblingCategory> categories);
     boolean deleteAssemblingCategory(AssemblingCategory assemblingCategory);
     AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory);
@@ -38,6 +39,7 @@ public interface AssemblingRemote
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
     AssemblingCategory getParent(AssemblingCategory child);
     //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);
+    RealProduct getRealProduct(SimpleProduct simpleProduct);
 
     List<AssemblingSchema> getAssemblingSchemas(Organization organization);
     List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory);
@@ -49,6 +51,7 @@ public interface AssemblingRemote
     EntityProperties getAssemblingSchemaItemEntityProperties();
     EntityProperties getAssemblingSchemaItemValueEntityProperties();
     EntityProperties getVirtualProductItemEntityProperties();
+    EntityProperties getAssemblingCategoryEntityProperties();
 
     List<DbResource> getAlgorithms();
     List<DbResource> getDataTypes();

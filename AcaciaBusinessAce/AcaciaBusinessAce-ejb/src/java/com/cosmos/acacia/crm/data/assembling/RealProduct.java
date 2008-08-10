@@ -29,7 +29,10 @@ import javax.persistence.Table;
             (
                 name = "RealProduct.findBySimpleProduct",
                 query = "select t1 from RealProduct t1" +
-                    " where t1.simpleProduct = :simpleProduct"
+                    " where " +
+                    "  t1.parentId = :parentId" +
+                    "  and t1.dataObject.deleted = false" +
+                    "  and t1.simpleProduct = :simpleProduct"
             ),
         @NamedQuery
             (
