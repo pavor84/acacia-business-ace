@@ -27,7 +27,8 @@ public class AssemblingCategoriesTreePanel
     @EJB
     private static AssemblingRemote formSession;
 
-    private AssemblingCategoryListPanel categoryListPanel;
+    //private AssemblingCategoryListPanel categoryListPanel;
+    private AssemblingCategoryTreeTablePanel categoryListPanel;
     private boolean editable;
 
 
@@ -37,6 +38,7 @@ public class AssemblingCategoriesTreePanel
         super(parentDataObjectId);
         //initComponents();
         setWindowAncestorCount(1);
+        System.out.println("AssemblingCategoriesTreePanel()");
     }
 
     public AssemblingCategoriesTreePanel()
@@ -93,13 +95,14 @@ public class AssemblingCategoriesTreePanel
     @Override
     protected void initData()
     {
-        categoryListPanel = new AssemblingCategoryListPanel(true);
+        //categoryListPanel = new AssemblingCategoryListPanel(true);
+        categoryListPanel = new AssemblingCategoryTreeTablePanel(null);
 
         toStringConverter = new AcaciaToStringConverter("${categoryName}");
         getTree().setToStringConverter(toStringConverter);
 
         //load all categories and init the tree
-        List<AssemblingCategory> categories = getFormSession().getAssemblingCategories(null);
+        List<AssemblingCategory> categories = getFormSession().getAssemblingCategories(null, getShowAllHeirs());
 
         refreshTreeModel(categories);
     }
@@ -108,15 +111,83 @@ public class AssemblingCategoriesTreePanel
     protected void onTableRefreshed()
     {
         //load all categories and refresh the tree
-        List<AssemblingCategory> categories = getFormSession().getAssemblingCategories(null);
+        List<AssemblingCategory> categories = getFormSession().getAssemblingCategories(null, getShowAllHeirs());
 
         refreshTreeModel(categories);
     }
 
+    private TreeEnabledTablePanel treeEnabledTablePanel;
     @Override
+    //AssemblingCategoryTreeTablePanel
     public AbstractTreeEnabledTablePanel<AssemblingCategory> getListPanel()
     {
-        return categoryListPanel;
+        //return categoryListPanel;
+        if(treeEnabledTablePanel == null)
+        {
+            treeEnabledTablePanel = new TreeEnabledTablePanel(categoryListPanel);
+        }
+
+        return treeEnabledTablePanel;
+    }
+
+    private class TreeEnabledTablePanel
+        extends AbstractTreeEnabledTablePanel
+    {
+        private AssemblingCategoryTreeTablePanel treeTablePanel;
+
+        public TreeEnabledTablePanel(AssemblingCategoryTreeTablePanel treeTablePanel)
+        {
+            super(treeTablePanel.getMainDataObject());
+            this.treeTablePanel = treeTablePanel;
+        }
+
+        @Override
+        protected List getItems()
+        {
+            return treeTablePanel.getListData();
+        }
+
+        @Override
+        protected Object onEditEntity(Object entity)
+        {
+            return treeTablePanel.onEditEntity((AssemblingCategory)entity);
+        }
+
+        @Override
+        public void refreshDataTable()
+        {
+            treeTablePanel.refreshDataTable();
+        }
+
+        @Override
+        protected boolean deleteRow(Object rowObject)
+        {
+            return treeTablePanel.deleteRow((AssemblingCategory)rowObject);
+        }
+
+        @Override
+        protected Object newRow()
+        {
+            return treeTablePanel.newEntity(null);
+        }
+
+        @Override
+        public boolean canCreate()
+        {
+            return treeTablePanel.canCreate();
+        }
+
+        @Override
+        public boolean canModify(Object rowObject)
+        {
+            return treeTablePanel.canModify((AssemblingCategory)rowObject);
+        }
+
+        @Override
+        public boolean canDelete(Object rowObject)
+        {
+            return treeTablePanel.canDelete((AssemblingCategory)rowObject);
+        }
     }
 
     @Override

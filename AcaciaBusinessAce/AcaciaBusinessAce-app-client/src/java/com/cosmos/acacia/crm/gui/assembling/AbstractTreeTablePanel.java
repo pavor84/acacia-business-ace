@@ -9,6 +9,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
 import java.util.List;
@@ -237,5 +238,18 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
             return AbstractTreeTablePanel.this.canDelete((E)rowObject);
         }
 
+        @Override
+        public void close()
+        {
+            // super.close();
+            AbstractTreeTablePanel.this.close();
+        }
+
+        @Override
+        protected void setDialogResponse(DialogResponse response)
+        {
+            super.setDialogResponse(response);
+            AbstractTreeTablePanel.this.setDialogResponse(response);
+        }
     }
 }

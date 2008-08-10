@@ -594,7 +594,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         {
             // Classify the new object if needed
             classifyObject(newRowObject);
-            dataTable.addRow(newRowObject);
+            // This check fix the JTree issue when the selected node is ROOT node
+            // where the selection is unselected and as result the refresh DataTable 
+            // is invoked and the new row is already in the table.
+            if(dataTable.getRowIndex(newRowObject) == -1)
+                dataTable.addRow(newRowObject);
             fireAdd(newRowObject);
         }
     }

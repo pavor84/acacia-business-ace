@@ -148,6 +148,12 @@ public class JBComboList
                 {
                     Object result = selectableListDialog.getSelectedRowObject();
                     comboBox.setSelectedItem(result);
+                    // Miro Debug
+                    // org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel
+                    // RuntimeException: Cannot use this method with a non-Mutable data model.
+                    // at javax.swing.JComboBox.checkMutableComboBoxModel(JComboBox.java:775)
+                    // at javax.swing.JComboBox.addItem(JComboBox.java:697)
+                    // at com.cosmos.swingb.JBComboList.lookupButtonAction(JBComboList.java:154)
                     comboBox.addItem(result);
                 }
                 else

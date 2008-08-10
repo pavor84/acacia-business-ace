@@ -39,6 +39,7 @@
             <included-library files="1">file.reference.liquidlnf.jar</included-library>
             <included-library files="1">file.reference.beansbinding.jar</included-library>
             <included-library files="1">file.reference.beansbinding.jar</included-library>
+            <included-library files="1">file.reference.beansbinding.jar.OLD</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

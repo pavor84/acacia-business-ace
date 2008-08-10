@@ -53,7 +53,7 @@ public class AssemblingBean
     private AcaciaSessionLocal acaciaSessionLocal;
 
 
-    @Override
+    /*@Override
     public List<AssemblingCategory> getAssemblingCategories(DataObject parent)
     {
         Query q;
@@ -68,7 +68,7 @@ public class AssemblingBean
         }
         q.setParameter("deleted", false);
         return new ArrayList<AssemblingCategory>(q.getResultList());
-    }
+    }*/
 
     @Override
     public EntityProperties getAssemblingCategoryEntityProperties()
