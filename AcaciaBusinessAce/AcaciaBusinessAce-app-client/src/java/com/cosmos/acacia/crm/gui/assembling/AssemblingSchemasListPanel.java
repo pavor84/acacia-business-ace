@@ -11,8 +11,6 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
-import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
-import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -20,19 +18,14 @@ import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.MaskFormattedCellEditor;
-import com.cosmos.swingb.MaskFormattedCellRenderer;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.Serializable;
 import java.math.BigInteger;
-import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.swing.table.TableColumn;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -445,6 +438,16 @@ public class AssemblingSchemasListPanel
         {
             return true;
         }
+
+        @Override
+        public void close()
+        {
+            AssemblingSchemasListPanel.this.setDialogResponse(getDialogResponse());
+            AssemblingSchemasListPanel.this.setSelectedRowObject(getSelectedRowObject());
+            AssemblingSchemasListPanel.this.close();
+        }
+
+
     }
 
     private class SchemaItemsTablePanel
@@ -584,7 +587,7 @@ public class AssemblingSchemasListPanel
             AcaciaTable table = getDataTable();
 
             JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
-            tableBinding.setEditable(true);
+            /*tableBinding.setEditable(true);
             table.setEditable(true);
 
             MaskFormattedCellEditor cellEditor;
@@ -609,7 +612,7 @@ public class AssemblingSchemasListPanel
 
             ProductsListPanel productsListPanel = new ProductsListPanel(null);
             PropertyDetails propDetails = entityProps.getPropertyDetails("virtualProduct");
-            table.bindComboListCellEditor(bindingGroup, productsListPanel, propDetails);
+            table.bindComboListCellEditor(bindingGroup, productsListPanel, propDetails);*/
 
             bindingGroup.bind();
         }
@@ -640,8 +643,7 @@ public class AssemblingSchemasListPanel
         {
             AssemblingSchemaItemValue itemValue = new AssemblingSchemaItemValue();
             itemValue.setAssemblingSchemaItem(getAssemblingSchemaItem());
-            return itemValue;
-            //return onEditEntity(itemValue);
+            return onEditEntity(itemValue);
         }
 
         private Object onEditEntity(AssemblingSchemaItemValue itemValue)

@@ -7,13 +7,19 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.data.assembling.RealProduct;
+import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import javax.ejb.EJB;
+import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
@@ -62,93 +68,96 @@ public class AssemblingSchemaItemValuePanel
     private void initComponents() {
 
         entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        jBButton1 = new com.cosmos.swingb.JBButton();
-        jBTextField1 = new com.cosmos.swingb.JBTextField();
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        jBPanel1 = new com.cosmos.swingb.JBPanel();
-        jBPanel2 = new com.cosmos.swingb.JBPanel();
-        jBTextField2 = new com.cosmos.swingb.JBTextField();
-        jBLabel3 = new com.cosmos.swingb.JBLabel();
-        jBPanel3 = new com.cosmos.swingb.JBPanel();
-        jBTextField3 = new com.cosmos.swingb.JBTextField();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
-        jBTextField4 = new com.cosmos.swingb.JBTextField();
-        jBLabel4 = new com.cosmos.swingb.JBLabel();
+        selectProductOrSchemaButton = new com.cosmos.swingb.JBButton();
+        productOrSchemaTextField = new com.cosmos.swingb.JBTextField();
+        productOrSchemaLabel = new com.cosmos.swingb.JBLabel();
+        constraintsPanel = new com.cosmos.swingb.JBPanel();
+        minValuePanel = new com.cosmos.swingb.JBPanel();
+        minValueTextField = new com.cosmos.swingb.JBTextField();
+        minValueLabel = new com.cosmos.swingb.JBLabel();
+        maxValuePanel = new com.cosmos.swingb.JBPanel();
+        maxValueTextField = new com.cosmos.swingb.JBTextField();
+        maxValueLabel = new com.cosmos.swingb.JBLabel();
+        quantityTextField = new com.cosmos.swingb.JBTextField();
+        quantityLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(AssemblingSchemaItemValuePanel.class, this);
+        selectProductOrSchemaButton.setAction(actionMap.get("productOrSchemaSelectAction")); // NOI18N
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemaItemValuePanel.class);
-        jBButton1.setText(resourceMap.getString("jBButton1.text")); // NOI18N
-        jBButton1.setName("jBButton1"); // NOI18N
+        selectProductOrSchemaButton.setText(resourceMap.getString("selectProductOrSchemaButton.text")); // NOI18N
+        selectProductOrSchemaButton.setName("selectProductOrSchemaButton"); // NOI18N
 
-        jBTextField1.setName("jBTextField1"); // NOI18N
+        productOrSchemaTextField.setEditable(false);
+        productOrSchemaTextField.setName("productOrSchemaTextField"); // NOI18N
 
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
+        productOrSchemaLabel.setText(resourceMap.getString("productOrSchemaLabel.text")); // NOI18N
+        productOrSchemaLabel.setName("productOrSchemaLabel"); // NOI18N
 
-        jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel1.border.title"))); // NOI18N
-        jBPanel1.setName("jBPanel1"); // NOI18N
-        jBPanel1.setLayout(new java.awt.GridLayout());
+        constraintsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("constraintsPanel.border.title"))); // NOI18N
+        constraintsPanel.setName("constraintsPanel"); // NOI18N
+        constraintsPanel.setLayout(new java.awt.GridLayout(1, 0));
 
-        jBPanel2.setName("jBPanel2"); // NOI18N
+        minValuePanel.setName("minValuePanel"); // NOI18N
 
-        jBTextField2.setName("jBTextField2"); // NOI18N
+        minValueTextField.setName("minValueTextField"); // NOI18N
 
-        jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
-        jBLabel3.setName("jBLabel3"); // NOI18N
+        minValueLabel.setText(resourceMap.getString("minValueLabel.text")); // NOI18N
+        minValueLabel.setName("minValueLabel"); // NOI18N
 
-        javax.swing.GroupLayout jBPanel2Layout = new javax.swing.GroupLayout(jBPanel2);
-        jBPanel2.setLayout(jBPanel2Layout);
-        jBPanel2Layout.setHorizontalGroup(
-            jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout minValuePanelLayout = new javax.swing.GroupLayout(minValuePanel);
+        minValuePanel.setLayout(minValuePanelLayout);
+        minValuePanelLayout.setHorizontalGroup(
+            minValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(minValuePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(minValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jBTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addComponent(minValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jBPanel2Layout.setVerticalGroup(
-            jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jBTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        minValuePanelLayout.setVerticalGroup(
+            minValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(minValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(minValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(minValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jBPanel1.add(jBPanel2);
+        constraintsPanel.add(minValuePanel);
 
-        jBPanel3.setName("jBPanel3"); // NOI18N
+        maxValuePanel.setName("maxValuePanel"); // NOI18N
 
-        jBTextField3.setName("jBTextField3"); // NOI18N
+        maxValueTextField.setName("maxValueTextField"); // NOI18N
 
-        jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
-        jBLabel2.setName("jBLabel2"); // NOI18N
+        maxValueLabel.setText(resourceMap.getString("maxValueLabel.text")); // NOI18N
+        maxValueLabel.setName("maxValueLabel"); // NOI18N
 
-        javax.swing.GroupLayout jBPanel3Layout = new javax.swing.GroupLayout(jBPanel3);
-        jBPanel3.setLayout(jBPanel3Layout);
-        jBPanel3Layout.setHorizontalGroup(
-            jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout maxValuePanelLayout = new javax.swing.GroupLayout(maxValuePanel);
+        maxValuePanel.setLayout(maxValuePanelLayout);
+        maxValuePanelLayout.setHorizontalGroup(
+            maxValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(maxValuePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(maxValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jBTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                .addComponent(maxValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
         );
-        jBPanel3Layout.setVerticalGroup(
-            jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jBTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        maxValuePanelLayout.setVerticalGroup(
+            maxValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(maxValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(maxValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(maxValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jBPanel1.add(jBPanel3);
+        constraintsPanel.add(maxValuePanel);
 
-        jBTextField4.setName("jBTextField4"); // NOI18N
+        quantityTextField.setName("quantityTextField"); // NOI18N
 
-        jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
-        jBLabel4.setName("jBLabel4"); // NOI18N
+        quantityLabel.setText(resourceMap.getString("quantityLabel.text")); // NOI18N
+        quantityLabel.setName("quantityLabel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -157,18 +166,18 @@ public class AssemblingSchemaItemValuePanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                    .addComponent(constraintsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                     .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(productOrSchemaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                        .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -176,15 +185,15 @@ public class AssemblingSchemaItemValuePanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productOrSchemaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(constraintsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -193,77 +202,41 @@ public class AssemblingSchemaItemValuePanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBPanel constraintsPanel;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
-    private com.cosmos.swingb.JBButton jBButton1;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBLabel jBLabel2;
-    private com.cosmos.swingb.JBLabel jBLabel3;
-    private com.cosmos.swingb.JBLabel jBLabel4;
-    private com.cosmos.swingb.JBPanel jBPanel1;
-    private com.cosmos.swingb.JBPanel jBPanel2;
-    private com.cosmos.swingb.JBPanel jBPanel3;
-    private com.cosmos.swingb.JBTextField jBTextField1;
-    private com.cosmos.swingb.JBTextField jBTextField2;
-    private com.cosmos.swingb.JBTextField jBTextField3;
-    private com.cosmos.swingb.JBTextField jBTextField4;
+    private com.cosmos.swingb.JBLabel maxValueLabel;
+    private com.cosmos.swingb.JBPanel maxValuePanel;
+    private com.cosmos.swingb.JBTextField maxValueTextField;
+    private com.cosmos.swingb.JBLabel minValueLabel;
+    private com.cosmos.swingb.JBPanel minValuePanel;
+    private com.cosmos.swingb.JBTextField minValueTextField;
+    private com.cosmos.swingb.JBLabel productOrSchemaLabel;
+    private com.cosmos.swingb.JBTextField productOrSchemaTextField;
+    private com.cosmos.swingb.JBLabel quantityLabel;
+    private com.cosmos.swingb.JBTextField quantityTextField;
+    private com.cosmos.swingb.JBButton selectProductOrSchemaButton;
     // End of variables declaration//GEN-END:variables
 
 
     @Override
     protected void initData()
     {
-        entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
+        entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
         PropertyDetails propDetails;
         
         bindingGroup = new BindingGroup();
 
+        //propDetails = entityProps.getPropertyDetails("virtualProduct");
+        //productOrSchemaTextField.bind(bindingGroup, entity, propDetails);
 
-        /*AssemblingSchema as = entity.getAssemblingSchema();
-        //schemaCodeTextField
-        schemaCodeTextField.setText(as.getSchemaCode());
+        propDetails = entityProps.getPropertyDetails("minConstraint");
+        minValueTextField.bind(bindingGroup, entity, propDetails);
 
-        //schemaNameTextField
-        schemaNameTextField.setText(as.getSchemaName());
+        propDetails = entityProps.getPropertyDetails("maxConstraint");
+        maxValueTextField.bind(bindingGroup, entity, propDetails);
 
-        //messageCodeTextField
-        propDetails = entityProps.getPropertyDetails("messageCode");
-        messageCodeTextField.bind(bindingGroup, entity, propDetails);
-
-        //messageTextTextField
-        propDetails = entityProps.getPropertyDetails("messageText");
-        messageTextTextField.bind(bindingGroup, entity, propDetails);
-
-        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
-        AutoCompleteDecorator.decorate(algorithmComboBox, resourceToStringConverter);
-        AutoCompleteDecorator.decorate(dataTypeComboBox, resourceToStringConverter);
-
-        //algorithmComboBox
-        propDetails = entityProps.getPropertyDetails("assemblingAlgorithm");
-        algorithmComboBox.bind(bindingGroup, getAlgorithms(), entity, propDetails);
-
-        //dataTypeComboBox
-        propDetails = entityProps.getPropertyDetails("dataType");
-        dataTypeComboBox.bind(bindingGroup, getDataTypes(), entity, propDetails);
-
-        //minSelectionsTextField
-        propDetails = entityProps.getPropertyDetails("minSelections");
-        minSelectionsTextField.bind(bindingGroup, entity, propDetails);
-
-        //maxSelectionsTextField
-        propDetails = entityProps.getPropertyDetails("maxSelections");
-        maxSelectionsTextField.bind(bindingGroup, entity, propDetails);
-
-        //quantityTextField
         propDetails = entityProps.getPropertyDetails("quantity");
         quantityTextField.bind(bindingGroup, entity, propDetails);
-
-        //defaultValueTextField
-        propDetails = entityProps.getPropertyDetails("defaultValue");
-        defaultValueTextField.bind(bindingGroup, entity, propDetails);
-
-        //descriptionTextPane
-        propDetails = entityProps.getPropertyDetails("description");
-        descriptionTextPane.bind(bindingGroup, entity, propDetails);*/
 
         bindingGroup.bind();
     }
@@ -304,5 +277,47 @@ public class AssemblingSchemaItemValuePanel
         }
 
         return formSession;
+    }
+
+    @Action
+    public void productOrSchemaSelectAction()
+    {
+        VirtualProduct virtualProduct = entity.getVirtualProduct();
+        if(virtualProduct == null)
+        {
+            VirtualProductSelectionPanel selectionPanel = new VirtualProductSelectionPanel(entity);
+            DialogResponse response = selectionPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                virtualProduct = (VirtualProduct)selectionPanel.getSelectedValue();
+                entity.setVirtualProduct(virtualProduct);
+            }
+        }
+        else if(virtualProduct instanceof AssemblingSchema)
+        {
+            AssemblingSchema assemblingSchema = (AssemblingSchema)virtualProduct;
+            AssemblingSchemasListPanel asListPanel = new AssemblingSchemasListPanel(assemblingSchema.getParentId());
+            asListPanel.setSelectedRowObject(assemblingSchema);
+            DialogResponse response = asListPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
+                entity.setVirtualProduct(assemblingSchema);
+            }
+        }
+        else if(virtualProduct instanceof RealProduct)
+        {
+            RealProduct realProduct = (RealProduct)virtualProduct;
+            SimpleProduct simpleProduct = realProduct.getSimpleProduct();
+            ProductsListPanel productsPanel = new ProductsListPanel(simpleProduct.getParentId());
+            productsPanel.setSelectedRowObject(simpleProduct);
+            DialogResponse response = productsPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                simpleProduct = (SimpleProduct)productsPanel.getSelectedRowObject();
+                realProduct = getFormSession().getRealProduct(simpleProduct);
+                entity.setVirtualProduct(realProduct);
+            }
+        }
     }
 }

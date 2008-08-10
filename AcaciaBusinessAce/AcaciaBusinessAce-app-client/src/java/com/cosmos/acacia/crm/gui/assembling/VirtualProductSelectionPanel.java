@@ -6,8 +6,16 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.data.assembling.RealProduct;
+import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.swingb.DialogResponse;
+import javax.ejb.EJB;
 import org.jdesktop.application.Action;
 
 /**
@@ -17,6 +25,8 @@ import org.jdesktop.application.Action;
 public class VirtualProductSelectionPanel
     extends AcaciaPanel
 {
+    @EJB
+    private static AssemblingRemote formSession;
 
     /** Creates new form VirtualProductSelectionPanel */
     public VirtualProductSelectionPanel(AssemblingSchemaItemValue itemValue)
@@ -113,16 +123,48 @@ public class VirtualProductSelectionPanel
     @Action
     public void productSelectionAction()
     {
+        ProductsListPanel productsPanel = new ProductsListPanel(null);
+        DialogResponse response = productsPanel.showDialog(this);
+        setDialogResponse(response);
+        if(DialogResponse.SELECT.equals(response))
+        {
+            SimpleProduct simpleProduct = (SimpleProduct)productsPanel.getSelectedRowObject();
+            RealProduct realProduct = getFormSession().getRealProduct(simpleProduct);
+            setSelectedValue(realProduct);
+        }
+
+        close();
     }
 
     @Action
     public void schemaSelectionAction()
     {
+        AssemblingSchemasListPanel asListPanel = new AssemblingSchemasListPanel(null);
+        asListPanel.setVisibleSelectButtons(true);
+        DialogResponse response = asListPanel.showDialog(this);
+        setDialogResponse(response);
+        if(DialogResponse.SELECT.equals(response))
+        {
+            AssemblingSchema assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
+            setSelectedValue(assemblingSchema);
+        }
+
+        close();
     }
 
     @Action
     public void cancelAction()
     {
+        close();
     }
 
+    protected AssemblingRemote getFormSession()
+    {
+        if(formSession == null)
+        {
+            formSession = getRemoteBean(this, AssemblingRemote.class);
+        }
+
+        return formSession;
+    }
 }
