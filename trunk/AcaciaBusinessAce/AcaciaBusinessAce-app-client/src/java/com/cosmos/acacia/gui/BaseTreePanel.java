@@ -324,6 +324,11 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
         return showAllHeirsCheck;
     }
 
+    protected boolean getShowAllHeirs()
+    {
+        return showAllHeirsCheck.isSelected();
+    }
+
     protected TreeLister getTreeLister() {
         return new TreeLister();
     }
@@ -337,8 +342,7 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
     }
 
     protected void refreshTableItems() {
-        boolean showAllHeirs = getShowAllHeirsCheckBox().isSelected();
-        refreshTableItems(showAllHeirs);
+        refreshTableItems(getShowAllHeirs());
     }
 
     @SuppressWarnings("unchecked")

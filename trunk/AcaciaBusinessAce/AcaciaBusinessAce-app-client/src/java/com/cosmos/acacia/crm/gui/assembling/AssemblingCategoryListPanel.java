@@ -304,7 +304,7 @@ public class AssemblingCategoryListPanel
     @Override
     protected List<AssemblingCategory> getItems()
     {
-        return getFormSession().getAssemblingCategories(null);
+        return getFormSession().getAssemblingCategories(null, true); //getShowAllHeirs());
     }
 
 }

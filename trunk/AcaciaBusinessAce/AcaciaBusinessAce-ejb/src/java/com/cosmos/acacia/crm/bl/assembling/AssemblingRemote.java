@@ -24,10 +24,9 @@ import javax.ejb.Remote;
 @Remote
 public interface AssemblingRemote
 {
+    //List<AssemblingCategory> getAssemblingCategories(DataObject parent);
     List<AssemblingCategory> getAssemblingCategories(AssemblingCategory parent, Boolean allHeirs);
     int getAssemblingCategoryChildCount(AssemblingCategory parentEntity);
-
-    List<AssemblingCategory> getAssemblingCategories(DataObject parent);
     EntityProperties getAssemblingCategoryEntityProperties();
     boolean deleteAssemblingCategories(List<AssemblingCategory> categories);
     boolean deleteAssemblingCategory(AssemblingCategory assemblingCategory);

@@ -41,7 +41,7 @@ public class AssemblingCategoryPanel
 
     public AssemblingCategoryPanel(AssemblingCategory category)
     {
-        super(category.getParentId());
+        super(category != null ? category.getParentId() : null);
         this.entity = category;
         init();
     }
