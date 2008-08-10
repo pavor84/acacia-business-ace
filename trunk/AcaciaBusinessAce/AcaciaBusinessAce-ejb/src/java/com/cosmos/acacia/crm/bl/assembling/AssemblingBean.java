@@ -28,6 +28,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -343,6 +344,24 @@ public class AssemblingBean
             {
                 esm.remove(em, rp);
             }
+        }
+    }
+
+    @Override
+    public RealProduct getRealProduct(SimpleProduct simpleProduct)
+    {
+        Query q = em.createNamedQuery("RealProduct.findBySimpleProduct");
+        q.setParameter("parentId", simpleProduct.getParentId());
+        q.setParameter("simpleProduct", simpleProduct);
+        try
+        {
+            return (RealProduct)q.getSingleResult();
+        }
+        catch(NoResultException ex)
+        {
+            RealProduct realProduct = new RealProduct(simpleProduct);
+            esm.persist(em, realProduct);
+            return realProduct;
         }
     }
 
