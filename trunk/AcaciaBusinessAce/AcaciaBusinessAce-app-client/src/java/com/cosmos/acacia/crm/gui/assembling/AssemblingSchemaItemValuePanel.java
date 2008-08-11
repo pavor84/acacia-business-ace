@@ -226,8 +226,10 @@ public class AssemblingSchemaItemValuePanel
         
         bindingGroup = new BindingGroup();
 
-        //propDetails = entityProps.getPropertyDetails("virtualProduct");
-        //productOrSchemaTextField.bind(bindingGroup, entity, propDetails);
+        // propDetails = entityProps.getPropertyDetails("virtualProduct");
+        // productOrSchemaTextField.bind(bindingGroup, entity, propDetails);
+        VirtualProduct virtualProduct = entity.getVirtualProduct();
+        productOrSchemaTextField.setText(virtualProduct.getProductName());
 
         propDetails = entityProps.getPropertyDetails("minConstraint");
         minValueTextField.bind(bindingGroup, entity, propDetails);
@@ -291,6 +293,7 @@ public class AssemblingSchemaItemValuePanel
             {
                 virtualProduct = (VirtualProduct)selectionPanel.getSelectedValue();
                 entity.setVirtualProduct(virtualProduct);
+                productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
         }
         else if(virtualProduct instanceof AssemblingSchema)
@@ -301,8 +304,9 @@ public class AssemblingSchemaItemValuePanel
             DialogResponse response = asListPanel.showDialog(this);
             if(DialogResponse.SELECT.equals(response))
             {
-                assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
+                virtualProduct = assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
                 entity.setVirtualProduct(assemblingSchema);
+                productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
         }
         else if(virtualProduct instanceof RealProduct)
@@ -315,8 +319,9 @@ public class AssemblingSchemaItemValuePanel
             if(DialogResponse.SELECT.equals(response))
             {
                 simpleProduct = (SimpleProduct)productsPanel.getSelectedRowObject();
-                realProduct = getFormSession().getRealProduct(simpleProduct);
+                virtualProduct = realProduct = getFormSession().getRealProduct(simpleProduct);
                 entity.setVirtualProduct(realProduct);
+                productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
         }
     }
