@@ -275,11 +275,14 @@ public class AssemblingBean
     @Override
     public List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory)
     {
-        if(assemblingCategory == null)
-            return Collections.emptyList();
-
-        Query q = em.createNamedQuery("AssemblingSchema.findByAssemblingCategory");
-        q.setParameter("assemblingCategory", assemblingCategory);
+        Query q;
+        if(assemblingCategory != null) {
+            q = em.createNamedQuery("AssemblingSchema.findByAssemblingCategory");
+            q.setParameter("assemblingCategory", assemblingCategory);
+        } else {
+            q = em.createNamedQuery("AssemblingSchema.findByParentId");
+            q.setParameter("parentId", acaciaSessionLocal.getOrganization().getId());
+        }
         q.setParameter("deleted", false);
         return new ArrayList<AssemblingSchema>(q.getResultList());
     }

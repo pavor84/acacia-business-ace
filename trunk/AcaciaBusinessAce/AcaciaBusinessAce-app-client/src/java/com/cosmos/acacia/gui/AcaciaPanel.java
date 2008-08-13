@@ -50,7 +50,7 @@ public abstract class AcaciaPanel
     private static final String SESSION_BRANCH = "SESSION_BRANCH";
     private static Map<String, Object> sessionCache = new HashMap<String, Object>();
 
-    AcaciaPanel()
+    public AcaciaPanel()
     {
         super(AcaciaApplication.class);
     }

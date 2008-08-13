@@ -7,7 +7,6 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -16,12 +15,9 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.SelectableListDialog;
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
@@ -60,9 +56,7 @@ public class AssemblingSchemasListPanel
     private void initComponents() {
 
         assemblingSchemasPanel = new com.cosmos.swingb.JBPanel();
-        assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
-        assemblingCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        schemasTablePanel = getAssemblingSchemasTablePanel();
+        assemblingSchemaChoicePanel = new com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaChoicePanel();
         assemblingSchemasSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsSplitPane = new com.cosmos.swingb.JBSplitPane();
         schemaItemsTitledPanel = new com.cosmos.swingb.JBTitledPanel();
@@ -71,41 +65,23 @@ public class AssemblingSchemasListPanel
 
         assemblingSchemasPanel.setName("assemblingSchemasPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemasListPanel.class);
-        assemblingCategoryLabel.setText(resourceMap.getString("assemblingCategoryLabel.text")); // NOI18N
-        assemblingCategoryLabel.setName("assemblingCategoryLabel"); // NOI18N
-
-        assemblingCategoryComboList.setName("assemblingCategoryComboList"); // NOI18N
-
-        schemasTablePanel.setName("schemasTablePanel"); // NOI18N
+        assemblingSchemaChoicePanel.setName("assemblingSchemaChoicePanel"); // NOI18N
 
         javax.swing.GroupLayout assemblingSchemasPanelLayout = new javax.swing.GroupLayout(assemblingSchemasPanel);
         assemblingSchemasPanel.setLayout(assemblingSchemasPanelLayout);
         assemblingSchemasPanelLayout.setHorizontalGroup(
             assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(assemblingSchemasPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(assemblingSchemaChoicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
         );
         assemblingSchemasPanelLayout.setVerticalGroup(
             assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(assemblingSchemasPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(assemblingSchemasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(schemasTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
+            .addComponent(assemblingSchemaChoicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
         );
 
         setName("Form"); // NOI18N
         setLayout(new java.awt.BorderLayout());
 
-        assemblingSchemasSplitPane.setDividerLocation(450);
+        assemblingSchemasSplitPane.setDividerLocation(460);
         assemblingSchemasSplitPane.setResizeWeight(0.5);
         assemblingSchemasSplitPane.setName("assemblingSchemasSplitPane"); // NOI18N
 
@@ -114,6 +90,7 @@ public class AssemblingSchemasListPanel
         schemaItemsSplitPane.setResizeWeight(0.5);
         schemaItemsSplitPane.setName("schemaItemsSplitPane"); // NOI18N
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemasListPanel.class);
         schemaItemsTitledPanel.setTitle(resourceMap.getString("schemaItemsTitledPanel.title")); // NOI18N
         schemaItemsTitledPanel.setContentContainer(getSchemaItemsTablePanel());
         schemaItemsTitledPanel.setName("schemaItemsTitledPanel"); // NOI18N
@@ -135,19 +112,16 @@ public class AssemblingSchemasListPanel
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.acacia.gui.AcaciaComboList assemblingCategoryComboList;
-    private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
+    private com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaChoicePanel assemblingSchemaChoicePanel;
     private com.cosmos.swingb.JBPanel assemblingSchemasPanel;
     private com.cosmos.swingb.JBSplitPane assemblingSchemasSplitPane;
     private com.cosmos.swingb.JBTitledPanel assemblingSchemasTitledPanel;
     private com.cosmos.swingb.JBTitledPanel itemValuesTitledPanel;
     private com.cosmos.swingb.JBSplitPane schemaItemsSplitPane;
     private com.cosmos.swingb.JBTitledPanel schemaItemsTitledPanel;
-    private com.cosmos.swingb.JBPanel schemasTablePanel;
     // End of variables declaration//GEN-END:variables
 
 
-    private AssemblingSchemasTablePanel assemblingSchemasTablePanel;
     private SchemaItemsTablePanel schemaItemsTablePanel;
     private ItemValuesTablePanel itemValuesTablePanel;
 
@@ -159,20 +133,13 @@ public class AssemblingSchemasListPanel
     protected void initData()
     {
         setPreferredSize(new Dimension(1055, 600));
-        assemblingSchemasSplitPane.setDividerLocation(555);
+        assemblingSchemasSplitPane.setDividerLocation(565);
+        assemblingSchemaChoicePanel.addTableListener(new AssemblingSchemasTableListener());
     }
-
-    private AssemblingSchemasTablePanel getAssemblingSchemasTablePanel()
+    
+    private AbstractTablePanel getAssemblingSchemasTablePanel()
     {
-        if(assemblingSchemasTablePanel == null)
-        {
-            assemblingSchemasTablePanel = new AssemblingSchemasTablePanel();
-            AssemblingSchemasTableListener listener = new AssemblingSchemasTableListener();
-            assemblingSchemasTablePanel.addTablePanelListener(listener);
-            assemblingSchemasTablePanel.setPreferredSize(new Dimension(300, 400));
-        }
-
-        return assemblingSchemasTablePanel;
+        return assemblingSchemaChoicePanel.getTablePanel();
     }
 
     private SchemaItemsTablePanel getSchemaItemsTablePanel()
@@ -232,42 +199,42 @@ public class AssemblingSchemasListPanel
     @Override
     public Object getSelectedRowObject()
     {
-        AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+        AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         return asTablePanel.getSelectedRowObject();
     }
 
     @Override
     public void setSelectedRowObject(Object selectedObject)
     {
-        AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+        AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         asTablePanel.setSelectedRowObject(selectedObject);
     }
 
     @Override
     public List getListData()
     {
-        AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+        AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         return asTablePanel.getListData();
     }
 
     @Override
     public void setEditable(boolean editable)
     {
-        AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+        AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         asTablePanel.setEditable(editable);
     }
 
     @Override
     public boolean isEditable()
     {
-        AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+        AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         return asTablePanel.isEditable();
     }
 
     @Override
     public void setVisibleSelectButtons(boolean visible)
     {
-        AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+        AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         asTablePanel.setVisibleSelectButtons(visible);
     }
 
@@ -281,7 +248,7 @@ public class AssemblingSchemasListPanel
         @Override
         public void selectionRowChanged()
         {
-            AssemblingSchemasTablePanel asTablePanel = getAssemblingSchemasTablePanel();
+            AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
             setAssemblingSchema((AssemblingSchema)asTablePanel.getDataTable().getSelectedRowObject());
             getSchemaItemsTablePanel().refreshDataTable();
         }
@@ -312,142 +279,6 @@ public class AssemblingSchemasListPanel
 
         @Override
         public void tableRefreshed() {}
-    }
-
-    private class AssemblingSchemasTablePanel
-        extends AbstractTablePanel
-        implements ItemListener
-    {
-        private BindingGroup categoryBindingGroup;
-        private BindingGroup bindingGroup;
-
-        private EntityProperties entityProps;
-
-        private AssemblingCategory category;
-        private AssemblingSchema categorySchema;
-
-
-        public AssemblingSchemasTablePanel()
-        {
-        }
-
-        @Override
-        protected void initData()
-        {
-            super.initData();
-            setVisible(AbstractTablePanel.Button.Classify, false);
-            assemblingCategoryComboList.getComboBox().setPrototypeDisplayValue("123456789012345");
-
-            entityProps = getFormSession().getAssemblingSchemaEntityProperties();
-
-            categoryBindingGroup = new BindingGroup();
-            if(categorySchema == null)
-                categorySchema = new AssemblingSchema();
-            PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
-            //AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
-            AssemblingCategoryTreeTablePanel listPanel = new AssemblingCategoryTreeTablePanel(category);
-            assemblingCategoryComboList.bind(
-                categoryBindingGroup,
-                listPanel,
-                categorySchema,
-                propDetails,
-                "${categoryCode}, ${categoryName}",
-                UpdateStrategy.READ_WRITE);
-            assemblingCategoryComboList.addItemListener(this);
-            categoryBindingGroup.bind();
-
-            refreshDataTable(entityProps);
-        }
-
-        @SuppressWarnings("unchecked")
-        private void refreshDataTable(EntityProperties entityProps)
-        {
-            if(bindingGroup != null)
-                bindingGroup.unbind();
-
-            bindingGroup = new BindingGroup();
-            AcaciaTable table = getDataTable();
-
-            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
-            tableBinding.setEditable(false);
-
-            bindingGroup.bind();
-        }
-
-        private List getList()
-        {
-            return getFormSession().getAssemblingSchemas(category);
-        }
-
-        @Override
-        public void itemStateChanged(ItemEvent event)
-        {
-            if(event.getStateChange() > 0x700)
-            {
-                category = (AssemblingCategory)assemblingCategoryComboList.getSelectedItem();
-                refreshDataTable(entityProps);
-            }
-        }
-
-        @Override
-        protected boolean deleteRow(Object rowObject)
-        {
-            return true;
-        }
-
-        @Override
-        protected Object modifyRow(Object rowObject)
-        {
-            return onEditEntity((AssemblingSchema)rowObject);
-        }
-
-        @Override
-        protected Object newRow()
-        {
-            AssemblingSchema as = new AssemblingSchema();
-            as.setAssemblingCategory(category);
-            return onEditEntity(as);
-        }
-
-        private Object onEditEntity(AssemblingSchema as)
-        {
-            AssemblingSchemaPanel editPanel = new AssemblingSchemaPanel(as);
-            DialogResponse response = editPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return editPanel.getSelectedValue();
-            }
-
-            return null;
-        }
-
-        @Override
-        public boolean canCreate()
-        {
-            return true;
-        }
-
-        @Override
-        public boolean canModify(Object rowObject)
-        {
-            return true;
-        }
-
-        @Override
-        public boolean canDelete(Object rowObject)
-        {
-            return true;
-        }
-
-        @Override
-        public void close()
-        {
-            AssemblingSchemasListPanel.this.setDialogResponse(getDialogResponse());
-            AssemblingSchemasListPanel.this.setSelectedRowObject(getSelectedRowObject());
-            AssemblingSchemasListPanel.this.close();
-        }
-
-
     }
 
     private class SchemaItemsTablePanel
