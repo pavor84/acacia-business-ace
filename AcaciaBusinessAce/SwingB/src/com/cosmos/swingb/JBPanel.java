@@ -57,8 +57,9 @@ public class JBPanel
 
 
     public JBPanel()
-    {
-        this(Application.getInstance());
+    {     
+        
+        this((Application) null);
     }
 
     public JBPanel(Class<? extends Application> applicationClass)
@@ -68,6 +69,13 @@ public class JBPanel
 
     public JBPanel(Application application)
     {
+        if (application == null) {
+            try {
+                application = Application.getInstance();
+            } catch (Throwable t) {
+                //
+            }
+        }
         this.application = application;
     }
 

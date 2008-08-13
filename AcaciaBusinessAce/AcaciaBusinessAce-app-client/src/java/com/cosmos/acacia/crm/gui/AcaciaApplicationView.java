@@ -38,6 +38,7 @@ import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
+import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaChoicePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
@@ -364,6 +365,8 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void productAssemblerAction()
     {
+        AssemblingSchemaChoicePanel panel = new AssemblingSchemaChoicePanel();
+        panel.showFrame();
     }
 
     @Action
