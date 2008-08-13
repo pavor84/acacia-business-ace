@@ -229,7 +229,8 @@ public class AssemblingSchemaItemValuePanel
         // propDetails = entityProps.getPropertyDetails("virtualProduct");
         // productOrSchemaTextField.bind(bindingGroup, entity, propDetails);
         VirtualProduct virtualProduct = entity.getVirtualProduct();
-        productOrSchemaTextField.setText(virtualProduct.getProductName());
+        if(virtualProduct != null)
+            productOrSchemaTextField.setText(virtualProduct.getProductName());
 
         propDetails = entityProps.getPropertyDetails("minConstraint");
         minValueTextField.bind(bindingGroup, entity, propDetails);
@@ -292,6 +293,7 @@ public class AssemblingSchemaItemValuePanel
             if(DialogResponse.SELECT.equals(response))
             {
                 virtualProduct = (VirtualProduct)selectionPanel.getSelectedValue();
+                System.out.println("productOrSchemaSelectAction.virtualProduct: " + virtualProduct);
                 entity.setVirtualProduct(virtualProduct);
                 productOrSchemaTextField.setText(virtualProduct.getProductName());
             }

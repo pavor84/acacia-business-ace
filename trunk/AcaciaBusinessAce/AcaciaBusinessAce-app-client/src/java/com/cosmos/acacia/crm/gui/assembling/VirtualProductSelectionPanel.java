@@ -129,8 +129,10 @@ public class VirtualProductSelectionPanel
         if(DialogResponse.SELECT.equals(response))
         {
             SimpleProduct simpleProduct = (SimpleProduct)productsPanel.getSelectedRowObject();
+            System.out.println("productSelectionAction.simpleProduct: " + simpleProduct);
             RealProduct realProduct = getFormSession().getRealProduct(simpleProduct);
             setSelectedValue(realProduct);
+            System.out.println("productSelectionAction.realProduct: " + realProduct);
         }
 
         close();
@@ -147,6 +149,7 @@ public class VirtualProductSelectionPanel
         {
             AssemblingSchema assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
             setSelectedValue(assemblingSchema);
+            System.out.println("schemaSelectionAction.assemblingSchema: " + assemblingSchema);
         }
 
         close();
