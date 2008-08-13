@@ -36,7 +36,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 public class AssemblingSchemaChoicePanel extends JBPanel {
 
     protected static Logger log = Logger.getLogger(AssemblingSchemaChoicePanel.class);
-    
+
     /** Creates new form AssemblingSchemaChoicePanel */
     public AssemblingSchemaChoicePanel() {
         initComponents();
@@ -123,23 +123,23 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
 
     private AssemblingRemote formSession;
     private AssemblingSchemasTablePanel tablePanel;
-            
+
     public void initData() {
-        
+
         tablePanel = new AssemblingSchemasTablePanel();
         schemasHolderPanel.add(tablePanel);
 //        if (getModalityType() != ModalityType.MODELESS)
 //            proceedButton.setVisible(false);
     }
-     
+
     protected AssemblingRemote getFormSession() {
         if (formSession == null)
             formSession = AcaciaPanel.getRemoteBean(this, AssemblingRemote.class);
-        
-        return formSession;    
+
+        return formSession;
     }
 
-    
+
     private class AssemblingSchemasTablePanel
         extends AbstractTablePanel
         implements ItemListener
@@ -161,7 +161,7 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
         protected void initData()
         {
             super.initData();
-            
+
             setVisible(AbstractTablePanel.Button.Classify, false);
             assemblingCategoryComboList.getComboBox().setPrototypeDisplayValue("123456789012345");
 
@@ -275,7 +275,7 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
 
 
     }
-    
+
     public AbstractTablePanel getTablePanel() {
         return tablePanel;
     }
@@ -303,7 +303,7 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
     public void setSchemasHolderPanel(TableHolderPanel schemasHolderPanel) {
         this.schemasHolderPanel = schemasHolderPanel;
     }
-    
+
     public void addTableListener(TablePanelListener listener) {
         tablePanel.addTablePanelListener(listener);
     }
@@ -316,5 +316,16 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
             paramsPanel.showFrame();
             close();
         }
+    }
+
+    @Override
+    public void close() {
+        try {
+            ((JBPanel) getParent().getParent().getParent().getParent()).close();
+        } catch (Exception ex) {
+            // no JBPanel parent available
+        }
+
+        super.close();
     }
 }
