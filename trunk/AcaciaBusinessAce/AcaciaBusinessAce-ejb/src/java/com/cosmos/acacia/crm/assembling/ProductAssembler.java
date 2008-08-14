@@ -5,14 +5,13 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
@@ -22,6 +21,8 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import java.util.HashMap;
+import javax.naming.InitialContext;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 
@@ -33,44 +34,42 @@ import javax.security.auth.callback.CallbackHandler;
 public class ProductAssembler
 {
     //@PersistenceContext
-    private EntityManager entityManager;
+    //private EntityManager entityManager;
 
     public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
     /*private EntityManagerFactory emf;
     private EntityManager entityManager;*/
 
-    private Callback callback;
+    //private Callback callback;
 
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> assemblingSchemaItems;
-
+    private EntityManagerFacadeRemote em;
+    
+    {
+        try {
+            em = InitialContext.doLookup(EntityManagerFacadeRemote.class.getName());;
+        } catch (Exception ex) {
+            //
+        }
+    }
     private CallbackHandler callbackHandler;
 
     public ProductAssembler(
-            AssemblingSchema assemblingSchema,
-            EntityManager entityManager)
+            AssemblingSchema assemblingSchema)
     {
         this.assemblingSchema = assemblingSchema;
-        this.entityManager = entityManager;
     }
 
     public AssemblingSchema getAssemblingSchema() {
         return assemblingSchema;
     }
 
-    public CallbackHandler getCallbackHandler() {
-        return callbackHandler;
-    }
-
-    public void setCallbackHandler(CallbackHandler callbackHandler) {
-        this.callbackHandler = callbackHandler;
-    }
-
     public ComplexProduct assemble(Map parameters)
         throws AlgorithmException
     {
-        EntityManager em = getEntityManager();
+        //EntityManager em = getEntityManager();
         try
         {
             //em.getTransaction().begin();
@@ -85,7 +84,7 @@ public class ProductAssembler
         }
     }
 
-    protected ComplexProduct assemblе(Map parameters, EntityManager em)
+    protected ComplexProduct assemblе(Map parameters, EntityManagerFacadeRemote em)
         throws AlgorithmException
     {
         int itemCounter = 0;
@@ -123,7 +122,7 @@ public class ProductAssembler
             AssemblingSchemaItem asi,
             ComplexProduct product,
             Map parameters,
-            EntityManager em)
+            EntityManagerFacadeRemote em)
         throws AlgorithmException
     {
         BigDecimal iQuantity = asi.getQuantity();
@@ -144,8 +143,8 @@ public class ProductAssembler
             if(virtualProduct instanceof AssemblingSchema)
             {
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
-                ProductAssembler assembler = new ProductAssembler(itemSchema, em);
-                assembler.setCallbackHandler(callbackHandler);
+                ProductAssembler assembler = new ProductAssembler(itemSchema);
+                //assembler.setCallbackHandler(callbackHandler);
                 itemProduct = assembler.assemblе(parameters, em);
             }
             else
@@ -244,36 +243,32 @@ public class ProductAssembler
         return emf;
     }*/
 
-    protected EntityManager getEntityManager()
-    {
-        if(entityManager == null)
-        {
-            //entityManager = getEntityManagerFactory().createEntityManager();
-        }
-
-        return entityManager;
-    }
+//    protected EntityManager getEntityManager()
+//    {
+//        if(entityManager == null)
+//        {
+//            //entityManager = getEntityManagerFactory().createEntityManager();
+//        }
+//
+//        return entityManager;
+//    }
 
     protected List<AssemblingSchemaItem> getAssemblingSchemaItems()
     {
         if(assemblingSchemaItems == null)
         {
-            EntityManager em = getEntityManager();
-            em.getTransaction().begin();
-            Query q = em.createNamedQuery("AssemblingSchemaItem.findByAssemblingSchema");
-            q.setParameter("assemblingSchema", assemblingSchema);
-            assemblingSchemaItems = q.getResultList();
-            em.getTransaction().commit();
+            //EntityManager em = getEntityManager();
+            //em.getTransaction().begin();
+            Map<String, Object> paramsMap = new HashMap<String, Object>();
+            paramsMap.put("assemblingSchema", assemblingSchema);
+            paramsMap.put("deleted", false);
+            
+            assemblingSchemaItems = em.getNamedQueryResult(
+                    "AssemblingSchemaItem.findByAssemblingSchema", paramsMap);
+            
+            //em.getTransaction().commit();
         }
 
         return assemblingSchemaItems;
-    }
-
-    public Callback getCallback() {
-        return callback;
-    }
-
-    public void setCallback(Callback callback) {
-        this.callback = callback;
     }
 }
