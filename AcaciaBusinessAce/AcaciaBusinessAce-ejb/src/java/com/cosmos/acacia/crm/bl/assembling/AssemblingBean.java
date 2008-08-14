@@ -80,6 +80,27 @@ public class AssemblingBean
     }
 
     @Override
+    public boolean deleteAssemblingSchema(AssemblingSchema assemblingSchema)
+    {
+        esm.remove(em, assemblingSchema);
+        return true;
+    }
+
+    @Override
+    public boolean deleteAssemblingSchemaItem(AssemblingSchemaItem schemaItem)
+    {
+        esm.remove(em, schemaItem);
+        return true;
+    }
+
+    @Override
+    public boolean deleteAssemblingSchemaItemValue(AssemblingSchemaItemValue itemValue)
+    {
+        esm.remove(em, itemValue);
+        return true;
+    }
+
+    @Override
     public boolean deleteAssemblingCategory(AssemblingCategory assemblingCategory)
     {
         esm.remove(em, assemblingCategory);
@@ -155,6 +176,30 @@ public class AssemblingBean
         q.setParameter("parentId", organization.getId());
         Long count = (Long)q.getSingleResult();
         return count.intValue();
+    }
+
+    @Override
+    public AssemblingSchema newAssemblingSchema()
+    {
+        AssemblingSchema assemblingSchema = new AssemblingSchema();
+        assemblingSchema.setParentId(acaciaSessionLocal.getOrganization().getId());
+        return assemblingSchema;
+    }
+
+    @Override
+    public AssemblingSchemaItem newAssemblingSchemaItem(AssemblingSchema assemblingSchema)
+    {
+        AssemblingSchemaItem schemaItem = new AssemblingSchemaItem();
+        schemaItem.setAssemblingSchema(assemblingSchema);
+        return schemaItem;
+    }
+
+    @Override
+    public AssemblingSchemaItemValue newAssemblingSchemaItemValue(AssemblingSchemaItem schemaItem)
+    {
+        AssemblingSchemaItemValue itemValue = new AssemblingSchemaItemValue();
+        itemValue.setAssemblingSchemaItem(schemaItem);
+        return itemValue;
     }
 
     @Override
@@ -334,7 +379,9 @@ public class AssemblingBean
         {
             for(SimpleProduct sp : newSP)
             {
-                esm.persist(em, new RealProduct(sp));
+                RealProduct realProduct = new RealProduct(sp);
+                realProduct.setParentId(acaciaSessionLocal.getOrganization().getId());
+                esm.persist(em, realProduct);
             }
         }
 
@@ -363,6 +410,7 @@ public class AssemblingBean
         catch(NoResultException ex)
         {
             RealProduct realProduct = new RealProduct(simpleProduct);
+            realProduct.setParentId(acaciaSessionLocal.getOrganization().getId());
             esm.persist(em, realProduct);
             return realProduct;
         }
