@@ -341,7 +341,7 @@ public class AssemblingSchemasListPanelBackup
 
             categoryBindingGroup = new BindingGroup();
             if(categorySchema == null)
-                categorySchema = new AssemblingSchema();
+                categorySchema = getFormSession().newAssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
             assemblingCategoryLookup.bind(new AcaciaLookupProvider()
                 {
@@ -416,7 +416,7 @@ public class AssemblingSchemasListPanelBackup
         @Override
         protected Object newRow()
         {
-            AssemblingSchema as = new AssemblingSchema();
+            AssemblingSchema as = getFormSession().newAssemblingSchema();
             as.setAssemblingCategory(category);
             return onEditEntity(as);
         }

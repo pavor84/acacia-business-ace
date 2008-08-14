@@ -163,13 +163,15 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
             super.initData();
 
             setVisible(AbstractTablePanel.Button.Classify, false);
+            setEnabled(AbstractTablePanel.Button.New, false);
+
             assemblingCategoryComboList.getComboBox().setPrototypeDisplayValue("123456789012345");
 
             entityProps = getFormSession().getAssemblingSchemaEntityProperties();
 
             categoryBindingGroup = new BindingGroup();
             if(categorySchema == null)
-                categorySchema = new AssemblingSchema();
+                categorySchema = getFormSession().newAssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
             //AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
             AssemblingCategoryTreeTablePanel listPanel = new AssemblingCategoryTreeTablePanel(category);
@@ -213,13 +215,16 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
             {
                 category = (AssemblingCategory)assemblingCategoryComboList.getSelectedItem();
                 refreshDataTable(entityProps);
+                AbstractTablePanel tp = getTablePanel();
+                if(tp != null)
+                    tp.setEnabled(AbstractTablePanel.Button.New, category != null);
             }
         }
 
         @Override
         protected boolean deleteRow(Object rowObject)
         {
-            return true;
+            return getFormSession().deleteAssemblingSchema((AssemblingSchema)rowObject);
         }
 
         @Override
@@ -231,7 +236,7 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
         @Override
         protected Object newRow()
         {
-            AssemblingSchema as = new AssemblingSchema();
+            AssemblingSchema as = getFormSession().newAssemblingSchema();
             as.setAssemblingCategory(category);
             return onEditEntity(as);
         }
