@@ -6,13 +6,31 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.jdesktop.application.Action;
+
+import com.cosmos.acacia.crm.assembling.AlgorithmException;
+import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
+import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import java.math.BigInteger;
-import java.util.List;
-import org.jdesktop.application.Action;
 
 /**
  *
@@ -24,8 +42,9 @@ public class AssemblingParametersPanel extends AcaciaPanel {
     public AssemblingParametersPanel(AssemblingSchema schema) {
         super((BigInteger) null);
         this.schema = schema;
-        this.params = getFormSession().getAssemblingSchemaItems(schema);
+        this.items = getFormSession().getAssemblingSchemaItems(schema);
         initComponents();
+        initData();
         this.schemaLabel.setText(schema.getSchemaCode() + ": " + schema.getSchemaName());
     }
 
@@ -114,55 +133,53 @@ public class AssemblingParametersPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBLabel schemaLabel;
     // End of variables declaration//GEN-END:variables
 
-    private List<AssemblingSchemaItem> params;
+    private List<AssemblingSchemaItem> items;
     private AssemblingSchema schema;
-    
+
     private AssemblingRemote formSession;
-    
+
     @Override
     protected void initData() {
-        
-        for (AssemblingSchemaItem item : params) {
-            Pair pair = new Pair();
-            pair.setKey(item.getMessageText());
-            pair.setValue(item.getDefaultValue());
-            parametersTable.addRow(pair);
+        DefaultTableModel model = (DefaultTableModel) parametersTable.getModel();
+
+        for (AssemblingSchemaItem item : items) {
+            Object[] data = new Object[2];
+            data[0] = item.getMessageCode() + ": " + item.getMessageText();
+            data[1] = item.getDefaultValue();
+            model.addRow(data);
         }
-        
-    }
-    
-    @Action
-    public void assemble() {
-        //getFormSession().assemble(params);
+        parametersTable.setEditable(true);
     }
 
-    
+    @Action
+    public void assemble() {
+        // Setting AssemblingSchemaItem, Object - will convert later
+        Map<AssemblingSchemaItem, Object> params =
+            new HashMap<AssemblingSchemaItem, Object>();
+
+        TableModel model = parametersTable.getModel();
+        for (int i = 0; i < items.size(); i ++) {
+            params.put(items.get(i), model.getValueAt(i, 1));
+        }
+        ProductAssembler assembler =
+            new ProductAssembler(schema);
+
+        try {
+            ComplexProduct product = assembler.assemble(params);
+            log.info("Product: " + product);
+        } catch (AlgorithmException ex) {
+            log.info("EXC: " + ex.getMessage());
+            ValidationException vex = new ValidationException();
+            vex.addMessage(ex.getMessage());
+            throw vex;
+        }
+    }
+
+
     protected AssemblingRemote getFormSession() {
         if (formSession == null)
             formSession = getBean(AssemblingRemote.class);
-        
+
         return formSession;
-    }
-    
-    private class Pair {
-        private String key;
-        private Object value;
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public void setValue(Object value) {
-            this.value = value;
-        }
-        
     }
 }
