@@ -236,6 +236,9 @@ public class AssemblingSchemasListPanel
     {
         AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
         asTablePanel.setVisibleSelectButtons(visible);
+        if (visible)
+            asTablePanel.setVisibleButtons(1 + 2 + 4 + 32 + 64);
+
     }
 
 
@@ -254,7 +257,11 @@ public class AssemblingSchemasListPanel
         }
 
         @Override
-        public void selectAction() {}
+        public void selectAction() {
+            setSelectedRowObject(getAssemblingSchemasTablePanel().getSelectedRowObject());
+            setDialogResponse(DialogResponse.SELECT);
+            close();
+        }
 
         @Override
         public void tableRefreshed() {}

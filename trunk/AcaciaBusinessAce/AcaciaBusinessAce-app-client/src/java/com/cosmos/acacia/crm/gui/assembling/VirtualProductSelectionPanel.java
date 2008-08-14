@@ -143,6 +143,7 @@ public class VirtualProductSelectionPanel
     {
         AssemblingSchemasListPanel asListPanel = new AssemblingSchemasListPanel(null);
         asListPanel.setVisibleSelectButtons(true);
+        
         DialogResponse response = asListPanel.showDialog(this);
         setDialogResponse(response);
         if(DialogResponse.SELECT.equals(response))

@@ -26,8 +26,10 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="productOrSchemaLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="productOrSchemaTextField" pref="356" max="32767" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="productOrSchemaTextField" pref="371" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jBButton1" min="-2" pref="38" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="selectProductOrSchemaButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -45,9 +47,10 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="selectProductOrSchemaButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productOrSchemaLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="productOrSchemaTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBButton1" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="selectProductOrSchemaButton" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="productOrSchemaTextField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="constraintsPanel" min="-2" max="-2" attributes="0"/>
@@ -119,7 +122,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="minValueLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="minValueTextField" pref="203" max="32767" attributes="0"/>
+                      <Component id="minValueTextField" pref="223" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -159,7 +162,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="maxValueLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="maxValueTextField" pref="215" max="32767" attributes="0"/>
+                      <Component id="maxValueTextField" pref="229" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -197,6 +200,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="quantityLabel.text"/>
         <Property name="name" type="java.lang.String" value="quantityLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="jBButton1">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaItemValuePanel" id="clearProductOrSchema" methodName="clearProductOrSchema"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jBButton1" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
