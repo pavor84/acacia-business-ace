@@ -252,7 +252,9 @@ public class AssemblingSchemasListPanel
         public void selectionRowChanged()
         {
             AbstractTablePanel asTablePanel = getAssemblingSchemasTablePanel();
-            setAssemblingSchema((AssemblingSchema)asTablePanel.getDataTable().getSelectedRowObject());
+            AssemblingSchema as = (AssemblingSchema)asTablePanel.getDataTable().getSelectedRowObject();
+            getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, as != null);
+            setAssemblingSchema(as);
             getSchemaItemsTablePanel().refreshDataTable();
         }
 
@@ -277,7 +279,9 @@ public class AssemblingSchemasListPanel
         public void selectionRowChanged()
         {
             SchemaItemsTablePanel siTablePanel = getSchemaItemsTablePanel();
-            setAssemblingSchemaItem((AssemblingSchemaItem)siTablePanel.getDataTable().getSelectedRowObject());
+            AssemblingSchemaItem asi = (AssemblingSchemaItem)siTablePanel.getDataTable().getSelectedRowObject();
+            getItemValuesTablePanel().setEnabled(AbstractTablePanel.Button.New, asi != null);
+            setAssemblingSchemaItem(asi);
             getItemValuesTablePanel().refreshDataTable();
         }
 
@@ -304,6 +308,7 @@ public class AssemblingSchemasListPanel
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
             setVisible(AbstractTablePanel.Button.Close, false);
+            setEnabled(AbstractTablePanel.Button.New, false);
 
             entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
 
@@ -341,7 +346,7 @@ public class AssemblingSchemasListPanel
         @Override
         protected boolean deleteRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getFormSession().deleteAssemblingSchemaItem((AssemblingSchemaItem)rowObject);
         }
 
         @Override
@@ -353,8 +358,7 @@ public class AssemblingSchemasListPanel
         @Override
         protected Object newRow()
         {
-            AssemblingSchemaItem asi = new AssemblingSchemaItem();
-            asi.setAssemblingSchema(getAssemblingSchema());
+            AssemblingSchemaItem asi = getFormSession().newAssemblingSchemaItem(getAssemblingSchema());
             return onEditEntity(asi);
         }
 
@@ -405,6 +409,7 @@ public class AssemblingSchemasListPanel
             super.initData();
             setVisible(AbstractTablePanel.Button.Classify, false);
             setVisible(AbstractTablePanel.Button.Close, false);
+            setEnabled(AbstractTablePanel.Button.New, false);
 
             entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
 
@@ -467,7 +472,7 @@ public class AssemblingSchemasListPanel
         @Override
         protected boolean deleteRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getFormSession().deleteAssemblingSchemaItemValue((AssemblingSchemaItemValue)rowObject);
         }
 
         @Override
@@ -479,8 +484,8 @@ public class AssemblingSchemasListPanel
         @Override
         protected Object newRow()
         {
-            AssemblingSchemaItemValue itemValue = new AssemblingSchemaItemValue();
-            itemValue.setAssemblingSchemaItem(getAssemblingSchemaItem());
+            AssemblingSchemaItemValue itemValue;
+            itemValue = getFormSession().newAssemblingSchemaItemValue(getAssemblingSchemaItem());
             return onEditEntity(itemValue);
         }
 
