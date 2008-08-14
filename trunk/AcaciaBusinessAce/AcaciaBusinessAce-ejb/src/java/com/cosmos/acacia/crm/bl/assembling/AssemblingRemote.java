@@ -31,6 +31,12 @@ public interface AssemblingRemote
     int getAssemblingCategoryChildCount(AssemblingCategory parentEntity);
     boolean deleteAssemblingCategories(List<AssemblingCategory> categories);
     boolean deleteAssemblingCategory(AssemblingCategory assemblingCategory);
+    boolean deleteAssemblingSchema(AssemblingSchema assemblingSchema);
+    boolean deleteAssemblingSchemaItem(AssemblingSchemaItem schemaItem);
+    boolean deleteAssemblingSchemaItemValue(AssemblingSchemaItemValue itemValue);
+    AssemblingSchema newAssemblingSchema();
+    AssemblingSchemaItem newAssemblingSchemaItem(AssemblingSchema assemblingSchema);
+    AssemblingSchemaItemValue newAssemblingSchemaItemValue(AssemblingSchemaItem schemaItem);
     AssemblingCategory newAssemblingCategory(AssemblingCategory parentCategory);
     AssemblingCategory saveCategory(AssemblingCategory entity);
     AssemblingSchema saveSchema(AssemblingSchema entity);
