@@ -80,6 +80,7 @@ public class AssemblingSchemaItemValuePanel
         maxValueLabel = new com.cosmos.swingb.JBLabel();
         quantityTextField = new com.cosmos.swingb.JBTextField();
         quantityLabel = new com.cosmos.swingb.JBLabel();
+        jBButton1 = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -116,7 +117,7 @@ public class AssemblingSchemaItemValuePanel
                 .addContainerGap()
                 .addComponent(minValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(minValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addComponent(minValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
                 .addContainerGap())
         );
         minValuePanelLayout.setVerticalGroup(
@@ -143,7 +144,7 @@ public class AssemblingSchemaItemValuePanel
                 .addContainerGap()
                 .addComponent(maxValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(maxValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                .addComponent(maxValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
         );
         maxValuePanelLayout.setVerticalGroup(
             maxValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,6 +160,9 @@ public class AssemblingSchemaItemValuePanel
         quantityLabel.setText(resourceMap.getString("quantityLabel.text")); // NOI18N
         quantityLabel.setName("quantityLabel"); // NOI18N
 
+        jBButton1.setAction(actionMap.get("clearProductOrSchema")); // NOI18N
+        jBButton1.setName("jBButton1"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -171,8 +175,10 @@ public class AssemblingSchemaItemValuePanel
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(productOrSchemaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -185,9 +191,10 @@ public class AssemblingSchemaItemValuePanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productOrSchemaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(constraintsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -204,6 +211,7 @@ public class AssemblingSchemaItemValuePanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel constraintsPanel;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
+    private com.cosmos.swingb.JBButton jBButton1;
     private com.cosmos.swingb.JBLabel maxValueLabel;
     private com.cosmos.swingb.JBPanel maxValuePanel;
     private com.cosmos.swingb.JBTextField maxValueTextField;
@@ -326,5 +334,11 @@ public class AssemblingSchemaItemValuePanel
                 productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
         }
+    }
+
+    @Action
+    public void clearProductOrSchema() {
+        entity.setVirtualProduct(null);
+        productOrSchemaTextField.setText(null);
     }
 }
