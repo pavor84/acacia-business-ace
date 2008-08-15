@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -22,7 +23,9 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -36,6 +39,44 @@ import org.jdesktop.swingbinding.JTableBinding;
 public class AssemblingSchemaChoicePanel extends JBPanel {
 
     protected static Logger log = Logger.getLogger(AssemblingSchemaChoicePanel.class);
+
+    public enum Mode
+    {
+        AssembleSchemaSelect(
+            Button.Select,
+            Button.Unselect,
+            Button.Refresh,
+            Button.Close),
+
+        AssemblingSchema(
+            Button.New,
+            Button.Modify,
+            Button.Delete,
+            Button.Refresh,
+            Button.Close),
+
+        AssemblingSchemaSelect(
+            Button.Select,
+            Button.Unselect,
+            Button.New,
+            Button.Modify,
+            Button.Delete,
+            Button.Refresh,
+            Button.Close)
+        ;
+
+        private Mode(Button firstButton, Button... restButtons)
+        {
+            this.buttons = EnumSet.of(firstButton, restButtons);
+        }
+
+        private Set<Button> buttons;
+
+        public Set<Button> getButtons()
+        {
+            return buttons;
+        }
+    }
 
     /** Creates new form AssemblingSchemaChoicePanel */
     public AssemblingSchemaChoicePanel() {
@@ -121,15 +162,30 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
     private com.cosmos.acacia.gui.TableHolderPanel schemasHolderPanel;
     // End of variables declaration//GEN-END:variables
 
+
+    private Mode mode;
     private AssemblingRemote formSession;
     private AssemblingSchemasTablePanel tablePanel;
 
-    public void initData() {
-
+    public void initData()
+    {
+        proceedButton.setVisible(false);
         tablePanel = new AssemblingSchemasTablePanel();
         schemasHolderPanel.add(tablePanel);
 //        if (getModalityType() != ModalityType.MODELESS)
 //            proceedButton.setVisible(false);
+        setMode(Mode.AssembleSchemaSelect);
+    }
+
+    public Mode getMode()
+    {
+        return mode;
+    }
+
+    public void setMode(Mode mode)
+    {
+        this.mode = mode;
+        tablePanel.setVisible(mode.getButtons());
     }
 
     protected AssemblingRemote getFormSession() {

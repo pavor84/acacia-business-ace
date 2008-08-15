@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaChoicePanel.Mode;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -38,10 +39,16 @@ public class AssemblingSchemasListPanel
     private static AssemblingRemote formSession;
 
 
-    /** Creates new form AssemblingSchemasListPanel */
     public AssemblingSchemasListPanel(BigInteger parentId)
     {
+        this(parentId, false);
+    }
+
+    /** Creates new form AssemblingSchemasListPanel */
+    public AssemblingSchemasListPanel(BigInteger parentId, boolean selectMode)
+    {
         super(parentId);
+        this.selectMode = selectMode;
         initComponents();
         initData();
     }
@@ -128,12 +135,23 @@ public class AssemblingSchemasListPanel
     private AssemblingSchema assemblingSchema;
     private AssemblingSchemaItem assemblingSchemaItem;
 
+    private boolean selectMode;
 
     @Override
     protected void initData()
     {
-        setPreferredSize(new Dimension(1055, 600));
-        assemblingSchemasSplitPane.setDividerLocation(565);
+        if(selectMode)
+        {
+            assemblingSchemaChoicePanel.setMode(Mode.AssemblingSchemaSelect);
+            setPreferredSize(new Dimension(1225, 600));
+            assemblingSchemasSplitPane.setDividerLocation(735);
+        }
+        else
+        {
+            assemblingSchemaChoicePanel.setMode(Mode.AssemblingSchema);
+            setPreferredSize(new Dimension(1055, 600));
+            assemblingSchemasSplitPane.setDividerLocation(565);
+        }
         assemblingSchemaChoicePanel.addTableListener(new AssemblingSchemasTableListener());
     }
     
