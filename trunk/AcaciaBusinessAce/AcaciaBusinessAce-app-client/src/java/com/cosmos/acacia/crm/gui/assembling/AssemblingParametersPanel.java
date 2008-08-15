@@ -6,17 +6,11 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -25,7 +19,6 @@ import org.jdesktop.application.Action;
 import com.cosmos.acacia.crm.assembling.AlgorithmException;
 import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
@@ -81,10 +74,12 @@ public class AssemblingParametersPanel extends AcaciaPanel {
                 false, true
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
