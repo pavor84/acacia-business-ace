@@ -381,12 +381,15 @@ public class AssemblingSchemaChoicePanel extends JBPanel {
 
     @Override
     public void close() {
+        System.out.println("AssemblingSchemaChoicePanel.close()");
         try {
             ((JBPanel) getParent().getParent().getParent().getParent()).close();
         } catch (Exception ex) {
             // no JBPanel parent available
+            ex.printStackTrace();
         }
 
         super.close();
+        System.out.println("return super.close()");
     }
 }

@@ -38,8 +38,8 @@ import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
-import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaChoicePanel;
-import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasListPanel;
+import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
+import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
@@ -358,14 +358,20 @@ public class AcaciaApplicationView extends FrameView {
     public void assemblingSchemasAction()
     {
         log.debug("personsListAction");
-        AssemblingSchemasListPanel assemblingSchemas = new AssemblingSchemasListPanel(null);
+        //AssemblingSchemasListPanel assemblingSchemas = new AssemblingSchemasListPanel(null);
+        AssemblingSchemasPanel assemblingSchemas = new AssemblingSchemasPanel();
+        assemblingSchemas.setMode(AssemblingSchemasPanel.Mode.AssemblingSchema);
+        //assemblingSchemas.setMode(AssemblingSchemasPanel.Mode.AssembleSchemaSelect);
+        //assemblingSchemas.setMode(AssemblingSchemasPanel.Mode.AssemblingSchemaSelect);
         assemblingSchemas.showFrame();
     }
 
     @Action
     public void productAssemblerAction()
     {
-        AssemblingSchemaChoicePanel panel = new AssemblingSchemaChoicePanel();
+        //AssemblingSchemaChoicePanel panel = new AssemblingSchemaChoicePanel();
+        //panel.showFrame();
+        ProductAssemblerPanel panel = new ProductAssemblerPanel();
         panel.showFrame();
     }
 
