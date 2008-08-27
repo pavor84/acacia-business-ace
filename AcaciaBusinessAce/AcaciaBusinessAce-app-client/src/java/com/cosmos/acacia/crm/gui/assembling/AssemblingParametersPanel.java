@@ -6,7 +6,6 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,8 @@ public class AssemblingParametersPanel extends AcaciaPanel {
 
     /** Creates new form AssemblingParametersPanel */
     public AssemblingParametersPanel(AssemblingSchema schema) {
-        super((BigInteger) null);
+        //super((BigInteger) null);
+        super(schema);
         this.schema = schema;
         this.items = getFormSession().getAssemblingSchemaItems(schema);
         initComponents();
