@@ -6,21 +6,40 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.swingb.JBComboList;
+import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.TablePanelListener;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBSplitPane;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTitledPanel;
+import com.cosmos.swingb.SelectableListDialog;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.swing.border.EmptyBorder;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -28,6 +47,7 @@ import org.jdesktop.application.ResourceMap;
  */
 public class AssemblingSchemasPanel
     extends AcaciaPanel
+    implements SelectableListDialog
 {
     public enum Mode
     {
@@ -67,6 +87,9 @@ public class AssemblingSchemasPanel
         }
     }
 
+    @EJB
+    private static AssemblingRemote formSession;
+
 
     /** Creates new form AssemblingSchemasPanel */
     public AssemblingSchemasPanel() {
@@ -97,13 +120,17 @@ public class AssemblingSchemasPanel
     private JBSplitPane itemValuesSplitPane;
 
     // schemasPanel - Assembling Schemas Table Panel
-    private AbstractTablePanel schemasTablePanel;
-    private JBComboList categoryComboList;
+    private AssemblingSchemasTablePanel schemasTablePanel;
+    private AcaciaComboList categoryComboList;
     private JBLabel categoryLabel;
     private JBPanel categoryPanel;
 
-    private AbstractTablePanel schemaItemsTablePanel;
-    private AbstractTablePanel itemValuesTablePanel;
+    private SchemaItemsTablePanel schemaItemsTablePanel;
+    private ItemValuesTablePanel itemValuesTablePanel;
+
+    private AssemblingSchema assemblingSchema;
+    private AssemblingSchemaItem assemblingSchemaItem;
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -222,6 +249,7 @@ public class AssemblingSchemasPanel
         itemValuesTabPanel.setLayout(new BorderLayout());
         tabbedPane.addTab("Schemas", getSchemasPanel());
         tabbedPane.addTab("Items & Values", itemValuesTabPanel);
+        tabbedPane.setEnabledAt(1, false);
 
         schemaItemsTitledPanel = new JBTitledPanel();
         schemaItemsTitledPanel.setTitle(resource.getString("schemaItemsTitledPanel.title")); // NOI18N
@@ -271,74 +299,538 @@ public class AssemblingSchemasPanel
         return schemasPanel;
     }
 
-    public AbstractTablePanel getSchemasTablePanel()
+    public AssemblingSchemasTablePanel getSchemasTablePanel()
     {
         if(schemasTablePanel == null)
         {
-            schemasTablePanel = new TempTablePanel();
+            schemasTablePanel = new AssemblingSchemasTablePanel();
         }
 
         return schemasTablePanel;
     }
 
-    private AbstractTablePanel getSchemaItemsTablePanel()
+    private SchemaItemsTablePanel getSchemaItemsTablePanel()
     {
         if(schemaItemsTablePanel == null)
         {
-            schemaItemsTablePanel = new TempTablePanel();
+            schemaItemsTablePanel = new SchemaItemsTablePanel();
+            AssemblingSchemaItemsTableListener listener = new AssemblingSchemaItemsTableListener();
+            schemaItemsTablePanel.addTablePanelListener(listener);
         }
 
         return schemaItemsTablePanel;
     }
 
-    private AbstractTablePanel getItemValuesTablePanel()
+    private ItemValuesTablePanel getItemValuesTablePanel()
     {
         if(itemValuesTablePanel == null)
         {
-            itemValuesTablePanel = new TempTablePanel();
+            itemValuesTablePanel = new ItemValuesTablePanel();
         }
 
         return itemValuesTablePanel;
     }
 
-    private class TempTablePanel
-        extends AbstractTablePanel
+    public AssemblingSchema getAssemblingSchema()
     {
+        return assemblingSchema;
+    }
+
+    public void setAssemblingSchema(AssemblingSchema assemblingSchema)
+    {
+        this.assemblingSchema = assemblingSchema;
+    }
+
+    public AssemblingSchemaItem getAssemblingSchemaItem()
+    {
+        return assemblingSchemaItem;
+    }
+
+    public void setAssemblingSchemaItem(AssemblingSchemaItem assemblingSchemaItem)
+    {
+        this.assemblingSchemaItem = assemblingSchemaItem;
+    }
+
+    protected AssemblingRemote getFormSession()
+    {
+        if(formSession == null)
+        {
+            formSession = getRemoteBean(this, AssemblingRemote.class);
+        }
+
+        return formSession;
+    }
+
+    @Override
+    public Object getSelectedRowObject()
+    {
+        AbstractTablePanel asTablePanel = getSchemasTablePanel();
+        return asTablePanel.getSelectedRowObject();
+    }
+
+    @Override
+    public void setSelectedRowObject(Object selectedObject)
+    {
+        AbstractTablePanel asTablePanel = getSchemasTablePanel();
+        asTablePanel.setSelectedRowObject(selectedObject);
+    }
+
+    @Override
+    public List getListData()
+    {
+        AbstractTablePanel asTablePanel = getSchemasTablePanel();
+        return asTablePanel.getListData();
+    }
+
+    @Override
+    public void setEditable(boolean editable)
+    {
+        AbstractTablePanel asTablePanel = getSchemasTablePanel();
+        asTablePanel.setEditable(editable);
+    }
+
+    @Override
+    public boolean isEditable()
+    {
+        AbstractTablePanel asTablePanel = getSchemasTablePanel();
+        return asTablePanel.isEditable();
+    }
+
+    @Override
+    public void setVisibleSelectButtons(boolean visible)
+    {
+        AbstractTablePanel asTablePanel = getSchemasTablePanel();
+        asTablePanel.setVisibleSelectButtons(visible);
+        if (visible)
+            asTablePanel.setVisibleButtons(1 + 2 + 4 + 32 + 64);
+
+    }
+
+
+    private class AssemblingSchemasTableListener
+        implements TablePanelListener
+    {
+        @Override
+        public void tablePanelClose() {}
+
+        @Override
+        public void selectionRowChanged()
+        {
+            AbstractTablePanel asTablePanel = getSchemasTablePanel();
+            AssemblingSchema as = (AssemblingSchema)asTablePanel.getDataTable().getSelectedRowObject();
+            if(as != null)
+            {
+                getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, true);
+                tabbedPane.setEnabledAt(1, true);
+            }
+            else
+            {
+                getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, false);
+                tabbedPane.setEnabledAt(1, false);
+            }
+            setAssemblingSchema(as);
+            getSchemaItemsTablePanel().refreshDataTable();
+        }
+
+        @Override
+        public void selectAction() {
+            setSelectedRowObject(getSchemasTablePanel().getSelectedRowObject());
+            setDialogResponse(DialogResponse.SELECT);
+            close();
+        }
+
+        @Override
+        public void tableRefreshed() {}
+    }
+
+    private class AssemblingSchemaItemsTableListener
+        implements TablePanelListener
+    {
+        @Override
+        public void tablePanelClose() {}
+
+        @Override
+        public void selectionRowChanged()
+        {
+            SchemaItemsTablePanel siTablePanel = getSchemaItemsTablePanel();
+            AssemblingSchemaItem asi = (AssemblingSchemaItem)siTablePanel.getDataTable().getSelectedRowObject();
+            getItemValuesTablePanel().setEnabled(AbstractTablePanel.Button.New, asi != null);
+            setAssemblingSchemaItem(asi);
+            getItemValuesTablePanel().refreshDataTable();
+        }
+
+        @Override
+        public void selectAction() {}
+
+        @Override
+        public void tableRefreshed() {}
+    }
+
+    private class AssemblingSchemasTablePanel
+        extends AbstractTablePanel
+        implements ItemListener
+    {
+        private BindingGroup categoryBindingGroup;
+        private BindingGroup bindingGroup;
+
+        private EntityProperties entityProps;
+
+        private AssemblingCategory category;
+        private AssemblingSchema categorySchema;
+
+
+        public AssemblingSchemasTablePanel()
+        {
+        }
+
+        @Override
+        protected void initData()
+        {
+            super.initData();
+
+            setVisible(AbstractTablePanel.Button.Classify, false);
+            setEnabled(AbstractTablePanel.Button.New, false);
+
+            categoryComboList.getComboBox().setPrototypeDisplayValue("123456789012345");
+
+            entityProps = getFormSession().getAssemblingSchemaEntityProperties();
+
+            categoryBindingGroup = new BindingGroup();
+            if(categorySchema == null)
+                categorySchema = getFormSession().newAssemblingSchema();
+            PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
+            //AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
+            AssemblingCategoryTreeTablePanel listPanel = new AssemblingCategoryTreeTablePanel(category);
+            categoryComboList.bind(
+                categoryBindingGroup,
+                listPanel,
+                categorySchema,
+                propDetails,
+                "${categoryCode}, ${categoryName}",
+                UpdateStrategy.READ_WRITE);
+            categoryComboList.addItemListener(this);
+            categoryBindingGroup.bind();
+
+            addTablePanelListener(new AssemblingSchemasTableListener());
+            refreshDataTable(entityProps);
+            setPreferredSize(new Dimension(640, 480));
+        }
+
+        @SuppressWarnings("unchecked")
+        private void refreshDataTable(EntityProperties entityProps)
+        {
+            if(bindingGroup != null)
+                bindingGroup.unbind();
+
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+
+            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
+            tableBinding.setEditable(false);
+
+            bindingGroup.bind();
+        }
+
+        private List getList()
+        {
+            return getFormSession().getAssemblingSchemas(category);
+        }
+
+        @Override
+        public void itemStateChanged(ItemEvent event)
+        {
+            if(event.getStateChange() > 0x700)
+            {
+                refreshDataTable(entityProps);
+                setEnabled(AbstractTablePanel.Button.New, canCreate());
+            }
+        }
 
         @Override
         protected boolean deleteRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getFormSession().deleteAssemblingSchema((AssemblingSchema)rowObject);
         }
 
         @Override
         protected Object modifyRow(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return onEditEntity((AssemblingSchema)rowObject);
         }
 
         @Override
         protected Object newRow()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            AssemblingSchema as = getFormSession().newAssemblingSchema();
+            as.setAssemblingCategory(category);
+            return onEditEntity(as);
+        }
+
+        private Object onEditEntity(AssemblingSchema as)
+        {
+            AssemblingSchemaPanel editPanel = new AssemblingSchemaPanel(as);
+            DialogResponse response = editPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return editPanel.getSelectedValue();
+            }
+
+            return null;
         }
 
         @Override
         public boolean canCreate()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return categoryComboList.getSelectedItem() != null;
         }
 
         @Override
         public boolean canModify(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
         }
 
         @Override
         public boolean canDelete(Object rowObject)
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return true;
+        }
+
+        @Override
+        public void close()
+        {
+            AssemblingSchemasPanel.this.setDialogResponse(getDialogResponse());
+            AssemblingSchemasPanel.this.close();
+        }
+
+
+    }
+
+    private class SchemaItemsTablePanel
+        extends AbstractTablePanel
+    {
+        private BindingGroup bindingGroup;
+        private EntityProperties entityProps;
+
+        public SchemaItemsTablePanel()
+        {
+        }
+
+        @Override
+        protected void initData()
+        {
+            super.initData();
+            setVisible(AbstractTablePanel.Button.Classify, false);
+            setVisible(AbstractTablePanel.Button.Close, false);
+            setEnabled(AbstractTablePanel.Button.New, false);
+
+            entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
+
+            refreshDataTable(entityProps);
+        }
+
+        public void refreshDataTable()
+        {
+            refreshDataTable(entityProps);
+        }
+
+        private void refreshDataTable(EntityProperties entityProps)
+        {
+            if(bindingGroup != null)
+                bindingGroup.unbind();
+
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+
+            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
+            tableBinding.setEditable(false);
+
+            bindingGroup.bind();
+        }
+
+        private List getList()
+        {
+            AssemblingSchema as = getAssemblingSchema();
+            if(as != null)
+                return getFormSession().getAssemblingSchemaItems(as);
+            else
+                return Collections.emptyList();
+        }
+
+        @Override
+        protected boolean deleteRow(Object rowObject)
+        {
+            return getFormSession().deleteAssemblingSchemaItem((AssemblingSchemaItem)rowObject);
+        }
+
+        @Override
+        protected Object modifyRow(Object rowObject)
+        {
+            return onEditEntity((AssemblingSchemaItem)rowObject);
+        }
+
+        @Override
+        protected Object newRow()
+        {
+            AssemblingSchemaItem asi = getFormSession().newAssemblingSchemaItem(getAssemblingSchema());
+            return onEditEntity(asi);
+        }
+
+        private Object onEditEntity(AssemblingSchemaItem asi)
+        {
+            AssemblingSchemaItemPanel editPanel = new AssemblingSchemaItemPanel(asi);
+            DialogResponse response = editPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return editPanel.getSelectedValue();
+            }
+
+            return null;
+        }
+
+        @Override
+        public boolean canCreate()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean canModify(Object rowObject)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean canDelete(Object rowObject)
+        {
+            return true;
+        }
+    }
+
+    private class ItemValuesTablePanel
+        extends AbstractTablePanel
+    {
+        private BindingGroup bindingGroup;
+        private EntityProperties entityProps;
+
+        public ItemValuesTablePanel()
+        {
+        }
+
+        @Override
+        protected void initData()
+        {
+            super.initData();
+            setVisible(AbstractTablePanel.Button.Classify, false);
+            setVisible(AbstractTablePanel.Button.Close, false);
+            setEnabled(AbstractTablePanel.Button.New, false);
+
+            entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
+
+            refreshDataTable(entityProps);
+        }
+
+        public void refreshDataTable()
+        {
+            refreshDataTable(entityProps);
+        }
+
+        private void refreshDataTable(EntityProperties entityProps)
+        {
+            if(bindingGroup != null)
+                bindingGroup.unbind();
+
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+
+            JTableBinding tableBinding = table.bind(bindingGroup, getList(), entityProps, UpdateStrategy.READ);
+            /*tableBinding.setEditable(true);
+            table.setEditable(true);
+
+            MaskFormattedCellEditor cellEditor;
+            String mask = "##-###";
+            try
+            {
+                cellEditor = new MaskFormattedCellEditor(mask);
+            }
+            catch(ParseException ex)
+            {
+                throw new RuntimeException(ex);
+            }
+            MaskFormattedCellRenderer cellRenderer =
+                new MaskFormattedCellRenderer(cellEditor);
+            TableColumn column = table.getColumn("Min. Value");
+            column.setCellEditor(cellEditor);
+            column.setCellRenderer(cellRenderer);
+            column = table.getColumn("Max. Value");
+            column.setCellEditor(cellEditor);
+            column.setCellRenderer(cellRenderer);
+            table.setDefaultEditor(Serializable.class, cellEditor);
+
+            ProductsListPanel productsListPanel = new ProductsListPanel(null);
+            PropertyDetails propDetails = entityProps.getPropertyDetails("virtualProduct");
+            table.bindComboListCellEditor(bindingGroup, productsListPanel, propDetails);*/
+
+            bindingGroup.bind();
+        }
+
+        private List getList()
+        {
+            AssemblingSchemaItem asi = getAssemblingSchemaItem();
+            if(asi != null)
+                return getFormSession().getAssemblingSchemaItemValues(asi);
+            else
+                return Collections.emptyList();
+        }
+
+        @Override
+        protected boolean deleteRow(Object rowObject)
+        {
+            return getFormSession().deleteAssemblingSchemaItemValue((AssemblingSchemaItemValue)rowObject);
+        }
+
+        @Override
+        protected Object modifyRow(Object rowObject)
+        {
+            return onEditEntity((AssemblingSchemaItemValue)rowObject);
+        }
+
+        @Override
+        protected Object newRow()
+        {
+            AssemblingSchemaItemValue itemValue;
+            itemValue = getFormSession().newAssemblingSchemaItemValue(getAssemblingSchemaItem());
+            return onEditEntity(itemValue);
+        }
+
+        private Object onEditEntity(AssemblingSchemaItemValue itemValue)
+        {
+            AssemblingSchemaItemValuePanel editPanel = new AssemblingSchemaItemValuePanel(itemValue);
+            DialogResponse response = editPanel.showDialog(this);
+            if(DialogResponse.SAVE.equals(response))
+            {
+                return editPanel.getSelectedValue();
+            }
+
+            return null;
+        }
+
+        @Override
+        public boolean canCreate()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean canModify(Object rowObject)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean canDelete(Object rowObject)
+        {
+            return true;
         }
     }
 }
