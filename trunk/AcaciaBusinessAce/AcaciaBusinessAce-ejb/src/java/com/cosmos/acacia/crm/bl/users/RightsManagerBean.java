@@ -51,6 +51,8 @@ public class RightsManagerBean
 
         Set<UserRight> rights = fetchRights(user, dataObject, false);
 
+        System.out.println(" RIGHTS : " + rights.size());
+
         UserRight highestPriorityRight = getHigherPriorityRight(rights, false);
         UserRight highestPriorityExclusionRight = getHigherPriorityRight(rights, true);
 
@@ -151,7 +153,11 @@ public class RightsManagerBean
                         applicableRights.add(right);
                 }
             }
-            tmpDataObject = em.find(DataObject.class, tmpDataObject.getParentDataObjectId());
+            if (tmpDataObject.getParentDataObjectId() != null)
+                tmpDataObject = em.find(DataObject.class, tmpDataObject.getParentDataObjectId());
+            else
+                tmpDataObject = null;
+
         }
 
         return applicableRights;

@@ -1,21 +1,20 @@
 package com.cosmos.acacia.crm.bl.users;
 
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.DbResource;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.beansbinding.EntityProperties;
-import java.util.List;
 
 @Remote
 public interface UserRightsRemote {
@@ -84,7 +83,7 @@ public interface UserRightsRemote {
      * @param group
      * @param user
      */
-    void assingGroupToUser(UserGroup group, User user);
+    void assignGroupToUser(UserGroup group, User user);
 
     /**
      * Assigns a set of general rights to a user
@@ -186,10 +185,10 @@ public interface UserRightsRemote {
      * @return data object bean
      */
     DataObjectBean getDataObjectBean(DataObject dataObject);
-    
+
     /**
      * Lists all special permissions avialable in the system
-     * 
+     *
      * @return a list of DbResource
      */
     List<DbResource> getSpecialPermissions();

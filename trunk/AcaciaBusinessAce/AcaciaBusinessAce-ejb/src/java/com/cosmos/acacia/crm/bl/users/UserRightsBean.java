@@ -108,7 +108,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     }
 
     @Override
-    public void assingGroupToUser(UserGroup group, User user) {
+    public void assignGroupToUser(UserGroup group, User user) {
         UserOrganization uo = em.find(UserOrganization.class, new UserOrganizationPK(
                 user.getId(), session.getOrganization().getId()));
 

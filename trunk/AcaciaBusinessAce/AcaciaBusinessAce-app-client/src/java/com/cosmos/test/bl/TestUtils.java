@@ -79,6 +79,11 @@ public abstract class TestUtils {
     }
 
 
+    /**
+     * Creates a random string, which is a valid email
+     *
+     * @return the generated email
+     */
     public static String getRandomEmail() {
         return getRandomString(8) + "@" + getRandomString(7) + ".com";
     }
