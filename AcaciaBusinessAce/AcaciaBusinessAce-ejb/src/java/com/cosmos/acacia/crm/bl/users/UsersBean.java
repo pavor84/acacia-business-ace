@@ -225,7 +225,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         q.setParameter("secondName", person.getSecondName());
         q.setParameter("lastName", person.getLastName());
         q.setParameter("extraName", person.getExtraName());
-        
+
         try {
             q.getSingleResult();
             // if there is an existing person with this combination,
