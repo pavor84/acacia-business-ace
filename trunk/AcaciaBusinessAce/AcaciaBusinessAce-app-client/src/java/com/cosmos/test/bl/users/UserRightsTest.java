@@ -36,6 +36,7 @@ public class UserRightsTest {
       private User user;
       private UserGroup userGroup;
       private Organization org;
+      private Address branch;
 
       @Before
       public void setUp() {
@@ -59,7 +60,7 @@ public class UserRightsTest {
                   Person person = personsSession.getPersons(org.getId()).get(0);
 
                   // Must have at least one branch for the organization
-                  Address branch = orgSession.getAddresses(org.getId()).get(0);
+                  branch = orgSession.getAddresses(org.getId()).get(0);
                   searchMore = false;
 
                   user = usersSession.createUser();
@@ -263,6 +264,60 @@ public class UserRightsTest {
                   formSession.isAllowed(user, dob, UserRightType.CREATE));
       }
 
+      @Test
+      public void userWithNoRightOnParentObjectTest() {
+          Set<UserRight> rights = new HashSet<UserRight>();
+          DataObject dob = branch.getDataObject();
+          DataObject parent = org.getDataObject();
+
+          UserRight userRight = createUserRight(user, null, null, parent, false);
+          userRight.setCreate(false);
+          rights.add(userRight);
+
+          rightsSession.assignRightsToUser(rights, user);
+
+          Assert.assertFalse(
+                  "User is NOT expected to have the specified right" +
+                  " (via inheritance), but has it",
+                  formSession.isAllowed(user, dob, UserRightType.CREATE));
+      }
+
+      @Test
+      public void groupWithRightOnParentObjectTest() {
+          Set<UserRight> rights = new HashSet<UserRight>();
+          DataObject dob = branch.getDataObject();
+          DataObject parent = org.getDataObject();
+
+          UserRight userRight = createUserRight(null, userGroup, null, parent, false);
+          userRight.setCreate(true);
+          rights.add(userRight);
+
+          rightsSession.assignRightsToUser(rights, user);
+
+          Assert.assertTrue(
+                  "User is expected to have the specified right" +
+                  " (via inheritance), but does not",
+                  formSession.isAllowed(user, dob, UserRightType.CREATE));
+      }
+
+      @Test
+      public void userWithRightOnParentObjectTypeTest() {
+          Set<UserRight> rights = new HashSet<UserRight>();
+          DataObject dob = branch.getDataObject();
+          DataObject parent = org.getDataObject();
+
+          UserRight userRight = createUserRight(user, null, parent.getDataObjectType(), null, false);
+          userRight.setCreate(true);
+          rights.add(userRight);
+
+          rightsSession.assignRightsToUser(rights, user);
+
+          Assert.assertTrue(
+                  "User is expected to have the specified right" +
+                  " (via inheritance), but does not",
+                  formSession.isAllowed(user, dob, UserRightType.CREATE));
+      }
+
       private UserRight createUserRight(User user,
               UserGroup group,
               DataObjectType dataObjectType,
@@ -278,5 +333,4 @@ public class UserRightsTest {
 
           return right;
       }
-
 }
