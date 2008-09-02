@@ -112,12 +112,18 @@ public class RightsManagerBean
     }
 
     private UserRight compareRights(UserRight right1, UserRight right2) {
+        UserRight higerPriorityRight = null;
         if (right1.getUser() != null && right2.getUser() == null) {
-            right2 = right1;
+            higerPriorityRight = right1;
+        } else if (right2.getUser() != null && right1.getUser() == null) {
+            higerPriorityRight = right2;
         } else if (right1.getDataObject() != null && right2.getDataObject() == null){
-            right2 = right1;
+            higerPriorityRight = right1;
+        } else {
+            higerPriorityRight = right2;
         }
-        return right2;
+
+        return higerPriorityRight;
     }
 
     private Set<UserRight> fetchRights(User user, DataObject dataObject, boolean isSpecial) {

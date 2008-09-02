@@ -35,3 +35,15 @@ User has right on data object, excluded.
 8.
 User has right on data object type, with create right
 Group has right on data object, excluded.
+
+9.
+User has right on data object parent, with create right
+
+10.
+User has right on data object parent, with no create right
+
+11.
+Group has right on data object parent, with create right
+
+12.
+User has right on data object parent type, with create right
