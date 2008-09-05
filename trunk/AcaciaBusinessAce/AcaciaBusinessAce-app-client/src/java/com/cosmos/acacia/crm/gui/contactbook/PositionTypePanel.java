@@ -2,6 +2,7 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
 import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -59,6 +60,8 @@ public class PositionTypePanel extends BaseEntityPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         nameLabel = new com.cosmos.swingb.JBLabel();
+        groupLabel = new com.cosmos.swingb.JBLabel();
+        groupComboList = new com.cosmos.acacia.gui.AcaciaComboList();
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
@@ -85,13 +88,18 @@ public class PositionTypePanel extends BaseEntityPanel {
         descriptionPanelLayout.setVerticalGroup(
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(descriptionPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(PositionTypePanel.class);
         nameLabel.setText(resourceMap.getString("nameLabel.text")); // NOI18N
         nameLabel.setName("nameLabel"); // NOI18N
+
+        groupLabel.setText(resourceMap.getString("groupLabel.text")); // NOI18N
+        groupLabel.setName("groupLabel"); // NOI18N
+
+        groupComboList.setName("groupComboList"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -101,11 +109,15 @@ public class PositionTypePanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(groupLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(groupComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,12 +127,19 @@ public class PositionTypePanel extends BaseEntityPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(groupLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(groupComboList, 0, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {groupComboList, nameTextField});
+
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -128,6 +147,8 @@ public class PositionTypePanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
+    private com.cosmos.acacia.gui.AcaciaComboList groupComboList;
+    private com.cosmos.swingb.JBLabel groupLabel;
     private javax.swing.JScrollPane jScrollPane3;
     private com.cosmos.swingb.JBLabel nameLabel;
     private com.cosmos.swingb.JBTextField nameTextField;
@@ -157,6 +178,10 @@ public class PositionTypePanel extends BaseEntityPanel {
 
         nameTextField.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("positionTypeName"));
         descriptionTextPane.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("description"));
+
+        groupComboList.setEnabled(true);
+        UserGroupsListPanel groupsTable = new UserGroupsListPanel(getOrganizationDataObjectId());
+        groupComboList.bind(positionTypeBindingGroup, groupsTable, positionType, entityProps.getPropertyDetails("userGroup"), "${name}");
 
         positionTypeBindingGroup.bind();
     }

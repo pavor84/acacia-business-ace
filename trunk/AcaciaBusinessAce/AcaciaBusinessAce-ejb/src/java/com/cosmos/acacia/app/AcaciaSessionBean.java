@@ -4,13 +4,17 @@ import static com.cosmos.acacia.app.SessionContext.BRANCH_KEY;
 import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
@@ -35,7 +39,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @PersistenceContext
     private EntityManager em;
 
-    
+
     @Override
     public Integer login(User user) {
         //create and register session
@@ -83,7 +87,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     public void setBranch(Address branch) {
         getSession().setValue(BRANCH_KEY, branch);
     }
-    
+
     private SessionContext getSession(){
         return SessionRegistry.getSession();
     }
@@ -99,7 +103,14 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     @Override
-    public void setPerson(Person person) { 
+    public void setPerson(Person person) {
         getSession().setValue(PERSON_KEY, person);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<DataObjectType> getDataObjectTypes() {
+        Query q = em.createNamedQuery("DataObjectType.listAll");
+        return new ArrayList<DataObjectType>(q.getResultList());
     }
 }

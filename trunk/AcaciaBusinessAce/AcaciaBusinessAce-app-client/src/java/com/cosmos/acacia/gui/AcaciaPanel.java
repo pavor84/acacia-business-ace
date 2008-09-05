@@ -27,8 +27,10 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
 
@@ -45,8 +47,19 @@ public abstract class AcaciaPanel
     private DataObjectBean mainDataObject;
     private BigInteger organizationDataObjectId;
 
-    private AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
+    private static AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
+    private static PermissionsManager permissionsManager;
     
+    {
+        if (permissionsManager == null)
+            try {
+                permissionsManager = new PermissionsManager(
+                    acaciaSession.getUser(), acaciaSession.getDataObjectTypes());
+            } catch (Exception ex) {
+                //
+            }
+    }
+
     private static final String SESSION_BRANCH = "SESSION_BRANCH";
     private static Map<String, Object> sessionCache = new HashMap<String, Object>();
 
@@ -92,8 +105,8 @@ public abstract class AcaciaPanel
     {
         if (getParentDataObjectId() != null)
             return getAcaciaSession().getDataObject(getParentDataObjectId());
-        else
-            return null;
+
+        return null;
     }
 
     public BigInteger getOrganizationDataObjectId() {
@@ -117,9 +130,9 @@ public abstract class AcaciaPanel
 
     protected void setFonts()
     {
-        Component[] components = this.getComponents();
+        //Component[] components = this.getComponents();
         // Get a font from config?
-        Font font = new Font("Tahoma", Font.PLAIN, 11);
+        //Font font = new Font("Tahoma", Font.PLAIN, 11);
         //setFontToComponents(components, font);
     }
 
@@ -215,6 +228,7 @@ public abstract class AcaciaPanel
         return AcaciaPanel.class;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> remoteInterface) {
         try {
             InitialContext ctx = new InitialContext();
@@ -248,18 +262,40 @@ public abstract class AcaciaPanel
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             log.info("Method called: " + method.getName() + " on bean: " + bean);
-            return sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
+            Object result = null;
+
+            if (permissionsManager == null) {
+                result = sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
+            } else {
+                boolean isAllowed = permissionsManager.isAllowedPreCall(method, args);
+
+                if (isAllowed) {
+                    result = sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
+                    isAllowed = permissionsManager.isAllowedPostCall(result);
+
+                    if (isAllowed)
+                        result = permissionsManager.filterResult(result);
+                }
+
+                if (!isAllowed) {
+                    return null; // display error message.. or throw exception ?
+                }
+            }
+            return result;
         }
+
+
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T getRemoteBean(Object obj, Class<T> remoteInterface)
     {
         try
         {
-            T bean = (T)InitialContext.doLookup(remoteInterface.getName());
+            T bean = (T) InitialContext.doLookup(remoteInterface.getName());
             InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
 
-            T proxy = (T)Proxy.newProxyInstance(
+            T proxy = (T) Proxy.newProxyInstance(
                 obj.getClass().getClassLoader(),
                 new Class[]{remoteInterface},
                 handler);
@@ -284,7 +320,7 @@ public abstract class AcaciaPanel
             log.error("error", ex);
         }
     }
-    
+
     public void handleValidationException(Exception ex){
         ValidationException ve = extractValidationException(ex);
         if ( ve!=null ){
