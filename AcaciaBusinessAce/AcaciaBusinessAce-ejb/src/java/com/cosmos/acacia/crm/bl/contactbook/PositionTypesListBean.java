@@ -134,6 +134,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
         return newChild;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<PositionType> getInternalOrganizationPositionTypes(
             BigInteger parentId) {
@@ -144,7 +145,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
 
         return new ArrayList<PositionType>(q.getResultList());
     }
-    
+
     @Override
     public void deletePositionTypes(List<PositionType> positionTypes) {
         for (PositionType positionType : positionTypes) {

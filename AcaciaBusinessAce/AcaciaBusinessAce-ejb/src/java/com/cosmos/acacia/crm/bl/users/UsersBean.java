@@ -210,6 +210,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     }
 
+    @SuppressWarnings("null")
     @Override
     public User signup(User user, Organization organization, Address branch, Person person) {
 

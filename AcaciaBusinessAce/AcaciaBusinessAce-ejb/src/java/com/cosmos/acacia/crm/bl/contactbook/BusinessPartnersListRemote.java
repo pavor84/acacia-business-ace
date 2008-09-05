@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
- * 
+ *
  * Created	:	26.07.2008
  * @author	Petar Milev
  *
@@ -33,7 +33,7 @@ public interface BusinessPartnersListRemote {
     /**
      * Delete a business partner
      * @param businessPartner
-     * @return
+     *
      */
     void deleteBusinessPartner(BusinessPartner businessPartner);
 
