@@ -5,9 +5,11 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -16,7 +18,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.validation.ClassifierValidatorLocal;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
 import com.cosmos.acacia.crm.data.ClassifiedObjectBean;
@@ -27,10 +31,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.validation.ValidationException;
-import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Set;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import com.cosmos.beansbinding.EntityProperties;
 
 /**
  * Implementation of handling classifiers (see interface for more information)
@@ -50,6 +51,9 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @EJB
     private ClassifierValidatorLocal classifierValidator;
+
+    @EJB
+    private AcaciaSessionLocal session;
 
     @Override
     public void addDataObjectTypeConstraint(Classifier classifier,
@@ -84,16 +88,16 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     public int deleteClassifier(Classifier classifier) {
         if (!classifier.getClassifierGroup().getIsSystemGroup())
             return esm.remove(em, classifier);
-        else
-            throw new ValidationException("Classifier.err.systemGroupForbidden");
+
+        throw new ValidationException("Classifier.err.systemGroupForbidden");
     }
 
     @Override
     public int deleteClassifierGroup(ClassifierGroup classifierGroup) {
         if (!classifierGroup.getIsSystemGroup())
             return esm.remove(em, classifierGroup);
-        else
-            throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+
+        throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
 
     }
 
@@ -252,6 +256,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         return new ClassifiedObject();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Classifier> getClassifiers(DataObject classifiedDataObject) {
         Query q = em.createNamedQuery("ClassifiedObject.findByDataObject");
@@ -270,8 +275,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @Override
     public List<DataObjectType> getDataObjectTypes() {
-        Query q = em.createNamedQuery("DataObjectType.listAll");
-        return new ArrayList<DataObjectType>(q.getResultList());
+        return session.getDataObjectTypes();
     }
 
     @Override
@@ -282,6 +286,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
        return entityProperties;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<DataObjectType> getDataObjectTypes(Classifier classifier) {
         if (classifier == null || classifier.getDataObject() == null) {
@@ -301,6 +306,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         return new ArrayList<DataObjectType>(result);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<DataObject> getDataObjects(Classifier classifier) {
         Query q;
@@ -310,7 +316,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         } else {
             q = em.createNamedQuery("ClassifiedObject.findAll");
         }
-        
+
         q.setParameter("deleted", false);
 
         List<ClassifiedObject> cos = q.getResultList();
@@ -322,6 +328,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Classifier getClassifier(String code) {
         Query q = em.createNamedQuery("Classifier.findByCode");
@@ -333,37 +340,38 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
         if (result == null || result.size() == 0)
             throw new ValidationException("No classifier found with this code");
-        else
-            return result.get(0);
+
+        return result.get(0);
     }
-    
+
     @Override
     public List<ClassifiedObjectBean> getClassifiedObjectBeans(Classifier classifier) {
         List<DataObject> dataObjects = getDataObjects(classifier);
-        
+
         List<ClassifiedObjectBean> result = new ArrayList<ClassifiedObjectBean>(dataObjects.size());
-        
+
         for (DataObject dataObject : dataObjects) {
             DataObjectBean dob = getDataObjectBean(dataObject);
             if (dob != null) {
                 ClassifiedObjectBean cob = new ClassifiedObjectBean();
                 String type = dob.getClass().getName().replaceAll(dob.getClass().getPackage().getName() + "\\.", "");
-                
+
                 cob.setTitle(dob.getInfo());
                 cob.setType(type);
                 result.add(cob);
             }
-                
+
         }
-        
+
         return result;
     }
-    
+
+    @SuppressWarnings("unchecked")
     @Override
     public DataObjectBean getDataObjectBean(DataObject dataObject) {
         if (dataObject == null)
             return null;
-        
+
         DataObjectType dot = dataObject.getDataObjectType();
         try {
             Class clazz = Class.forName(dot.getDataObjectType());

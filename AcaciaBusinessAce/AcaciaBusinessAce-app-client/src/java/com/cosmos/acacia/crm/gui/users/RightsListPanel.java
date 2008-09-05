@@ -81,8 +81,6 @@ public class RightsListPanel extends AbstractTablePanel {
         AcaciaTable usersTable = getDataTable();
         List<UserRight> initialRights = getRights();
 
-
-
         usersTable.bind(
                 rightsBindingGroup,
                 initialRights,

@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -25,11 +26,15 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="organizationLabel1" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="userTextField" min="-2" pref="286" max="-2" attributes="1"/>
+                      <Component id="userTextField" min="-2" pref="210" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="branchLabel" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="branchComboList" pref="385" max="32767" attributes="1"/>
+                      <Component id="branchComboList" min="-2" pref="230" max="-2" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="groupLabel" min="-2" max="-2" attributes="1"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="groupComboList" pref="184" max="32767" attributes="1"/>
                   </Group>
                   <Component id="specialPermissionsHolderPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="entityFormButtonPanel1" alignment="1" pref="772" max="32767" attributes="0"/>
@@ -42,13 +47,17 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="organizationLabel1" alignment="3" min="-2" max="-2" attributes="1"/>
-                      <Component id="branchLabel" alignment="3" min="-2" max="-2" attributes="1"/>
-                      <Component id="userTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="groupComboList" pref="20" max="32767" attributes="1"/>
+                  <Component id="branchComboList" alignment="0" pref="20" max="32767" attributes="1"/>
+                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="userTextField" alignment="0" max="32767" attributes="1"/>
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="organizationLabel1" alignment="3" min="-2" max="-2" attributes="1"/>
+                          <Component id="branchLabel" alignment="3" min="-2" pref="20" max="-2" attributes="1"/>
+                      </Group>
                   </Group>
-                  <Component id="branchComboList" alignment="1" min="-2" pref="20" max="-2" attributes="1"/>
+                  <Component id="groupLabel" alignment="1" pref="20" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="generalRightsHolderPanel" min="-2" max="-2" attributes="0"/>
@@ -110,7 +119,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="194" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="245" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -119,7 +128,9 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="General rights"/>
+            <TitledBorder title="Special permissions">
+              <Property name="titleX" resourceKey="specialPermissionsHolderPanel.border.title"/>
+            </TitledBorder>
           </Border>
         </Property>
         <Property name="name" type="java.lang.String" value="specialPermissionsHolderPanel" noResource="true"/>
@@ -138,5 +149,16 @@
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="com.cosmos.swingb.JBLabel" name="groupLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="groupLabel.text"/>
+        <Property name="name" type="java.lang.String" value="groupLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="groupComboList">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="groupComboList" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>
