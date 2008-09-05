@@ -82,6 +82,7 @@ public class PositionType
 
     @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
     @OneToOne
+    @Property(title="User Group", customDisplay="${userGroup.name}")
     private UserGroup userGroup;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

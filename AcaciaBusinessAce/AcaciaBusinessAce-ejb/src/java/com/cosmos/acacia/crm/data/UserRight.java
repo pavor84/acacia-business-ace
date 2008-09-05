@@ -200,6 +200,7 @@ public class UserRight implements Serializable {
                 + ((dataObject == null) ? 0 : dataObject.hashCode());
         result = prime * result
                 + ((dataObjectType == null) ? 0 : dataObjectType.hashCode());
+        result = prime * result + (excluded ? 1231 : 1237);
         result = prime
                 * result
                 + ((specialPermission == null) ? 0 : specialPermission
@@ -228,6 +229,8 @@ public class UserRight implements Serializable {
             if (other.dataObjectType != null)
                 return false;
         } else if (!dataObjectType.equals(other.dataObjectType))
+            return false;
+        if (excluded != other.excluded)
             return false;
         if (specialPermission == null) {
             if (other.specialPermission != null)
@@ -278,5 +281,14 @@ public class UserRight implements Serializable {
 
     public void setSpecialPermission(DbResource specialPermission) {
         this.specialPermission = specialPermission;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ";" +
+            "User: " + user + "; " +
+            "UserGroup: " + userGroup + "; " +
+            "DataObject: " + dataObject + "; " +
+            "DataObjectType: " + dataObjectType + "; ";
     }
 }
