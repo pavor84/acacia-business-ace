@@ -214,6 +214,7 @@ public class UserRightsTest {
           rights.add(userRight);
 
           UserRight userRightExcluded = createUserRight(user, null, null, dob, true);
+          userRightExcluded.setCreate(true);
           rights.add(userRightExcluded);
 
           rightsSession.assignRightsToUser(rights, user);
@@ -234,6 +235,7 @@ public class UserRightsTest {
           rights.add(groupRight);
 
           UserRight userRightExcluded = createUserRight(user, null, null, dob, true);
+          userRightExcluded.setCreate(true);
           rights.add(userRightExcluded);
 
           rightsSession.assignRightsToUser(rights, user);
@@ -255,6 +257,7 @@ public class UserRightsTest {
           rights.add(userRight);
 
           UserRight userGroupRightExcluded = createUserRight(null, userGroup, null, dob, true);
+          userGroupRightExcluded.setCreate(true);
           rights.add(userGroupRightExcluded);
 
           rightsSession.assignRightsToUser(rights, user);

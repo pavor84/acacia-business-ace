@@ -51,18 +51,37 @@ public class RightsManagerBean
 
         Set<UserRight> rights = fetchRights(user, dataObject, false);
 
-        System.out.println(" RIGHTS : " + rights.size());
-
-        UserRight highestPriorityRight = getHigherPriorityRight(rights, false);
+        UserRight highestPriorityRegularRight = getHigherPriorityRight(rights, false);
         UserRight highestPriorityExclusionRight = getHigherPriorityRight(rights, true);
 
-        if (highestPriorityRight == null)
+        if (highestPriorityRegularRight == null)
             return false;
 
-        highestPriorityRight = compareRights(highestPriorityRight, highestPriorityExclusionRight);
+        UserRight highestPriorityRight =
+                compareRights(highestPriorityRegularRight, highestPriorityExclusionRight);
 
-        if (highestPriorityRight.isExcluded())
-            return false;
+        // Setting excluded rights
+        if (highestPriorityRight == highestPriorityExclusionRight) {
+            highestPriorityRight.setCreate(
+                    highestPriorityRegularRight.canCreate()
+                    && !highestPriorityExclusionRight.canCreate());
+
+            highestPriorityRight.setRead(
+                    highestPriorityRegularRight.canRead()
+                    && !highestPriorityExclusionRight.canRead());
+
+            highestPriorityRight.setDelete(
+                    highestPriorityRegularRight.canDelete()
+                    && !highestPriorityExclusionRight.canDelete());
+
+            highestPriorityRight.setModify(
+                    highestPriorityRegularRight.canModify()
+                    && !highestPriorityExclusionRight.canModify());
+        }
+
+
+//        if (highestPriorityRight.isExcluded())
+//            return false;
 
         if (rightType == UserRightType.READ)
             return highestPriorityRight.canRead();
@@ -98,7 +117,8 @@ public class RightsManagerBean
 
         UserRight highestPriorityRight = null;
         for (UserRight right : rights) {
-            if (right.isExcluded() & countExcluded)
+
+            if (right.isExcluded() ^ countExcluded)
                 continue;
 
             if (highestPriorityRight == null) {
@@ -112,18 +132,29 @@ public class RightsManagerBean
     }
 
     private UserRight compareRights(UserRight right1, UserRight right2) {
-        UserRight higerPriorityRight = null;
+        UserRight higherPriorityRight = null;
+
+        if (right1 == right2)
+            return right1;
+
+        if (right1 == null)
+            return right2;
+
+        if (right2 == null)
+            return right1;
+
+
         if (right1.getUser() != null && right2.getUser() == null) {
-            higerPriorityRight = right1;
+            higherPriorityRight = right1;
         } else if (right2.getUser() != null && right1.getUser() == null) {
-            higerPriorityRight = right2;
+            higherPriorityRight = right2;
         } else if (right1.getDataObject() != null && right2.getDataObject() == null){
-            higerPriorityRight = right1;
+            higherPriorityRight = right1;
         } else {
-            higerPriorityRight = right2;
+            higherPriorityRight = right2;
         }
 
-        return higerPriorityRight;
+        return higherPriorityRight;
     }
 
     private Set<UserRight> fetchRights(User user, DataObject dataObject, boolean isSpecial) {
@@ -219,6 +250,7 @@ public class RightsManagerBean
 
         // Creating a set of all rights for this user
         Set<UserRight> rights = new HashSet<UserRight>();
+
         rights.addAll(userSpecificRights);
         rights.addAll(groupRights);
 
