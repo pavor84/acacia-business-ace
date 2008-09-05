@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a method's function is to view a list of entities
+ * Indicates that a method's function is to modify an entity
  *
  * @author Bozhidar Bozhanov
  *
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface View {
+public @interface Modify {
 
 }
