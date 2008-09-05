@@ -58,6 +58,7 @@ public class UserOrganization implements Serializable {
 
     @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
     @ManyToOne
+    @Property(title="User Group", customDisplay="${userGroup.name}")
     private UserGroup userGroup;
 
     public UserGroup getUserGroup() {
