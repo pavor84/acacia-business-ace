@@ -7,7 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * 
+ *
  * @author Miro
  * @version 1.0
  */
@@ -27,7 +27,7 @@ public class Base64Encoder
 
     // lookup for base64 chars
     private static final byte[] lookUpBase64Alphabet = new byte[LOOKUPLENGTH];
-    
+
     // Populating the lookup and character arrays
     static
     {
@@ -123,7 +123,6 @@ public class Base64Encoder
         byte buffer[] = new byte[BUFFER_SIZE];
         int read;
         int pos = 0;
-        int byteValue = 0;
         int offset = 0;
         byte threeBytes[] = new byte[3];
 

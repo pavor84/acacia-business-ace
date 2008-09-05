@@ -8,7 +8,6 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.callback.CallbackHandler;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
@@ -196,46 +195,46 @@ public interface UsersRemote {
      * @return version
      */
     int deleteUser(User user);
-    
+
     /**
      * Sets the organization in the session. May be called only when there is no organizatin in the session
-     * 
+     *
      * @param organization
      */
     void setOrganization(Organization organization);
-    
+
     /**
      * Gets the UserOrganization object corresponding to the specified params
-     * 
+     *
      * @param user
      * @param organization
      * @return the UserOrganization object
      */
     UserOrganization getUserOrganization(User user, Organization organization);
-    
+
     /**
      * Saves changes to a specified UserOrganization objecet
-     * 
+     *
      * @param uo
      * @return the saved entity
      */
     UserOrganization saveUserOrganization(UserOrganization uo);
-    
-    
+
+
     /**
      * Gets the entity properties for UserOrganization
-     * 
+     *
      * @return the entity properties
      */
     EntityProperties getUserOrganizationEntityProperties();
 
     /**
      * Changes the branch of a user
-     * 
+     *
      * @param user
      * @param oldBranch
      * @param newBranch
      */
     public void changeBranch(User user, Address oldBranch, Address newBranch);
-    
+
 }

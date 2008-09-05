@@ -13,9 +13,7 @@ import javax.ejb.Remote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -125,7 +123,7 @@ public interface PersonsListRemote {
      * @return the version of the deleted Person
      */
     int deletePerson(Person person);
-    
+
     /**
      * Lists all the persons registered with the current organization
      * @param parentDataObjecetId
