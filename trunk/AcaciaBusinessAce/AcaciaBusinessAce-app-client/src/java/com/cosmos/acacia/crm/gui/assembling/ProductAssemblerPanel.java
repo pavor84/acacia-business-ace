@@ -13,6 +13,7 @@ import com.cosmos.acacia.gui.AcaciaTreeTable;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 
@@ -138,6 +139,7 @@ public class ProductAssemblerPanel
         String strValue = resource.getString("schemaTitledPanel.title");
         schemaTitledPanel.setTitle(strValue + schemaName);
         parametersTable = new AcaciaTable();
+        parametersTable.setModel(new SchemaTableModel());
         JBScrollPane scrollPane = new JBScrollPane();
         scrollPane.setViewportView(parametersTable);
         schemaTitledPanel.setContentContainer(scrollPane);
@@ -149,6 +151,19 @@ public class ProductAssemblerPanel
         scrollPane.setViewportView(productTreeTable);
         productTitledPanel.setContentContainer(scrollPane);
     }
+
+    /*protected void initSchemaTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) parametersTable.getModel();
+
+        for (AssemblingSchemaItem item : items) {
+            Object[] data = new Object[2];
+            data[0] = item.getMessageCode() + ": " + item.getMessageText();
+            data[1] = item.getDefaultValue();
+            model.addRow(data);
+        }
+        parametersTable.setEditable(true);
+    }*/
 
     @Override
     public DialogResponse showDialog(Component parentComponent)
@@ -207,4 +222,43 @@ public class ProductAssemblerPanel
     }
 
 
+    private class SchemaTableModel
+        extends DefaultTableModel
+    {
+        private Class[] columnType =
+        {
+            String.class, Object.class
+        };
+
+        private boolean[] canEditColumn =
+        {
+            false, true
+        };
+
+        public SchemaTableModel()
+        {
+            super();
+
+            ResourceMap resource = getResourceMap();
+
+            String strValue;
+            strValue = resource.getString("productTreeTable.column.parameter.title");
+            addColumn(strValue);
+
+            strValue = resource.getString("productTreeTable.column.value.title");
+            addColumn(strValue);
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex)
+        {
+            return columnType[columnIndex];
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column)
+        {
+            return canEditColumn[column];
+        }
+    }
 }
