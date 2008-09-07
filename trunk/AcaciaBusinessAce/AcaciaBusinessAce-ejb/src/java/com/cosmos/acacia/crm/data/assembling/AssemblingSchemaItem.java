@@ -255,6 +255,25 @@ public class AssemblingSchemaItem
         return "com.cosmos.acacia.crm.data.AssemblingSchemaItem[itemId=" + itemId + "]";
     }
 
+    public String toString(boolean debug)
+    {
+        if(!debug)
+            return toString();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(toString());
+        sb.append("\n\t assemblingSchema: ").append(assemblingSchema.toString());
+        sb.append("\n\t messageCode: ").append(messageCode);
+        sb.append("\n\t messageText: ").append(messageText);
+        sb.append("\n\t dataType: ").append(dataType);
+        sb.append("\n\t minSelections: ").append(minSelections);
+        sb.append("\n\t maxSelections: ").append(maxSelections);
+        sb.append("\n\t quantity: ").append(quantity);
+        sb.append("\n\t defaultValue: ").append(defaultValue);
+
+        return sb.toString();
+    }
+
     @Override
     public BigInteger getParentId()
     {

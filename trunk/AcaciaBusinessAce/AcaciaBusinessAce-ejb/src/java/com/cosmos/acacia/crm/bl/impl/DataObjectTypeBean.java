@@ -17,8 +17,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.apache.jcs.JCS;
-import org.apache.jcs.access.exception.CacheException;
+import org.jboss.cache.Cache;
+import org.jboss.cache.CacheFactory;
+import org.jboss.cache.DefaultCacheFactory;
+import org.jboss.cache.Fqn;
+import org.jboss.cache.Node;
 
 /**
  *
@@ -27,17 +30,22 @@ import org.apache.jcs.access.exception.CacheException;
 @Stateless
 public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeLocal {
 
+    private static CacheFactory cacheFactory;
+    private static Cache cache;
+    private static Fqn fqnDOTName =
+        Fqn.fromString("/" + DataObjectType.class.getName().replace('.', '/') + "/name");
+    private static Fqn fqnDOTId =
+        Fqn.fromString("/" + DataObjectType.class.getName().replace('.', '/') + "/id");
+
     @PersistenceContext
     private EntityManager em;
 
     @EJB
     private AcaciaSessionLocal session;
     
-    private JCS cacheByName;
-    private JCS cacheById;
 
     public DataObjectType getDataObjectType(int id) {
-        JCS idCache = getCacheById();
+        Node idCache = getCacheById();
         DataObjectType dot = (DataObjectType)idCache.get(id);
         if(dot == null)
         {
@@ -53,16 +61,9 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
             }
             if(dot != null)
             {
-                JCS nameCache = getCacheByName();
-                try
-                {
-                    idCache.put(id, dot);
-                    nameCache.put(dot.getDataObjectType(), dot);
-                }
-                catch(CacheException ex)
-                {
-                    throw new RuntimeException(ex);
-                }
+                Node nameCache = getCacheByName();
+                idCache.put(id, dot);
+                nameCache.put(dot.getDataObjectType(), dot);
             }
         }
 
@@ -70,7 +71,7 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
     }
     
     public DataObjectType getDataObjectType(String name) {
-        JCS nameCache = getCacheByName();
+        Node nameCache = getCacheByName();
         DataObjectType dot = (DataObjectType)nameCache.get(name);
         if(dot == null)
         {
@@ -89,75 +90,31 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
 
             if(dot != null)
             {
-                JCS idCache = getCacheById();
-                try
-                {
-                    nameCache.put(name, dot);
-                    idCache.put(dot.getDataObjectTypeId(), dot);
-                }
-                catch(CacheException ex)
-                {
-                    throw new RuntimeException(ex);
-                }
+                Node idCache = getCacheById();
+                nameCache.put(name, dot);
+                idCache.put(dot.getDataObjectTypeId(), dot);
             }
         }
 
         return dot;
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
- 
-
-    private JCS getCacheByName()
+    private Node getCacheByName()
     {
-        if(cacheByName == null)
-        {
-            try
-            {
-                String regionName = DataObjectType.class.getName() + ".name";
-                cacheByName = JCS.getInstance(regionName);
-            }
-            catch(CacheException ex)
-            {
-                throw new RuntimeException(ex);
-            }
-        }
-
-        return cacheByName;
+        return getNode(fqnDOTName);
     }
 
-    private JCS getCacheById()
+    private Node getCacheById()
     {
-        if(cacheById == null)
-        {
-            try
-            {
-                String regionName = DataObjectType.class.getName() + ".id";
-                cacheById = JCS.getInstance(regionName);
-            }
-            catch(CacheException ex)
-            {
-                throw new RuntimeException(ex);
-            }
-        }
-
-        return cacheById;
+        return getNode(fqnDOTId);
     }
 
     private void removeFromCache(DataObjectType dataObjectType)
     {
-        JCS nameCache = getCacheByName();
-        JCS idCache = getCacheById();
-        try
-        {
-            nameCache.remove(dataObjectType.getDataObjectType());
-            idCache.remove(dataObjectType.getDataObjectTypeId());
-        }
-        catch(CacheException ex)
-        {
-            throw new RuntimeException(ex);
-        }
+        Node nameCache = getCacheByName();
+        Node idCache = getCacheById();
+        nameCache.remove(dataObjectType.getDataObjectType());
+        idCache.remove(dataObjectType.getDataObjectTypeId());
     }
 
     public DataObjectType persist(DataObjectType dataObjectType) {
@@ -187,5 +144,38 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
         } catch (Exception ex) {
             return Collections.EMPTY_LIST;
         }
+    }
+
+    public CacheFactory getCacheFactory()
+    {
+        if(cacheFactory == null)
+        {
+            cacheFactory = new DefaultCacheFactory();
+        }
+
+        return cacheFactory;
+    }
+
+    public Cache getCache()
+    {
+        if(cache == null)
+        {
+            cache = getCacheFactory().createCache();
+        }
+
+        return cache;
+    }
+
+    public Node getNode(Fqn regionName)
+    {
+        Cache localCache = getCache();
+        Node node = localCache.getNode(regionName);
+        if(node == null)
+        {
+            Node rootNode = localCache.getRoot();
+            node = rootNode.addChild(regionName);
+        }
+
+        return node;
     }
 }
