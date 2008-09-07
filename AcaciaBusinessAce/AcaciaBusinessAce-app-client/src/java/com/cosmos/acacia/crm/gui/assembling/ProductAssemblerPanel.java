@@ -7,11 +7,14 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
-import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemaChoicePanel.Mode;
-import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.AcaciaTreeTable;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
 
 /**
  *
@@ -22,8 +25,10 @@ public class ProductAssemblerPanel
 {
 
     /** Creates new form ProductAssemblerPanel */
-    public ProductAssemblerPanel() {
+    public ProductAssemblerPanel()
+    {
         initComponents();
+        initData();
     }
 
     /** This method is called from within the constructor to
@@ -35,68 +40,170 @@ public class ProductAssemblerPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        schemaTitledPanel = new com.cosmos.swingb.JBTitledPanel();
+        buttonsPanel = new com.cosmos.swingb.JBPanel();
+        assembleButton = new com.cosmos.swingb.JBButton();
+        cancelButton = new com.cosmos.swingb.JBButton();
+        okButton = new com.cosmos.swingb.JBButton();
+        productTitledPanel = new com.cosmos.swingb.JBTitledPanel();
+
         setName("Form"); // NOI18N
+
+        schemaTitledPanel.setName("schemaTitledPanel"); // NOI18N
+
+        buttonsPanel.setName("buttonsPanel"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(ProductAssemblerPanel.class, this);
+        assembleButton.setAction(actionMap.get("assembleAction")); // NOI18N
+        assembleButton.setName("assembleButton"); // NOI18N
+
+        cancelButton.setAction(actionMap.get("cancelAction")); // NOI18N
+        cancelButton.setName("cancelButton"); // NOI18N
+
+        okButton.setAction(actionMap.get("okAction")); // NOI18N
+        okButton.setName("okButton"); // NOI18N
+
+        javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
+        buttonsPanel.setLayout(buttonsPanelLayout);
+        buttonsPanelLayout.setHorizontalGroup(
+            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(assembleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {assembleButton, cancelButton, okButton});
+
+        buttonsPanelLayout.setVerticalGroup(
+            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(assembleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {assembleButton, cancelButton, okButton});
+
+        productTitledPanel.setName("productTitledPanel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(buttonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(schemaTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+            .addComponent(productTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(schemaTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(productTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBButton assembleButton;
+    private com.cosmos.swingb.JBPanel buttonsPanel;
+    private com.cosmos.swingb.JBButton cancelButton;
+    private com.cosmos.swingb.JBButton okButton;
+    private com.cosmos.swingb.JBTitledPanel productTitledPanel;
+    private com.cosmos.swingb.JBTitledPanel schemaTitledPanel;
     // End of variables declaration//GEN-END:variables
 
+
+    private AcaciaTable parametersTable;
+    private AcaciaTreeTable productTreeTable;
 
     @Override
     protected void initData()
     {
+        okButton.setEnabled(false);
+        ResourceMap resource = getResourceMap();
+
+        String schemaName = "Test schema";
+
+        String strValue = resource.getString("schemaTitledPanel.title");
+        schemaTitledPanel.setTitle(strValue + schemaName);
+        parametersTable = new AcaciaTable();
+        JBScrollPane scrollPane = new JBScrollPane();
+        scrollPane.setViewportView(parametersTable);
+        schemaTitledPanel.setContentContainer(scrollPane);
+
+        strValue = resource.getString("productTitledPanel.title");
+        productTitledPanel.setTitle(strValue);
+        productTreeTable = new AcaciaTreeTable();
+        scrollPane = new JBScrollPane();
+        scrollPane.setViewportView(productTreeTable);
+        productTitledPanel.setContentContainer(scrollPane);
     }
 
     @Override
     public DialogResponse showDialog(Component parentComponent)
     {
-        //return super.showDialog(parentComponent);
-        return productAssemble(parentComponent, true);
+        DialogResponse response;
+        if(!DialogResponse.SELECT.equals((response = productAssemble(parentComponent))))
+        {
+            return response;
+        }
+
+        return super.showDialog(parentComponent);
     }
 
     @Override
     public void showFrame(Component parentComponent)
     {
-        //super.showFrame(parentComponent);
-        productAssemble(parentComponent, false);
+        if(!DialogResponse.SELECT.equals(productAssemble(parentComponent)))
+        {
+            return;
+        }
+
+        super.showFrame(parentComponent);
     }
 
-    private DialogResponse productAssemble(Component parentComponent, boolean dialog)
+    private DialogResponse productAssemble(Component parentComponent)
     {
-        AssemblingSchemaChoicePanel choicePanel = new AssemblingSchemaChoicePanel();
-        choicePanel.setMode(Mode.AssembleSchemaSelect);
-        AbstractTablePanel tablePanel = choicePanel.getTablePanel();
         AssemblingSchema assemblingSchema = (AssemblingSchema)getSelectedValue();
-        tablePanel.setSelectedRowObject(assemblingSchema);
-        DialogResponse response = tablePanel.showDialog(parentComponent);
+        AssemblingSchemasPanel asPanel = new AssemblingSchemasPanel(
+            AssemblingSchemasPanel.Mode.AssembleSchemaSelect, assemblingSchema);
+        DialogResponse response = asPanel.showDialog(parentComponent);
         if(!DialogResponse.SELECT.equals(response))
         {
+            close();
             return response;
         }
 
-        assemblingSchema = (AssemblingSchema)tablePanel.getSelectedRowObject();
-        AssemblingParametersPanel apPanel = new AssemblingParametersPanel(assemblingSchema);
-        if(dialog)
-        {
-            response = apPanel.showDialog(parentComponent);
-            setSelectedValue(apPanel.getSelectedValue());
-            return response;
-        }
+        assemblingSchema = (AssemblingSchema)asPanel.getSelectedRowObject();
+        setSelectedValue(assemblingSchema);
+        return response;
+    }
 
-        apPanel.showFrame(parentComponent);
-        return DialogResponse.CLOSE;
+    @Action
+    public void cancelAction()
+    {
+        close();
+    }
+
+    @Action
+    public void okAction()
+    {
+    }
+
+    @Action
+    public void assembleAction()
+    {
     }
 
 

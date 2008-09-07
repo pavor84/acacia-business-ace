@@ -348,9 +348,6 @@ public class AcaciaApplicationView extends FrameView {
     public void assemblingCategoriesAction()
     {
         AssemblingCategoryTreeTablePanel assemblingCategories = new AssemblingCategoryTreeTablePanel(null);
-        //AssemblingCategoriesTreePanel assemblingCategories = new AssemblingCategoriesTreePanel(null);
-        //assemblingCategories.getListPanel().setVisible(Button.Select, false);
-        //assemblingCategories.getListPanel().setVisible(Button.Unselect, false);
         assemblingCategories.showFrame();
     }
 
@@ -365,8 +362,6 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void productAssemblerAction()
     {
-        //AssemblingSchemaChoicePanel panel = new AssemblingSchemaChoicePanel();
-        //panel.showFrame();
         ProductAssemblerPanel panel = new ProductAssemblerPanel();
         panel.showFrame();
     }
