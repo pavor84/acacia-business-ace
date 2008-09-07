@@ -358,11 +358,7 @@ public class AcaciaApplicationView extends FrameView {
     public void assemblingSchemasAction()
     {
         log.debug("personsListAction");
-        //AssemblingSchemasListPanel assemblingSchemas = new AssemblingSchemasListPanel(null);
         AssemblingSchemasPanel assemblingSchemas = new AssemblingSchemasPanel();
-        assemblingSchemas.setMode(AssemblingSchemasPanel.Mode.AssemblingSchema);
-        //assemblingSchemas.setMode(AssemblingSchemasPanel.Mode.AssembleSchemaSelect);
-        //assemblingSchemas.setMode(AssemblingSchemasPanel.Mode.AssemblingSchemaSelect);
         assemblingSchemas.showFrame();
     }
 

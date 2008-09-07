@@ -139,14 +139,15 @@ public class VirtualProductSelectionPanel
     @Action
     public void schemaSelectionAction()
     {
-        AssemblingSchemasListPanel asListPanel = new AssemblingSchemasListPanel(null, true);
-        asListPanel.setVisibleSelectButtons(true);
-        
-        DialogResponse response = asListPanel.showDialog(this);
+        AssemblingSchemasPanel asPanel = new AssemblingSchemasPanel(
+            AssemblingSchemasPanel.Mode.AssemblingSchemaSelect,
+            null);
+
+        DialogResponse response = asPanel.showDialog(this);
         setDialogResponse(response);
         if(DialogResponse.SELECT.equals(response))
         {
-            AssemblingSchema assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
+            AssemblingSchema assemblingSchema = (AssemblingSchema)asPanel.getSelectedRowObject();
             setSelectedValue(assemblingSchema);
         }
 
