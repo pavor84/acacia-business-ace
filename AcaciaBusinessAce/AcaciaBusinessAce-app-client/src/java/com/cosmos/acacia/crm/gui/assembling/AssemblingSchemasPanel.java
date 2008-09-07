@@ -92,11 +92,19 @@ public class AssemblingSchemasPanel
 
 
     /** Creates new form AssemblingSchemasPanel */
-    public AssemblingSchemasPanel() {
+    public AssemblingSchemasPanel(Mode mode, AssemblingSchema assemblingSchema)
+    {
         initComponents();
         initData();
+        setMode(mode);
+        if(assemblingSchema != null)
+            setSelectedRowObject(assemblingSchema);
     }
 
+    public AssemblingSchemasPanel()
+    {
+        this(Mode.AssemblingSchema, null);
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -140,6 +148,7 @@ public class AssemblingSchemasPanel
     protected void initData()
     {
         setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(800, 600));
     }
 
     public Mode getMode()
@@ -265,7 +274,8 @@ public class AssemblingSchemasPanel
         itemValuesSplitPane.setOrientation(JBSplitPane.VERTICAL_SPLIT);
         itemValuesSplitPane.setTopComponent(schemaItemsTitledPanel);
         itemValuesSplitPane.setBottomComponent(itemValuesTitledPanel);
-        itemValuesSplitPane.setDividerLocation(0.5);
+        itemValuesSplitPane.setDividerLocation(225);
+        itemValuesSplitPane.setResizeWeight(0.5);
         itemValuesTabPanel.add(itemValuesSplitPane, BorderLayout.CENTER);
 
         add(tabbedPane, BorderLayout.CENTER);
@@ -418,18 +428,23 @@ public class AssemblingSchemasPanel
         {
             AbstractTablePanel asTablePanel = getSchemasTablePanel();
             AssemblingSchema as = (AssemblingSchema)asTablePanel.getDataTable().getSelectedRowObject();
-            if(as != null)
-            {
-                getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, true);
-                tabbedPane.setEnabledAt(1, true);
-            }
-            else
-            {
-                getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, false);
-                tabbedPane.setEnabledAt(1, false);
-            }
             setAssemblingSchema(as);
-            getSchemaItemsTablePanel().refreshDataTable();
+
+            if(!Mode.AssembleSchemaSelect.equals(getMode()))
+            {
+                if(as != null)
+                {
+                    getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, true);
+                    tabbedPane.setEnabledAt(1, true);
+                }
+                else
+                {
+                    getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, false);
+                    tabbedPane.setEnabledAt(1, false);
+                }
+            
+                getSchemaItemsTablePanel().refreshDataTable();
+            }
         }
 
         @Override
@@ -472,10 +487,7 @@ public class AssemblingSchemasPanel
     {
         private BindingGroup categoryBindingGroup;
         private BindingGroup bindingGroup;
-
         private EntityProperties entityProps;
-
-        private AssemblingCategory category;
         private AssemblingSchema categorySchema;
 
 
@@ -499,8 +511,8 @@ public class AssemblingSchemasPanel
             if(categorySchema == null)
                 categorySchema = getFormSession().newAssemblingSchema();
             PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
-            //AssemblingCategoriesTreePanel listPanel = new AssemblingCategoriesTreePanel();
-            AssemblingCategoryTreeTablePanel listPanel = new AssemblingCategoryTreeTablePanel(category);
+            AssemblingCategoryTreeTablePanel listPanel =
+                new AssemblingCategoryTreeTablePanel(getCategory());
             categoryComboList.bind(
                 categoryBindingGroup,
                 listPanel,
@@ -513,7 +525,11 @@ public class AssemblingSchemasPanel
 
             addTablePanelListener(new AssemblingSchemasTableListener());
             refreshDataTable(entityProps);
-            setPreferredSize(new Dimension(640, 480));
+        }
+
+        public AssemblingCategory getCategory()
+        {
+            return (AssemblingCategory)categoryComboList.getSelectedItem();
         }
 
         @SuppressWarnings("unchecked")
@@ -533,7 +549,7 @@ public class AssemblingSchemasPanel
 
         private List getList()
         {
-            return getFormSession().getAssemblingSchemas(category);
+            return getFormSession().getAssemblingSchemas(getCategory());
         }
 
         @Override
@@ -562,7 +578,7 @@ public class AssemblingSchemasPanel
         protected Object newRow()
         {
             AssemblingSchema as = getFormSession().newAssemblingSchema();
-            as.setAssemblingCategory(category);
+            as.setAssemblingCategory(getCategory());
             return onEditEntity(as);
         }
 
@@ -581,7 +597,7 @@ public class AssemblingSchemasPanel
         @Override
         public boolean canCreate()
         {
-            return categoryComboList.getSelectedItem() != null;
+            return getCategory() != null;
         }
 
         @Override

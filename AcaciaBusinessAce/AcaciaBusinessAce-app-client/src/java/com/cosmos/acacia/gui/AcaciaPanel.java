@@ -27,7 +27,6 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.security.PermissionsManager;

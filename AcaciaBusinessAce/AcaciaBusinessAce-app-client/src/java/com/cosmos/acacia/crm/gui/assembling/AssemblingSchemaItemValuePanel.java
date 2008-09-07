@@ -309,12 +309,13 @@ public class AssemblingSchemaItemValuePanel
         else if(virtualProduct instanceof AssemblingSchema)
         {
             AssemblingSchema assemblingSchema = (AssemblingSchema)virtualProduct;
-            AssemblingSchemasListPanel asListPanel = new AssemblingSchemasListPanel(assemblingSchema.getParentId(), true);
-            asListPanel.setSelectedRowObject(assemblingSchema);
-            DialogResponse response = asListPanel.showDialog(this);
+            AssemblingSchemasPanel asPanel = new AssemblingSchemasPanel(
+                AssemblingSchemasPanel.Mode.AssemblingSchemaSelect,
+                assemblingSchema);
+            DialogResponse response = asPanel.showDialog(this);
             if(DialogResponse.SELECT.equals(response))
             {
-                virtualProduct = assemblingSchema = (AssemblingSchema)asListPanel.getSelectedRowObject();
+                virtualProduct = assemblingSchema = (AssemblingSchema)asPanel.getSelectedRowObject();
                 entity.setVirtualProduct(assemblingSchema);
                 productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
