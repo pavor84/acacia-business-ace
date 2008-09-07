@@ -30,6 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
@@ -40,6 +41,8 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 public class AssemblingBean
     implements AssemblingRemote, AssemblingLocal
 {
+    Logger logger = Logger.getLogger(AssemblingBean.class);
+
     @PersistenceContext
     private EntityManager em;
 
@@ -232,13 +235,11 @@ public class AssemblingBean
     @Override
     public AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity)
     {
-        System.out.println("saveSchemaItem: " + entity.toString(true));
-        System.out.flush();
+        logger.debug("saveSchemaItem: " + entity.toString(true));
         //assemblingCategoryValidator.validate(entity); 
 
         esm.persist(em, entity);
-        System.out.println("New entity: " + entity.toString(true));
-        System.out.flush();
+        logger.debug("saveSchemaItem: " + entity.toString(true));
         return entity; 
     }
 
