@@ -101,9 +101,14 @@ public class AssemblingSchemasPanel
             setSelectedRowObject(assemblingSchema);
     }
 
-    public AssemblingSchemasPanel()
+    public AssemblingSchemasPanel(Mode mode)
     {
         this(Mode.AssemblingSchema, null);
+    }
+
+    public AssemblingSchemasPanel()
+    {
+        this(Mode.AssemblingSchema);
     }
     /** This method is called from within the constructor to
      * initialize the form.
