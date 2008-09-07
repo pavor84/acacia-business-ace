@@ -8,7 +8,6 @@ package com.cosmos.acacia.crm.bl.assembling;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -233,9 +232,13 @@ public class AssemblingBean
     @Override
     public AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity)
     {
+        System.out.println("saveSchemaItem: " + entity.toString(true));
+        System.out.flush();
         //assemblingCategoryValidator.validate(entity); 
 
         esm.persist(em, entity);
+        System.out.println("New entity: " + entity.toString(true));
+        System.out.flush();
         return entity; 
     }
 
