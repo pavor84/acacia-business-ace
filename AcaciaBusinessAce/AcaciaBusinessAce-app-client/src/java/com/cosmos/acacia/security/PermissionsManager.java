@@ -44,7 +44,7 @@ public class PermissionsManager {
             Method method,
             Object[] args)
     {
-//        if (true) return true;
+        if (true) return true;
 
         if (method.isAnnotationPresent(Create.class)) {
             DataObject tmpDataObject = new DataObject();
@@ -91,7 +91,7 @@ public class PermissionsManager {
     @SuppressWarnings("unchecked")
     public boolean isAllowedPostCall(Object result)
     {
-//        if (true) return true;
+        if (true) return true;
 
         if (result instanceof DataObjectBean) {
              return manager.isAllowed(
@@ -112,7 +112,7 @@ public class PermissionsManager {
     @SuppressWarnings("unchecked")
     public Object filterResult(Object result) {
 
-//        if (true) return result;
+        if (true) return result;
 
         if (result instanceof Collection) {
             Collection tmpCollection = (Collection) result;
