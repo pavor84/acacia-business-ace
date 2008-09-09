@@ -13,6 +13,29 @@ import com.cosmos.acacia.crm.enums.UserRightType;
 @Remote
 public interface RightsManagerRemote {
 
+
+    /**
+     * Checks whether the current user has permission on the specified object
+     *
+     * @param dataObject
+     * @param rightType
+     * @return true if the user is allowed, false otherwise
+     */
+    boolean isAllowed(DataObject dataObject, UserRightType rightType);
+
+    /**
+     * Checks whether the current user has the specified special permission.
+     * dataObject may be null, if the permission does not concern
+     * any data object
+     *
+     * @param dataObject
+     * @param specialPermission
+     * @return
+     */
+    boolean isAllowed(DataObject dataObject,
+            SpecialPermission specialPermission);
+
+
     /**
      * Checks whether the user has permission on the specified object
      *

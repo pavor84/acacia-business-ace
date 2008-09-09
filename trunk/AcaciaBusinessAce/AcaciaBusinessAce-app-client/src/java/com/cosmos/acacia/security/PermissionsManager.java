@@ -1,6 +1,7 @@
 package com.cosmos.acacia.security;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,24 +16,19 @@ import com.cosmos.acacia.crm.bl.users.annotations.Read;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.enums.UserRightType;
-import java.util.ArrayList;
 
 public class PermissionsManager {
 
     private RightsManagerRemote manager;
-    private User user;
     private List<DataObjectType> dataObjectTypes;
 
-    public PermissionsManager(User user, List<DataObjectType> dataObjectTypes) {
+    public PermissionsManager(List<DataObjectType> dataObjectTypes) {
         try {
             manager = InitialContext.doLookup(RightsManagerRemote.class.getName());
         } catch (NamingException ex) {
             //
         }
-
-        this.user = user;
         this.dataObjectTypes = dataObjectTypes;
     }
 
@@ -48,18 +44,18 @@ public class PermissionsManager {
             Method method,
             Object[] args)
     {
-        if (true) return true;
-        
+//        if (true) return true;
+
         if (method.isAnnotationPresent(Create.class)) {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
-                return manager.isAllowed(user, tmpDataObject, UserRightType.CREATE);
+                return manager.isAllowed(tmpDataObject, UserRightType.CREATE);
         }
 
         if (method.isAnnotationPresent(Modify.class)) {
             if (args[0] instanceof DataObjectBean) {
-                return manager.isAllowed(user,
+                return manager.isAllowed(
                     ((DataObjectBean) args[0]).getDataObject(),
                     UserRightType.MODIFY);
             }
@@ -67,7 +63,7 @@ public class PermissionsManager {
 
         if (method.isAnnotationPresent(Delete.class)) {
             if (args[0] instanceof DataObjectBean) {
-                return manager.isAllowed(user,
+                return manager.isAllowed(
                     ((DataObjectBean) args[0]).getDataObject(),
                     UserRightType.DELETE);
             }
@@ -77,7 +73,7 @@ public class PermissionsManager {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
-                return manager.isAllowed(user, tmpDataObject, UserRightType.READ);
+                return manager.isAllowed(tmpDataObject, UserRightType.READ);
         }
 
         return true;
@@ -95,10 +91,10 @@ public class PermissionsManager {
     @SuppressWarnings("unchecked")
     public boolean isAllowedPostCall(Object result)
     {
-        if (true) return true;
-        
+//        if (true) return true;
+
         if (result instanceof DataObjectBean) {
-             return manager.isAllowed(user,
+             return manager.isAllowed(
                      ((DataObjectBean) result).getDataObject(),
                      UserRightType.READ);
         }
@@ -116,7 +112,7 @@ public class PermissionsManager {
     @SuppressWarnings("unchecked")
     public Object filterResult(Object result) {
 
-        if (true) return result;
+//        if (true) return result;
 
         if (result instanceof Collection) {
             Collection tmpCollection = (Collection) result;
@@ -124,7 +120,7 @@ public class PermissionsManager {
 
             for (Object obj : iterable) {
                 if (obj instanceof DataObjectBean) {
-                    if (!manager.isAllowed(user,
+                    if (!manager.isAllowed(
                             ((DataObjectBean) obj).getDataObject(),
                             UserRightType.READ)) {
 
