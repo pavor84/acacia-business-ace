@@ -435,7 +435,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         descriptionTextPane.bind(organizationBindingGroup, organization, "description");
 
         // Using an AbstractTablePanel implementation
-        branchesTable = new AddressListPanel(organization.getId());
+        branchesTable = new AddressListPanel(organization != null ? organization.getId() : null);
         //branchesTable.setVisibleButtons(14); //Only New, Modify and Delete
         branchesTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 

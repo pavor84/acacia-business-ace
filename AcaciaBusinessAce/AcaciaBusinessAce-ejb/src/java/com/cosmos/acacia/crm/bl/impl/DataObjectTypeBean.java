@@ -138,7 +138,9 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
         name = name.replaceAll(DataObjectType.class.getPackage().getName() + "\\.", "");
         
         try {
-            Query q = em.createQuery("select o from " + name + " o where o.dataObject.parentDataObjectId = :parentDataObjectId");
+            Query q = em.createQuery("select o from " + name + " o" +
+                    " where o.dataObject.parentDataObjectId = :parentDataObjectId" +
+                    " or o.dataObject.dataObjectId = :parentDataObjectId");
             q.setParameter("parentDataObjectId", session.getOrganization().getId());
             return new ArrayList<DataObjectBean>(q.getResultList());
         } catch (Exception ex) {

@@ -44,6 +44,23 @@ public class RightsManagerBean
     private Set<UserRight> generalRights;
     private Set<UserRight> specialRights;
 
+
+    @Override
+    public boolean isAllowed(DataObject dataObject,
+            UserRightType rightType) {
+
+        return isAllowed(session.getUser(), dataObject, rightType);
+
+    }
+
+    @Override
+    public boolean isAllowed(DataObject dataObject,
+            SpecialPermission specialPermission) {
+
+        return isAllowed(session.getUser(), dataObject, specialPermission);
+
+    }
+
     @Override
     public boolean isAllowed(User user,
             DataObject dataObject,

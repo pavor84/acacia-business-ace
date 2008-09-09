@@ -48,12 +48,12 @@ public abstract class AcaciaPanel
 
     private static AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
     private static PermissionsManager permissionsManager;
-    
+
     {
         if (permissionsManager == null)
             try {
-                permissionsManager = new PermissionsManager(
-                    acaciaSession.getUser(), acaciaSession.getDataObjectTypes());
+                permissionsManager =
+                    new PermissionsManager(acaciaSession.getDataObjectTypes());
             } catch (Exception ex) {
                 //
             }
