@@ -6,13 +6,17 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaTreeTable;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -24,6 +28,9 @@ import org.jdesktop.application.ResourceMap;
 public class ProductAssemblerPanel
     extends AcaciaPanel
 {
+    @EJB
+    private static AssemblingRemote formSession;
+
 
     /** Creates new form ProductAssemblerPanel */
     public ProductAssemblerPanel()
@@ -128,16 +135,16 @@ public class ProductAssemblerPanel
     private AcaciaTable parametersTable;
     private AcaciaTreeTable productTreeTable;
 
+    private AssemblingSchema assemblingSchema;
+    private List<AssemblingSchemaItem> schemaItems;
+
     @Override
     protected void initData()
     {
         okButton.setEnabled(false);
         ResourceMap resource = getResourceMap();
 
-        String schemaName = "Test schema";
-
-        String strValue = resource.getString("schemaTitledPanel.title");
-        schemaTitledPanel.setTitle(strValue + schemaName);
+        String strValue;
         parametersTable = new AcaciaTable();
         parametersTable.setModel(new SchemaTableModel());
         JBScrollPane scrollPane = new JBScrollPane();
@@ -150,26 +157,33 @@ public class ProductAssemblerPanel
         scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productTreeTable);
         productTitledPanel.setContentContainer(scrollPane);
+
+        parametersTable.setEditable(true);
     }
 
-    /*protected void initSchemaTable()
+    private void initParameters()
     {
-        DefaultTableModel model = (DefaultTableModel) parametersTable.getModel();
+        ResourceMap resource = getResourceMap();
+        AssemblingSchema schema = getAssemblingSchema();
 
-        for (AssemblingSchemaItem item : items) {
-            Object[] data = new Object[2];
-            data[0] = item.getMessageCode() + ": " + item.getMessageText();
-            data[1] = item.getDefaultValue();
-            model.addRow(data);
+        DefaultTableModel model = (DefaultTableModel)parametersTable.getModel();
+        for(AssemblingSchemaItem item : getSchemaItems())
+        {
+            String message = item.getMessageCode() + ": " + item.getMessageText();
+            Object value = item.getDefaultValue();
+            model.addRow(new Object[] {message, value});
         }
-        parametersTable.setEditable(true);
-    }*/
+
+        String schemaName = schema.getSchemaCode() + " - " + schema.getSchemaName();
+        String strValue = resource.getString("schemaTitledPanel.title");
+        schemaTitledPanel.setTitle(strValue + schemaName);
+    }
 
     @Override
     public DialogResponse showDialog(Component parentComponent)
     {
         DialogResponse response;
-        if(!DialogResponse.SELECT.equals((response = productAssemble(parentComponent))))
+        if(!DialogResponse.SELECT.equals((response = selectAssemblingSchema(parentComponent))))
         {
             return response;
         }
@@ -180,7 +194,7 @@ public class ProductAssemblerPanel
     @Override
     public void showFrame(Component parentComponent)
     {
-        if(!DialogResponse.SELECT.equals(productAssemble(parentComponent)))
+        if(!DialogResponse.SELECT.equals(selectAssemblingSchema(parentComponent)))
         {
             return;
         }
@@ -188,11 +202,17 @@ public class ProductAssemblerPanel
         super.showFrame(parentComponent);
     }
 
-    private DialogResponse productAssemble(Component parentComponent)
+    private DialogResponse selectAssemblingSchema(Component parentComponent)
     {
-        AssemblingSchema assemblingSchema = (AssemblingSchema)getSelectedValue();
+        AssemblingSchema schema = getAssemblingSchema();
+        if(schema != null)
+        {
+            initParameters();
+            return DialogResponse.SELECT;
+        }
+
         AssemblingSchemasPanel asPanel = new AssemblingSchemasPanel(
-            AssemblingSchemasPanel.Mode.AssembleSchemaSelect, assemblingSchema);
+            AssemblingSchemasPanel.Mode.AssembleSchemaSelect);
         DialogResponse response = asPanel.showDialog(parentComponent);
         if(!DialogResponse.SELECT.equals(response))
         {
@@ -200,8 +220,9 @@ public class ProductAssemblerPanel
             return response;
         }
 
-        assemblingSchema = (AssemblingSchema)asPanel.getSelectedRowObject();
-        setSelectedValue(assemblingSchema);
+        schema = (AssemblingSchema)asPanel.getSelectedRowObject();
+        setAssemblingSchema(schema);
+        initParameters();
         return response;
     }
 
@@ -219,6 +240,36 @@ public class ProductAssemblerPanel
     @Action
     public void assembleAction()
     {
+    }
+
+    public AssemblingSchema getAssemblingSchema()
+    {
+        return assemblingSchema;
+    }
+
+    public void setAssemblingSchema(AssemblingSchema assemblingSchema)
+    {
+        this.assemblingSchema = assemblingSchema;
+    }
+
+    public List<AssemblingSchemaItem> getSchemaItems()
+    {
+        if(schemaItems == null)
+        {
+            schemaItems = getFormSession().getAssemblingSchemaItems(getAssemblingSchema());
+        }
+
+        return schemaItems;
+    }
+
+    protected AssemblingRemote getFormSession()
+    {
+        if(formSession == null)
+        {
+            formSession = getRemoteBean(this, AssemblingRemote.class);
+        }
+
+        return formSession;
     }
 
 

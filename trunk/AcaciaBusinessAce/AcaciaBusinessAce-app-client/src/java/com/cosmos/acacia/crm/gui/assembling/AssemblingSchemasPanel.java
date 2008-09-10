@@ -103,7 +103,7 @@ public class AssemblingSchemasPanel
 
     public AssemblingSchemasPanel(Mode mode)
     {
-        this(Mode.AssemblingSchema, null);
+        this(mode, null);
     }
 
     public AssemblingSchemasPanel()
