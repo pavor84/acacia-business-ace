@@ -43,4 +43,7 @@ public interface DeliveryCertificatesRemote {
 
     void mapDeliveryCertificateToInvoice(BigInteger deliveryCertificateId, BigInteger documentId);
     
+    DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate);
+
+    int deleteDeliveryCertificate(DeliveryCertificate deliveryCertificate);
 }

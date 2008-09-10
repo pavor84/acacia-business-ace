@@ -190,7 +190,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
 
     public DeliveryCertificate newDeliveryCertificate(Object parent) {
         DeliveryCertificate ds = new DeliveryCertificate();
-        
+        /*
         if(session.getOrganization() != null){
             String userOrganizationName = session.getOrganization().getOrganizationName();
             System.out.println("Organization name: " + userOrganizationName);
@@ -206,8 +206,54 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         }else{
             System.out.println("User is NULL");
         }
-        
+        */
         ds.setDeliveryCertificateMethodType(DeliveryCertificateMethodType.InPlace.getDbResource());
+        
+        //temp
+        Query q2 = em.createNamedQuery("Organization.findByName");
+        q2.setParameter("organizationName", "Opel");
+        List<Organization> organizations = q2.getResultList();
+
+        BusinessPartner recipient = organizations.get(0);
+        if(recipient != null){
+            ds.setRecipientName(((Organization)recipient).getOrganizationName());
+            ds.setRecipient(recipient);
+        }
+        
+        List branches = addressesBean.getAddresses(new BigInteger("1216474970646"));
+        ds.setRecipientBranch((Address)branches.get(1));
+        Query q0 = em.createNamedQuery("Person.findByName");
+        q0.setParameter("firstName", "Charko");
+        Person recipientBranchContactPerson = (Person)q0.getResultList().get(0);
+        ds.setRecipientContact(recipientBranchContactPerson);
+        ds.setRecipientContactName(recipientBranchContactPerson.getLastName());
+        
+        try{
+            if(session != null && session.getPerson() != null){
+                String userDisplayName = session.getPerson().getDisplayName();
+                System.out.println("User display name: " + userDisplayName);
+                ds.setCreator(session.getPerson());
+                ds.setCreatorName(userDisplayName);
+            }else{
+                System.out.println("User is NULL");
+            }
+        }catch(Exception e){
+            Query q = em.createNamedQuery("Person.findByName");
+            q.setParameter("firstName", "Smarty");
+            Person creator = (Person)q.getResultList().get(0);
+            ds.setCreator(creator);
+            ds.setCreatorName(creator.getLastName());
+        }
+        Query q1 = em.createNamedQuery("Warehouse.findById");
+        q1.setParameter("id", new BigInteger("1213952129954"));
+        Warehouse warehouse = (Warehouse)q1.getResultList().get(0);
+        System.out.println("Warehouse: " + warehouse.getDescription());
+        ds.setWarehouse(warehouse);
+        ds.setWarehouseName(warehouse.getDescription());
+        
+        //ds.setDeliveryCertificateNumber(367856901);
+        //ds.setDeliveryCertificateDate(new Date());
+        //ds.setCreationTime(new Date());
         
         return ds;
     }
@@ -245,6 +291,20 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         DeliveryCertificateAssignmentPK pk = new DeliveryCertificateAssignmentPK(deliveryCertificateId, documentId);
         assignment.setDeliveryCertificateAssignmentPK(pk);
         esm.persist(em, assignment);
+    }
+
+    public DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate) {
+        deliveryCertificate.setDeliveryCertificateDate(new Date());
+        if(deliveryCertificate.getCreationTime() == null){
+            deliveryCertificate.setCreationTime(new Date());
+        }
+        esm.persist(em, deliveryCertificate);
+        return deliveryCertificate; 
+    }
+
+    @Override
+    public int deleteDeliveryCertificate(DeliveryCertificate deliveryCertificate) {
+        return esm.remove(em, deliveryCertificate);
     }
     
     
