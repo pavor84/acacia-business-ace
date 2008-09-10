@@ -28,7 +28,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="recipientPanel" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="entityFormButtonPanel1" alignment="0" pref="675" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel1" alignment="0" pref="844" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -87,8 +87,8 @@
                   </Group>
                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="documentComboBox" pref="228" max="32767" attributes="0"/>
-                      <Component id="creationDatePicker" alignment="1" pref="228" max="32767" attributes="0"/>
+                      <Component id="documentComboBox" pref="397" max="32767" attributes="0"/>
+                      <Component id="creationDatePicker" alignment="1" pref="397" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -312,11 +312,13 @@
                       <Component id="clientBranchLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="clientContactPersonLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="46" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="recipientContactPersonComboBox" max="32767" attributes="1"/>
-                      <Component id="clientBranchTextField" alignment="0" max="32767" attributes="1"/>
-                      <Component id="recipientNameTextField" alignment="1" pref="189" max="32767" attributes="1"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="recipientBranchTextField" alignment="0" max="32767" attributes="1"/>
+                          <Component id="recipientNameTextField" alignment="1" pref="189" max="32767" attributes="1"/>
+                      </Group>
+                      <Component id="recipientContactPersonAcaciaLookup" min="-2" pref="364" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -332,14 +334,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="clientBranchLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="clientBranchTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientBranchTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="clientContactPersonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="recipientContactPersonComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="clientContactPersonLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="recipientContactPersonAcaciaLookup" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <EmptySpace pref="21" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -363,10 +365,10 @@
             <Property name="name" type="java.lang.String" value="clientBranchLabel" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="clientBranchTextField">
+        <Component class="com.cosmos.swingb.JBTextField" name="recipientBranchTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="clientBranchTextField.text"/>
-            <Property name="name" type="java.lang.String" value="clientBranchTextField" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="recipientBranchTextField.text"/>
+            <Property name="name" type="java.lang.String" value="recipientBranchTextField" noResource="true"/>
           </Properties>
         </Component>
         <Component class="com.cosmos.swingb.JBLabel" name="clientContactPersonLabel">
@@ -375,17 +377,9 @@
             <Property name="name" type="java.lang.String" value="clientContactPersonLabel" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="recipientContactPersonComboBox">
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="recipientContactPersonAcaciaLookup">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
-            </Property>
-            <Property name="name" type="java.lang.String" value="recipientContactPersonComboBox" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="recipientContactPersonAcaciaLookup" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -433,7 +427,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="145" max="32767" attributes="0"/>
+                  <EmptySpace pref="314" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

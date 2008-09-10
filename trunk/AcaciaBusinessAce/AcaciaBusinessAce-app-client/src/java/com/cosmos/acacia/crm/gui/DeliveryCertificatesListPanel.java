@@ -78,7 +78,13 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     
     @Override
     protected boolean deleteRow(Object rowObject) {
-        return true;
+        if(rowObject != null)
+        {
+            DeliveryCertificate deliveryCertificate = (DeliveryCertificate) rowObject;
+            getFormSession().deleteDeliveryCertificate(deliveryCertificate);
+            return true;
+        }
+        return false;
     }
 
     @Override
