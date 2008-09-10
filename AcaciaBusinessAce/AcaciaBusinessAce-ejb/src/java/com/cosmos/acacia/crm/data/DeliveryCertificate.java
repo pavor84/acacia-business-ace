@@ -23,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -82,11 +83,12 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     
     @JoinColumn(name = "recipient_branch_id")
     @ManyToOne
-    @Property(title="Recipient Branch")
+    @Property(title="Recipient Branch", customDisplay="${recipientBranch.addressName}")
     private Address recipientBranch;
-
+    
     @JoinColumn(name = "recipient_contact_id")
     @ManyToOne
+    @Property(title="Recipient Contact")
     private Person recipientContact;
 
     @Column(name = "recipient_contact_name")
@@ -108,6 +110,18 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Property(title="Assignment", visible=false)
     private List<DeliveryCertificateAssignment> assignments;
 
+    @Transient
+    @Property(title="Current Assignment", visible=false)
+    private String currentDocumentId;
+
+    public String getCurrentDocumentId() {
+        return currentDocumentId;
+    }
+
+    public void setCurrentDocumentId(String currentDocumentId) {
+        this.currentDocumentId = currentDocumentId;
+    }
+    
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
     @Property(title="Creation Time")
@@ -128,7 +142,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     
     @JoinColumn(name = "forwarder_branch_id")
     @ManyToOne
-    @Property(title="Forwarder Branch", visible=false)
+    @Property(title="Forwarder Branch")
     private Address forwarderBranch;
 
     @JoinColumn(name = "forwarder_contact_id")
@@ -222,7 +236,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     public String getRecipientContactName() {
         return recipientContactName;
     }
-
+    
     public void setRecipientContactName(String recipientContactName) {
         this.recipientContactName = recipientContactName;
     }
