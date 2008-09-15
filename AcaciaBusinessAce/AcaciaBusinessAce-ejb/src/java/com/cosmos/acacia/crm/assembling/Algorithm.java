@@ -162,13 +162,16 @@ public class Algorithm
     private int maxSelections = Integer.MAX_VALUE;
 
     private AssemblingSchemaItem assemblingSchemaItem;
+    private ProductAssemblerService productAssemblerService;
 
     private CallbackHandler callbackHandler;
 
 
-    public Algorithm(AssemblingSchemaItem assemblingSchemaItem)
+    public Algorithm(AssemblingSchemaItem assemblingSchemaItem,
+        ProductAssemblerService productAssemblerService)
     {
         this.assemblingSchemaItem = assemblingSchemaItem;
+        this.productAssemblerService = productAssemblerService;
         DbResource assemblingAlgorithm = assemblingSchemaItem.getAssemblingAlgorithm();
         this.type = (Type)assemblingAlgorithm.getEnumValue();
         Integer intValue = assemblingSchemaItem.getMinSelections();
@@ -209,7 +212,9 @@ public class Algorithm
     public List<AssemblingSchemaItemValue> apply(Object valueAgainstConstraints)
         throws AlgorithmException
     {
-        return apply(getAssemblingSchemaItemValue(), valueAgainstConstraints);
+        return apply(
+            getAssemblingSchemaItemValues(),
+            valueAgainstConstraints);
     }
 
     protected List<AssemblingSchemaItemValue> apply(
@@ -349,12 +354,6 @@ public class Algorithm
         return selectedRows;
     }
 
-    protected List<AssemblingSchemaItemValue> getAssemblingSchemaItemValue()
-    {
-        //return assemblingSchemaItem.getItemValues();
-        throw new UnsupportedOperationException("Not implemejted yet");
-    }
-
     protected List<AssemblingSchemaItemValue> getResultList(List<ConstraintRow> constraintRows) {
         if(resultList == null)
         {
@@ -386,6 +385,11 @@ public class Algorithm
     {
         for(ConstraintRow constraintRow : constraintRows)
             addConstraintRow(constraintRow);
+    }
+
+    protected List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues()
+    {
+        return productAssemblerService.getAssemblingSchemaItemValues(assemblingSchemaItem);
     }
 }
 
