@@ -6,16 +6,22 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.assembling.AlgorithmException;
+import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaTreeTable;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Action;
@@ -240,6 +246,31 @@ public class ProductAssemblerPanel
     @Action
     public void assembleAction()
     {
+        productAssemble();
+    }
+
+    private void productAssemble()
+    {
+        Map<AssemblingSchemaItem, Object> params =
+            new HashMap<AssemblingSchemaItem, Object>();
+
+        ProductAssembler assembler =
+            new ProductAssembler(getAssemblingSchema(),
+            getFormSession(),
+            new AssemblerCallbackHandler());
+
+        try
+        {
+            ComplexProduct product = assembler.assemble(params);
+            log.info("Product: " + product);
+        }
+        catch(AlgorithmException ex)
+        {
+            log.info("EXC: " + ex.getMessage());
+            ValidationException vex = new ValidationException();
+            vex.addMessage(ex.getMessage());
+            throw vex;
+        }
     }
 
     public AssemblingSchema getAssemblingSchema()
