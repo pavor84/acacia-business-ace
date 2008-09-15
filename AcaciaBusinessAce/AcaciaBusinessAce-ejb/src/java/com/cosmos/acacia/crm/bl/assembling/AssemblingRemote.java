@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.assembling;
 
-import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.assembling.ProductAssemblerService;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -25,6 +25,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface AssemblingRemote
+    extends ProductAssemblerService
 {
     //List<AssemblingCategory> getAssemblingCategories(DataObject parent);
     List<AssemblingCategory> getAssemblingCategories(AssemblingCategory parent, Boolean allHeirs);
@@ -49,8 +50,6 @@ public interface AssemblingRemote
 
     List<AssemblingSchema> getAssemblingSchemas(Organization organization);
     List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory);
-    List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema);
-    List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem);
     List<VirtualProduct> getVirtualProducts(Organization organization);
 
     EntityProperties getAssemblingSchemaEntityProperties();
