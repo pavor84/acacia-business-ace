@@ -62,7 +62,7 @@ public class ProductAssembler
         product.setProductCode(assemblingSchema.getSchemaCode());
         product.setAppliedSchema(assemblingSchema);
         BigDecimal productPrice = BigDecimal.ZERO;
-        List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(asiList.size());
+        //List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(asiList.size());
         for(AssemblingSchemaItem asi : asiList)
         {
             List<ComplexProductItem> cpiList = assemble(asi, product, parameters);
@@ -72,7 +72,8 @@ public class ProductAssembler
             for(ComplexProductItem cpi : cpiList)
             {
                 cpi.setOrderPosition(++itemCounter);
-                productItems.add(cpi);
+                //productItems.add(cpi);
+                product.addComplexProductItem(cpi);
                 productPrice = productPrice.add(cpi.getItemPrice());
             }
         }
