@@ -12,6 +12,8 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -19,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -53,6 +56,9 @@ public class ComplexProduct
     @JoinColumn(name = "applied_schema_id", referencedColumnName = "product_id")
     @ManyToOne
     private AssemblingSchema appliedSchema;
+
+    @Transient
+    private List<ComplexProductItem> complexProductItems;
 
 
     public ComplexProduct()
@@ -123,4 +129,16 @@ public class ComplexProduct
         return getProductName();
     }
 
+    public List<ComplexProductItem> getComplexProductItems()
+    {
+        return complexProductItems;
+    }
+
+    public boolean addComplexProductItem(ComplexProductItem complexProductItem)
+    {
+        if(complexProductItems == null)
+            complexProductItems = new ArrayList<ComplexProductItem>();
+
+        return complexProductItems.add(complexProductItem);
+    }
 }
