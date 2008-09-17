@@ -141,4 +141,17 @@ public class ComplexProduct
 
         return complexProductItems.add(complexProductItem);
     }
+
+    public String toString(boolean debug)
+    {
+        if(!debug)
+            return toString();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(toString());
+        if(complexProductItems != null && complexProductItems.size() > 0)
+            sb.append("; items: ").append(complexProductItems.toString());
+
+        return sb.toString();
+    }
 }
