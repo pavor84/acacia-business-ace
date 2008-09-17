@@ -8,6 +8,8 @@ package com.cosmos.acacia.crm.bl.assembling;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -250,6 +252,24 @@ public class AssemblingBean
 
         esm.persist(em, entity);
         return entity; 
+    }
+
+    @Override
+    public ComplexProduct saveComplexProduct(ComplexProduct complexProduct)
+    {
+        logger.debug("saveComplexProduct: " + complexProduct.toString(true));
+
+        esm.persist(em, complexProduct);
+        List<ComplexProductItem> items = complexProduct.getComplexProductItems();
+        if(items != null && items.size() > 0)
+        {
+            for(ComplexProductItem item : items)
+            {
+                esm.persist(em, item);
+            }
+        }
+
+        return complexProduct;
     }
 
     @Override

@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.crm.assembling.ProductAssemblerService;
+import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -43,6 +44,7 @@ public interface AssemblingRemote
     AssemblingSchema saveSchema(AssemblingSchema entity);
     AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity);
     AssemblingSchemaItemValue saveItemValue(AssemblingSchemaItemValue entity);
+    ComplexProduct saveComplexProduct(ComplexProduct complexProduct);
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
     AssemblingCategory getParent(AssemblingCategory child);
     //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);
