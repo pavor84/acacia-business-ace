@@ -262,8 +262,7 @@ public class ProductAssemblerPanel
         try
         {
             ComplexProduct product = assembler.assemble(params);
-            log.info("Product: " + product);
-            log.info("\t Items: " + product.getComplexProductItems());
+            log.info("Product: " + product.toString(true));
         }
         catch(AlgorithmException ex)
         {
