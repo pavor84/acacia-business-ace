@@ -1,6 +1,7 @@
 package com.cosmos.acacia.security;
 
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,14 +23,16 @@ public class PermissionsManager {
 
     private RightsManagerRemote manager;
     private List<DataObjectType> dataObjectTypes;
+    private BigInteger branchId;
 
-    public PermissionsManager(List<DataObjectType> dataObjectTypes) {
+    public PermissionsManager(List<DataObjectType> dataObjectTypes, BigInteger branchId) {
         try {
             manager = InitialContext.doLookup(RightsManagerRemote.class.getName());
         } catch (NamingException ex) {
             //
         }
         this.dataObjectTypes = dataObjectTypes;
+        this.branchId = branchId;
     }
 
     /**
@@ -92,14 +95,17 @@ public class PermissionsManager {
     public boolean isAllowedPostCall(Object result)
     {
         if (true) return true;
-
+        boolean allowed = true;
         if (result instanceof DataObjectBean) {
-             return manager.isAllowed(
-                     ((DataObjectBean) result).getDataObject(),
+            DataObjectBean dob = (DataObjectBean) result;
+            allowed = dob.getDataObject().getOwnerId().equals(branchId);
+            if (allowed)
+                allowed = manager.isAllowed(
+                     dob.getDataObject(),
                      UserRightType.READ);
         }
 
-        return true;
+        return allowed;
     }
 
     /**
@@ -120,7 +126,11 @@ public class PermissionsManager {
 
             for (Object obj : iterable) {
                 if (obj instanceof DataObjectBean) {
-                    if (!manager.isAllowed(
+
+                    // checking branch ownership; if valid, check regular permissions
+                    if (!((DataObjectBean) obj).getDataObject().getOwnerId().equals(branchId)) {
+                        tmpCollection.remove(obj);
+                    } else if (!manager.isAllowed(
                             ((DataObjectBean) obj).getDataObject(),
                             UserRightType.READ)) {
 
@@ -146,7 +156,6 @@ public class PermissionsManager {
                 return dot;
             }
         }
-
         return null;
     }
 }

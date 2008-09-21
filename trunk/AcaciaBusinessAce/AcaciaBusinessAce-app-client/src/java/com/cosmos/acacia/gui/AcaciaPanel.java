@@ -9,8 +9,6 @@ import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
@@ -27,6 +25,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.gui.LocalSession;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.security.PermissionsManager;
@@ -53,14 +52,15 @@ public abstract class AcaciaPanel
         if (permissionsManager == null)
             try {
                 permissionsManager =
-                    new PermissionsManager(acaciaSession.getDataObjectTypes());
+                    new PermissionsManager(acaciaSession.getDataObjectTypes(),
+                            getUserBranch().getAddressId());
             } catch (Exception ex) {
-                //
+                // Potential exceptions when the session is not initialized;
+                // that is, before login. Ignore the errors than, as no
+                // permissions manager is required; not-null check of
+                // permissions manager is present in the calling method
             }
     }
-
-    private static final String SESSION_BRANCH = "SESSION_BRANCH";
-    private static Map<String, Object> sessionCache = new HashMap<String, Object>();
 
     public AcaciaPanel()
     {
@@ -338,10 +338,10 @@ public abstract class AcaciaPanel
      * @return
      */
     public Address getUserBranch() {
-        Address branch = (Address) sessionCache.get(SESSION_BRANCH);
+        Address branch = (Address) LocalSession.get(LocalSession.BRANCH);
         if ( branch == null ){
             branch = getAcaciaSession().getBranch();
-            sessionCache.put(SESSION_BRANCH, branch);
+            LocalSession.put(LocalSession.BRANCH, branch);
         }
         return branch;
     }

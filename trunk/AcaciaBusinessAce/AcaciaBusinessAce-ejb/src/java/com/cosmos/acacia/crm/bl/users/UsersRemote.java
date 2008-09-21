@@ -213,6 +213,15 @@ public interface UsersRemote {
     UserOrganization getUserOrganization(User user, Organization organization);
 
     /**
+     * Gets the User Organization object for the specified person
+     *
+     * @param person
+     * @return the user organization object
+     */
+    UserOrganization getUserOrganization(Person person);
+
+
+    /**
      * Saves changes to a specified UserOrganization objecet
      *
      * @param uo
@@ -235,6 +244,5 @@ public interface UsersRemote {
      * @param oldBranch
      * @param newBranch
      */
-    public void changeBranch(User user, Address oldBranch, Address newBranch);
-
+    void changeBranch(User user, Address oldBranch, Address newBranch);
 }
