@@ -63,13 +63,22 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     dataObject.setParentDataObjectId(parentId);
                     dataObject.setDataObjectType(dot);
                     dataObject.setDataObjectVersion(1);
+                    BigInteger creatorId = null;
+                    BigInteger ownerId = null;
+
                     try {
-                        dataObject.setCreatorId(session.getUser().getUserId());
-                        dataObject.setOwnerId(session.getBranch().getAddressId());
+                        creatorId = session.getUser().getUserId();
+                        ownerId = session.getBranch().getAddressId();
                     } catch (Exception ex) {
                         // Exception ignored; caused when there is still no
                         // user logged, or no branch selected
                     }
+
+                    if (creatorId != null)
+                        dataObject.setCreatorId(creatorId);
+                    if (ownerId != null)
+                        dataObject.setOwnerId(ownerId);
+
                     em.persist(dataObject);
                 }
                 else

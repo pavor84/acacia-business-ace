@@ -80,7 +80,11 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public User getUser() {
-        return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
+        try {
+            return (User) SessionRegistry.getSession().getValue(SessionContext.USER_KEY);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     @Override
@@ -94,7 +98,12 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public Address getBranch() {
-        return (Address) getSession().getValue(BRANCH_KEY);
+        try {
+            return (Address) getSession().getValue(BRANCH_KEY);
+        } catch (Exception ex) {
+            return null;
+        }
+
     }
 
     @Override
