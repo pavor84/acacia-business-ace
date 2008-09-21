@@ -89,6 +89,12 @@ public class Address
     @Property(title="Description", hidden=true)
     private String description;
 
+
+//    @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
+//    @OneToOne
+//    @Property(title="User Group", customDisplay="${userGroup.name}")
+//    private UserGroup userGroup;
+
     @PrimaryKeyJoinColumn
     @OneToOne
     private DataObject dataObject;
@@ -165,6 +171,14 @@ public class Address
     public void setCountry(Country country) {
         this.country = country;
     }
+
+//    public UserGroup getUserGroup() {
+//        return userGroup;
+//    }
+//
+//    public void setUserGroup(UserGroup userGroup) {
+//        this.userGroup = userGroup;
+//    }
 
     @Override
     public DataObject getDataObject() {

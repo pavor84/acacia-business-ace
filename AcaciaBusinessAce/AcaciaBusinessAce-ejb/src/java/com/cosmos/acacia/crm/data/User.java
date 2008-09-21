@@ -58,6 +58,10 @@ import javax.persistence.Transient;
             @NamedQuery(
                     name = "User.findAll",
                     query = "select u from User u"
+            ),
+            @NamedQuery(
+                    name = "User.findByPerson",
+                    query = "select u from User u where u.person=:person"
             )
         }
 )

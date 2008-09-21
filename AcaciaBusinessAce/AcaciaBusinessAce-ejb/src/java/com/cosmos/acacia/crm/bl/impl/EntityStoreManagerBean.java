@@ -5,6 +5,19 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigInteger;
+import java.sql.BatchUpdateException;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -12,17 +25,6 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
-
-import java.math.BigInteger;
-import java.sql.BatchUpdateException;
-import java.util.Map;
-import java.util.TreeMap;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 
 /**
  *
@@ -33,6 +35,9 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
     @EJB
     private DataObjectTypeLocal dotLocal;
+
+    @EJB
+    private AcaciaSessionLocal session;
 
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
 
@@ -51,8 +56,6 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 {
                     DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
                     DataObjectType dot = dotLocal.getDataObjectType(entity.getClass().getName());
-                    System.out.println("dotLocal: " + dotLocal);
-                    System.out.println("dot: " + dot);
 
                     if(dataObject == null)
                         dataObject = new DataObject();
@@ -60,6 +63,13 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     dataObject.setParentDataObjectId(parentId);
                     dataObject.setDataObjectType(dot);
                     dataObject.setDataObjectVersion(1);
+                    try {
+                        dataObject.setCreatorId(session.getUser().getUserId());
+                        dataObject.setOwnerId(session.getBranch().getAddressId());
+                    } catch (Exception ex) {
+                        // Exception ignored; caused when there is still no
+                        // user logged, or no branch selected
+                    }
                     em.persist(dataObject);
                 }
                 else
@@ -190,6 +200,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
 
 
+    @SuppressWarnings("unchecked")
     public EntityProperties getEntityProperties(Class entityClass)
     {
         String entityClassName = entityClass.getName();
@@ -202,7 +213,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
         return (EntityProperties)entityProperties.clone();
     }
-    
+
     @SuppressWarnings("unchecked")
     public PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position){
         return BeansBindingHelper.createPropertyDetails(entityClass, propertyName, position);

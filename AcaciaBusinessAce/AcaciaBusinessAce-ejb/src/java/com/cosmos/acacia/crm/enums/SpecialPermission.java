@@ -11,12 +11,12 @@ import java.util.List;
  *
  */
 public enum SpecialPermission implements DatabaseResource {
-    SpecialPermission1,
-    SpecialPermission2
+
+    CanViewDataFromAllBranches
     ;
 
     private DbResource dbResource;
-    
+
     @Override
     public DbResource getDbResource() {
         return dbResource;
@@ -37,17 +37,14 @@ public enum SpecialPermission implements DatabaseResource {
     public String toText() {
         return null;
     }
-    
-    
+
+
     private static List<DbResource> dbResources;
-    public static List<DbResource> getDbResources()
-    {
-        if(dbResources == null)
-        {
+    public static List<DbResource> getDbResources() {
+        if(dbResources == null) {
             dbResources = new ArrayList<DbResource>(SpecialPermission.values().length);
 
-            for(SpecialPermission specialPermission : SpecialPermission.values())
-            {
+            for(SpecialPermission specialPermission : SpecialPermission.values()) {
                 dbResources.add(specialPermission.getDbResource());
             }
         }

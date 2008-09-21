@@ -256,6 +256,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
             uo.setUserOrganizationPK(pk);
             uo.setBranch(branch);
+            //uo.setUserGroup(branch.getUserGroup());
             uo.setUserActive(false);
 
             esm.persist(em, uo);
@@ -556,6 +557,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
             uo.setUserOrganizationPK(pk);
             uo.setBranch(branch);
+            //uo.setUserGroup(branch.getUserGroup());
             esm.persist(em, uo);
         }
     }
@@ -630,10 +632,31 @@ public class UsersBean implements UsersRemote, UsersLocal {
             cp.setParentId(newBranch.getId());
             esm.persist(em, cp);
 
+//            UserOrganization uo = getUserOrganization(user, acaciaSessionLocal.getOrganization());
+//
+//            // only if the default user group for the user is in use
+//            if (uo.getUserGroup().equals(oldBranch.getUserGroup())) {
+//                uo.setUserGroup(newBranch.getUserGroup());
+//                esm.persist(em, uo);
+//            }
+
         } catch (Exception ex) {
             // Ignored
         }
 
+    }
+
+    @Override
+    public UserOrganization getUserOrganization(Person person) {
+        Query q = em.createNamedQuery("User.findByPerson");
+        q.setParameter("person", person);
+
+        try {
+            User u = (User) q.getSingleResult();
+            return getUserOrganization(u, acaciaSessionLocal.getOrganization());
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
 }

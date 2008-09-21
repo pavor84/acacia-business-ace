@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +34,6 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -69,6 +69,12 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     @EJB
     private PositionTypesListLocal positionTypesManager;
 
+//    @EJB
+//    private UserRightsLocal groupsManager;
+
+//    @EJB
+//    private UsersLocal usersManager;
+
     /**
      * A method for listing all existing countries
      *
@@ -95,10 +101,16 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return locationsManager.newAddress();
     }
 
-    public Address saveAddress(Address address, BigInteger parentDataObjectId)
-    {
-        if (parentDataObjectId != null)
+    public Address saveAddress(Address address, BigInteger parentDataObjectId) {
+        if (parentDataObjectId != null) {
             address.setParentId(parentDataObjectId);
+//            UserGroup group = groupsManager.newUserGroup(parentDataObjectId);
+//            group.setName("_" + address.getAddressName());
+//            groupsManager.saveUserGroup(group);
+//            address.setUserGroup(group);
+//
+//            //TODO : assign default rights to the newly created user group
+        }
 
         addressValidator.validate(address);
 
@@ -106,6 +118,10 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     public int deleteAddress(Address address) {
+//        // TODO: Transaction required! (in case automatic transactions are off
+//        if (address.getUserGroup() != null)
+//            esm.remove(em, address.getUserGroup());
+
         return esm.remove(em, address);
     }
 
@@ -179,6 +195,12 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @Override
     public int deleteContactPerson(ContactPerson contactPerson) {
+//        UserOrganization uo =
+//            usersManager.getUserOrganization(contactPerson.getContact());
+//
+//        // clean group only if the group is underscored (a branch group)
+//        if (uo.getUserGroup().getName().indexOf("_") > -1)
+//                uo.setUserGroup(null);
 
         return esm.remove(em, contactPerson);
     }
