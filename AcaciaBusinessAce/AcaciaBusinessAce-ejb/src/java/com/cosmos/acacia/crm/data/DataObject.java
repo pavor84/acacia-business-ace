@@ -56,10 +56,10 @@ public class DataObject implements Serializable {
     private Date creationTime = new Date();
 
     @Column(name = "creator_id", nullable = false)
-    private long creatorId;
+    private BigInteger creatorId;
 
     @Column(name = "owner_id", nullable = false)
-    private long ownerId;
+    private BigInteger ownerId;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
@@ -148,19 +148,19 @@ public class DataObject implements Serializable {
         this.creationTime = creationTime;
     }
 
-    public long getCreatorId() {
+    public BigInteger getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(long creatorId) {
+    public void setCreatorId(BigInteger creatorId) {
         this.creatorId = creatorId;
     }
 
-    public long getOwnerId() {
+    public BigInteger getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(long ownerId) {
+    public void setOwnerId(BigInteger ownerId) {
         this.ownerId = ownerId;
     }
 
