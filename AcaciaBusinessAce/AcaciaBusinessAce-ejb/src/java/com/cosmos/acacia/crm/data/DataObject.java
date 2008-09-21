@@ -56,10 +56,10 @@ public class DataObject implements Serializable {
     private Date creationTime = new Date();
 
     @Column(name = "creator_id", nullable = false)
-    private BigInteger creatorId;
+    private BigInteger creatorId = BigInteger.ZERO;
 
     @Column(name = "owner_id", nullable = false)
-    private BigInteger ownerId;
+    private BigInteger ownerId = BigInteger.ZERO;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
