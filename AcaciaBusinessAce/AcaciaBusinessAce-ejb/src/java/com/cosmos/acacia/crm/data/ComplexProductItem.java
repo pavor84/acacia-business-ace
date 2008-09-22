@@ -6,6 +6,8 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -36,35 +38,46 @@ public class ComplexProductItem
     @Column(name = "complex_product_item_id", nullable = false)
     private BigInteger complexProductItemId;
 
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+//    @Column(name = "parent_id")
+//    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
+//    private BigInteger parentId;
 
     @Column(name = "order_position")
+    @Property(title="Order Position")
     private int orderPosition;
 
     @Column(name = "quantity", nullable = false)
+    @Property(title="Quantity", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal quantity;
 
     @Column(name = "unit_price", nullable = false)
+    @Property(title="Unit Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal unitPrice;
 
     @Column(name = "item_price", nullable = false)
+    @Property(title="Item Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal itemPrice;
 
     @JoinColumn(name = "applied_algorithm_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Applied Algorithm")
     private DbResource appliedAlgorithm;
 
     @Column(name = "applied_value")
+    @Property(title="Applied Value")
     private Serializable appliedValue;
 
     @JoinColumn(name = "complex_product_id", referencedColumnName = "product_id")
     @ManyToOne
+    @Property(title="Complex Product", editable=false, readOnly=true, visible=false, hidden=true)
     private ComplexProduct complexProduct;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
+    @Property(title="Product")
     private Product product;
 
     @OneToOne
@@ -142,11 +155,13 @@ public class ComplexProductItem
         this.appliedValue = appliedValue;
     }
 
-    public ComplexProduct getComplexProduct() {
+    public ComplexProduct getComplexProduct()
+    {
         return complexProduct;
     }
 
-    public void setComplexProduct(ComplexProduct complexProduct) {
+    public void setComplexProduct(ComplexProduct complexProduct)
+    {
         this.complexProduct = complexProduct;
     }
 
@@ -161,13 +176,16 @@ public class ComplexProductItem
     @Override
     public BigInteger getParentId()
     {
-        return parentId;
+        if(complexProduct == null)
+            return null;
+
+        return complexProduct.getProductId();
     }
 
     @Override
     public void setParentId(BigInteger parentId)
     {
-        this.parentId = parentId;
+        //this.parentId = parentId;
     }
 
     @Override

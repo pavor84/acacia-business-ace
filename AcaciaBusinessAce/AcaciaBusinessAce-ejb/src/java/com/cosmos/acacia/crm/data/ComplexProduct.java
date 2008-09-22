@@ -78,6 +78,7 @@ public class ComplexProduct
 
     @Override
     public void setProductCode(String productCode) {
+        firePropertyChange("productCode", this.productCode, productCode);
         this.productCode = productCode;
     }
 
@@ -90,6 +91,7 @@ public class ComplexProduct
     @Override
     public void setProductName(String productName)
     {
+        firePropertyChange("productName", this.productName, productName);
         this.productName = productName;
     }
 
@@ -113,6 +115,7 @@ public class ComplexProduct
     @Override
     public void setSalePrice(BigDecimal salePrice)
     {
+        firePropertyChange("salePrice", this.salePrice, salePrice);
         this.salePrice = salePrice;
     }
 
@@ -121,6 +124,7 @@ public class ComplexProduct
     }
 
     public void setAppliedSchema(AssemblingSchema appliedSchema) {
+        firePropertyChange("appliedSchema", this.appliedSchema, appliedSchema);
         this.appliedSchema = appliedSchema;
     }
 
@@ -136,10 +140,14 @@ public class ComplexProduct
 
     public boolean addComplexProductItem(ComplexProductItem complexProductItem)
     {
+        firePropertyChange("add.complexProductItem", null, complexProductItem);
+
         if(complexProductItems == null)
             complexProductItems = new ArrayList<ComplexProductItem>();
 
-        return complexProductItems.add(complexProductItem);
+        boolean result = complexProductItems.add(complexProductItem);
+        firePropertyChange("complexProductItems", this.complexProductItems, complexProductItems);
+        return result;
     }
 
     public String toString(boolean debug)
