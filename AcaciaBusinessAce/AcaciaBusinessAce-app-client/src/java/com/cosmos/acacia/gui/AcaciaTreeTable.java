@@ -6,7 +6,11 @@
 package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBTreeTable;
+import com.cosmos.swingb.SelectableListDialog;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 /**
  *
@@ -20,4 +24,34 @@ public class AcaciaTreeTable
         super(AcaciaApplication.class);
     }
 
+    public void bindComboListCellEditor(
+        BindingGroup bindingGroup,
+        SelectableListDialog selectableListDialog,
+        PropertyDetails propertyDetails)
+    {
+        bindComboListCellEditor(bindingGroup, selectableListDialog, propertyDetails, (String)null);
+    }
+
+    public void bindComboListCellEditor(
+        BindingGroup bindingGroup,
+        SelectableListDialog selectableListDialog,
+        PropertyDetails propertyDetails,
+        String elPropertyItemDisplay)
+    {
+        ObjectToStringConverter converter;
+        if (elPropertyItemDisplay != null)
+        {
+            converter = new AcaciaToStringConverter(elPropertyItemDisplay);
+        }
+        else
+        {
+            converter = new AcaciaToStringConverter();
+        }
+
+        bindComboListCellEditor(
+            bindingGroup,
+            selectableListDialog,
+            propertyDetails,
+            converter);
+    }
 }
