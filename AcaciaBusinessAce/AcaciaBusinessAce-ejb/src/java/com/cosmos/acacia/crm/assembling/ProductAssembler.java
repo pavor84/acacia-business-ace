@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.security.auth.callback.CallbackHandler;
+import javax.swing.event.EventListenerList;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -26,11 +28,15 @@ import javax.security.auth.callback.CallbackHandler;
  */
 public class ProductAssembler
 {
+    private static final Logger logger = Logger.getLogger(ProductAssembler.class);
+
     private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
     private AssemblingSchema assemblingSchema;
     private ProductAssemblerService productAssemblerService;
     private CallbackHandler callbackHandler;
+
+    private EventListenerList eventListeners = new EventListenerList();
 
 
     public ProductAssembler(
@@ -38,6 +44,10 @@ public class ProductAssembler
         ProductAssemblerService productAssemblerService,
         CallbackHandler callbackHandler)
     {
+        logger.info("ProductAssembler(" +
+            "assemblingSchema: " + assemblingSchema +
+            ", productAssemblerService: " + productAssemblerService +
+            ", callbackHandler: " + callbackHandler + ")");
         this.assemblingSchema = assemblingSchema;
         this.productAssemblerService = productAssemblerService;
         this.callbackHandler = callbackHandler;
@@ -56,34 +66,32 @@ public class ProductAssembler
     public ComplexProduct assemble(Map parameters)
         throws AlgorithmException
     {
+        logger.info("assemble(parameters: " + parameters + ")");
         int itemCounter = 0;
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
+        logger.info("assemble(Map), List<AssemblingSchemaItem>: " + asiList);
         ComplexProduct product = new ComplexProduct();
         product.setProductCode(assemblingSchema.getSchemaCode());
         product.setAppliedSchema(assemblingSchema);
         BigDecimal productPrice = BigDecimal.ZERO;
-        //List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(asiList.size());
         for(AssemblingSchemaItem asi : asiList)
         {
+            logger.info("assemble(Map), AssemblingSchemaItem: " + asi);
             List<ComplexProductItem> cpiList = assemble(asi, product, parameters);
+            logger.info("assemble(Map), List<ComplexProductItem>: " + cpiList);
             if(cpiList == null || cpiList.size() == 0)
                 continue;
 
             for(ComplexProductItem cpi : cpiList)
             {
                 cpi.setOrderPosition(++itemCounter);
-                //productItems.add(cpi);
                 product.addComplexProductItem(cpi);
+                logger.info("assemble(Map), addComplexProductItem: " + cpi + ", to ComplexProduct: " + product);
+                fireComplexProductItemAdded(product, cpi);
                 productPrice = productPrice.add(cpi.getItemPrice());
             }
         }
         product.setSalePrice(productPrice);
-
-        /*em.persist(product);
-        for(ComplexProductItem productItem : productItems)
-        {
-            em.persist(productItem);
-        }*/
 
         return product;
     }
@@ -94,16 +102,21 @@ public class ProductAssembler
             Map parameters)
         throws AlgorithmException
     {
+        logger.info("assemble(AssemblingSchemaItem: " + asi +
+            ", ComplexProduct: " + product +
+            ", parameters: " + parameters + ")");
         BigDecimal iQuantity = asi.getQuantity();
         Algorithm algorithm = new Algorithm(asi, productAssemblerService);
         algorithm.setCallbackHandler(getCallbackHandler());
         Object valueAgainstConstraints = getAlgorithmValue(asi, parameters);
         List<AssemblingSchemaItemValue> itemValues = algorithm.apply(valueAgainstConstraints);
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(itemValues.size());
+        logger.info("assemble(...), AssemblingSchemaItemValues: " + itemValues);
         for(AssemblingSchemaItemValue itemValue : itemValues)
         {
             BigDecimal ivQuantity = itemValue.getQuantity();
             VirtualProduct virtualProduct = itemValue.getVirtualProduct();
+            logger.info("assemble(...), virtualProduct: " + virtualProduct);
             ComplexProductItem productItem = new ComplexProductItem(product);
             productItem.setAppliedAlgorithm(asi.getAssemblingAlgorithm());
             productItem.setAppliedValue((Serializable)valueAgainstConstraints);
@@ -112,13 +125,14 @@ public class ProductAssembler
             if(virtualProduct instanceof AssemblingSchema)
             {
                 AssemblingSchema itemSchema = (AssemblingSchema)virtualProduct;
+                logger.info("assemble(...), itemSchema: " + itemSchema);
                 ProductAssembler assembler = 
                     new ProductAssembler(
                         itemSchema,
                         productAssemblerService,
                         callbackHandler);
-                assembler.setCallbackHandler(getCallbackHandler());
                 itemProduct = assembler.assemble(parameters);
+                logger.info("assemble(...), itemProduct: " + itemProduct);
             }
             else
             {
@@ -206,5 +220,48 @@ public class ProductAssembler
     protected BigDecimal getProductDiscount(Product product)
     {
         return BigDecimal.valueOf(0.0);
+    }
+
+    public void addProductAssemblerListener(ProductAssemblerListener listener)
+    {
+        logger.info("addProductAssemblerListener(" + listener + ")");
+        eventListeners.add(ProductAssemblerListener.class, listener);
+    }
+
+    public void removeProductAssemblerListener(ProductAssemblerListener listener)
+    {
+        logger.info("removeProductAssemblerListener(" + listener + ")");
+        eventListeners.remove(ProductAssemblerListener.class, listener);
+    }
+
+    public ProductAssemblerListener[] getProductAssemblerListeners()
+    {
+        return eventListeners.getListeners(ProductAssemblerListener.class);
+    }
+
+    protected void fireComplexProductItemAdded(
+        ComplexProduct product,
+        ComplexProductItem item)
+    {
+        logger.info("fireComplexProductItemAdded(" +
+            "ComplexProduct: " + product +
+            ", ComplexProductItem: " + item + ")");
+        ProductAssemblerListener[] listeners;
+        int size;
+        if((listeners = getProductAssemblerListeners()) != null &&
+            (size = listeners.length) > 0)
+        {
+            logger.info("fireComplexProductItemAdded().listeners count: " + size);
+            ProductAssemblerEvent event = new ProductAssemblerEvent(this, product, item);
+            for(ProductAssemblerListener listener : listeners)
+            {
+                logger.info("fireComplexProductItemAdded().ProductAssemblerListener: " + listener);
+                listener.productAssemblerEvent(event);
+            }
+        }
+        else
+        {
+            logger.info("fireComplexProductItemAdded().ProductAssemblerListeners: " + listeners);
+        }
     }
 }
