@@ -8,17 +8,21 @@ package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.assembling.AlgorithmException;
 import com.cosmos.acacia.crm.assembling.ProductAssembler;
+import com.cosmos.acacia.crm.assembling.ProductAssemblerEvent;
+import com.cosmos.acacia.crm.assembling.ProductAssemblerListener;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.gui.AcaciaTreeTable;
+import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,7 @@ import javax.ejb.EJB;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
@@ -139,10 +144,13 @@ public class ProductAssemblerPanel
 
 
     private AcaciaTable parametersTable;
-    private AcaciaTreeTable productTreeTable;
+    //private AcaciaTreeTable productTreeTable;
+    private AcaciaTable productTreeTable;
 
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> schemaItems;
+
+    private List<ComplexProductItem> complexProductItems;
 
     @Override
     protected void initData()
@@ -159,7 +167,12 @@ public class ProductAssemblerPanel
 
         strValue = resource.getString("productTitledPanel.title");
         productTitledPanel.setTitle(strValue);
-        productTreeTable = new AcaciaTreeTable();
+        //productTreeTable = new AcaciaTreeTable();
+        productTreeTable = new AcaciaTable();
+        BindingGroup bindingGroup = new BindingGroup();
+        EntityProperties entityProperties =
+            getFormSession().getAssemblingSchemaItemEntityProperties();
+        productTreeTable.bind(bindingGroup, getComplexProductItems(), entityProperties);
         scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productTreeTable);
         productTitledPanel.setContentContainer(scrollPane);
@@ -258,6 +271,8 @@ public class ProductAssemblerPanel
             new ProductAssembler(getAssemblingSchema(),
             getFormSession(),
             new AssemblerCallbackHandler());
+        ComplexProductAssemblerListener listener = new ComplexProductAssemblerListener();
+        assembler.addProductAssemblerListener(listener);
 
         try
         {
@@ -270,6 +285,10 @@ public class ProductAssemblerPanel
             ValidationException vex = new ValidationException();
             vex.addMessage(ex.getMessage());
             throw vex;
+        }
+        finally
+        {
+            assembler.removeProductAssemblerListener(listener);
         }
     }
 
@@ -293,6 +312,16 @@ public class ProductAssemblerPanel
         return schemaItems;
     }
 
+    public List<ComplexProductItem> getComplexProductItems()
+    {
+        if(complexProductItems == null)
+        {
+            complexProductItems = new ArrayList<ComplexProductItem>();
+        }
+
+        return complexProductItems;
+    }
+
     protected AssemblingRemote getFormSession()
     {
         if(formSession == null)
@@ -301,6 +330,21 @@ public class ProductAssemblerPanel
         }
 
         return formSession;
+    }
+
+    private class ComplexProductAssemblerListener
+        implements ProductAssemblerListener
+    {
+
+        @Override
+        public void productAssemblerEvent(ProductAssemblerEvent event)
+        {
+            log.info("event.getComplexProductItem(): " + event.getComplexProductItem());
+            productTreeTable.addRow(event.getComplexProductItem());
+            System.out.println("productTreeTable.getData(): " + productTreeTable.getData());
+            System.out.println("getComplexProductItems(): " + getComplexProductItems());
+        }
+
     }
 
 
@@ -342,5 +386,7 @@ public class ProductAssemblerPanel
         {
             return canEditColumn[column];
         }
+
+        
     }
 }
