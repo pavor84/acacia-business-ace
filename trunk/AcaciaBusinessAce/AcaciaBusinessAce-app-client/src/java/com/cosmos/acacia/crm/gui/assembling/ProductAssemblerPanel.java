@@ -171,7 +171,7 @@ public class ProductAssemblerPanel
         productTreeTable = new AcaciaTable();
         BindingGroup bindingGroup = new BindingGroup();
         EntityProperties entityProperties =
-            getFormSession().getAssemblingSchemaItemEntityProperties();
+            getFormSession().getComplexProductItemEntityProperties();
         productTreeTable.bind(bindingGroup, getComplexProductItems(), entityProperties);
         scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productTreeTable);
@@ -339,9 +339,18 @@ public class ProductAssemblerPanel
         @Override
         public void productAssemblerEvent(ProductAssemblerEvent event)
         {
-            log.info("event.getComplexProductItem(): " + event.getComplexProductItem());
-            productTreeTable.addRow(event.getComplexProductItem());
-            System.out.println("productTreeTable.getData(): " + productTreeTable.getData());
+            ComplexProductItem productItem = event.getComplexProductItem();
+            log.info("event.getComplexProductItem(): " + productItem);
+            log.info("\t AppliedAlgorithm: " + productItem.getAppliedAlgorithm());
+            log.info("\t AppliedValue: " + productItem.getAppliedValue());
+            log.info("\t ComplexProduct: " + productItem.getComplexProduct());
+            log.info("\t ComplexProductItemId: " + productItem.getComplexProductItemId());
+            log.info("\t Info: " + productItem.getInfo());
+            log.info("\t OrderPosition: " + productItem.getOrderPosition());
+            log.info("\t Product: " + productItem.getProduct());
+            log.info("\t Quantity: " + productItem.getQuantity());
+            log.info("\t UnitPrice: " + productItem.getUnitPrice());
+            productTreeTable.addRow(productItem);
             System.out.println("getComplexProductItems(): " + getComplexProductItems());
         }
 
