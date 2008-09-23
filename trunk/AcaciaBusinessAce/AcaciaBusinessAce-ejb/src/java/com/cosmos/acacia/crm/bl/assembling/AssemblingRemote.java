@@ -59,6 +59,8 @@ public interface AssemblingRemote
     EntityProperties getAssemblingSchemaItemValueEntityProperties();
     EntityProperties getVirtualProductItemEntityProperties();
     EntityProperties getAssemblingCategoryEntityProperties();
+    EntityProperties getComplexProductEntityProperties();
+    EntityProperties getComplexProductItemEntityProperties();
 
     List<DbResource> getAlgorithms();
     List<DbResource> getDataTypes();

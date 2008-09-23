@@ -473,6 +473,22 @@ public class AssemblingBean
     }
 
     @Override
+    public EntityProperties getComplexProductEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(ComplexProduct.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getComplexProductItemEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(ComplexProductItem.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
     public List<DbResource> getAlgorithms()
     {
         return Algorithm.Type.getDbResources();
