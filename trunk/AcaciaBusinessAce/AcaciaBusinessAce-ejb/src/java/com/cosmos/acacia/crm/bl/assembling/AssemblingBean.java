@@ -365,7 +365,8 @@ public class AssemblingBean
         Query q = em.createNamedQuery("AssemblingSchemaItem.findByAssemblingSchema");
         q.setParameter("assemblingSchema", assemblingSchema);
         q.setParameter("deleted", false);
-        return new ArrayList<AssemblingSchemaItem>(q.getResultList());
+        List<AssemblingSchemaItem> schemaItems = q.getResultList();
+        return new ArrayList<AssemblingSchemaItem>(schemaItems);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class ProductAssembler
     public ComplexProduct assemble(Map parameters)
         throws AlgorithmException
     {
-        logger.info("assemble(parameters: " + parameters + ")");
+        logger.info("assemble(parameters: " + parameters + "), assemblingSchema: " + assemblingSchema);
         int itemCounter = 0;
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
         logger.info("assemble(Map), List<AssemblingSchemaItem>: " + asiList);
