@@ -22,10 +22,11 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import java.lang.Object;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 import javax.ejb.EJB;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Action;
@@ -264,8 +265,7 @@ public class ProductAssemblerPanel
 
     private void productAssemble()
     {
-        Map<AssemblingSchemaItem, Object> params =
-            new HashMap<AssemblingSchemaItem, Object>();
+        Properties params = new Properties();
 
         ProductAssembler assembler =
             new ProductAssembler(getAssemblingSchema(),

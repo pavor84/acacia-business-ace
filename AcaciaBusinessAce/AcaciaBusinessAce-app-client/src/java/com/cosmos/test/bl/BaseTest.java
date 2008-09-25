@@ -41,7 +41,7 @@ public class BaseTest {
         login("admin", "admin");
     }
 
-    protected void login(String userName, String password) {
+    public void login(String userName, String password) {
         User loggedUser = getUser();
         //already logged - so return
         if ( loggedUser!=null && loggedUser.getUserName().equals(userName))
@@ -58,7 +58,7 @@ public class BaseTest {
         usersRemote.setOrganization(organizations.get(0));
     }
     
-    protected User getUser(){
+    public User getUser(){
         User result = (User) sessionCache.get("user");
         if ( result==null ){
             result = session.getUser();
@@ -67,7 +67,7 @@ public class BaseTest {
         return result;
     }
     
-    protected Organization getOrganization(){
+    public Organization getOrganization(){
         Organization result = (Organization) sessionCache.get("organization");
         if ( result==null ){
             result = session.getOrganization();
@@ -76,11 +76,11 @@ public class BaseTest {
         return result;
     }
     
-    protected BigInteger getOrganizationId(){
+    public BigInteger getOrganizationId(){
         return getOrganization().getId();
     }
 
-    protected Address getBranch(){
+    public Address getBranch(){
         Address result = (Address) sessionCache.get("branch");
         if ( result==null ){
             result = session.getBranch();
@@ -93,7 +93,7 @@ public class BaseTest {
         return sessionCaching;
     }
     
-    protected void clearSessionCache(){
+    public void clearSessionCache(){
         sessionCache.clear();
     }
 
