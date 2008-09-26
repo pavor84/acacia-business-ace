@@ -40,6 +40,7 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
+import com.cosmos.acacia.crm.gui.contactbook.BranchSelectionPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
@@ -384,7 +385,7 @@ public class AcaciaApplicationView extends FrameView {
         PersonsListPanel personsListPanel = new PersonsListPanel(getParentId(), true);
         personsListPanel.showFrame();
     }
-    
+
     @Action
     public void editOwnPersonAction(){
         log.debug("editOwnPersonAction");
@@ -394,7 +395,7 @@ public class AcaciaApplicationView extends FrameView {
             personsListPanel.showFrame();
         }
     }
-    
+
     @Action
     public void organizationsListAction(){
         log.debug("organizationsListAction");
@@ -520,6 +521,12 @@ public class AcaciaApplicationView extends FrameView {
         panel.showFrame();
     }
 
+    @Action
+    public void branchSelectionAction() {
+        BranchSelectionPanel panel = new BranchSelectionPanel();
+        panel.showFrame();
+    }
+
     private ActionMap getActionMap()
     {
         return getContext().getActionMap(this);
@@ -561,6 +568,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem leaveOrganizationMenuItem = new JBMenuItem();
         JBMenuItem ownOrganizationMenuItem = new JBMenuItem();
         JBMenuItem organizationInternalHierarchyMenuItem = new JBMenuItem();
+        JBMenuItem branchSelectionMenuItem = new JBMenuItem();
         /* End of contact book menu items */
 
         JBMenu classifiersMenu = new JBMenu();
@@ -733,10 +741,10 @@ public class AcaciaApplicationView extends FrameView {
 
         personsListMenuItem.setAction(actionMap.get("personsListAction"));
         contactBook.add(personsListMenuItem);
-        
+
         staffListMenuItem.setAction(actionMap.get("staffListAction"));
         contactBook.add(staffListMenuItem);
-        
+
         personPositionTypesListMenuItem.setAction(actionMap.get("personPositionTypesListAction"));
         contactBook.add(personPositionTypesListMenuItem);
 
@@ -745,8 +753,10 @@ public class AcaciaApplicationView extends FrameView {
 
         organizationsListMenuItem.setAction(actionMap.get("organizationsListAction"));
         contactBook.add(organizationsListMenuItem);
+
         organizationPositionTypesListMenuItem.setAction(actionMap.get("organizationPositionTypesListAction"));
         contactBook.add(organizationPositionTypesListMenuItem);
+
         organizationInternalHierarchyMenuItem.setAction(actionMap.get("organizationInternalHierarchyAction"));
         contactBook.add(organizationInternalHierarchyMenuItem);
 
@@ -778,9 +788,12 @@ public class AcaciaApplicationView extends FrameView {
 
         editOwnPersonMenuItem.setAction(actionMap.get("editOwnPersonAction"));
         contactBook.add(editOwnPersonMenuItem);
-        
+
         ownOrganizationMenuItem.setAction(actionMap.get("ownOrganizationAction"));
         contactBook.add(ownOrganizationMenuItem);
+
+        branchSelectionMenuItem.setAction(actionMap.get("branchSelectionAction"));
+        contactBook.add(branchSelectionMenuItem);
 
         menuBar.add(contactBook);
 
