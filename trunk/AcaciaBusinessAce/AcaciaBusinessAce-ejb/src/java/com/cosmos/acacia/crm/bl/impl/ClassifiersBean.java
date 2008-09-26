@@ -390,4 +390,23 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
         return entityProperties;
     }
+
+
+    @Override
+    public Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId) {
+
+        classifier.setParentId(parentDataObjectId);
+
+        if (classifier.getDataObject() == null){
+            DataObject dataObject = new DataObject();
+            dataObject.setParentDataObjectId(parentDataObjectId);
+            classifier.setDataObject(dataObject);
+        }
+
+        classifierValidator.validate(classifier);
+
+        esm.persist(em, classifier);
+
+        return classifier;
+    }
 }

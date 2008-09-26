@@ -266,4 +266,15 @@ public interface ClassifiersRemote {
      * @return
      */
     EntityProperties getClassifiedObjectBeansEntityProperties();
+
+    /**
+     * Saves a classifier. The method is used in initialization phase.
+     * This allows system classifiers to be created programatically.
+     *
+     * @param classifier
+     * @param parentDataObjectId
+     * @return
+     */
+    Classifier saveInitialClassifier(Classifier classifier,
+            BigInteger parentDataObjectId);
 }
