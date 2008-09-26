@@ -197,7 +197,7 @@ public interface UsersRemote {
     int deleteUser(User user);
 
     /**
-     * Sets the organization in the session. May be called only when there is no organizatin in the session
+     * Sets the organization in the session. May be called only when there is no organization in the session
      *
      * @param organization
      */

@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class EntityManagerFacade implements EntityManagerFacadeRemote {
         em.persist(entity);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List getNamedQueryResult(String queryName, Map<String, Object> params) {
         Query q = em.createNamedQuery(queryName);
@@ -28,5 +30,10 @@ public class EntityManagerFacade implements EntityManagerFacadeRemote {
             q.setParameter(key, params.get(key));
         }
         return new ArrayList(q.getResultList());
+    }
+
+    @Override
+    public <T> T find(Class<T> clazz, Serializable id) {
+        return em.find(clazz, id);
     }
 }

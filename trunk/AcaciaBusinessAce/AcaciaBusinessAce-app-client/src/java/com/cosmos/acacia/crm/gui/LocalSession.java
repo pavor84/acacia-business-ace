@@ -7,6 +7,7 @@ public class LocalSession {
 
     //Keys
     public static final String BRANCH = "SESSION_BRANCH";
+    public static final String ORGANIZATION = "SESSION_ORGANIZATION";
     public static final String VIEW_DATA_FROM_ALL_BRANCHES
         = "VIEW_DATA_FROM_ALL_BRANCHES";
 

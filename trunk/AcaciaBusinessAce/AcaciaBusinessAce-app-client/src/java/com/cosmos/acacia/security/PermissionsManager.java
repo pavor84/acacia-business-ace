@@ -9,6 +9,8 @@ import java.util.List;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.annotations.Create;
 import com.cosmos.acacia.crm.bl.users.annotations.Delete;
@@ -18,6 +20,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.crm.gui.LocalSession;
 
 public class PermissionsManager {
 
@@ -27,7 +30,9 @@ public class PermissionsManager {
 
     public PermissionsManager(List<DataObjectType> dataObjectTypes, BigInteger branchId) {
         try {
-            manager = InitialContext.doLookup(RightsManagerRemote.class.getName());
+            //manager = InitialContext.doLookup(RightsManagerRemote.class.getName());
+            EntityManagerFacadeRemote em = InitialContext.doLookup(EntityManagerFacadeRemote.class.getName());
+            manager = new RightsManagerBean(em);
         } catch (NamingException ex) {
             //
         }
@@ -98,13 +103,21 @@ public class PermissionsManager {
         boolean allowed = true;
         if (result instanceof DataObjectBean) {
             DataObjectBean dob = (DataObjectBean) result;
+
+            // checking if new object
+            if (dob.getDataObject() == null || dob.getDataObject().getDataObjectId() == null)
+                return true;
+
+            // checking if it is the current organization
+            if (dob.equals(LocalSession.get(LocalSession.ORGANIZATION)))
+                return true;
+
             allowed = dob.getDataObject().getOwnerId().equals(branchId);
             if (allowed)
                 allowed = manager.isAllowed(
                      dob.getDataObject(),
                      UserRightType.READ);
         }
-
         return allowed;
     }
 
