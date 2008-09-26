@@ -46,5 +46,11 @@ public interface AcaciaSessionRemote {
      * @return
      */
     List<DataObjectType> getDataObjectTypes();
+    
+    /**
+    * Set the current login branch for the session.
+    * @param branch
+    */
+    void setBranch(Address branch);
 }
 

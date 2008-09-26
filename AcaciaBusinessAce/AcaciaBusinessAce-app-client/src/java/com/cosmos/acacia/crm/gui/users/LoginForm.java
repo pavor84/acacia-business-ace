@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.gui.LocalSession;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import java.util.List;
@@ -333,7 +334,6 @@ public class LoginForm extends AcaciaPanel {
 
             User user = acaciaSessionRemote.getUser();
 
-
             setPreferences(username);
 
             /* End of preferences handling */
@@ -356,7 +356,7 @@ public class LoginForm extends AcaciaPanel {
             }
 
             getFormSession().setOrganization(organization);
-
+            LocalSession.put(LocalSession.ORGANIZATION, organization);
 
 //            try {
 //                OrganizationsCallbackHandler handler = new OrganizationsCallbackHandler(defaultOrganization);
@@ -450,12 +450,12 @@ public class LoginForm extends AcaciaPanel {
             c.addKeyListener(l);
         }
     }
-    
+
     @Override
     public void close() {
         close(true);
     }
-    
+
     public void close(boolean exit) {
         super.close();
         if (exit)

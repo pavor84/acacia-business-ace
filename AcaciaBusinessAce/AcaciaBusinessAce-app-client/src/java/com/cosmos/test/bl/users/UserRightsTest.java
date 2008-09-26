@@ -3,6 +3,9 @@ package com.cosmos.test.bl.users;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,6 +13,8 @@ import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
@@ -23,6 +28,7 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.UserRightType;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.gui.LocalSession;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.test.bl.TestUtils;
 
@@ -40,8 +46,15 @@ public class UserRightsTest {
 
       @Before
       public void setUp() {
-          if (formSession == null)
-              formSession = AcaciaPanel.getRemoteBean(this, RightsManagerRemote.class);
+          if (formSession == null) {
+              //formSession = AcaciaPanel.getRemoteBean(this, RightsManagerRemote.class);
+              try {
+                  EntityManagerFacadeRemote em = InitialContext.doLookup(EntityManagerFacadeRemote.class.getName());
+                  formSession = new RightsManagerBean(em);
+              } catch (NamingException ex) {
+
+              }
+          }
 
           usersSession = AcaciaPanel.getRemoteBean(this, UsersRemote.class);
           rightsSession = AcaciaPanel.getRemoteBean(this, UserRightsRemote.class);
@@ -55,6 +68,7 @@ public class UserRightsTest {
               try {
                   // Must have at least one organization in the database
                   org = orgSession.getOrganizations(null).get(i);
+                  LocalSession.put(LocalSession.ORGANIZATION, org);
 
                   // Must have at least one person for the organization
                   Person person = personsSession.getPersons(org.getId()).get(0);

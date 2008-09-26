@@ -27,13 +27,7 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * Sets the current login organization for the session.
      * @param organization
      */
-	void setOrganization(Organization organization);
-
-	/**
-	 * Set the current login branch for the session.
-	 * @param branch 
-	 */
-    void setBranch(Address branch);
+    void setOrganization(Organization organization);
 
     /**
      * Set the currently logged person. 
