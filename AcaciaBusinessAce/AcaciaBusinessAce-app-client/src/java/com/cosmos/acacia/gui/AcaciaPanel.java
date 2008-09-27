@@ -21,11 +21,11 @@ import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.acacia.crm.gui.LocalSession;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.security.PermissionsManager;
@@ -44,23 +44,6 @@ public abstract class AcaciaPanel
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
     private BigInteger organizationDataObjectId;
-
-    private static AcaciaSessionRemote acaciaSession = getBean(AcaciaSessionRemote.class);
-    private static PermissionsManager permissionsManager;
-
-    {
-        if (permissionsManager == null)
-            try {
-                permissionsManager =
-                    new PermissionsManager(acaciaSession.getDataObjectTypes(),
-                            getUserBranch().getAddressId());
-            } catch (Exception ex) {
-                // Potential exceptions when the session is not initialized;
-                // that is, before login. Ignore the errors than, as no
-                // permissions manager is required; not-null check of
-                // permissions manager is present in the calling method
-            }
-    }
 
     public AcaciaPanel()
     {
@@ -229,17 +212,33 @@ public abstract class AcaciaPanel
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> remoteInterface) {
+       return getBean(remoteInterface, true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T getBean(Class<T> remoteInterface, boolean checkPermissions) {
+         try {
+             InitialContext ctx = new InitialContext();
+             T bean = (T) ctx.lookup(remoteInterface.getName());
+             InvocationHandler handler = new RemoteBeanInvocationHandler(bean, checkPermissions);
+
+             T proxy = (T) Proxy.newProxyInstance(AcaciaPanel.class.getClassLoader(),
+                 new Class[]{remoteInterface}, handler);
+
+             return proxy;
+         } catch (Exception ex){
+             ex.printStackTrace();
+             return null;
+         }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> T getUnproxiedBean(Class<T> remoteInterface) {
         try {
             InitialContext ctx = new InitialContext();
             T bean = (T) ctx.lookup(remoteInterface.getName());
-            InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
-
-            T proxy = (T) Proxy.newProxyInstance(AcaciaPanel.class.getClassLoader(),
-                new Class[]{remoteInterface}, handler);
-
-            return proxy;
-        } catch (Exception ex){
-            ex.printStackTrace();
+            return bean;
+        } catch (NamingException ex) {
             return null;
         }
     }
@@ -248,9 +247,11 @@ public abstract class AcaciaPanel
 
         private E bean;
         private SessionFacadeRemote sessionFacade;
+        private boolean checkPermissions = true;
 
-        public RemoteBeanInvocationHandler(E bean) {
+        public RemoteBeanInvocationHandler(E bean, boolean checkPermissions) {
             this.bean = bean;
+            this.checkPermissions = checkPermissions;
             try {
                 sessionFacade = InitialContext.doLookup(SessionFacadeRemote.class.getName());
             } catch (NamingException ex){
@@ -263,9 +264,10 @@ public abstract class AcaciaPanel
             log.info("Method called: " + method.getName() + " on bean: " + bean);
             Object result = null;
 
-            if (permissionsManager == null) {
+            if (!checkPermissions) {
                 result = sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
             } else {
+                PermissionsManager permissionsManager = PermissionsManager.get();
                 boolean isAllowed = permissionsManager.isAllowedPreCall(method, args);
 
                 if (isAllowed) {
@@ -292,7 +294,7 @@ public abstract class AcaciaPanel
         try
         {
             T bean = (T) InitialContext.doLookup(remoteInterface.getName());
-            InvocationHandler handler = new RemoteBeanInvocationHandler(bean);
+            InvocationHandler handler = new RemoteBeanInvocationHandler(bean, true);
 
             T proxy = (T) Proxy.newProxyInstance(
                 obj.getClass().getClassLoader(),
@@ -307,8 +309,8 @@ public abstract class AcaciaPanel
         }
     }
 
-    public AcaciaSessionRemote getAcaciaSession() {
-            return acaciaSession;
+    public static AcaciaSessionRemote getAcaciaSession() {
+        return LocalSession.instance();
     }
 
     public void handleBusinessException(Exception ex) {
@@ -338,11 +340,6 @@ public abstract class AcaciaPanel
      * @return
      */
     public Address getUserBranch() {
-        Address branch = (Address) LocalSession.get(LocalSession.BRANCH);
-        if ( branch == null ){
-            branch = getAcaciaSession().getBranch();
-            LocalSession.put(LocalSession.BRANCH, branch);
-        }
-        return branch;
+        return LocalSession.instance().getBranch();
     }
 }

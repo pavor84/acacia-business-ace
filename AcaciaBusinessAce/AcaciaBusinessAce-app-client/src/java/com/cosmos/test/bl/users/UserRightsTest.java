@@ -14,10 +14,10 @@ import org.junit.Test;
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -28,8 +28,8 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.UserRightType;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.acacia.crm.gui.LocalSession;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.security.RightsManagerBean;
 import com.cosmos.test.bl.TestUtils;
 
 public class UserRightsTest {
@@ -56,10 +56,10 @@ public class UserRightsTest {
               }
           }
 
-          usersSession = AcaciaPanel.getRemoteBean(this, UsersRemote.class);
-          rightsSession = AcaciaPanel.getRemoteBean(this, UserRightsRemote.class);
-          OrganizationsListRemote orgSession = AcaciaPanel.getRemoteBean(this, OrganizationsListRemote.class);
-          PersonsListRemote personsSession = AcaciaPanel.getRemoteBean(this, PersonsListRemote.class);
+          usersSession = AcaciaPanel.getBean(UsersRemote.class, false);
+          rightsSession = AcaciaPanel.getBean(UserRightsRemote.class, false);
+          OrganizationsListRemote orgSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
+          PersonsListRemote personsSession = AcaciaPanel.getBean(PersonsListRemote.class, false);
 
           // subsequent organization, in the search of appropriate one
           int i = 0;
@@ -68,7 +68,7 @@ public class UserRightsTest {
               try {
                   // Must have at least one organization in the database
                   org = orgSession.getOrganizations(null).get(i);
-                  LocalSession.put(LocalSession.ORGANIZATION, org);
+                  LocalSession.instance().put(LocalSession.ORGANIZATION, org);
 
                   // Must have at least one person for the organization
                   Person person = personsSession.getPersons(org.getId()).get(0);

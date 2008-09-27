@@ -25,8 +25,6 @@ public interface RightsManagerRemote {
 
     /**
      * Checks whether the current user has the specified special permission.
-     * dataObject may be null, if the permission does not concern
-     * any data object
      *
      * @param dataObject
      * @param specialPermission
@@ -35,6 +33,16 @@ public interface RightsManagerRemote {
     boolean isAllowed(DataObject dataObject,
             SpecialPermission specialPermission);
 
+
+    /**
+     * Checks whether the current user has the specified special permission.
+     * Use this method if the permission does not concern any dataObject
+     *
+     * @param dataObject
+     * @param specialPermission
+     * @return
+     */
+    boolean isAllowed(SpecialPermission specialPermission);
 
     /**
      * Checks whether the user has permission on the specified object
@@ -74,5 +82,4 @@ public interface RightsManagerRemote {
      * @param rights
      */
     void setSpecialRights(Set<UserRight> rights);
-
 }
