@@ -21,7 +21,6 @@ import com.cosmos.acacia.crm.bl.users.UserRightsLocal;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.bl.users.UsersLocal;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
