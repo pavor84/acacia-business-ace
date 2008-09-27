@@ -6,9 +6,9 @@ import java.util.Set;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -120,10 +120,11 @@ public class UserRightsTest {
               rightsSession.deleteUserGroup(userGroup);
       }
 
-      @After
-      public void tearDown() {
+      @Before
+      public void setUp() {
           rightsSession.assignRightsToGroup(new HashSet<UserRight>(), userGroup);
           rightsSession.assignRightsToUser(new HashSet<UserRight>(), user);
+          formSession.setGeneralRights(null);
       }
 
       @Test
