@@ -30,9 +30,9 @@ import com.cosmos.beansbinding.EntityProperties;
  */
 public class ProductsListTest extends BaseTest {
 
-    private ProductsListRemote formSession = AcaciaPanel.getBean(ProductsListRemote.class);
+    private ProductsListRemote formSession = AcaciaPanel.getBean(ProductsListRemote.class, false);
 
-    private PatternMaskListRemote patternMaskListSession = AcaciaPanel.getBean(PatternMaskListRemote.class);;
+    private PatternMaskListRemote patternMaskListSession = AcaciaPanel.getBean(PatternMaskListRemote.class, false);;
 
     @Before
     public void setUp() {

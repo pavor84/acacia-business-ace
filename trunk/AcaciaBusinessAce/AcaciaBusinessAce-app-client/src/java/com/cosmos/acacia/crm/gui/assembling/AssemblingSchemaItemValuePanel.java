@@ -231,7 +231,7 @@ public class AssemblingSchemaItemValuePanel
     {
         entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
         PropertyDetails propDetails;
-        
+
         bindingGroup = new BindingGroup();
 
         // propDetails = entityProps.getPropertyDetails("virtualProduct");
@@ -284,7 +284,7 @@ public class AssemblingSchemaItemValuePanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;

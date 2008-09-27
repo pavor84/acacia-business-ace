@@ -29,9 +29,9 @@ import com.cosmos.beansbinding.EntityProperties;
  */
 public class PatternMaskListTest extends BaseTest{
 
-    private PatternMaskListRemote formSession = AcaciaPanel.getBean(PatternMaskListRemote.class);
-    
-    private BusinessPartnersListRemote businessPartnersListRemote = AcaciaPanel.getBean(BusinessPartnersListRemote.class);
+    private PatternMaskListRemote formSession = AcaciaPanel.getBean(PatternMaskListRemote.class, false);
+
+    private BusinessPartnersListRemote businessPartnersListRemote = AcaciaPanel.getBean(BusinessPartnersListRemote.class, false);
 
     @Before
     public void setUp() {

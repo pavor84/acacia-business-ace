@@ -20,9 +20,9 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
- * Business logic test 
- * for {@link OrderConfirmationListBean}  
- * 
+ * Business logic test
+ * for {@link OrderConfirmationListBean}
+ *
  * Created	:	29.07.2008
  * @author	Petar Milev
  *
@@ -30,13 +30,13 @@ import com.cosmos.beansbinding.EntityProperties;
 public class OrderConfirmationListTest extends BaseTest{
 
     @EJB
-    private OrderConfirmationListRemote formSession = AcaciaPanel.getBean(OrderConfirmationListRemote.class);
+    private OrderConfirmationListRemote formSession = AcaciaPanel.getBean(OrderConfirmationListRemote.class, false);
 
     @EJB
-    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class);
-    
+    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class, false);
+
     @EJB
-    private OrganizationsListRemote organizationsListRemote = AcaciaPanel.getBean(OrganizationsListRemote.class);
+    private OrganizationsListRemote organizationsListRemote = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
 
     @Before
     public void setUp() {
@@ -48,18 +48,18 @@ public class OrderConfirmationListTest extends BaseTest{
         EntityProperties entityProperties =
             formSession.getDetailEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         entityProperties = formSession.getListingEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         entityProperties = formSession.getItemDetailEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         entityProperties = formSession.getItemsListEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         Assert.assertNotNull(formSession.getCurrencies());
-        
+
         Assert.assertNotNull(formSession.getPendingConfirmations(getOrganizationId(), getBranch()));
     }
 
@@ -112,18 +112,18 @@ public class OrderConfirmationListTest extends BaseTest{
             o = orgs.get(oIdx++);
             persons = formSession.getSupplierContacts(o);
         }
-        
+
         if ( persons==null || persons.isEmpty() ){
             throw new UncompleteUnitTestException("Not available contact persons to select from. ");
         }
-        
+
         result.setSupplier(o);
         result.setSupplierName(o.getDisplayName());
         result.setSupplierContact(persons.get(0));
         result.setSupplierContactName(persons.get(0).getContact().getDisplayName());
-        
+
         result.setDocumentNumber(""+random.nextInt(1000000000));
-        
+
         try{
             return
             formSession.saveOrderConfirmation(result);

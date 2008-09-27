@@ -288,27 +288,6 @@ public abstract class AcaciaPanel
 
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T getRemoteBean(Object obj, Class<T> remoteInterface)
-    {
-        try
-        {
-            T bean = (T) InitialContext.doLookup(remoteInterface.getName());
-            InvocationHandler handler = new RemoteBeanInvocationHandler(bean, true);
-
-            T proxy = (T) Proxy.newProxyInstance(
-                obj.getClass().getClassLoader(),
-                new Class[]{remoteInterface},
-                handler);
-
-            return proxy;
-        }
-        catch(Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
-    }
-
     public static AcaciaSessionRemote getAcaciaSession() {
         return LocalSession.instance();
     }

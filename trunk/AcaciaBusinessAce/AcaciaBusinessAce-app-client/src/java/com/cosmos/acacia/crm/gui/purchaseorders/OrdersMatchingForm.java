@@ -31,20 +31,20 @@ import com.cosmos.acacia.gui.AbstractTablePanel.ButtonVisibility;
 import com.cosmos.swingb.DialogResponse;
 
 /**
- * 
+ *
  * Created	:	23.07.2008
  * @author	Petar Milev
  *
  */
 public class OrdersMatchingForm extends AcaciaPanel {
-    
-    private PurchaseOrderListRemote purchaseOrderListRemote = getBean(PurchaseOrderListRemote.class);
-    private OrderConfirmationListRemote orderConfirmationListRemote = getBean(OrderConfirmationListRemote.class);
-    
+
+    private PurchaseOrderListRemote purchaseOrderListRemote = getBean(PurchaseOrderListRemote.class, false);
+    private OrderConfirmationListRemote orderConfirmationListRemote = getBean(OrderConfirmationListRemote.class, false);
+
     private PurchaseOrderItemListPanel orderItemsListPanel;
     private OrderConfirmationItemListPanel confirmationItemsListPanel;
 
-    /** Creates new form OrdersMatchingForm 
+    /** Creates new form OrdersMatchingForm
      * @param parentId */
     public OrdersMatchingForm(BigInteger parentId) {
         super(parentId);
@@ -206,13 +206,13 @@ public class OrdersMatchingForm extends AcaciaPanel {
     private com.cosmos.acacia.gui.TableHolderPanel orderItemsHolderPanel;
     private com.cosmos.acacia.gui.AcaciaComboList purchaseOrderField;
     // End of variables declaration//GEN-END:variables
-    
-    
+
+
     @Override
     protected void initData() {
         //by default we have close response
         setDialogResponse(DialogResponse.CLOSE);
-        
+
         matchItemsButton.setMnemonic('M');
         matchPartialButton.setMnemonic('P');
         autoMatchButton.setMnemonic('A');
@@ -225,7 +225,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
         autoMatchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {onAutoMatch();}
         });
-        
+
         //purchase order items panel
         orderItemsListPanel = new PurchaseOrderItemListPanel((BigInteger)null);
         orderItemsListPanel.setVisibleButtons(0);
@@ -236,7 +236,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 updateMatchItemButtons();
             }
         });
-        
+
         //confirmation items list panel
         confirmationItemsListPanel = new OrderConfirmationItemListPanel((BigInteger)null);
         confirmationItemsListPanel.setVisibleButtons(0);
@@ -248,15 +248,15 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 autoSelectOrderItem();
             }
         });
-        
+
         //purchase orders
         List<PurchaseOrder> pendingOrders = purchaseOrderListRemote.getPendingOrders(getParentDataObjectId(), getUserBranch());
         bindorderConfirmationField(pendingOrders);
-        
+
         //order confirmations
         List<OrderConfirmation> pendingConfirmations = orderConfirmationListRemote.getPendingConfirmations(getParentDataObjectId(), getUserBranch());
         OrderConfirmationListPanel confirmationsListPanel = new OrderConfirmationListPanel(getParentDataObjectId(), pendingConfirmations);
-        confirmationsListPanel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex() | 
+        confirmationsListPanel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex() |
             ButtonVisibility.Unselect.getVisibilityIndex() | ButtonVisibility.Close.getVisibilityIndex());
         orderConfirmationField.initUnbound(confirmationsListPanel, "${documentNumber} - ${supplier.displayName}");
         orderConfirmationField.addItemListener(new ItemListener() {
@@ -265,7 +265,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 onOrderConfirmationChanged((OrderConfirmation)e.getItem());
             }
         });
-        
+
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -279,14 +279,14 @@ public class OrdersMatchingForm extends AcaciaPanel {
         //if no selected order - nothing to do here
         if ( order==null )
             return;
-        
+
         List<PurchaseOrderItem> orderItems = orderItemsListPanel.getItems();
-        
+
         OrderConfirmationItem confirmationItem = (OrderConfirmationItem) confirmationItemsListPanel.getDataTable().getSelectedRowObject();
         //believe me - this also happens
         if ( confirmationItem==null )
             return;
-        
+
         PurchaseOrderItem targetOrderItem = null;
         SimpleProduct targetProduct = confirmationItem.getProduct();
         for (PurchaseOrderItem purchaseOrderItem : orderItems) {
@@ -301,9 +301,9 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 }
             }
         }
-        
+
         orderItemsListPanel.setSelectedRowObject(targetOrderItem);
-        
+
         updateMatchItemButtons();
     }
 
@@ -315,10 +315,10 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         if(JOptionPane.YES_OPTION == result){
-            
+
             PurchaseOrder purchaseOrder = (PurchaseOrder) purchaseOrderField.getSelectedItem();
             OrderConfirmation orderConfirmation = (OrderConfirmation) orderConfirmationField.getSelectedItem();
-            
+
             try{
                 orderConfirmationListRemote.matchOrderConfirmation(orderConfirmation, purchaseOrder);
                 refreshItemTables();
@@ -339,7 +339,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
         }else{
             maxQuantityToMatch = confirmationitem.getPendingQuantity();
         }
-        
+
         PartialQuantityForm quantityForm = new PartialQuantityForm(getParentDataObjectId(), maxQuantityToMatch);
         DialogResponse response = quantityForm.showDialog(this);
         if ( DialogResponse.SAVE.equals(response) ){
@@ -354,7 +354,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
     protected void onMatchItems() {
         matchItems(null);
     }
-    
+
     private void matchItems(BigDecimal matchQuantity){
         PurchaseOrderItem orderItem = (PurchaseOrderItem) orderItemsListPanel.getDataTable().getSelectedRowObject();
         OrderConfirmationItem confirmationitem = (OrderConfirmationItem) confirmationItemsListPanel.getDataTable().getSelectedRowObject();
@@ -376,7 +376,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
         }else
             items = new ArrayList<OrderConfirmationItem>();
         confirmationItemsListPanel.refreshList(items);
-        
+
         //update order items
         PurchaseOrder purchaseOrder = (PurchaseOrder) purchaseOrderField.getSelectedItem();
         List<PurchaseOrderItem> orderItems = getPendingItems(purchaseOrder);
@@ -386,19 +386,19 @@ public class OrdersMatchingForm extends AcaciaPanel {
     protected void updateMatchItemButtons() {
         OrderConfirmationItem confirmationItem = (OrderConfirmationItem) confirmationItemsListPanel.getDataTable().getSelectedRowObject();
         PurchaseOrderItem orderItem = (PurchaseOrderItem) orderItemsListPanel.getDataTable().getSelectedRowObject();
-        
+
         boolean enabled = false;
         if ( orderItem!=null && confirmationItem!=null && orderItem.getProduct().equals(confirmationItem.getProduct())){
             enabled = true;
         }
-        
+
         matchItemsButton.setEnabled(enabled);
         matchPartialButton.setEnabled(enabled);
     }
 
     private void bindorderConfirmationField(List<PurchaseOrder> orders) {
         PurchaseOrderListPanel ordersListPanel = new PurchaseOrderListPanel(getParentDataObjectId(), orders);
-        ordersListPanel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex() | 
+        ordersListPanel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex() |
             ButtonVisibility.Unselect.getVisibilityIndex() | ButtonVisibility.Close.getVisibilityIndex());
         purchaseOrderField.initUnbound(ordersListPanel, "${orderNumber} - ${supplier.displayName}");
         purchaseOrderField.addItemListener(new ItemListener() {
@@ -409,7 +409,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 onPurchaseOrderChanged((PurchaseOrder)e.getItem());
             }
         });
-        
+
         updateMatchItemButtons();
         updateAutoMatchButton();
     }
@@ -425,16 +425,16 @@ public class OrdersMatchingForm extends AcaciaPanel {
             items = new ArrayList<OrderConfirmationItem>();
             possibleOrders = purchaseOrderListRemote.getPendingOrders(getParentDataObjectId(), getUserBranch());
         }
-            
+
         confirmationItemsListPanel.refreshList(items);
         bindorderConfirmationField(possibleOrders);
-        
+
         if ( possibleOrders.size()==1 && orderConfirmation!=null ){
             purchaseOrderField.setSelectedItem(possibleOrders.get(0));
         }else{
             orderItemsListPanel.refreshList(new ArrayList<PurchaseOrderItem>());
         }
-        
+
         updateAutoMatchButton();
     }
 
@@ -452,7 +452,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
                     }
                 }
             }
-            
+
             autoMatchButton.setEnabled(enabled);
         }
         else
@@ -463,10 +463,10 @@ public class OrdersMatchingForm extends AcaciaPanel {
         List<PurchaseOrderItem> items = null;
         if ( order!=null )
             items = getPendingItems(order);
-        else 
+        else
             items = new ArrayList<PurchaseOrderItem>();
         orderItemsListPanel.refreshList(items);
-        
+
         autoSelectOrderItem();
         updateAutoMatchButton();
     }
@@ -474,7 +474,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
     private List<PurchaseOrderItem> getPendingItems(PurchaseOrder order) {
         List<PurchaseOrderItem> items = purchaseOrderListRemote.getOrderItems(order.getId());
         List<PurchaseOrderItem> result = new ArrayList<PurchaseOrderItem>();
-        
+
         for (PurchaseOrderItem item : items) {
             //ordered > confirmed
             if ( item.getConfirmedQuantity()==null ||
@@ -482,7 +482,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
                 result.add(item);
             }
         }
-        
+
         return result;
     }
 

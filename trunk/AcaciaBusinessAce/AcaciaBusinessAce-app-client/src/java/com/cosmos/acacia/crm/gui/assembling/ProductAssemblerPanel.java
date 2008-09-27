@@ -326,7 +326,7 @@ public class ProductAssemblerPanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;
@@ -396,6 +396,6 @@ public class ProductAssemblerPanel
             return canEditColumn[column];
         }
 
-        
+
     }
 }

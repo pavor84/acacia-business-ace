@@ -31,10 +31,10 @@ import com.cosmos.beansbinding.EntityProperties;
 public class WarehouseListTest extends BaseTest{
 
     @EJB
-    private WarehouseListRemote formSession = AcaciaPanel.getBean(WarehouseListRemote.class);
+    private WarehouseListRemote formSession = AcaciaPanel.getBean(WarehouseListRemote.class, false);
 
     @EJB
-    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class);
+    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class, false);
 
     @Before
     public void setUp() {

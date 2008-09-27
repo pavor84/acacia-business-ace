@@ -61,27 +61,27 @@ public class ContactBookTest {
     @Before
     public void setUp() {
         if (addressFormSession == null){
-            addressFormSession = AcaciaPanel.getRemoteBean(this, AddressesListRemote.class);
+            addressFormSession = AcaciaPanel.getBean(AddressesListRemote.class, false);
         }
 
         if (organizationFormSession == null){
-            organizationFormSession = AcaciaPanel.getRemoteBean(this, OrganizationsListRemote.class);
+            organizationFormSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
         }
 
         if (personFormSession == null){
-            personFormSession = AcaciaPanel.getRemoteBean(this, PersonsListRemote.class);;
+            personFormSession = AcaciaPanel.getBean(PersonsListRemote.class, false);
         }
 
         if (bankDetailsFormSession == null){
-            bankDetailsFormSession = AcaciaPanel.getRemoteBean(this, BankDetailsListRemote.class);
+            bankDetailsFormSession = AcaciaPanel.getBean(BankDetailsListRemote.class, false);
         }
 
         if (passportFormSession == null){
-            passportFormSession = AcaciaPanel.getRemoteBean(this, PassportsListRemote.class);
+            passportFormSession = AcaciaPanel.getBean(PassportsListRemote.class, false);
         }
 
         if (locationFormSession == null){
-            locationFormSession = AcaciaPanel.getRemoteBean(this, LocationsListRemote.class);
+            locationFormSession = AcaciaPanel.getBean(LocationsListRemote.class, false);
         }
     }
 

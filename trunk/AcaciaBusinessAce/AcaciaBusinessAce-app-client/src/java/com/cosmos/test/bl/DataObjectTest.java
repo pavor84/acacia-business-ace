@@ -42,7 +42,7 @@ public class DataObjectTest
     public void setUp() {
         if(doh == null)
         {
-            doh = AcaciaPanel.getRemoteBean(this, DataObjectTypeRemote.class);
+            doh = AcaciaPanel.getBean(DataObjectTypeRemote.class, false);
         }
     }
 

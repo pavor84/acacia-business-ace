@@ -21,9 +21,9 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
- * Business logic test 
- * for {@link PurchaseOrderListBean}  
- * 
+ * Business logic test
+ * for {@link PurchaseOrderListBean}
+ *
  * Created	:	29.07.2008
  * @author	Petar Milev
  *
@@ -31,13 +31,13 @@ import com.cosmos.beansbinding.EntityProperties;
 public class PurchaseOrderListTest extends BaseTest{
 
     @EJB
-    private PurchaseOrderListRemote formSession = AcaciaPanel.getBean(PurchaseOrderListRemote.class);
+    private PurchaseOrderListRemote formSession = AcaciaPanel.getBean(PurchaseOrderListRemote.class, false);
 
     @EJB
-    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class);
-    
+    private AddressesListRemote addressListSession = AcaciaPanel.getBean(AddressesListRemote.class, false);
+
     @EJB
-    private OrganizationsListRemote organizationsListRemote = AcaciaPanel.getBean(OrganizationsListRemote.class);
+    private OrganizationsListRemote organizationsListRemote = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
 
     @Before
     public void setUp() {
@@ -49,22 +49,22 @@ public class PurchaseOrderListTest extends BaseTest{
         EntityProperties entityProperties =
             formSession.getDetailEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         entityProperties = formSession.getListingEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         entityProperties = formSession.getItemDetailEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         entityProperties = formSession.getItemsListEntityProperties();
         Assert.assertNotNull(entityProperties);
-        
+
         Assert.assertNotNull(formSession.getCurrencies());
-        
+
         Assert.assertNotNull(formSession.getDeliveryMethods());
-        
+
         Assert.assertNotNull(formSession.getStatuses());
-        
+
         Assert.assertNotNull(formSession.getPendingOrders(getOrganizationId(), getBranch()));
     }
 
@@ -117,16 +117,16 @@ public class PurchaseOrderListTest extends BaseTest{
             o = orgs.get(oIdx++);
             persons = formSession.getSupplierContacts(o);
         }
-        
+
         if ( persons==null || persons.isEmpty() ){
             throw new UncompleteUnitTestException("Not available contact persons to select from. ");
         }
-        
+
         result.setSupplier(o);
         result.setSupplierName(o.getDisplayName());
         result.setSupplierContact(persons.get(0));
         result.setSupplierContactName(persons.get(0).getContact().getDisplayName());
-        
+
         //mean while do unrelated to createNew test, but do it here, because we found a supplier
         Assert.assertNotNull(formSession.getPendingOrders(getOrganizationId(), o, getBranch()));
 

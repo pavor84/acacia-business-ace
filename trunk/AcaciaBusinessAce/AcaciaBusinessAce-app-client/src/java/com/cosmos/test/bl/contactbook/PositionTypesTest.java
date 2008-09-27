@@ -36,10 +36,10 @@ public class PositionTypesTest {
     @Before
     public void setUp() {
         if (formSession == null)
-            formSession = AcaciaPanel.getRemoteBean(this, PositionTypesListRemote.class);
+            formSession = AcaciaPanel.getBean(PositionTypesListRemote.class, false);
 
         if (orgSession == null)
-            orgSession = AcaciaPanel.getRemoteBean(this, OrganizationsListRemote.class);
+            orgSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
     }
 
     @Test

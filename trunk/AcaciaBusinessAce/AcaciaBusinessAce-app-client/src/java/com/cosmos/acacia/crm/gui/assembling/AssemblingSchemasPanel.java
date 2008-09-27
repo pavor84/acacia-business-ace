@@ -370,7 +370,7 @@ public class AssemblingSchemasPanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;
@@ -447,7 +447,7 @@ public class AssemblingSchemasPanel
                     getSchemaItemsTablePanel().setEnabled(AbstractTablePanel.Button.New, false);
                     tabbedPane.setEnabledAt(1, false);
                 }
-            
+
                 getSchemaItemsTablePanel().refreshDataTable();
             }
         }
