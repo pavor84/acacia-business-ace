@@ -35,8 +35,10 @@ import org.jdesktop.application.TaskMonitor;
 
 import com.birosoft.liquid.LiquidLookAndFeel;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
@@ -63,7 +65,9 @@ import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
+import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.acacia.settings.GeneralSettings;
+import com.cosmos.swingb.JBCheckBoxMenuItem;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
@@ -527,6 +531,15 @@ public class AcaciaApplicationView extends FrameView {
         panel.showFrame();
     }
 
+    JBCheckBoxMenuItem viewDataFromAllBranchesMenuItem;
+
+    @Action
+    public void viewDataFromAllBranchesAction() {
+        LocalSession.instance().put(
+                LocalSession.VIEW_DATA_FROM_ALL_BRANCHES,
+                new Boolean(viewDataFromAllBranchesMenuItem.getState()));
+    }
+
     private ActionMap getActionMap()
     {
         return getContext().getActionMap(this);
@@ -569,6 +582,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem ownOrganizationMenuItem = new JBMenuItem();
         JBMenuItem organizationInternalHierarchyMenuItem = new JBMenuItem();
         JBMenuItem branchSelectionMenuItem = new JBMenuItem();
+        viewDataFromAllBranchesMenuItem = new JBCheckBoxMenuItem();
         /* End of contact book menu items */
 
         JBMenu classifiersMenu = new JBMenu();
@@ -794,6 +808,11 @@ public class AcaciaApplicationView extends FrameView {
 
         branchSelectionMenuItem.setAction(actionMap.get("branchSelectionAction"));
         contactBook.add(branchSelectionMenuItem);
+
+        if (isAllowed(SpecialPermission.CanViewDataFromAllBranches)) {
+            viewDataFromAllBranchesMenuItem.setAction(actionMap.get("viewDataFromAllBranchesAction"));
+            contactBook.add(viewDataFromAllBranchesMenuItem);
+        }
 
         menuBar.add(contactBook);
 
@@ -1046,4 +1065,10 @@ public class AcaciaApplicationView extends FrameView {
         return menu;
     }
 
+    /**
+     * Wraps the functionality of special permission checking
+     */
+    private boolean isAllowed(SpecialPermission specialPermission) {
+        return PermissionsManager.get().isAllowed(specialPermission);
+    }
 }

@@ -5,39 +5,60 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.annotations.Create;
 import com.cosmos.acacia.crm.bl.users.annotations.Delete;
 import com.cosmos.acacia.crm.bl.users.annotations.Modify;
 import com.cosmos.acacia.crm.bl.users.annotations.Read;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.enums.UserRightType;
-import com.cosmos.acacia.crm.gui.LocalSession;
 
+/**
+ * Pseudo-singleton class for managing permissions
+ *
+ * @author Bozhidar Bozhanov
+ *
+ */
 public class PermissionsManager {
+
+    private static final long CLEAR_PERIOD = 4 * 60 * 60 * 1000;
 
     private RightsManagerRemote manager;
     private List<DataObjectType> dataObjectTypes;
     private BigInteger branchId;
+    private static PermissionsManager instance;
 
     public PermissionsManager(List<DataObjectType> dataObjectTypes, BigInteger branchId) {
+        if (instance != null)
+            return;
+
         try {
             //manager = InitialContext.doLookup(RightsManagerRemote.class.getName());
             EntityManagerFacadeRemote em = InitialContext.doLookup(EntityManagerFacadeRemote.class.getName());
             manager = new RightsManagerBean(em);
+            Timer timer = new Timer();
+            timer.schedule(new ClearingTask(), CLEAR_PERIOD, CLEAR_PERIOD);
         } catch (NamingException ex) {
             //
         }
         this.dataObjectTypes = dataObjectTypes;
         this.branchId = branchId;
+        instance = this;
+    }
+
+    public static PermissionsManager get() {
+        return instance;
     }
 
     /**
@@ -109,10 +130,23 @@ public class PermissionsManager {
                 return true;
 
             // checking if it is the current organization
-            if (dob.equals(LocalSession.get(LocalSession.ORGANIZATION)))
+            if (dob.equals(LocalSession.instance().getOrganization()))
                 return true;
 
-            allowed = dob.getDataObject().getOwnerId().equals(branchId);
+            // Checking if the user is allowed to view data from all branches
+            boolean isAllowedToViewAll = false;
+            try {
+                isAllowedToViewAll = ((Boolean) LocalSession.instance().get(
+                    LocalSession.VIEW_DATA_FROM_ALL_BRANCHES)).booleanValue();
+            } catch (NullPointerException ex) {
+                //Ignored, the value is not set
+            }
+
+
+            allowed = isAllowedToViewAll
+            || dob.getDataObject().getOwnerId().equals(branchId)
+            || dob.getDataObject().getOwnerId().equals(BigInteger.ZERO);
+
             if (allowed)
                 allowed = manager.isAllowed(
                      dob.getDataObject(),
@@ -141,10 +175,28 @@ public class PermissionsManager {
                 if (obj instanceof DataObjectBean) {
 
                     // checking branch ownership; if valid, check regular permissions
-                    if (!((DataObjectBean) obj).getDataObject().getOwnerId().equals(branchId)) {
+                    // Checking if the user is allowed to view data from all branches
+                    boolean isAllowedToViewAll = false;
+                    try {
+                        isAllowedToViewAll = ((Boolean) LocalSession.instance().get(
+                            LocalSession.VIEW_DATA_FROM_ALL_BRANCHES)).booleanValue();
+                    } catch (NullPointerException ex) {
+                        //Ignored, the value is not set
+                    }
+
+                    DataObjectBean dob = ((DataObjectBean) obj);
+                    boolean isBranchMember = isAllowedToViewAll
+                    || dob.getDataObject().getOwnerId().equals(branchId)
+                    || dob.getDataObject().getOwnerId().equals(BigInteger.ZERO);
+
+                    System.out.println("DOID: " + manager.isAllowed(
+                            dob.getDataObject(),
+                            UserRightType.READ));
+
+                    if (!isBranchMember) {
                         tmpCollection.remove(obj);
                     } else if (!manager.isAllowed(
-                            ((DataObjectBean) obj).getDataObject(),
+                            dob.getDataObject(),
                             UserRightType.READ)) {
 
                         tmpCollection.remove(obj);
@@ -170,5 +222,38 @@ public class PermissionsManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Method for client-side checking special permissions
+     * @param specialPermission
+     * @return
+     */
+    public boolean isAllowed(DataObject dataObject, SpecialPermission specialPermission) {
+        return manager.isAllowed(dataObject, specialPermission);
+    }
+
+    public boolean isAllowed(SpecialPermission specialPermission) {
+        return manager.isAllowed(specialPermission);
+    }
+
+    public BigInteger getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(BigInteger branchId) {
+        this.branchId = branchId;
+    }
+
+    public void clearCachedRights() {
+        manager.setSpecialRights(null);
+        manager.setGeneralRights(null);
+    }
+
+    class ClearingTask extends TimerTask {
+        @Override
+        public void run() {
+            clearCachedRights();
+        }
     }
 }

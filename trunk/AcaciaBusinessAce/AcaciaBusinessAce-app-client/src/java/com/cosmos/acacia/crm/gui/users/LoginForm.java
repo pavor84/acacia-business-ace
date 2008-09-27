@@ -12,6 +12,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 
@@ -19,15 +20,13 @@ import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.acacia.crm.gui.LocalSession;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.swingb.DialogResponse;
-import java.util.List;
 
 /**
  *
@@ -43,8 +42,6 @@ public class LoginForm extends AcaciaPanel {
 
     @SuppressWarnings("hiding")
     protected static Logger log = Logger.getLogger(LoginForm.class);
-
-    private AcaciaSessionRemote acaciaSessionRemote = getBean(AcaciaSessionRemote.class);
 
     /** Creates new form LoginForm */
     public LoginForm(BigInteger parentId) {
@@ -332,7 +329,7 @@ public class LoginForm extends AcaciaPanel {
             Integer sessionid = getFormSession().login(username, password);
             AcaciaApplication.setSessionId(sessionid);
 
-            User user = acaciaSessionRemote.getUser();
+            User user = getAcaciaSession().getUser();
 
             setPreferences(username);
 
@@ -355,8 +352,14 @@ public class LoginForm extends AcaciaPanel {
                 organization = organizations.get(0);
             }
 
+            // Initialization of client parameters
+
             getFormSession().setOrganization(organization);
-            LocalSession.put(LocalSession.ORGANIZATION, organization);
+
+            new PermissionsManager(getAcaciaSession().getDataObjectTypes(),
+                    getUserBranch().getAddressId());
+
+            // End of initialization
 
 //            try {
 //                OrganizationsCallbackHandler handler = new OrganizationsCallbackHandler(defaultOrganization);
@@ -432,7 +435,7 @@ public class LoginForm extends AcaciaPanel {
         if (formSession == null) {
             try
             {
-                formSession = getBean(UsersRemote.class);
+                formSession = getBean(UsersRemote.class, false);
                 UserUtils.updateUserLocale(formSession);
             }
             catch(Exception ex)

@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import java.util.HashSet;
@@ -44,7 +45,7 @@ public class RightsListPanel extends AbstractTablePanel {
         GeneralRightsPanel,
         SpecialPermissionsPanel
     }
-    
+
     public RightsListPanel(User user, Type type) {
         super(user.getId());
         this.user = user;
@@ -67,7 +68,7 @@ public class RightsListPanel extends AbstractTablePanel {
     private User user;
     private UserGroup userGroup;
     private Type type;
-    
+
     @Override
     protected void initData() {
         super.initData();
@@ -93,7 +94,7 @@ public class RightsListPanel extends AbstractTablePanel {
 
     private UserRightsRemote getFormSession() {
          if(formSession == null)
-            formSession = getBean(UserRightsRemote.class);
+            formSession = getBean(UserRightsRemote.class, false);
 
         return formSession;
     }
@@ -102,35 +103,36 @@ public class RightsListPanel extends AbstractTablePanel {
     protected List<UserRight> getRights()
     {
         if (rights == null) {
-            
+
             if (user != null && user.getId() != null) {
                 if (type == Type.GeneralRightsPanel)
                     rights = getFormSession().getUserRights(user);
-                
+
                 if (type == Type.SpecialPermissionsPanel)
                     rights = getFormSession().getSpecialPermissions(user);
             }
-                
+
 
             if (userGroup != null && userGroup.getId() != null) {
                 if (type == Type.GeneralRightsPanel)
                     rights = getFormSession().getUserRights(userGroup);
-                
+
                 if (type == Type.SpecialPermissionsPanel)
                     rights = getFormSession().getSpecialPermissions(userGroup);
             }
-            
+
             if (rights == null)
                 rights = new HashSet<UserRight>();
-            
-            List<DataObjectType> dots = 
+
+            List<DataObjectType> dots =
                     DataObjectTypesListPanel.shortenDataObjectTypeNames(getFormSession().getDataObjectTypes());
-            
+
             for (UserRight right : rights) {
-                right.setDataObjectType(dots.get(dots.indexOf(right.getDataObjectType())));
+                if (right.getDataObjectType() != null)
+                    right.setDataObjectType(dots.get(dots.indexOf(right.getDataObjectType())));
             }
         }
-        
+
         return new LinkedList<UserRight>(rights);
     }
 
@@ -151,14 +153,14 @@ public class RightsListPanel extends AbstractTablePanel {
 
         if (type == Type.GeneralRightsPanel)
             entityProps.removePropertyDetails("specialPermission");
-        
+
         if (type == Type.SpecialPermissionsPanel) {
             entityProps.removePropertyDetails("read");
             entityProps.removePropertyDetails("create");
             entityProps.removePropertyDetails("modify");
             entityProps.removePropertyDetails("delete");
         }
-        
+
         return entityProps;
     }
 
@@ -168,6 +170,7 @@ public class RightsListPanel extends AbstractTablePanel {
         return true;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null && canNestedOperationProceed())
@@ -175,10 +178,10 @@ public class RightsListPanel extends AbstractTablePanel {
             AcaciaPanel panel = null;
             if (type == Type.GeneralRightsPanel)
                 panel = new RightsPanel((UserRight) rowObject);
-            
+
             if (type == Type.SpecialPermissionsPanel)
                 panel = new SpecialPermissionPanel((UserRight) rowObject);
-            
+
             DialogResponse response = panel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -189,6 +192,7 @@ public class RightsListPanel extends AbstractTablePanel {
         return null;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed()) {
@@ -199,19 +203,19 @@ public class RightsListPanel extends AbstractTablePanel {
             if (userGroup != null)
                 right.setUserGroup(userGroup);
 
-            
+
             AcaciaPanel panel = null;
             if (type == Type.GeneralRightsPanel)
                 panel = new RightsPanel(right);
-            
+
             if (type == Type.SpecialPermissionsPanel)
                 panel = new SpecialPermissionPanel(right);
-            
+
             DialogResponse response = panel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
                 UserRight result  = (UserRight) panel.getSelectedValue();
-                
+
                 rights.add(result);
                 return right;
             }
@@ -243,7 +247,7 @@ public class RightsListPanel extends AbstractTablePanel {
             if (userGroup != null)
                 getFormSession().assignRightsToGroup(rights, userGroup);
         }
-        
+
         if (type == Type.SpecialPermissionsPanel) {
             if (user != null)
                 getFormSession().assignSpecialPermissionsToUser(rights, user);
@@ -251,6 +255,13 @@ public class RightsListPanel extends AbstractTablePanel {
             if (userGroup != null)
                 getFormSession().assignSpecialPermissionsToGroup(rights, userGroup);
         }
+
+        // Clearing the cached rights on the client. They will be fetched
+        // the next time they are requested. This only happens if the user
+        // is changing his own rights
+        // TODO: same for user group
+        if (user != null && user.equals(getAcaciaSession().getUser()))
+                PermissionsManager.get().clearCachedRights();
     }
 
     @Override

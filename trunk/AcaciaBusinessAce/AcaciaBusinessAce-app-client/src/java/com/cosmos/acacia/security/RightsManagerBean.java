@@ -1,4 +1,4 @@
-package com.cosmos.acacia.crm.bl.users;
+package com.cosmos.acacia.security;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +15,13 @@ import javax.persistence.Query;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
+import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
+import com.cosmos.acacia.crm.bl.users.UserRightsLocal;
+import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
+import com.cosmos.acacia.crm.bl.users.UsersLocal;
+import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -26,7 +33,7 @@ import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.enums.UserRightType;
-import com.cosmos.acacia.crm.gui.LocalSession;
+import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
  * The class supports both server-side and client-side invocations
@@ -78,7 +85,8 @@ public class RightsManagerBean
         try {
             rightsHelperRemote = InitialContext.doLookup(UserRightsRemote.class.getName());
             usersManagerRemote = InitialContext.doLookup(UsersRemote.class.getName());
-            sessionRemote = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
+            //sessionRemote = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
+            sessionRemote = AcaciaPanel.getAcaciaSession();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -102,6 +110,11 @@ public class RightsManagerBean
     }
 
     @Override
+    public boolean isAllowed(SpecialPermission specialPermission) {
+        return isAllowed(new DataObject(), specialPermission);
+    }
+
+    @Override
     public boolean isAllowed(User user,
             DataObject dataObject,
             UserRightType rightType) {
@@ -111,8 +124,10 @@ public class RightsManagerBean
         UserRight highestPriorityRegularRight = getHigherPriorityRight(rights, false);
         UserRight highestPriorityExclusionRight = getHigherPriorityRight(rights, true);
 
+        // TODO : default behavior : to allow or disallow access
+        // when no settings are present
         if (highestPriorityRegularRight == null)
-            return false;
+            return true;
 
         UserRight highestPriorityRight =
                 compareRights(highestPriorityRegularRight, highestPriorityExclusionRight);
@@ -163,7 +178,8 @@ public class RightsManagerBean
 
         for (UserRight right : rights) {
             //TODO: this check might be incorrect
-            if (right.getSpecialPermission().equals(specialPermission.getDbResource()))
+
+            if (specialPermission.matches(right.getSpecialPermission()))
                 return true;
         }
 
@@ -360,7 +376,7 @@ public class RightsManagerBean
         if (session != null)
             return session.getOrganization();
 
-        return (Organization) LocalSession.get(LocalSession.ORGANIZATION);
+        return sessionRemote.getOrganization();
     }
 
     private Set<UserRight> getUserRights(User user) {
@@ -390,6 +406,4 @@ public class RightsManagerBean
 
         return rightsHelperRemote.getSpecialPermissions(group);
     }
-
-
 }

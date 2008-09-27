@@ -11,16 +11,20 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.gui.LocalSession;
-import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
+
 import javax.naming.InitialContext;
+
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
+
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.security.PermissionsManager;
+import com.cosmos.beansbinding.EntityProperties;
 
 /**
  *
@@ -111,7 +115,7 @@ public class BranchSelectionPanel extends AcaciaPanel {
         bindingGroup.bind();
 
         //Selecting the current branch
-        branchesTable.setSelectedRowObject(LocalSession.get(LocalSession.BRANCH));
+        branchesTable.setSelectedRowObject(getUserBranch());
     }
 
     protected List<Address> getAddresses()
@@ -153,8 +157,11 @@ public class BranchSelectionPanel extends AcaciaPanel {
 
     @Action
     public void select() {
-        LocalSession.put(LocalSession.BRANCH, branchesTable.getSelectedRowObject());
-        getAcaciaSession().setBranch((Address) branchesTable.getSelectedRowObject());
+        Address branch = (Address) branchesTable.getSelectedRowObject();
+
+        getAcaciaSession().setBranch(branch);
+        // Updating the permissions manager
+        PermissionsManager.get().setBranchId(branch.getAddressId());
         close();
     }
 

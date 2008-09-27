@@ -51,4 +51,8 @@ public enum SpecialPermission implements DatabaseResource {
 
         return dbResources;
     }
+
+    public boolean matches(DbResource dbResource) {
+        return toString().equals(dbResource.getEnumName());
+    }
 }
