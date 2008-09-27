@@ -29,7 +29,7 @@ import com.cosmos.beansbinding.EntityProperties;
 public class ProductCategoriesTest extends BaseTest{
 
     @EJB
-    private ProductsListRemote formSession = AcaciaPanel.getBean(ProductsListRemote.class);
+    private ProductsListRemote formSession = AcaciaPanel.getBean(ProductsListRemote.class, false);
 
     @Before
     public void setUp() {

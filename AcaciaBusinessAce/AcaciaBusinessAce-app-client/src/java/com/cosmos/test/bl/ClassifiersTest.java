@@ -35,7 +35,7 @@ public class ClassifiersTest {
     @Before
     public void setUp() {
         if ( formSession==null )
-                formSession = AcaciaPanel.getRemoteBean(this, ClassifiersRemote.class);
+                formSession = AcaciaPanel.getBean(ClassifiersRemote.class, false);
     }
 
     @Test

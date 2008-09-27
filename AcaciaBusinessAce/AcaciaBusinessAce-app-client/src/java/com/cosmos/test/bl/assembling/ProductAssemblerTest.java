@@ -52,7 +52,7 @@ public class ProductAssemblerTest
     public static void setUpClass() throws Exception
     {
         assemblingSchemas = new TreeMap<Algorithm.Type, AssemblingSchema>();
-        formSession = AcaciaPanel.getBean(AssemblingRemote.class);
+        formSession = AcaciaPanel.getBean(AssemblingRemote.class, false);
         util = new BaseTest();
         util.setUp();
 
@@ -115,7 +115,7 @@ public class ProductAssemblerTest
     public void testUserSelection()
     {
     }
-    
+
 
     @Test
     public void testUserSingleSelection()

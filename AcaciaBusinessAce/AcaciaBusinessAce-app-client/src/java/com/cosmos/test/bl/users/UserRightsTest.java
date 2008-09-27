@@ -7,8 +7,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
@@ -34,18 +35,18 @@ import com.cosmos.test.bl.TestUtils;
 
 public class UserRightsTest {
 
-      private RightsManagerRemote formSession;
+      private static RightsManagerRemote formSession;
 
-      private UsersRemote usersSession;
-      private UserRightsRemote rightsSession;
+      private static UsersRemote usersSession;
+      private static UserRightsRemote rightsSession;
 
-      private User user;
-      private UserGroup userGroup;
-      private Organization org;
-      private Address branch;
+      private static User user;
+      private static UserGroup userGroup;
+      private static Organization org;
+      private static Address branch;
 
-      @Before
-      public void setUp() {
+      @BeforeClass
+      public static void setUpClass() {
           if (formSession == null) {
               //formSession = AcaciaPanel.getRemoteBean(this, RightsManagerRemote.class);
               try {
@@ -110,13 +111,19 @@ public class UserRightsTest {
           }
       }
 
-      @After
-      public void tearDown() {
+      @AfterClass
+      public static void tearDownClass() {
           if (user != null)
               usersSession.deleteUser(user);
 
           if (userGroup != null)
               rightsSession.deleteUserGroup(userGroup);
+      }
+
+      @After
+      public void tearDown() {
+          rightsSession.assignRightsToGroup(new HashSet<UserRight>(), userGroup);
+          rightsSession.assignRightsToUser(new HashSet<UserRight>(), user);
       }
 
       @Test

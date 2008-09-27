@@ -58,6 +58,9 @@ public class PermissionsManager {
     }
 
     public static PermissionsManager get() {
+        if (instance == null)
+            throw new RuntimeException("Initialize the permissions manager first");
+
         return instance;
     }
 

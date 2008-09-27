@@ -75,7 +75,7 @@ public class AssemblingCategoryTreeTablePanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;

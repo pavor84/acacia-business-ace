@@ -16,9 +16,9 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
- * Business logic test 
- * for {@link BusinessPartnerListBean}  
- * 
+ * Business logic test
+ * for {@link BusinessPartnerListBean}
+ *
  * Created	:	29.07.2008
  * @author	Petar Milev
  *
@@ -26,10 +26,10 @@ import com.cosmos.beansbinding.EntityProperties;
 public class BusinessPartnerListTest extends BaseTest{
 
     @EJB
-    private BusinessPartnersListRemote formSession = AcaciaPanel.getBean(BusinessPartnersListRemote.class);
+    private BusinessPartnersListRemote formSession = AcaciaPanel.getBean(BusinessPartnersListRemote.class, false);
 
     @EJB
-    private PersonsListRemote personFormSession = AcaciaPanel.getBean(PersonsListRemote.class);
+    private PersonsListRemote personFormSession = AcaciaPanel.getBean(PersonsListRemote.class, false);
 
     @Before
     public void setUp() {
@@ -64,7 +64,7 @@ public class BusinessPartnerListTest extends BaseTest{
             //delete
             formSession.deleteBusinessPartner(inserted);
         }
-        
+
         //listing
         list();
     }
@@ -81,8 +81,8 @@ public class BusinessPartnerListTest extends BaseTest{
         person.setSecondName(""+random.nextInt(100000000));
         person.setLastName(""+random.nextInt(100000000));
         person.setExtraName(""+random.nextInt(100000000));
-        
-        
+
+
         try{
             person = personFormSession.savePerson(person);
             return person;

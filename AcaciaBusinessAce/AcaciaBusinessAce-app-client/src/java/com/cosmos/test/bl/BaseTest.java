@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.cosmos.test.bl;
 
@@ -27,15 +27,15 @@ import com.cosmos.acacia.crm.gui.AcaciaApplication;
  */
 public class BaseTest {
     private static Map<String, Object> sessionCache = new HashMap<String, Object>();
-    
-    protected UsersRemote usersRemote = getBean(UsersRemote.class);
-    
-    protected AcaciaSessionRemote session = getBean(AcaciaSessionRemote.class);
-    
+
+    protected UsersRemote usersRemote = getBean(UsersRemote.class, false);
+
+    protected AcaciaSessionRemote session = getBean(AcaciaSessionRemote.class, false);
+
     protected Random random = new Random();
-    
+
     private boolean sessionCaching = true;
-    
+
     @Before
     public void setUp() {
         login("admin", "admin");
@@ -46,7 +46,7 @@ public class BaseTest {
         //already logged - so return
         if ( loggedUser!=null && loggedUser.getUserName().equals(userName))
             return;
-        
+
         Integer sessionid = usersRemote.login(userName, password.toCharArray());
         AcaciaApplication.setSessionId(sessionid);
 
@@ -54,10 +54,10 @@ public class BaseTest {
         List<Organization> organizations = usersRemote.getOrganizationsList(user);
         if ( organizations==null || organizations.isEmpty() )
             throw new IllegalStateException("Organizations empty for this user: "+userName);
-        
+
         usersRemote.setOrganization(organizations.get(0));
     }
-    
+
     public User getUser(){
         User result = (User) sessionCache.get("user");
         if ( result==null ){
@@ -66,7 +66,7 @@ public class BaseTest {
         }
         return result;
     }
-    
+
     public Organization getOrganization(){
         Organization result = (Organization) sessionCache.get("organization");
         if ( result==null ){
@@ -75,7 +75,7 @@ public class BaseTest {
         }
         return result;
     }
-    
+
     public BigInteger getOrganizationId(){
         return getOrganization().getId();
     }
@@ -92,7 +92,7 @@ public class BaseTest {
     public boolean isSessionCaching() {
         return sessionCaching;
     }
-    
+
     public void clearSessionCache(){
         sessionCache.clear();
     }

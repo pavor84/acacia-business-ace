@@ -171,9 +171,9 @@ public class AssemblingCategoryPanel
     {
         entProps = getFormSession().getAssemblingCategoryEntityProperties();
         PropertyDetails propDetails;
-        
+
         bindGroup = new BindingGroup();
-        
+
         //parent category
         propDetails = entProps.getPropertyDetails("parentCategory");
         parentCategoryLookup.bind(new AcaciaLookupProvider()
@@ -184,12 +184,12 @@ public class AssemblingCategoryPanel
                     return onChooseCategory();
                 }
             },
-            bindGroup, 
-            entity, 
-            propDetails, 
+            bindGroup,
+            entity,
+            propDetails,
             "${categoryName}",
             UpdateStrategy.READ_WRITE);
-        
+
         //category code
         propDetails = entProps.getPropertyDetails("categoryCode");
         categoryCodeTextField.bind(bindGroup, entity, propDetails);
@@ -238,11 +238,11 @@ public class AssemblingCategoryPanel
         panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
         panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
         panel.setModificationsEnabled(false);
-        
+
         DialogResponse dResponse = panel.showDialog(this);
-        
+
         if ( DialogResponse.SELECT.equals(dResponse) ){
-            
+
             ProductCategory category = (ProductCategory)
                 panel.getListPanel().getSelectedRowObject();
 
@@ -257,7 +257,7 @@ public class AssemblingCategoryPanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;

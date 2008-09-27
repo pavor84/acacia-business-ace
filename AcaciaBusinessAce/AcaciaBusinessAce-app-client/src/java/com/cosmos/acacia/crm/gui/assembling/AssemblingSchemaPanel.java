@@ -181,9 +181,9 @@ public class AssemblingSchemaPanel
 
         entityProps = getFormSession().getAssemblingSchemaEntityProperties();
         PropertyDetails propDetails;
-        
+
         bindingGroup = new BindingGroup();
-        
+
         //parent category
         propDetails = entityProps.getPropertyDetails("assemblingCategory");
         assemblingCategoryLookup.bind(new AcaciaLookupProvider()
@@ -194,9 +194,9 @@ public class AssemblingSchemaPanel
                     return onChooseCategory();
                 }
             },
-            bindingGroup, 
-            entity, 
-            propDetails, 
+            bindingGroup,
+            entity,
+            propDetails,
             "${categoryName}",
             UpdateStrategy.READ_WRITE);
 
@@ -256,7 +256,7 @@ public class AssemblingSchemaPanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;

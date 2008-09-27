@@ -50,7 +50,7 @@ public class UsersTest implements Serializable {
     @Before
     public void setUp() {
         if (formSession == null)
-            formSession = AcaciaPanel.getRemoteBean(this, UsersRemote.class);
+            formSession = AcaciaPanel.getBean(UsersRemote.class, false);
 
         user = formSession.createUser();
         password = TestUtils.getRandomString(15);
@@ -60,7 +60,7 @@ public class UsersTest implements Serializable {
 
 
         if (orgSession == null)
-            orgSession = AcaciaPanel.getRemoteBean(this, OrganizationsListRemote.class);
+            orgSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
 
         organization = orgSession.newOrganization(null);
         organization.setOrganizationName(TestUtils.getRandomString(10));

@@ -339,7 +339,7 @@ public class AssemblingSchemaItemPanel
     {
         entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
         PropertyDetails propDetails;
-        
+
         bindingGroup = new BindingGroup();
 
         AssemblingSchema as = entity.getAssemblingSchema();
@@ -434,7 +434,7 @@ public class AssemblingSchemaItemPanel
     {
         if(formSession == null)
         {
-            formSession = getRemoteBean(this, AssemblingRemote.class);
+            formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;
