@@ -25,7 +25,6 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -355,9 +354,6 @@ public class LoginForm extends AcaciaPanel {
             // Initialization of client parameters
 
             getFormSession().setOrganization(organization);
-
-            new PermissionsManager(getAcaciaSession().getDataObjectTypes(),
-                    getUserBranch().getAddressId());
 
             // End of initialization
 

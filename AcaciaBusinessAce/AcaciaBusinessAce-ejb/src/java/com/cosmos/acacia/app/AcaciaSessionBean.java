@@ -6,6 +6,7 @@ import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,6 +19,7 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.UserRight;
 
 /**
  * Created	:	19.05.2008
@@ -121,5 +123,37 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     public List<DataObjectType> getDataObjectTypes() {
         Query q = em.createNamedQuery("DataObjectType.listAll");
         return new ArrayList<DataObjectType>(q.getResultList());
+    }
+
+    @Override
+    public Boolean getViewDataFromAllBranches() {
+        return (Boolean) getSession().getValue(SessionContext.VIEW_DATA_FROM_ALL_BRANCHES_KEY);
+    }
+
+    @Override
+    public void setViewDataFromAllBranches(Boolean value) {
+        getSession().setValue(SessionContext.VIEW_DATA_FROM_ALL_BRANCHES_KEY, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Set<UserRight> getGeneralRights() {
+        return (Set<UserRight>) getSession().getValue(SessionContext.GENERAL_RIGHTS_KEY);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Set<UserRight> getSpecialPermissions() {
+        return (Set<UserRight>) getSession().getValue(SessionContext.SPECIAL_PERMISSIONS_KEY);
+    }
+
+    @Override
+    public void setGeneralRights(Set<UserRight> rights) {
+        getSession().setValue(SessionContext.GENERAL_RIGHTS_KEY, rights);
+    }
+
+    @Override
+    public void setSpecialPermissions(Set<UserRight> rights) {
+        getSession().setValue(SessionContext.SPECIAL_PERMISSIONS_KEY, rights);
     }
 }

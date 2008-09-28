@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
@@ -25,7 +26,6 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.UserRightType;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.security.RightsManagerBean;
 import com.cosmos.test.bl.LoginResult;
 import com.cosmos.test.bl.TestUtils;
 
@@ -43,15 +43,8 @@ public class UserRightsTest {
 
       @BeforeClass
       public static void setUpClass() {
-          if (formSession == null) {
-              //formSession = AcaciaPanel.getRemoteBean(this, RightsManagerRemote.class);
-              try {
-                  EntityManagerFacadeRemote em = InitialContext.doLookup(EntityManagerFacadeRemote.class.getName());
-                  formSession = new RightsManagerBean(em);
-              } catch (NamingException ex) {
-
-              }
-          }
+          if (formSession == null)
+              formSession = AcaciaPanel.getBean(RightsManagerRemote.class, false);
 
           usersSession = AcaciaPanel.getBean(UsersRemote.class, false);
           rightsSession = AcaciaPanel.getBean(UserRightsRemote.class, false);

@@ -12,8 +12,15 @@ public interface SessionFacadeRemote {
      * @param bean
      * @param methodName
      * @param args
+     * @param sessionId
+     * @param checkPermissions
      * @return
      */
     @SuppressWarnings("unchecked")
-	Object call(Object bean, String methodName, Object[] args, Class[] parameterTypes, Integer sesionId) throws Throwable;
+    Object call(Object bean,
+            String methodName,
+            Object[] args,
+            Class[] parameterTypes,
+            Integer sesionId,
+            boolean checkPermissions) throws Throwable;
 }

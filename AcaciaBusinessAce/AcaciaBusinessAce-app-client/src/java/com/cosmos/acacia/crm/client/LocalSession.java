@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -34,6 +35,8 @@ public class LocalSession implements AcaciaSessionRemote {
     private Map<String, Object> sessionCache = new HashMap<String, Object>();
 
     private static LocalSession instance;
+
+    private RightsManagerRemote rightsManager;
 
     private LocalSession() {
             remoteSession = AcaciaPanel.getBean(AcaciaSessionRemote.class, false);
@@ -112,5 +115,29 @@ public class LocalSession implements AcaciaSessionRemote {
     public void setBranch(Address branch) {
         remoteSession.setBranch(branch);
         sessionCache.put(BRANCH, branch);
+    }
+
+    @Override
+    public Boolean getViewDataFromAllBranches() {
+        Boolean value = (Boolean) sessionCache.get(VIEW_DATA_FROM_ALL_BRANCHES);
+        if (value == null) {
+            value = remoteSession.getViewDataFromAllBranches();
+            sessionCache.put(VIEW_DATA_FROM_ALL_BRANCHES, value);
+        }
+
+        return value;
+    }
+
+    @Override
+    public void setViewDataFromAllBranches(Boolean value) {
+        remoteSession.setViewDataFromAllBranches(value);
+        sessionCache.put(VIEW_DATA_FROM_ALL_BRANCHES, value);
+    }
+
+    public RightsManagerRemote getRightsManager() {
+        if (rightsManager == null)
+            rightsManager = AcaciaPanel.getBean(RightsManagerRemote.class, false);
+
+        return rightsManager;
     }
 }

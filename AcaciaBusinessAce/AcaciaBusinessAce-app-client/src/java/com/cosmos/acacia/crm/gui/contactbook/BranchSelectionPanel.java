@@ -23,7 +23,6 @@ import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -159,9 +158,7 @@ public class BranchSelectionPanel extends AcaciaPanel {
     public void select() {
         Address branch = (Address) branchesTable.getSelectedRowObject();
 
-        getAcaciaSession().setBranch(branch);
-        // Updating the permissions manager
-        PermissionsManager.get().setBranchId(branch.getAddressId());
+        LocalSession.instance().setBranch(branch);
         close();
     }
 

@@ -26,9 +26,9 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.security.PermissionsManager;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
-import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
 
@@ -262,27 +262,12 @@ public abstract class AcaciaPanel
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             log.info("Method called: " + method.getName() + " on bean: " + bean);
-            Object result = null;
-
-            if (!checkPermissions) {
-                result = sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
-            } else {
-                PermissionsManager permissionsManager = PermissionsManager.get();
-                boolean isAllowed = permissionsManager.isAllowedPreCall(method, args);
-
-                if (isAllowed) {
-                    result = sessionFacade.call(bean, method.getName(), args, method.getParameterTypes(), AcaciaApplication.getSessionId());
-                    isAllowed = permissionsManager.isAllowedPostCall(result);
-
-                    if (isAllowed)
-                        result = permissionsManager.filterResult(result);
-                }
-
-                if (!isAllowed) {
-                    return null; // display error message.. or throw exception ?
-                }
-            }
-            return result;
+            return sessionFacade.call(
+                    bean,
+                    method.getName(),
+                    args,
+                    method.getParameterTypes(),
+                    AcaciaApplication.getSessionId(), checkPermissions);
         }
 
 

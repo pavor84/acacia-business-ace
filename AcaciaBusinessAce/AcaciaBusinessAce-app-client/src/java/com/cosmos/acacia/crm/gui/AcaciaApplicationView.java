@@ -35,6 +35,7 @@ import org.jdesktop.application.TaskMonitor;
 
 import com.birosoft.liquid.LiquidLookAndFeel;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
@@ -63,9 +64,9 @@ import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
+import com.cosmos.acacia.crm.security.PermissionsManager;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
-import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.swingb.JBCheckBoxMenuItem;
 import com.cosmos.swingb.JBDesktopPane;
@@ -535,8 +536,7 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void viewDataFromAllBranchesAction() {
-        LocalSession.instance().put(
-                LocalSession.VIEW_DATA_FROM_ALL_BRANCHES,
+        LocalSession.instance().setViewDataFromAllBranches(
                 new Boolean(viewDataFromAllBranchesMenuItem.getState()));
     }
 
@@ -1065,10 +1065,12 @@ public class AcaciaApplicationView extends FrameView {
         return menu;
     }
 
+    private RightsManagerRemote rightsManager =
+        AcaciaPanel.getBean(RightsManagerRemote.class, false);
     /**
      * Wraps the functionality of special permission checking
      */
     private boolean isAllowed(SpecialPermission specialPermission) {
-        return PermissionsManager.get().isAllowed(specialPermission);
+        return rightsManager.isAllowed(specialPermission);
     }
 }
