@@ -42,6 +42,7 @@ import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -98,7 +99,7 @@ public abstract class AbstractTablePanel
             }
         });
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -119,6 +120,7 @@ public abstract class AbstractTablePanel
         unselectButton = new com.cosmos.swingb.JBButton();
         classifyButton = new com.cosmos.swingb.JBButton();
         specialFunctionalityButton = new com.cosmos.swingb.JBButton();
+        filterButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -169,6 +171,9 @@ public abstract class AbstractTablePanel
         specialFunctionalityButton.setAction(actionMap.get("specialAction")); // NOI18N
         specialFunctionalityButton.setName("specialFunctionalityButton"); // NOI18N
 
+        filterButton.setAction(actionMap.get("filter")); // NOI18N
+        filterButton.setName("filterButton"); // NOI18N
+
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
         buttonsPanelLayout.setHorizontalGroup(
@@ -178,8 +183,10 @@ public abstract class AbstractTablePanel
                 .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(specialFunctionalityButton, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(specialFunctionalityButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filterButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -210,6 +217,7 @@ public abstract class AbstractTablePanel
                     .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(classifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filterButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(specialFunctionalityButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -223,7 +231,7 @@ public abstract class AbstractTablePanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dataScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 985, Short.MAX_VALUE)
+                    .addComponent(dataScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
                     .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -248,6 +256,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private javax.swing.JScrollPane dataScrollPane;
     private com.cosmos.acacia.gui.AcaciaTable dataTable;
     private com.cosmos.swingb.JBButton deleteButton;
+    private com.cosmos.swingb.JBButton filterButton;
     private com.cosmos.swingb.JBButton modifyButton;
     private com.cosmos.swingb.JBButton newButton;
     private com.cosmos.swingb.JBButton refreshButton;
@@ -260,12 +269,18 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     private boolean editable = true;
     private boolean visibilitySetChanged = false;
-    
+
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
-    
+
+    /**
+     * Before applying a classifier filter, the default fetched data
+     * is saved, so that it can be reverted to
+     */
+    private List defaultData;
+
     /**
      * When a row is selected a check is performed against it to decide where it can be modified/viewed or neither.
      * If it can be modified, this is set to false.
@@ -273,10 +288,16 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * If neither, it doesn't matter what this is set to, because the button is disabled.
      */
     private boolean viewRowState = false;
-    
+
+    /**
+     * A boolean indicating whether the close action shoul be
+     * triggered after the Unselect button is pressed
+     */
+    private boolean closeAfterUnselect = false;
+
     @EJB
     private ClassifiersRemote classifiersFormSession;
-            
+
     @Override
     protected void initData()
     {
@@ -292,7 +313,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         setEnabled(Button.Delete, false);
         setEnabled(Button.Special, false);
         setEnabled(Button.Classify, false);
-        
+
         if(selectedRowObject != null)
             dataTable.setSelectedRowObject(selectedRowObject);
 
@@ -325,7 +346,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     protected JScrollPane getDataScrollPane(){
         return dataScrollPane;
     }
-    
+
     /**
      * A getter for subclasses to use
      * @return JScrollPane
@@ -372,7 +393,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         return getDataTable().getData();
     }
-    
+
     @Override
     public void setVisibleSelectButtons(boolean visible)
     {
@@ -409,7 +430,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @return newRowObject
      */
     protected abstract Object modifyRow(Object rowObject);
-    
+
     /**
      * Just show detailed view of the object
      *
@@ -420,7 +441,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     /**
      * Implement this method for adding new rows
-     * 
+     *
      * @return the new row object
      */
     protected abstract Object newRow();
@@ -492,7 +513,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         if (visible)
             visibilitySetChanged = true;
-        
+
         getButtonsMap().get(button).setVisible(visible);
     }
 
@@ -500,7 +521,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         return getButtonsMap().get(button).isVisible();
     }
-    
+
     protected JBButton getButton(Button button) {
         switch(button)
         {
@@ -520,6 +541,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                 return closeButton;
             case Special:
                 return specialFunctionalityButton;
+            case Filter:
+                return filterButton;
         }
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
@@ -527,7 +550,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     /**
      * Sets the visible buttons:
-     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32, Unselect=64, Classify = 128
+     * Select=1, New=2, Modify=4, Delete=8, Refresh=16, Close=32, Unselect=64,
+     * Classify = 128, Special = 256, Filter = 512
      * Sum the buttons you want to show and pass the result to the method
      *
      * @param visibleButtons
@@ -585,6 +609,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     {
         if(dataTable != null)
             dataTable.getSelectionModel().clearSelection();
+
+        if (closeAfterUnselect) {
+            setDialogResponse(DialogResponse.SELECT);
+            setSelectedValue(null);
+            close();
+        }
+
     }
 
     @Action
@@ -595,7 +626,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             // Classify the new object if needed
             classifyObject(newRowObject);
             // This check fix the JTree issue when the selected node is ROOT node
-            // where the selection is unselected and as result the refresh DataTable 
+            // where the selection is unselected and as result the refresh DataTable
             // is invoked and the new row is already in the table.
             if(dataTable.getRowIndex(newRowObject) == -1)
                 dataTable.addRow(newRowObject);
@@ -628,17 +659,17 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             }
         }
     }
-    
+
     @Action
     public void deleteAction() {
         Object rowObject = dataTable.getSelectedRowObject();
-        
+
         if ( showDeleteConfirmation(getResourceMap().getString("deleteAction.ConfirmDialog.message")) ){
             try {
                 if(deleteRow(rowObject))
                 {
                     dataTable.removeSelectedRow();
-                    fireDelete(rowObject);    
+                    fireDelete(rowObject);
                 }
             } catch (Exception ex) {
                 ValidationException ve = extractValidationException(ex);
@@ -648,20 +679,20 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     log.error(ex);
                 }
             }
-            
+
         }
     }
-    
+
     /**
      * Forms the error message shown when constraint violation occurs
-     * 
+     *
      * @param the name of the table
      * @return the message
      */
     private String formTableReferencedMessage(String table)
     {
         String message = getResourceMap().getString("deleteAction.err.referenced");
-        String tableUserfriendly = 
+        String tableUserfriendly =
             getResourceMap().getString("table.userfriendlyname."+table);
         String result = null;
         if ( tableUserfriendly==null )
@@ -670,20 +701,20 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             result = message + " " + tableUserfriendly;
         return result;
     }
-    
-    
+
+
     protected void classifyObject(Object object) {
         if (!(object instanceof DataObjectBean))
             return;
-        
+
         if (getClassifier() == null)
             return;
-        
+
         DataObject dataObject = ((DataObjectBean) object).getDataObject();
-        
+
         getClassifiersFormSession().classifyDataObject(dataObject, getClassifier());
     }
-    
+
     protected ClassifiersRemote getClassifiersFormSession()
     {
         if(classifiersFormSession == null)
@@ -700,7 +731,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
         return classifiersFormSession;
     }
-    
+
     protected boolean showDeleteConfirmation(String message){
         ResourceMap resource = getResourceMap();
         String title = resource.getString("deleteAction.ConfirmDialog.title");
@@ -737,7 +768,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             cop.showDialog();
         }
     }
-    
+
     protected void fireTableRefreshed() {
         for (TablePanelListener listener : tablePanelListeners) {
             listener.tableRefreshed();
@@ -776,7 +807,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Delete("deleteAction"),
         Refresh("refreshAction"),
         Close("closeAction"),
-        Special("specialAction");
+        Special("specialAction"),
+        Filter("filterAction");
 
 
         private Button(String actionName)
@@ -814,6 +846,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             buttonsMap.put(Button.Unselect, unselectButton);
             buttonsMap.put(Button.Classify, classifyButton);
             buttonsMap.put(Button.Special, specialFunctionalityButton);
+            buttonsMap.put(Button.Filter, filterButton);
         }
 
         return buttonsMap;
@@ -833,7 +866,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Close(32, Button.Close),
         Unselect(64, Button.Unselect),
         Classify(128, Button.Classify),
-        Special(256, Button.Special);
+        Special(256, Button.Special),
+        Filter(512, Button.Filter);
 
         ButtonVisibility(int visibilityIndex, Button button)
         {
@@ -877,7 +911,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     setEnabled(Button.Select, false);
                     setEnabled(Button.Unselect, false);
                     setEnabled(Button.Classify, false);
-                    
+
                     if ( !specialButtonAlwaysEnabled )
                         setEnabled(Button.Special, false);
                 }
@@ -892,7 +926,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     }
                     //the list is edit-able but not the row is not modifiable
                     else if ( isEditable() ){
-                        //the row is not view-able - disable the button 
+                        //the row is not view-able - disable the button
                         if ( !canView(selectedObject) ){
                             setEnabled(Button.Modify, false);
                         //the row is view-able - show the view button instead of modify
@@ -987,7 +1021,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             listener.rowModified(row);
         }
     }
-    
+
     protected void fireDelete(Object row)
     {
         log.info("fireDelete called with " + row);
@@ -996,18 +1030,18 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             listener.rowDeleted(row);
         }
     }
-    
+
     private List<TablePanelListener> tablePanelListeners = new ArrayList<TablePanelListener>();
-    
+
     /**
      * There are two behaviors of the special button:
      * 1) always enabled - no matter if there is selected row or not, the button is always active
      * 2) enabled only if row is selected (like the 'modify' and 'delete' buttons for ex.)
-     * 
-     * @param alwaysEnabled - if you set it to true, then behavior 1) will take place 
+     *
+     * @param alwaysEnabled - if you set it to true, then behavior 1) will take place
      */
     private boolean specialButtonAlwaysEnabled;
-    
+
     /**
      * Add new listener
      * @param listener
@@ -1015,7 +1049,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     public void addTablePanelListener(TablePanelListener listener){
         tablePanelListeners.add(listener);
     }
-    
+
     /**
      * Finds the row that is displaying the passed instance and
      * refreshes the data.
@@ -1043,34 +1077,41 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         this.classifier = classifier;
         filterByClassifier();
     }
-    
-    
+
+
     protected void filterByClassifier() {
         if (getClassifier() != null) {
+            //Saving the default data, so that we can revert to it next
+            if (defaultData == null)
+                defaultData = new ArrayList(dataTable.getData());
+
             List<Object> data = dataTable.getData();
             List<Object> dataMirror = new LinkedList<Object>(data);
-            
+
             List<DataObject> dataObjects = getClassifiersFormSession().getDataObjects(classifier);
-            int i = 0;            
+            int i = 0;
             for (Object obj : data) {
                 if (!(obj instanceof DataObjectBean))
                     continue;
 
                 DataObject currentDataObject = ((DataObjectBean) obj).getDataObject();
-                
+
                 if (!dataObjects.contains(currentDataObject)) {
                     dataMirror.remove(i);
                     i--;
                 }
                 i++;
             }
-           
+
             dataTable.setData(dataMirror);
-            
+
             setTitle(getTitle() + " (" + classifier.getClassifierName() + ")");
+        } else {
+            if (defaultData != null)
+                dataTable.setData(defaultData);
         }
     }
-    
+
     protected void performDefaultDoubleClickAction() {
         if (isVisible(Button.Select))
             selectAction();
@@ -1083,14 +1124,14 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             table.setParentDataObjectId(parentDataObjectId);
         }
     }
-    
+
     public void associateWithTable(AbstractTablePanel table) {
         if (!associatedTables.contains(table)) {
             associatedTables.add(table);
             table.associateWithTable(this);
         }
     }
-    
+
     public void onKeyCommand(KeyEvent evt){
         if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_N) {
             newAction();
@@ -1103,18 +1144,19 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     @Action
     public void specialAction() {
+        System.out.println("Special");
     }
-    
+
     public void setSpecialCaption(String key) {
         specialFunctionalityButton.setText(getResourceMap().getString(key));
     }
-    
+
     /**
      * There are two behaviors of the special button:
      * 1) always enabled - no matter if there is selected row or not, the button is always active
      * 2) enabled only if row is selected (like the 'modify' and 'delete' buttons for ex.)
-     * 
-     * @param alwaysEnabled - if you set it to true, then behavior 1) will take place 
+     *
+     * @param alwaysEnabled - if you set it to true, then behavior 1) will take place
      */
     public void setSpecialButtonBehavior(boolean alwaysEnabled){
         this.specialButtonAlwaysEnabled = alwaysEnabled;
@@ -1134,5 +1176,55 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         setVisible(Button.Classify, false);
         setVisible(Button.Delete, false);
         setVisible(Button.New, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Action
+    public void filter() {
+        List data = getListData();
+        ClassifiersListPanel panel = null;
+        if (data.size() > 0) {
+            Object obj = data.get(0);
+            if (obj instanceof DataObjectBean) {
+                DataObject dataObject = ((DataObjectBean) obj).getDataObject();
+                panel = new ClassifiersListPanel(null, dataObject.getDataObjectType());
+            }
+        } else {
+            panel = new ClassifiersListPanel(null, null);
+        }
+
+        panel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex()
+                | ButtonVisibility.Unselect.getVisibilityIndex()
+                | ButtonVisibility.Close.getVisibilityIndex());
+
+        panel.setCloseAfterUnselect(true);
+        panel.setSelectedRowObject(getClassifier());
+
+        panel.showDialog(this);
+
+        if (panel.getDialogResponse() == DialogResponse.SELECT) {
+            setClassifier((Classifier) panel.getSelectedRowObject());
+        }
+    }
+
+    public boolean isCloseAfterUnselect() {
+        return closeAfterUnselect;
+    }
+
+    public void setCloseAfterUnselect(boolean closeAfterUnselect) {
+        this.closeAfterUnselect = closeAfterUnselect;
+    }
+
+    /**
+     * The method generally does not work for table panels
+     * use getSelectedRowObject instead.
+     */
+    @Deprecated
+    @Override
+    public Object getSelectedValue() {
+        if (super.getSelectedValue() != null)
+            return super.getSelectedValue();
+
+        return getSelectedRowObject();
     }
 }

@@ -1,5 +1,6 @@
 package com.cosmos.test.bl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -59,9 +60,9 @@ public class ClassifiersTest {
     @SuppressWarnings("unchecked")
     @Test
     public void crudTest(){
-
+        BigInteger parentId = BigInteger.ONE;
         // Creating a classifier group
-        ClassifierGroup group = formSession.newClassifierGroup();
+        ClassifierGroup group = formSession.newClassifierGroup(parentId);
         group.setClassifierGroupCode(TestUtils.getRandomString(10));
         group.setClassifierGroupName(TestUtils.getRandomString(10));
         group = formSession.saveClassifierGroup(group);

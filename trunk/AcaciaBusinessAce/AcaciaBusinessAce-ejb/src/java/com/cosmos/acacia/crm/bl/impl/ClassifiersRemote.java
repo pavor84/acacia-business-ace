@@ -95,8 +95,9 @@ public interface ClassifiersRemote {
      * Creates a new classifier group
      *
      * @return the newly created classifier group
+     * @param parentId the parent (organization)
      */
-    ClassifierGroup newClassifierGroup();
+    ClassifierGroup newClassifierGroup(BigInteger parentId);
 
     /**
      * Saves a classifier group

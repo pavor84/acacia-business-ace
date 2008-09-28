@@ -105,6 +105,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @Override
     public List<ClassifierGroup> getClassifierGroups() {
          Query q = em.createNamedQuery("ClassifierGroup.getAllNotDeleted");
+         q.setParameter("parentId", session.getOrganization().getId());
          return new ArrayList<ClassifierGroup>(q.getResultList());
     }
 
@@ -119,12 +120,14 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         if(parentDataObjectId != null)
         {
             q = em.createNamedQuery("Classifier.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentDataObjectId);
+            q.setParameter("groupId", parentDataObjectId);
         }
         else
         {
             q = em.createNamedQuery("Classifier.findAllAndDeleted");
         }
+        q.setParameter("parentId", session.getOrganization().getId());
+
         q.setParameter("deleted", false);
         result = new ArrayList(q.getResultList());
         List<Classifier> mirror = new ArrayList<Classifier>(result);
@@ -160,8 +163,10 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }
 
     @Override
-    public ClassifierGroup newClassifierGroup() {
-       return new ClassifierGroup();
+    public ClassifierGroup newClassifierGroup(BigInteger parentId) {
+        ClassifierGroup group = new ClassifierGroup();
+        group.setParentId(parentId);
+        return group;
     }
 
     @Override
@@ -174,16 +179,16 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }
 
     @Override
-    public Classifier saveClassifier(Classifier classifier, BigInteger parentDataObjectId) {
+    public Classifier saveClassifier(Classifier classifier, BigInteger groupId) {
 
         if (classifier.getClassifierGroup().getIsSystemGroup())
             throw new ValidationException("Classifier.err.systemGroupForbidden");
 
-        classifier.setParentId(parentDataObjectId);
+        classifier.setParentId(groupId);
 
         if (classifier.getDataObject() == null){
             DataObject dataObject = new DataObject();
-            dataObject.setParentDataObjectId(parentDataObjectId);
+            dataObject.setParentDataObjectId(groupId);
             classifier.setDataObject(dataObject);
         }
 
@@ -334,7 +339,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         Query q = em.createNamedQuery("Classifier.findByCode");
         q.setParameter("code", code);
         q.setParameter("deleted", false);
-        //TODO: owner id!
+        q.setParameter("parentId", session.getOrganization().getId());
 
         List<Classifier> result = q.getResultList();
 

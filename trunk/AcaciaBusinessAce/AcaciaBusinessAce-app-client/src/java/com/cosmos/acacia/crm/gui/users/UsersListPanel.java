@@ -52,7 +52,7 @@ public class UsersListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
 
-        setVisibleButtons(4 + 16 + 32);
+        setVisibleButtons(4 + 16 + 32 + 512);
 
         ownUser = getAcaciaSession().getUser();
         initAdminView();

@@ -42,7 +42,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         super(null);
         init();
     }
-    
+
     @Override
     protected void init()
     {
@@ -166,17 +166,17 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     private ClassifiersRemote formSession;
 
     private DataObject dataObjectToBeClassified;
-    
+
     ClassifiersListPanel classifiersTable;
     ClassifiersListPanel appliedClassifiersTable;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
 
         entityFormButtonPanel.setVisible(EntityFormButtonPanel.Button.Save, false);
         entityFormButtonPanel.setVisible(EntityFormButtonPanel.Button.Problems, false);
-        
+
         groupLookup.setLookupProvider(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
@@ -185,7 +185,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
                     return null;
                 }
             });
-            
+
         groupLookup.setEnabled(true);
         groupLookup.setListener(new AcaciaLookupListener() {
             @Override
@@ -194,23 +194,23 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
                 classifiersTable.refreshAction();
             }
         });
-                
-        
+
+
         appliedClassifiersTable = new ClassifiersListPanel(dataObjectToBeClassified);
         //appliedClassifiersTable.setVisibleButtons(16);
         appliedClassifiersTable.setVisible(AbstractTablePanel.Button.Refresh);
 
         appliedClassifiersPanel.add(appliedClassifiersTable);
-        
-        
+
+
         classifiersTable = new ClassifiersListPanel(null, dataObjectToBeClassified.getDataObjectType());
         //classifiersTable.setVisibleButtons(2 + 4 + 8 + 16);
         classifiersTable.setVisible(AbstractTablePanel.Button.NewModifyDeleteRefresh);
         filterClassifiers();
-        
+
         classifiersTable.addTablePanelListener(new RefreshListener());
         classifiersTable.addTableModificationListener(new NewClassifierListener());
-        
+
         classifiersPanel.add(classifiersTable);
     }
 
@@ -229,15 +229,15 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
             return null;
         }
     }
-    
+
     protected void filterClassifiers() {
         classifiersTable.filter(appliedClassifiersTable.getClassifiers());
     }
-    
+
     protected List<ClassifierGroup> getClassifierGroups() {
         return getFormSession().getClassifierGroups();
     }
-    
+
     protected ClassifiersRemote getFormSession()
     {
         if(formSession == null)
@@ -268,7 +268,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        
+
     }
 
     @Override
@@ -280,7 +280,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
-    
+
     @Action
     public void applyClassifierAction() {
         getFormSession().classifyDataObject(
@@ -289,7 +289,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         appliedClassifiersTable.refreshAction();
         filterClassifiers();
     }
-        
+
     @Action
     public void removeClassifierAction() {
         Classifier classifier = (Classifier) appliedClassifiersTable.getDataTable().getSelectedRowObject();
@@ -299,7 +299,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         appliedClassifiersTable.refreshAction();
         classifiersTable.getDataTable().addRow(classifier);
     }
-    
+
     class RefreshListener implements TablePanelListener {
 
         @Override
@@ -322,7 +322,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
             filterClassifiers();
         }
     }
-    
+
     class NewClassifierListener implements TableModificationListener {
 
         @Override
@@ -338,6 +338,6 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         @Override
         public void rowAdded(Object row) {
             groupLookup.clearSelectedValue();
-        }   
+        }
     }
 }

@@ -176,8 +176,6 @@ public class RightsManagerBean
         Set<UserRight> rights = fetchRights(user, dataObject, true);
 
         for (UserRight right : rights) {
-            //TODO: this check might be incorrect
-
             if (specialPermission.matches(right.getSpecialPermission()))
                 return true;
         }

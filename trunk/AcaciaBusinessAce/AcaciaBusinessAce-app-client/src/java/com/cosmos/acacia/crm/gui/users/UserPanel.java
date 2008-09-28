@@ -7,9 +7,6 @@
 package com.cosmos.acacia.crm.gui.users;
 
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
@@ -179,7 +176,7 @@ public class UserPanel extends BaseEntityPanel {
     RightsListPanel rightsTable;
     RightsListPanel specialPermissionsTable;
     private Address branch;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -256,7 +253,7 @@ public class UserPanel extends BaseEntityPanel {
 
         if (!userOrganization.getBranch().equals(branch))
             getFormSession().changeBranch(u, branch, userOrganization.getBranch());
-        
+
         u.setActive(userOrganization.isUserActive());
 
         setDialogResponse(DialogResponse.SAVE);

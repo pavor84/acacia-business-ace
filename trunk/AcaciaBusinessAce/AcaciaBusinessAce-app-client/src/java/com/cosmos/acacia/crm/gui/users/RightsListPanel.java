@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.gui.users;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,6 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.util.HashSet;
 
 /**
  * Panel for listing existing organizations, giving CRUD options
@@ -73,7 +73,9 @@ public class RightsListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
 
-        setVisibleButtons(4 + 16 + 32);
+        setVisibleButtons(ButtonVisibility.Modify.getVisibilityIndex() |
+                ButtonVisibility.Refresh.getVisibilityIndex() |
+                ButtonVisibility.Close.getVisibilityIndex());
     }
 
 
