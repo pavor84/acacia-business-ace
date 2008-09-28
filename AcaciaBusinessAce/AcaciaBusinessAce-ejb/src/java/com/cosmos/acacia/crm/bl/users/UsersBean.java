@@ -184,7 +184,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @Override
     public void requestRegistration(String email) {
         //TODO: better scheme of forming the code
-        //BigInteger codeNumber = BigInteger.valueOf((long) UUID.randomUUID().getMostSignificantBits() / 1000000l);
 
         SecureRandom random = new SecureRandom();
         BigInteger codeNumber = BigInteger.valueOf(random.nextInt(10000000));

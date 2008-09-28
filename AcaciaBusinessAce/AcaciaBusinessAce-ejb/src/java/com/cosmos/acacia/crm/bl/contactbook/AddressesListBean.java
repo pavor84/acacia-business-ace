@@ -109,7 +109,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 //            groupsManager.saveUserGroup(group);
 //            address.setUserGroup(group);
 //
-//            //TODO : assign default rights to the newly created user group
+//            //TO|DO : assign default rights to the newly created user group
         }
 
         addressValidator.validate(address);

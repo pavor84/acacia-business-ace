@@ -170,7 +170,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         log.info("initData().classifierGroup: " + classifierGroup);
         if(classifierGroup == null)
         {
-            classifierGroup = getFormSession().newClassifierGroup();
+            classifierGroup = getFormSession().newClassifierGroup(getOrganizationDataObjectId());
         }
 
         classifierGroupBindingGroup = new BindingGroup();

@@ -2,11 +2,13 @@ package com.cosmos.acacia.crm.bl.validation;
 
 import static com.cosmos.acacia.crm.validation.ValidationUtil.checkUnique;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
@@ -18,6 +20,9 @@ public class ClassifierValidatorBean implements ClassifierValidatorLocal {
     @PersistenceContext
     private EntityManager em;
 
+    @EJB
+    private AcaciaSessionLocal session;
+
     @Override
     public void validate(Classifier entity) throws ValidationException {
         ValidationException ve = new ValidationException();
@@ -26,7 +31,8 @@ public class ClassifierValidatorBean implements ClassifierValidatorLocal {
         Query q = em.createNamedQuery("Classifier.findByCode");
         q.setParameter("code", entity.getClassifierCode());
         q.setParameter("deleted", false);
-        
+        q.setParameter("parentId", session.getOrganization().getId());
+
         if ( !checkUnique(q.getResultList(), entity))
             ve.addMessage("Classifier.err.codeInUse");
 

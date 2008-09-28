@@ -33,17 +33,23 @@ import javax.persistence.Table;
         @NamedQuery
              (
                 name = "Classifier.findByParentDataObjectAndDeleted",
-                query = "select c from Classifier c where c.dataObject.parentDataObjectId = :parentDataObjectId and c.dataObject.deleted = :deleted"
+                query = "select c from Classifier c where c.parentId = :groupId" +
+                        " and c.dataObject.deleted = :deleted" +
+                        " and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
              ),
         @NamedQuery
              (
                 name = "Classifier.findAllAndDeleted",
-                query = "select c from Classifier c where c.dataObject.deleted = :deleted"
+                query = "select c from Classifier c where" +
+                        " c.dataObject.deleted = :deleted" +
+                        " and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
               ),
         @NamedQuery
             (
                 name = "Classifier.findByCode",
-                query = "select c from Classifier c where c.classifierCode = :code and c.dataObject.deleted = :deleted"
+                query = "select c from Classifier c where c.classifierCode = :code" +
+                        " and c.dataObject.deleted = :deleted" +
+                        " and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
             )
     }
 )
@@ -74,7 +80,7 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     @ManyToOne
     @Property(title="Group", customDisplay="${classifierGroup.classifierGroupName}")
     private ClassifierGroup classifierGroup;
-        
+
     @Column(name = "description")
     @Property(title="Description")
     private String description;

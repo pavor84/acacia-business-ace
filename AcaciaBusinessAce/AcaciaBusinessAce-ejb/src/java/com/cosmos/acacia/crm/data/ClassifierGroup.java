@@ -35,7 +35,9 @@ import javax.persistence.Table;
         @NamedQuery
             (
             name = "ClassifierGroup.getAllNotDeleted",
-            query = "select cg from ClassifierGroup cg where cg.dataObject.deleted = false"
+            query = "select cg from ClassifierGroup cg " +
+                    " where cg.dataObject.deleted = false" +
+                    " and cg.dataObject.parentDataObjectId=:parentId"
             )
     }
 )
@@ -66,7 +68,7 @@ public class ClassifierGroup extends DataObjectBean
     @Column(name = "is_system_group", nullable = false)
     @Property(title="System")
     private boolean isSystemGroup;
-    
+
     @Column(name = "description")
     @Property(title="Description")
     private String description;
