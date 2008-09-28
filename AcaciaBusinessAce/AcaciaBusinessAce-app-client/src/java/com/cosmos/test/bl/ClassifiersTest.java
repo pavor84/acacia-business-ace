@@ -60,7 +60,11 @@ public class ClassifiersTest {
     @SuppressWarnings("unchecked")
     @Test
     public void crudTest(){
-        BigInteger parentId = BigInteger.ONE;
+
+        LoginResult loginResult = TestUtils.login();
+
+        BigInteger parentId = loginResult.getOrganization().getId();
+
         // Creating a classifier group
         ClassifierGroup group = formSession.newClassifierGroup(parentId);
         group.setClassifierGroupCode(TestUtils.getRandomString(10));
@@ -107,6 +111,7 @@ public class ClassifiersTest {
         // Delete the group
         formSession.deleteClassifierGroup(group);
 
+        TestUtils.clearLogin(loginResult.getUser());
     }
 
 }

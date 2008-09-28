@@ -12,25 +12,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
-import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.UserRightType;
-import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.security.RightsManagerBean;
+import com.cosmos.test.bl.LoginResult;
 import com.cosmos.test.bl.TestUtils;
 
 public class UserRightsTest {
@@ -59,62 +55,22 @@ public class UserRightsTest {
 
           usersSession = AcaciaPanel.getBean(UsersRemote.class, false);
           rightsSession = AcaciaPanel.getBean(UserRightsRemote.class, false);
-          OrganizationsListRemote orgSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
-          PersonsListRemote personsSession = AcaciaPanel.getBean(PersonsListRemote.class, false);
 
-          // subsequent organization, in the search of appropriate one
-          int i = 0;
-          boolean searchMore = true;
-          while (searchMore) {
-              try {
-                  // Must have at least one organization in the database
-                  org = orgSession.getOrganizations(null).get(i);
-                  LocalSession.instance().put(LocalSession.ORGANIZATION, org);
+          LoginResult loginResult = TestUtils.login();
+          user = loginResult.getUser();
+          branch = loginResult.getBranch();
+          org = loginResult.getOrganization();
 
-                  // Must have at least one person for the organization
-                  Person person = personsSession.getPersons(org.getId()).get(0);
+          userGroup = rightsSession.newUserGroup(org.getId());
+          userGroup.setName(TestUtils.getRandomString(10));
+          userGroup = rightsSession.saveUserGroup(userGroup);
 
-                  // Must have at least one branch for the organization
-                  branch = orgSession.getAddresses(org.getId()).get(0);
-                  searchMore = false;
-
-                  user = usersSession.createUser();
-
-                  user.setUserName(TestUtils.getRandomString(10));
-                  user.setUserPassword("asd");
-                  user.setEmailAddress(TestUtils.getRandomEmail());
-                  user.setBranchName(branch.getAddressName());
-                  user.setPerson(person);
-                  user.setActive(true);
-
-                  user = usersSession.signup(user, org, branch, person);
-                  usersSession.activateUser(user, org.getId(), true);
-
-                  Integer sessionId = usersSession.login(user.getUserName(), "asd".toCharArray());
-                  AcaciaApplication.setSessionId(sessionId);
-                  usersSession.setOrganization(org);
-
-                  userGroup = rightsSession.newUserGroup(org.getId());
-                  userGroup.setName(TestUtils.getRandomString(10));
-                  userGroup = rightsSession.saveUserGroup(userGroup);
-
-                  rightsSession.assignGroupToUser(userGroup, user);
-
-              } catch (Exception ex) {
-//                  System.out.println("Ignorable error: ");
-//                  ex.printStackTrace();
-                  i ++;
-                  // Fail after 10 errors
-                  if (i > 10)
-                      searchMore = false;
-              }
-          }
+          rightsSession.assignGroupToUser(userGroup, user);
       }
 
       @AfterClass
       public static void tearDownClass() {
-          if (user != null)
-              usersSession.deleteUser(user);
+          TestUtils.clearLogin(user);
 
           if (userGroup != null)
               rightsSession.deleteUserGroup(userGroup);
