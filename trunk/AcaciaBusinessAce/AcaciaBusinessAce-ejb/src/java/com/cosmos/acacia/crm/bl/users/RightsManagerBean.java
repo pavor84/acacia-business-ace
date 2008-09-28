@@ -1,26 +1,15 @@
-package com.cosmos.acacia.security;
+package com.cosmos.acacia.crm.bl.users;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
-import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
-import com.cosmos.acacia.crm.bl.users.UserRightsLocal;
-import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
-import com.cosmos.acacia.crm.bl.users.UsersLocal;
-import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -32,7 +21,6 @@ import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.enums.UserRightType;
-import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
  * The class supports both server-side and client-side invocations
@@ -58,39 +46,10 @@ public class RightsManagerBean
     @EJB
     UsersLocal usersManager;
 
-    private Set<UserRight> generalRights;
-    private Set<UserRight> specialRights;
-
-    // client-side managers
-
-    private EntityManagerFacadeRemote emFacade;
-    private AcaciaSessionRemote sessionRemote;
-    private UsersRemote usersManagerRemote;
-    private UserRightsRemote rightsHelperRemote;
-
-
     public RightsManagerBean() {
 
     }
 
-    /**
-     * Client-side instantiation method. Using the manager from the client
-     * optimizes requests to the server, and thus - operational time
-     *
-     * @param emFacade an entity manager facade
-     */
-    public RightsManagerBean(EntityManagerFacadeRemote emFacade) {
-        this.emFacade = emFacade;
-        try {
-            rightsHelperRemote = InitialContext.doLookup(UserRightsRemote.class.getName());
-            usersManagerRemote = InitialContext.doLookup(UsersRemote.class.getName());
-            //sessionRemote = InitialContext.doLookup(AcaciaSessionRemote.class.getName());
-            sessionRemote = AcaciaPanel.getAcaciaSession();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }
 
     @Override
     public boolean isAllowed(DataObject dataObject,
@@ -229,14 +188,15 @@ public class RightsManagerBean
 
     private Set<UserRight> fetchRights(User user, DataObject dataObject, boolean isSpecial) {
 
-        Set<UserRight> rights = isSpecial ? specialRights : generalRights;
+        Set<UserRight> rights = isSpecial
+            ? session.getSpecialPermissions() : session.getGeneralRights();
 
         if (rights == null) {
             rights = fetchRights(user, isSpecial);
             if (isSpecial)
-                specialRights = new HashSet<UserRight>(rights);
+                session.setSpecialPermissions(new HashSet<UserRight>(rights));
             else
-                generalRights = new HashSet<UserRight>(rights);
+                session.setGeneralRights(new HashSet<UserRight>(rights));
         }
 
 
@@ -261,10 +221,7 @@ public class RightsManagerBean
                 }
             }
             if (tmpDataObject.getParentDataObjectId() != null)
-                if (em != null)
-                    tmpDataObject = em.find(DataObject.class, tmpDataObject.getParentDataObjectId());
-                else
-                    tmpDataObject = emFacade.find(DataObject.class, tmpDataObject.getParentDataObjectId());
+                tmpDataObject = em.find(DataObject.class, tmpDataObject.getParentDataObjectId());
             else
                 tmpDataObject = null;
 
@@ -287,11 +244,7 @@ public class RightsManagerBean
 
 
         // Getting the directly assigned group for this user
-        UserOrganization uo = null;
-        if (usersManager != null)
-            uo = usersManager.getUserOrganization(user, getOrganization());
-        else
-            uo = usersManagerRemote.getUserOrganization(user, getOrganization());
+        UserOrganization uo = usersManager.getUserOrganization(user, getOrganization());
 
         UserGroup group = uo.getUserGroup();
 
@@ -303,26 +256,13 @@ public class RightsManagerBean
             Address branch = uo.getBranch();
             if (branch != null) {
                 ContactPerson contact = null;
-                if (em != null) {
-                    Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
-                    q.setParameter("person", user.getPerson());
-                    q.setParameter("parentDataObjectId", branch.getAddressId());
-                    try {
-                        contact = (ContactPerson) q.getSingleResult();
-                    } catch (Exception ex) {
-                        // No match
-                    }
-                } else {
-                    Map<String, Object> params = new HashMap<String, Object>();
-                    params.put("person", user.getPerson());
-                    params.put("parentDataObjectId", branch.getAddressId());
-                    try {
-                        contact = (ContactPerson) emFacade.getNamedQueryResult(
-                            "ContactPerson.findByPersonAndParentDataObject",
-                            params).get(0);
-                    } catch (Exception ex){
-                        // No match
-                    }
+                Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
+                q.setParameter("person", user.getPerson());
+                q.setParameter("parentDataObjectId", branch.getAddressId());
+                try {
+                    contact = (ContactPerson) q.getSingleResult();
+                } catch (Exception ex) {
+                    // No match
                 }
 
                 try {
@@ -354,53 +294,42 @@ public class RightsManagerBean
 
     @Override
     public void setGeneralRights(Set<UserRight> rights) {
-        generalRights = rights;
+        session.setGeneralRights(rights);
     }
 
     @Override
     public void setSpecialRights(Set<UserRight> rights) {
-        specialRights = rights;
+        session.setSpecialPermissions(rights);
+    }
+
+    @Override
+    public void clearCachedRights() {
+        setSpecialRights(null);
+        setGeneralRights(null);
     }
 
     private User getUser() {
-        if (session != null)
-            return session.getUser();
-
-        return sessionRemote.getUser();
+        return session.getUser();
     }
 
     private Organization getOrganization() {
-        if (session != null)
-            return session.getOrganization();
+        return session.getOrganization();
 
-        return sessionRemote.getOrganization();
     }
 
     private Set<UserRight> getUserRights(User user) {
-        if (rightsHelper != null)
-            return rightsHelper.getUserRights(user);
-
-        return rightsHelperRemote.getUserRights(user);
+        return rightsHelper.getUserRights(user);
     }
 
     private Set<UserRight> getSpecialPermissions(User user) {
-        if (rightsHelper != null)
-            return rightsHelper.getSpecialPermissions(user);
-
-        return rightsHelperRemote.getSpecialPermissions(user);
+        return rightsHelper.getSpecialPermissions(user);
     }
 
     private Set<UserRight> getUserRights(UserGroup group) {
-        if (rightsHelper != null)
-            return rightsHelper.getUserRights(group);
-
-        return rightsHelperRemote.getUserRights(group);
+        return rightsHelper.getUserRights(group);
     }
 
     private Set<UserRight> getSpecialPermissions(UserGroup group) {
-        if (rightsHelper != null)
-            return rightsHelper.getSpecialPermissions(group);
-
-        return rightsHelperRemote.getSpecialPermissions(group);
+        return rightsHelper.getSpecialPermissions(group);
     }
 }

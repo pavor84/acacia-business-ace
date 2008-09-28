@@ -5,12 +5,14 @@ import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.rmi.CORBA.ClassDesc;
 
 import org.apache.log4j.Logger;
 
+import com.cosmos.acacia.crm.security.PermissionsManagerLocal;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 @Stateless
@@ -18,9 +20,17 @@ public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLoc
 
     protected Logger log = Logger.getLogger(SessionFacadeBean.class);
 
+    @EJB
+    private PermissionsManagerLocal permissionsManager;
+
     @SuppressWarnings("unchecked")
     @Override
-    public Object call(Object bean, String methodName, Object[] args, Class[] parameterTypes, Integer sessionId) throws Throwable {
+    public Object call(Object bean,
+            String methodName,
+            Object[] args,
+            Class[] parameterTypes,
+            Integer sessionId,
+            boolean checkPermissions) throws Throwable {
 
         //find the session
         SessionContext sessionContext = SessionRegistry.getSession(sessionId);
@@ -35,7 +45,27 @@ public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLoc
 
         Method method = bean.getClass().getMethod(methodName, parameterTypes);
         try {
-            return method.invoke(bean, args);
+            Object result = null;
+
+            if (!checkPermissions) {
+                result = method.invoke(bean, args);
+            } else {
+                boolean isAllowed = permissionsManager.isAllowedPreCall(method, args);
+
+                if (isAllowed) {
+                    result = method.invoke(bean, args);
+                    isAllowed = permissionsManager.isAllowedPostCall(result);
+
+                    if (isAllowed)
+                        result = permissionsManager.filterResult(result);
+                }
+
+                if (!isAllowed) {
+                    return null; // display error message.. or throw exception ?
+                }
+            }
+            return result;
+
         } catch (InvocationTargetException ex){
             Throwable t = getRootCause(ex);
             while(t != null)

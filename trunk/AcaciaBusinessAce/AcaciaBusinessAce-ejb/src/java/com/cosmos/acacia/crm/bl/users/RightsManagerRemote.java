@@ -82,4 +82,9 @@ public interface RightsManagerRemote {
      * @param rights
      */
     void setSpecialRights(Set<UserRight> rights);
+
+    /**
+     * Clears the stored user rights
+     */
+    void clearCachedRights();
 }

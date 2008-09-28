@@ -17,6 +17,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
@@ -25,7 +26,6 @@ import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.security.PermissionsManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
@@ -263,7 +263,7 @@ public class RightsListPanel extends AbstractTablePanel {
         // is changing his own rights
         // TODO: same for user group
         if (user != null && user.equals(getAcaciaSession().getUser()))
-                PermissionsManager.get().clearCachedRights();
+                LocalSession.instance().getRightsManager().clearCachedRights();
     }
 
     @Override
