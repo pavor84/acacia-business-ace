@@ -9,7 +9,17 @@ import javax.ejb.EJBException;
 
 import org.apache.log4j.Logger;
 
+import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
  * Created	:	18.04.2008
@@ -86,5 +96,83 @@ public abstract class TestUtils {
      */
     public static String getRandomEmail() {
         return getRandomString(8) + "@" + getRandomString(7) + ".com";
+    }
+
+
+    /**
+     * Method to be used for emulating a login into the system.
+     * Important - delete the returned user after the test case(s),
+     * using TestUtils.clearLogin(user)
+     *
+     * @return the result from login, containing user, random organization
+     * and random branch from it
+     */
+    public static LoginResult login() {
+
+        UsersRemote usersSession = AcaciaPanel.getBean(UsersRemote.class, false);
+        OrganizationsListRemote orgSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
+        PersonsListRemote personsSession = AcaciaPanel.getBean(PersonsListRemote.class, false);
+
+        Organization org = null;
+        Address branch = null;
+        User user = null;
+
+        // subsequent organization, in the search of appropriate one
+        int i = 0;
+        boolean searchMore = true;
+        while (searchMore) {
+            try {
+                // Must have at least one organization in the database
+                org = orgSession.getOrganizations(null).get(i);
+                LocalSession.instance().put(LocalSession.ORGANIZATION, org);
+
+                // Must have at least one person for the organization
+                Person person = personsSession.getPersons(org.getId()).get(0);
+
+                // Must have at least one branch for the organization
+                branch = orgSession.getAddresses(org.getId()).get(0);
+                searchMore = false;
+
+                user = usersSession.createUser();
+
+                user.setUserName(TestUtils.getRandomString(10));
+                user.setUserPassword("asd");
+                user.setEmailAddress(TestUtils.getRandomEmail());
+                user.setBranchName(branch.getAddressName());
+                user.setPerson(person);
+                user.setActive(true);
+
+                user = usersSession.signup(user, org, branch, person);
+                usersSession.activateUser(user, org.getId(), true);
+
+                Integer sessionId = usersSession.login(user.getUserName(), "asd".toCharArray());
+                AcaciaApplication.setSessionId(sessionId);
+                usersSession.setOrganization(org);
+
+            } catch (Exception ex) {
+                i ++;
+                // Fail after 10 errors
+                if (i > 10)
+                    searchMore = false;
+            }
+        }
+
+        LoginResult result = new LoginResult();
+        result.setOrganization(org);
+        result.setUser(user);
+        result.setBranch(branch);
+
+        return result;
+    }
+
+    /**
+     * Method for clearing the newly created user for login simulation
+     *
+     * @param user
+     */
+    public static void clearLogin(User user) {
+        UsersRemote usersSession = AcaciaPanel.getBean(UsersRemote.class, false);
+        if (user != null)
+            usersSession.deleteUser(user);
     }
 }
