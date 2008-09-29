@@ -3,20 +3,14 @@ package com.cosmos.test.bl.users;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.cosmos.acacia.crm.bl.impl.EntityManagerFacadeRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
-import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -33,7 +27,6 @@ public class UserRightsTest {
 
       private static RightsManagerRemote formSession;
 
-      private static UsersRemote usersSession;
       private static UserRightsRemote rightsSession;
 
       private static User user;
@@ -46,7 +39,6 @@ public class UserRightsTest {
           if (formSession == null)
               formSession = AcaciaPanel.getBean(RightsManagerRemote.class, false);
 
-          usersSession = AcaciaPanel.getBean(UsersRemote.class, false);
           rightsSession = AcaciaPanel.getBean(UserRightsRemote.class, false);
 
           LoginResult loginResult = TestUtils.login();
