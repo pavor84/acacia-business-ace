@@ -273,6 +273,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
+    private boolean allowClassifierChange;
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
 
     /**
@@ -1074,10 +1075,19 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param classifier
      */
     public void setClassifier(Classifier classifier) {
-        this.classifier = classifier;
-        filterByClassifier();
+        setClassifier(classifier, false);
     }
 
+
+    public void setClassifier(Classifier classifier, boolean allowChange) {
+        if (classifier == null || allowClassifierChange) {
+            allowClassifierChange = allowChange;
+            this.classifier = classifier;
+            filterByClassifier();
+        }
+        if (!allowClassifierChange)
+            setEnabled(Button.Filter, false);
+    }
 
     protected void filterByClassifier() {
         if (getClassifier() != null) {
@@ -1203,7 +1213,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         panel.showDialog(this);
 
         if (panel.getDialogResponse() == DialogResponse.SELECT) {
-            setClassifier((Classifier) panel.getSelectedRowObject());
+            setClassifier((Classifier) panel.getSelectedRowObject(), true);
         }
     }
 
