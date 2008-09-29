@@ -1080,7 +1080,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
 
     public void setClassifier(Classifier classifier, boolean allowChange) {
-        if (classifier == null || allowClassifierChange) {
+        if (this.classifier == null || allowClassifierChange) {
             allowClassifierChange = allowChange;
             this.classifier = classifier;
             filterByClassifier();
