@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
 
 
 @Entity
@@ -41,7 +42,7 @@ import com.cosmos.acacia.annotation.Property;
                 query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is not null order by dataObjectType,excluded"
         )
 })
-public class UserRight implements Serializable {
+public class UserRight implements Serializable, Comparable<UserRight> {
 
     @Id
     @SequenceGenerator(name="UserRightsSequenceGenerator", sequenceName="user_rights_seq", allocationSize=1)
@@ -289,6 +290,23 @@ public class UserRight implements Serializable {
             "User: " + user + "; " +
             "UserGroup: " + userGroup + "; " +
             "DataObject: " + dataObject + "; " +
-            "DataObjectType: " + dataObjectType + "; ";
+            "DataObjectType: " + dataObjectType + "; " +
+            "Excluded: " + excluded + "; ";
+    }
+
+    /**
+     * Used for ranking rights by concreteness.
+     * If a right is more concrete than the other, it should go
+     * before it in a list/queue. Hence the -1 if 'this' is 'bigger'
+     */
+    @Override
+    public int compareTo(UserRight right2) {
+        UserRight higherPriorityRight =
+            RightsManagerBean.compareRights(this, right2);
+
+        if (higherPriorityRight == this)
+            return -1;
+
+        return 1;
     }
 }
