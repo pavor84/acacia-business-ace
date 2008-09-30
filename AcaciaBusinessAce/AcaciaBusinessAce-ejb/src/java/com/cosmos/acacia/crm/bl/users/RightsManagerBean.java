@@ -34,6 +34,8 @@ import com.cosmos.acacia.crm.enums.UserRightType;
 public class RightsManagerBean
     implements RightsManagerRemote, RightsManagerLocal {
 
+    private static final boolean DEFAULT_RIGHT = true;
+
     @PersistenceContext
     EntityManager em;
 
@@ -85,7 +87,7 @@ public class RightsManagerBean
         // TODO : default behavior : to allow or disallow access
         // when no settings are present
         if (highestPriorityRegularRight == null)
-            return true;
+            return DEFAULT_RIGHT;
 
         UserRight highestPriorityRight =
                 compareRights(highestPriorityRegularRight, highestPriorityExclusionRight);
