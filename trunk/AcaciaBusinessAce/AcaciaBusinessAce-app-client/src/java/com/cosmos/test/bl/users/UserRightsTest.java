@@ -77,11 +77,11 @@ public class UserRightsTest {
           rights.add(groupRight);
           rightsSession.assignRightsToGroup(rights, userGroup);
 
-          rights.clear();
+          Set<UserRight> rights2 = new HashSet<UserRight>();
           UserRight userRight = createUserRight(user, null, null, dob, false);
           userRight.setCreate(true);
-          rights.add(userRight);
-          rightsSession.assignRightsToUser(rights, user);
+          rights2.add(userRight);
+          rightsSession.assignRightsToUser(rights2, user);
 
           Assert.assertTrue(
                   "User is expected to have the specified right, but does not",
@@ -98,11 +98,11 @@ public class UserRightsTest {
           rights.add(groupRight);
           rightsSession.assignRightsToGroup(rights, userGroup);
 
-          rights.clear();
+          Set<UserRight> rights2 = new HashSet<UserRight>();
           UserRight userRight = createUserRight(user, null, null, dob, false);
           userRight.setCreate(false);
-          rights.add(userRight);
-          rightsSession.assignRightsToUser(rights, user);
+          rights2.add(userRight);
+          rightsSession.assignRightsToUser(rights2, user);
 
           Assert.assertFalse(
                   "User is expected NOT to have the specified right, but has it",
@@ -134,11 +134,11 @@ public class UserRightsTest {
           rights.add(groupRight);
           rightsSession.assignRightsToGroup(rights, userGroup);
 
-          rights.clear();
+          Set<UserRight> rights2 = new HashSet<UserRight>();
           UserRight userRight = createUserRight(user, null, null, dob, false);
           userRight.setCreate(false);
-          rights.add(userRight);
-          rightsSession.assignRightsToUser(rights, user);
+          rights2.add(userRight);
+          rightsSession.assignRightsToUser(rights2, user);
 
           Assert.assertFalse(
                   "User is expected NOT to have the specified right, but has it",
@@ -155,11 +155,11 @@ public class UserRightsTest {
           rights.add(groupRight);
           rightsSession.assignRightsToGroup(rights, userGroup);
 
-          rights.clear();
+          Set<UserRight> rights2 = new HashSet<UserRight>();
           UserRight userRight = createUserRight(user, null, null, dob, false);
           userRight.setCreate(true);
-          rights.add(userRight);
-          rightsSession.assignRightsToUser(rights, user);
+          rights2.add(userRight);
+          rightsSession.assignRightsToUser(rights2, user);
 
           Assert.assertTrue(
                   "User is expected to have the specified right, but does not",
@@ -182,9 +182,10 @@ public class UserRightsTest {
 
           rightsSession.assignRightsToUser(rights, user);
 
-          Assert.assertFalse(
-                  "User is expected NOT to have the specified right" +
-                  " (because of exclusion), but has it",
+          Assert.assertTrue(
+                  "User is expected to have the specified right" +
+                  " (because of exclusion, and falling back to default value)," +
+                  " but does not have it",
                   formSession.isAllowed(user, dob, UserRightType.CREATE));
       }
 
@@ -203,9 +204,10 @@ public class UserRightsTest {
 
           rightsSession.assignRightsToUser(rights, user);
 
-          Assert.assertFalse(
-                  "User is expected NOT to have the specified right" +
-                  " (because of exclusion), but has it",
+          Assert.assertTrue(
+                  "User is expected to have the specified right" +
+                  " (because of exclusion, and falling back to default value)," +
+                  " but does not haveit",
                   formSession.isAllowed(user, dob, UserRightType.CREATE));
       }
 
@@ -213,20 +215,27 @@ public class UserRightsTest {
       @Test
       public void userWithRightOnTypeObjectForGroupExcludedTest() {
           Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
 
-          UserRight userRight = createUserRight(user, null, dob.getDataObjectType(), null, false);
+          DataObject dob = branch.getDataObject();
+          DataObject parent = org.getDataObject();
+
+          UserRight userRight = createUserRight(user, null, null, dob, false);
           userRight.setCreate(true);
           rights.add(userRight);
 
-          UserRight userGroupRightExcluded = createUserRight(null, userGroup, null, dob, true);
-          userGroupRightExcluded.setCreate(true);
-          rights.add(userGroupRightExcluded);
+          UserRight parentRight = createUserRight(user, null, null, parent, false);
+          userRight.setCreate(false);
+          rights.add(parentRight);
+
+          UserRight userRightExcluded = createUserRight(user, null, null, dob, true);
+          userRightExcluded.setCreate(true);
+          rights.add(userRightExcluded);
 
           rightsSession.assignRightsToUser(rights, user);
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right, but does not",
+          Assert.assertFalse(
+                  "User is expected NOT to have the specified right," +
+                  " becauses the parent is disallowed, but he has it",
                   formSession.isAllowed(user, dob, UserRightType.CREATE));
       }
 

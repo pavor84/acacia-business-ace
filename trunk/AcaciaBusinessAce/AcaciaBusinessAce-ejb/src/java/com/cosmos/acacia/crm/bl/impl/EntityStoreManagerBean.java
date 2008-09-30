@@ -51,7 +51,6 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             BigInteger parentId = doBean.getParentId();
             if(id == null)
             {
-                System.out.println("Insert Entity");
                 if(dataObject == null || dataObject.getDataObjectId() == null)
                 {
                     DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
@@ -106,11 +105,8 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
                 //id = new BigInteger(dataObject.getDataObjectId().toByteArray());
                 id = dataObject.getDataObjectId();
-                System.out.println("id: " + id);
-                System.out.println("1. doBean: " + doBean);
                 doBean.setId(id);
                 doBean.setDataObject(dataObject);
-                System.out.println("2. doBean: " + doBean);
             }
             else
             {

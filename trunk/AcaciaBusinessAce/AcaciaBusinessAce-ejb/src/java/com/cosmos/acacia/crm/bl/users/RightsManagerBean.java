@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.bl.users;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,10 @@ import com.cosmos.acacia.crm.enums.UserRightType;
 public class RightsManagerBean
     implements RightsManagerRemote, RightsManagerLocal {
 
-    private static final boolean DEFAULT_RIGHT = true;
+    private static final boolean DEFAULT_CREATE_RIGHT = true;
+    private static final boolean DEFAULT_READ_RIGHT = true;
+    private static final boolean DEFAULT_MODIFY_RIGHT = true;
+    private static final boolean DEFAULT_DELETE_RIGHT = true;
 
     @PersistenceContext
     EntityManager em;
@@ -74,6 +78,7 @@ public class RightsManagerBean
         return isAllowed(new DataObject(), specialPermission);
     }
 
+    @SuppressWarnings("null")
     @Override
     public boolean isAllowed(User user,
             DataObject dataObject,
@@ -81,39 +86,76 @@ public class RightsManagerBean
 
         Set<UserRight> rights = fetchRights(user, dataObject, false);
 
-        UserRight highestPriorityRegularRight = getHigherPriorityRight(rights, false);
-        UserRight highestPriorityExclusionRight = getHigherPriorityRight(rights, true);
+        Set<UserRight> generalSubset = getRightsSubset(rights, false);
+        Set<UserRight> excludedSubset = getRightsSubset(rights, true);
 
-        // TODO : default behavior : to allow or disallow access
+        UserRight[] generalSubsetArray = toArray(generalSubset);
+        UserRight[] excludedSubsetArray = toArray(excludedSubset);
+
+        //Sorting arrays by priority
+        Arrays.sort(generalSubsetArray);
+        Arrays.sort(excludedSubsetArray);
+
+        // default behavior : to allow or disallow access
         // when no settings are present
-        if (highestPriorityRegularRight == null)
-            return DEFAULT_RIGHT;
+        if (generalSubsetArray.length == 0) {
+            if (rightType == UserRightType.CREATE)
+                return DEFAULT_CREATE_RIGHT;
+            if (rightType == UserRightType.READ)
+                return DEFAULT_READ_RIGHT;
+            if (rightType == UserRightType.MODIFY)
+                return DEFAULT_MODIFY_RIGHT;
+            if (rightType == UserRightType.DELETE)
+                return DEFAULT_DELETE_RIGHT;
+        }
+
+//        if (generalSubsetArray.length > 1) {
+//            UserRight r = compareRights(generalSubsetArray[0], generalSubsetArray[1]);
+//            if (generalSubsetArray[0] != r) {
+//                System.out.println("FAKE");
+//            }
+//        }
+
+        UserRight highestPriorityRegularRight = generalSubsetArray[0];
+        UserRight highestPriorityExclusionRight = null;
+        try {
+            highestPriorityExclusionRight = excludedSubsetArray[0];
+        } catch (Exception e) {
+            //ignore
+        }
+
 
         UserRight highestPriorityRight =
                 compareRights(highestPriorityRegularRight, highestPriorityExclusionRight);
 
-        // Setting excluded rights
-        if (highestPriorityRight == highestPriorityExclusionRight) {
-            highestPriorityRight.setCreate(
-                    highestPriorityRegularRight.canCreate()
-                    && !highestPriorityExclusionRight.canCreate());
+        // Excluded rights; here canXxx() means that Xxx is excluded
+        if (highestPriorityRight.isExcluded()) {
 
-            highestPriorityRight.setRead(
-                    highestPriorityRegularRight.canRead()
-                    && !highestPriorityExclusionRight.canRead());
+            if (highestPriorityExclusionRight.canCreate())
+                if (generalSubsetArray.length > 1)
+                    highestPriorityRight.setCreate(generalSubsetArray[1].canCreate());
+                else
+                    highestPriorityRight.setCreate(DEFAULT_CREATE_RIGHT);
 
-            highestPriorityRight.setDelete(
-                    highestPriorityRegularRight.canDelete()
-                    && !highestPriorityExclusionRight.canDelete());
+            if (highestPriorityExclusionRight.canRead())
+                if (generalSubsetArray.length > 1)
+                    highestPriorityRight.setCreate(generalSubsetArray[1].canRead());
+                else
+                    highestPriorityRight.setCreate(DEFAULT_READ_RIGHT);
 
-            highestPriorityRight.setModify(
-                    highestPriorityRegularRight.canModify()
-                    && !highestPriorityExclusionRight.canModify());
+            if (highestPriorityExclusionRight.canModify())
+                if (generalSubsetArray.length > 1)
+                    highestPriorityRight.setCreate(generalSubsetArray[1].canModify());
+                else
+                    highestPriorityRight.setCreate(DEFAULT_MODIFY_RIGHT);
+
+            if (highestPriorityExclusionRight.canDelete())
+                if (generalSubsetArray.length > 1)
+                    highestPriorityRight.setCreate(generalSubsetArray[1].canDelete());
+                else
+                    highestPriorityRight.setCreate(DEFAULT_DELETE_RIGHT);
         }
 
-
-//        if (highestPriorityRight.isExcluded())
-//            return false;
 
         if (rightType == UserRightType.READ)
             return highestPriorityRight.canRead();
@@ -144,29 +186,33 @@ public class RightsManagerBean
         return false;
     }
 
-    private UserRight getHigherPriorityRight(Set<UserRight> rights, boolean countExcluded) {
+    private Set<UserRight> getRightsSubset(Set<UserRight> rights, boolean countExcluded) {
 
-        UserRight highestPriorityRight = null;
+        Set<UserRight> subset = new HashSet<UserRight>();
+
         for (UserRight right : rights) {
-
             if (right.isExcluded() ^ countExcluded)
                 continue;
-
-            if (highestPriorityRight == null) {
-                highestPriorityRight = right;
-            } else {
-                highestPriorityRight = compareRights(right, highestPriorityRight);
-            }
+            subset.add(right);
         }
 
-        return highestPriorityRight;
+        return subset;
     }
 
-    private UserRight compareRights(UserRight right1, UserRight right2) {
+    /**
+     * Compares two rights and returns the more concrete one.
+     * If the two are equally concrete, the second one is returned.
+     *
+     * @param right1
+     * @param right2
+     * @return the more concrete right
+     */
+    public static UserRight compareRights(UserRight right1, UserRight right2) {
+
         UserRight higherPriorityRight = null;
 
         if (right1 == right2)
-            return right1;
+            return right2;
 
         if (right1 == null)
             return right2;
@@ -174,15 +220,25 @@ public class RightsManagerBean
         if (right2 == null)
             return right1;
 
-
         if (right1.getUser() != null && right2.getUser() == null) {
             higherPriorityRight = right1;
         } else if (right2.getUser() != null && right1.getUser() == null) {
             higherPriorityRight = right2;
         } else if (right1.getDataObject() != null && right2.getDataObject() == null){
             higherPriorityRight = right1;
-        } else {
+        } else if (right2.getDataObject() != null && right1.getDataObject() == null){
             higherPriorityRight = right2;
+        } else {
+            // checking parent-child relations
+            if (right1.getDataObject().getDataObjectId()
+                    .equals(right2.getDataObject().getParentDataObjectId())) {
+                return right2;
+            } else if (right2.getDataObject().getDataObjectId()
+                    .equals(right1.getDataObject().getParentDataObjectId())) {
+                return right1;
+            } else {
+                higherPriorityRight = right2;
+            }
         }
 
         return higherPriorityRight;
@@ -333,5 +389,14 @@ public class RightsManagerBean
 
     private Set<UserRight> getSpecialPermissions(UserGroup group) {
         return rightsHelper.getSpecialPermissions(group);
+    }
+
+    private UserRight[] toArray(Set<UserRight> set) {
+        UserRight[] array = new UserRight[set.size()];
+        int i = 0;
+        for (UserRight right : set) {
+            array[i++] = right;
+        }
+        return array;
     }
 }
