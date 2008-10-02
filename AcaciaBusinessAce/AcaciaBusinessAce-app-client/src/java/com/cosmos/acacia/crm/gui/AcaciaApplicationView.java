@@ -41,6 +41,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
+import com.cosmos.acacia.crm.gui.assembling.AssemblingMessageListPanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BranchSelectionPanel;
@@ -360,9 +361,17 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void assemblingSchemasAction()
     {
-        log.debug("personsListAction");
+        log.debug("assemblingSchemasAction");
         AssemblingSchemasPanel assemblingSchemas = new AssemblingSchemasPanel();
         assemblingSchemas.showFrame();
+    }
+
+    @Action
+    public void assemblingMessagesAction()
+    {
+        log.debug("assemblingMessagesAction");
+        AssemblingMessageListPanel listPanel = new AssemblingMessageListPanel();
+        listPanel.showFrame();
     }
 
     @Action
@@ -715,6 +724,10 @@ public class AcaciaApplicationView extends FrameView {
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("assemblingCategoriesAction")); // NOI18N
+        assemblingMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("assemblingMessagesAction")); // NOI18N
         assemblingMenu.add(menuItem);
 
         menuItem = new JBMenuItem();

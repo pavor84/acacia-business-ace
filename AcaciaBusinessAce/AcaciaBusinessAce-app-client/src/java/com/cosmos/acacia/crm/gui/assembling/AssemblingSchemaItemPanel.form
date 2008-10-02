@@ -18,24 +18,39 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="fieldsPanel" alignment="0" pref="800" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
-              <EmptySpace min="15" pref="15" max="15" attributes="0"/>
-              <Component id="descriptionPanel" pref="785" max="32767" attributes="0"/>
-          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" pref="770" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="descriptionPanel" pref="785" max="32767" attributes="0"/>
+          </Group>
+          <Component id="schemaPanel" alignment="0" pref="800" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="messageLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="messageComboList" pref="605" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Component id="fieldsPanel" alignment="0" pref="800" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
+              <Component id="schemaPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="messageLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="messageComboList" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="fieldsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="descriptionPanel" pref="167" max="32767" attributes="0"/>
+              <Component id="descriptionPanel" pref="119" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -65,19 +80,15 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="schemaCodeLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="messageCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="algorithmLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="minSelectionsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="minSelectionsLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="quantityLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="algorithmLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="quantityTextField" alignment="0" pref="250" max="32767" attributes="0"/>
-                          <Component id="minSelectionsTextField" alignment="1" pref="250" max="32767" attributes="1"/>
-                          <Component id="algorithmComboBox" alignment="1" pref="250" max="32767" attributes="1"/>
-                          <Component id="messageCodeTextField" alignment="1" pref="250" max="32767" attributes="1"/>
-                          <Component id="schemaCodeTextField" alignment="1" pref="250" max="32767" attributes="1"/>
+                          <Component id="minSelectionsTextField" alignment="1" pref="258" max="32767" attributes="1"/>
+                          <Component id="algorithmComboBox" alignment="1" pref="258" max="32767" attributes="1"/>
+                          <Component id="quantityTextField" alignment="1" pref="258" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -88,61 +99,25 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="schemaCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="schemaCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="messageCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="messageCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="algorithmComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="algorithmLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="algorithmComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="minSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="minSelectionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="minSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="quantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="quantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.cosmos.swingb.JBLabel" name="schemaCodeLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="schemaCodeLabel.text"/>
-                <Property name="name" type="java.lang.String" value="schemaCodeLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="schemaCodeTextField">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="name" type="java.lang.String" value="schemaCodeTextField" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="messageCodeTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="messageCodeTextField" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="messageTextTextField"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="messageCodeLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="messageCodeLabel.text"/>
-                <Property name="name" type="java.lang.String" value="messageCodeLabel" noResource="true"/>
-              </Properties>
-            </Component>
             <Component class="com.cosmos.swingb.JBComboBox" name="algorithmComboBox">
               <Properties>
                 <Property name="name" type="java.lang.String" value="algorithmComboBox" noResource="true"/>
@@ -198,19 +173,15 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="schemaNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="messageTextLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="dataTypeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="defaultValueLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="maxSelectionsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="defaultValueLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="maxSelectionsTextField" alignment="1" pref="245" max="32767" attributes="1"/>
-                          <Component id="dataTypeComboBox" alignment="1" pref="245" max="32767" attributes="1"/>
-                          <Component id="messageTextTextField" alignment="1" pref="245" max="32767" attributes="1"/>
-                          <Component id="schemaNameTextField" alignment="1" pref="245" max="32767" attributes="1"/>
-                          <Component id="defaultValueTextField" alignment="1" pref="245" max="32767" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="maxSelectionsTextField" alignment="1" pref="255" max="32767" attributes="1"/>
+                          <Component id="dataTypeComboBox" alignment="1" pref="255" max="32767" attributes="1"/>
+                          <Component id="defaultValueTextField" alignment="1" pref="255" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -221,61 +192,25 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="schemaNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="schemaNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="messageTextTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="messageTextLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="dataTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="dataTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="dataTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="maxSelectionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="maxSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="defaultValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="defaultValueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.cosmos.swingb.JBTextField" name="schemaNameTextField">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="name" type="java.lang.String" value="schemaNameTextField" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="schemaNameLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="schemaNameLabel.text"/>
-                <Property name="name" type="java.lang.String" value="schemaNameLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="messageTextTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="messageTextTextField" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="algorithmComboBox"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="messageTextLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="messageTextLabel.text"/>
-                <Property name="name" type="java.lang.String" value="messageTextLabel" noResource="true"/>
-              </Properties>
-            </Component>
             <Component class="com.cosmos.swingb.JBComboBox" name="dataTypeComboBox">
               <Properties>
                 <Property name="name" type="java.lang.String" value="dataTypeComboBox" noResource="true"/>
@@ -367,8 +302,121 @@
       <Properties>
         <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="messageCodeTextField"/>
+          <ComponentRef name="default"/>
         </Property>
+      </Properties>
+    </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="schemaPanel">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="schemaPanel" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Container class="com.cosmos.swingb.JBPanel" name="schemaCodePanel">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="schemaCodePanel" noResource="true"/>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="schemaCodeLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="schemaCodeTextField" pref="250" max="32767" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="schemaCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="schemaCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBTextField" name="schemaCodeTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="schemaCodeTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="schemaCodeLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="schemaCodeLabel.text"/>
+                <Property name="name" type="java.lang.String" value="schemaCodeLabel" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.cosmos.swingb.JBPanel" name="schemaNamePanel">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="schemaNamePanel" noResource="true"/>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="schemaNameLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="schemaNameTextField" pref="245" max="32767" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="schemaNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="schemaNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBTextField" name="schemaNameTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="schemaNameTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="schemaNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="schemaNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="schemaNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="messageComboList">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="messageComboList" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="messageLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="messageLabel.text"/>
+        <Property name="name" type="java.lang.String" value="messageLabel" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -14,7 +14,6 @@ import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.awt.Component;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;

@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.assembling.ProductAssemblerListener;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -24,7 +25,6 @@ import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
 import java.lang.Object;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.EJB;
@@ -189,9 +189,10 @@ public class ProductAssemblerPanel
         DefaultTableModel model = (DefaultTableModel)parametersTable.getModel();
         for(AssemblingSchemaItem item : getSchemaItems())
         {
-            String message = item.getMessageCode() + ": " + item.getMessageText();
+            AssemblingMessage message = item.getAssemblingMessage();
+            String code = message.getMessageCode() + ": " + message.getMessageText();
             Object value = item.getDefaultValue();
-            model.addRow(new Object[] {message, value});
+            model.addRow(new Object[] {code, value});
         }
 
         String schemaName = schema.getSchemaCode() + " - " + schema.getSchemaName();
