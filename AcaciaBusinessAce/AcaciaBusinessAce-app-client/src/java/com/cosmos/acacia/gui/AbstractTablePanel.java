@@ -306,6 +306,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             setVisible(Button.Select, false);
             setVisible(Button.Unselect, false);
             setVisible(Button.Special, false);
+            setVisible(Button.Filter, false);
         }
 
         setEnabled(Button.Select, false);
