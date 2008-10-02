@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.assembling;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -180,8 +181,8 @@ public class ProductAssembler
         if(Algorithm.Type.RangeAlgorithms.contains(algorithmType) ||
            Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
         {
-            String messageCode = asi.getMessageCode();
-            return parameters.get(messageCode);
+            AssemblingMessage message = asi.getAssemblingMessage();
+            return parameters.get(message.getMessageCode());
         }
 
         return null;
