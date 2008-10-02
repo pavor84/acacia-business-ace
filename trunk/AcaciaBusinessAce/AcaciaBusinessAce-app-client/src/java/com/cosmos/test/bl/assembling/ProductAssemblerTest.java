@@ -10,10 +10,12 @@ import com.cosmos.acacia.crm.assembling.AlgorithmException;
 import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.test.bl.BaseTest;
 import java.io.IOException;
@@ -56,12 +58,11 @@ public class ProductAssemblerTest
         util = new BaseTest();
         util.setUp();
 
-        assemblingCategory = new AssemblingCategory();
+        assemblingCategory = formSession.newAssemblingCategory(null);
         String code = UUID.randomUUID().toString();
         assemblingCategory.setCategoryCode(code);
         assemblingCategory.setCategoryName(code);
         assemblingCategory.setDescription(ProductAssemblerTest.class.getName());
-        assemblingCategory.setParentId(util.getOrganizationId());
         assemblingCategory = formSession.saveCategory(assemblingCategory);
         System.out.println("assemblingCategory: " + assemblingCategory);
     }
@@ -180,21 +181,48 @@ public class ProductAssemblerTest
             return schema;
 
         String name = algorithmType.name();
-        schema = new AssemblingSchema();
-        schema.setAssemblingCategory(assemblingCategory);
+        schema = formSession.newAssemblingSchema(assemblingCategory);
         schema.setSchemaCode(name);
         schema.setSchemaName(name);
         schema = formSession.saveSchema(schema);
         assemblingSchemas.put(algorithmType, schema);
 
+        populateAssemblingSchemaItems(schema, algorithmType);
+
+        return schema;
+    }
+
+    private void populateAssemblingSchemaItems(
+        AssemblingSchema schema,
+        Algorithm.Type algorithmType)
+    {
+        List<AssemblingSchemaItem> schemaItems =
+            formSession.getAssemblingSchemaItems(schema);
+        if(schemaItems != null && schemaItems.size() > 0)
+            return;
+
+        AssemblingSchemaItem schemaItem;
+        DbResource dataType =
+            getDataType(AssemblingSchemaItemDataType.Integer);
+        System.out.println("dataType: " + dataType);
+        
         switch(algorithmType)
         {
             case UnconditionalSelection:
+                schemaItem = formSession.newAssemblingSchemaItem(schema);
+                //schemaItem.set
                 break;
         }
+    }
 
+    private List<DbResource> getDataTypes()
+    {
+        return formSession.getDataTypes();
+    }
 
-        return schema;
+    private DbResource getDataType(AssemblingSchemaItemDataType dataType)
+    {
+        return formSession.getDbResource(dataType);
     }
 
     private static class AssemblerCallbackHandler

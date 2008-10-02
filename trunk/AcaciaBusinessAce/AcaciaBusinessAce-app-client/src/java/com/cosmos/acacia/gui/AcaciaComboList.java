@@ -22,6 +22,7 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 public class AcaciaComboList
     extends JBComboList
 {
+    private static final long serialVersionUID = 1L;
 
     public AcaciaComboList()
     {

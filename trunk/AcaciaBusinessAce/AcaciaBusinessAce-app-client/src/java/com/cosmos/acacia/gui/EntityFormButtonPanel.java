@@ -23,6 +23,7 @@ import com.cosmos.swingb.JBButton;
  * @author  Bozhidar Bozhanov
  */
 public class EntityFormButtonPanel extends AcaciaPanel {
+    private static final long serialVersionUID = 1L;
 
     protected static Logger log = Logger.getLogger(EntityFormButtonPanel.class);
 

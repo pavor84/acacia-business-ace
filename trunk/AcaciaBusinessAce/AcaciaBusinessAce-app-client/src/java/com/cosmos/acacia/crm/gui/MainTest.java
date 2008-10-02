@@ -42,6 +42,7 @@ public class MainTest {
            BusinessPartnerListTest.class.getName(),
            ProductAssemblerTest.class.getName(),
         };
+        tests = new String[] {ProductAssemblerTest.class.getName()};
 
         JUnitCore.main(tests);
     }

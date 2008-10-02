@@ -447,9 +447,21 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     protected abstract Object newRow();
 
-    public abstract boolean canCreate();
-    public abstract boolean canModify(Object rowObject);
-    public abstract boolean canDelete(Object rowObject);
+    public boolean canCreate()
+    {
+        return true;
+    }
+
+    public boolean canModify(Object rowObject)
+    {
+        return true;
+    }
+
+    public boolean canDelete(Object rowObject)
+    {
+        return true;
+    }
+
     public boolean canView(Object rowObject){
         return true;
     }
