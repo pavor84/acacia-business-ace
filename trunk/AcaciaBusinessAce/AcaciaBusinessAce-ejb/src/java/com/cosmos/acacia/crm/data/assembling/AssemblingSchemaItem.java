@@ -35,14 +35,6 @@ import javax.persistence.Table;
     {
         @NamedQuery
             (
-                name = "AssemblingSchemaItem.findBySchemaAndMessageCode",
-                query = "select t1 from AssemblingSchemaItem t1" +
-                        " where t1.assemblingSchema = :assemblingSchema" +
-                        " and t1.messageCode = :messageCode" +
-                        " and t1.dataObject.deleted = :deleted"
-            ),
-        @NamedQuery
-            (
                 name = "AssemblingSchemaItem.findByAssemblingSchema",
                 query = "select t1 from AssemblingSchemaItem t1" +
                         " where t1.assemblingSchema = :assemblingSchema" +
@@ -73,23 +65,10 @@ public class AssemblingSchemaItem
     @Property(title="Algorithm", propertyValidator=@PropertyValidator(required=true))
     private DbResource assemblingAlgorithm;
 
-    @Column(name = "message_code", nullable = false)
-    @Property(
-        title="Message Code",
-        propertyValidator=@PropertyValidator(
-            validationType=ValidationType.LENGTH,
-            maxLength=50,
-            required=true))
-    private String messageCode;
-
-    @Column(name = "message_text", nullable = false)
-    @Property(
-        title="Message Text",
-        propertyValidator=@PropertyValidator(
-            validationType=ValidationType.LENGTH,
-            maxLength=100,
-            required=true))
-    private String messageText;
+    @JoinColumn(name = "message_id", referencedColumnName = "message_id", nullable=false)
+    @ManyToOne
+    @Property(title="Message", propertyValidator=@PropertyValidator(required=true))
+    private AssemblingMessage assemblingMessage;
 
     @JoinColumn(name = "data_type_id", referencedColumnName = "resource_id", nullable=false)
     @ManyToOne
@@ -157,20 +136,14 @@ public class AssemblingSchemaItem
         this.dataType = dataType;
     }
 
-    public String getMessageCode() {
-        return messageCode;
+    public AssemblingMessage getAssemblingMessage()
+    {
+        return assemblingMessage;
     }
 
-    public void setMessageCode(String messageCode) {
-        this.messageCode = messageCode;
-    }
-
-    public String getMessageText() {
-        return messageText;
-    }
-
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public void setAssemblingMessage(AssemblingMessage assemblingMessage)
+    {
+        this.assemblingMessage = assemblingMessage;
     }
 
     public Integer getMinSelections() {
@@ -263,8 +236,7 @@ public class AssemblingSchemaItem
         StringBuilder sb = new StringBuilder();
         sb.append(toString());
         sb.append("\n\t assemblingSchema: ").append(assemblingSchema.toString());
-        sb.append("\n\t messageCode: ").append(messageCode);
-        sb.append("\n\t messageText: ").append(messageText);
+        sb.append("\n\t message: ").append(assemblingMessage.toString());
         sb.append("\n\t dataType: ").append(dataType);
         sb.append("\n\t minSelections: ").append(minSelections);
         sb.append("\n\t maxSelections: ").append(maxSelections);
@@ -316,6 +288,9 @@ public class AssemblingSchemaItem
     @Override
     public String getInfo()
     {
-        return getMessageText();
+        if(assemblingAlgorithm == null)
+            return "";
+
+        return assemblingAlgorithm.toString();
     }
 }

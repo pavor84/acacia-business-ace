@@ -14,14 +14,17 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
+import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
+import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,14 +79,6 @@ public class AssemblingBean
     }*/
 
     @Override
-    public EntityProperties getAssemblingCategoryEntityProperties()
-    {
-        EntityProperties entityProperties = esm.getEntityProperties(AssemblingCategory.class);
-        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        return entityProperties;
-    }
-
-    @Override
     public boolean deleteAssemblingSchema(AssemblingSchema assemblingSchema)
     {
         esm.remove(em, assemblingSchema);
@@ -119,6 +114,13 @@ public class AssemblingBean
             esm.remove(em, category);
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean deleteAssemblingMessage(AssemblingMessage assemblingMessage)
+    {
+        esm.remove(em, assemblingMessage);
         return true;
     }
 
@@ -185,8 +187,17 @@ public class AssemblingBean
     @Override
     public AssemblingSchema newAssemblingSchema()
     {
+        return newAssemblingSchema(null);
+    }
+
+    @Override
+    public AssemblingSchema newAssemblingSchema(AssemblingCategory assemblingCategory)
+    {
         AssemblingSchema assemblingSchema = new AssemblingSchema();
         assemblingSchema.setParentId(acaciaSessionLocal.getOrganization().getId());
+        if(assemblingCategory != null)
+            assemblingSchema.setAssemblingCategory(assemblingCategory);
+
         return assemblingSchema;
     }
 
@@ -195,6 +206,9 @@ public class AssemblingBean
     {
         AssemblingSchemaItem schemaItem = new AssemblingSchemaItem();
         schemaItem.setAssemblingSchema(assemblingSchema);
+        schemaItem.setDataType(getDbResource(AssemblingSchemaItemDataType.Integer));
+        schemaItem.setQuantity(BigDecimal.ONE);
+
         return schemaItem;
     }
 
@@ -212,6 +226,15 @@ public class AssemblingBean
         AssemblingCategory newObject = new AssemblingCategory();
         newObject.setParentCategory(parentCategory);
         newObject.setParentId(acaciaSessionLocal.getOrganization().getId());
+
+        return newObject;
+    }
+
+    @Override
+    public AssemblingMessage newAssemblingMessage()
+    {
+        AssemblingMessage newObject = new AssemblingMessage();
+        newObject.setOrganization(acaciaSessionLocal.getOrganization());
 
         return newObject;
     }
@@ -273,6 +296,15 @@ public class AssemblingBean
     }
 
     @Override
+    public AssemblingMessage saveAssemblingMessage(AssemblingMessage assemblingMessage)
+    {
+        //assemblingCategoryValidator.validate(entity);
+
+        esm.persist(em, assemblingMessage);
+        return assemblingMessage;
+    }
+
+    @Override
     public AssemblingCategory updateParents(
         AssemblingCategory newParent,
         AssemblingCategory newChild)
@@ -329,8 +361,9 @@ public class AssemblingBean
     }
 
     @Override
-    public List<AssemblingSchema> getAssemblingSchemas(Organization organization)
+    public List<AssemblingSchema> getAssemblingSchemas()
     {
+        Organization organization = acaciaSessionLocal.getOrganization();
         BigInteger parentId;
         if(organization == null || (parentId = organization.getId()) == null)
             return Collections.emptyList();
@@ -382,8 +415,9 @@ public class AssemblingBean
     }
 
     @Override
-    public List<VirtualProduct> getVirtualProducts(Organization organization)
+    public List<VirtualProduct> getVirtualProducts()
     {
+        Organization organization = acaciaSessionLocal.getOrganization();
         BigInteger parentId;
         if(organization == null || (parentId = organization.getId()) == null)
             return Collections.emptyList();
@@ -423,6 +457,20 @@ public class AssemblingBean
     }
 
     @Override
+    public List<AssemblingMessage> getAssemblingMessages()
+    {
+        Organization organization = acaciaSessionLocal.getOrganization();
+        logger.info("getAssemblingMessages().organization: " + organization);
+        if(organization == null || organization.getId() == null)
+            return Collections.emptyList();
+
+        Query q = em.createNamedQuery("AssemblingMessage.findByOrganization");
+        q.setParameter("organization", organization);
+
+        return new ArrayList<AssemblingMessage>(q.getResultList());
+    }
+
+    @Override
     public RealProduct getRealProduct(SimpleProduct simpleProduct)
     {
         Query q = em.createNamedQuery("RealProduct.findBySimpleProduct");
@@ -439,6 +487,14 @@ public class AssemblingBean
             esm.persist(em, realProduct);
             return realProduct;
         }
+    }
+
+    @Override
+    public EntityProperties getAssemblingCategoryEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(AssemblingCategory.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
     }
 
     @Override
@@ -490,6 +546,14 @@ public class AssemblingBean
     }
 
     @Override
+    public EntityProperties getAssemblingMessageEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(AssemblingMessage.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
     public List<DbResource> getAlgorithms()
     {
         return Algorithm.Type.getDbResources();
@@ -501,4 +565,9 @@ public class AssemblingBean
         return AssemblingSchemaItemDataType.getDbResources();
     }
 
+    @Override
+    public DbResource getDbResource(DatabaseResource databaseResource)
+    {
+        return databaseResource.getDbResource();
+    }
 }
