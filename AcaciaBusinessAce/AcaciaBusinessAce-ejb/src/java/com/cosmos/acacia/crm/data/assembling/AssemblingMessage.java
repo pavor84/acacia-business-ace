@@ -61,6 +61,15 @@ public class AssemblingMessage
             required=true))
     private String messageCode;
 
+    @Column(name = "message_label", nullable = false)
+    @Property(
+        title="Message Label",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=50,
+            required=true))
+    private String messageLabel;
+
     @Column(name = "message_text", nullable = false)
     @Property(
         title="Message Text",
@@ -69,6 +78,15 @@ public class AssemblingMessage
             maxLength=100,
             required=true))
     private String messageText;
+
+    @Column(name = "message_title", nullable = false)
+    @Property(
+        title="Message Title",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=100,
+            required=true))
+    private String messageTitle;
 
     @Column(name = "description")
     @Property(title="Description")
@@ -82,6 +100,129 @@ public class AssemblingMessage
     @OneToOne
     @PrimaryKeyJoinColumn
     private DataObject dataObject;
+
+    public enum Unit
+    {
+        WidthSelection(
+            "widthSelection",
+            "Width",
+            "Please select the width",
+            "Width selection"),
+        WidthInput(
+            "widthInput",
+            "Width",
+            "Please enter the width",
+            "Width input"),
+        HeightSelection(
+            "heightSelection",
+            "Height",
+            "Please select the height",
+            "Height selection"),
+        HeightInput(
+            "heightInput",
+            "Height",
+            "Please enter the height",
+            "Height input"),
+        LengthSelection(
+            "lengthSelection",
+            "Length",
+            "Please select the length",
+            "Length selection"),
+        LengthInput(
+            "lengthInput",
+            "Length",
+            "Please enter the length",
+            "Length input"),
+        WeightSelection(
+            "weightSelection",
+            "Weight",
+            "Please select the weight",
+            "Weight selection"),
+        WeightInput(
+            "weightInput",
+            "Weight",
+            "Please enter the weight",
+            "Weight input"),
+        ColorSelection(
+            "colorSelection",
+            "Color",
+            "Please select the color",
+            "Color selection"),
+        ProductSelection(
+            "productSelection",
+            "Product",
+            "Please select the product",
+            "Product selection"),
+        SchemaSelection(
+            "schemaSelection",
+            "Schema",
+            "Please select the schema",
+            "Schema selection"),
+        MaterialSelection(
+            "materialSelection",
+            "Material",
+            "Please select the material",
+            "Material selection"),
+        DirectionSelection(
+            "directionSelection",
+            "Direction",
+            "Please select the direction",
+            "Direction selection"),
+        ProfileSelection(
+            "profileSelection",
+            "Profile",
+            "Please select the profile",
+            "Profile selection"),
+        OrientationSelection(
+            "orientationSelection",
+            "Orientation",
+            "Please select the orientation",
+            "Orientation selection"),
+        SpecificationSelection(
+            "specificationSelection",
+            "Specification",
+            "Please select the specification",
+            "Specification selection"),
+        ;
+
+        private Unit(
+            String messageCode,
+            String messageLabel,
+            String messageText,
+            String messageTitle)
+        {
+            this(messageCode, messageLabel, messageText, messageTitle, null);
+        }
+
+        private Unit(
+            String messageCode,
+            String messageLabel,
+            String messageText,
+            String messageTitle,
+            String description)
+        {
+            this.messageCode = messageCode;
+            this.messageLabel = messageLabel;
+            this.messageText = messageText;
+            this.messageTitle = messageTitle;
+            this.description = description;
+        }
+
+        private String messageCode;
+        private String messageLabel;
+        private String messageText;
+        private String messageTitle;
+        private String description;
+
+        public void initAssemblingMessage(AssemblingMessage message)
+        {
+            message.messageCode = messageCode;
+            message.messageLabel = messageLabel;
+            message.messageText = messageText;
+            message.messageTitle = messageTitle;
+            message.description = description;
+        }
+    }
 
 
     public AssemblingMessage()
@@ -128,6 +269,26 @@ public class AssemblingMessage
     public void setMessageText(String messageText)
     {
         this.messageText = messageText;
+    }
+
+    public String getMessageLabel()
+    {
+        return messageLabel;
+    }
+
+    public void setMessageLabel(String messageLabel)
+    {
+        this.messageLabel = messageLabel;
+    }
+
+    public String getMessageTitle()
+    {
+        return messageTitle;
+    }
+
+    public void setMessageTitle(String messageTitle)
+    {
+        this.messageTitle = messageTitle;
     }
 
     public String getDescription()

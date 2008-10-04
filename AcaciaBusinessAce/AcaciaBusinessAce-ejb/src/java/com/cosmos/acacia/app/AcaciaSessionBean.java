@@ -20,6 +20,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
+import org.apache.log4j.Logger;
 
 /**
  * Created	:	19.05.2008
@@ -37,6 +38,9 @@ import com.cosmos.acacia.crm.data.UserRight;
  */
 @Stateless
 public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLocal {
+
+    private static final Logger logger =
+        Logger.getLogger(AcaciaSessionBean.class);
 
     @PersistenceContext
     private EntityManager em;

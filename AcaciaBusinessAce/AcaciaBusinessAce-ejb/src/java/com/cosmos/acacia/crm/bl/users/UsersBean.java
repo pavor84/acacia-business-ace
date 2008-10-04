@@ -38,6 +38,7 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.callback.CallbackHandler;
 import com.cosmos.acacia.callback.CallbackLocal;
 import com.cosmos.acacia.callback.CallbackTransportObject;
+import com.cosmos.acacia.crm.bl.assembling.AssemblingLocal;
 import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
@@ -49,6 +50,7 @@ import com.cosmos.acacia.crm.data.RegistrationCode;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserOrganizationPK;
+import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
@@ -89,6 +91,10 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @EJB
     private CallbackLocal callbackHandler;
+
+    @EJB
+    private AssemblingLocal assemblingLocal;
+
 
     /** Temporary indicator that operations are concerning password change */
     private boolean passwordChange = false;
@@ -134,6 +140,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             throw new ValidationException(INCORRECT_LOGIN_DATA);
         }
     }
+
     @Override
     public void remindPasswordByEmail(String email) {
         Query q = em.createNamedQuery("User.findByEmail");
@@ -655,6 +662,28 @@ public class UsersBean implements UsersRemote, UsersLocal {
             return getUserOrganization(u, acaciaSessionLocal.getOrganization());
         } catch (Exception ex) {
             return null;
+        }
+    }
+
+    @Override
+    public void init()
+    {
+        try
+        {
+            List<AssemblingMessage> messages = assemblingLocal.getAssemblingMessages();
+            if(messages == null || messages.size() == 0)
+            {
+                for(AssemblingMessage.Unit unit : AssemblingMessage.Unit.values())
+                {
+                    AssemblingMessage message = assemblingLocal.newAssemblingMessage();
+                    unit.initAssemblingMessage(message);
+                    assemblingLocal.saveAssemblingMessage(message);
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            log.error("Error during initialization of user/organization/branch resources.", ex);
         }
     }
 
