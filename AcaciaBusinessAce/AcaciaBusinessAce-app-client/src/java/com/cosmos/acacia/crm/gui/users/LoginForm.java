@@ -378,6 +378,8 @@ public class LoginForm extends AcaciaPanel {
                 //    AcaciaApplication.getApplication().exit();
             }
 
+            getFormSession().init();
+
             close(false);
             AcaciaApplication.launch(AcaciaApplication.class, null);
         } catch (Exception ex) {

@@ -25,13 +25,17 @@
                   <Component id="entityFormButtonPanel" alignment="0" pref="561" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="messageLabelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="messageCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="messageTextLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="messageTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="messageTextTextField" alignment="0" pref="452" max="32767" attributes="0"/>
-                          <Component id="messageCodeTextField" alignment="0" pref="452" max="32767" attributes="0"/>
+                          <Component id="messageTitleTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="messageTextTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="messageCodeTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="messageLabelTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -49,8 +53,18 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="messageLabelLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="messageLabelTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="messageTextLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="messageTextTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="messageTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="messageTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="descriptionPanel" pref="120" max="32767" attributes="0"/>
@@ -125,6 +139,28 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="messageTextLabel.text"/>
         <Property name="name" type="java.lang.String" value="messageTextLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="messageLabelTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="messageLabelTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="messageTitleTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="messageTitleTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="messageLabelLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="messageLabelLabel.text"/>
+        <Property name="name" type="java.lang.String" value="messageLabelLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="messageTitleLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="messageTitleLabel.text"/>
+        <Property name="name" type="java.lang.String" value="messageTitleLabel" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
