@@ -5,13 +5,11 @@
 
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.beansbinding.validation.RequiredValidator;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,6 +22,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
+
 /**
  *
  * @author Miro
@@ -32,6 +34,26 @@ import javax.persistence.TemporalType;
 @Table(name = "invoices")
 @NamedQueries(
     {
+        /**
+         * Parameters: 
+         *  - branch - not null
+         */
+        @NamedQuery
+            (
+                name = "Invoice.maxInvoiceNumberForBranch",
+                query = "select max(i.invoiceNumber) from Invoice i where i.branch = :branch "
+            ),
+        /**
+         * Parameters: 
+         *  - parentDataObjectId - not null, the parent object id
+         *  - deleted - not null - true/false
+         */
+        @NamedQuery
+            (
+                name = "Invoice.findForParentAndDeleted",
+                query = "select i from Invoice i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
+                        "and i.dataObject.deleted = :deleted"
+            ),
         @NamedQuery
             (
                 name = "Invoice.findByParentDataObjectAndDeleted",
@@ -65,192 +87,208 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Branch Name")
     private String branchName;
 
-    @Column(name = "invoice_number", nullable = false)
-    @Property(title="Number",
-            propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
-    private long invoiceNumber;
+    @Property(title="Invoice Number", editable=false)
+    @Column(name = "invoice_number")
+    private BigInteger invoiceNumber;
 
     @Column(name = "invoice_date", nullable = false)
     @Temporal(TemporalType.DATE)
     @Property(title="Date",
-            propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+            propertyValidator=@PropertyValidator(required=true))
     private Date invoiceDate;
 
     @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id", nullable=false)
     @ManyToOne
     @Property(title="Recipient",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+              propertyValidator=@PropertyValidator(required=true), customDisplay="${recipient.displayName}")
     private BusinessPartner recipient;
 
     @Column(name = "recipient_name", nullable = false)
     @Property(title="Recipient name",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+              propertyValidator=@PropertyValidator(required=true))
     private String recipientName;
 
-    @JoinColumn(name = "recipient_contact_id")
+    @Property(title="Recipient Contact", propertyValidator=@PropertyValidator(required=true), customDisplay="${recipientContact.contact.displayName}")
+    @JoinColumn(name = "supplier_contact_id")
     @ManyToOne
-    @Property(title="Recipient contact",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
-    private Person recipientContactId;
+    private ContactPerson recipientContact;
 
     @Column(name = "recipient_contact_name", nullable = false)
     @Property(title="Recipient contact name",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+              propertyValidator=@PropertyValidator(required=true))
     private String recipientContactName;
 
     @JoinColumn(name = "invoice_type_id", nullable = false, referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Type",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+              propertyValidator=@PropertyValidator(required=true))
     private DbResource invoiceType;
 
+    @Property(title="Status", readOnly=true, propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Status",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
-    private DbResource statusId;
+    private DbResource status;
 
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
     @Property(title="Creation date")
     private Date creationTime;
 
+    @Property(title="Creator", customDisplay="${creator.displayName}")
     @JoinColumn(name = "creator_id")
     @ManyToOne
-    @Property(title="Created by",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private Person creator;
-
+    
+    @Property(title="Creator Name", editable=false)
     @Column(name = "creator_name", nullable = false)
-    @Property(title="Created by name",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private String creatorName;
 
+    @Property(title="Delivery Method", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Delivery method",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource documentDeliveryMethod;
 
     @JoinColumn(name = "transportation_method_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Transportation method",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+    @Property(title="Transportation method", 
+              propertyValidator=@PropertyValidator(required=true))
     private DbResource transportationMethod;
-
-    @JoinColumn(name = "shipping_agent_id", referencedColumnName = "data_object_link_id")
+    
+    @Property(title="Shipping Agent", customDisplay="${shippingAgent.displayName}")
     @ManyToOne
-    @Property(title="Shipping agent")
-    private DataObjectLink shippingAgentLink;
+    private BusinessPartner shippingAgent;
 
-    @Column(name = "transportation_price")
-    @Property(title="Transportation Price")
+    @Property(title="Transport Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "transport_price")
     private BigDecimal transportationPrice;
 
+    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Currency",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
     private DbResource currency;
 
+    @Property(title="Invoice Sub Value", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "invoice_sub_value", nullable = false)
-    @Property(title="Sub value")
     private BigDecimal invoiceSubValue;
 
+    @Property(title="Vat %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
+    @Column(name = "vat", nullable = false)
+    private BigDecimal vat;
+    
+    @Property(title="Discount", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "discount_amount")
+    private BigDecimal discountAmount;
+    
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
     @Column(name = "discount_percent")
-    @Property(title="Discount percent")
     private BigDecimal discountPercent;
+    
+    @Property(title="Total Value", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d, required=true))
+    @Column(name = "total_value", nullable = false)
+    private BigDecimal totalValue;
 
-    @Column(name = "discount_value")
-    @Property(title="Discount value")
-    private BigDecimal discountValue;
-
-    @Column(name = "invoice_value", nullable = false)
-    @Property(title="Value",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
-    private BigDecimal invoiceValue;
-
+    @Property(title="Excise Duty %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
     @Column(name = "excise_duty_percent")
-    @Property(title="Excise duty percent")
     private BigDecimal exciseDutyPercent;
 
-    @Column(name = "excise_duty_value")
-    @Property(title="Excise duty value")
+    @Property(title="Excise Duty", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "excise_duty_amount")
     private BigDecimal exciseDutyValue;
 
     @JoinColumn(name = "vat_condition_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Vat condition")
+    @Property(title="Vat Condition", propertyValidator=@PropertyValidator(required=true))
     private DbResource vatCondition;
-
-    @Column(name = "vat_percent", nullable = false)
-    @Property(title="Vat percent")
-    private BigDecimal vatPercent;
-
-    @Column(name = "vat_value", nullable = false)
-    @Property(title="Vat value")
-    private BigDecimal vatValue;
-
-    @Column(name = "total_invoice_value", nullable = false)
-    @Property(title="Total")
-    private BigDecimal totalInvoiceValue;
 
     @JoinColumn(name = "payment_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Payment method",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+    @Property(title="Payment Method",
+              propertyValidator=@PropertyValidator(required=true))
     private DbResource paymentType;
 
     @JoinColumn(name = "payment_terms_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Payment terms",
-              propertyValidator=@PropertyValidator(validator=RequiredValidator.class))
+    @Property(title="Payment Terms",
+              propertyValidator=@PropertyValidator(required=true))
     private DbResource paymentTerms;
 
     @Column(name = "payment_due_date")
     @Temporal(TemporalType.DATE)
     @Property(title="Payment due date")
     private Date paymentDueDate;
+    
+    @Property(title="Single Pay Amount", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "single_pay")
+    private BigDecimal singlePayAmount;
+    
+    @Property(title="Payments Count", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=1000000))
+    @Column(name = "payments_count")
+    private Integer paymentsCount;
+    
+    @Property(title="Days Between Payments", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=1000000))
+    @Column(name = "days_between_payments")
+    private Integer daysBetweenPayments;
 
     @JoinColumn(name = "delivery_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Delivery type")
+    @Property(title="Delivery Type", propertyValidator=@PropertyValidator( required=true ))
     private DbResource deliveryType;
 
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
-    @Property(title="Sent time")
+    @Property(title="Sent Time")
     private Date sentTime;
 
+    @Property(title="Sender")
     @JoinColumn(name = "sender_id")
     @ManyToOne
-    @Property(title="Sender")
     private Person sender;
-
+    
+    @Property(title="Sender Name", editable=false)
     @Column(name = "sender_name")
-    @Property(title="Sender name")
     private String senderName;
-
-    @Column(name = "first_ship_date")
-    @Temporal(TemporalType.DATE)
-    @Property(title="First ship date")
-    private Date firstShipDate;
-
-    @Column(name = "last_ship_date")
-    @Temporal(TemporalType.DATE)
-    @Property(title="Last ship date")
-    private Date lastShipDate;
 
     @Column(name = "finalizing_date")
     @Temporal(TemporalType.DATE)
     private Date finalizingDate;
+    
+    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53, required=true))
+    @Column(name = "ship_week")
+    private Integer shipWeek;
+    
+    @Property(title="Ship Date From", propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "ship_date_from")
+    @Temporal(TemporalType.DATE)
+    private Date shipDateFrom;
+    
+    @Property(title="Ship Date To", propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "ship_date_to")
+    @Temporal(TemporalType.DATE)
+    private Date shipDateTo;
+    
+    @Column(name = "notes")
+    @Property(title="Notes")
+    private String notes;
+    
+    @Column(name = "vat_condition_notes")
+    @Property(title="Vat Condition Notes")
+    private String vatConditionNotes;
 
     @JoinColumn(name = "invoice_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     @Property(title="Invoice ID", editable=false, readOnly=true, visible=false)
     private DataObject dataObject;
-
-
 
     public Invoice() {
     }
@@ -280,17 +318,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     }
 
     public void setBranchName(String branchName) {
-        firePropertyChange("branchName", this.branchName, branchName);
         this.branchName = branchName;
-    }
-
-    public long getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(long invoiceNumber) {
-        firePropertyChange("invoiceNumber", this.invoiceNumber, invoiceNumber);
-        this.invoiceNumber = invoiceNumber;
     }
 
     public Date getInvoiceDate() {
@@ -347,15 +375,6 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.creatorName = creatorName;
     }
 
-    public DataObjectLink getShippingAgentLink() {
-        return shippingAgentLink;
-    }
-
-    public void setShippingAgentLink(DataObjectLink shippingAgentLink) {
-        firePropertyChange("shippingAgentLink", this.shippingAgentLink, shippingAgentLink);
-        this.shippingAgentLink = shippingAgentLink;
-    }
-
     public BigDecimal getTransportationPrice() {
         return transportationPrice;
     }
@@ -383,24 +402,6 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.discountPercent = discountPercent;
     }
 
-    public BigDecimal getDiscountValue() {
-        return discountValue;
-    }
-
-    public void setDiscountValue(BigDecimal discountValue) {
-        firePropertyChange("discountValue", this.discountValue, discountValue);
-        this.discountValue = discountValue;
-    }
-
-    public BigDecimal getInvoiceValue() {
-        return invoiceValue;
-    }
-
-    public void setInvoiceValue(BigDecimal invoiceValue) {
-        firePropertyChange("invoiceValue", this.invoiceValue, invoiceValue);
-        this.invoiceValue = invoiceValue;
-    }
-
     public BigDecimal getExciseDutyPercent() {
         return exciseDutyPercent;
     }
@@ -417,33 +418,6 @@ public class Invoice extends DataObjectBean implements Serializable {
     public void setExciseDutyValue(BigDecimal exciseDutyValue) {
         firePropertyChange("exciseDutyValue", this.exciseDutyValue, exciseDutyValue);
         this.exciseDutyValue = exciseDutyValue;
-    }
-
-    public BigDecimal getVatPercent() {
-        return vatPercent;
-    }
-
-    public void setVatPercent(BigDecimal vatPercent) {
-        firePropertyChange("vatPercent", this.vatPercent, vatPercent);
-        this.vatPercent = vatPercent;
-    }
-
-    public BigDecimal getVatValue() {
-        return vatValue;
-    }
-
-    public void setVatValue(BigDecimal vatValue) {
-        firePropertyChange("vatValue", this.vatValue, vatValue);
-        this.vatValue = vatValue;
-    }
-
-    public BigDecimal getTotalInvoiceValue() {
-        return totalInvoiceValue;
-    }
-
-    public void setTotalInvoiceValue(BigDecimal totalInvoiceValue) {
-        firePropertyChange("totalInvoiceValue", this.totalInvoiceValue, totalInvoiceValue);
-        this.totalInvoiceValue = totalInvoiceValue;
     }
 
     public Date getPaymentDueDate() {
@@ -473,24 +447,6 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.senderName = senderName;
     }
 
-    public Date getFirstShipDate() {
-        return firstShipDate;
-    }
-
-    public void setFirstShipDate(Date firstShipDate) {
-        firePropertyChange("firstShipDate", this.firstShipDate, firstShipDate);
-        this.firstShipDate = firstShipDate;
-    }
-
-    public Date getLastShipDate() {
-        return lastShipDate;
-    }
-
-    public void setLastShipDate(Date lastShipDate) {
-        firePropertyChange("lastShipDate", this.lastShipDate, lastShipDate);
-        this.lastShipDate = lastShipDate;
-    }
-
     public Date getFinalizingDate() {
         return finalizingDate;
     }
@@ -516,15 +472,6 @@ public class Invoice extends DataObjectBean implements Serializable {
     public void setDataObject(DataObject dataObject) {
         firePropertyChange("dataObject", this.dataObject, dataObject);
         this.dataObject = dataObject;
-    }
-
-    public Person getRecipientContactId() {
-        return recipientContactId;
-    }
-
-    public void setRecipientContactId(Person recipientContactId) {
-        firePropertyChange("recipientContactId", this.recipientContactId, recipientContactId);
-        this.recipientContactId = recipientContactId;
     }
 
     public Person getSender() {
@@ -563,15 +510,6 @@ public class Invoice extends DataObjectBean implements Serializable {
         this.paymentType = paymentType;
     }
 
-    public DbResource getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(DbResource statusId) {
-        firePropertyChange("statusId", this.statusId, statusId);
-        this.statusId = statusId;
-    }
-
     public DbResource getTransportationMethod() {
         return transportationMethod;
     }
@@ -593,7 +531,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     public DbResource getCurrency() {
         return currency;
     }
-
+    
     public void setCurrency(DbResource currency) {
         firePropertyChange("currency", this.currency, currency);
         this.currency = currency;
@@ -664,5 +602,125 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return "" + getInvoiceNumber();
+    }
+
+    public Integer getShipWeek() {
+        return shipWeek;
+    }
+
+    public void setShipWeek(Integer shipWeek) {
+        this.shipWeek = shipWeek;
+    }
+
+    public Date getShipDateFrom() {
+        return shipDateFrom;
+    }
+
+    public void setShipDateFrom(Date shipDateFrom) {
+        this.shipDateFrom = shipDateFrom;
+    }
+
+    public Date getShipDateTo() {
+        return shipDateTo;
+    }
+
+    public void setShipDateTo(Date shipDateTo) {
+        this.shipDateTo = shipDateTo;
+    }
+
+    public ContactPerson getRecipientContact() {
+        return recipientContact;
+    }
+
+    public void setRecipientContact(ContactPerson recipientContact) {
+        this.recipientContact = recipientContact;
+    }
+
+    public DbResource getStatus() {
+        return status;
+    }
+
+    public void setStatus(DbResource status) {
+        this.status = status;
+    }
+
+    public BusinessPartner getShippingAgent() {
+        return shippingAgent;
+    }
+
+    public void setShippingAgent(BusinessPartner shippingAgent) {
+        this.shippingAgent = shippingAgent;
+    }
+
+    public BigDecimal getVat() {
+        return vat;
+    }
+
+    public void setVat(BigDecimal vat) {
+        this.vat = vat;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public BigDecimal getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getVatConditionNotes() {
+        return vatConditionNotes;
+    }
+
+    public void setVatConditionNotes(String vatConditionNotes) {
+        this.vatConditionNotes = vatConditionNotes;
+    }
+
+    public BigDecimal getSinglePayAmount() {
+        return singlePayAmount;
+    }
+
+    public void setSinglePayAmount(BigDecimal singlePayAmount) {
+        this.singlePayAmount = singlePayAmount;
+    }
+
+    public Integer getPaymentsCount() {
+        return paymentsCount;
+    }
+
+    public void setPaymentsCount(Integer paymentsCount) {
+        this.paymentsCount = paymentsCount;
+    }
+
+    public Integer getDaysBetweenPayments() {
+        return daysBetweenPayments;
+    }
+
+    public void setDaysBetweenPayments(Integer daysBetweenPayments) {
+        this.daysBetweenPayments = daysBetweenPayments;
+    }
+
+    public BigInteger getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(BigInteger invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 }

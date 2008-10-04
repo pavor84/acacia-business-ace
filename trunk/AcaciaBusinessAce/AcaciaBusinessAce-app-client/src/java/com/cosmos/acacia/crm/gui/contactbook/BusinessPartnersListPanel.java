@@ -178,6 +178,18 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     public boolean canDelete(Object rowObject) {
         return true;
     }
+    
+    private static Classifier getOrCreateClassifier(String classifierKey){
+        ClassifiersRemote classifiersFormSession = getBean(ClassifiersRemote.class);
+        Classifier theClassifier = classifiersFormSession.getOrCreateSystemClassifier(classifierKey);
+        return theClassifier;
+    }
+    
+    private static BusinessPartnersListPanel createPartnerPanel(String classiferKey, BigInteger parentDataObjectId){
+        Classifier supplierClassifier = getOrCreateClassifier(classiferKey);
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(parentDataObjectId, supplierClassifier);
+        return listPanel;
+    }
 
     /**
      * Factory method - returns {@link BusinessPartnersListPanel} with applied classifier for 
@@ -186,9 +198,26 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
      * @return
      */
     public static BusinessPartnersListPanel createProvidersPanel(BigInteger parentDataObjectId) {
-        ClassifiersRemote classifiersFormSession = getBean(ClassifiersRemote.class);
-        Classifier supplierClassifier = classifiersFormSession.getClassifier("provider");
-        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(parentDataObjectId, supplierClassifier);
-        return listPanel;
+        return createPartnerPanel("provider", parentDataObjectId);
+    }
+    
+    /**
+     * Factory method - returns {@link BusinessPartnersListPanel} with applied classifier for 
+     * customers ('customer')
+     * @param parentDataObjectId
+     * @return
+     */
+    public static BusinessPartnersListPanel createCustomerPanel(BigInteger parentDataObjectId) {
+        return createPartnerPanel("customer", parentDataObjectId);
+    }
+    
+    /**
+     * Factory method - returns {@link BusinessPartnersListPanel} with applied classifier for 
+     * customers ('shippingAgent')
+     * @param parentDataObjectId
+     * @return
+     */
+    public static BusinessPartnersListPanel createShippingAgentPanel(BigInteger parentDataObjectId) {
+        return createPartnerPanel("shippingAgent", parentDataObjectId);
     }
 }

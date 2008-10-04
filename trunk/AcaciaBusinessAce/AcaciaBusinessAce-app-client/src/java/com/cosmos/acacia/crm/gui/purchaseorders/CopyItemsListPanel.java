@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.bl.invoice.impl.InvoiceItemsListRemote;
+import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -36,7 +36,7 @@ public class CopyItemsListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
         
-        entityProps = getFormSession().getInvoiceItemsEntityProperties();
+        entityProps = getFormSession().getItemsListEntityProperties();
         entityProps.getPropertyDetails("product").setCustomDisplay("${product.productName}");
         refreshDataTable(entityProps);
 
@@ -56,7 +56,7 @@ public class CopyItemsListPanel extends AbstractTablePanel {
     }
     
     @EJB
-    private InvoiceItemsListRemote formSession;
+    private InvoiceListRemote formSession;
     private EntityProperties entityProps;
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canCreate()
@@ -69,7 +69,7 @@ public class CopyItemsListPanel extends AbstractTablePanel {
     protected List<InvoiceItem> getItems() {
         if ( invoiceItems==null ){
             if ( getParentDataObjectId()!=null )
-                invoiceItems = getFormSession().getInvoiceItems(getParentDataObject());
+                invoiceItems = getFormSession().getInvoiceItems(getParentDataObjectId());
             else
                 invoiceItems = new ArrayList<InvoiceItem>();
         }
@@ -111,9 +111,9 @@ public class CopyItemsListPanel extends AbstractTablePanel {
         return null;
     }
     
-    protected InvoiceItemsListRemote getFormSession() {
+    protected InvoiceListRemote getFormSession() {
         if(formSession == null) {
-            formSession = getBean(InvoiceItemsListRemote.class);
+            formSession = getBean(InvoiceListRemote.class);
         }
 
         return formSession;

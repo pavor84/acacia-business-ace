@@ -10,6 +10,10 @@ import java.util.List;
  */
 public enum PaymentTerm implements DatabaseResource {
     InAdvance("In Advance", "Payment should be payed in advance"),
+    AfterDelivery("After Delivery", "Payment should be payed in after delivery"),
+    BeforeAndAfter("Before And After", "Payment should be payed partially in advance"),
+    Leasing("Leasing", "Leasing"),
+    InstalmentPlan("InstalmentPlan", "InstalmentPlan"),
     None("None", "No Special payment terms")
     ;
     

@@ -19,6 +19,7 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.bl.impl.WarehouseListLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
@@ -27,6 +28,7 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
@@ -65,6 +67,9 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     
     @EJB
     private PurchaseOrderItemValidatorLocal purchaseOrderItemValidator;
+    
+    @EJB
+    private WarehouseListLocal warehouseListLocal;
     
     @Override
     public EntityProperties getListingEntityProperties() {
@@ -203,21 +208,34 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         BigInteger result = (BigInteger) q.getSingleResult();
         //no orders for this warehouse
         if ( result==null ){
-            q = em.createNamedQuery("PurchaseOrder.maxOrderNumber");
-            q.setParameter("parentDataObjectId", po.getParentId());
-            
-            result = (BigInteger) q.getSingleResult();
-            BigInteger step = new BigInteger("1000000000");
-            //no orders at all
-            if ( result==null ){
-                result = step;
-            //first order for this warehouse - get next step
-            }else{
-                BigInteger newWarehouseNumber = result.divide(step);
-                newWarehouseNumber = newWarehouseNumber.add(new BigInteger("1"));
-                newWarehouseNumber = newWarehouseNumber.multiply(step);
-                result = newWarehouseNumber;
+            Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(po.getBranch());
+            if ( warehouse==null ){
+                throw new IllegalStateException("No warehouse found for address: "+po.getBranch()==null?"null":po.getBranch().getAddressName());
             }
+            
+            if ( warehouse.getIndex()==null || warehouse.getIndex().equals(new Long(0))){
+                throw new IllegalStateException("No warehouse index set for warehouse: "
+                    +warehouse.getAddress().getAddressName()+". This is needed to generate document numbers!");
+            }
+            
+            result = new BigInteger(""+warehouse.getIndex());
+            result = result.multiply(WarehouseListLocal.DOCUMENT_INDEX_MULTIPLICATOR);
+            
+//            q = em.createNamedQuery("PurchaseOrder.maxOrderNumber");
+//            q.setParameter("parentDataObjectId", po.getParentId());
+//            
+//            result = (BigInteger) q.getSingleResult();
+//            BigInteger step = new BigInteger("1000000000");
+//            //no orders at all
+//            if ( result==null ){
+//                result = step;
+//            //first order for this warehouse - get next step
+//            }else{
+//                BigInteger newWarehouseNumber = result.divide(step);
+//                newWarehouseNumber = newWarehouseNumber.add(new BigInteger("1"));
+//                newWarehouseNumber = newWarehouseNumber.multiply(step);
+//                result = newWarehouseNumber;
+//            }
         //just get the next number
         }else{
             result = result.add(new BigInteger("1"));

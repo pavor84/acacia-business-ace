@@ -6,6 +6,9 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ValidationType;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -30,6 +33,17 @@ import javax.persistence.TemporalType;
 @Table(name = "invoice_items")
 @NamedQueries(
     {
+        /**
+         * Parameters: 
+         *  - parentDataObjectId - not null, the parent object id
+         *  - deleted - not null - true/false
+         */
+        @NamedQuery
+            (
+                name = "InvoiceItem.findForParentAndDeleted",
+                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
+                        "and i.dataObject.deleted = :deleted"
+            ),
         @NamedQuery
             (
                 name = "InvoiceItem.findByParentDataObjectAndDeleted",
@@ -56,8 +70,8 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    @Property(title="Product")
-    private SimpleProduct product;
+    @Property(title="Product", customDisplay="${product.productName}", propertyValidator=@PropertyValidator(required=true))
+    private Product product;
 
     @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
     @ManyToOne
@@ -69,11 +83,11 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     private BigDecimal orderedQuantity;
 
     @Column(name = "shipped_quantity")
-    @Property(title="Shipped quantir\ty")
+    @Property(title="Shipped quantity", readOnly=true)
     private BigDecimal shippedQuantity;
 
     @Column(name = "returned_quantity")
-    @Property(title="Returned quantiry")
+    @Property(title="Returned quantiry", readOnly=true)
     private BigDecimal returnedQuantity;
 
     @Column(name = "unit_price", nullable = false)
@@ -81,24 +95,49 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     private BigDecimal unitPrice;
 
     @Column(name = "extended_price", nullable = false)
-    @Property(title="Extended price")
+    @Property(title="Extended price", readOnly=true)
     private BigDecimal extendedPrice;
+    
+    @Property(title="Discount", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name = "discount_amount")
+    private BigDecimal discountAmount;
+    
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
+    @Column(name = "discount_percent")
+    private BigDecimal discountPercent;
 
-    @Column(name = "ship_date")
+    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))
+    @Column(name = "ship_week")
+    private Integer shipWeek;
+    
+    @Property(title="Ship Date From")
+    @Column(name = "ship_date_from")
     @Temporal(TemporalType.DATE)
-    @Property(title="Ship date")
-    private Date shipDate;
+    private Date shipDateFrom;
+    
+    @Property(title="Ship Date To")
+    @Column(name = "ship_date_to")
+    @Temporal(TemporalType.DATE)
+    private Date shipDateTo;
 
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id")
     @ManyToOne
-    @Property(title="Warehouse")
+    @Property(title="Warehouse", customDisplay="${warehouse.address.addressName}")
     private Warehouse warehouse;
+    
+    @Column(name = "notes")
+    @Property(title="Notes")
+    private String notes;
+    
+    @Column(name = "product_description")
+    @Property(title="Product Description")
+    private String productDescription;
 
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
-    @Property(title="Date object")
     private DataObject dataObject;
-
 
     public InvoiceItem() {
     }
@@ -168,13 +207,12 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
         this.extendedPrice = extendedPrice;
     }
 
-    public Date getShipDate() {
-        return shipDate;
+    public Integer getShipWeek() {
+        return shipWeek;
     }
 
-    public void setShipDate(Date shipDate) {
-        firePropertyChange("shipDate", this.shipDate, shipDate);
-        this.shipDate = shipDate;
+    public void setShipWeek(Integer shipWeek) {
+        this.shipWeek = shipWeek;
     }
 
     public DataObject getDataObject() {
@@ -184,15 +222,6 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     public void setDataObject(DataObject dataObject) {
         firePropertyChange("dataObject", this.dataObject, dataObject);
         this.dataObject = dataObject;
-    }
-
-    public SimpleProduct getProduct() {
-        return product;
-    }
-
-    public void setProduct(SimpleProduct product) {
-        firePropertyChange("product", this.product, product);
-        this.product = product;
     }
 
     public DbResource getMeasureUnit() {
@@ -251,5 +280,61 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return getInvoiceItemId().toString();
+    }
+    
+    public Date getShipDateFrom() {
+        return shipDateFrom;
+    }
+
+    public void setShipDateFrom(Date shipDateFrom) {
+        this.shipDateFrom = shipDateFrom;
+    }
+
+    public Date getShipDateTo() {
+        return shipDateTo;
+    }
+
+    public void setShipDateTo(Date shipDateTo) {
+        this.shipDateTo = shipDateTo;
+    }
+
+    public BigDecimal getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(BigDecimal discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 }
