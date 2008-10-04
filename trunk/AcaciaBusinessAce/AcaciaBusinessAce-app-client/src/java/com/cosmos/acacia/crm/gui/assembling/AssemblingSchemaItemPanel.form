@@ -35,22 +35,19 @@
               <Component id="messageComboList" pref="605" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Component id="fieldsPanel" alignment="0" pref="800" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <Component id="schemaPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="messageLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="messageComboList" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="messageLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="messageComboList" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="fieldsPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="descriptionPanel" pref="119" max="32767" attributes="0"/>
+              <Component id="descriptionPanel" pref="120" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -59,204 +56,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.cosmos.swingb.JBPanel" name="fieldsPanel">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="fieldsPanel" noResource="true"/>
-      </Properties>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="0"/>
-        <Property name="rows" type="int" value="1"/>
-      </Layout>
-      <SubComponents>
-        <Container class="com.cosmos.swingb.JBPanel" name="firstFieldsPanel">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="firstFieldsPanel" noResource="true"/>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="minSelectionsLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="quantityLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="algorithmLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="minSelectionsTextField" alignment="1" pref="258" max="32767" attributes="1"/>
-                          <Component id="algorithmComboBox" alignment="1" pref="258" max="32767" attributes="1"/>
-                          <Component id="quantityTextField" alignment="1" pref="258" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="algorithmLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="algorithmComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="minSelectionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="minSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="quantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="com.cosmos.swingb.JBComboBox" name="algorithmComboBox">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="algorithmComboBox" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="dataTypeComboBox"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="algorithmLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="algorithmLabel.text"/>
-                <Property name="name" type="java.lang.String" value="algorithmLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="minSelectionsTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="minSelectionsTextField" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="maxSelectionsTextField"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="minSelectionsLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="minSelectionsLabel.text"/>
-                <Property name="name" type="java.lang.String" value="minSelectionsLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="quantityTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="quantityTextField" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="defaultValueTextField"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="quantityLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="quantityLabel.text"/>
-                <Property name="name" type="java.lang.String" value="quantityLabel" noResource="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="com.cosmos.swingb.JBPanel" name="secondFieldsPanel">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="secondFieldsPanel" noResource="true"/>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="dataTypeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="maxSelectionsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="defaultValueLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="maxSelectionsTextField" alignment="1" pref="255" max="32767" attributes="1"/>
-                          <Component id="dataTypeComboBox" alignment="1" pref="255" max="32767" attributes="1"/>
-                          <Component id="defaultValueTextField" alignment="1" pref="255" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="dataTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="dataTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="maxSelectionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="maxSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="defaultValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="defaultValueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="com.cosmos.swingb.JBComboBox" name="dataTypeComboBox">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="dataTypeComboBox" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="minSelectionsTextField"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="dataTypeLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="dataTypeLabel.text"/>
-                <Property name="name" type="java.lang.String" value="dataTypeLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="maxSelectionsTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="maxSelectionsTextField" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="quantityTextField"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="maxSelectionsLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="maxSelectionsLabel.text"/>
-                <Property name="name" type="java.lang.String" value="maxSelectionsLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="defaultValueTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="defaultValueTextField" noResource="true"/>
-                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="descriptionTextPane"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="defaultValueLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="defaultValueLabel.text"/>
-                <Property name="name" type="java.lang.String" value="defaultValueLabel" noResource="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-      </SubComponents>
-    </Container>
     <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -301,9 +100,6 @@
     <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
       <Properties>
         <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
-        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="default"/>
-        </Property>
       </Properties>
     </Component>
     <Container class="com.cosmos.swingb.JBPanel" name="schemaPanel">
@@ -324,11 +120,30 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="schemaCodeLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="schemaCodeTextField" pref="250" max="32767" attributes="1"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="quantityLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="schemaCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="minSelectionsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="algorithmLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="algorithmComboBox" alignment="1" pref="258" max="32767" attributes="1"/>
+                                  <Component id="schemaCodeTextField" alignment="0" pref="258" max="32767" attributes="1"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="quantityTextField" alignment="1" pref="258" max="32767" attributes="1"/>
+                                          <Component id="minSelectionsTextField" alignment="0" pref="258" max="32767" attributes="1"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -340,6 +155,21 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="schemaCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="schemaCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="algorithmLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="algorithmComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="minSelectionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="minSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="quantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -359,6 +189,48 @@
                 <Property name="name" type="java.lang.String" value="schemaCodeLabel" noResource="true"/>
               </Properties>
             </Component>
+            <Component class="com.cosmos.swingb.JBComboBox" name="algorithmComboBox">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="algorithmComboBox" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="dataTypeComboBox"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="minSelectionsTextField">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="minSelectionsTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="maxSelectionsTextField"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="quantityTextField">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="quantityTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="defaultValueTextField"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="algorithmLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="algorithmLabel.text"/>
+                <Property name="name" type="java.lang.String" value="algorithmLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="minSelectionsLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="minSelectionsLabel.text"/>
+                <Property name="name" type="java.lang.String" value="minSelectionsLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="quantityLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="quantityLabel.text"/>
+                <Property name="name" type="java.lang.String" value="quantityLabel" noResource="true"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="com.cosmos.swingb.JBPanel" name="schemaNamePanel">
@@ -371,9 +243,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="schemaNameLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="schemaNameTextField" pref="245" max="32767" attributes="1"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="schemaNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="dataTypeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="maxSelectionsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="defaultValueLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="defaultValueTextField" alignment="0" pref="255" max="32767" attributes="1"/>
+                          <Component id="maxSelectionsTextField" alignment="0" pref="255" max="32767" attributes="1"/>
+                          <Component id="dataTypeComboBox" alignment="0" pref="255" max="32767" attributes="1"/>
+                          <Component id="schemaNameTextField" alignment="0" pref="255" max="32767" attributes="1"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -385,6 +267,21 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="schemaNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="schemaNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="dataTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="dataTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="maxSelectionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="maxSelectionsTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="defaultValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="defaultValueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -402,6 +299,48 @@
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="schemaNameLabel.text"/>
                 <Property name="name" type="java.lang.String" value="schemaNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBComboBox" name="dataTypeComboBox">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="dataTypeComboBox" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="minSelectionsTextField"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="maxSelectionsTextField">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="maxSelectionsTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="quantityTextField"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="defaultValueTextField">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="defaultValueTextField" noResource="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="descriptionTextPane"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="dataTypeLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="dataTypeLabel.text"/>
+                <Property name="name" type="java.lang.String" value="dataTypeLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="maxSelectionsLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="maxSelectionsLabel.text"/>
+                <Property name="name" type="java.lang.String" value="maxSelectionsLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="defaultValueLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="defaultValueLabel.text"/>
+                <Property name="name" type="java.lang.String" value="defaultValueLabel" noResource="true"/>
               </Properties>
             </Component>
           </SubComponents>

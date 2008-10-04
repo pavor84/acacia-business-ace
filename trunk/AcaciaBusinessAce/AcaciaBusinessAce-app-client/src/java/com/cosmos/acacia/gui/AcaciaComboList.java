@@ -26,7 +26,6 @@ public class AcaciaComboList
 
     public AcaciaComboList()
     {
-        super(AcaciaApplication.class);
     }
 
 
