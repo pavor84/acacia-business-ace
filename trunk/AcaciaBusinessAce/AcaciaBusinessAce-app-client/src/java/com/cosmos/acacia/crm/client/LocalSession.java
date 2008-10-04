@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.app.DeferredListServerRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -31,6 +32,8 @@ public class LocalSession implements AcaciaSessionRemote {
     = "VIEW_DATA_FROM_ALL_BRANCHES";
 
     private AcaciaSessionRemote remoteSession;
+
+    private DeferredListServerRemote listServer;
 
     private Map<String, Object> sessionCache = new HashMap<String, Object>();
 
@@ -139,5 +142,12 @@ public class LocalSession implements AcaciaSessionRemote {
             rightsManager = AcaciaPanel.getBean(RightsManagerRemote.class, false);
 
         return rightsManager;
+    }
+
+    public DeferredListServerRemote getListServer() {
+        if (listServer == null)
+            listServer = AcaciaPanel.getBean(DeferredListServerRemote.class, false);
+
+        return listServer;
     }
 }
