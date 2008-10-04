@@ -6,12 +6,11 @@
 package com.cosmos.acacia.init;
 
 import com.cosmos.acacia.crm.bl.impl.AcaciaEjbInitRemote;
-import java.io.*;
-import java.net.*;
 
 import javax.naming.InitialContext;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 
 /**
  *
