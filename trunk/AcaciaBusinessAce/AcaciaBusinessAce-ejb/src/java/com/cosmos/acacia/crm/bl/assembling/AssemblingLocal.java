@@ -12,6 +12,7 @@ import javax.ejb.Local;
  * @author Miro
  */
 @Local
-public interface AssemblingLocal {
-    
+public interface AssemblingLocal
+    extends AssemblingRemote
+{
 }

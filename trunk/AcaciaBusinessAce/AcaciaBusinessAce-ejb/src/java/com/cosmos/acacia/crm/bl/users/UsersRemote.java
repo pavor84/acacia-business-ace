@@ -245,4 +245,9 @@ public interface UsersRemote {
      * @param newBranch
      */
     void changeBranch(User user, Address oldBranch, Address newBranch);
+
+    /**
+     * Initialization of user/organization/branch specific values.
+     */
+    void init();
 }

@@ -368,7 +368,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.User[userId=" + userId + "]";
+        return "com.cosmos.acacia.crm.data.User[userId=" + userId + ", username=" + userName + ", email=" + emailAddress + "]";
     }
 
     @Override
