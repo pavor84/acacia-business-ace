@@ -5,25 +5,27 @@
 
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 
 /**
  *
@@ -40,7 +42,7 @@ import javax.persistence.Transient;
          * - warehouse - an warehouse
          */
         name = "DeliveryCertificate.findByWarehouse",
-        query = "select ds from DeliveryCertificate ds where ds.dataObject.deleted = false"
+        query = "select ds from DeliveryCertificate ds where ds.warehouse.warehouseId=:parentId and ds.dataObject.deleted = false"
     )
 })
 public class DeliveryCertificate extends DataObjectBean implements Serializable {
@@ -61,24 +63,21 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Column(name = "warehouse_name", nullable = false)
     private String warehouseName;
 
-    @Column(name = "delivery_certificate_number", nullable = false)
-    @Property(title="Serial Number")
-    private long deliveryCertificateNumber;
+    @Column(name = "delivery_certificate_number")
+    @Property(title="Serial Number", editable=false, propertyValidator=@PropertyValidator(required=false))
+    private BigInteger deliveryCertificateNumber;
 
-    @Column(name = "delivery_certificate_date", nullable = false)
+    @Column(name = "delivery_certificate_date")
     @Temporal(TemporalType.DATE)
-    @Property(title="Certificate date")
+    @Property(title="Certificate date", editable=false, propertyValidator=@PropertyValidator(required=false))
     private Date deliveryCertificateDate;
 
-    /**
-     * The Recipient can be both Person or Organization
-     */
-    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id")
+    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id", nullable=false)
     @ManyToOne
     private BusinessPartner recipient;
 
-    @Column(name = "recipient_name", nullable = false)
-    @Property(title="Recipient")
+    @Column(name = "recipient_name", nullable=false)
+    @Property(title="Recipient", editable=false, propertyValidator=@PropertyValidator(required=false))
     private String recipientName;
     
     @JoinColumn(name = "recipient_branch_id")
@@ -86,13 +85,17 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Property(title="Recipient Branch", customDisplay="${recipientBranch.addressName}")
     private Address recipientBranch;
     
+    @Column(name = "recipient_branch_name")
+    @Property(title="Recipient Branch Name", editable=false)
+    private String recipientBranchName;
+
     @JoinColumn(name = "recipient_contact_id")
     @ManyToOne
-    @Property(title="Recipient Contact")
-    private Person recipientContact;
+    @Property(title="Recipient Contact", customDisplay="${recipientContact.contact.displayName}")
+    private ContactPerson recipientContact;
 
     @Column(name = "recipient_contact_name")
-    @Property(title="Recipient Contact Name")
+    @Property(title="Recipient Contact Name", editable=false)
     private String recipientContactName;
 
     @JoinColumn(name = "delivery_cert_method_type_id", referencedColumnName = "resource_id")
@@ -105,26 +108,20 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Property(title="Reason")
     private DbResource deliveryCertificateReason;
 
-    @JoinColumn(name="delivery_certificate_id")
-    @OneToMany
-    @Property(title="Assignment", visible=false)
-    private List<DeliveryCertificateAssignment> assignments;
-
     @Transient
-    @Property(title="Current Assignment", visible=false)
-    private String currentDocumentId;
-
-    public String getCurrentDocumentId() {
-        return currentDocumentId;
+    private DeliveryCertificateAssignment documentAssignment;
+    
+    public DeliveryCertificateAssignment getDocumentAssignment() {
+        return documentAssignment;
     }
 
-    public void setCurrentDocumentId(String currentDocumentId) {
-        this.currentDocumentId = currentDocumentId;
+    public void setDocumentAssignment(DeliveryCertificateAssignment documentAssignment) {
+        this.documentAssignment = documentAssignment;
     }
     
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
-    @Property(title="Creation Time")
+    @Property(title="Creation Time", editable=false)
     private Date creationTime;
 
     @JoinColumn(name = "creator_id")
@@ -132,17 +129,35 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     private Person creator;
 
     @Column(name = "creator_name", nullable = false)
-    @Property(title="Creator")
+    @Property(title="Creator", editable=false)
     private String creatorName;
 
-    @JoinColumn(name = "forwarder_id", updatable = false)
+    @JoinColumn(name = "creator_organization_id", nullable = false)
+    @ManyToOne
+    @Property(title="Creator Organization", customDisplay="${creatorOrganization.organizationName}")
+    private Organization creatorOrganization;
+    
+    @Column(name="creator_organization_name")
+    @Property(title="Creator Organization Name", visible=false, editable=false)
+    private String creatorOrganizationName;
+    
+    @JoinColumn(name = "creator_branch_id")
+    @ManyToOne
+    @Property(title="Creator Branch", customDisplay="${creatorBranch.addressName}")
+    private Address creatorBranch;
+    
+    @Column(name="creator_branch_name")
+    @Property(title="Creator Branch Name", visible=false, editable=false)
+    private String creatorBranchName;
+    
+    @JoinColumn(name = "forwarder_id")
     @ManyToOne
     @Property(title="Forwarder", customDisplay="${forwarder.organizationName}")
     private Organization forwarder;
     
     @JoinColumn(name = "forwarder_branch_id")
     @ManyToOne
-    @Property(title="Forwarder Branch")
+    @Property(title="Forwarder Branch", customDisplay="${forwarderBranch.addressName}")
     private Address forwarderBranch;
 
     @JoinColumn(name = "forwarder_contact_id")
@@ -176,10 +191,12 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.deliveryCertificateId = deliveryCertificateId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
@@ -192,11 +209,11 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.warehouseName = warehouseName;
     }
 
-    public long getDeliveryCertificateNumber() {
+    public BigInteger getDeliveryCertificateNumber() {
         return deliveryCertificateNumber;
     }
 
-    public void setDeliveryCertificateNumber(long deliveryCertificateNumber) {
+    public void setDeliveryCertificateNumber(BigInteger deliveryCertificateNumber) {
         this.deliveryCertificateNumber = deliveryCertificateNumber;
     }
 
@@ -213,8 +230,10 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     }
 
     public void setRecipient(BusinessPartner recipient) {
-        //firePropertyChange("recipient", this.recipient, recipient);
         this.recipient = recipient;
+        if(recipient != null){
+            this.setRecipientName(recipient.getDisplayName());
+        }
     }
 
     public String getRecipientName() {
@@ -231,6 +250,9 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     public void setRecipientBranch(Address recipientAddress) {
         this.recipientBranch = recipientAddress;
+        if(recipientBranch != null){
+            this.setRecipientBranchName(recipientAddress.getAddressName());
+        }
     }
 
     public String getRecipientContactName() {
@@ -255,6 +277,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     public void setCreator(Person creator) {
         this.creator = creator;
+        this.setCreatorName(creator.getDisplayName());
     }
 
     public String getCreatorName() {
@@ -264,7 +287,29 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
     }
+    
+    public Address getCreatorBranch() {
+        return creatorBranch;
+    }
 
+    public void setCreatorBranch(Address creatorBranch) {
+        this.creatorBranch = creatorBranch;
+        if(creatorBranch != null){
+            this.setCreatorBranchName(creatorBranch.getAddressName());
+        }
+    }
+
+    public Organization getCreatorOrganization() {
+        return creatorOrganization;
+    }
+
+    public void setCreatorOrganization(Organization creatorOrganization) {
+        this.creatorOrganization = creatorOrganization;
+        if(creatorOrganization != null){
+            this.setCreatorOrganizationName(creatorOrganization.getOrganizationName());
+        }
+    }
+    
     public Organization getForwarder() {
         return forwarder;
     }
@@ -297,20 +342,25 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.forwarderContactName = forwarderContactName;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
-    public Person getRecipientContact() {
+    public ContactPerson getRecipientContact() {
         return recipientContact;
     }
 
-    public void setRecipientContact(Person recipientContact) {
+    public void setRecipientContact(ContactPerson recipientContact) {
         this.recipientContact = recipientContact;
+        if(recipientContact != null && recipientContact.getContact() != null){
+            this.setRecipientContactName(recipientContact.getContact().getDisplayName());
+        }
     }
 
     public Person getForwarderContact() {
@@ -336,14 +386,6 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     public void setDeliveryCertificateReason(DbResource deliveryCertificateReason) {
         this.deliveryCertificateReason = deliveryCertificateReason;
     }
-
-    public List<DeliveryCertificateAssignment> getAssignments() {
-        return assignments;
-    }
-
-    public void setAssignments(List<DeliveryCertificateAssignment> assignment) {
-        this.assignments = assignments;
-    }
     
     public Warehouse getWarehouse() {
         return warehouse;
@@ -353,6 +395,30 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.warehouse = warehouse;
     }
 
+    public String getCreatorBranchName() {
+        return creatorBranchName;
+    }
+
+    public void setCreatorBranchName(String creatorBranchName) {
+        this.creatorBranchName = creatorBranchName;
+    }
+
+    public String getCreatorOrganizationName() {
+        return creatorOrganizationName;
+    }
+
+    public void setCreatorOrganizationName(String creatorOrganizationName) {
+        this.creatorOrganizationName = creatorOrganizationName;
+    }
+
+    public String getRecipientBranchName() {
+        return recipientBranchName;
+    }
+
+    public void setRecipientBranchName(String recipientBranchName) {
+        this.recipientBranchName = recipientBranchName;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -391,5 +457,22 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Override
     public String getInfo() {
         return "" + getDeliveryCertificateNumber();
+    }
+
+    @PrePersist
+    public void initialize(){
+        
+        Date now = new Date();
+        this.setDeliveryCertificateDate(now);
+        this.setCreationTime(now);
+        this.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
+        
+        if(this.deliveryCertificateMethodType.getEnumValue().equals(DeliveryCertificateMethodType.InPlace)){
+            this.setForwarder(null);
+            this.setForwarderBrunch(null);
+            this.setForwarderContact(null);
+            this.setForwarderContactName(null);
+            this.setForwarderName(null);
+        }
     }
 }
