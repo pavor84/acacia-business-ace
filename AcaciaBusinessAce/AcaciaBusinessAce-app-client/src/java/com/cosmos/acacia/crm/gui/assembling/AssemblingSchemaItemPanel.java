@@ -71,21 +71,6 @@ public class AssemblingSchemaItemPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fieldsPanel = new com.cosmos.swingb.JBPanel();
-        firstFieldsPanel = new com.cosmos.swingb.JBPanel();
-        algorithmComboBox = new com.cosmos.swingb.JBComboBox();
-        algorithmLabel = new com.cosmos.swingb.JBLabel();
-        minSelectionsTextField = new com.cosmos.swingb.JBTextField();
-        minSelectionsLabel = new com.cosmos.swingb.JBLabel();
-        quantityTextField = new com.cosmos.swingb.JBTextField();
-        quantityLabel = new com.cosmos.swingb.JBLabel();
-        secondFieldsPanel = new com.cosmos.swingb.JBPanel();
-        dataTypeComboBox = new com.cosmos.swingb.JBComboBox();
-        dataTypeLabel = new com.cosmos.swingb.JBLabel();
-        maxSelectionsTextField = new com.cosmos.swingb.JBTextField();
-        maxSelectionsLabel = new com.cosmos.swingb.JBLabel();
-        defaultValueTextField = new com.cosmos.swingb.JBTextField();
-        defaultValueLabel = new com.cosmos.swingb.JBLabel();
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
@@ -94,132 +79,27 @@ public class AssemblingSchemaItemPanel
         schemaCodePanel = new com.cosmos.swingb.JBPanel();
         schemaCodeTextField = new com.cosmos.swingb.JBTextField();
         schemaCodeLabel = new com.cosmos.swingb.JBLabel();
+        algorithmComboBox = new com.cosmos.swingb.JBComboBox();
+        minSelectionsTextField = new com.cosmos.swingb.JBTextField();
+        quantityTextField = new com.cosmos.swingb.JBTextField();
+        algorithmLabel = new com.cosmos.swingb.JBLabel();
+        minSelectionsLabel = new com.cosmos.swingb.JBLabel();
+        quantityLabel = new com.cosmos.swingb.JBLabel();
         schemaNamePanel = new com.cosmos.swingb.JBPanel();
         schemaNameTextField = new com.cosmos.swingb.JBTextField();
         schemaNameLabel = new com.cosmos.swingb.JBLabel();
+        dataTypeComboBox = new com.cosmos.swingb.JBComboBox();
+        maxSelectionsTextField = new com.cosmos.swingb.JBTextField();
+        defaultValueTextField = new com.cosmos.swingb.JBTextField();
+        dataTypeLabel = new com.cosmos.swingb.JBLabel();
+        maxSelectionsLabel = new com.cosmos.swingb.JBLabel();
+        defaultValueLabel = new com.cosmos.swingb.JBLabel();
         messageComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         messageLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
-        fieldsPanel.setName("fieldsPanel"); // NOI18N
-        fieldsPanel.setLayout(new java.awt.GridLayout(1, 0));
-
-        firstFieldsPanel.setName("firstFieldsPanel"); // NOI18N
-
-        algorithmComboBox.setName("algorithmComboBox"); // NOI18N
-        algorithmComboBox.setNextFocusableComponent(dataTypeComboBox);
-
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(AssemblingSchemaItemPanel.class);
-        algorithmLabel.setText(resourceMap.getString("algorithmLabel.text")); // NOI18N
-        algorithmLabel.setName("algorithmLabel"); // NOI18N
-
-        minSelectionsTextField.setName("minSelectionsTextField"); // NOI18N
-        minSelectionsTextField.setNextFocusableComponent(maxSelectionsTextField);
-
-        minSelectionsLabel.setText(resourceMap.getString("minSelectionsLabel.text")); // NOI18N
-        minSelectionsLabel.setName("minSelectionsLabel"); // NOI18N
-
-        quantityTextField.setName("quantityTextField"); // NOI18N
-        quantityTextField.setNextFocusableComponent(defaultValueTextField);
-
-        quantityLabel.setText(resourceMap.getString("quantityLabel.text")); // NOI18N
-        quantityLabel.setName("quantityLabel"); // NOI18N
-
-        javax.swing.GroupLayout firstFieldsPanelLayout = new javax.swing.GroupLayout(firstFieldsPanel);
-        firstFieldsPanel.setLayout(firstFieldsPanelLayout);
-        firstFieldsPanelLayout.setHorizontalGroup(
-            firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(firstFieldsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(minSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(algorithmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(minSelectionsTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                    .addComponent(algorithmComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        firstFieldsPanelLayout.setVerticalGroup(
-            firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(firstFieldsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(algorithmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(algorithmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(minSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(minSelectionsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(firstFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        fieldsPanel.add(firstFieldsPanel);
-
-        secondFieldsPanel.setName("secondFieldsPanel"); // NOI18N
-
-        dataTypeComboBox.setName("dataTypeComboBox"); // NOI18N
-        dataTypeComboBox.setNextFocusableComponent(minSelectionsTextField);
-
-        dataTypeLabel.setText(resourceMap.getString("dataTypeLabel.text")); // NOI18N
-        dataTypeLabel.setName("dataTypeLabel"); // NOI18N
-
-        maxSelectionsTextField.setName("maxSelectionsTextField"); // NOI18N
-        maxSelectionsTextField.setNextFocusableComponent(quantityTextField);
-
-        maxSelectionsLabel.setText(resourceMap.getString("maxSelectionsLabel.text")); // NOI18N
-        maxSelectionsLabel.setName("maxSelectionsLabel"); // NOI18N
-
-        defaultValueTextField.setName("defaultValueTextField"); // NOI18N
-        defaultValueTextField.setNextFocusableComponent(descriptionTextPane);
-
-        defaultValueLabel.setText(resourceMap.getString("defaultValueLabel.text")); // NOI18N
-        defaultValueLabel.setName("defaultValueLabel"); // NOI18N
-
-        javax.swing.GroupLayout secondFieldsPanelLayout = new javax.swing.GroupLayout(secondFieldsPanel);
-        secondFieldsPanel.setLayout(secondFieldsPanelLayout);
-        secondFieldsPanelLayout.setHorizontalGroup(
-            secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(secondFieldsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dataTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(maxSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(defaultValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(maxSelectionsTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
-                    .addComponent(dataTypeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
-                    .addComponent(defaultValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        secondFieldsPanelLayout.setVerticalGroup(
-            secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(secondFieldsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dataTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dataTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(maxSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(maxSelectionsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(secondFieldsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(defaultValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(defaultValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        fieldsPanel.add(secondFieldsPanel);
-
         descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("descriptionPanel.border.title"))); // NOI18N
         descriptionPanel.setName("descriptionPanel"); // NOI18N
         descriptionPanel.setLayout(new java.awt.BorderLayout());
@@ -235,7 +115,7 @@ public class AssemblingSchemaItemPanel
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
         schemaPanel.setName("schemaPanel"); // NOI18N
-        schemaPanel.setLayout(new java.awt.GridLayout());
+        schemaPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         schemaCodePanel.setName("schemaCodePanel"); // NOI18N
 
@@ -245,15 +125,46 @@ public class AssemblingSchemaItemPanel
         schemaCodeLabel.setText(resourceMap.getString("schemaCodeLabel.text")); // NOI18N
         schemaCodeLabel.setName("schemaCodeLabel"); // NOI18N
 
+        algorithmComboBox.setName("algorithmComboBox"); // NOI18N
+        algorithmComboBox.setNextFocusableComponent(dataTypeComboBox);
+
+        minSelectionsTextField.setName("minSelectionsTextField"); // NOI18N
+        minSelectionsTextField.setNextFocusableComponent(maxSelectionsTextField);
+
+        quantityTextField.setName("quantityTextField"); // NOI18N
+        quantityTextField.setNextFocusableComponent(defaultValueTextField);
+
+        algorithmLabel.setText(resourceMap.getString("algorithmLabel.text")); // NOI18N
+        algorithmLabel.setName("algorithmLabel"); // NOI18N
+
+        minSelectionsLabel.setText(resourceMap.getString("minSelectionsLabel.text")); // NOI18N
+        minSelectionsLabel.setName("minSelectionsLabel"); // NOI18N
+
+        quantityLabel.setText(resourceMap.getString("quantityLabel.text")); // NOI18N
+        quantityLabel.setName("quantityLabel"); // NOI18N
+
         javax.swing.GroupLayout schemaCodePanelLayout = new javax.swing.GroupLayout(schemaCodePanel);
         schemaCodePanel.setLayout(schemaCodePanelLayout);
         schemaCodePanelLayout.setHorizontalGroup(
             schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(schemaCodePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(schemaCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(schemaCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(schemaCodePanelLayout.createSequentialGroup()
+                        .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(schemaCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(minSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(algorithmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(algorithmComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                            .addComponent(schemaCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                            .addGroup(schemaCodePanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(quantityTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                                    .addComponent(minSelectionsTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         schemaCodePanelLayout.setVerticalGroup(
@@ -263,6 +174,18 @@ public class AssemblingSchemaItemPanel
                 .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(schemaCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(schemaCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(algorithmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(algorithmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(minSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(minSelectionsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(schemaCodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -276,15 +199,41 @@ public class AssemblingSchemaItemPanel
         schemaNameLabel.setText(resourceMap.getString("schemaNameLabel.text")); // NOI18N
         schemaNameLabel.setName("schemaNameLabel"); // NOI18N
 
+        dataTypeComboBox.setName("dataTypeComboBox"); // NOI18N
+        dataTypeComboBox.setNextFocusableComponent(minSelectionsTextField);
+
+        maxSelectionsTextField.setName("maxSelectionsTextField"); // NOI18N
+        maxSelectionsTextField.setNextFocusableComponent(quantityTextField);
+
+        defaultValueTextField.setName("defaultValueTextField"); // NOI18N
+        defaultValueTextField.setNextFocusableComponent(descriptionTextPane);
+
+        dataTypeLabel.setText(resourceMap.getString("dataTypeLabel.text")); // NOI18N
+        dataTypeLabel.setName("dataTypeLabel"); // NOI18N
+
+        maxSelectionsLabel.setText(resourceMap.getString("maxSelectionsLabel.text")); // NOI18N
+        maxSelectionsLabel.setName("maxSelectionsLabel"); // NOI18N
+
+        defaultValueLabel.setText(resourceMap.getString("defaultValueLabel.text")); // NOI18N
+        defaultValueLabel.setName("defaultValueLabel"); // NOI18N
+
         javax.swing.GroupLayout schemaNamePanelLayout = new javax.swing.GroupLayout(schemaNamePanel);
         schemaNamePanel.setLayout(schemaNamePanelLayout);
         schemaNamePanelLayout.setHorizontalGroup(
             schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(schemaNamePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(schemaNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(schemaNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addGroup(schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(schemaNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dataTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(maxSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(defaultValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(defaultValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                    .addComponent(maxSelectionsTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                    .addComponent(dataTypeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                    .addComponent(schemaNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
                 .addContainerGap())
         );
         schemaNamePanelLayout.setVerticalGroup(
@@ -294,6 +243,18 @@ public class AssemblingSchemaItemPanel
                 .addGroup(schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(schemaNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(schemaNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dataTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dataTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(maxSelectionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(maxSelectionsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(schemaNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(defaultValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(defaultValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -322,20 +283,17 @@ public class AssemblingSchemaItemPanel
                 .addGap(18, 18, 18)
                 .addComponent(messageComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(fieldsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(schemaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(messageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(messageComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -354,8 +312,6 @@ public class AssemblingSchemaItemPanel
     private javax.swing.JScrollPane descriptionScrollPane;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
-    private com.cosmos.swingb.JBPanel fieldsPanel;
-    private com.cosmos.swingb.JBPanel firstFieldsPanel;
     private com.cosmos.swingb.JBLabel maxSelectionsLabel;
     private com.cosmos.swingb.JBTextField maxSelectionsTextField;
     private com.cosmos.acacia.gui.AcaciaComboList messageComboList;
@@ -371,7 +327,6 @@ public class AssemblingSchemaItemPanel
     private com.cosmos.swingb.JBPanel schemaNamePanel;
     private com.cosmos.swingb.JBTextField schemaNameTextField;
     private com.cosmos.swingb.JBPanel schemaPanel;
-    private com.cosmos.swingb.JBPanel secondFieldsPanel;
     // End of variables declaration//GEN-END:variables
 
 
