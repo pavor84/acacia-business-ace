@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -78,20 +77,20 @@ public class SessionFacadeBean implements SessionFacadeRemote, SessionFacadeLoca
 
             if (USE_TRANSFERABLE_LISTS && result instanceof List) {
                 // concurency allowed!
-                List wholeList = (List) result;
-                TransferableList list = new TransferableList();
-                int toIndex = TransferableList.FETCH_CHUNK_SIZE;
-                if (toIndex >= wholeList.size())
-                    toIndex = wholeList.size();
-
-                // Need to create a new list, because sublist instance
-                // is not serializable
-                list.setCurrentList(new CopyOnWriteArrayList(
-                        wholeList.subList(0, toIndex)));
-
-                list.setActualSize(wholeList.size());
-                list.setId(deferredListServer.addList(wholeList));
-                return list;
+//                List wholeList = (List) result;
+//                TransferableList list = new TransferableList();
+//                int toIndex = TransferableList.FETCH_CHUNK_SIZE;
+//                if (toIndex >= wholeList.size())
+//                    toIndex = wholeList.size();
+//
+//                // Need to create a new list, because sublist instance
+//                // is not serializable
+//                list.setCurrentList(new CopyOnWriteArrayList(
+//                        wholeList.subList(0, toIndex)));
+//
+//                list.setActualSize(wholeList.size());
+//                list.setId(deferredListServer.addList(wholeList));
+//                return list;
             }
 
             return result;

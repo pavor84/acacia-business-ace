@@ -1,4 +1,4 @@
-package com.cosmos.acacia.app;
+package com.cosmos.acacia.crm.client;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.cosmos.acacia.crm.client.LocalSession;
 
 /**
  * A list used to transfer its contents from the server
