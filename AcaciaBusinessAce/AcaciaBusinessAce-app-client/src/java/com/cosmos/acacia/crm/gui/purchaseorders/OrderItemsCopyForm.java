@@ -385,6 +385,18 @@ public class OrderItemsCopyForm extends AcaciaPanel {
         public DialogResponse showDialog(Component parentComponent) {
             return null;
         }
+
+        @Override
+        public void setEnabled(boolean enabled)
+        {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean isEnabled()
+        {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
         
     }
 

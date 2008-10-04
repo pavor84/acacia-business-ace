@@ -1,7 +1,7 @@
 /*
  * DeliveryCertificatePanel.java
  *
- * Created on Вторник, 2008, Юли 15, 20:43
+ * Created on ???????, 2008, ??? 15, 20:43
  */
 
 package com.cosmos.acacia.crm.gui;
