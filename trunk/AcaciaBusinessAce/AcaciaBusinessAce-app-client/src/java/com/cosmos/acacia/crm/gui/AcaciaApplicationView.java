@@ -384,6 +384,7 @@ public class AcaciaApplicationView extends FrameView {
         listPanel.showFrame();
     }
 
+    @Action
     public void productAssemblerAction()
     {
         ProductAssemblerPanel panel = new ProductAssemblerPanel();

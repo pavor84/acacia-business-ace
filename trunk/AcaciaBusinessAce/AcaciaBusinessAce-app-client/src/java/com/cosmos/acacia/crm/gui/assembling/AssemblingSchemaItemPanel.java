@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
@@ -31,7 +32,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  */
 public class AssemblingSchemaItemPanel
     extends BaseEntityPanel
-    implements ItemListener
 {
     @EJB
     private static AssemblingRemote formSession;
@@ -356,7 +356,7 @@ public class AssemblingSchemaItemPanel
             propDetails,
             "${messageCode}, ${messageText}",
             UpdateStrategy.READ_WRITE);
-        messageComboList.addItemListener(this);
+        messageComboList.addItemListener(new MessageItemListener());
 
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(algorithmComboBox, resourceToStringConverter);
@@ -391,16 +391,10 @@ public class AssemblingSchemaItemPanel
         descriptionTextPane.bind(bindingGroup, entity, propDetails);
 
         bindingGroup.bind();
-    }
 
-    @Override
-    public void itemStateChanged(ItemEvent event)
-    {
-        if(event.getStateChange() > 0x700)
-        {
-//            refreshDataTable(entityProps);
-//            setEnabled(AbstractTablePanel.Button.New, canCreate());
-        }
+        algorithmChanged();
+
+        algorithmComboBox.addItemListener(new AlgorithmItemListener());
     }
 
     @Override
@@ -449,5 +443,68 @@ public class AssemblingSchemaItemPanel
         }
 
         return formSession;
+    }
+
+    protected Algorithm.Type getAlgorithmType()
+    {
+        DbResource resource;
+        if((resource = (DbResource)algorithmComboBox.getSelectedItem()) == null)
+            return null;
+
+        return (Algorithm.Type)resource.getEnumValue();
+    }
+
+    private class MessageItemListener
+        implements ItemListener
+    {
+        @Override
+        public void itemStateChanged(ItemEvent event)
+        {
+            if(event.getStateChange() > 0x700)
+            {
+                //refreshDataTable(entityProps);
+                //setEnabled(AbstractTablePanel.Button.New, canCreate());
+            }
+        }
+    }
+
+    private void algorithmChanged()
+    {
+        Algorithm.Type algorithmType;
+        if((algorithmType = getAlgorithmType()) == null)
+            return;
+
+        if(Algorithm.Type.SingleSelectionAlgorithms.contains(algorithmType) ||
+            Algorithm.Type.UnconditionalSelection.equals(algorithmType))
+        {
+            minSelectionsTextField.setEnabled(false);
+            maxSelectionsTextField.setEnabled(false);
+        }
+        else
+        {
+            minSelectionsTextField.setEnabled(true);
+            maxSelectionsTextField.setEnabled(true);
+        }
+
+        if(Algorithm.Type.UnconditionalSelection.equals(algorithmType))
+        {
+            messageComboList.setEnabled(false);
+            defaultValueTextField.setEnabled(false);
+        }
+        else
+        {
+            messageComboList.setEnabled(true);
+            defaultValueTextField.setEnabled(true);
+        }
+    }
+
+    private class AlgorithmItemListener
+        implements ItemListener
+    {
+        @Override
+        public void itemStateChanged(ItemEvent event)
+        {
+            algorithmChanged();
+        }
     }
 }

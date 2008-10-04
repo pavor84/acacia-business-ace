@@ -671,6 +671,18 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     public List getListData() {
                         return new ArrayList();
                     }
+
+                    @Override
+                    public void setEnabled(boolean enabled)
+                    {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
+
+                    @Override
+                    public boolean isEnabled()
+                    {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
                 },
                 entity,
                 pd,
