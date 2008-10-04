@@ -170,7 +170,7 @@ public class AssemblingSchemaItem
         this.quantity = quantity;
     }
 
-    public Object getDefaultValue() {
+    public Serializable getDefaultValue() {
         return defaultValue;
     }
 

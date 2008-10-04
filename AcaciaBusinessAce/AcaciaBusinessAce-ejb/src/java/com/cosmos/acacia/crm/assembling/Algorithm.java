@@ -121,22 +121,22 @@ public class Algorithm
         }
 
 
-        public final static Set RangeAlgorithms = 
+        public final static Set<Type> RangeAlgorithms = 
                 EnumSet.of(RangeSelection, RangeSingleSelection, RangeMultipleSelection);
 
-        public final static Set EqualsAlgorithms = 
+        public final static Set<Type> EqualsAlgorithms = 
                 EnumSet.of(EqualsSelection, EqualsSingleSelection, EqualsMultipleSelection);
 
-        public final static Set UserSelectionAlgorithms = 
+        public final static Set<Type> UserSelectionAlgorithms = 
                 EnumSet.of(UserSelection, UserSingleSelection, UserMultipleSelection);
 
-        public final static Set SelectionAlgorithms = 
+        public final static Set<Type> SelectionAlgorithms = 
                 EnumSet.of(UserSelection, RangeSelection, EqualsSelection);
 
-        public final static Set SingleSelectionAlgorithms = 
+        public final static Set<Type> SingleSelectionAlgorithms = 
                 EnumSet.of(UserSingleSelection, RangeSingleSelection, EqualsSingleSelection);
 
-        public final static Set MultipleSelectionAlgorithms = 
+        public final static Set<Type> MultipleSelectionAlgorithms = 
                 EnumSet.of(UserMultipleSelection, RangeMultipleSelection, EqualsMultipleSelection);
 
         private static List<DbResource> dbResources;
@@ -174,12 +174,21 @@ public class Algorithm
         this.productAssemblerService = productAssemblerService;
         DbResource assemblingAlgorithm = assemblingSchemaItem.getAssemblingAlgorithm();
         this.type = (Type)assemblingAlgorithm.getEnumValue();
-        Integer intValue = assemblingSchemaItem.getMinSelections();
-        if(intValue != null)
-            minSelections = intValue;
-        intValue = assemblingSchemaItem.getMaxSelections();
-        if(intValue != null)
-            maxSelections = intValue;
+
+        if(Type.SingleSelectionAlgorithms.contains(type))
+        {
+            minSelections = maxSelections = 1;
+        }
+        else
+        {
+            Integer intValue = assemblingSchemaItem.getMinSelections();
+            if(intValue != null)
+                minSelections = intValue;
+
+            intValue = assemblingSchemaItem.getMaxSelections();
+            if(intValue != null)
+                maxSelections = intValue;
+        }
     }
 
     public Type getType()
