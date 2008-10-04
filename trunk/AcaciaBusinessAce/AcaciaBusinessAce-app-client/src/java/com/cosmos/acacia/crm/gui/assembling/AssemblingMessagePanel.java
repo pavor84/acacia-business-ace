@@ -62,6 +62,10 @@ public class AssemblingMessagePanel
         messageTextTextField = new com.cosmos.swingb.JBTextField();
         messageCodeLabel = new com.cosmos.swingb.JBLabel();
         messageTextLabel = new com.cosmos.swingb.JBLabel();
+        messageLabelTextField = new com.cosmos.swingb.JBTextField();
+        messageTitleTextField = new com.cosmos.swingb.JBTextField();
+        messageLabelLabel = new com.cosmos.swingb.JBLabel();
+        messageTitleLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -89,6 +93,16 @@ public class AssemblingMessagePanel
         messageTextLabel.setText(resourceMap.getString("messageTextLabel.text")); // NOI18N
         messageTextLabel.setName("messageTextLabel"); // NOI18N
 
+        messageLabelTextField.setName("messageLabelTextField"); // NOI18N
+
+        messageTitleTextField.setName("messageTitleTextField"); // NOI18N
+
+        messageLabelLabel.setText(resourceMap.getString("messageLabelLabel.text")); // NOI18N
+        messageLabelLabel.setName("messageLabelLabel"); // NOI18N
+
+        messageTitleLabel.setText(resourceMap.getString("messageTitleLabel.text")); // NOI18N
+        messageTitleLabel.setName("messageTitleLabel"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -100,12 +114,16 @@ public class AssemblingMessagePanel
                     .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(messageLabelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(messageCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(messageTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(messageTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(messageTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(messageTextTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
-                            .addComponent(messageCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))))
+                            .addComponent(messageTitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(messageTextTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(messageCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(messageLabelTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -117,8 +135,16 @@ public class AssemblingMessagePanel
                     .addComponent(messageCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(messageLabelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(messageLabelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(messageTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(messageTextTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(messageTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(messageTitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -135,8 +161,12 @@ public class AssemblingMessagePanel
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.swingb.JBLabel messageCodeLabel;
     private com.cosmos.swingb.JBTextField messageCodeTextField;
+    private com.cosmos.swingb.JBLabel messageLabelLabel;
+    private com.cosmos.swingb.JBTextField messageLabelTextField;
     private com.cosmos.swingb.JBLabel messageTextLabel;
     private com.cosmos.swingb.JBTextField messageTextTextField;
+    private com.cosmos.swingb.JBLabel messageTitleLabel;
+    private com.cosmos.swingb.JBTextField messageTitleTextField;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -184,9 +214,17 @@ public class AssemblingMessagePanel
         propDetails = entityProps.getPropertyDetails("messageCode");
         messageCodeTextField.bind(bg, entity, propDetails);
 
+        //messageLabelTextField
+        propDetails = entityProps.getPropertyDetails("messageLabel");
+        messageLabelTextField.bind(bg, entity, propDetails);
+
         //messageTextTextField
         propDetails = entityProps.getPropertyDetails("messageText");
         messageTextTextField.bind(bg, entity, propDetails);
+
+        //messageTitleTextField
+        propDetails = entityProps.getPropertyDetails("messageTitle");
+        messageTitleTextField.bind(bg, entity, propDetails);
 
         //descriptionTextPane
         propDetails = entityProps.getPropertyDetails("description");
