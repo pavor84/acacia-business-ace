@@ -74,6 +74,16 @@ import com.cosmos.acacia.annotation.PropertyValidator;
         query = "select w from Warehouse w where " +
                 "w.dataObject.deleted = false and w.dataObject.parentDataObjectId = :parentDataObjectId "+
         		"and w.address = :address"
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Temp usage
+         * Parameters:
+         * - id - data object id
+         */
+        name = "Warehouse.findById",
+        query = "select w from Warehouse w where w.dataObject.deleted = false and w.dataObject.id = :id"
     )
 })
 public class Warehouse extends DataObjectBean implements Serializable {
