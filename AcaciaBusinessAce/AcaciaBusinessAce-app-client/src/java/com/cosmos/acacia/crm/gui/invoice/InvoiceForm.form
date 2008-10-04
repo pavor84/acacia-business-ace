@@ -1,0 +1,1189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="entityFormButtonPanel1" alignment="0" pref="931" max="32767" attributes="0"/>
+          <Component id="jBTabbedPane1" alignment="0" pref="931" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <Component id="jBTabbedPane1" pref="618" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="com.cosmos.swingb.JBTabbedPane" name="jBTabbedPane1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jBTabbedPane1" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="com.cosmos.swingb.JBPanel" name="jBPanel1">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jBPanel1" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Invoice Details">
+                <Property name="tabTitle" type="java.lang.String" resourceKey="jBPanel1.TabConstraints.tabTitle"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jBPanel4" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBPanel2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBPanel3" alignment="1" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="jBPanel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="jBPanel3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jBPanel4" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="com.cosmos.swingb.JBPanel" name="jBPanel2">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Document Details"/>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jBPanel2" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jBLabel6" pref="137" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Component id="branchField" pref="287" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jBLabel8" alignment="1" pref="137" max="32767" attributes="0"/>
+                                      <Component id="jBLabel7" alignment="1" pref="137" max="32767" attributes="0"/>
+                                      <Component id="jBLabel11" alignment="0" pref="137" max="32767" attributes="0"/>
+                                      <Component id="jBLabel12" alignment="0" pref="137" max="32767" attributes="0"/>
+                                      <Component id="jBLabel20" alignment="0" pref="137" max="32767" attributes="0"/>
+                                      <Component id="jBLabel21" alignment="0" pref="137" max="32767" attributes="0"/>
+                                      <Component id="jBLabel13" alignment="0" pref="137" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="documentDateField" alignment="0" pref="287" max="32767" attributes="1"/>
+                                      <Component id="invoiceNumberField" alignment="0" pref="287" max="32767" attributes="1"/>
+                                      <Component id="createdAtField" alignment="0" pref="287" max="32767" attributes="0"/>
+                                      <Component id="createdByField" alignment="0" pref="287" max="32767" attributes="0"/>
+                                      <Component id="sentAtField" alignment="0" pref="287" max="32767" attributes="0"/>
+                                      <Component id="sentByField" alignment="0" pref="287" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jBLabel14" alignment="1" pref="116" max="32767" attributes="2"/>
+                                      <Component id="jBLabel9" alignment="1" pref="116" max="32767" attributes="2"/>
+                                      <Component id="jBLabel10" alignment="1" pref="116" max="32767" attributes="2"/>
+                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="documentTypeField" alignment="1" pref="314" max="32767" attributes="0"/>
+                                      <Component id="recipientContactField" alignment="0" pref="314" max="32767" attributes="0"/>
+                                      <Component id="recipientField" alignment="0" pref="314" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="jBLabel15" pref="110" max="32767" attributes="2"/>
+                                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                                  <Component id="documentDeliveryField" pref="314" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jBLabel22" alignment="1" pref="116" max="32767" attributes="2"/>
+                                      <Component id="jBLabel16" alignment="1" pref="116" max="32767" attributes="2"/>
+                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="finalizedAtField" alignment="0" pref="314" max="32767" attributes="0"/>
+                                      <Component id="statusField" alignment="1" pref="314" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="branchField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel9" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="invoiceNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="documentDateField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="recipientField" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="recipientContactField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="documentTypeField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="createdAtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="createdByField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="documentDeliveryField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="statusField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="sentAtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="sentByField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="finalizedAtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jBLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="com.cosmos.swingb.JBTextField" name="branchField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="branchField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel6">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel6.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="invoiceNumberField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="invoiceNumberField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel7">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel7.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel7" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBDatePicker" name="documentDateField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="documentDateField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel8">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jBLabel8" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="recipientField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="recipientField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel9">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel9.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel9" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="recipientContactField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="recipientContactField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel10">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel10.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel10" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="documentTypeField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="documentTypeField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel14">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel14.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel14" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="createdAtField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="createdAtField" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createdAtFieldActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel11">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel11.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel11" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="createdByField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="createdByField" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createdByFieldActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel12">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel12.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel12" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="documentDeliveryField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="documentDeliveryField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel15">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel15.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel15" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="statusField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="statusField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel16">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel16.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel16" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="sentAtField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="sentAtField" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sentAtFieldActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel20">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel20.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel20" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="sentByField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="sentByField" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sentByFieldActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel21">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel21.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel21" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="finalizedAtField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="finalizedAtField" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="finalizedAtFieldActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel22">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel22.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel22" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel13">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel13.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel13" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="com.cosmos.swingb.JBPanel" name="jBPanel3">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Shipment Information">
+                      <Property name="titleX" resourceKey="jBPanel3.border.title"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jBPanel3" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jBLabel17" alignment="0" min="-2" pref="138" max="-2" attributes="2"/>
+                              <Component id="jBLabel18" alignment="0" pref="139" max="32767" attributes="2"/>
+                              <Component id="jBLabel19" alignment="1" pref="139" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="deliveryTypeField" alignment="0" pref="291" max="32767" attributes="2"/>
+                              <Component id="transportMethodField" alignment="0" pref="291" max="32767" attributes="2"/>
+                              <Component id="shippingAgentField" alignment="0" pref="291" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jBLabel23" min="-2" pref="118" max="-2" attributes="2"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="shipDateFromField" pref="308" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jBLabel24" min="-2" pref="118" max="-2" attributes="2"/>
+                                      <Component id="jBLabel32" min="-2" pref="118" max="-2" attributes="2"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="shipWeekField" alignment="0" pref="308" max="32767" attributes="2"/>
+                                      <Component id="shipDateToField" alignment="0" pref="308" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="jBLabel23" alignment="3" max="32767" attributes="1"/>
+                                  <Component id="shipDateFromField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="shippingAgentField" alignment="0" max="32767" attributes="1"/>
+                              <Component id="jBLabel17" alignment="0" pref="25" max="32767" attributes="1"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="transportMethodField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="deliveryTypeField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="jBLabel24" alignment="0" max="32767" attributes="1"/>
+                                      <Component id="shipDateToField" alignment="0" max="32767" attributes="1"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="shipWeekField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel32" alignment="3" pref="22" max="32767" attributes="1"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="shippingAgentField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="shippingAgentField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel17">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel17.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel17" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="transportMethodField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="transportMethodField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel18">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel18.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel18" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="deliveryTypeField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="deliveryTypeField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel19">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel19.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel19" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel23">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel23.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel23" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel24">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel24.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel24" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBDatePicker" name="shipDateFromField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="shipDateFromField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBDatePicker" name="shipDateToField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="shipDateToField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="shipWeekField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="shipWeekField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel32">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel32.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel32" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="com.cosmos.swingb.JBPanel" name="jBPanel4">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Notes">
+                      <Property name="titleX" resourceKey="jBPanel4.border.title"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jBPanel4" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" pref="874" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jScrollPane1" pref="178" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="com.cosmos.swingb.JBTextPane" name="notesField">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="notesField" noResource="true"/>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
+        <Container class="com.cosmos.swingb.JBPanel" name="jBPanel5">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jBPanel5" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Invoice Items">
+                <Property name="tabTitle" type="java.lang.String" resourceKey="jBPanel5.TabConstraints.tabTitle"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="itemsTableHolderPanel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBPanel6" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jBPanel8" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
+                      <Component id="itemsTableHolderPanel" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="jBPanel6" min="-2" pref="81" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jBPanel8" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="419" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="com.cosmos.swingb.JBPanel" name="jBPanel6">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Payment"/>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jBPanel6" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jBLabel36" alignment="0" min="-2" pref="105" max="-2" attributes="2"/>
+                              <Component id="jBLabel40" alignment="0" min="-2" pref="105" max="-2" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="paymentTypeField" alignment="0" pref="164" max="32767" attributes="2"/>
+                              <Component id="singlePayAmountField" alignment="0" pref="164" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jBLabel41" alignment="1" pref="105" max="32767" attributes="2"/>
+                              <Component id="jBLabel37" alignment="1" pref="105" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="paymentsCountField" alignment="0" pref="175" max="32767" attributes="2"/>
+                              <Component id="paymentTermsField" alignment="0" pref="175" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jBLabel38" min="-2" pref="93" max="-2" attributes="2"/>
+                                  <EmptySpace min="30" pref="30" max="30" attributes="0"/>
+                              </Group>
+                              <Component id="jBLabel42" alignment="0" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="paymentDueField" alignment="1" pref="182" max="32767" attributes="2"/>
+                              <Component id="daysBetweenPaymentsField" alignment="1" pref="182" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jBLabel36" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBLabel38" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="paymentTypeField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="paymentTermsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="paymentDueField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBLabel37" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jBLabel40" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="singlePayAmountField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="paymentsCountField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="daysBetweenPaymentsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="paymentTypeField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="paymentTypeField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel36">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel36.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel36" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel37">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel37.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel37" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="paymentTermsField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="paymentTermsField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBDatePicker" name="paymentDueField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="paymentDueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel38">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel38.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel38" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="singlePayAmountField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="singlePayAmountField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel40">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel40.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel40" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="paymentsCountField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="paymentsCountField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel41">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel41.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel41" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="daysBetweenPaymentsField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="daysBetweenPaymentsField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel42">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel42.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel42" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="com.cosmos.swingb.JBPanel" name="jBPanel8">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Pricing"/>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jBPanel8" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jBLabel25" alignment="0" pref="126" max="32767" attributes="2"/>
+                                      <Component id="jBLabel26" alignment="0" pref="126" max="32767" attributes="2"/>
+                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="invoiceSubValueField" alignment="0" pref="288" max="32767" attributes="1"/>
+                                      <Component id="currencyField" alignment="1" pref="288" max="32767" attributes="2"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jBLabel34" pref="126" max="32767" attributes="2"/>
+                                      <Component id="jBLabel43" alignment="0" pref="126" max="32767" attributes="2"/>
+                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane3" pref="288" max="32767" attributes="1"/>
+                                      <Component id="vatConditionField" alignment="0" pref="288" max="32767" attributes="2"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jBLabel31" alignment="0" pref="137" max="32767" attributes="2"/>
+                              <Component id="jBLabel30" alignment="0" pref="137" max="32767" attributes="2"/>
+                              <Component id="jBLabel29" alignment="0" pref="137" max="32767" attributes="2"/>
+                              <Component id="jBLabel28" alignment="1" pref="137" max="32767" attributes="2"/>
+                              <Component id="jBLabel27" pref="137" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="transportPriceField" alignment="0" pref="297" max="32767" attributes="1"/>
+                              <Component id="totalValueField" alignment="0" pref="297" max="32767" attributes="1"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="discountValueField" pref="131" max="32767" attributes="2"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="discountPercentField" min="-2" pref="145" max="-2" attributes="2"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jBLabel35" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="vatValueField" alignment="1" pref="131" max="32767" attributes="2"/>
+                                      <Component id="exciseDutyValueField" alignment="1" pref="131" max="32767" attributes="2"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="vatPercentField" max="32767" attributes="3"/>
+                                      <Component id="exciseDutyPercentField" alignment="0" pref="145" max="32767" attributes="3"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jBLabel33" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel39" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="currencyField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="vatValueField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="vatPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel39" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                          <Component id="invoiceSubValueField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jBLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="vatConditionField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jBLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jScrollPane3" pref="44" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel33" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="exciseDutyValueField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="exciseDutyPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel35" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="discountValueField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="discountPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="transportPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel43" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="totalValueField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="currencyField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="currencyField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel25">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel25.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel25" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="invoiceSubValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="invoiceSubValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel26">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel26.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel26" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel27">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel27.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel27" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="vatValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="vatValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel28">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel28.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel28" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel29">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel29.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel29" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel30">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel30.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel30" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="transportPriceField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="transportPriceField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel31">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel31.text"/>
+                    <Property name="font" type="java.awt.Font" resourceKey="jBLabel31.font"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel31" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="totalValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="totalValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="vatPercentField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="vatPercentField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="exciseDutyValueField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="exciseDutyValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="exciseDutyPercentField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="exciseDutyPercentField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel33">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel33.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel33" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="vatConditionField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="vatConditionField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel34">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel34.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel34" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="discountValueField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="discountValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBTextField" name="discountPercentField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="discountPercentField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel35">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel35.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel35" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel39">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel39.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel39" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel43">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel43.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel43" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="com.cosmos.swingb.JBTextPane" name="vatConditionNotesField">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="vatConditionNotesField" noResource="true"/>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+              </SubComponents>
+            </Container>
+            <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsTableHolderPanel">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Invoice Items">
+                      <Property name="titleX" resourceKey="itemsTableHolderPanel.border.title"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="itemsTableHolderPanel" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="894" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="288" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+            </Container>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel1" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

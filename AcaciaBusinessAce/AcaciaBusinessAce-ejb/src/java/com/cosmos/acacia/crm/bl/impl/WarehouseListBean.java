@@ -18,6 +18,7 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -35,7 +36,7 @@ import com.cosmos.beansbinding.EntityProperties;
  * Implement business logic behind the Warehouse module functionality
  */
 @Stateless
-public class WarehouseListBean implements WarehouseListRemote {
+public class WarehouseListBean implements WarehouseListRemote, WarehouseListLocal {
     @PersistenceContext
     private EntityManager em;
 
@@ -128,10 +129,24 @@ public class WarehouseListBean implements WarehouseListRemote {
 
     @Override
     public Warehouse saveWarehouse(Warehouse entity) {
+        long maxIndex = getMaxWarehouseIndex(entity.getParentId());
+        
+        entity.setIndex(maxIndex+1);
         warehouseValidator.validate(entity);
 
         esm.persist(em, entity);
         return entity;
+    }
+
+    private long getMaxWarehouseIndex(BigInteger parentId) {
+        Query q = em.createNamedQuery("Warehouse.getMaxIndex");
+        q.setParameter("parentDataObjectId", parentId);
+        
+        Long maxIndex = (Long) q.getSingleResult();
+        if ( maxIndex==null )
+            return 0;
+        
+        return maxIndex;
     }
 
     @Override
@@ -328,5 +343,22 @@ public class WarehouseListBean implements WarehouseListRemote {
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Warehouse getWarehouseForAddress(Address address) {
+        if ( address==null )
+            throw new IllegalArgumentException("Please supply not null address!");
+        
+        Query q = em.createNamedQuery("Warehouse.findForAddress");
+        q.setParameter("address", address);
+        
+        List<Warehouse> result = q.getResultList();
+        
+        if ( result.isEmpty() )
+            return null;
+        
+        return result.get(0);
     }
 }

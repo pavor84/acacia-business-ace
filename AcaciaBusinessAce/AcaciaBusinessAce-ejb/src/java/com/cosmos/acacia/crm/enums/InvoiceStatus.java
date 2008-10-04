@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 
+ * Created	:	10.09.2008
+ * @author	Petar Milev
  *
- * @author rlozanov
  */
 public enum InvoiceStatus implements DatabaseResource {
     Open("Open", "The invoice is created and can be changed."),
-    Sent("Sent", "The invoice is sent, no changes are permitted."),
+    Published("Published", "The invoice is considered published and legally active. Can not be edited."),
+    Sent("Sent", "The invoice is sent (and legally activated), no changes are permitted."),
     PartlyDelivered("Partly Delivered", "Invoice is partly delivered."),
     Delivered("Delivered", "Invoice is received from recipient."),
     PartlyCanceled("Partly Canceled", "Part(s) of the invoice are canceled"),

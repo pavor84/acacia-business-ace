@@ -9,7 +9,6 @@ package com.cosmos.acacia.crm.gui;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.bl.invoice.impl.InvoicesListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
@@ -57,9 +56,6 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     
     @EJB
     private OrganizationsListRemote organizationList;
-    
-    @EJB
-    private InvoicesListRemote invoicesList;
     
     private DeliveryCertificate entity;
     private Address forwarderBranch;
@@ -307,7 +303,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         List l = new ArrayList();
         Invoice i = new Invoice();
         i.setId(new BigInteger("577845883"));
-        i.setInvoiceNumber(8347535);
+        i.setInvoiceNumber(new BigInteger("8347535"));
         l.add(i);
         return l;
     }

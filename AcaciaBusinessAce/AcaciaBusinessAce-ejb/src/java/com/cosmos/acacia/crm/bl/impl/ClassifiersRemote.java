@@ -268,7 +268,7 @@ public interface ClassifiersRemote {
      */
     EntityProperties getClassifiedObjectBeansEntityProperties();
 
-    /**
+	/**
      * Saves a classifier. The method is used in initialization phase.
      * This allows system classifiers to be created programatically.
      *
@@ -278,4 +278,13 @@ public interface ClassifiersRemote {
      */
     Classifier saveInitialClassifier(Classifier classifier,
             BigInteger parentDataObjectId);
+            
+    /**
+     * If a classifier with the specified key exists, it is returned.
+     * Otherwise new classifier will be created with the specified key, member of System classifier group.
+     * @param classifierKey
+     * @param classiferName
+     * @return
+     */
+    Classifier getOrCreateSystemClassifier(String classifierKey);
 }

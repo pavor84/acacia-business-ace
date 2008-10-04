@@ -9,7 +9,6 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListLocal;
-import com.cosmos.acacia.crm.bl.invoice.impl.InvoicesListLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -57,8 +56,6 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     private OrganizationsListLocal organizationsBean;
     @EJB
     private AcaciaSessionLocal session;
-    @EJB
-    private InvoicesListLocal invoicesBean;
     
     @Deprecated
     public DeliveryCertificate createStubDeliveryCert() {

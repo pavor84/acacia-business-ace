@@ -32,17 +32,17 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
 /**
- *
+ * 
  * Created	:	20.07.2008
  * @author	Petar Milev
  *
  */
 public class PurchaseOrderItemListPanel extends AbstractTablePanel {
-
-    private PurchaseOrderListRemote formSession = getBean(PurchaseOrderListRemote.class, false);
-    private ProductsListRemote productsListRemote = getBean(ProductsListRemote.class, false);
-    private PersonsListRemote personsListRemote = getBean(PersonsListRemote.class, false);
-
+    
+    private PurchaseOrderListRemote formSession = getBean(PurchaseOrderListRemote.class);
+    private ProductsListRemote productsListRemote = getBean(ProductsListRemote.class);
+    private PersonsListRemote personsListRemote = getBean(PersonsListRemote.class);
+    
     private List<SimpleProduct> products;
     private List<DbResource> measureUnits;
     private List<PurchaseOrderItem> items;
@@ -65,7 +65,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
     @Override
     protected void initData() {
         super.initData();
-
+        
         setSpecialCaption("button.insertFromDocument");
         setVisible(Button.Special, true);
         setSpecialButtonBehavior(true);
@@ -129,7 +129,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected Object newRow() { 
         if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
             PurchaseOrderItem item = getFormSession().newOrderItem(getParentDataObjectId());
@@ -170,44 +170,44 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
     public boolean canDelete(Object rowObject) {
         return true;
     }
-
+    
     @Override
     protected void viewRow(Object rowObject) {
         PurchaseOrderItemForm formPanel = new PurchaseOrderItemForm((PurchaseOrderItem) rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);
     }
-
+    
     @Override
     public void specialAction() {
         if ( canNestedOperationProceed() ){
             List<DummyInvoice> dummyInvoices = null;
             try{
-                dummyInvoices = createDummyInvoices();
+                dummyInvoices = createDummyInvoices(); 
             }catch ( Exception e ){
                 e.printStackTrace();
                 dummyInvoices = new ArrayList<DummyInvoice>();
             }
-
+            
             PurchaseOrderItemListPanel orderItemsList = new PurchaseOrderItemListPanel(getParentDataObjectId());
             orderItemsList.getButtonsPanel().setVisible(false);
-            OrderItemsCopyForm copyForm = new OrderItemsCopyForm(getParentDataObjectId(), orderItemsList, dummyInvoices);
+            OrderItemsCopyForm copyForm = new OrderItemsCopyForm(getParentDataObjectId(), orderItemsList, dummyInvoices); 
             DialogResponse response = copyForm.showDialog();
             if ( DialogResponse.SAVE.equals(response) ){
                 refreshAction();
             }
         }
     }
-
+    
     private List<DummyInvoice> createDummyInvoices() {
         List<Person> recipients = personsListRemote.getPersons(null);
         int currentIdx = 0;
         if ( currentIdx>=recipients.size() ) currentIdx=0;
-
+        
         List<DummyInvoice> result = new ArrayList<DummyInvoice>();
 
         Random r = new Random();
-
+        
         //invoice
         Invoice i = new Invoice();
         i.setId(new BigInteger(""+sequence++));
@@ -216,11 +216,11 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
         if ( !recipients.isEmpty() )
             i.setRecipient(recipients.get(currentIdx++));
         if ( currentIdx>=recipients.size() ) currentIdx=0;
-        i.setInvoiceNumber(r.nextInt(100000000));
+        i.setInvoiceNumber(new BigInteger(""+r.nextInt(100000000)));
         addDummyInvoiceItems(di);
-
+        
         result.add(di);
-
+        
         //invoice
         i = new Invoice();
         i.setId(new BigInteger(""+sequence++));
@@ -229,11 +229,11 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
         if ( !recipients.isEmpty() )
             i.setRecipient(recipients.get(currentIdx++));
         if ( currentIdx>=recipients.size() ) currentIdx=0;
-        i.setInvoiceNumber(r.nextInt(100000000));
+        i.setInvoiceNumber(new BigInteger(""+r.nextInt(100000000)));
         addDummyInvoiceItems(di);
-
+        
         result.add(di);
-
+        
         //invoice
         i = new Invoice();
         i.setId(new BigInteger(""+sequence++));
@@ -242,28 +242,28 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
         if ( !recipients.isEmpty() )
             i.setRecipient(recipients.get(currentIdx++));
         if ( currentIdx>=recipients.size() ) currentIdx=0;
-        i.setInvoiceNumber(r.nextInt(100000000));
+        i.setInvoiceNumber(new BigInteger(""+r.nextInt(100000000)));
         addDummyInvoiceItems(di);
-
+        
         result.add(di);
-
+        
         return result;
     }
-
+    
     public static class DummyInvoice{
         public Invoice invoice;
         public List<InvoiceItem> items;
     }
-
+    
     private void addDummyInvoiceItems(DummyInvoice i) {
-
+        
         int howMuch = r.nextInt(5);
         howMuch++;
-
+        
         i.items = new ArrayList<InvoiceItem>();
-
+        
         Set<SimpleProduct> addedProductsForInvoice = new HashSet<SimpleProduct>();
-
+        
         for (int j = 0; j < howMuch; j++) {
             InvoiceItem item = new InvoiceItem();
             item.setId(new BigInteger(""+sequence++));
@@ -295,15 +295,15 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
             unitPrice*=10;
             if ( unitPrice<0 )
                 unitPrice = -unitPrice;
-
+            
             item.setExtendedPrice(new BigDecimal(""+(unitPrice*ordered)));
-
+            
             item.setUnitPrice(new BigDecimal(unitPrice));
-
+            
             i.items.add(item);
         }
     }
-
+    
     private SimpleProduct getRandomProduct() {
         if ( products==null )
             products = productsListRemote.getProducts(getOrganizationDataObjectId());
@@ -318,7 +318,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
 
     public void refreshList(List<PurchaseOrderItem> orderItems) {
         this.items = orderItems;
-
+        
         refreshDataTable(entityProps);
     }
 

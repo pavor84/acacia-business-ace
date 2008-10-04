@@ -30,7 +30,29 @@ import com.cosmos.acacia.annotation.PropertyValidator;
     @NamedQuery
     ( 
         /**
-         * Get all mask formats for a given name - at most one should exist
+         * Get all warehouses for a given address - at most one should exist
+         * Parameters:
+         * - address - the address instance to match the warehouse to (not null)
+         */
+        name = "Warehouse.findForAddress",
+        query = "select w from Warehouse w where " +
+                "w.address = :address"
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Get the max index value of all warehouses for this parent organization
+         * Parameters:
+         * - parentDataObjectId - not null 
+         */
+        name = "Warehouse.getMaxIndex",
+        query = "select max(w.index) from Warehouse w where " +
+                "w.dataObject.parentDataObjectId = :parentDataObjectId"
+    ),
+    @NamedQuery
+    ( 
+        /**
+         * Get all warehouses for a given address name - at most one should exist
          * Parameters:
          * - name - the name of the pattern mask
          * - parentDataObjectId - not null
@@ -78,6 +100,15 @@ public class Warehouse extends DataObjectBean implements Serializable {
     @Property(title="Description")
     @Column(name = "description")
     private String description;
+    
+    /**
+     * The index of a warehouse is a sequence number (for ex. 1, 2, 3).
+     * It is automatically generated during first save. It's a system property (not for user interaction).
+     * Some of the documents assigned to this warehouse will be numbered according to this index.
+     * For ex., if the index is 2, the invoices for this warehouse may be numbered 2000000001, 2000000002, etc. 
+     */
+    @Column(name = "index")
+    private Long index;
 
     @JoinColumn(name = "warehouse_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -176,5 +207,13 @@ public class Warehouse extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return getAddress().getInfo();
+    }
+
+    public Long getIndex() {
+        return index;
+    }
+
+    public void setIndex(Long index) {
+        this.index = index;
     }
 }

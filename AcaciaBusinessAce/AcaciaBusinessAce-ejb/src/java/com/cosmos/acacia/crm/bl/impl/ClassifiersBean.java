@@ -387,6 +387,14 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
             return null;
         }
     }
+    
+    private ClassifierGroup getSystemGroup(){
+        for (ClassifierGroup g : getClassifierGroups()) {
+            if ( g.getIsSystemGroup() || "system".equals(g.getClassifierGroupCode()) )
+                return g;
+        }
+        return null;
+    }
 
     @Override
     public EntityProperties getClassifiedObjectBeansEntityProperties() {
@@ -396,7 +404,31 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         return entityProperties;
     }
 
-
+    @Override
+    public Classifier getOrCreateSystemClassifier(String classifierKey) {
+        Classifier result = null;
+        try{
+            result = getClassifier(classifierKey);
+        }catch ( Exception e){
+            log.debug("Classifier: "+classifierKey+" not found! Creating new...");
+        }
+        
+        if ( result == null ){
+            result = newClassifier();
+            result.setClassifierCode(classifierKey);
+            String name = classifierKey.substring(0, 1).toUpperCase() + classifierKey.substring(1);
+            result.setClassifierName(name);
+            ClassifierGroup group = getSystemGroup();
+            result.setClassifierGroup(group);
+            result.setParentId(group.getId());
+            
+            classifierValidator.validate(result);
+            esm.persist(em, result);
+        }
+        
+        return result;
+    }
+    
     @Override
     public Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId) {
 

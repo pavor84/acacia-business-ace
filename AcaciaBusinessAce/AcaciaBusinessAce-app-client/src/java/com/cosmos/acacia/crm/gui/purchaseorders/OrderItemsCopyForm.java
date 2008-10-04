@@ -34,17 +34,17 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.SelectableListDialog;
 
 /**
- *
+ * 
  * Created	:	23.07.2008
  * @author	Petar Milev
  *
  */
 public class OrderItemsCopyForm extends AcaciaPanel {
-
+    
     private PurchaseOrderItemListPanel orderItemsPanel;
     private List<DummyInvoice> dummyInvoices;
 
-    /** Creates new form InsertFromDocumentForm
+    /** Creates new form InsertFromDocumentForm 
      * @param dummyInvoices */
     public OrderItemsCopyForm(BigInteger parentId, PurchaseOrderItemListPanel orderItemsPanel, List<DummyInvoice> dummyInvoices) {
         super(parentId);
@@ -166,13 +166,13 @@ public class OrderItemsCopyForm extends AcaciaPanel {
     private com.cosmos.swingb.JBLabel jBLabel3;
     private com.cosmos.acacia.gui.TableHolderPanel orderItemsHolderPanel;
     // End of variables declaration//GEN-END:variables
-
+    
     private CopyItemsListPanel copyItemsPanel;
     @Override
     protected void initData() {
-
+        
         setDialogResponse(DialogResponse.CANCEL);
-
+        
         //supplier
         //InvoicesListPanel listPanel = new InvoicesListPanel(getOrganizationDataObjectId());
         List<Invoice> invoices = getInvoicesList(dummyInvoices);
@@ -184,7 +184,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
                 onInvoiceChanged((Invoice)e.getItem());
             }
         });
-//
+//        
 //        bind(
 //            bindGroup,
 //            listPanel,
@@ -192,22 +192,22 @@ public class OrderItemsCopyForm extends AcaciaPanel {
 //            entProps.getPropertyDetails("supplier"),
 //            "${recipient.displayName} - ${invoiceNumber}",
 //            UpdateStrategy.READ_WRITE);
-
+        
         copyItemsPanel = new CopyItemsListPanel(null, new ArrayList<InvoiceItem>());
         copyItemsPanel.setVisibleButtons(0);
         copyItemsPanel.getDataTable().setSelectionMode(DefaultListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
+        
         invoiceItemsHolderPanel.add(copyItemsPanel);
-
+        
         orderItemsHolderPanel.add(orderItemsPanel);
-
+        
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 close();
             }
         });
-
+        
         copyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -215,19 +215,19 @@ public class OrderItemsCopyForm extends AcaciaPanel {
             }
         });
     }
-
+    
 
     Set<InvoiceItem> addedItems = new HashSet<InvoiceItem>();
-
+    
     /**
-     *
+     * 
      */
     @SuppressWarnings("unchecked")
     protected void onCopyButton() {
         List<InvoiceItem> selectedItems = copyItemsPanel.getDataTable().getSelectedRowObjects();
         if ( selectedItems==null || selectedItems.isEmpty() )
             return;
-
+        
         boolean alreadyAdded = false;
         for (InvoiceItem invoiceItem : selectedItems) {
             if ( addedItems.contains(invoiceItem) ){
@@ -235,7 +235,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
                 break;
             }
         }
-
+        
         try{
             if ( alreadyAdded ){
                 if ( showAlreadyAddedWarning() ){
@@ -244,14 +244,14 @@ public class OrderItemsCopyForm extends AcaciaPanel {
             }else{
                 addItems(selectedItems);
             }
-
+            
             setDialogResponse(DialogResponse.SAVE);
         }catch (Exception ex){
             handleBusinessException(ex);
         }
     }
-
-    private PurchaseOrderListRemote purchaseOrderListRemote = getBean(PurchaseOrderListRemote.class, false);
+    
+    private PurchaseOrderListRemote purchaseOrderListRemote = getBean(PurchaseOrderListRemote.class);
 
     private void addItems(List<InvoiceItem> items) {
         List<PurchaseOrderItem> orderItems = new ArrayList<PurchaseOrderItem>();
@@ -262,10 +262,10 @@ public class OrderItemsCopyForm extends AcaciaPanel {
             orderItem.setOrderedQuantity(orderItem.getOrderedQuantity().add(addQuantity));
             orderItems.add(orderItem);
         }
-
+        
         purchaseOrderListRemote.saveOrderItems(orderItems);
         orderItemsPanel.refreshAction();
-
+        
         addedItems.addAll(items);
     }
 
@@ -280,19 +280,19 @@ public class OrderItemsCopyForm extends AcaciaPanel {
                 break;
             }
         }
-
+        
         //create new item
         if ( orderItem==null ){
             orderItem = purchaseOrderListRemote.newOrderItem(getParentDataObjectId());
             if ( orderItem.getOrderedQuantity()==null )
                 orderItem.setOrderedQuantity(new BigDecimal(0));
-            SimpleProduct product = invoiceItem.getProduct();
+            SimpleProduct product = (SimpleProduct) invoiceItem.getProduct();
             orderItem.setProduct(product);
-
+            
             //get the measurement unit from the invoice item
             DbResource measureMentUnit = invoiceItem.getMeasureUnit();
             orderItem.setMeasureUnit(measureMentUnit);
-
+            
             //get the purchase price from product and warehouse product
             WarehouseProduct warehouseProduct = purchaseOrderListRemote.getWarehouseProduct(product);
             BigDecimal purchasePrice = product.getPurchasePrice();
@@ -305,7 +305,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
         }else{
             //nothing specific
         }
-
+        
         return orderItem;
     }
 
@@ -335,7 +335,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
         List<InvoiceItem> items = getDummyItems(invoice);
         copyItemsPanel.refreshList(items);
     }
-
+    
     private List<InvoiceItem> getDummyItems(Invoice invoice) {
         for (DummyInvoice di : dummyInvoices) {
             if ( di.invoice==invoice )
@@ -345,7 +345,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
     }
 
     private static class DummyInvoicesListDialog implements SelectableListDialog{
-
+        
         @SuppressWarnings("unchecked")
         private List listData;
 
@@ -385,7 +385,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
         public DialogResponse showDialog(Component parentComponent) {
             return null;
         }
-
+        
     }
 
 }

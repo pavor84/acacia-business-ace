@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
@@ -119,4 +120,11 @@ public interface WarehouseListRemote {
      * @return not null map
      */
     Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(BigInteger parentId);
+    
+    /**
+     * Get the warehouse seated at the specified address
+     * @param branch
+     * @return warehouse or null if not found
+     */
+    Warehouse getWarehouseForAddress(Address address);
 }

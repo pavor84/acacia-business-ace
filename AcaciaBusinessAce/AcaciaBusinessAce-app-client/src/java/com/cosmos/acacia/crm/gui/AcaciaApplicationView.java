@@ -54,7 +54,7 @@ import com.cosmos.acacia.crm.gui.contactbook.PersonPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
-import com.cosmos.acacia.crm.gui.invoice.InvoicesListPanel;
+import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
@@ -65,7 +65,6 @@ import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
-import com.cosmos.acacia.crm.security.PermissionsManager;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
@@ -374,7 +373,6 @@ public class AcaciaApplicationView extends FrameView {
         listPanel.showFrame();
     }
 
-    @Action
     public void productAssemblerAction()
     {
         ProductAssemblerPanel panel = new ProductAssemblerPanel();
@@ -523,13 +521,11 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void invoicesListAction() {
-        System.out.println("invoicesListAction");
-        InvoicesListPanel invoicesListPanel = new InvoicesListPanel(null);
+        InvoiceListPanel invoicesListPanel = new InvoiceListPanel(getParentId());
         invoicesListPanel.showFrame();
     }
 
-
-    @Action
+   	@Action
     public void userGroupsListAction() {
         UserGroupsListPanel panel = new UserGroupsListPanel(getParentId());
         panel.showFrame();
