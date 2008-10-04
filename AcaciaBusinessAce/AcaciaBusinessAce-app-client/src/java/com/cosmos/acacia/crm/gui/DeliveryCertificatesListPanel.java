@@ -8,22 +8,16 @@ package com.cosmos.acacia.crm.gui;
 //import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesListRemote;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
+import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignmentPK;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import javax.swing.ActionMap;
-import javax.swing.JButton;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -41,6 +35,10 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     private BindingGroup bidingGroup;
     private List<DeliveryCertificate> deliveryCertificates;
     
+    /**
+     * 
+     * @param parentDataObjectId - Id of a Warehouse
+     */
     public DeliveryCertificatesListPanel(BigInteger parentDataObjectId){
         super(parentDataObjectId);
     }
@@ -104,7 +102,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        DeliveryCertificate ds = getFormSession().newDeliveryCertificate(null);
+        DeliveryCertificate ds = getFormSession().newDeliveryCertificate(getParentDataObjectId());
         return onEditEntity(ds);
        
     }
@@ -141,14 +139,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     {
         if(formSession == null)
         {
-            try
-            {
-                formSession = InitialContext.doLookup(DeliveryCertificatesRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
+            formSession = getBean(DeliveryCertificatesRemote.class);
         }
 
         return formSession;
@@ -158,7 +149,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     {
         if(deliveryCertificates == null)
         {
-            deliveryCertificates = getFormSession().getDeliveryCertificates(null);
+            deliveryCertificates = getFormSession().getDeliveryCertificates(getParentDataObjectId());
         }
 
         return deliveryCertificates;

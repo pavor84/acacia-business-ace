@@ -7,7 +7,10 @@ package com.cosmos.acacia.crm.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigInteger;
+import java.util.List;
 
+import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -35,10 +38,12 @@ import org.jdesktop.application.TaskMonitor;
 
 import com.birosoft.liquid.LiquidLookAndFeel;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
+import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingMessageListPanel;
@@ -78,12 +83,16 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import com.cosmos.acacia.crm.enums.UserRightType;
 
 /**
  * The application's main frame.
  */
 public class AcaciaApplicationView extends FrameView {
-
+    
+    @EJB
+    private WarehouseListRemote warehouseBean;
+    
     protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
 
     public AcaciaApplicationView(SingleFrameApplication app) {
@@ -319,9 +328,11 @@ public class AcaciaApplicationView extends FrameView {
 //    }
 
     @Action
-    public void deliveryCertificatesAction()
+    public void deliveryCertificatesAction(ActionEvent e)
     {
-        DeliveryCertificatesListPanel listPanel = new DeliveryCertificatesListPanel(null);
+        BigInteger warehouseId = new BigInteger(e.getActionCommand());
+        log.info("Displaying delivery certificates for warehouse: " + warehouseId);
+        DeliveryCertificatesListPanel listPanel = new DeliveryCertificatesListPanel(warehouseId);
         listPanel.showFrame();
     }
 
@@ -1063,17 +1074,31 @@ public class AcaciaApplicationView extends FrameView {
         ActionMap actionMap = getActionMap();
 
         menu.setName("DeliveryCertificates");
-        menu.setText("DeliveryCertificates(TODO)");
+        menu.setText("DeliveryCertificates");
 
-        JBMenuItem warehouse = new JBMenuItem();
-        warehouse.setAction(actionMap.get("deliveryCertificatesAction"));
-        warehouse.setText("Hardcoded Warehouse");
-        warehouse.setActionCommand("warehouse id");
-
-        menu.add(warehouse);
+        List<Warehouse> warehouses = getWarehouseBean().listWarehousesByName(getParentId());
+        for(Warehouse w : warehouses){
+            JBMenuItem warehouse = new JBMenuItem();
+            warehouse.setAction(actionMap.get("deliveryCertificatesAction"));
+            warehouse.setText(w.getAddress().getAddressName());
+            warehouse.setActionCommand(String.valueOf(w.getWarehouseId()));
+            menu.add(warehouse);
+        }
         return menu;
     }
 
+    protected WarehouseListRemote getWarehouseBean() {
+        if (warehouseBean == null) {
+            try {
+                warehouseBean = InitialContext.doLookup(WarehouseListRemote.class.getName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return warehouseBean;
+    }
+    
     private RightsManagerRemote rightsManager =
         AcaciaPanel.getBean(RightsManagerRemote.class, false);
     /**

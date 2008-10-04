@@ -1,49 +1,43 @@
 /*
  * DeliveryCertificatePanel.java
  *
- * Created on Ð’Ñ‚Ð¾Ñ€Ð½Ð¸Ðº, 2008, Ð®Ð»Ð¸ 15, 20:43
+ * Created on Âòîðíèê, 2008, Þëè 15, 20:43
  */
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigInteger;
+
+import javax.ejb.EJB;
+
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
-import com.cosmos.acacia.gui.BaseEntityPanel;
-import com.cosmos.acacia.gui.EntityFormButtonPanel;
-import java.beans.PropertyChangeEvent;
-import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.DeliveryCertificate;
 import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
+import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
+import com.cosmos.acacia.gui.AcaciaComboBox;
+import com.cosmos.acacia.gui.AcaciaLookup;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
+import com.cosmos.acacia.gui.BaseEntityPanel;
+import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.swingbinding.JComboBoxBinding;
 
 /**
  *
@@ -54,31 +48,27 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     @EJB
     private DeliveryCertificatesRemote formSession;
     
-    @EJB
-    private OrganizationsListRemote organizationList;
-    
     private DeliveryCertificate entity;
+    private DeliveryCertificateAssignment assignment;
+    
     private Address forwarderBranch;
-    private EntityProperties entProps;
+    private EntityProperties entityProps;
     private BindingGroup bindGroup;
-    private Binding recipientContactPersonBinding;
-    private Binding forwardersBinding;
-    private Binding forwarderBranchBinding;
-    private Binding forwarderContactPersonsBinding;
+    private Binding recipientNameBinding;
+    private Binding recipientBranchNameBinding;
+    private Binding recipientContactNameBinding;
     
-    Converter<Invoice, String> converter;
-    
-       
     public DeliveryCertificatePanel(DeliveryCertificate ds, DataObject parent) {
         super(parent != null ? parent.getDataObjectId() : null);
         this.entity = ds;
+        this.assignment = ds.getDocumentAssignment();
         init();
     }
     
      /** Creates new form DeliveryCertificatePanel */
     public DeliveryCertificatePanel(DeliveryCertificate ds) {
         this(ds, null);
-        init();
+        //init();
     }
     
     @Override
@@ -90,7 +80,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        entity = getFormSession().saveDeliveryCertificate(entity);
+        entity = getFormSession().saveDeliveryCertificate(entity, assignment);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
         if (closeAfter) {
@@ -122,72 +112,69 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             bindGroup = new BindingGroup();
         }
         
-        converter = new Converter<Invoice, String>() {
-            @Override
-            public String convertForward(Invoice invoice) {
-                return invoice.getId().toString();
-            }
-            @Override
-            public Invoice convertReverse(String arg0) {
-                return new Invoice();
-            }
-        };
-        
         if(entity == null){
             entity = getFormSession().newDeliveryCertificate(getParentDataObjectId());
+            assignment = getFormSession().newDeliveryCertificateAssignment();
         }
+         
+        entityProps = getFormSession().getDeliveryCertificateEntityProperties();
+        EntityProperties assignmentProps = getFormSession().getDeliveryCertificateAssignmentEntityProperties(); 
         
-        final EntityProperties entityProps = getFormSession().getDeliveryCertificateEntityProperties();
-        
+        //Base Properties Panel
         numberTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateNumber"));
-        //creationDatePicker.bind(bindGroup, entity, entityProps.getPropertyDetails("creationTime"));
-        
-        recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
-        //recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranch"));
-        
-        recipientBranchTextField.setText(entity.getRecipientBranch().getAddressName());
-        
-        List invoices = getInvoices();
-                
-        //JComboBoxBinding docsBinding = documentComboBox.bind(bindGroup, invoices, entity, entityProps.getPropertyDetails("currentDocumentId"));
-        //docsBinding.setConverter(converter);
-        
-        recipientContactPersonBinding = recipientContactPersonAcaciaLookup.bind(
-                    new AcaciaLookupProvider(){
-                        @Override
-                        public Object showSelectionControl(){
-                            return onChooseRecipientContactPerson();
-                        }
-                    }, bindGroup,
-                    entity,        
-                    entityProps.getPropertyDetails("recipientContact"),
-                    "${firstName}",
-                    UpdateStrategy.READ_WRITE);
-               
-                  
-        creatorNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorName"));
-        AcaciaSessionRemote acaciaSessionRemote = getBean(AcaciaSessionRemote.class);
-        Organization creatorOrg = acaciaSessionRemote.getOrganization();
-        creatorOrganizationTextField.setText(creatorOrg.getOrganizationName());
-        
-        
-        //We do not have property CreatorOrganization in DeliveryCertificate object
-        //creatorOrganizationTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorName"));
+        creationDatePicker.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateDate"));
         reasonComboBox.bind(bindGroup, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
+        documentsAcaciaLookup.bind(
+            new AcaciaLookupProvider(){
+                @Override
+                public Object showSelectionControl(){
+                    return onChooseAssignment();
+                }
+
+            }, bindGroup,
+            assignment,        
+            assignmentProps.getPropertyDetails("documentNumber"),
+            UpdateStrategy.READ_WRITE);
         
+        //Creator Panel
+        creatorNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorName"));
+        creatorOrganizationTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorOrganizationName"));
+        creatorBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorBranchName"));
         
-        //BusinessPartner recipient = entity.getRecipient();
-        Warehouse warehouse = entity.getWarehouse();
+        //Recipient Panel
+        recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
+        recipientBranchNameBinding = recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
+        recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
+            new AcaciaLookupProvider(){
+                @Override
+                public Object showSelectionControl(){
+                    return onChooseRecipientContactPerson();
+                }
+            }, bindGroup,
+            entity,        
+            entityProps.getPropertyDetails("recipientContact"),
+            UpdateStrategy.READ_WRITE);
         
-        //We do not have property CreatorBranch
-        if(warehouse != null){
-            String creatorBranch = acaciaSessionRemote.getBranch() != null ? acaciaSessionRemote.getBranch().getAddressName() : warehouse.getAddress().getAddressName();
-            creatorBranchTextField.setText(creatorBranch);
-        }
-        
+        //Delivery Type Panel
         deliveryTypeComboBox.bind(bindGroup, getFormSession().getDeliveryTypes(), entity, entityProps.getPropertyDetails("deliveryCertificateMethodType"));
-        //if(entity.getDeliveryCertificateMethodType().getEnumValue() == DeliveryCertificateMethodType.Forwarder){
-            forwardersBinding = forwardersLookup.bind(new AcaciaLookupProvider() {
+        deliveryTypeComboBox.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                AcaciaComboBox acb = (AcaciaComboBox)e.getSource();
+                DbResource selectedDeliveryType = (DbResource)acb.getSelectedItem();
+                if(selectedDeliveryType != null){
+                    boolean isForwarding = selectedDeliveryType.getEnumValue().equals(DeliveryCertificateMethodType.Forwarder);
+                    for(Component c : forwarderPanel.getComponents()){
+                        if(c instanceof AcaciaLookup){
+                            ((AcaciaLookup)c).setEnabled(isForwarding);
+                        }
+                    }
+                }
+            }
+        });
+        
+        //Forwarder Details Panel
+        forwardersLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
                     return onChooseForwarder();
@@ -197,8 +184,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("forwarder"),
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
-            
-            forwarderBranchBinding = forwarderBranchAcaciaLookup.bind(new AcaciaLookupProvider(){
+       forwarderBranchAcaciaLookup.bind(new AcaciaLookupProvider(){
                     @Override
                     public Object showSelectionControl() {
                         return onChooseForwarderBranch();
@@ -207,10 +193,9 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 bindGroup, 
                 entity, 
                 entityProps.getPropertyDetails("forwarderBranch"),
-                "${addressName}",        
+                "${addressName}",      
                 UpdateStrategy.READ_WRITE);
-                
-            forwarderContactPersonsBinding = forwarderContactPersonAcaciaLookup.bind( new AcaciaLookupProvider(){
+       forwarderContactPersonAcaciaLookup.bind( new AcaciaLookupProvider(){
                 @Override
                 public Object showSelectionControl(){
                     return onChooseForwarderContactPerson();
@@ -218,33 +203,75 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             }, bindGroup,
             entity,        
             entityProps.getPropertyDetails("forwarderContact"),
-            "${firstName}",
+            "${displayName}",
             UpdateStrategy.READ_WRITE);
-            
-       // }else{
-            //disable forwarder inputs
-        //}
-        
-        //TODO, but do not know how
-        //documentComboBox.bind(bindGroup, getFormSession().getDocuments(DeliveryCertificateReason.Invoice), entity, entityProps.getPropertyDetails("assignments"));
-        
+           
         bindGroup.bind();
          
     }
     
     protected Object onChooseRecipientContactPerson(){
         
+        if(entity.getRecipientBranch() == null){
+            return null;
+        }
         ContactPersonsListPanel listPanel = new ContactPersonsListPanel(entity.getRecipientBranch().getAddressId());
         
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             ContactPerson selectedContactPerson = (ContactPerson) listPanel.getSelectedRowObject();
-            return selectedContactPerson.getContact();
+            return selectedContactPerson;
         } else {
             return null;
         }
     }
-
+    
+    //TODO: Based on reason selected, we have to display different list of documents.
+    //For now display only InvoicesList, because other documents are not implemented.
+    protected String onChooseAssignment() {
+        InvoiceListPanel listPanel = new InvoiceListPanel(entity.getCreatorOrganization().getId());
+        
+        listPanel.setVisibleSelectButtons(true);
+        DialogResponse dResponse = listPanel.showDialog(this);
+        
+        if ( DialogResponse.SELECT.equals(dResponse) ){
+            Invoice selectedDocument = (Invoice) listPanel.getSelectedRowObject();
+             
+            assignment.setDocumentId(selectedDocument.getId());
+            assignment.setDocumentNumber(String.valueOf(selectedDocument.getInvoiceNumber()));
+            
+            entity.setRecipient(selectedDocument.getRecipient());
+            entity.setRecipientBranch(selectedDocument.getBranch());
+            entity.setRecipientContact(selectedDocument.getRecipientContact());
+            
+            //populate the components with new values.
+            bindGroup.removeBinding(recipientNameBinding);
+            recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
+            recipientNameBinding.bind();
+            bindGroup.removeBinding(recipientBranchNameBinding);
+            recipientBranchNameBinding = recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
+            recipientBranchNameBinding.bind();
+            bindGroup.removeBinding(recipientContactNameBinding);
+            recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
+                new AcaciaLookupProvider(){
+                    @Override
+                    public Object showSelectionControl(){
+                        return onChooseRecipientContactPerson();
+                    }
+                },  
+                bindGroup,
+                entity,        
+                entityProps.getPropertyDetails("recipientContact"),
+                "${contact.displayName}",
+                UpdateStrategy.READ_WRITE);
+            recipientContactNameBinding.bind();
+            
+            return assignment.getDocumentNumber();
+        } else {
+            return null;
+        }
+    }
+ 
     protected Object onChooseForwarder() {
 
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
@@ -289,38 +316,14 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         }
     }
     
-    protected List getInvoices(){
-        /*try{
-            invoicesList = InitialContext.doLookup(InvoicesListRemote.class.getName());
-            return invoicesList.getInvoices(null);
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            return null;
-        }*/
-        
-        //Stub Invoices just for test
-        List l = new ArrayList();
-        Invoice i = new Invoice();
-        i.setId(new BigInteger("577845883"));
-        i.setInvoiceNumber(new BigInteger("8347535"));
-        l.add(i);
-        return l;
-    }
-    
     protected DeliveryCertificatesRemote getFormSession(){
         if(formSession == null){
-            try{
-                formSession = InitialContext.doLookup(DeliveryCertificatesRemote.class.getName());
-            }
-            catch(Exception ex){
-                ex.printStackTrace();
-            }
+            formSession = getBean(DeliveryCertificatesRemote.class);
         }
 
         return formSession;
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -337,8 +340,8 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         dateLabel = new com.cosmos.swingb.JBLabel();
         documentLabel = new com.cosmos.swingb.JBLabel();
         reasonComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        documentComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         creationDatePicker = new com.cosmos.swingb.JBDatePicker();
+        documentsAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         creatorPanel = new com.cosmos.swingb.JBPanel();
         organizationLabel = new com.cosmos.swingb.JBLabel();
         creatorOrganizationTextField = new com.cosmos.swingb.JBTextField();
@@ -355,13 +358,16 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         recipientContactPersonAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         deliveryMethodPanel = new com.cosmos.swingb.JBPanel();
-        forwardNameLabel = new com.cosmos.swingb.JBLabel();
-        forwarderContactNameLabel = new com.cosmos.swingb.JBLabel();
         deliveryTypeComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        forwardersLookup = new com.cosmos.acacia.gui.AcaciaLookup();
-        forwarderContactPersonAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
-        forwarderBranchAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        forwarderPanel = new com.cosmos.swingb.JBPanel();
+        forwardNameLabel = new com.cosmos.swingb.JBLabel();
         forwarderBranchLabel = new com.cosmos.swingb.JBLabel();
+        forwarderContactNameLabel = new com.cosmos.swingb.JBLabel();
+        forwardersLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        forwarderBranchAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        forwarderContactPersonAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
+        jBPanel1 = new com.cosmos.swingb.JBPanel();
+        jBLabel1 = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -392,11 +398,10 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         reasonComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         reasonComboBox.setName("reasonComboBox"); // NOI18N
 
-        documentComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        documentComboBox.setName("documentComboBox"); // NOI18N
-
         creationDatePicker.setEditable(false);
         creationDatePicker.setName("creationDatePicker"); // NOI18N
+
+        documentsAcaciaLookup.setName("documentsAcaciaLookup"); // NOI18N
 
         javax.swing.GroupLayout detailsPanelLayout = new javax.swing.GroupLayout(detailsPanel);
         detailsPanel.setLayout(detailsPanelLayout);
@@ -411,14 +416,14 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(reasonComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(numberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
-                .addGap(45, 45, 45)
-                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(50, 50, 50)
+                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(documentComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-                    .addComponent(creationDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(creationDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(documentsAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         detailsPanelLayout.setVerticalGroup(
@@ -428,18 +433,21 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                     .addGroup(detailsPanelLayout.createSequentialGroup()
                         .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(numberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(numberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(numberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(reasonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(reasonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(documentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(reasonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(detailsPanelLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(creationDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(creationDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(documentsAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         creatorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("creatorPanel.border.title"))); // NOI18N
@@ -476,12 +484,12 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                             .addComponent(supplierBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(creatorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(creatorBranchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-                            .addComponent(creatorOrganizationTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)))
+                            .addComponent(creatorBranchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                            .addComponent(creatorOrganizationTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)))
                     .addGroup(creatorPanelLayout.createSequentialGroup()
                         .addComponent(supplerEmployeeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(creatorNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)))
+                        .addComponent(creatorNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         creatorPanelLayout.setVerticalGroup(
@@ -498,7 +506,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addGroup(creatorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(supplerEmployeeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(creatorNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         recipientPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("recipientPanel.border.title"))); // NOI18N
@@ -531,12 +539,11 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                     .addComponent(clientNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clientBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clientContactPersonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(recipientBranchTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(recipientNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
-                    .addComponent(recipientContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(recipientBranchTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(recipientNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                    .addComponent(recipientContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         recipientPanelLayout.setVerticalGroup(
@@ -553,7 +560,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(clientContactPersonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(recipientContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
@@ -561,23 +568,62 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         deliveryMethodPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("deliveryMethodPanel.border.title"))); // NOI18N
         deliveryMethodPanel.setName("deliveryMethodPanel"); // NOI18N
 
+        deliveryTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        deliveryTypeComboBox.setName("deliveryTypeComboBox"); // NOI18N
+
+        forwarderPanel.setName("forwarderPanel"); // NOI18N
+
         forwardNameLabel.setText(resourceMap.getString("forwardNameLabel.text")); // NOI18N
         forwardNameLabel.setName("forwardNameLabel"); // NOI18N
+
+        forwarderBranchLabel.setText(resourceMap.getString("forwarderBranchLabel.text")); // NOI18N
+        forwarderBranchLabel.setName("forwarderBranchLabel"); // NOI18N
 
         forwarderContactNameLabel.setText(resourceMap.getString("forwarderContactNameLabel.text")); // NOI18N
         forwarderContactNameLabel.setName("forwarderContactNameLabel"); // NOI18N
 
-        deliveryTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        deliveryTypeComboBox.setName("deliveryTypeComboBox"); // NOI18N
-
         forwardersLookup.setName("forwardersLookup"); // NOI18N
-
-        forwarderContactPersonAcaciaLookup.setName("forwarderContactPersonAcaciaLookup"); // NOI18N
 
         forwarderBranchAcaciaLookup.setName("forwarderBranchAcaciaLookup"); // NOI18N
 
-        forwarderBranchLabel.setText(resourceMap.getString("forwarderBranchLabel.text")); // NOI18N
-        forwarderBranchLabel.setName("forwarderBranchLabel"); // NOI18N
+        forwarderContactPersonAcaciaLookup.setName("forwarderContactPersonAcaciaLookup"); // NOI18N
+
+        javax.swing.GroupLayout forwarderPanelLayout = new javax.swing.GroupLayout(forwarderPanel);
+        forwarderPanel.setLayout(forwarderPanelLayout);
+        forwarderPanelLayout.setHorizontalGroup(
+            forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(forwarderPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(forwardNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwarderContactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwarderBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(forwarderBranchAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwardersLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwarderContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        forwarderPanelLayout.setVerticalGroup(
+            forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(forwarderPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(forwarderPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(forwardersLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(forwardNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(forwarderBranchAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwarderBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(forwarderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(forwarderContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwarderContactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout deliveryMethodPanelLayout = new javax.swing.GroupLayout(deliveryMethodPanel);
         deliveryMethodPanel.setLayout(deliveryMethodPanelLayout);
@@ -587,20 +633,8 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deliveryTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(deliveryMethodPanelLayout.createSequentialGroup()
-                            .addComponent(forwarderContactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(forwarderContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, deliveryMethodPanelLayout.createSequentialGroup()
-                            .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(forwarderBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(forwardNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(40, 40, 40)
-                            .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(forwarderBranchAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(forwardersLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(314, Short.MAX_VALUE))
+                    .addComponent(forwarderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(275, Short.MAX_VALUE))
         );
         deliveryMethodPanelLayout.setVerticalGroup(
             deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -608,21 +642,31 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addComponent(deliveryTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(forwardersLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(forwardNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(deliveryMethodPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(forwarderBranchAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(deliveryMethodPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(forwarderBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(deliveryMethodPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(forwarderContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(forwarderContactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(forwarderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel1.border.title"))); // NOI18N
+        jBPanel1.setName("jBPanel1"); // NOI18N
+
+        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
+        jBLabel1.setName("jBLabel1"); // NOI18N
+
+        javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
+        jBPanel1.setLayout(jBPanel1Layout);
+        jBPanel1Layout.setHorizontalGroup(
+            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jBPanel1Layout.createSequentialGroup()
+                .addGap(221, 221, 221)
+                .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(500, Short.MAX_VALUE))
+        );
+        jBPanel1Layout.setVerticalGroup(
+            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jBPanel1Layout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -632,13 +676,14 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(deliveryMethodPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(detailsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(creatorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(recipientPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE))
+                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
+                    .addComponent(deliveryMethodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -647,12 +692,14 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addContainerGap()
                 .addComponent(detailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(creatorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(recipientPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(recipientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deliveryMethodPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(135, 135, 135)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -676,15 +723,18 @@ private void numberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//G
     private com.cosmos.swingb.JBPanel deliveryMethodPanel;
     private com.cosmos.acacia.gui.AcaciaComboBox deliveryTypeComboBox;
     private com.cosmos.swingb.JBPanel detailsPanel;
-    private com.cosmos.acacia.gui.AcaciaComboBox documentComboBox;
     private com.cosmos.swingb.JBLabel documentLabel;
+    private com.cosmos.acacia.gui.AcaciaLookup documentsAcaciaLookup;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBLabel forwardNameLabel;
     private com.cosmos.acacia.gui.AcaciaLookup forwarderBranchAcaciaLookup;
     private com.cosmos.swingb.JBLabel forwarderBranchLabel;
     private com.cosmos.swingb.JBLabel forwarderContactNameLabel;
     private com.cosmos.acacia.gui.AcaciaLookup forwarderContactPersonAcaciaLookup;
+    private com.cosmos.swingb.JBPanel forwarderPanel;
     private com.cosmos.acacia.gui.AcaciaLookup forwardersLookup;
+    private com.cosmos.swingb.JBLabel jBLabel1;
+    private com.cosmos.swingb.JBPanel jBPanel1;
     private com.cosmos.swingb.JBLabel numberLabel;
     private com.cosmos.swingb.JBTextField numberTextField;
     private com.cosmos.swingb.JBLabel organizationLabel;

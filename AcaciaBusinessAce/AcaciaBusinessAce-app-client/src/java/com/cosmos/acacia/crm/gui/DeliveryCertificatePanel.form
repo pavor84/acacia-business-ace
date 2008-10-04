@@ -21,14 +21,15 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="deliveryMethodPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jBPanel1" alignment="0" max="32767" attributes="0"/>
                   <Component id="detailsPanel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="creatorPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="recipientPanel" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="entityFormButtonPanel1" alignment="0" pref="844" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel1" alignment="0" pref="835" max="32767" attributes="0"/>
+                  <Component id="deliveryMethodPanel" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -40,13 +41,15 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="detailsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="creatorPanel" max="32767" attributes="1"/>
-                  <Component id="recipientPanel" alignment="0" max="32767" attributes="1"/>
+                  <Component id="recipientPanel" alignment="0" min="-2" max="-2" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="jBPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="deliveryMethodPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -80,15 +83,15 @@
                       <Component id="reasonComboBox" max="32767" attributes="1"/>
                       <Component id="numberTextField" alignment="0" pref="218" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="dateLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="documentLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="documentComboBox" pref="397" max="32767" attributes="0"/>
-                      <Component id="creationDatePicker" alignment="1" pref="397" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="creationDatePicker" min="-2" max="-2" attributes="1"/>
+                      <Component id="documentsAcaciaLookup" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -102,22 +105,27 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="numberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="numberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="reasonComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="reasonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="documentLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="documentComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                          <Component id="creationDatePicker" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="creationDatePicker" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                              <Component id="dateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="documentsAcaciaLookup" min="-2" max="-2" attributes="0"/>
+                              <Component id="documentLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="30" max="32767" attributes="0"/>
+                  <EmptySpace pref="31" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -169,23 +177,15 @@
             <Property name="name" type="java.lang.String" value="reasonComboBox" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="documentComboBox">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
-            </Property>
-            <Property name="name" type="java.lang.String" value="documentComboBox" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.swingb.JBDatePicker" name="creationDatePicker">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="creationDatePicker" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="documentsAcaciaLookup">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="documentsAcaciaLookup" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -215,14 +215,14 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="creatorBranchTextField" pref="223" max="32767" attributes="0"/>
-                              <Component id="creatorOrganizationTextField" alignment="0" pref="223" max="32767" attributes="0"/>
+                              <Component id="creatorBranchTextField" pref="266" max="32767" attributes="0"/>
+                              <Component id="creatorOrganizationTextField" alignment="0" pref="266" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="supplerEmployeeLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="creatorNameTextField" pref="222" max="32767" attributes="0"/>
+                          <Component id="creatorNameTextField" pref="265" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -246,7 +246,7 @@
                       <Component id="supplerEmployeeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="creatorNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -312,13 +312,11 @@
                       <Component id="clientBranchLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="clientContactPersonLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="40" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="recipientBranchTextField" alignment="0" max="32767" attributes="1"/>
-                          <Component id="recipientNameTextField" alignment="1" pref="189" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="recipientContactPersonAcaciaLookup" min="-2" pref="364" max="-2" attributes="0"/>
+                  <EmptySpace pref="91" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="recipientBranchTextField" alignment="0" max="32767" attributes="1"/>
+                      <Component id="recipientNameTextField" alignment="1" pref="189" max="32767" attributes="1"/>
+                      <Component id="recipientContactPersonAcaciaLookup" alignment="1" min="-2" pref="265" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -341,7 +339,7 @@
                       <Component id="clientContactPersonLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="recipientContactPersonAcaciaLookup" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="21" max="32767" attributes="0"/>
+                  <EmptySpace pref="38" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -408,26 +406,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="deliveryTypeComboBox" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="1" attributes="1">
-                              <Component id="forwarderContactNameLabel" min="-2" pref="78" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="forwarderContactPersonAcaciaLookup" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="forwarderBranchLabel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="forwardNameLabel" alignment="0" min="-2" pref="64" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="forwarderBranchAcaciaLookup" min="-2" max="-2" attributes="0"/>
-                                  <Component id="forwardersLookup" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
+                      <Component id="forwarderPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="314" max="32767" attributes="0"/>
+                  <EmptySpace pref="275" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -437,43 +418,13 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="deliveryTypeComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="forwardersLookup" min="-2" max="-2" attributes="0"/>
-                      <Component id="forwardNameLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                          <Component id="forwarderBranchAcaciaLookup" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="forwarderBranchLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="forwarderContactPersonAcaciaLookup" min="-2" max="-2" attributes="0"/>
-                      <Component id="forwarderContactNameLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="forwarderPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.cosmos.swingb.JBLabel" name="forwardNameLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="forwardNameLabel.text"/>
-            <Property name="name" type="java.lang.String" value="forwardNameLabel" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="forwarderContactNameLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="forwarderContactNameLabel.text"/>
-            <Property name="name" type="java.lang.String" value="forwarderContactNameLabel" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="deliveryTypeComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -487,25 +438,132 @@
             <Property name="name" type="java.lang.String" value="deliveryTypeComboBox" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="forwardersLookup">
+        <Container class="com.cosmos.swingb.JBPanel" name="forwarderPanel">
           <Properties>
-            <Property name="name" type="java.lang.String" value="forwardersLookup" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="forwarderPanel" noResource="true"/>
           </Properties>
-        </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="forwarderContactPersonAcaciaLookup">
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="forwardNameLabel" alignment="0" min="-2" pref="64" max="-2" attributes="0"/>
+                          <Component id="forwarderContactNameLabel" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
+                          <Component id="forwarderBranchLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="forwarderBranchAcaciaLookup" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="forwardersLookup" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="forwarderContactPersonAcaciaLookup" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="forwardersLookup" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="forwardNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="forwarderBranchAcaciaLookup" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="forwarderBranchLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="forwarderContactPersonAcaciaLookup" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="forwarderContactNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBLabel" name="forwardNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="forwardNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="forwardNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="forwarderBranchLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="forwarderBranchLabel.text"/>
+                <Property name="name" type="java.lang.String" value="forwarderBranchLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="forwarderContactNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="forwarderContactNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="forwarderContactNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="forwardersLookup">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="forwardersLookup" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="forwarderBranchAcaciaLookup">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="forwarderBranchAcaciaLookup" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="forwarderContactPersonAcaciaLookup">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="forwarderContactPersonAcaciaLookup" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Container class="com.cosmos.swingb.JBPanel" name="jBPanel1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="products">
+              <Property name="titleX" resourceKey="jBPanel1.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jBPanel1" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="221" max="-2" attributes="0"/>
+                  <Component id="jBLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="500" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
+                  <Component id="jBLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="91" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
           <Properties>
-            <Property name="name" type="java.lang.String" value="forwarderContactPersonAcaciaLookup" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="forwarderBranchAcaciaLookup">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="forwarderBranchAcaciaLookup" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="forwarderBranchLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="forwarderBranchLabel.text"/>
-            <Property name="name" type="java.lang.String" value="forwarderBranchLabel" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
+            <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
