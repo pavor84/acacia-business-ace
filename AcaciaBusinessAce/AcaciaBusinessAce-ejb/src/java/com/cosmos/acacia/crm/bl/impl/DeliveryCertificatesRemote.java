@@ -5,18 +5,16 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.beansbinding.EntityProperties;
-import javax.ejb.Remote;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
-import com.cosmos.acacia.crm.data.Invoice;
-import java.util.List;
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
 import java.math.BigInteger;
+import java.util.List;
+
+import javax.ejb.Remote;
+
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
+import com.cosmos.beansbinding.EntityProperties;
 
 /**
  *
@@ -25,25 +23,23 @@ import java.math.BigInteger;
 @Remote
 public interface DeliveryCertificatesRemote {
 
-    DeliveryCertificate createStubDeliveryCert();
-
     EntityProperties getDeliveryCertificateEntityProperties();
 
-    java.util.List<com.cosmos.acacia.crm.data.DeliveryCertificate> getDeliveryCertificates(String parentId);
+    List<DeliveryCertificate> getDeliveryCertificates(BigInteger parentId);
 
-    DeliveryCertificate newDeliveryCertificate(Object parent);
+    DeliveryCertificate newDeliveryCertificate(BigInteger parentId);
 
     List<DbResource> getReasons();
 
     List<DbResource> getDeliveryTypes();
 
-    List<Organization> getForwarders();
-
-    List<DeliveryCertificateAssignment> getDocuments(DeliveryCertificateReason reason);
-
-    void mapDeliveryCertificateToInvoice(BigInteger deliveryCertificateId, BigInteger documentId);
-    
-    DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate);
+    DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment);
 
     int deleteDeliveryCertificate(DeliveryCertificate deliveryCertificate);
+    
+    DeliveryCertificateAssignment newDeliveryCertificateAssignment();
+    
+    DeliveryCertificateAssignment newDeliveryCertificateAssignment(DeliveryCertificate ds, DataObjectBean document);
+    
+    EntityProperties getDeliveryCertificateAssignmentEntityProperties();
 }

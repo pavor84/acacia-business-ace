@@ -8,13 +8,14 @@ package com.cosmos.acacia.crm.data;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
 
 /**
  *
@@ -26,72 +27,53 @@ import javax.persistence.Table;
     @NamedQuery (
             name = "DeliveryCertificateAssignment.findAll",
             query = "select a from DeliveryCertificateAssignment a"
+    ),
+    @NamedQuery (
+        name = "DeliveryCertificateAssignment.findByDeliveryCertificate",
+        query= "select a from DeliveryCertificateAssignment a where a.deliveryCertificateId=:deliveryCertificateId"
     )
 })
 public class DeliveryCertificateAssignment implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    @EmbeddedId
-    protected DeliveryCertificateAssignmentPK deliveryCertificateAssignmentPK;
 
-    @JoinColumn(name = "delivery_certificate_id", referencedColumnName = "delivery_certificate_id", insertable=false, updatable=false)
-    @ManyToOne
-    private DeliveryCertificate deliveryCertificate;
+    @Id
+    @Column(name = "delivery_certificate_id", nullable=false)
+    private BigInteger deliveryCertificateId;
 
-    @Column(name = "document_id", insertable=false, updatable=false)
+    @Column(name = "document_id", nullable=false)
     private BigInteger documentId;
+
+    @Column(name = "document_number", nullable=false)
+    @Property(title="Document Number")
+    private String documentNumber;
     
-    public DeliveryCertificateAssignment(){
-        
-    }
-    
-    public DeliveryCertificateAssignment(DeliveryCertificateAssignmentPK deliveryCertificateAssignmentPK){
-        this.deliveryCertificateAssignmentPK = deliveryCertificateAssignmentPK;
+    public BigInteger getDeliveryCertificateId() {
+        return deliveryCertificateId;
     }
 
-    public DeliveryCertificateAssignment(BigInteger deliveryCertificateId, BigInteger documentId){
-        this.deliveryCertificateAssignmentPK = new DeliveryCertificateAssignmentPK(deliveryCertificateId, documentId);
+    public void setDeliveryCertificateId(BigInteger deliveryCertificateId) {
+        this.deliveryCertificateId = deliveryCertificateId;
     }
     
-    public DeliveryCertificateAssignmentPK getDeliveryCertificateAssignmentPK() {
-        return deliveryCertificateAssignmentPK;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
-    public void setDeliveryCertificateAssignmentPK(DeliveryCertificateAssignmentPK deliveryCertificateAssignmentPK) {
-        this.deliveryCertificateAssignmentPK = deliveryCertificateAssignmentPK;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
     
-    public DeliveryCertificate getDeliveryCertificate() {
-        return deliveryCertificate;
+    public BigInteger getDocumentId() {
+        return documentId;
     }
 
-    public void setDeliveryCertificate(DeliveryCertificate deliveryCertificate) {
-        this.deliveryCertificate = deliveryCertificate;
+    public void setDocumentId(BigInteger documentId) {
+        this.documentId = documentId;
     }
     
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (deliveryCertificateAssignmentPK != null ? deliveryCertificateAssignmentPK.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DeliveryCertificateAssignment)) {
-            return false;
-        }
-        DeliveryCertificateAssignment other = (DeliveryCertificateAssignment) object;
-        if ((this.deliveryCertificateAssignmentPK == null && other.deliveryCertificateAssignmentPK != null) || (this.deliveryCertificateAssignmentPK != null && !this.deliveryCertificateAssignmentPK.equals(other.deliveryCertificateAssignmentPK))){ 
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber[deliveryCertificateAssignmentPK=" + deliveryCertificateAssignmentPK + "]";
+        return "com.cosmos.acacia.crm.data.DeliveryCertificateAssignment[deliveryCertificate=" + deliveryCertificateId + "]";
     }
-
+    
 }
