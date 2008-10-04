@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -16,12 +18,17 @@ import com.cosmos.acacia.crm.security.PermissionsManagerLocal;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 @Stateless
-public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLocal {
+public class SessionFacadeBean implements SessionFacadeRemote, SessionFacadeLocal {
 
     protected Logger log = Logger.getLogger(SessionFacadeBean.class);
 
+    private static final boolean USE_TRANSFERABLE_LISTS = false;
+
     @EJB
     private PermissionsManagerLocal permissionsManager;
+
+    @EJB
+    private DeferredListServerLocal deferredListServer;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -64,6 +71,29 @@ public class SessionFacadeBean implements  SessionFacadeRemote, SessionFacadeLoc
                     return null; // display error message.. or throw exception ?
                 }
             }
+
+            // Usage of transferable lists. Constant value
+            // should be changed to true, and work to be continued
+            // if performance issues increase
+
+            if (USE_TRANSFERABLE_LISTS && result instanceof List) {
+                // concurency allowed!
+                List wholeList = (List) result;
+                TransferableList list = new TransferableList();
+                int toIndex = TransferableList.FETCH_CHUNK_SIZE;
+                if (toIndex >= wholeList.size())
+                    toIndex = wholeList.size();
+
+                // Need to create a new list, because sublist instance
+                // is not serializable
+                list.setCurrentList(new CopyOnWriteArrayList(
+                        wholeList.subList(0, toIndex)));
+
+                list.setActualSize(wholeList.size());
+                list.setId(deferredListServer.addList(wholeList));
+                return list;
+            }
+
             return result;
 
         } catch (InvocationTargetException ex){

@@ -210,7 +210,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
     }
 
     /**
-     * Method for client-side checking special permissions
+     * Method for checking special permissions
      * @param specialPermission
      * @return
      */

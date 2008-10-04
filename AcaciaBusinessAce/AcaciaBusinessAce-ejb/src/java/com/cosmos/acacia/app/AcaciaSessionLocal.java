@@ -61,4 +61,19 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * @return
      */
     Set<UserRight> getSpecialPermissions();
+
+
+    /**
+     * Puts a value in the session
+     * @param key
+     * @param value
+     */
+    void put(String key, Object value);
+
+    /**
+     * Gets a value from the session
+     * @param key
+     * @return
+     */
+    Object get(String key);
 }

@@ -160,4 +160,14 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     public void setSpecialPermissions(Set<UserRight> rights) {
         getSession().setValue(SessionContext.SPECIAL_PERMISSIONS_KEY, rights);
     }
+
+    @Override
+    public Object get(String key) {
+        return SessionRegistry.getSession().getValue(key);
+    }
+
+    @Override
+    public void put(String key, Object value) {
+        SessionRegistry.getSession().setValue(key, value);
+    }
 }
