@@ -179,7 +179,7 @@ public class Algorithm
         {
             minSelections = maxSelections = 1;
         }
-        else
+        else if(!Type.UnconditionalSelection.equals(type))
         {
             Integer intValue = assemblingSchemaItem.getMinSelections();
             if(intValue != null)

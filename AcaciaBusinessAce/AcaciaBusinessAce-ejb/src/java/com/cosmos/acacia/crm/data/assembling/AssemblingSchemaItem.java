@@ -65,9 +65,9 @@ public class AssemblingSchemaItem
     @Property(title="Algorithm", propertyValidator=@PropertyValidator(required=true))
     private DbResource assemblingAlgorithm;
 
-    @JoinColumn(name = "message_id", referencedColumnName = "message_id", nullable=false)
+    @JoinColumn(name = "message_id", referencedColumnName = "message_id")
     @ManyToOne
-    @Property(title="Message", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Message")
     private AssemblingMessage assemblingMessage;
 
     @JoinColumn(name = "data_type_id", referencedColumnName = "resource_id", nullable=false)
@@ -236,7 +236,7 @@ public class AssemblingSchemaItem
         StringBuilder sb = new StringBuilder();
         sb.append(toString());
         sb.append("\n\t assemblingSchema: ").append(assemblingSchema.toString());
-        sb.append("\n\t message: ").append(assemblingMessage.toString());
+        sb.append("\n\t message: ").append(assemblingMessage);
         sb.append("\n\t dataType: ").append(dataType);
         sb.append("\n\t minSelections: ").append(minSelections);
         sb.append("\n\t maxSelections: ").append(maxSelections);
