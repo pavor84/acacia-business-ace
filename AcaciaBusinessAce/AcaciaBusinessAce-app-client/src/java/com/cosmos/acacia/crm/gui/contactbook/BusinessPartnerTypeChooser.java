@@ -21,7 +21,6 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.DialogResponse;
-import com.sun.tools.xjc.reader.xmlschema.BindGreen;
 
 /**
  * 
