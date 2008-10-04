@@ -7,7 +7,6 @@ package com.cosmos.swingb;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.ItemSelectable;
@@ -18,10 +17,6 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 
 import org.jdesktop.application.Action;
@@ -46,7 +41,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.swingb.listeners.ComboListEventListener;
 import com.cosmos.swingb.validation.Validatable;
 
 /**
@@ -62,6 +56,7 @@ public class JBComboList
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
 
+    private JXButton unselectButton;
     private JXButton lookupButton;
     private JBComboBox comboBox;
 
@@ -92,11 +87,26 @@ public class JBComboList
 
     private void initComponents()
     {
+        unselectButton = new JXButton();
         lookupButton = new JXButton();
-        comboBox = new ListComboBox();
+        comboBox = new JBComboBox();
 
         setName("JBComboList"); // NOI18N
         setLayout(new BorderLayout());
+
+        JBPanel buttonPanel = new JBPanel();
+        buttonPanel.setLayout(new BorderLayout());
+
+        unselectButton.setAction(getApplicationActionMap().get("unselectButtonAction")); // NOI18N
+        unselectButton.setAlignmentX(0.5F);
+        unselectButton.setAlignmentY(0.5F);
+        unselectButton.setHorizontalAlignment(SwingConstants.CENTER);
+        unselectButton.setVerticalAlignment(SwingConstants.CENTER);
+        unselectButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        unselectButton.setVerticalTextPosition(SwingConstants.CENTER);
+        unselectButton.setName("unselectButton"); // NOI18N
+        unselectButton.setPreferredSize(new Dimension(25, 25));
+        unselectButton.setEnabled(false);
 
         lookupButton.setAction(getApplicationActionMap().get("lookupButtonAction")); // NOI18N
         lookupButton.setAlignmentX(0.5F);
@@ -107,13 +117,17 @@ public class JBComboList
         lookupButton.setVerticalTextPosition(SwingConstants.CENTER);
         lookupButton.setName("lookupButton"); // NOI18N
         lookupButton.setPreferredSize(new Dimension(25, 25));
-        add(lookupButton, BorderLayout.EAST);
+
+        buttonPanel.add(unselectButton, BorderLayout.WEST);
+        buttonPanel.add(lookupButton, BorderLayout.EAST);
+        add(buttonPanel, BorderLayout.EAST);
 
         ResourceMap rm = getResourceMap();
         Font font = rm.getFont("comboBox.font");
         if(font != null)
             comboBox.setFont(font); // NOI18N
         comboBox.setName("comboBox"); // NOI18N
+        comboBox.addItemListener(new ComboListItemListener());
         add(comboBox, BorderLayout.CENTER);
     }
 
@@ -125,6 +139,11 @@ public class JBComboList
     public JXButton getLookupButton()
     {
         return lookupButton;
+    }
+
+    public JXButton getUnselectButton()
+    {
+        return unselectButton;
     }
 
     @Action
@@ -146,12 +165,6 @@ public class JBComboList
                 {
                     Object result = selectableListDialog.getSelectedRowObject();
                     comboBox.setSelectedItem(result);
-                    // Miro Debug
-                    // org.jdesktop.swingbinding.JComboBoxBinding$BindingComboBoxModel
-                    // RuntimeException: Cannot use this method with a non-Mutable data model.
-                    // at javax.swing.JComboBox.checkMutableComboBoxModel(JComboBox.java:775)
-                    // at javax.swing.JComboBox.addItem(JComboBox.java:697)
-                    // at com.cosmos.swingb.JBComboList.lookupButtonAction(JBComboList.java:154)
                     comboBox.addItem(result);
                 }
                 else
@@ -162,6 +175,20 @@ public class JBComboList
         }
     }
 
+    @Action
+    public void unselectButtonAction()
+    {
+        comboBox.setSelectedIndex(-1);
+    }
+
+    private class ComboListItemListener
+        implements ItemListener
+    {
+        public void itemStateChanged(ItemEvent event)
+        {
+            unselectButton.setEnabled(comboBox.getSelectedItem() != null);
+        }
+    }
 
     /*
     public JComboBoxBinding bind(
@@ -260,13 +287,26 @@ public class JBComboList
         return editable;
     }
 
+    @Override
+    public void setEnabled(boolean enabled)
+    {
+        super.setEnabled(enabled);
+        comboBox.setEnabled(enabled);
+        unselectButton.setEnabled(enabled && comboBox.getSelectedItem() != null);
+        lookupButton.setEnabled(enabled);
+    }
+
     public void setEditable(boolean editable)
     {
         this.editable = editable;
         comboBox.setEditable(editable);
-        comboBox.setEnabled(editable);
-        if ( selectableListDialog!=null )
+        setEnabled(editable);
+
+        if(selectableListDialog != null)
+        {
+            selectableListDialog.setEditable(editable);
             selectableListDialog.setVisibleSelectButtons(editable);
+        }
     }
 
     public ObservableList getData() {
@@ -293,7 +333,7 @@ public class JBComboList
 
     public void addItemListener(ItemListener listener)
     {
-        comboBox.addItemListener(new ComboListEventListener(listener));
+        comboBox.addItemListener(listener);
     }
 
     public void removeItemListener(ItemListener listener)
@@ -443,45 +483,6 @@ public class JBComboList
         Color color = getResourceMap().getColor("validation.field.normal.background");
         comboBox.getEditor().getEditorComponent().setBackground(color);
     }
-
-    private class ListComboBox
-        extends JBComboBox
-    {
-
-        @Override
-        public void setSelectedItem(Object anObject)
-        {
-            Object oldSelectedItem = getSelectedItem();
-            super.setSelectedItem(anObject);
-            Object newSelectedItem = getSelectedItem();
-            if(oldSelectedItem != null)
-            {
-                if(!oldSelectedItem.equals(newSelectedItem))
-                    selectedItemChanged(newSelectedItem);
-            }
-            else if(newSelectedItem != null)
-            {
-                selectedItemChanged(newSelectedItem);
-            }
-        }
-
-        protected void selectedItemChanged(Object selectedItem)
-        {
-            ItemEvent event;
-            if(selectedItem != null)
-                event = new ItemEvent(this,
-                    ItemEvent.ITEM_STATE_CHANGED,
-                    selectedItem,
-                    ItemEvent.SELECTED + 0x700);
-            else
-                event = new ItemEvent(this,
-                    ItemEvent.ITEM_STATE_CHANGED,
-                    selectedItem,
-                    ItemEvent.DESELECTED + 0x700);
-            fireItemStateChanged(event);
-        }
-    }
-
 
     public void initUnbound(
             SelectableListDialog selectableListDialog,

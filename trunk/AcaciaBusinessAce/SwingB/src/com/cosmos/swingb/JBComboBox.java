@@ -6,10 +6,13 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.listeners.ComboListEventListener;
 import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -288,5 +291,49 @@ public class JBComboBox
             return super.getListCellRendererComponent(list, value,
                     index, isSelected, cellHasFocus);
         }
+    }
+
+    @Override
+    public void addItemListener(ItemListener listener)
+    {
+        super.addItemListener(new ComboListEventListener(listener));
+    }
+
+    @Override
+    public void setSelectedItem(Object anObject)
+    {
+        Object oldSelectedItem = getSelectedItem();
+        super.setSelectedItem(anObject);
+        Object newSelectedItem = getSelectedItem();
+        if(oldSelectedItem != null)
+        {
+            if(!oldSelectedItem.equals(newSelectedItem))
+                selectedItemChanged(newSelectedItem);
+        }
+        else if(newSelectedItem != null)
+        {
+            selectedItemChanged(newSelectedItem);
+        }
+    }
+
+    protected void selectedItemChanged(Object selectedItem)
+    {
+        ItemEvent event;
+        if(selectedItem != null)
+        {
+            event = new ItemEvent(this,
+                ItemEvent.ITEM_STATE_CHANGED,
+                selectedItem,
+                ItemEvent.SELECTED + 0x700);
+        }
+        else
+        {
+            event = new ItemEvent(this,
+                ItemEvent.ITEM_STATE_CHANGED,
+                selectedItem,
+                ItemEvent.DESELECTED + 0x700);
+        }
+
+        fireItemStateChanged(event);
     }
 }

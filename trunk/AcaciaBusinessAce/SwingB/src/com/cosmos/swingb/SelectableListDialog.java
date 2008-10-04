@@ -20,5 +20,7 @@ public interface SelectableListDialog
     List getListData();
     void setEditable(boolean editable);
     boolean isEditable();
+    void setEnabled(boolean enabled);
+    boolean isEnabled();
     void setVisibleSelectButtons(boolean visible);
 }
