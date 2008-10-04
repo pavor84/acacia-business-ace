@@ -81,15 +81,13 @@ public class JBComboList
         initComponents();
     }
 
-    public JBComboList(Class<? extends Application> applicationClass)
-    {
-        this(Application.getInstance(applicationClass));
-    }
-
     public JBComboList(Application application)
     {
         this();
-        this.application = application;
+        if(application != null)
+            this.application = application;
+        else
+            this.application = Application.getInstance();
     }
 
     private void initComponents()
