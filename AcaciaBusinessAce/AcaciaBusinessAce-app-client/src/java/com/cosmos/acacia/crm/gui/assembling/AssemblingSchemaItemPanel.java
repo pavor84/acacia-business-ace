@@ -394,7 +394,7 @@ public class AssemblingSchemaItemPanel
 
         algorithmChanged();
 
-        algorithmComboBox.addItemListener(new AlgorithmItemListener());
+        algorithmComboBox.addItemListener(new AlgorithmItemListener(), true);
     }
 
     @Override

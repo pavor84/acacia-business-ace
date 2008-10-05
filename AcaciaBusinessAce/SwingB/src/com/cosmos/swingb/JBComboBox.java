@@ -62,7 +62,7 @@ public class JBComboBox
         Class appClass = null;
         if (application != null)
             appClass = application.getClass();
-        
+
         setRenderer(new CustomCellRenderer(appClass));
     }
 
@@ -127,7 +127,7 @@ public class JBComboBox
         {
             binding.setValidator(validator);
         }
-        
+
         binding.addBindingListener(new BindingValidationListener(this));
 
         bindingGroup.addBinding(binding);
@@ -227,13 +227,13 @@ public class JBComboBox
         Color color = getResourceMap().getColor("validation.field.invalid.background");
         getEditor().getEditorComponent().setBackground(color);
     }
-    
+
     public void setStyleValid() {
         setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.valid.background");
         getEditor().getEditorComponent().setBackground(color);
     }
-    
+
     public void setStyleNormal() {
         setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.normal.background");
@@ -246,13 +246,13 @@ public class JBComboBox
         super.addKeyListener(listener);
         getEditor().getEditorComponent().addKeyListener(listener);
     }
-    
+
     @Override
     public void removeKeyListener(KeyListener listener) {
         super.removeKeyListener(listener);
         getEditor().getEditorComponent().removeKeyListener(listener);
     }
-    
+
     private class JBComboBoxEditor
         extends BasicComboBoxEditor
     {
@@ -261,11 +261,11 @@ public class JBComboBox
             getEditorComponent().addMouseListener(new JBContextMenuCreaetor());
         }
     }
-    
+
     /** Handling coversions */
-    
+
     private ObjectToStringConverter converter;
-    
+
     public ObjectToStringConverter getConverter() {
         return converter;
     }
@@ -273,30 +273,32 @@ public class JBComboBox
     public void setConverter(ObjectToStringConverter converter) {
         this.converter = converter;
     }
-    
-    
+
+
     class CustomCellRenderer extends BeanListCellRenderer {
-        
+
         public CustomCellRenderer(Class appClass) {
             super(appClass);
         }
-        
+
         @Override
         public Component getListCellRendererComponent(JList list,
                 Object value, int index, boolean isSelected, boolean cellHasFocus)
         {
             if (getConverter() != null)
                 value = getConverter().getPreferredStringForItem(value);
-            
+
             return super.getListCellRendererComponent(list, value,
                     index, isSelected, cellHasFocus);
         }
     }
 
-    @Override
-    public void addItemListener(ItemListener listener)
+    public void addItemListener(ItemListener listener, boolean ignoreSelectEvents)
     {
-        super.addItemListener(new ComboListEventListener(listener));
+        if (ignoreSelectEvents)
+            super.addItemListener(new ComboListEventListener(listener));
+        else
+            super.addItemListener(listener);
     }
 
     @Override
