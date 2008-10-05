@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
+import com.cosmos.acacia.crm.data.assembling.AssemblingParameter;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.EJB;
-import javax.swing.table.DefaultTableModel;
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -40,6 +41,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 public class ProductAssemblerPanel
     extends AcaciaPanel
 {
+    private static final Logger logger = Logger.getLogger(ProductAssemblerPanel.class);
+
     @EJB
     private static AssemblingRemote formSession;
 
@@ -148,6 +151,7 @@ public class ProductAssemblerPanel
     //private AcaciaTreeTable productTreeTable;
     private AcaciaTable productTreeTable;
 
+    private List<AssemblingParameter> assemblingParameters;
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> schemaItems;
 
@@ -161,7 +165,12 @@ public class ProductAssemblerPanel
 
         String strValue;
         parametersTable = new AcaciaTable();
-        parametersTable.setModel(new SchemaTableModel());
+        BindingGroup bindingGroup = new BindingGroup();
+        EntityProperties entityProperties =
+            getFormSession().getAssemblingParameterEntityProperties();
+        List<AssemblingParameter> assemblingParameters = new ArrayList<AssemblingParameter>();
+        parametersTable.bind(bindingGroup, assemblingParameters, entityProperties);
+        bindingGroup.bind();
         JBScrollPane scrollPane = new JBScrollPane();
         scrollPane.setViewportView(parametersTable);
         schemaTitledPanel.setContentContainer(scrollPane);
@@ -170,10 +179,10 @@ public class ProductAssemblerPanel
         productTitledPanel.setTitle(strValue);
         //productTreeTable = new AcaciaTreeTable();
         productTreeTable = new AcaciaTable();
-        BindingGroup bindingGroup = new BindingGroup();
-        EntityProperties entityProperties =
-            getFormSession().getComplexProductItemEntityProperties();
+        bindingGroup = new BindingGroup();
+        entityProperties = getFormSession().getComplexProductItemEntityProperties();
         productTreeTable.bind(bindingGroup, getComplexProductItems(), entityProperties);
+        bindingGroup.bind();
         scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productTreeTable);
         productTitledPanel.setContentContainer(scrollPane);
@@ -186,18 +195,25 @@ public class ProductAssemblerPanel
         ResourceMap resource = getResourceMap();
         AssemblingSchema schema = getAssemblingSchema();
 
-        DefaultTableModel model = (DefaultTableModel)parametersTable.getModel();
+        List<AssemblingParameter> parameters = parametersTable.getData();
         for(AssemblingSchemaItem item : getSchemaItems())
         {
             AssemblingMessage message = item.getAssemblingMessage();
-            String code = message.getMessageCode() + ": " + message.getMessageText();
+            if(message == null)
+                continue;
+
             Object value = item.getDefaultValue();
-            model.addRow(new Object[] {code, value});
+            AssemblingParameter parameter = new AssemblingParameter();
+            parameter.setAssemblingMessage(message);
+            parameter.setValue(value);
+            parameters.add(parameter);
         }
 
         String schemaName = schema.getSchemaCode() + " - " + schema.getSchemaName();
         String strValue = resource.getString("schemaTitledPanel.title");
         schemaTitledPanel.setTitle(strValue + schemaName);
+
+        parametersTable.packAll();
     }
 
     @Override
@@ -264,10 +280,29 @@ public class ProductAssemblerPanel
         productAssemble();
     }
 
-    private void productAssemble()
+    private Properties getParameters()
     {
         Properties params = new Properties();
+        List<AssemblingParameter> assemblingParameters = parametersTable.getData();
+        if((assemblingParameters = parametersTable.getData()) != null &&
+            assemblingParameters.size() > 0)
+        {
+            for(AssemblingParameter parameter : assemblingParameters)
+            {
+                AssemblingMessage message = parameter.getAssemblingMessage();
+                String key = message.getMessageCode();
+                Object value = parameter.getValue();
+                logger.info("key: " + key + ", value: " + value);
+                params.put(key, value);
+            }
+        }
+        logger.info("getParameters(): " + params);
 
+        return params;
+    }
+
+    private void productAssemble()
+    {
         ProductAssembler assembler =
             new ProductAssembler(getAssemblingSchema(),
             getFormSession(),
@@ -277,12 +312,12 @@ public class ProductAssemblerPanel
 
         try
         {
-            ComplexProduct product = assembler.assemble(params);
-            log.info("Product: " + product.toString(true));
+            ComplexProduct product = assembler.assemble(getParameters());
+            logger.info("Product: " + product.toString(true));
         }
         catch(AlgorithmException ex)
         {
-            log.info("EXC: " + ex.getMessage());
+            logger.info("EXC: " + ex.getMessage());
             ValidationException vex = new ValidationException();
             vex.addMessage(ex.getMessage());
             throw vex;
@@ -341,16 +376,16 @@ public class ProductAssemblerPanel
         public void productAssemblerEvent(ProductAssemblerEvent event)
         {
             ComplexProductItem productItem = event.getComplexProductItem();
-            log.info("event.getComplexProductItem(): " + productItem);
-            log.info("\t AppliedAlgorithm: " + productItem.getAppliedAlgorithm());
-            log.info("\t AppliedValue: " + productItem.getAppliedValue());
-            log.info("\t ComplexProduct: " + productItem.getComplexProduct());
-            log.info("\t ComplexProductItemId: " + productItem.getComplexProductItemId());
-            log.info("\t Info: " + productItem.getInfo());
-            log.info("\t OrderPosition: " + productItem.getOrderPosition());
-            log.info("\t Product: " + productItem.getProduct());
-            log.info("\t Quantity: " + productItem.getQuantity());
-            log.info("\t UnitPrice: " + productItem.getUnitPrice());
+            logger.info("event.getComplexProductItem(): " + productItem);
+            logger.info("\t AppliedAlgorithm: " + productItem.getAppliedAlgorithm());
+            logger.info("\t AppliedValue: " + productItem.getAppliedValue());
+            logger.info("\t ComplexProduct: " + productItem.getComplexProduct());
+            logger.info("\t ComplexProductItemId: " + productItem.getComplexProductItemId());
+            logger.info("\t Info: " + productItem.getInfo());
+            logger.info("\t OrderPosition: " + productItem.getOrderPosition());
+            logger.info("\t Product: " + productItem.getProduct());
+            logger.info("\t Quantity: " + productItem.getQuantity());
+            logger.info("\t UnitPrice: " + productItem.getUnitPrice());
             productTreeTable.addRow(productItem);
             System.out.println("getComplexProductItems(): " + getComplexProductItems());
         }
@@ -358,45 +393,4 @@ public class ProductAssemblerPanel
     }
 
 
-    private class SchemaTableModel
-        extends DefaultTableModel
-    {
-        private Class[] columnType =
-        {
-            String.class, Object.class
-        };
-
-        private boolean[] canEditColumn =
-        {
-            false, true
-        };
-
-        public SchemaTableModel()
-        {
-            super();
-
-            ResourceMap resource = getResourceMap();
-
-            String strValue;
-            strValue = resource.getString("productTreeTable.column.parameter.title");
-            addColumn(strValue);
-
-            strValue = resource.getString("productTreeTable.column.value.title");
-            addColumn(strValue);
-        }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex)
-        {
-            return columnType[columnIndex];
-        }
-
-        @Override
-        public boolean isCellEditable(int row, int column)
-        {
-            return canEditColumn[column];
-        }
-
-
-    }
 }

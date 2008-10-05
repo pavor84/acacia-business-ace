@@ -6,12 +6,17 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.callback.assembling.ChoiceCallback;
+import com.cosmos.acacia.crm.assembling.ConstraintRow;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -21,6 +26,7 @@ public class AssemblerCallbackHandler
     extends AcaciaPanel
     implements CallbackHandler
 {
+    private static final Logger logger = Logger.getLogger(AssemblerCallbackHandler.class);
 
     /** Creates new form AssemblerCallbackHandler */
     public AssemblerCallbackHandler() {
@@ -58,7 +64,7 @@ public class AssemblerCallbackHandler
     @Override
     protected void initData()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -66,8 +72,34 @@ public class AssemblerCallbackHandler
         throws IOException,
         UnsupportedCallbackException
     {
-        System.out.println("AssemblerCallbackHandler.handle(" + Arrays.asList(callbacks) + ")");
-        throw new UnsupportedOperationException("Not supported yet.");
+        logger.info("handle(" + Arrays.asList(callbacks) + ").");
+
+        if(callbacks == null || callbacks.length == 0)
+            throw new IllegalArgumentException("At least one callback must be passed.");
+
+        List<String> errorMessages = new ArrayList<String>();
+
+        for(Callback callback : callbacks)
+        {
+            if(callback instanceof ChoiceCallback)
+            {
+                ChoiceCallback choiceCallback = (ChoiceCallback)callback;
+                List<ConstraintRow> choices = choiceCallback.getChoices();
+                if(choices == null || choices.size() == 0)
+                    throw new IllegalArgumentException("Invalid ChoiceCallback: " + 
+                        choiceCallback.getAssemblingSchemaItem() +
+                        ". The choices must contain at least one element.");
+
+                choiceCallback.setSelectedRow(choices.get(0));
+                
+            }
+        }
+
+        if(errorMessages.size() > 0)
+        {
+            System.out.println("AssemblerCallbackHandler.handle(" + Arrays.asList(callbacks) + ")");
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
 
