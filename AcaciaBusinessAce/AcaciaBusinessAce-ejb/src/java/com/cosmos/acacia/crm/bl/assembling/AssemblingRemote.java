@@ -72,6 +72,7 @@ public interface AssemblingRemote
     EntityProperties getComplexProductEntityProperties();
     EntityProperties getComplexProductItemEntityProperties();
     EntityProperties getAssemblingMessageEntityProperties();
+    EntityProperties getAssemblingParameterEntityProperties();
 
     List<DbResource> getAlgorithms();
     List<DbResource> getDataTypes();

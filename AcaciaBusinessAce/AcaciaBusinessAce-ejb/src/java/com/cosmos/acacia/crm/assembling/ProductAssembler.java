@@ -110,6 +110,7 @@ public class ProductAssembler
         Algorithm algorithm = new Algorithm(asi, productAssemblerService);
         algorithm.setCallbackHandler(getCallbackHandler());
         Object valueAgainstConstraints = getAlgorithmValue(asi, parameters);
+        logger.info("valueAgainstConstraints: " + valueAgainstConstraints);
         List<AssemblingSchemaItemValue> itemValues = algorithm.apply(valueAgainstConstraints);
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(itemValues.size());
         logger.info("assemble(...), AssemblingSchemaItemValues: " + itemValues);
@@ -176,12 +177,14 @@ public class ProductAssembler
             AssemblingSchemaItem asi,
             Map parameters)
     {
+        logger.info("getAlgorithmValue(SchemaItem: " + asi + ", parameters: " + parameters);
         Algorithm.Type algorithmType;
         algorithmType = (Algorithm.Type)asi.getAssemblingAlgorithm().getEnumValue();
         if(Algorithm.Type.RangeAlgorithms.contains(algorithmType) ||
            Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
         {
             AssemblingMessage message = asi.getAssemblingMessage();
+            System.out.println("message: " + message);
             return parameters.get(message.getMessageCode());
         }
 
