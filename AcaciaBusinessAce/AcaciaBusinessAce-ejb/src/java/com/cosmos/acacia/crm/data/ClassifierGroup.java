@@ -37,7 +37,8 @@ import javax.persistence.Table;
             name = "ClassifierGroup.getAllNotDeleted",
             query = "select cg from ClassifierGroup cg " +
                     " where cg.dataObject.deleted = false" +
-                    " and cg.dataObject.parentDataObjectId=:parentId"
+                    " and (cg.dataObject.parentDataObjectId=:parentId" +
+                    " or cg.isSystemGroup=true or cg.classifierGroupCode='system')"
             )
     }
 )

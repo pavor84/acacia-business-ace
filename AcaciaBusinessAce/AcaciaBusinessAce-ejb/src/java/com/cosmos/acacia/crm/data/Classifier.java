@@ -35,21 +35,24 @@ import javax.persistence.Table;
                 name = "Classifier.findByParentDataObjectAndDeleted",
                 query = "select c from Classifier c where c.parentId = :groupId" +
                         " and c.dataObject.deleted = :deleted" +
-                        " and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
+                        " and (c.classifierGroup.dataObject.parentDataObjectId = :parentId" +
+                        " or c.classifierGroup.isSystemGroup=true or c.classifierGroup.classifierGroupCode='system')"
              ),
         @NamedQuery
              (
                 name = "Classifier.findAllAndDeleted",
                 query = "select c from Classifier c where" +
                         " c.dataObject.deleted = :deleted" +
-                        " and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
+                        " and (c.classifierGroup.dataObject.parentDataObjectId = :parentId" +
+                        " or c.classifierGroup.isSystemGroup=true or c.classifierGroup.classifierGroupCode='system')"
               ),
         @NamedQuery
             (
                 name = "Classifier.findByCode",
                 query = "select c from Classifier c where c.classifierCode = :code" +
                         " and c.dataObject.deleted = :deleted" +
-                        " and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
+                        " and (c.classifierGroup.dataObject.parentDataObjectId = :parentId" +
+                        " or c.classifierGroup.isSystemGroup=true or c.classifierGroup.classifierGroupCode='system')"
             )
     }
 )
