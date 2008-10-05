@@ -127,7 +127,7 @@ public class JBComboList
         if(font != null)
             comboBox.setFont(font); // NOI18N
         comboBox.setName("comboBox"); // NOI18N
-        comboBox.addItemListener(new ComboListItemListener());
+        comboBox.addItemListener(new ComboListItemListener(), true);
         add(comboBox, BorderLayout.CENTER);
     }
 
@@ -329,6 +329,11 @@ public class JBComboList
     public Object[] getSelectedObjects()
     {
         return comboBox.getSelectedObjects();
+    }
+
+    public void addItemListener(ItemListener listener, boolean ignoreSelectEvents)
+    {
+        comboBox.addItemListener(listener, ignoreSelectEvents);
     }
 
     public void addItemListener(ItemListener listener)
