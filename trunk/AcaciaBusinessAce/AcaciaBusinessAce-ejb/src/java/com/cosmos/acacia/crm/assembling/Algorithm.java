@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -32,6 +33,8 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 public class Algorithm
     implements Serializable
 {
+    private static final Logger logger = Logger.getLogger(Algorithm.class);
+
     public enum Type
         implements DatabaseResource
     {
@@ -172,8 +175,12 @@ public class Algorithm
     {
         this.assemblingSchemaItem = assemblingSchemaItem;
         this.productAssemblerService = productAssemblerService;
+        logger.info("assemblingSchemaItem: " + assemblingSchemaItem);
+        logger.info("productAssemblerService: " + productAssemblerService);
         DbResource assemblingAlgorithm = assemblingSchemaItem.getAssemblingAlgorithm();
+        logger.info("assemblingAlgorithm: " + assemblingAlgorithm);
         this.type = (Type)assemblingAlgorithm.getEnumValue();
+        logger.info("Algorithm.Type: " + type);
 
         if(Type.SingleSelectionAlgorithms.contains(type))
         {
@@ -221,6 +228,11 @@ public class Algorithm
     public List<AssemblingSchemaItemValue> apply(Object valueAgainstConstraints)
         throws AlgorithmException
     {
+        if(valueAgainstConstraints != null)
+            logger.info("valueAgainstConstraints: " + valueAgainstConstraints + ", class: " + valueAgainstConstraints.getClass().getName());
+        else
+            logger.info("valueAgainstConstraints: " + valueAgainstConstraints);
+
         return apply(
             getAssemblingSchemaItemValues(),
             valueAgainstConstraints);
@@ -231,6 +243,8 @@ public class Algorithm
             Object valueAgainstConstraints)
         throws AlgorithmException
     {
+        logger.info("itemValues: " + itemValues);
+
         if(resultList != null && resultList.size() > 0)
             resultList.clear();
         List<ConstraintRow> constraintRows = new ArrayList<ConstraintRow>(itemValues.size());
@@ -278,15 +292,26 @@ public class Algorithm
             Comparable valueAgainstConstraints)
         throws AlgorithmException
     {
+        logger.info("constraintRows: " + constraintRows);
         List<ConstraintRow> resultRows = new ArrayList<ConstraintRow>(constraintRows.size());
         for(ConstraintRow row : constraintRows)
         {
+            logger.info("row: " + row);
             ConstraintValues constraintValues = row.getConstraintValues();
             Comparable minValue = constraintValues.getMinConstraint();
             Comparable maxValue = constraintValues.getMaxConstraint();
+            if(minValue != null)
+                logger.info("minValue: " + minValue + ", class: " + minValue.getClass().getName());
+            else
+                logger.info("minValue is NULL");
+            if(maxValue != null)
+                logger.info("maxValue: " + maxValue + ", class: " + maxValue.getClass().getName());
+            else
+                logger.info("maxValue is NULL");
             if((minValue == null || valueAgainstConstraints.compareTo(minValue) >= 0) &&
                (maxValue == null || valueAgainstConstraints.compareTo(maxValue) <= 0))
             {
+                logger.info("The row " + row + " is in range.");
                 resultRows.add(row);
             }
         }
@@ -302,6 +327,7 @@ public class Algorithm
             Object valueAgainstConstraints)
         throws AlgorithmException
     {
+        logger.info("constraintRows: " + constraintRows);
         List<ConstraintRow> resultRows = new ArrayList<ConstraintRow>(constraintRows.size());
         for(ConstraintRow row : constraintRows)
         {
@@ -324,6 +350,7 @@ public class Algorithm
             Object valueAgainstConstraints)
         throws AlgorithmException
     {
+        logger.info("constraintRows: " + constraintRows);
         if(callbackHandler == null)
             throw new IllegalArgumentException("The callbackHandler can not be null when applyUserSelection is invoked.");
         ChoiceCallback choiceCallback = new ChoiceCallback(
@@ -363,7 +390,8 @@ public class Algorithm
         return selectedRows;
     }
 
-    protected List<AssemblingSchemaItemValue> getResultList(List<ConstraintRow> constraintRows) {
+    protected List<AssemblingSchemaItemValue> getResultList(List<ConstraintRow> constraintRows)
+    {
         if(resultList == null)
         {
             resultList = new ArrayList(constraintRows.size());
@@ -373,7 +401,8 @@ public class Algorithm
         return resultList;
     }
 
-    protected List<AssemblingSchemaItemValue> getResultList() {
+    protected List<AssemblingSchemaItemValue> getResultList()
+    {
         if(resultList == null)
             resultList = new LinkedList();
 
@@ -382,16 +411,19 @@ public class Algorithm
 
     protected void addItem(AssemblingSchemaItemValue item)
     {
+        logger.info("item: " + item);
         getResultList().add(item);
     }
 
     protected void addConstraintRow(ConstraintRow constraintRow)
     {
+        logger.info("constraintRow: " + constraintRow);
         addItem(constraintRow.getCorrespondingObject());
     }
 
     protected void addConstraintRows(List<ConstraintRow> constraintRows)
     {
+        logger.info("constraintRows: " + constraintRows);
         for(ConstraintRow constraintRow : constraintRows)
             addConstraintRow(constraintRow);
     }

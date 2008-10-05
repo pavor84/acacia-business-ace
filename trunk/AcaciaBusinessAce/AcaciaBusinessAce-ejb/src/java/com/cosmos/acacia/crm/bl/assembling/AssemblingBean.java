@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
+import com.cosmos.acacia.crm.data.assembling.AssemblingParameter;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -56,6 +57,9 @@ public class AssemblingBean
 
     @EJB
     private AssemblingCategoryValidatorLocal assemblingCategoryValidator;
+
+    @EJB
+    private AssemblingSchemaItemValidatorLocal assemblingSchemaItemValidator;
     
     @EJB
     private AcaciaSessionLocal acaciaSessionLocal;
@@ -261,7 +265,7 @@ public class AssemblingBean
     public AssemblingSchemaItem saveSchemaItem(AssemblingSchemaItem entity)
     {
         logger.debug("saveSchemaItem: " + entity.toString(true));
-        //assemblingCategoryValidator.validate(entity); 
+        assemblingSchemaItemValidator.validate(entity);
 
         esm.persist(em, entity);
         logger.debug("saveSchemaItem: " + entity.toString(true));
@@ -549,6 +553,14 @@ public class AssemblingBean
     public EntityProperties getAssemblingMessageEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(AssemblingMessage.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getAssemblingParameterEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(AssemblingParameter.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
