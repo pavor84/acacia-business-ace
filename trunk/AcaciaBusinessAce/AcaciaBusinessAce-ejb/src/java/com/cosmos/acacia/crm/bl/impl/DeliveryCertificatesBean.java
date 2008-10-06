@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Iterator;
@@ -29,7 +30,9 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
 import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
@@ -56,10 +59,32 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     public EntityProperties getDeliveryCertificateEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificate.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        
+        return entityProperties;
+    }
+    
+    public EntityProperties getDeliveryCertificateListEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificate.class);
+        entityProperties.removePropertyDetails("recipientBranch");
+        entityProperties.removePropertyDetails("creationTime");
+        entityProperties.removePropertyDetails("recipientContact");
+        entityProperties.removePropertyDetails("creatorOrganization");
+        entityProperties.removePropertyDetails("creatorBranch");
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+    
+    public EntityProperties getDeliveryCertificateItemsEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificateItem.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
 
+    public EntityProperties getDeliveryCertificateItemDetailsEntityProperties(){
+    	EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificateItem.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+    
     /**
      * 
      * @param parentId - warehouse id
@@ -87,6 +112,14 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         return result;
     }
 
+    @Override
+    public List<DeliveryCertificateItem> getDeliveryCertificateItems(BigInteger parentId){
+    	Query q1 = em.createNamedQuery("DeliveryCertificateItem.findForCertificate");
+        q1.setParameter("parentId", parentId);
+         
+    	return (List<DeliveryCertificateItem>)q1.getResultList();
+    }
+    
     @Override
     public DeliveryCertificate newDeliveryCertificate(BigInteger parentId) {
         DeliveryCertificate ds = new DeliveryCertificate();
@@ -128,37 +161,39 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     public List<DbResource> getDeliveryTypes() {
         return DeliveryCertificateMethodType.getDbResources();
     }
-
-    /*Test purposes*/
-    @Deprecated
-    private void mapDeliveryCertificateToInvoice(BigInteger deliveryCertificateId, BigInteger documentId) {
-        
-        //DeliveryCertificateAssignment assignment = new DeliveryCertificateAssignment();
-        //DeliveryCertificateAssignmentPK pk = new DeliveryCertificateAssignmentPK(deliveryCertificateId, documentId);
-        //assignment.setDeliveryCertificateAssignmentPK(pk);
-        //esm.persist(em, assignment);
-    }
-
+    
     @Override
-    public DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment) {
+    public DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items) {
 
         esm.persist(em, deliveryCertificate);
         assignment.setDeliveryCertificateId(deliveryCertificate.getId());
         esm.persist(em, assignment);
         
+        for(DeliveryCertificateItem item : items){
+        	item.setParentId(deliveryCertificate.getId());
+        	esm.persist(em, item);
+        }
+        
         return deliveryCertificate; 
     }
-
+    
     @Override
     public int deleteDeliveryCertificate(DeliveryCertificate deliveryCertificate) {
-        if(deliveryCertificate.getDocumentAssignment() != null){
-            esm.remove(em, deliveryCertificate.getDocumentAssignment());
+    	DeliveryCertificateAssignment deliveryCertificateAssignment = deliveryCertificate.getDocumentAssignment();
+    	if( deliveryCertificateAssignment != null ){
+            esm.remove(em, deliveryCertificateAssignment);
         }
+    	
+    	List<DeliveryCertificateItem> items = getDeliveryCertificateItems(deliveryCertificate.getDeliveryCertificateId());
+    	for(DeliveryCertificateItem item : items){
+    		esm.remove(em, item);
+    	}
+    	
         return esm.remove(em, deliveryCertificate);
     }
 
     @Override
-    public DeliveryCertificateAssignment newDeliveryCertificateAssignment(DeliveryCertificate ds, DataObjectBean document) {
+    public DeliveryCertificateAssignment newDeliveryCertificateAssignment(DataObjectBean document) {
         if(document instanceof Invoice){
             Invoice invoice = (Invoice)document;
             DeliveryCertificateAssignment assignment = new DeliveryCertificateAssignment();
@@ -182,6 +217,23 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     public DeliveryCertificateAssignment newDeliveryCertificateAssignment(){
         DeliveryCertificateAssignment assignment = new DeliveryCertificateAssignment();
         return assignment;
+    }
+    
+    @Override
+    public DeliveryCertificateItem newDeliveryCertificateItem(DataObjectBean source){
+    	
+    	DeliveryCertificateItem dci = new DeliveryCertificateItem();
+    	
+    	if(source instanceof InvoiceItem){
+    		InvoiceItem invoiceItem = ((InvoiceItem)source);
+    		dci.setProduct(invoiceItem.getProduct());
+    		dci.setQuantity(invoiceItem.getOrderedQuantity());
+    		dci.setMeasureUnit(invoiceItem.getMeasureUnit());
+    	}else{
+    		throw new IllegalArgumentException("Certificate Item cannot be created from " + source.getDataObject().getDataObjectType());
+    	}
+    	
+    	return dci;
     }
     
     // Add business logic below. (Right-click in editor and choose

@@ -15,9 +15,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
 
 /**
  *
@@ -25,7 +29,19 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "delivery_certificate_items")
-public class DeliveryCertificateItem implements Serializable {
+@NamedQueries({ 
+    @NamedQuery
+    ( 
+        /**
+         * Get all delivery certificates for a given warehouse 
+         * Parameters:
+         * - warehouse - an warehouse
+         */
+        name = "DeliveryCertificateItem.findForCertificate",
+        query = "select dci from DeliveryCertificateItem dci where dci.parentId=:parentId and dci.dataObject.deleted = false"
+    )
+})
+public class DeliveryCertificateItem extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,13 +54,16 @@ public class DeliveryCertificateItem implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    private SimpleProduct product;
+    @Property(title="Product", customDisplay="${product.productName}")
+    private Product product;
 
     @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Measure Unit")
     private DbResource measureUnit;
 
     @Column(name = "quantity", nullable = false)
+    @Property(title="Quantity")
     private BigDecimal quantity;
 
     @JoinColumn(name = "certificate_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -91,11 +110,11 @@ public class DeliveryCertificateItem implements Serializable {
         this.parentId = parentId;
     }
 
-    public SimpleProduct getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(SimpleProduct product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
@@ -131,5 +150,20 @@ public class DeliveryCertificateItem implements Serializable {
     public String toString() {
         return "com.cosmos.acacia.crm.data.DeliveryCertificateItem[certificateItemId=" + certificateItemId + "]";
     }
+
+	@Override
+	public BigInteger getId() {
+		return getCertificateItemId();
+	}
+
+	@Override
+	public String getInfo() {
+		return this.toString();
+	}
+
+	@Override
+	public void setId(BigInteger id) {
+		setCertificateItemId(id);
+	}
 
 }
