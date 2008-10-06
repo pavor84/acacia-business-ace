@@ -15,7 +15,10 @@ import com.cosmos.acacia.crm.enums.DatabaseResource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,10 +56,10 @@ public class AssemblingSchemaItem
     public enum DataType
         implements DatabaseResource
     {
-        Integer("Integer"),
-        Decimal("Decimal"),
-        Date("Date"),
-        String("String");
+        IntegerType("IntegerType"),
+        DecimalType("DecimalType"),
+        DateType("DateType"),
+        StringType("StringType");
 
         private DataType(String name){
             this.name = name;
@@ -82,13 +85,64 @@ public class AssemblingSchemaItem
         @Override
         public String toShortText()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getName();
         }
 
         @Override
         public String toText()
         {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getName();
+        }
+
+        private static SimpleDateFormat dateFormat = new SimpleDateFormat();
+
+        public Serializable toDataType(Serializable source)
+        {
+            if(source == null)
+                throw new IllegalArgumentException("The source can not be null.");
+
+            if(source instanceof String)
+                source = ((String)source).trim();
+
+            switch(this)
+            {
+                case IntegerType:
+                    if(source instanceof Integer)
+                        return source;
+                    if(source instanceof String)
+                        return Integer.valueOf((String)source);
+                    throw new NumberFormatException(String.valueOf(source));
+
+                case DecimalType:
+                    if(source instanceof BigDecimal)
+                        return source;
+                    if(source instanceof Number)
+                        return new BigDecimal(((Number)source).doubleValue());
+                    if(source instanceof String)
+                        return new BigDecimal((String)source);
+                    return new BigDecimal(String.valueOf(source));
+
+                case DateType:
+                    if(source instanceof Date)
+                        return source;
+                    try
+                    {
+                        if(source instanceof String)
+                            return dateFormat.parse((String)source);
+                        return dateFormat.parse(String.valueOf(source));
+                    }
+                    catch(ParseException ex)
+                    {
+                        throw new IllegalArgumentException(ex);
+                    }
+
+                case StringType:
+                    if(source instanceof String)
+                        return source;
+                    return String.valueOf(source);
+            }
+
+            return null;
         }
 
         private static List<DbResource> dbResources;

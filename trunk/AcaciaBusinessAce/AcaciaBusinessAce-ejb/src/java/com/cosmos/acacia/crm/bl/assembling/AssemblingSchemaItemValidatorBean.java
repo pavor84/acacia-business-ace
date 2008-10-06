@@ -5,8 +5,11 @@
 
 package com.cosmos.acacia.crm.bl.assembling;
 
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,12 +26,35 @@ public class AssemblingSchemaItemValidatorBean
     private EntityManager em;
 
     @Override
-    public void validate(AssemblingSchemaItem entity)
+    public void validate(AssemblingSchemaItem schemaItem)
         throws ValidationException
     {
         ValidationException ve = new ValidationException();
 
-        entity.getDataType();
+        DbResource resource = schemaItem.getDataType();
+        if(resource != null)
+        {
+            AssemblingSchemaItem.DataType dataType =
+                (AssemblingSchemaItem.DataType)resource.getEnumValue();
+            try
+            {
+                Serializable value = schemaItem.getDefaultValue();
+                if(value != null)
+                {
+                    value = dataType.toDataType(value);
+                    schemaItem.setDefaultValue(value);
+                }
+            }
+            catch(Throwable ex)
+            {
+                ve.addMessage("defaultValue", "AssemblingSchemaItem.err.IllegalDefaultValue", ex.getMessage());
+            }
+        }
+        else
+        {
+            ve.addMessage("dataType", "AssemblingSchemaItem.err.emptyDataType");
+        }
+
         //AssemblingSchemaItemDataType
 
         /*BigInteger parentId = entity.getParentId();
@@ -90,5 +116,53 @@ public class AssemblingSchemaItemValidatorBean
             throw ve;
     }
 
+    @Override
+    public void validate(AssemblingSchemaItemValue itemValue)
+        throws ValidationException
+    {
+        ValidationException ve = new ValidationException();
 
+        AssemblingSchemaItem schemaItem = itemValue.getAssemblingSchemaItem();
+        DbResource resource = schemaItem.getDataType();
+        if(resource != null)
+        {
+            AssemblingSchemaItem.DataType dataType =
+                (AssemblingSchemaItem.DataType)resource.getEnumValue();
+            try
+            {
+                Serializable value = itemValue.getMinConstraint();
+                if(value != null)
+                {
+                    value = dataType.toDataType(value);
+                    itemValue.setMinConstraint(value);
+                }
+            }
+            catch(Throwable ex)
+            {
+                ve.addMessage("minConstraint", "AssemblingSchemaItemValue.err.IllegalMinConstraint", ex.getMessage());
+            }
+
+            try
+            {
+                Serializable value = itemValue.getMaxConstraint();
+                if(value != null)
+                {
+                    value = dataType.toDataType(value);
+                    itemValue.setMaxConstraint(value);
+                }
+            }
+            catch(Throwable ex)
+            {
+                ve.addMessage("maxConstraint", "AssemblingSchemaItemValue.err.IllegalMaxConstraint", ex.getMessage());
+            }
+        }
+        else
+        {
+            ve.addMessage("dataType", "AssemblingSchemaItem.err.emptyDataType");
+        }
+
+        //if we have validation messages - throw the exception since not everything is OK
+        if(!ve.getMessages().isEmpty())
+            throw ve;
+    }
 }
