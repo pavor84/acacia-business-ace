@@ -10,6 +10,8 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJB;
 
@@ -18,19 +20,23 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
+import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
 import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
+import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaLookup;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
@@ -45,11 +51,21 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class DeliveryCertificatePanel extends BaseEntityPanel {
 
-    @EJB
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9063542129569961080L;
+
+	@EJB
     private DeliveryCertificatesRemote formSession;
+    
+    @EJB
+    private InvoiceListRemote invoicesBean;
     
     private DeliveryCertificate entity;
     private DeliveryCertificateAssignment assignment;
+    private DeliveryCertificateItemListPanel itemsTablePanel;
+    private List<DeliveryCertificateItem> deliveryCertificateItems;
     
     private Address forwarderBranch;
     private EntityProperties entityProps;
@@ -75,12 +91,29 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     protected void init()
     {
         initComponents();
+        initComponentsCustom();
         super.init();
     }
 
+    private void initComponentsCustom() {
+        // Using an AbstractTablePanel implementation
+        itemsTablePanel = new DeliveryCertificateItemListPanel(entity.getDeliveryCertificateId());
+        itemsTablePanel.setVisible(AbstractTablePanel.Button.SpecialModify);
+        itemsTablePanel.setSpecialButtonBehavior(false);
+        itemsTablePanel.setSpecialCaption("deliveryCertificateItemsAction.Action.text");
+        
+        //Adding the nested table listener to ensure that purchase order is saved before adding
+        //items to it. 
+        addNestedFormListener(itemsTablePanel);
+        itemsTableHolderPanel.add(itemsTablePanel);
+    }
+    
     @Override
     public void performSave(boolean closeAfter) {
-        entity = getFormSession().saveDeliveryCertificate(entity, assignment);
+    	
+    	//Wrap the ListData that is from ObservableList type to one (ArrayList) that can be marshalled.
+    	List<DeliveryCertificateItem> items = new ArrayList<DeliveryCertificateItem>(itemsTablePanel.getListData());
+    	entity = getFormSession().saveDeliveryCertificate(entity, assignment, items);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
         if (closeAfter) {
@@ -132,7 +165,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 }
 
             }, bindGroup,
-            assignment,        
+            assignment,
             assignmentProps.getPropertyDetails("documentNumber"),
             UpdateStrategy.READ_WRITE);
         
@@ -244,6 +277,16 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             entity.setRecipientBranch(selectedDocument.getBranch());
             entity.setRecipientContact(selectedDocument.getRecipientContact());
             
+            List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(selectedDocument.getInvoiceId());
+            if(invoiceItems != null){
+            	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
+            	for(InvoiceItem invoiceItem : invoiceItems){
+            		DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
+            		deliveryCertificateItems.add(dci);
+            	}
+            	itemsTablePanel.refreshList(deliveryCertificateItems);
+            }
+            
             //populate the components with new values.
             bindGroup.removeBinding(recipientNameBinding);
             recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
@@ -323,7 +366,15 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 
         return formSession;
     }
+    
+    protected InvoiceListRemote getInvoicesSession(){
+        if(invoicesBean == null){
+        	invoicesBean = getBean(InvoiceListRemote.class);
+        }
 
+        return invoicesBean;
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -366,8 +417,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         forwardersLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         forwarderBranchAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         forwarderContactPersonAcaciaLookup = new com.cosmos.acacia.gui.AcaciaLookup();
-        jBPanel1 = new com.cosmos.swingb.JBPanel();
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
+        itemsTableHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
 
         setName("Form"); // NOI18N
 
@@ -413,17 +463,17 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                     .addComponent(numberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(reasonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(reasonComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(numberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
-                .addGap(50, 50, 50)
+                    .addComponent(numberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(93, 93, 93)
                 .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(creationDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(documentsAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(documentsAcaciaLookup, 0, 0, Short.MAX_VALUE)
+                    .addComponent(creationDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
                 .addContainerGap())
         );
         detailsPanelLayout.setVerticalGroup(
@@ -432,12 +482,12 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(detailsPanelLayout.createSequentialGroup()
                         .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(numberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(numberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(numberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(reasonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(reasonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(reasonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(reasonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(detailsPanelLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -445,9 +495,9 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                             .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(detailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(documentsAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(31, Short.MAX_VALUE))
+                            .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(documentsAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         creatorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("creatorPanel.border.title"))); // NOI18N
@@ -483,7 +533,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                             .addComponent(organizationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(supplierBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(creatorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(creatorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(creatorBranchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                             .addComponent(creatorOrganizationTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)))
                     .addGroup(creatorPanelLayout.createSequentialGroup()
@@ -539,11 +589,11 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                     .addComponent(clientNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clientBranchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clientContactPersonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(recipientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(recipientBranchTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(recipientNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                    .addComponent(recipientContactPersonAcaciaLookup, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(recipientNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                    .addComponent(recipientContactPersonAcaciaLookup, 0, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         recipientPanelLayout.setVerticalGroup(
@@ -646,44 +696,35 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 .addContainerGap())
         );
 
-        jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel1.border.title"))); // NOI18N
-        jBPanel1.setName("jBPanel1"); // NOI18N
+        itemsTableHolderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("itemsTableHolderPanel.border.title"))); // NOI18N
+        itemsTableHolderPanel.setName("itemsTableHolderPanel"); // NOI18N
 
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
-
-        javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
-        jBPanel1.setLayout(jBPanel1Layout);
-        jBPanel1Layout.setHorizontalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
-                .addGap(221, 221, 221)
-                .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+        javax.swing.GroupLayout itemsTableHolderPanelLayout = new javax.swing.GroupLayout(itemsTableHolderPanel);
+        itemsTableHolderPanel.setLayout(itemsTableHolderPanelLayout);
+        itemsTableHolderPanelLayout.setHorizontalGroup(
+            itemsTableHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 819, Short.MAX_VALUE)
         );
-        jBPanel1Layout.setVerticalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+        itemsTableHolderPanelLayout.setVerticalGroup(
+            itemsTableHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 196, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(detailsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(itemsTableHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(detailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(creatorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(recipientPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
-                    .addComponent(deliveryMethodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
+                    .addComponent(deliveryMethodPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -696,8 +737,8 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                     .addComponent(creatorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(recipientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(itemsTableHolderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(deliveryMethodPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -733,8 +774,7 @@ private void numberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//G
     private com.cosmos.acacia.gui.AcaciaLookup forwarderContactPersonAcaciaLookup;
     private com.cosmos.swingb.JBPanel forwarderPanel;
     private com.cosmos.acacia.gui.AcaciaLookup forwardersLookup;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBPanel jBPanel1;
+    private com.cosmos.acacia.gui.TableHolderPanel itemsTableHolderPanel;
     private com.cosmos.swingb.JBLabel numberLabel;
     private com.cosmos.swingb.JBTextField numberTextField;
     private com.cosmos.swingb.JBLabel organizationLabel;
