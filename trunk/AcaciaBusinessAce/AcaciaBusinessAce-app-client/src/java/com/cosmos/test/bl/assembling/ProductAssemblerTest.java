@@ -201,7 +201,7 @@ public class ProductAssemblerTest
 
         AssemblingSchemaItem schemaItem;
         DbResource dataType =
-            getDataType(AssemblingSchemaItem.DataType.Integer);
+            getDataType(AssemblingSchemaItem.DataType.IntegerType);
         System.out.println("dataType: " + dataType);
         
         switch(algorithmType)

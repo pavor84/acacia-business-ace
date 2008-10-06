@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.assembling.ProductAssemblerListener;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingParameter;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
@@ -24,6 +25,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import java.awt.Component;
+import java.io.Serializable;
 import java.lang.Object;
 import java.util.ArrayList;
 import java.util.List;
@@ -205,6 +207,8 @@ public class ProductAssemblerPanel
             Object value = item.getDefaultValue();
             AssemblingParameter parameter = new AssemblingParameter();
             parameter.setAssemblingMessage(message);
+            DbResource dbResource = item.getDataType();
+            parameter.setDataType((AssemblingSchemaItem.DataType)dbResource.getEnumValue());
             parameter.setValue(value);
             parameters.add(parameter);
         }
@@ -290,9 +294,15 @@ public class ProductAssemblerPanel
             for(AssemblingParameter parameter : assemblingParameters)
             {
                 AssemblingMessage message = parameter.getAssemblingMessage();
+                System.out.println("message: " + message);
                 String key = message.getMessageCode();
-                Object value = parameter.getValue();
-                logger.info("key: " + key + ", value: " + value);
+                AssemblingSchemaItem.DataType dataType = parameter.getDataType();
+                logger.info("AssemblingSchemaItem.DataType: " + dataType);
+                Serializable value = (Serializable)parameter.getValue();
+                if(value != null)
+                    value = dataType.toDataType(value);
+                logger.info("key: " + key + ", value: " + value +
+                    (value != null ? value.getClass().getName() : ""));
                 params.put(key, value);
             }
         }
