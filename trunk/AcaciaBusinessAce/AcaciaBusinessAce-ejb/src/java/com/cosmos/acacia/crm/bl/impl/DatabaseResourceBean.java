@@ -20,7 +20,7 @@ import javax.persistence.Query;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
-import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
@@ -74,7 +74,7 @@ public class DatabaseResourceBean
             getDbResources(Currency.class);
             getDbResources(PassportType.class);
             getDbResources(Algorithm.Type.class);
-            getDbResources(AssemblingSchemaItemDataType.class);
+            getDbResources(AssemblingSchemaItem.DataType.class);
             getDbResources(DeliveryCertificateMethodType.class);
             getDbResources(DeliveryCertificateReason.class);
             getDbResources(InvoiceType.class);

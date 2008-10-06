@@ -27,7 +27,10 @@ public class AssemblingSchemaItemValidatorBean
         throws ValidationException
     {
         ValidationException ve = new ValidationException();
-        
+
+        entity.getDataType();
+        //AssemblingSchemaItemDataType
+
         /*BigInteger parentId = entity.getParentId();
         if(parentId != null)
         {
