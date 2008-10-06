@@ -18,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -41,6 +43,7 @@ import javax.persistence.Table;
 public class DbResource
     implements Serializable, EnumResource
 {
+    private static final Logger logger = Logger.getLogger(DbResource.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -108,19 +111,26 @@ public class DbResource
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.DbResource[resourceId=" + resourceId + "]";
+        return "com.cosmos.acacia.crm.data.DbResource[resourceId=" + resourceId +
+            ", enumName=" + enumName +
+            ", enumClass=" + enumClass + "]";
     }
 
+    @Override
     public Enum getEnumValue()
     {
         try
         {
-            Class enumClass = Class.forName(getEnumClass().getEnumClassName());
-            return Enum.valueOf(enumClass, getEnumName());
+            logger.debug("DbResource: " + toString());
+            Class cls = Class.forName(enumClass.getEnumClassName());
+            Enum enumValue = Enum.valueOf(cls, enumName);
+            logger.debug("enumValue: " + enumValue);
+            return enumValue;
         }
         catch(Exception ex)
         {
-            throw new RuntimeException(ex);
+            logger.fatal(toString(), ex);
+            throw new RuntimeException(toString(), ex);
         }
     }
 }

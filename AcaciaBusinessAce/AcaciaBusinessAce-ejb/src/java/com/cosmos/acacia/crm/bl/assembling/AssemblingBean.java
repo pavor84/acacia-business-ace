@@ -209,7 +209,7 @@ public class AssemblingBean
     {
         AssemblingSchemaItem schemaItem = new AssemblingSchemaItem();
         schemaItem.setAssemblingSchema(assemblingSchema);
-        schemaItem.setDataType(getDbResource(AssemblingSchemaItem.DataType.Integer));
+        schemaItem.setDataType(getDbResource(AssemblingSchemaItem.DataType.IntegerType));
         schemaItem.setQuantity(BigDecimal.ONE);
 
         return schemaItem;
@@ -274,10 +274,10 @@ public class AssemblingBean
     @Override
     public AssemblingSchemaItemValue saveItemValue(AssemblingSchemaItemValue entity)
     {
-        //assemblingCategoryValidator.validate(entity); 
+        assemblingSchemaItemValidator.validate(entity);
 
         esm.persist(em, entity);
-        return entity; 
+        return entity;
     }
 
     @Override

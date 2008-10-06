@@ -6,7 +6,9 @@
 package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.validation.EntityValidator;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import javax.ejb.Local;
 
 /**
@@ -15,6 +17,16 @@ import javax.ejb.Local;
  */
 @Local
 public interface AssemblingSchemaItemValidatorLocal
-     extends EntityValidator<AssemblingSchemaItem>
 {
+    /**
+     * If the validation fails the method is expected to throw ValidationException
+     * @see ValidationException.
+     * @param entity
+     * @throws ValidationException
+     */
+    void validate(AssemblingSchemaItem schemaItem)
+        throws ValidationException;
+
+    void validate(AssemblingSchemaItemValue itemValue)
+        throws ValidationException;
 }

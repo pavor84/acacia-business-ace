@@ -91,7 +91,8 @@ public class EnumClass implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.EnumClass[enumClassId=" + enumClassId + "]";
+        return "com.cosmos.acacia.crm.data.EnumClass[enumClassId=" + enumClassId +
+            ", enumClassName=" + enumClassName + "]";
     }
 
 }
