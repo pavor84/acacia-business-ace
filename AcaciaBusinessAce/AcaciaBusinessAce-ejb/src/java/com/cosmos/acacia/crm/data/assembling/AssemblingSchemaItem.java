@@ -11,9 +11,12 @@ import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.enums.DatabaseResource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -46,6 +49,65 @@ public class AssemblingSchemaItem
     implements Serializable
 {
     private static final long serialVersionUID = 1L;
+
+    public enum DataType
+        implements DatabaseResource
+    {
+        Integer("Integer"),
+        Decimal("Decimal"),
+        Date("Date"),
+        String("String");
+
+        private DataType(String name){
+            this.name = name;
+        }
+
+        public String getName(){
+            return name;
+        }
+
+        @Override
+        public DbResource getDbResource() {
+            return dbResource;
+        }
+
+        @Override
+        public void setDbResource(DbResource resource) {
+            this.dbResource = resource;
+        }
+
+        private String name;
+        private DbResource dbResource;
+
+        @Override
+        public String toShortText()
+        {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String toText()
+        {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        private static List<DbResource> dbResources;
+        public static List<DbResource> getDbResources()
+        {
+            if(dbResources == null)
+            {
+                dbResources = new ArrayList<DbResource>(DataType.values().length);
+
+                for(DataType item : DataType.values())
+                {
+                    dbResources.add(item.getDbResource());
+                }
+            }
+
+            return dbResources;
+        }
+    }
+
 
     @Id
     @Property(title="Item Id", editable=false, readOnly=true, visible=false, hidden=true)

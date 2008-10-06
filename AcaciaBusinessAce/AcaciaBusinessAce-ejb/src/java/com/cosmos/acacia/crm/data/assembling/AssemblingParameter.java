@@ -7,7 +7,6 @@ package com.cosmos.acacia.crm.data.assembling;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 
 /**
  *
@@ -16,18 +15,22 @@ import com.cosmos.acacia.crm.enums.AssemblingSchemaItemDataType;
 public class AssemblingParameter
 {
     @Property(
+        title="Order Position",
+        editable=false, readOnly=true, hidden=true, visible=false)
+    private int sortOrder;
+
+    @Property(
         title="Message",
         customDisplay="${assemblingMessage.messageCode}: ${assemblingMessage.messageText}?",
-        editable=false,
-        readOnly=true,
+        editable=false, readOnly=true,
         propertyValidator=@PropertyValidator(required=true))
     private AssemblingMessage assemblingMessage;
 
     @Property(title="Value")
     private Object value;
 
-    @Property(title="Data Type", editable=false, readOnly=true)
-    private AssemblingSchemaItemDataType dataType;
+    @Property(title="Data Type", editable=false, readOnly=true, visible=false, hidden=true)
+    private AssemblingSchemaItem.DataType dataType;
 
     @Property(title="Value Source", editable=false, readOnly=true)
     private Object valuesSource;
@@ -43,12 +46,12 @@ public class AssemblingParameter
         this.assemblingMessage = assemblingMessage;
     }
 
-    public AssemblingSchemaItemDataType getDataType()
+    public AssemblingSchemaItem.DataType getDataType()
     {
         return dataType;
     }
 
-    public void setDataType(AssemblingSchemaItemDataType dataType)
+    public void setDataType(AssemblingSchemaItem.DataType dataType)
     {
         this.dataType = dataType;
     }
@@ -71,6 +74,16 @@ public class AssemblingParameter
     public void setValuesSource(Object valuesSource)
     {
         this.valuesSource = valuesSource;
+    }
+
+    public int getSortOrder()
+    {
+        return sortOrder;
+    }
+
+    public void setSortOrder(int sortOrder)
+    {
+        this.sortOrder = sortOrder;
     }
 
     @Override
