@@ -52,7 +52,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
         
-        entityProps = getFormSession().getDeliveryCertificateEntityProperties();
+        entityProps = getFormSession().getDeliveryCertificateListEntityProperties();
         
         refreshDataTable(entityProps);
           

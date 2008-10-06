@@ -18,11 +18,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jBPanel1" alignment="0" max="32767" attributes="0"/>
-                  <Component id="detailsPanel" alignment="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="itemsTableHolderPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="detailsPanel" alignment="0" pref="835" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="creatorPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -46,8 +46,8 @@
                   <Component id="recipientPanel" alignment="0" min="-2" max="-2" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jBPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="itemsTableHolderPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="deliveryMethodPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
@@ -79,19 +79,19 @@
                       <Component id="reasonLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="reasonComboBox" max="32767" attributes="1"/>
-                      <Component id="numberTextField" alignment="0" pref="218" max="32767" attributes="1"/>
+                      <Component id="numberTextField" alignment="1" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="dateLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="documentLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="dateLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="creationDatePicker" min="-2" max="-2" attributes="1"/>
-                      <Component id="documentsAcaciaLookup" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="documentsAcaciaLookup" min="0" pref="0" max="32767" attributes="1"/>
+                      <Component id="creationDatePicker" alignment="1" pref="313" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -103,13 +103,13 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="numberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="numberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="numberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="reasonComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="reasonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="reasonComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -120,12 +120,12 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="documentsAcaciaLookup" min="-2" max="-2" attributes="0"/>
                               <Component id="documentLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="documentsAcaciaLookup" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace pref="46" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -214,9 +214,9 @@
                               <Component id="supplierBranchLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="creatorBranchTextField" pref="266" max="32767" attributes="0"/>
-                              <Component id="creatorOrganizationTextField" alignment="0" pref="266" max="32767" attributes="0"/>
+                              <Component id="creatorOrganizationTextField" pref="266" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -312,11 +312,11 @@
                       <Component id="clientBranchLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="clientContactPersonLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="91" max="32767" attributes="0"/>
+                  <EmptySpace pref="43" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="recipientBranchTextField" alignment="0" max="32767" attributes="1"/>
-                      <Component id="recipientNameTextField" alignment="1" pref="189" max="32767" attributes="1"/>
-                      <Component id="recipientContactPersonAcaciaLookup" alignment="1" min="-2" pref="265" max="-2" attributes="1"/>
+                      <Component id="recipientNameTextField" alignment="1" pref="313" max="32767" attributes="1"/>
+                      <Component id="recipientContactPersonAcaciaLookup" alignment="1" min="0" pref="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -527,46 +527,30 @@
         </Container>
       </SubComponents>
     </Container>
-    <Container class="com.cosmos.swingb.JBPanel" name="jBPanel1">
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsTableHolderPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="products">
-              <Property name="titleX" resourceKey="jBPanel1.border.title"/>
+              <Property name="titleX" resourceKey="itemsTableHolderPanel.border.title"/>
             </TitledBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="jBPanel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="itemsTableHolderPanel" noResource="true"/>
       </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="221" max="-2" attributes="0"/>
-                  <Component id="jBLabel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="500" max="32767" attributes="0"/>
-              </Group>
+              <EmptySpace min="0" pref="819" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
-                  <Component id="jBLabel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="91" max="32767" attributes="0"/>
-              </Group>
+              <EmptySpace min="0" pref="196" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
-      <SubComponents>
-        <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
-            <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
-          </Properties>
-        </Component>
-      </SubComponents>
     </Container>
   </SubComponents>
 </Form>

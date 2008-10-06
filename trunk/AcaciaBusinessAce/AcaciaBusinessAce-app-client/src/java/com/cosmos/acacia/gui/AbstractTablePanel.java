@@ -844,6 +844,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             EnumSet.of(New, Modify, Delete, Refresh);
         public static final Set<Button> DeleteRefresh = // 8, 16
             EnumSet.of(Delete, Refresh);
+        public static final Set<Button> SpecialModify = // 256, 4
+            EnumSet.of(Special, Modify);
     };
 
     public Map<Button, JButton> getButtonsMap()
