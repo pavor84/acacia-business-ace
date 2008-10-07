@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -250,4 +251,11 @@ public interface UsersRemote {
      * Initialization of user/organization/branch specific values.
      */
     void init();
+
+
+    /**
+     * Finds (if existing) the user group assigned to the position type,
+     * which is assigned to the current user's person
+     */
+    UserGroup getUserGroupByPositionType();
 }

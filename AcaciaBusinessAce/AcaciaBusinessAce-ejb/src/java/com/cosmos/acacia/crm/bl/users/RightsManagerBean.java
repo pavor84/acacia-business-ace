@@ -310,28 +310,8 @@ public class RightsManagerBean
         // if there is no directly assigned group, get the group
         // via the position type.
 
-        if (group == null) {
-            Address branch = uo.getBranch();
-            if (branch != null) {
-                ContactPerson contact = null;
-                Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
-                q.setParameter("person", user.getPerson());
-                q.setParameter("parentDataObjectId", branch.getAddressId());
-                try {
-                    contact = (ContactPerson) q.getSingleResult();
-                } catch (Exception ex) {
-                    // No match
-                }
-
-                try {
-                    PositionType positionType = contact.getPositionType();
-                    if (positionType != null)
-                        group = positionType.getUserGroup();
-                } catch (NullPointerException ex) {
-                    // ignored
-                }
-            }
-        }
+        if (group == null)
+            group = usersManager.getUserGroupByPositionType();
 
         Set<UserRight> groupRights = new HashSet<UserRight>();
         if (group != null) {
@@ -365,7 +345,7 @@ public class RightsManagerBean
         setSpecialRights(null);
         setGeneralRights(null);
     }
-
+    
     private User getUser() {
         return session.getUser();
     }

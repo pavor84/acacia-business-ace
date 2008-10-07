@@ -186,19 +186,9 @@ public class PositionTypePanel extends BaseEntityPanel {
         positionTypeBindingGroup.bind();
     }
 
-        protected PositionTypesListRemote getFormSession()
-    {
+    protected PositionTypesListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(PositionTypesListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(PositionTypesListRemote.class);
 
         return formSession;
     }
