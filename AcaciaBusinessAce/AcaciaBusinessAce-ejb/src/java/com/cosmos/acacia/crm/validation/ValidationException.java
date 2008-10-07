@@ -103,16 +103,4 @@ public class ValidationException extends RuntimeException {
         ValidationMessage msg = new ValidationMessage(target, messageKey, arguments);
         addMessage(msg);
     }
-
-    /**
-     * Add validation message to this exception.
-     * @see ValidationMessage
-     * @param target
-     * @param messageKey
-     * @param arguments
-     */
-    public void addMessage(String messageKey, Serializable...arguments){
-        ValidationMessage msg = new ValidationMessage(null, messageKey, arguments);
-        addMessage(msg);
-    }
 }
