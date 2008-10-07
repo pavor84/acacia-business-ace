@@ -72,8 +72,10 @@ public class ProductAssembler
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
         logger.info("assemble(Map), List<AssemblingSchemaItem>: " + asiList);
         ComplexProduct product = new ComplexProduct();
-        product.setProductCode(assemblingSchema.getSchemaCode());
+        product.setProductCode(assemblingSchema.getProductCode());
+        product.setProductName(assemblingSchema.getProductName());
         product.setAppliedSchema(assemblingSchema);
+        product.setMeasureUnit(assemblingSchema.getMeasureUnit());
         BigDecimal productPrice = BigDecimal.ZERO;
         for(AssemblingSchemaItem asi : asiList)
         {

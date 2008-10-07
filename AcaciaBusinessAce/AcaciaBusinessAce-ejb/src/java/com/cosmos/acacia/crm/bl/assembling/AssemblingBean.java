@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
@@ -200,6 +201,7 @@ public class AssemblingBean
         assemblingSchema.setParentId(acaciaSessionLocal.getOrganization().getId());
         if(assemblingCategory != null)
             assemblingSchema.setAssemblingCategory(assemblingCategory);
+        assemblingSchema.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
 
         return assemblingSchema;
     }
@@ -574,6 +576,12 @@ public class AssemblingBean
     public List<DbResource> getDataTypes()
     {
         return AssemblingSchemaItem.DataType.getDbResources();
+    }
+
+    @Override
+    public List<DbResource> getMeasureUnits()
+    {
+        return MeasurementUnit.getDbResources();
     }
 
     @Override
