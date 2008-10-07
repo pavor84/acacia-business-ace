@@ -7,11 +7,19 @@
 package com.cosmos.acacia.crm.gui.users;
 
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.JOptionPane;
+
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
@@ -20,6 +28,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBComboBox;
 
 /**
  *
@@ -200,6 +209,29 @@ public class UserPanel extends BaseEntityPanel {
         groupComboList.setEnabled(true);
         UserGroupsListPanel groupsTable = new UserGroupsListPanel(userOrganization.getOrganization().getId());
         groupComboList.bind(bindingGroup, groupsTable, userOrganization, entityProps.getPropertyDetails("userGroup"), "${name}");
+
+        final boolean isGroupEmpty = userOrganization.getUserGroup() == null;
+
+        groupComboList.getComboBox().addPropertyChangeListener(JBComboBox.SELECTED_ITEM, new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (isGroupEmpty) {
+                   UserGroup positionUserGroup = getFormSession().getUserGroupByPositionType();
+                   if (positionUserGroup != null) {
+                        if (JOptionPane.showConfirmDialog(UserPanel.this,
+                            getResourceMap().getString("override.assign.group",
+                                positionUserGroup.getName()),
+                            getResourceMap().getString("selection.confirm"),
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
+                        {
+                            groupComboList.setSelectedItem(null);
+                            userOrganization.setUserGroup(null);
+                        }
+                   }
+                }
+            }
+        });
 
         rightsTable = new RightsListPanel(userOrganization.getUser(), RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);

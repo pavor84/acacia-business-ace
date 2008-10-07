@@ -46,8 +46,10 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.data.RegistrationCode;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
@@ -666,25 +668,49 @@ public class UsersBean implements UsersRemote, UsersLocal {
     }
 
     @Override
-    public void init()
-    {
-        try
-        {
+    public void init() {
+        try {
             List<AssemblingMessage> messages = assemblingLocal.getAssemblingMessages();
-            if(messages == null || messages.size() == 0)
-            {
-                for(AssemblingMessage.Unit unit : AssemblingMessage.Unit.values())
-                {
+            if(messages == null || messages.size() == 0) {
+                for(AssemblingMessage.Unit unit : AssemblingMessage.Unit.values()) {
                     AssemblingMessage message = assemblingLocal.newAssemblingMessage();
                     unit.initAssemblingMessage(message);
                     assemblingLocal.saveAssemblingMessage(message);
                 }
             }
-        }
-        catch(Exception ex)
-        {
+        } catch(Exception ex) {
             log.error("Error during initialization of user/organization/branch resources.", ex);
         }
     }
 
+    @Override
+    public UserGroup getUserGroupByPositionType() {
+        UserOrganization uo = getUserOrganization(acaciaSessionLocal.getUser(),
+                acaciaSessionLocal.getOrganization());
+        
+        UserGroup group = null;
+        Address branch = uo.getBranch();
+        User user = uo.getUser();
+        if (branch != null) {
+            ContactPerson contact = null;
+            Query q = em.createNamedQuery("ContactPerson.findByPersonAndParentDataObject");
+            q.setParameter("person", user.getPerson());
+            q.setParameter("parentDataObjectId", branch.getAddressId());
+            try {
+                contact = (ContactPerson) q.getSingleResult();
+            } catch (Exception ex) {
+                // No match
+            }
+
+            try {
+                PositionType positionType = contact.getPositionType();
+                if (positionType != null)
+                    group = positionType.getUserGroup();
+            } catch (NullPointerException ex) {
+                // ignored
+            }
+        }
+
+        return group;
+    }
 }

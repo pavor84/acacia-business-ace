@@ -5,19 +5,17 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.swingb.listeners.ComboListEventListener;
-import com.cosmos.swingb.menus.JBContextMenuCreaetor;
-import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.util.List;
+
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -35,6 +33,11 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.listeners.ComboListEventListener;
+import com.cosmos.swingb.menus.JBContextMenuCreaetor;
+import com.cosmos.swingb.validation.Validatable;
+
 /**
  *
  * @author Miro
@@ -43,6 +46,9 @@ public class JBComboBox
     extends JComboBox
     implements Validatable
 {
+
+    public static final String SELECTED_ITEM = "selectedItem";
+
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
@@ -310,15 +316,15 @@ public class JBComboBox
         if(oldSelectedItem != null)
         {
             if(!oldSelectedItem.equals(newSelectedItem))
-                selectedItemChanged(newSelectedItem);
+                selectedItemChanged(newSelectedItem, oldSelectedItem);
         }
         else if(newSelectedItem != null)
         {
-            selectedItemChanged(newSelectedItem);
+            selectedItemChanged(newSelectedItem, oldSelectedItem);
         }
     }
 
-    protected void selectedItemChanged(Object selectedItem)
+    protected void selectedItemChanged(Object selectedItem, Object oldSelectedItem)
     {
         ItemEvent event;
         if(selectedItem != null)
@@ -327,6 +333,10 @@ public class JBComboBox
                 ItemEvent.ITEM_STATE_CHANGED,
                 selectedItem,
                 ItemEvent.SELECTED + 0x700);
+
+            firePropertyChange(SELECTED_ITEM,
+                    selectedItem,
+                    oldSelectedItem);
         }
         else
         {
