@@ -62,14 +62,14 @@ public class PermissionsManager implements PermissionsManagerLocal {
     {
 //        if (true) return true;
 
-        if (method.isAnnotationPresent(Create.class)) {
+        if (isCreateMethod(method)) {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
                 return manager.isAllowed(tmpDataObject, UserRightType.CREATE);
         }
 
-        if (method.isAnnotationPresent(Modify.class)) {
+        if (isModifyMethod(method)) {
             if (args[0] instanceof DataObjectBean) {
                 return manager.isAllowed(
                     ((DataObjectBean) args[0]).getDataObject(),
@@ -77,7 +77,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
             }
         }
 
-        if (method.isAnnotationPresent(Delete.class)) {
+        if (isDeleteMethod(method)) {
             if (args[0] instanceof DataObjectBean) {
                 return manager.isAllowed(
                     ((DataObjectBean) args[0]).getDataObject(),
@@ -85,7 +85,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
             }
         }
 
-        if (method.isAnnotationPresent(Read.class)) {
+        if (isReadMethod(method)) {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
@@ -227,5 +227,30 @@ public class PermissionsManager implements PermissionsManagerLocal {
         public void run() {
             manager.clearCachedRights();
         }
+    }
+
+    private static final String CREATE_METHOD_PREFIX = "new";
+    private static final String DELETE_METHOD_PREFIX1 = "delete";
+    private static final String DELETE_METHOD_PREFIX2 = "remove";
+    private static final String MODIFY_METHOD_PREFIX = "save";
+
+    private boolean isCreateMethod(Method method) {
+        return method.isAnnotationPresent(Create.class)
+        || method.getName().startsWith(CREATE_METHOD_PREFIX);
+    }
+
+    private boolean isModifyMethod(Method method) {
+        return method.isAnnotationPresent(Modify.class)
+        || method.getName().startsWith(MODIFY_METHOD_PREFIX);
+    }
+
+    private boolean isDeleteMethod(Method method) {
+        return method.isAnnotationPresent(Delete.class)
+        || method.getName().startsWith(DELETE_METHOD_PREFIX1)
+        || method.getName().startsWith(DELETE_METHOD_PREFIX2);
+    }
+
+    private boolean isReadMethod(Method method) {
+        return method.isAnnotationPresent(Read.class);
     }
 }
