@@ -76,6 +76,7 @@ public interface AssemblingRemote
 
     List<DbResource> getAlgorithms();
     List<DbResource> getDataTypes();
+    List<DbResource> getMeasureUnits();
     DbResource getDbResource(DatabaseResource databaseResource);
 
 }

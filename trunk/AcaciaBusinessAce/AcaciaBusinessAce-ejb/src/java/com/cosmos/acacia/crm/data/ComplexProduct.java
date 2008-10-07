@@ -96,12 +96,14 @@ public class ComplexProduct
     }
 
     @Override
-    public DbResource getMeasureUnit() {
+    public DbResource getMeasureUnit()
+    {
         return measureUnit;
     }
 
     @Override
-    public void setMeasureUnit(DbResource measureUnit) {
+    public void setMeasureUnit(DbResource measureUnit)
+    {
         firePropertyChange("measureUnit", this.measureUnit, measureUnit);
         this.measureUnit = measureUnit;
     }

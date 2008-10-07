@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data.assembling;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DbResource;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -61,6 +62,11 @@ public class AssemblingSchema
         propertyValidator=@PropertyValidator(required=true))
     private AssemblingCategory assemblingCategory;
 
+    @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Measure Unit")
+    private DbResource measureUnit;
+
     @Column(name = "schema_code", nullable = false)
     @Property(
         title="Schema Code",
@@ -89,6 +95,17 @@ public class AssemblingSchema
 
 
     public AssemblingSchema() {
+    }
+
+    public DbResource getMeasureUnit()
+    {
+        return measureUnit;
+    }
+
+    public void setMeasureUnit(DbResource measureUnit)
+    {
+        firePropertyChange("measureUnit", this.measureUnit, measureUnit);
+        this.measureUnit = measureUnit;
     }
 
     public String getSchemaCode() {
