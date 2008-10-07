@@ -7,16 +7,19 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
-import com.cosmos.acacia.gui.AcaciaLookupProvider;
+import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.util.List;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -64,7 +67,6 @@ public class AssemblingSchemaPanel
     private void initComponents() {
 
         assemblingCategoryLabel = new com.cosmos.swingb.JBLabel();
-        assemblingCategoryLookup = new com.cosmos.acacia.gui.AcaciaLookup();
         schemaCodeTextField = new com.cosmos.swingb.JBTextField();
         schemaNameTextField = new com.cosmos.swingb.JBTextField();
         schemaCodeLabel = new com.cosmos.swingb.JBLabel();
@@ -74,6 +76,9 @@ public class AssemblingSchemaPanel
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
+        measureUnitLabel = new com.cosmos.swingb.JBLabel();
+        measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        assemblingCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
 
         setName("Form"); // NOI18N
 
@@ -81,12 +86,8 @@ public class AssemblingSchemaPanel
         assemblingCategoryLabel.setText(resourceMap.getString("assemblingCategoryLabel.text")); // NOI18N
         assemblingCategoryLabel.setName("assemblingCategoryLabel"); // NOI18N
 
-        assemblingCategoryLookup.setName("assemblingCategoryLookup"); // NOI18N
-
-        schemaCodeTextField.setText(resourceMap.getString("schemaCodeTextField.text")); // NOI18N
         schemaCodeTextField.setName("schemaCodeTextField"); // NOI18N
 
-        schemaNameTextField.setText(resourceMap.getString("schemaNameTextField.text")); // NOI18N
         schemaNameTextField.setName("schemaNameTextField"); // NOI18N
 
         schemaCodeLabel.setText(resourceMap.getString("schemaCodeLabel.text")); // NOI18N
@@ -111,6 +112,13 @@ public class AssemblingSchemaPanel
 
         descriptionPanel.add(descriptionScrollPane, java.awt.BorderLayout.CENTER);
 
+        measureUnitLabel.setText(resourceMap.getString("measureUnitLabel.text")); // NOI18N
+        measureUnitLabel.setName("measureUnitLabel"); // NOI18N
+
+        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
+
+        assemblingCategoryComboList.setName("assemblingCategoryComboList"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -118,40 +126,46 @@ public class AssemblingSchemaPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
                     .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(schemaCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(schemaNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(schemaCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(isObsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(schemaNameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                             .addComponent(schemaCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-                            .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))))
+                            .addComponent(schemaNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(isObsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(assemblingCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(assemblingCategoryLookup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(assemblingCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(measureUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(schemaCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(schemaCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(schemaNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(schemaNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(isObsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -160,13 +174,15 @@ public class AssemblingSchemaPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.acacia.gui.AcaciaComboList assemblingCategoryComboList;
     private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
-    private com.cosmos.acacia.gui.AcaciaLookup assemblingCategoryLookup;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private javax.swing.JScrollPane descriptionScrollPane;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.swingb.JBCheckBox isObsoleteCheckBox;
+    private com.cosmos.acacia.gui.AcaciaComboBox measureUnitComboBox;
+    private com.cosmos.swingb.JBLabel measureUnitLabel;
     private com.cosmos.swingb.JBLabel schemaCodeLabel;
     private com.cosmos.swingb.JBTextField schemaCodeTextField;
     private com.cosmos.swingb.JBLabel schemaNameLabel;
@@ -177,7 +193,8 @@ public class AssemblingSchemaPanel
     @Override
     protected void initData()
     {
-        assemblingCategoryLookup.setEnabled(false);
+        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+        AutoCompleteDecorator.decorate(measureUnitComboBox, resourceToStringConverter);
 
         entityProps = getFormSession().getAssemblingSchemaEntityProperties();
         PropertyDetails propDetails;
@@ -186,19 +203,18 @@ public class AssemblingSchemaPanel
 
         //parent category
         propDetails = entityProps.getPropertyDetails("assemblingCategory");
-        assemblingCategoryLookup.bind(new AcaciaLookupProvider()
-            {
-                @Override
-                public Object showSelectionControl()
-                {
-                    return onChooseCategory();
-                }
-            },
+        AssemblingCategoryListPanel listPanel =
+            new AssemblingCategoryListPanel();
+        assemblingCategoryComboList.bind(
             bindingGroup,
+            listPanel,
             entity,
             propDetails,
             "${categoryName}",
             UpdateStrategy.READ_WRITE);
+
+        propDetails = entityProps.getPropertyDetails("measureUnit");
+        measureUnitComboBox.bind(bindingGroup, getMeasureUnits(), entity, propDetails);
 
         //schema code
         propDetails = entityProps.getPropertyDetails("schemaCode");
@@ -250,6 +266,11 @@ public class AssemblingSchemaPanel
     protected Object onChooseCategory()
     {
         return null;
+    }
+
+    private List<DbResource> getMeasureUnits()
+    {
+        return getFormSession().getMeasureUnits();
     }
 
     protected AssemblingRemote getFormSession()

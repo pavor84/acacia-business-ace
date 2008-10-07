@@ -6,7 +6,6 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
-import com.cosmos.acacia.crm.assembling.AlgorithmException;
 import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.assembling.ProductAssemblerEvent;
 import com.cosmos.acacia.crm.assembling.ProductAssemblerListener;
@@ -28,8 +27,9 @@ import java.awt.Component;
 import java.io.Serializable;
 import java.lang.Object;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import javax.ejb.EJB;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
@@ -276,22 +276,36 @@ public class ProductAssemblerPanel
     @Action
     public void okAction()
     {
+        ComplexProduct complexProduct = (ComplexProduct)getSelectedValue();
+        try
+        {
+            getFormSession().saveComplexProduct(complexProduct);
+        }
+        catch(Exception ex)
+        {
+            logger.info("Save ComplexProduct Exception: " + ex.getMessage());
+            ValidationException vex = new ValidationException();
+            vex.addMessage(ex.getMessage());
+            throw vex;
+        }
+        close();
     }
 
     @Action
     public void assembleAction()
     {
+        productTreeTable.getData().clear();
         productAssemble();
     }
 
-    private Properties getParameters()
+    private Map<String, Object> getParameters()
     {
-        Properties params = new Properties();
-        List<AssemblingParameter> assemblingParameters = parametersTable.getData();
-        if((assemblingParameters = parametersTable.getData()) != null &&
-            assemblingParameters.size() > 0)
+        HashMap params = new HashMap();
+        List<AssemblingParameter> parameters = parametersTable.getData();
+        if((parameters = parametersTable.getData()) != null &&
+            parameters.size() > 0)
         {
-            for(AssemblingParameter parameter : assemblingParameters)
+            for(AssemblingParameter parameter : parameters)
             {
                 AssemblingMessage message = parameter.getAssemblingMessage();
                 System.out.println("message: " + message);
@@ -324,8 +338,11 @@ public class ProductAssemblerPanel
         {
             ComplexProduct product = assembler.assemble(getParameters());
             logger.info("Product: " + product.toString(true));
+            setSelectedValue(product);
+            okButton.setEnabled(true);
+            assembleButton.setEnabled(false);
         }
-        catch(AlgorithmException ex)
+        catch(Exception ex)
         {
             logger.info("EXC: " + ex.getMessage());
             ValidationException vex = new ValidationException();

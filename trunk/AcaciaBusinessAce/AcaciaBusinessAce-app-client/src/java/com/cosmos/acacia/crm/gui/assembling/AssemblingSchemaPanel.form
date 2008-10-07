@@ -21,20 +21,22 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="descriptionPanel" alignment="0" pref="561" max="32767" attributes="0"/>
                   <Component id="entityFormButtonPanel" alignment="0" pref="561" max="32767" attributes="0"/>
+                  <Component id="descriptionPanel" alignment="0" pref="561" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="schemaCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="schemaNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="schemaCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="measureUnitLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="assemblingCategoryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="isObsoleteCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="schemaNameTextField" alignment="1" pref="448" max="32767" attributes="0"/>
+                          <Component id="assemblingCategoryComboList" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="measureUnitComboBox" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Component id="schemaCodeTextField" alignment="0" pref="448" max="32767" attributes="0"/>
-                          <Component id="assemblingCategoryLookup" alignment="1" pref="448" max="32767" attributes="0"/>
+                          <Component id="schemaNameTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="isObsoleteCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -46,24 +48,29 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="assemblingCategoryLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="assemblingCategoryLookup" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="assemblingCategoryLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="assemblingCategoryComboList" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="measureUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="measureUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="schemaCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="schemaCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="schemaNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="schemaNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Component id="isObsoleteCheckBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-              <Component id="descriptionPanel" pref="171" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="descriptionPanel" pref="123" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -78,20 +85,13 @@
         <Property name="name" type="java.lang.String" value="assemblingCategoryLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="assemblingCategoryLookup">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="assemblingCategoryLookup" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBTextField" name="schemaCodeTextField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="schemaCodeTextField.text"/>
         <Property name="name" type="java.lang.String" value="schemaCodeTextField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBTextField" name="schemaNameTextField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="schemaNameTextField.text"/>
         <Property name="name" type="java.lang.String" value="schemaNameTextField" noResource="true"/>
       </Properties>
     </Component>
@@ -156,5 +156,21 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="com.cosmos.swingb.JBLabel" name="measureUnitLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="measureUnitLabel.text"/>
+        <Property name="name" type="java.lang.String" value="measureUnitLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="measureUnitComboBox">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="measureUnitComboBox" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="assemblingCategoryComboList">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="assemblingCategoryComboList" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>
