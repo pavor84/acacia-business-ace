@@ -22,7 +22,11 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBScrollPane;
+import com.cosmos.swingb.JBTextField;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.Serializable;
 import java.lang.Object;
@@ -187,7 +191,21 @@ public class ProductAssemblerPanel
         bindingGroup.bind();
         scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productTreeTable);
-        productTitledPanel.setContentContainer(scrollPane);
+
+        JBPanel complexProductPanel = new JBPanel();
+        complexProductPanel.setLayout(new BorderLayout());
+        complexProductPanel.add(BorderLayout.CENTER, scrollPane);
+        JBPanel productPricePanel = new JBPanel();
+        productPricePanel.setLayout(new BorderLayout());
+        JBLabel productPriceLabel = new JBLabel();
+        strValue = resource.getString("productPriceLabel.text");
+        productPriceLabel.setText(strValue);
+        JBTextField productPriceTextField = new JBTextField();
+        productPriceTextField.setEnabled(false);
+        productPricePanel.add(BorderLayout.WEST, productPriceLabel);
+        productPricePanel.add(BorderLayout.CENTER, productPriceTextField);
+        complexProductPanel.add(BorderLayout.PAGE_END, productPricePanel);
+        productTitledPanel.setContentContainer(complexProductPanel);
 
         parametersTable.setEditable(true);
     }
