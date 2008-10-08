@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.gui.AbstractTreeTablePanel;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
@@ -22,6 +23,11 @@ public class AssemblingCategoryTreeTablePanel
 {
     @EJB
     private static AssemblingRemote formSession;
+
+    public AssemblingCategoryTreeTablePanel()
+    {
+        this(null);
+    }
 
     public AssemblingCategoryTreeTablePanel(AssemblingCategory assemblingCategory)
     {
