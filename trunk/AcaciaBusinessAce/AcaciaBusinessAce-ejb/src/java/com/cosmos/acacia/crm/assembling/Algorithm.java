@@ -142,6 +142,13 @@ public class Algorithm
         public final static Set<Type> MultipleSelectionAlgorithms = 
                 EnumSet.of(UserMultipleSelection, RangeMultipleSelection, EqualsMultipleSelection);
 
+        public final static Set<Type> ValueDependentAlgorithms;
+        static
+        {
+            ValueDependentAlgorithms = EnumSet.copyOf(RangeAlgorithms);
+            ValueDependentAlgorithms.addAll(EqualsAlgorithms);
+        }
+
         private static List<DbResource> dbResources;
         public static List<DbResource> getDbResources()
         {
