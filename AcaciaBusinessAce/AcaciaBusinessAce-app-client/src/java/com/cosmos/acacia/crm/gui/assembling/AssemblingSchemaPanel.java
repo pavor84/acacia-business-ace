@@ -203,8 +203,8 @@ public class AssemblingSchemaPanel
 
         //parent category
         propDetails = entityProps.getPropertyDetails("assemblingCategory");
-        AssemblingCategoryListPanel listPanel =
-            new AssemblingCategoryListPanel();
+        AssemblingCategoryTreeTablePanel listPanel =
+            new AssemblingCategoryTreeTablePanel();
         assemblingCategoryComboList.bind(
             bindingGroup,
             listPanel,

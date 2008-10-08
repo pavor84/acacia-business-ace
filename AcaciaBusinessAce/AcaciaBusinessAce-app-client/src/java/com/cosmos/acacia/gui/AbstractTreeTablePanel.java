@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.gui.assembling;
+package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.gui.AbstractTreePanel;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;

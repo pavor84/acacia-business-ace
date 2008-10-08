@@ -4,7 +4,7 @@
  * Created on Петък, 2008, Юли 4, 10:08
  */
 
-package com.cosmos.acacia.crm.gui.assembling;
+package com.cosmos.acacia.gui;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AcaciaPanel;
