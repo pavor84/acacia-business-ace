@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data.assembling;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -304,6 +305,14 @@ public class AssemblingSchemaItem
 
     public DbResource getAssemblingAlgorithm() {
         return assemblingAlgorithm;
+    }
+
+    public Algorithm.Type getAlgorithmType()
+    {
+        if(assemblingAlgorithm == null)
+            return null;
+
+        return (Algorithm.Type)assemblingAlgorithm.getEnumValue();
     }
 
     public void setAssemblingAlgorithm(DbResource assemblingAlgorithm) {
