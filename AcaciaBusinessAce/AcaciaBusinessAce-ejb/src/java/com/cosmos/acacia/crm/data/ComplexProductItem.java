@@ -43,7 +43,7 @@ public class ComplexProductItem
 //    private BigInteger parentId;
 
     @Column(name = "order_position")
-    @Property(title="Order Position")
+    @Property(title="Order Position", editable=false, readOnly=true, visible=false, hidden=true)
     private int orderPosition;
 
     @Column(name = "quantity", nullable = false)
@@ -72,12 +72,15 @@ public class ComplexProductItem
 
     @JoinColumn(name = "complex_product_id", referencedColumnName = "product_id")
     @ManyToOne
-    @Property(title="Complex Product", editable=false, readOnly=true, visible=false, hidden=true)
+    @Property(title="Complex Product",
+        editable=false, readOnly=true, visible=false, hidden=true,
+        customDisplay="${complexProduct.productCode}:${complexProduct.productName}")
     private ComplexProduct complexProduct;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    @Property(title="Product")
+    @Property(title="Product",
+        customDisplay="${product.productCode}:${product.productName}")
     private Product product;
 
     @OneToOne

@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.assembling.Algorithm;
+import com.cosmos.acacia.crm.assembling.ProductSelectionRow;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
@@ -563,6 +564,14 @@ public class AssemblingBean
     {
         EntityProperties entityProperties = esm.getEntityProperties(AssemblingParameter.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getProductSelectionRowEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(ProductSelectionRow.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ);
         return entityProperties;
     }
 
