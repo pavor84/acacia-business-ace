@@ -162,7 +162,6 @@ public class ProductAssemblerPanel
     private AcaciaTable productTreeTable;
     private JBFormattedTextField productPriceTextField;
 
-    private List<AssemblingParameter> assemblingParameters;
     private AssemblingSchema assemblingSchema;
     private List<AssemblingSchemaItem> schemaItems;
 
