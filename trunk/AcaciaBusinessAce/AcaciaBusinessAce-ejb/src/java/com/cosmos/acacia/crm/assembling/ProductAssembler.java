@@ -90,11 +90,11 @@ public class ProductAssembler
                 cpi.setOrderPosition(++itemCounter);
                 product.addComplexProductItem(cpi);
                 logger.info("assemble(Map), addComplexProductItem: " + cpi + ", to ComplexProduct: " + product);
-                fireComplexProductItemAdded(product, cpi);
                 productPrice = productPrice.add(cpi.getItemPrice());
+                product.setSalePrice(productPrice);
+                fireComplexProductItemAdded(product, cpi);
             }
         }
-        product.setSalePrice(productPrice);
 
         return product;
     }
