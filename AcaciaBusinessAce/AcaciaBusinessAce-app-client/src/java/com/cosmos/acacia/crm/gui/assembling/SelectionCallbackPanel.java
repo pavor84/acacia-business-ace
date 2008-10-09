@@ -9,21 +9,24 @@ package com.cosmos.acacia.crm.gui.assembling;
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.assembling.ConstraintRow;
+import com.cosmos.acacia.crm.assembling.ProductSelectionRow;
+import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.swingb.JBButton;
-import com.cosmos.swingb.JBPanel;
-import java.awt.Component;
-import java.awt.Graphics;
+import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBScrollPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.SwingConstants;
+import javax.ejb.EJB;
 import javax.swing.border.TitledBorder;
+import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
@@ -32,7 +35,13 @@ import org.jdesktop.application.ResourceMap;
 public class SelectionCallbackPanel
     extends AcaciaPanel
 {
+    private static final Logger logger = Logger.getLogger(ProductAssemblerPanel.class);
+
+    @EJB
+    private static AssemblingRemote formSession;
+
     private ChoiceCallback callback;
+    private AcaciaTable productRowsTable;
 
     /** Creates new form SelectionCallbackPanel */
     public SelectionCallbackPanel(ChoiceCallback callback)
@@ -143,6 +152,35 @@ public class SelectionCallbackPanel
         {
             valuePanel.setEnabled(false);
         }
+
+        productRowsTable = new AcaciaTable();
+        JBScrollPane scrollPane = new JBScrollPane();
+        scrollPane.setViewportView(productRowsTable);
+        tablePanel.add(BorderLayout.CENTER, scrollPane);
+
+        BindingGroup bindingGroup = new BindingGroup();
+        EntityProperties entityProperties =
+            getFormSession().getProductSelectionRowEntityProperties();
+        productRowsTable.bind(
+            bindingGroup, 
+            getProductSelectionRows(),
+            entityProperties);
+        bindingGroup.bind();
+        productRowsTable.packAll();
+
+        setPreferredSize(new Dimension(640, 480));
+    }
+
+    private List<ProductSelectionRow> getProductSelectionRows()
+    {
+        List<ConstraintRow> constraintRows = getChoices();
+        List<ProductSelectionRow> rows = new ArrayList<ProductSelectionRow>(constraintRows.size());
+        for(ConstraintRow constraintRow : constraintRows)
+        {
+            rows.add(new ProductSelectionRow(constraintRow));
+        }
+
+        return rows;
     }
 
     private AssemblingSchemaItem getAssemblingSchemaItem()
@@ -189,14 +227,39 @@ public class SelectionCallbackPanel
     @Action
     public void selectButton()
     {
+        List<ProductSelectionRow> selectionRows;
+        int size;
+        if((selectionRows = productRowsTable.getSelectedRowObjects()) != null &&
+            (size = selectionRows.size()) > 0)
+        {
+            List<ConstraintRow> selectedRows = new ArrayList<ConstraintRow>(size);
+            for(ProductSelectionRow selectionRow : selectionRows)
+            {
+                selectedRows.add(selectionRow.getConstraintRow());
+            }
+            setSelectedValues(selectedRows);
+            logger.info("selectedRows: " + selectedRows);
+            setDialogResponse(DialogResponse.SELECT);
+            close();
+        }
     }
 
     @Action
     public void cancelButton()
     {
+        setDialogResponse(DialogResponse.CANCEL);
+        close();
     }
 
+    protected AssemblingRemote getFormSession()
+    {
+        if(formSession == null)
+        {
+            formSession = getBean(AssemblingRemote.class);
+        }
 
+        return formSession;
+    }
 
 
 }

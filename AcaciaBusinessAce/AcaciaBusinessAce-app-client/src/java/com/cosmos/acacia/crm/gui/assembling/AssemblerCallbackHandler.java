@@ -9,6 +9,7 @@ package com.cosmos.acacia.crm.gui.assembling;
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
 import com.cosmos.acacia.crm.assembling.ConstraintRow;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.swingb.DialogResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,8 +91,16 @@ public class AssemblerCallbackHandler
                         choiceCallback.getAssemblingSchemaItem() +
                         ". The choices must contain at least one element.");
 
-                choiceCallback.setSelectedRow(choices.get(0));
-                
+                //choiceCallback.setSelectedRow(choices.get(0));
+                SelectionCallbackPanel callbackPanel = new SelectionCallbackPanel(choiceCallback);
+                DialogResponse response = callbackPanel.showDialog();
+                System.out.println("response: " + response);
+                if(DialogResponse.SELECT.equals(response))
+                {
+                    List<ConstraintRow> selectedRows = callbackPanel.getSelectedValues();
+                    logger.info("selectedRows: " + selectedRows);
+                    choiceCallback.setSelectedRows(selectedRows);
+                }
             }
         }
 
