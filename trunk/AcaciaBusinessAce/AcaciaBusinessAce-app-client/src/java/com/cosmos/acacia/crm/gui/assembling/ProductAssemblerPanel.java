@@ -22,19 +22,23 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBFormattedTextField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBScrollPane;
-import com.cosmos.swingb.JBTextField;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.Serializable;
 import java.lang.Object;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.swing.text.MaskFormatter;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -156,6 +160,7 @@ public class ProductAssemblerPanel
     private AcaciaTable parametersTable;
     //private AcaciaTreeTable productTreeTable;
     private AcaciaTable productTreeTable;
+    private JBFormattedTextField productPriceTextField;
 
     private List<AssemblingParameter> assemblingParameters;
     private AssemblingSchema assemblingSchema;
@@ -200,8 +205,9 @@ public class ProductAssemblerPanel
         JBLabel productPriceLabel = new JBLabel();
         strValue = resource.getString("productPriceLabel.text");
         productPriceLabel.setText(strValue);
-        JBTextField productPriceTextField = new JBTextField();
-        productPriceTextField.setEnabled(false);
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        productPriceTextField = new JBFormattedTextField(decimalFormat);
+        productPriceTextField.setEditable(false);
         productPricePanel.add(BorderLayout.WEST, productPriceLabel);
         productPricePanel.add(BorderLayout.CENTER, productPriceTextField);
         complexProductPanel.add(BorderLayout.PAGE_END, productPricePanel);
@@ -301,6 +307,8 @@ public class ProductAssemblerPanel
         }
         catch(Exception ex)
         {
+            ex.printStackTrace();
+            logger.fatal(null, ex);
             logger.info("Save ComplexProduct Exception: " + ex.getMessage());
             ValidationException vex = new ValidationException();
             vex.addMessage(ex.getMessage());
@@ -362,6 +370,8 @@ public class ProductAssemblerPanel
         }
         catch(Exception ex)
         {
+            ex.printStackTrace();
+            logger.fatal(null, ex);
             logger.info("EXC: " + ex.getMessage());
             ValidationException vex = new ValidationException();
             vex.addMessage(ex.getMessage());
@@ -432,7 +442,13 @@ public class ProductAssemblerPanel
             logger.info("\t Quantity: " + productItem.getQuantity());
             logger.info("\t UnitPrice: " + productItem.getUnitPrice());
             productTreeTable.addRow(productItem);
+            productTreeTable.packAll();
             System.out.println("getComplexProductItems(): " + getComplexProductItems());
+
+            ComplexProduct product = event.getComplexProduct();
+            //String price = product.getSalePrice().toString();
+            //productPriceTextField.setText(price);
+            productPriceTextField.setValue(product.getSalePrice());
         }
 
     }
