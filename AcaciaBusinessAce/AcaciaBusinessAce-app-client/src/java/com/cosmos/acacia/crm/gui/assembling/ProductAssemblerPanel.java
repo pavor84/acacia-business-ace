@@ -22,6 +22,7 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBFormattedTextField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -303,17 +304,12 @@ public class ProductAssemblerPanel
         try
         {
             getFormSession().saveComplexProduct(complexProduct);
+            close();
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
-            logger.fatal(null, ex);
-            logger.info("Save ComplexProduct Exception: " + ex.getMessage());
-            ValidationException vex = new ValidationException();
-            vex.addMessage(ex.getMessage());
-            throw vex;
+            handleException("okAction(). Save ComplexProduct", ex);
         }
-        close();
     }
 
     @Action
@@ -369,12 +365,7 @@ public class ProductAssemblerPanel
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
-            logger.fatal(null, ex);
-            logger.info("EXC: " + ex.getMessage());
-            ValidationException vex = new ValidationException();
-            vex.addMessage(ex.getMessage());
-            throw vex;
+            handleException("productAssemble().assembler.assemble(...)", ex);
         }
         finally
         {
