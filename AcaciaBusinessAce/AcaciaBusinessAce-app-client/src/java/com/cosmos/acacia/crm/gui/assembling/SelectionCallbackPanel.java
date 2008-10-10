@@ -16,8 +16,10 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
+import com.cosmos.swingb.TableSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -42,6 +44,10 @@ public class SelectionCallbackPanel
 
     private ChoiceCallback callback;
     private AcaciaTable productRowsTable;
+    private Algorithm.Type algorithmType;
+    private Integer minSelections;
+    private Integer maxSelections;
+
 
     /** Creates new form SelectionCallbackPanel */
     public SelectionCallbackPanel(ChoiceCallback callback)
@@ -62,7 +68,7 @@ public class SelectionCallbackPanel
 
         valuePanel = new com.cosmos.swingb.JBPanel();
         valueLabel = new com.cosmos.swingb.JBLabel();
-        valueTextField = new com.cosmos.swingb.JBTextField();
+        valueTextField = new com.cosmos.swingb.JBFormattedTextField();
         tablePanel = new com.cosmos.swingb.JBPanel();
         buttonPanel = new com.cosmos.swingb.JBPanel();
         selectButton = new com.cosmos.swingb.JBButton();
@@ -114,13 +120,21 @@ public class SelectionCallbackPanel
     private com.cosmos.swingb.JBPanel tablePanel;
     private com.cosmos.swingb.JBLabel valueLabel;
     private com.cosmos.swingb.JBPanel valuePanel;
-    private com.cosmos.swingb.JBTextField valueTextField;
+    private com.cosmos.swingb.JBFormattedTextField valueTextField;
     // End of variables declaration//GEN-END:variables
 
 
     @Override
     protected void initData()
     {
+        algorithmType = getAlgorithmType();
+        this.minSelections = getMinSelections();
+        this.maxSelections = getMaxSelections();
+        if(Algorithm.Type.SingleSelectionAlgorithms.contains(algorithmType))
+        {
+            minSelections = maxSelections = 1;
+        }
+
         AssemblingMessage message = getAssemblingMessage();
         String strValue;
         if((strValue = message.getMessageTitle()) != null)
@@ -147,28 +161,55 @@ public class SelectionCallbackPanel
             valueLabel.setText(strValue);
         }
 
-        Algorithm.Type algorithmType = getAlgorithmType();
+        enableSelectButton(0);
+
         if(!Algorithm.Type.ValueDependentAlgorithms.contains(algorithmType))
         {
             valuePanel.setEnabled(false);
         }
 
         productRowsTable = new AcaciaTable();
+        SelectionModel selectionModel = new SelectionModel();
+        productRowsTable.setSelectionModel(selectionModel);
         JBScrollPane scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productRowsTable);
         tablePanel.add(BorderLayout.CENTER, scrollPane);
 
         BindingGroup bindingGroup = new BindingGroup();
-        EntityProperties entityProperties =
-            getFormSession().getProductSelectionRowEntityProperties();
         productRowsTable.bind(
             bindingGroup, 
             getProductSelectionRows(),
-            entityProperties);
+            getProductSelectionRowEntityProperties());
         bindingGroup.bind();
         productRowsTable.packAll();
 
+        valueTextField.setValue(getValueAgainstConstraints());
+
         setPreferredSize(new Dimension(640, 480));
+    }
+
+    private EntityProperties getProductSelectionRowEntityProperties()
+    {
+        EntityProperties entityProperties =
+            getFormSession().getProductSelectionRowEntityProperties();
+        Algorithm.Type algorithmType = getAlgorithmType();
+        PropertyDetails propertyDetails;
+        if(Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
+        {
+            propertyDetails = entityProperties.getPropertyDetails("minConstraint");
+            propertyDetails.setColumnName("Value");
+            propertyDetails = entityProperties.getPropertyDetails("maxConstraint");
+            propertyDetails.setVisible(false);
+        }
+        else if(Algorithm.Type.UserSelectionAlgorithms.contains(algorithmType))
+        {
+            propertyDetails = entityProperties.getPropertyDetails("minConstraint");
+            propertyDetails.setVisible(false);
+            propertyDetails = entityProperties.getPropertyDetails("maxConstraint");
+            propertyDetails.setVisible(false);
+        }
+
+        return entityProperties;
     }
 
     private List<ProductSelectionRow> getProductSelectionRows()
@@ -192,7 +233,16 @@ public class SelectionCallbackPanel
     {
         return getAssemblingSchemaItem().getAlgorithmType();
     }
-    
+
+    private Integer getMinSelections()
+    {
+        return getAssemblingSchemaItem().getMinSelections();
+    }
+
+    private Integer getMaxSelections()
+    {
+        return getAssemblingSchemaItem().getMaxSelections();
+    }
 
     private AssemblingMessage getAssemblingMessage()
     {
@@ -209,7 +259,7 @@ public class SelectionCallbackPanel
         return callback.getChoices();
     }
 
-    private int getDefaultChoice()
+    /*private int getDefaultChoice()
     {
         return callback.getDefaultChoice();
     }
@@ -222,6 +272,41 @@ public class SelectionCallbackPanel
     private void setSelectedRow(ConstraintRow selectedRow)
     {
         callback.setSelectedRow(selectedRow);
+    }*/
+
+    private void enableSelectButton(int selectedRowCount)
+    {
+        logger.info("enableSelectButton(" + selectedRowCount +
+            "): minSelections=" + minSelections +
+            ", maxSelections=" + maxSelections +
+            ", algorithmType=" + algorithmType);
+        if(Algorithm.Type.SelectionAlgorithms.contains(algorithmType))
+        {
+            logger.info("enableSelectButton: SelectionAlgorithms");
+            return;
+        }
+
+        if(minSelections == null && maxSelections == null)
+        {
+            logger.info("enableSelectButton: minSelections = maxSelections == null");
+            return;
+        }
+
+        if(minSelections != null && selectedRowCount < minSelections)
+        {
+            logger.info("selectedRowCount < minSelections");
+            selectButton.setEnabled(false);
+            return;
+        }
+
+        if(maxSelections != null && selectedRowCount > maxSelections)
+        {
+            logger.info("selectedRowCount > maxSelections");
+            selectButton.setEnabled(false);
+            return;
+        }
+
+        selectButton.setEnabled(true);
     }
 
     @Action
@@ -261,5 +346,41 @@ public class SelectionCallbackPanel
         return formSession;
     }
 
+    private class SelectionModel
+        extends TableSelectionModel
+    {
+        public SelectionModel()
+        {
+            if(Algorithm.Type.SingleSelectionAlgorithms.contains(algorithmType))
+                setSelectionMode(SINGLE_SELECTION);
+            else
+                setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+        }
 
+        @Override
+        protected void set(int r)
+        {
+            /*if(value.get(r))
+                return;
+
+            if(maxSelections != null && value.cardinality() >= maxSelections)
+                return;*/
+
+            super.set(r);
+            enableSelectButton(value.cardinality());
+        }
+
+        @Override
+        protected void clear(int r)
+        {
+            /*if(!value.get(r))
+                return;
+
+            if(minSelections != null && value.cardinality() <= minSelections)
+                return;*/
+
+            super.clear(r);
+            enableSelectButton(value.cardinality());
+        }
+    }
 }
