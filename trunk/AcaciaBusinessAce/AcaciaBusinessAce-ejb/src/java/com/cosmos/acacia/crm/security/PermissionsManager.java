@@ -60,7 +60,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
             Method method,
             Object[] args)
     {
-//        if (true) return true;
+        if (true) return true;
 
         if (isCreateMethod(method)) {
             DataObject tmpDataObject = new DataObject();
@@ -108,7 +108,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
     @Override
     public boolean isAllowedPostCall(Object result)
     {
-//        if (true) return true;
+        if (true) return true;
         boolean allowed = true;
         if (result instanceof DataObjectBean) {
             DataObjectBean dob = (DataObjectBean) result;
