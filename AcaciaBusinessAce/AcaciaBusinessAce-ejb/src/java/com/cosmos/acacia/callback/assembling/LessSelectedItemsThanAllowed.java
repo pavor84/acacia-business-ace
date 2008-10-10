@@ -19,7 +19,7 @@ public class LessSelectedItemsThanAllowed
 
     public LessSelectedItemsThanAllowed(int selected, int allowed)
     {
-        super("The selected (" + selected + ") items are less than the allowed (" + allowed +")");
+        super("The selected (" + selected + ") items are less than the required (" + allowed +")");
         this.selected = selected;
         this.allowed = allowed;
     }
