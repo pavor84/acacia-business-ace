@@ -28,8 +28,11 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
+import java.util.logging.Level;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  *
@@ -276,21 +279,44 @@ public abstract class AcaciaPanel
         return LocalSession.instance();
     }
 
-    public void handleBusinessException(Exception ex) {
-        ValidationException ve = extractValidationException(ex);
-        if (ve != null) {
-            JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
-        } else {
-            log.error("error", ex);
+    @Override
+    protected void handleException(String message, Throwable ex)
+    {
+        if(ex instanceof ValidationException)
+        {
+            logException(message, ex);
+            handleBusinessException(message, (ValidationException)ex);
+        }
+        else
+        {
+            super.handleException(message, ex);
         }
     }
 
-    public void handleValidationException(Exception ex){
+    public void handleBusinessException(Exception ex) {
+        handleBusinessException(null, ex);
+    }
+
+    public void handleBusinessException(String message, Exception ex) {
+        log.error(message, ex);
+        ValidationException ve = extractValidationException(ex);
+        if (ve != null) {
+            JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
+        }
+    }
+
+    public void handleValidationException(Exception ex)
+    {
+        handleValidationException(null, ex);
+    }
+
+    public void handleValidationException(String message, Exception ex){
+        log.error(message, ex);
         ValidationException ve = extractValidationException(ex);
         if ( ve!=null ){
-            String message = getValidationErrorsMessage(ve);
+            String errorMessage = getValidationErrorsMessage(ve);
             JOptionPane.showConfirmDialog(this.getParent(),
-                message,
+                errorMessage,
                 getResourceMap().getString("ValidationException.errorsListFollow"),
                 JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
         } else{
