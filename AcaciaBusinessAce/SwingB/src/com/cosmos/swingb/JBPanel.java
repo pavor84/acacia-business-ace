@@ -15,10 +15,15 @@ import java.awt.Dialog;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -31,7 +36,10 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.jdesktop.swingx.error.ErrorReporter;
 
 /**
  *
@@ -40,6 +48,8 @@ import org.jdesktop.swingx.JXPanel;
 public class JBPanel
     extends JXPanel
 {
+    private static final Logger logger = Logger.getLogger(JBPanel.class.getName());
+
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
@@ -413,5 +423,152 @@ public class JBPanel
                 return false;
         }
         return true;
+    }
+
+    /**
+      * getErrorTitle() is used as a quick reference for the
+      * error (for example, it might be used as the
+      * title of an error dialog or as the subject of
+      * an email message).
+     *  @return May return null.
+      */
+    protected String getErrorTitle(Throwable throwable)
+    {
+        return getResourceMap().getString("error.title");
+    }
+
+    /**
+      * getBasicErrorMessage() is short description of the problem.
+     *  @return May return null.
+      */
+    protected String getBasicErrorMessage(Throwable throwable)
+    {
+        if(throwable == null)
+            return getResourceMap().getString("exception.null");
+
+        Throwable ex = throwable;
+        String message;
+        while(ex != null)
+        {
+            if((message = throwable.getMessage()) != null && (message = message.trim()).length() > 0)
+                return message;
+
+            ex = ex.getCause();
+        }
+
+        return throwable.getClass().getName();
+    }
+
+    /**
+      * getDetailedErrorMessage() is full description of the problem. It is recommended,
+      * though not required, that this String contain HTML
+      * to improve the look and layout of the detailed
+      * error message.
+      * @return May return null.
+      */
+    protected String getDetailedErrorMessage(Throwable throwable)
+    {
+        if(throwable == null)
+            return getResourceMap().getString("exception.null");
+
+        StringWriter writer = new StringWriter();
+        PrintWriter out = new PrintWriter(writer);
+        throwable.printStackTrace(out);
+        out.flush();
+        return writer.toString();
+    }
+
+    /**
+      * getErrorCategory() is a category name, indicating where in the application
+      * this incident occurred. It is recommended that
+      * this be the same value as you would use when logging.
+      * @return May return null.
+      */
+    protected String getErrorCategory(Throwable throwable)
+    {
+        return getResourceMap().getString("error.category");
+    }
+
+    /**
+      * getErrorLevel() is any Level (Level.SEVERE, Level.WARNING, etc).
+      * If null, then the level will be set to SEVERE.
+      */
+    protected Level getErrorLevel(Throwable throwable)
+    {
+        return Level.SEVERE;
+    }
+
+    /**
+      * getErrorState() is the state of the application at the time the incident occured.
+      * The standard System properties are automatically added to this
+      * state, and thus do not need to be included. This value may be null.
+      * If null, the resulting map will contain only the System properties.
+      * If there is a value in the map with a key that also occurs in the
+      * System properties (for example: sun.java2d.noddraw), then the
+      * developer supplied value will be used. In other words, defined
+      * parameters override standard ones. In addition, the keys
+      * "System.currentTimeMillis" and "isOnEDT" are both defined
+      * automatically.
+      */
+    protected Map<String, String> getErrorState(Throwable throwable)
+    {
+        return null;
+    }
+
+    /**
+      * @param throwable <code>Throwable</code> that can be used as a
+      * source for additional information such as call
+      * stack, thread name, etc. May be null.
+      */
+    protected ErrorInfo getErrorInfo(Throwable throwable)
+    {
+        return new ErrorInfo(
+            getErrorTitle(throwable),
+            getBasicErrorMessage(throwable),
+            getDetailedErrorMessage(throwable),
+            getErrorCategory(throwable),
+            throwable,
+            getErrorLevel(throwable),
+            getErrorState(throwable));
+    }
+
+    protected JXErrorPane getErrorPane(ErrorInfo errorInfo)
+    {
+        return getErrorPane(errorInfo, null);
+    }
+
+    protected JXErrorPane getErrorPane(
+        ErrorInfo errorInfo,
+        ErrorReporter errorReporter)
+    {
+        JBErrorPane errorPane = new JBErrorPane();
+        errorPane.setErrorInfo(errorInfo);
+        if(errorReporter != null)
+            errorPane.setErrorReporter(errorReporter);
+        return errorPane;
+    }
+
+    protected final void handleException(Throwable ex)
+    {
+        handleException(null, ex);
+    }
+
+    protected void handleException(String message, Throwable ex)
+    {
+        ErrorInfo errorInfo = getErrorInfo(ex);
+        logException(errorInfo.getErrorLevel(), message, ex);
+        JBErrorPane.showDialog(this, getErrorPane(errorInfo));
+    }
+
+    protected void logException(String message, Throwable ex)
+    {
+        logException(null, message, ex);
+    }
+
+    protected void logException(Level level, String message, Throwable ex)
+    {
+        if(level == null)
+            level = Level.SEVERE;
+        logger.log(level, message, ex);
     }
 }
