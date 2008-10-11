@@ -329,7 +329,6 @@ public class ProductAssemblerPanel
             for(AssemblingParameter parameter : parameters)
             {
                 AssemblingMessage message = parameter.getAssemblingMessage();
-                System.out.println("message: " + message);
                 String key = message.getMessageCode();
                 AssemblingSchemaItem.DataType dataType = parameter.getDataType();
                 logger.info("AssemblingSchemaItem.DataType: " + dataType);
@@ -371,6 +370,7 @@ public class ProductAssemblerPanel
         {
             assembler.removeProductAssemblerListener(listener);
         }
+        requestFocus();
     }
 
     public AssemblingSchema getAssemblingSchema()
@@ -433,11 +433,8 @@ public class ProductAssemblerPanel
             logger.info("\t UnitPrice: " + productItem.getUnitPrice());
             productTreeTable.addRow(productItem);
             productTreeTable.packAll();
-            System.out.println("getComplexProductItems(): " + getComplexProductItems());
 
             ComplexProduct product = event.getComplexProduct();
-            //String price = product.getSalePrice().toString();
-            //productPriceTextField.setText(price);
             productPriceTextField.setValue(product.getSalePrice());
         }
 
