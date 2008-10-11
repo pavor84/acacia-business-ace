@@ -134,7 +134,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Column(name = "product_description")
     @Property(title="Product Description")
     private String productDescription;
-
+    
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;

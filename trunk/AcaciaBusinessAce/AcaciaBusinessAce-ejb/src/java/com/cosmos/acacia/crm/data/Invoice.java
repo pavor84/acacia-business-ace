@@ -35,24 +35,52 @@ import com.cosmos.acacia.annotation.ValidationType;
 @NamedQueries(
     {
         /**
+         * Get all invoices which are neither open nor finalized for a given branch.
          * Parameters: 
          *  - branch - not null
+         *  - finalizedStatus - provide the resource value of invoice status finalized
+         *  - openStatus - provide the resource value of invoice status open
+         */
+        @NamedQuery
+            (
+                name = "Invoice.getPendingTemplateInvoices",
+                query = "select i from Invoice i where " +
+                		"i.branch = :branch and i.status <> :finalizedStatus and i.status <> :openStatus"
+            ),
+        /**
+         * Get all invoices which state is past open for a given branch.
+         * Parameters: 
+         *  - branch - not null
+         *  - openStatus - provide the resource value of invoice status open
+         */
+        @NamedQuery
+            (
+                name = "Invoice.getAllTemplateInvoices",
+                query = "select i from Invoice i where " +
+                        "i.branch = :branch and i.status <> :openStatus"
+            ),
+        /**
+         * Parameters: 
+         *  - branch - not null
+         *  - proformaInvoice - true or false, not null
          */
         @NamedQuery
             (
                 name = "Invoice.maxInvoiceNumberForBranch",
-                query = "select max(i.invoiceNumber) from Invoice i where i.branch = :branch "
+                query = "select max(i.invoiceNumber) from Invoice i where i.branch = :branch " +
+                		"and i.proformaInvoice = :proformaInvoice "
             ),
         /**
          * Parameters: 
          *  - parentDataObjectId - not null, the parent object id
          *  - deleted - not null - true/false
+         *  - proformaInvoice - not null, true or false
          */
         @NamedQuery
             (
                 name = "Invoice.findForParentAndDeleted",
                 query = "select i from Invoice i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
-                        "and i.dataObject.deleted = :deleted"
+                        "and i.dataObject.deleted = :deleted and i.proformaInvoice = :proformaInvoice"
             ),
         @NamedQuery
             (
@@ -73,6 +101,9 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Column(name = "invoice_id", nullable = false)
     @Property(title="Invoice Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger invoiceId;
+    
+    @Column(name = "proforma", nullable=false)
+    private Boolean proformaInvoice;
 
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
@@ -87,7 +118,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Branch Name")
     private String branchName;
 
-    @Property(title="Invoice Number", editable=false)
+    @Property(title="Doc. Number", editable=false)
     @Column(name = "invoice_number")
     private BigInteger invoiceNumber;
 
@@ -722,5 +753,13 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     public void setInvoiceNumber(BigInteger invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Boolean getProformaInvoice() {
+        return proformaInvoice;
+    }
+
+    public void setProformaInvoice(Boolean proformaInvoice) {
+        this.proformaInvoice = proformaInvoice;
     }
 }

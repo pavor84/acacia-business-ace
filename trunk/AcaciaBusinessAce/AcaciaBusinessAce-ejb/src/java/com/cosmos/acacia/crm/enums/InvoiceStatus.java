@@ -17,7 +17,8 @@ public enum InvoiceStatus implements DatabaseResource {
     PartlyDelivered("Partly Delivered", "Invoice is partly delivered."),
     Delivered("Delivered", "Invoice is received from recipient."),
     PartlyCanceled("Partly Canceled", "Part(s) of the invoice are canceled"),
-    Canceled("Canceled", "The invoice is fully canceled")
+    Canceled("Canceled", "The invoice is fully canceled"),
+    Finalized("Finalized", "The invoice is in finalized state")
     ;
     private InvoiceStatus(String name, String description) {
         this.name = name;

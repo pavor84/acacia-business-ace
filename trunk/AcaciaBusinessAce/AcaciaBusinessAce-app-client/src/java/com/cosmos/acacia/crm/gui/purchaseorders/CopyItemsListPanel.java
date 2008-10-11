@@ -25,11 +25,10 @@ import com.cosmos.beansbinding.EntityProperties;
 public class CopyItemsListPanel extends AbstractTablePanel {
     
     private BindingGroup bindGroup;
-    private List<InvoiceItem> invoiceItems;
+    private List<?> items;
     
-    public CopyItemsListPanel(BigInteger parentDataObject, List<InvoiceItem> items) {
+    public CopyItemsListPanel(BigInteger parentDataObject) {
         super(parentDataObject);
-        this.invoiceItems = items;
     }
     
     @Override
@@ -66,14 +65,11 @@ public class CopyItemsListPanel extends AbstractTablePanel {
         return false;
     }
     
-    protected List<InvoiceItem> getItems() {
-        if ( invoiceItems==null ){
-            if ( getParentDataObjectId()!=null )
-                invoiceItems = getFormSession().getInvoiceItems(getParentDataObjectId());
-            else
-                invoiceItems = new ArrayList<InvoiceItem>();
-        }
-        return invoiceItems;
+    @SuppressWarnings("unchecked")
+    protected List<?> getItems() {
+        if ( items==null )
+            return new ArrayList();
+        return items;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
@@ -100,14 +96,14 @@ public class CopyItemsListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected InvoiceItem modifyRow(Object rowObject) {
         return null;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected InvoiceItem newRow() {
         return null;
     }
     
@@ -119,8 +115,8 @@ public class CopyItemsListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    public void refreshList(List<InvoiceItem> items) {
-        invoiceItems = items;
+    public void refreshList(List<?> items) {
+        this.items = items;
         
         refreshDataTable(entityProps);
     }

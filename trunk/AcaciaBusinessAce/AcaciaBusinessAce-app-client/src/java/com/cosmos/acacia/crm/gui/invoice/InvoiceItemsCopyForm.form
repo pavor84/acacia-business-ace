@@ -18,12 +18,8 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="itemsToCopyTableHolder" pref="726" max="32767" attributes="0"/>
-                  </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="245" max="-2" attributes="0"/>
                       <Component id="copySelectedButton" min="-2" max="-2" attributes="0"/>
@@ -40,9 +36,9 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="1">
-                              <Component id="allReadioField" min="-2" max="-2" attributes="0"/>
+                              <Component id="showAllRadioField" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="allPendingField" pref="548" max="32767" attributes="0"/>
+                              <Component id="showPendingRadioField" pref="548" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="invoicesCheckField" min="-2" pref="99" max="-2" attributes="0"/>
@@ -60,7 +56,10 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="invoiceItemsTableHolder" pref="726" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="invoiceItemsTableHolder" alignment="1" max="32767" attributes="0"/>
+                          <Component id="itemsToCopyTableHolder" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -79,8 +78,8 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="allPendingField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="allReadioField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="showPendingRadioField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="showAllRadioField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -88,18 +87,18 @@
                   <Component id="jBLabel1" alignment="3" min="-2" pref="14" max="-2" attributes="1"/>
                   <Component id="documentField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Component id="itemsToCopyTableHolder" pref="271" max="32767" attributes="2"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="itemsToCopyTableHolder" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="copySelectedButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="copyAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-              <Component id="invoiceItemsTableHolder" pref="268" max="32767" attributes="0"/>
+              <Component id="invoiceItemsTableHolder" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -162,16 +161,16 @@
         <Property name="name" type="java.lang.String" value="documentField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBRadioButton" name="allPendingField">
+    <Component class="com.cosmos.swingb.JBRadioButton" name="showPendingRadioField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="allPendingField.text"/>
-        <Property name="name" type="java.lang.String" value="allPendingField" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="showPendingRadioField.text"/>
+        <Property name="name" type="java.lang.String" value="showPendingRadioField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBRadioButton" name="allReadioField">
+    <Component class="com.cosmos.swingb.JBRadioButton" name="showAllRadioField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="allReadioField.text"/>
-        <Property name="name" type="java.lang.String" value="allReadioField" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="showAllRadioField.text"/>
+        <Property name="name" type="java.lang.String" value="showAllRadioField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel5">
@@ -180,7 +179,7 @@
         <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTableHeader" name="itemsToCopyTableHolder">
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsToCopyTableHolder">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -191,8 +190,21 @@
         </Property>
         <Property name="name" type="java.lang.String" value="itemsToCopyTableHolder" noResource="true"/>
       </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTableHeader" name="invoiceItemsTableHolder">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="714" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="245" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="invoiceItemsTableHolder">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -203,6 +215,19 @@
         </Property>
         <Property name="name" type="java.lang.String" value="invoiceItemsTableHolder" noResource="true"/>
       </Properties>
-    </Component>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="714" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="242" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
   </SubComponents>
 </Form>

@@ -262,7 +262,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     //TODO: Based on reason selected, we have to display different list of documents.
     //For now display only InvoicesList, because other documents are not implemented.
     protected String onChooseAssignment() {
-        InvoiceListPanel listPanel = new InvoiceListPanel(entity.getCreatorOrganization().getId());
+        InvoiceListPanel listPanel = new InvoiceListPanel(entity.getCreatorOrganization().getId(), false);
         
         listPanel.setVisibleSelectButtons(true);
         DialogResponse dResponse = listPanel.showDialog(this);

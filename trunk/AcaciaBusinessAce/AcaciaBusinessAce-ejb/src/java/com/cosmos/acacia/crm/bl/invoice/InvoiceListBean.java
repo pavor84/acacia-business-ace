@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -24,9 +25,11 @@ import com.cosmos.acacia.crm.bl.impl.WarehouseListLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.InvoiceItemLink;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.Warehouse;
@@ -153,6 +156,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         c.setPaymentDueDate(new Date());
         c.setStatus(InvoiceStatus.Open.getDbResource());
         c.setInvoiceDate(new Date());
+        c.setProformaInvoice(Boolean.FALSE);
         
         return c;
     }
@@ -195,9 +199,23 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
     
     public void deleteInvoiceItem(InvoiceItem item) {
+        List<InvoiceItemLink> invoiceItemLinks = getInvoiceItemLinks(item);
+        for (InvoiceItemLink invoiceItemLink : invoiceItemLinks) {
+            em.remove(invoiceItemLink);
+        }
         esm.remove(em, item);
     }
     
+    @SuppressWarnings("unchecked")
+    public List<InvoiceItemLink> getInvoiceItemLinks(InvoiceItem item) {
+        Query q = null;
+        
+        q = em.createNamedQuery("Invoice.getInvoicesItemLinks");
+        q.setParameter("invoiceItem",item);
+        
+        return q.getResultList();
+    }
+
     public EntityProperties getItemsListEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(InvoiceItem.class);
         entityProperties.removePropertyDetails("productDescription");
@@ -276,13 +294,17 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Invoice> listInvoices(BigInteger parentDataObjectId) {
+    public List<Invoice> listInvoices(BigInteger parentDataObjectId, Boolean proform) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
         Query q = em.createNamedQuery("Invoice.findForParentAndDeleted");
         q.setParameter("parentDataObjectId", parentDataObjectId);
         q.setParameter("deleted", false);
+        if ( Boolean.TRUE.equals(proform) )
+            q.setParameter("proformaInvoice", Boolean.TRUE);
+        else
+            q.setParameter("proformaInvoice", Boolean.FALSE);
         
         List<Invoice> result = q.getResultList();
         return result;
@@ -361,6 +383,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         if ( entity.getBranch()==null )
             throw new IllegalArgumentException("Invoice branch is null!");
         q.setParameter("branch", entity.getBranch());
+        q.setParameter("proformaInvoice", entity.getProformaInvoice());
         
         BigInteger result = (BigInteger) q.getSingleResult();
         //no orders for this warehouse
@@ -403,5 +426,57 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
             esm.persist(em, item);
         }
         em.flush();
+    }
+
+    @Override
+    public void addInvoiceItems(List<InvoiceItemLink> itemLinks) {
+        for (InvoiceItemLink invoiceItemLink : itemLinks) {
+            saveInvoiceItem(invoiceItemLink.getInvoiceItem());
+            esm.persist(em, invoiceItemLink);
+        }
+    }
+
+    @Override
+    public List<?> getDocumentItems(DataObjectBean document) {
+        if ( document instanceof Invoice ){
+            return getInvoiceItems(document.getId());
+        }
+        throw new IllegalArgumentException("Cannot get items! Document not supported: "+document);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<?> getTemplateDocuments(Boolean onlyPending, Boolean includeInvoices,
+        Boolean includeProformas, Boolean includeSalesOffers) {
+        if ( includeInvoices==false && includeProformas==false )
+            return new ArrayList<Object>();
+        
+        Query q = null;
+        
+        if ( onlyPending ){
+            q = em.createNamedQuery("Invoice.getPendingTemplateInvoices");
+            q.setParameter("finalizedStatus", InvoiceStatus.Finalized.getDbResource());
+            q.setParameter("openStatus", InvoiceStatus.Open.getDbResource());
+        }else{
+            q = em.createNamedQuery("Invoice.getAllTemplateInvoices");
+            q.setParameter("openStatus", InvoiceStatus.Open.getDbResource());
+        }
+        q.setParameter("branch", acaciaSession.getBranch());
+        
+        List<Invoice> invoices = new ArrayList<Invoice>(q.getResultList());
+        
+        for (Iterator iterator = invoices.iterator(); iterator.hasNext();) {
+            Invoice invoice = (Invoice) iterator.next();
+            //remove proformas if not needed
+            if ( invoice.getProformaInvoice() && !includeProformas ){
+                iterator.remove();
+            }
+            //remove invoices if not needed
+            if ( !Boolean.TRUE.equals(invoice.getProformaInvoice()) && !includeInvoices ){
+                iterator.remove();
+            }
+        }
+        
+        return invoices;
     }
 }

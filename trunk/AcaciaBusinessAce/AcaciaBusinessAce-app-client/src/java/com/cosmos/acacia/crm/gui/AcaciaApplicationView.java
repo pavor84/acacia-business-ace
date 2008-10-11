@@ -533,7 +533,13 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void invoicesListAction() {
-        InvoiceListPanel invoicesListPanel = new InvoiceListPanel(getParentId());
+        InvoiceListPanel invoicesListPanel = new InvoiceListPanel(getParentId(), false);
+        invoicesListPanel.showFrame();
+    }
+    
+    @Action
+    public void proformaInvoicesListAction() {
+        InvoiceListPanel invoicesListPanel = new InvoiceListPanel(getParentId(), true);
         invoicesListPanel.showFrame();
     }
 
@@ -660,6 +666,10 @@ public class AcaciaApplicationView extends FrameView {
 
         invoicesListItem.setAction(actionMap.get("invoicesListAction"));
         salesMenu.add(invoicesListItem);
+        
+        JBMenuItem proformaInvoicesItem = new JBMenuItem();
+        proformaInvoicesItem.setAction(actionMap.get("proformaInvoicesListAction"));
+        salesMenu.add(proformaInvoicesItem);
         menuBar.add(salesMenu);
 
         ordersMenu.setText(resourceMap.getString("ordersMenu.text")); // NOI18N
