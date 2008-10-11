@@ -43,7 +43,7 @@ import javax.persistence.Table;
     })
 public class AssemblingMessage
     extends DataObjectBean
-    implements Serializable
+    implements Serializable, Comparable<AssemblingMessage>
 {
     private static final long serialVersionUID = 1L;
 
@@ -385,6 +385,12 @@ public class AssemblingMessage
     public String getInfo()
     {
         return getMessageText();
+    }
+
+    @Override
+    public int compareTo(AssemblingMessage other)
+    {
+        return messageId.compareTo(other.messageId);
     }
 
 }

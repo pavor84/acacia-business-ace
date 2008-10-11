@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
@@ -286,7 +287,7 @@ public class AssemblingBean
     @Override
     public ComplexProduct saveComplexProduct(ComplexProduct complexProduct)
     {
-        logger.debug("saveComplexProduct: " + complexProduct.toString(true));
+        logger.info("saveComplexProduct: " + complexProduct.toString(true));
 
         esm.persist(em, complexProduct);
         List<ComplexProductItem> items = complexProduct.getComplexProductItems();
@@ -294,11 +295,26 @@ public class AssemblingBean
         {
             for(ComplexProductItem item : items)
             {
-                esm.persist(em, item);
+                saveComplexProductItem(item);
             }
         }
 
         return complexProduct;
+    }
+
+    public ComplexProductItem saveComplexProductItem(ComplexProductItem productItem)
+    {
+        logger.info("saveComplexProductItem: " + productItem);
+        Product product = productItem.getProduct();
+        logger.info("product: " + product);
+        if(product instanceof ComplexProduct)
+        {
+            saveComplexProduct((ComplexProduct)product);
+        }
+
+        esm.persist(em, productItem);
+
+        return productItem;
     }
 
     @Override

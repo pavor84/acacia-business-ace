@@ -61,7 +61,9 @@ public class AssemblingSchemaItemValue
 
     @JoinColumn(name = "virtual_product_id", referencedColumnName = "product_id")
     @ManyToOne
-    @Property(title="Product/Schema", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Product/Schema",
+        customDisplay="${virtualProduct.productCode}:${virtualProduct.productName}",
+        propertyValidator=@PropertyValidator(required=true))
     private VirtualProduct virtualProduct;
 
     //@Lob
