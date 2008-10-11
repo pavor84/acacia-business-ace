@@ -6,13 +6,13 @@
 package com.cosmos.acacia.crm.assembling;
 
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
-import com.cosmos.acacia.callback.assembling.LessSelectedItemsThanAllowed;
-import com.cosmos.acacia.callback.assembling.MoreSelectedItemsThanAllowed;
+import com.cosmos.acacia.callback.assembling.LessSelectedItemsThanAllowedException;
+import com.cosmos.acacia.callback.assembling.MoreSelectedItemsThanAllowedException;
+import com.cosmos.acacia.callback.assembling.ValueInputCallback;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
 import org.apache.log4j.Logger;
 
 
@@ -240,6 +239,23 @@ public class Algorithm
         else
             logger.info("valueAgainstConstraints: " + valueAgainstConstraints);
 
+        if(valueAgainstConstraints == null &&
+            Type.ValueDependentAlgorithms.contains(type))
+        {
+            ValueInputCallback valueInputCallback = new ValueInputCallback(
+                assemblingSchemaItem,
+                assemblingSchemaItem.getDefaultValue());
+            try
+            {
+                callbackHandler.handle(new Callback[] {valueInputCallback});
+                valueAgainstConstraints = valueInputCallback.getValue();
+            }
+            catch(Exception ex)
+            {
+                throw new AlgorithmException(ex);
+            }
+        }
+
         return apply(
             getAssemblingSchemaItemValues(),
             valueAgainstConstraints);
@@ -369,11 +385,7 @@ public class Algorithm
         {
             callbackHandler.handle(new Callback[] {choiceCallback});
         }
-        catch(IOException ex)
-        {
-            throw new AlgorithmException(ex);
-        }
-        catch(UnsupportedCallbackException ex)
+        catch(Exception ex)
         {
             throw new AlgorithmException(ex);
         }
@@ -386,11 +398,11 @@ public class Algorithm
             int allowed;
             if(selected < (allowed = minSelections))
             {
-                throw new LessSelectedItemsThanAllowed(selected, allowed);
+                throw new LessSelectedItemsThanAllowedException(selected, allowed);
             }
             else if(selected > maxSelections)
             {
-                throw new MoreSelectedItemsThanAllowed(selected, allowed);
+                throw new MoreSelectedItemsThanAllowedException(selected, allowed);
             }
         }
 
