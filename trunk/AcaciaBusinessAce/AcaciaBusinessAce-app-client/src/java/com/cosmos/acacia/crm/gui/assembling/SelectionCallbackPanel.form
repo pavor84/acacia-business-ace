@@ -13,21 +13,21 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,44,0,0,1,-112"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,117,0,0,2,74"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
-    <Container class="com.cosmos.swingb.JBPanel" name="valuePanel">
+    <Container class="com.cosmos.swingb.JBPanel" name="constraintsPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Value Against Constraints">
-              <Property name="titleX" resourceKey="valuePanel.border.title"/>
+            <TitledBorder title="Constraints">
+              <Property name="titleX" resourceKey="constraintsPanel.border.title"/>
             </TitledBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="valuePanel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="constraintsPanel" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -35,30 +35,105 @@
         </Constraint>
       </Constraints>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="horizontalGap" type="int" value="25"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
       <SubComponents>
-        <Component class="com.cosmos.swingb.JBLabel" name="valueLabel">
+        <Container class="com.cosmos.swingb.JBPanel" name="valuePanel">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="valueLabel.text"/>
-            <Property name="name" type="java.lang.String" value="valueLabel" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="valuePanel" noResource="true"/>
           </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-              <BorderConstraints direction="West"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="com.cosmos.swingb.JBFormattedTextField" name="valueTextField">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBFormattedTextField" name="valueTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="valueTextField" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                  <BorderConstraints direction="Center"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="valueLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="valueLabel.text"/>
+                <Property name="name" type="java.lang.String" value="valueLabel" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                  <BorderConstraints direction="West"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.cosmos.swingb.JBPanel" name="minSelectionsPanel">
           <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="valueTextField" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="minSelectionsPanel" noResource="true"/>
           </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-              <BorderConstraints direction="Center"/>
-            </Constraint>
-          </Constraints>
-        </Component>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBLabel" name="minSelectionsLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="minSelectionsLabel.text"/>
+                <Property name="name" type="java.lang.String" value="minSelectionsLabel" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                  <BorderConstraints direction="West"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="com.cosmos.swingb.JBFormattedTextField" name="minSelectionsTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="minSelectionsTextField" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                  <BorderConstraints direction="Center"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.cosmos.swingb.JBPanel" name="maxSelectionsPanel">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="maxSelectionsPanel" noResource="true"/>
+          </Properties>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBLabel" name="maxSelectionsLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="maxSelectionsLabel.text"/>
+                <Property name="name" type="java.lang.String" value="maxSelectionsLabel" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                  <BorderConstraints direction="West"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="com.cosmos.swingb.JBFormattedTextField" name="maxSelectionsTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="maxSelectionsTextField" noResource="true"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                  <BorderConstraints direction="Center"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Container class="com.cosmos.swingb.JBPanel" name="tablePanel">
