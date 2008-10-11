@@ -68,6 +68,8 @@ public class ProductAssembler
         throws AlgorithmException
     {
         logger.info("assemble(parameters: " + parameters + "), assemblingSchema: " + assemblingSchema);
+        
+
         int itemCounter = 0;
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
         logger.info("assemble(Map), List<AssemblingSchemaItem>: " + asiList);
