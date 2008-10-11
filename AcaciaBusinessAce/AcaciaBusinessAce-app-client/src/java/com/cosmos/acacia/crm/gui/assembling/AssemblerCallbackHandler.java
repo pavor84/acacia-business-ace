@@ -6,10 +6,11 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.callback.assembling.ChoiceCallback;
+import com.cosmos.acacia.callback.assembling.ValueInputCallback;
 import com.cosmos.acacia.crm.assembling.ConstraintRow;
 import com.cosmos.swingb.DialogResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.security.auth.callback.Callback;
@@ -36,8 +37,6 @@ public class AssemblerCallbackHandler
         if(callbacks == null || callbacks.length == 0)
             throw new IllegalArgumentException("At least one callback must be passed.");
 
-        List<String> errorMessages = new ArrayList<String>();
-
         for(Callback callback : callbacks)
         {
             if(callback instanceof ChoiceCallback)
@@ -49,10 +48,8 @@ public class AssemblerCallbackHandler
                         choiceCallback.getAssemblingSchemaItem() +
                         ". The choices must contain at least one element.");
 
-                //choiceCallback.setSelectedRow(choices.get(0));
                 SelectionCallbackPanel callbackPanel = new SelectionCallbackPanel(choiceCallback);
                 DialogResponse response = callbackPanel.showDialog();
-                System.out.println("response: " + response);
                 if(DialogResponse.SELECT.equals(response))
                 {
                     List<ConstraintRow> selectedRows = callbackPanel.getSelectedValues();
@@ -60,12 +57,22 @@ public class AssemblerCallbackHandler
                     choiceCallback.setSelectedRows(selectedRows);
                 }
             }
-        }
-
-        if(errorMessages.size() > 0)
-        {
-            System.out.println("AssemblerCallbackHandler.handle(" + Arrays.asList(callbacks) + ")");
-            throw new UnsupportedOperationException("Not supported yet.");
+            else if(callback instanceof ValueInputCallback)
+            {
+                ValueInputCallback inputCallback = (ValueInputCallback)callback;
+                InputCallbackPanel callbackPanel = new InputCallbackPanel(inputCallback);
+                DialogResponse response = callbackPanel.showDialog();
+                if(DialogResponse.OK.equals(response))
+                {
+                    Serializable value = (Serializable)callbackPanel.getSelectedValue();
+                    logger.info("value: " + value);
+                    inputCallback.setValue(value);
+                }
+            }
+            else
+            {
+                throw new UnsupportedCallbackException(callback);
+            }
         }
     }
 }
