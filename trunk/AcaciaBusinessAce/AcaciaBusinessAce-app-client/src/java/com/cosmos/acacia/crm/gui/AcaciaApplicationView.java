@@ -536,14 +536,14 @@ public class AcaciaApplicationView extends FrameView {
         InvoiceListPanel invoicesListPanel = new InvoiceListPanel(getParentId(), false);
         invoicesListPanel.showFrame();
     }
-    
+
     @Action
     public void proformaInvoicesListAction() {
         InvoiceListPanel invoicesListPanel = new InvoiceListPanel(getParentId(), true);
         invoicesListPanel.showFrame();
     }
 
-   	@Action
+    @Action
     public void userGroupsListAction() {
         UserGroupsListPanel panel = new UserGroupsListPanel(getParentId());
         panel.showFrame();
