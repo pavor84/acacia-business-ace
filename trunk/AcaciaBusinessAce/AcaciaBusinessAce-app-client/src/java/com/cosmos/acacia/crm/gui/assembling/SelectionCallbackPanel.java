@@ -20,6 +20,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import com.cosmos.swingb.TableSelectionModel;
+import com.cosmos.util.CosmosUtils;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 public class SelectionCallbackPanel
     extends AcaciaPanel
 {
-    private static final Logger logger = Logger.getLogger(ProductAssemblerPanel.class);
+    private static final Logger logger = Logger.getLogger(SelectionCallbackPanel.class);
 
     @EJB
     private static AssemblingRemote formSession;
@@ -66,7 +67,15 @@ public class SelectionCallbackPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tablePanel = new com.cosmos.swingb.JBPanel();
+        buttonPanel = new com.cosmos.swingb.JBPanel();
+        selectButton = new com.cosmos.swingb.JBButton();
+        cancelButton = new com.cosmos.swingb.JBButton();
         constraintsPanel = new com.cosmos.swingb.JBPanel();
+        algorithmPanel = new com.cosmos.swingb.JBPanel();
+        algorithmLabel = new com.cosmos.swingb.JBLabel();
+        algorithmTextField = new com.cosmos.swingb.JBFormattedTextField();
+        valuesPanel = new com.cosmos.swingb.JBPanel();
         valuePanel = new com.cosmos.swingb.JBPanel();
         valueTextField = new com.cosmos.swingb.JBFormattedTextField();
         valueLabel = new com.cosmos.swingb.JBLabel();
@@ -76,60 +85,11 @@ public class SelectionCallbackPanel
         maxSelectionsPanel = new com.cosmos.swingb.JBPanel();
         maxSelectionsLabel = new com.cosmos.swingb.JBLabel();
         maxSelectionsTextField = new com.cosmos.swingb.JBFormattedTextField();
-        tablePanel = new com.cosmos.swingb.JBPanel();
-        buttonPanel = new com.cosmos.swingb.JBPanel();
-        selectButton = new com.cosmos.swingb.JBButton();
-        cancelButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
         setLayout(new java.awt.BorderLayout());
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(SelectionCallbackPanel.class);
-        constraintsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("constraintsPanel.border.title"))); // NOI18N
-        constraintsPanel.setName("constraintsPanel"); // NOI18N
-        constraintsPanel.setLayout(new java.awt.GridLayout(1, 0, 25, 0));
-
-        valuePanel.setName("valuePanel"); // NOI18N
-        valuePanel.setLayout(new java.awt.BorderLayout());
-
-        valueTextField.setEditable(false);
-        valueTextField.setName("valueTextField"); // NOI18N
-        valuePanel.add(valueTextField, java.awt.BorderLayout.CENTER);
-
-        valueLabel.setText(resourceMap.getString("valueLabel.text")); // NOI18N
-        valueLabel.setName("valueLabel"); // NOI18N
-        valuePanel.add(valueLabel, java.awt.BorderLayout.WEST);
-
-        constraintsPanel.add(valuePanel);
-
-        minSelectionsPanel.setName("minSelectionsPanel"); // NOI18N
-        minSelectionsPanel.setLayout(new java.awt.BorderLayout());
-
-        minSelectionsLabel.setText(resourceMap.getString("minSelectionsLabel.text")); // NOI18N
-        minSelectionsLabel.setName("minSelectionsLabel"); // NOI18N
-        minSelectionsPanel.add(minSelectionsLabel, java.awt.BorderLayout.WEST);
-
-        minSelectionsTextField.setEditable(false);
-        minSelectionsTextField.setName("minSelectionsTextField"); // NOI18N
-        minSelectionsPanel.add(minSelectionsTextField, java.awt.BorderLayout.CENTER);
-
-        constraintsPanel.add(minSelectionsPanel);
-
-        maxSelectionsPanel.setName("maxSelectionsPanel"); // NOI18N
-        maxSelectionsPanel.setLayout(new java.awt.BorderLayout());
-
-        maxSelectionsLabel.setText(resourceMap.getString("maxSelectionsLabel.text")); // NOI18N
-        maxSelectionsLabel.setName("maxSelectionsLabel"); // NOI18N
-        maxSelectionsPanel.add(maxSelectionsLabel, java.awt.BorderLayout.WEST);
-
-        maxSelectionsTextField.setEditable(false);
-        maxSelectionsTextField.setName("maxSelectionsTextField"); // NOI18N
-        maxSelectionsPanel.add(maxSelectionsTextField, java.awt.BorderLayout.CENTER);
-
-        constraintsPanel.add(maxSelectionsPanel);
-
-        add(constraintsPanel, java.awt.BorderLayout.PAGE_START);
-
         tablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("tablePanel.border.title"))); // NOI18N
         tablePanel.setName("tablePanel"); // NOI18N
         tablePanel.setLayout(new java.awt.BorderLayout());
@@ -148,10 +108,76 @@ public class SelectionCallbackPanel
         buttonPanel.add(cancelButton);
 
         add(buttonPanel, java.awt.BorderLayout.PAGE_END);
+
+        constraintsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("constraintsPanel.border.title"))); // NOI18N
+        constraintsPanel.setName("constraintsPanel"); // NOI18N
+        constraintsPanel.setLayout(new java.awt.GridLayout(0, 1, 0, 7));
+
+        algorithmPanel.setName("algorithmPanel"); // NOI18N
+        algorithmPanel.setLayout(new java.awt.BorderLayout());
+
+        algorithmLabel.setText(resourceMap.getString("algorithmLabel.text")); // NOI18N
+        algorithmLabel.setName("algorithmLabel"); // NOI18N
+        algorithmPanel.add(algorithmLabel, java.awt.BorderLayout.WEST);
+
+        algorithmTextField.setEditable(false);
+        algorithmTextField.setName("algorithmTextField"); // NOI18N
+        algorithmPanel.add(algorithmTextField, java.awt.BorderLayout.CENTER);
+
+        constraintsPanel.add(algorithmPanel);
+
+        valuesPanel.setName("valuesPanel"); // NOI18N
+        valuesPanel.setLayout(new java.awt.GridLayout(1, 0, 25, 0));
+
+        valuePanel.setName("valuePanel"); // NOI18N
+        valuePanel.setLayout(new java.awt.BorderLayout());
+
+        valueTextField.setEditable(false);
+        valueTextField.setName("valueTextField"); // NOI18N
+        valuePanel.add(valueTextField, java.awt.BorderLayout.CENTER);
+
+        valueLabel.setText(resourceMap.getString("valueLabel.text")); // NOI18N
+        valueLabel.setName("valueLabel"); // NOI18N
+        valuePanel.add(valueLabel, java.awt.BorderLayout.WEST);
+
+        valuesPanel.add(valuePanel);
+
+        minSelectionsPanel.setName("minSelectionsPanel"); // NOI18N
+        minSelectionsPanel.setLayout(new java.awt.BorderLayout());
+
+        minSelectionsLabel.setText(resourceMap.getString("minSelectionsLabel.text")); // NOI18N
+        minSelectionsLabel.setName("minSelectionsLabel"); // NOI18N
+        minSelectionsPanel.add(minSelectionsLabel, java.awt.BorderLayout.WEST);
+
+        minSelectionsTextField.setEditable(false);
+        minSelectionsTextField.setName("minSelectionsTextField"); // NOI18N
+        minSelectionsPanel.add(minSelectionsTextField, java.awt.BorderLayout.CENTER);
+
+        valuesPanel.add(minSelectionsPanel);
+
+        maxSelectionsPanel.setName("maxSelectionsPanel"); // NOI18N
+        maxSelectionsPanel.setLayout(new java.awt.BorderLayout());
+
+        maxSelectionsLabel.setText(resourceMap.getString("maxSelectionsLabel.text")); // NOI18N
+        maxSelectionsLabel.setName("maxSelectionsLabel"); // NOI18N
+        maxSelectionsPanel.add(maxSelectionsLabel, java.awt.BorderLayout.WEST);
+
+        maxSelectionsTextField.setEditable(false);
+        maxSelectionsTextField.setName("maxSelectionsTextField"); // NOI18N
+        maxSelectionsPanel.add(maxSelectionsTextField, java.awt.BorderLayout.CENTER);
+
+        valuesPanel.add(maxSelectionsPanel);
+
+        constraintsPanel.add(valuesPanel);
+
+        add(constraintsPanel, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBLabel algorithmLabel;
+    private com.cosmos.swingb.JBPanel algorithmPanel;
+    private com.cosmos.swingb.JBFormattedTextField algorithmTextField;
     private com.cosmos.swingb.JBPanel buttonPanel;
     private com.cosmos.swingb.JBButton cancelButton;
     private com.cosmos.swingb.JBPanel constraintsPanel;
@@ -166,18 +192,27 @@ public class SelectionCallbackPanel
     private com.cosmos.swingb.JBLabel valueLabel;
     private com.cosmos.swingb.JBPanel valuePanel;
     private com.cosmos.swingb.JBFormattedTextField valueTextField;
+    private com.cosmos.swingb.JBPanel valuesPanel;
     // End of variables declaration//GEN-END:variables
 
 
     @Override
     protected void initData()
     {
+        CosmosUtils.sameSize(selectButton, cancelButton);
         algorithmType = getAlgorithmType();
+        logger.info("algorithmType: " + algorithmType);
+        algorithmTextField.setValue(algorithmType.toText());
+
         this.minSelections = getMinSelections();
         this.maxSelections = getMaxSelections();
         if(Algorithm.Type.SingleSelectionAlgorithms.contains(algorithmType))
         {
             minSelections = maxSelections = 1;
+        }
+        else if(Algorithm.Type.SelectionAlgorithms.contains(algorithmType))
+        {
+            minSelections = maxSelections = null;
         }
 
         AssemblingMessage message = getAssemblingMessage();
@@ -223,33 +258,22 @@ public class SelectionCallbackPanel
         bindingGroup.bind();
         productRowsTable.packAll();
 
-        int panelCount = 0;
         if(Algorithm.Type.ValueDependentAlgorithms.contains(algorithmType))
         {
             valueTextField.setValue(getValueAgainstConstraints());
-            panelCount++;
         }
-        else
-            valuePanel.setEnabled(false);
 
+        logger.info("minSelections: " + minSelections);
         if(minSelections != null)
         {
             minSelectionsTextField.setValue(minSelections);
-            panelCount++;
         }
-        else
-            minSelectionsPanel.setEnabled(false);
 
+        logger.info("maxSelections: " + maxSelections);
         if(maxSelections != null)
         {
             maxSelectionsTextField.setValue(maxSelections);
-            panelCount++;
         }
-        else
-            maxSelectionsPanel.setEnabled(false);
-
-        if(panelCount == 0)
-            constraintsPanel.setEnabled(false);
 
         setPreferredSize(new Dimension(640, 480));
     }
@@ -345,15 +369,25 @@ public class SelectionCallbackPanel
             "): minSelections=" + minSelections +
             ", maxSelections=" + maxSelections +
             ", algorithmType=" + algorithmType);
+
+        if(selectedRowCount == 0)
+        {
+            logger.info("selectedRowCount == 0");
+            selectButton.setEnabled(false);
+            return;
+        }
+
         if(Algorithm.Type.SelectionAlgorithms.contains(algorithmType))
         {
             logger.info("enableSelectButton: SelectionAlgorithms");
+            selectButton.setEnabled(true);
             return;
         }
 
         if(minSelections == null && maxSelections == null)
         {
             logger.info("enableSelectButton: minSelections = maxSelections == null");
+            selectButton.setEnabled(true);
             return;
         }
 
