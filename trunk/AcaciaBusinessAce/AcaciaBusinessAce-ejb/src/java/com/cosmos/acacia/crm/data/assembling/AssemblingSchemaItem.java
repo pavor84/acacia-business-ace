@@ -195,7 +195,9 @@ public class AssemblingSchemaItem
 
     @JoinColumn(name = "data_type_id", referencedColumnName = "resource_id", nullable=false)
     @ManyToOne
-    @Property(title="Data Type", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Data Type",
+        //customDisplay="${dataType.enumName}",
+        propertyValidator=@PropertyValidator(required=true))
     private DbResource dataType;
 
     @Column(name = "min_selections")
