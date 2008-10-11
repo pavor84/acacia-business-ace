@@ -33,27 +33,32 @@ public class InvoiceListPanel extends AbstractTablePanel {
     private BindingGroup bindingGroup;
 
     private List<Invoice> list;
+    private boolean proform;
     
     /**
      * @param pendingConfirmations 
      * @param parentDataObject
      */
-    public InvoiceListPanel(BigInteger parentDataObjectId) {
-        this ( parentDataObjectId, null );
+    public InvoiceListPanel(BigInteger parentDataObjectId, boolean proform) {
+        this ( parentDataObjectId, null, proform );
     }
     
     /**
      * @param pendingConfirmations 
      * @param parentDataObject
      */
-    public InvoiceListPanel(BigInteger parentDataObjectId, List<Invoice> list) {
+    public InvoiceListPanel(BigInteger parentDataObjectId, List<Invoice> list, boolean proform) {
         super(parentDataObjectId);
         this.list = list;
+        this.proform = proform;
         bindComponents();
     }
     
     protected void bindComponents(){
         entityProps = getFormSession().getListingEntityProperties();
+        
+        if ( proform )
+            setTitle(getResourceMap().getString("Form.title.proform"));
         
         refreshDataTable(entityProps);
     }
@@ -81,7 +86,7 @@ public class InvoiceListPanel extends AbstractTablePanel {
     @SuppressWarnings("unchecked")
     private List getList() {
         if ( list==null )
-            list = getFormSession().listInvoices(getParentDataObjectId());
+            list = getFormSession().listInvoices(getParentDataObjectId(), proform);
         return list;
     }
 
@@ -128,6 +133,8 @@ public class InvoiceListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         Invoice o = getFormSession().newInvoice(getParentDataObjectId());
+        if ( proform )
+            o.setProformaInvoice(Boolean.TRUE);
         return showDetailForm(o, true);
     }
 

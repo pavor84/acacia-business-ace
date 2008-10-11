@@ -52,11 +52,15 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
     protected void initData() {
 
         super.initData();
+        
+        setSpecialCaption("button.insertFromDocument");
+        setVisible(Button.Special, true);
+        setSpecialButtonBehavior(true);
 
         entityProps = getFormSession().getItemsListEntityProperties();
 
         refreshDataTable(entityProps);
-
+        
         setVisible(Button.Select, false);
     }
 
@@ -128,14 +132,12 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
-        Task t = super.refreshAction();
-
         if (bindGroup != null)
             bindGroup.unbind();
 
         initData();
 
-        return t;
+        return super.refreshAction();
     }
 
     @Override
@@ -173,5 +175,19 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
         InvoiceItemForm formPanel = new InvoiceItemForm((InvoiceItem) rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public void specialAction() {
+        if ( canNestedOperationProceed() ){
+            InvoiceItemListPanel invoiceItemsListPanel = new InvoiceItemListPanel(getParentDataObjectId());
+            invoiceItemsListPanel.getButtonsPanel().setVisible(false);
+            InvoiceItemsCopyForm copyForm = new InvoiceItemsCopyForm(getParentDataObjectId(), invoiceItemsListPanel);
+            DialogResponse response = copyForm.showDialog(this);
+            if ( DialogResponse.SAVE.equals(response) ){
+                refreshAction();
+            }
+        }
     }
 }

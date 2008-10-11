@@ -6,11 +6,8 @@
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -31,7 +28,6 @@ import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderItemListPanel.DummyInvoice;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.SelectableListDialog;
 
 /**
  * 
@@ -176,14 +172,14 @@ public class OrderItemsCopyForm extends AcaciaPanel {
         //supplier
         //InvoicesListPanel listPanel = new InvoicesListPanel(getOrganizationDataObjectId());
         List<Invoice> invoices = getInvoicesList(dummyInvoices);
-        DummyInvoicesListDialog listDialog = new DummyInvoicesListDialog(invoices);
-        invoiceField.initUnbound(listDialog, "${invoiceNumber} - ${recipient.displayName}");
-        invoiceField.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                onInvoiceChanged((Invoice)e.getItem());
-            }
-        });
+//        DummyInvoicesListDialog listDialog = new DummyInvoicesListDialog(invoices);
+//        invoiceField.initUnbound(listDialog, "${invoiceNumber} - ${recipient.displayName}");
+//        invoiceField.addItemListener(new ItemListener() {
+//            @Override
+//            public void itemStateChanged(ItemEvent e) {
+//                onInvoiceChanged((Invoice)e.getItem());
+//            }
+//        });
 //        
 //        bind(
 //            bindGroup,
@@ -193,7 +189,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
 //            "${recipient.displayName} - ${invoiceNumber}",
 //            UpdateStrategy.READ_WRITE);
         
-        copyItemsPanel = new CopyItemsListPanel(null, new ArrayList<InvoiceItem>());
+        copyItemsPanel = new CopyItemsListPanel(null);
         copyItemsPanel.setVisibleButtons(0);
         copyItemsPanel.getDataTable().setSelectionMode(DefaultListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         
@@ -342,62 +338,6 @@ public class OrderItemsCopyForm extends AcaciaPanel {
                 return di.items;
         }
         return new ArrayList<InvoiceItem>();
-    }
-
-    private static class DummyInvoicesListDialog implements SelectableListDialog{
-        
-        @SuppressWarnings("unchecked")
-        private List listData;
-
-        public DummyInvoicesListDialog(List<Invoice> invoices){
-            listData = invoices;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public List getListData() {
-            return listData;
-        }
-
-        @Override
-        public Object getSelectedRowObject() {
-            return null;
-        }
-
-        @Override
-        public boolean isEditable() {
-            return false;
-        }
-
-        @Override
-        public void setEditable(boolean editable) {
-        }
-
-        @Override
-        public void setSelectedRowObject(Object selectedObject) {
-        }
-
-        @Override
-        public void setVisibleSelectButtons(boolean visible) {
-        }
-
-        @Override
-        public DialogResponse showDialog(Component parentComponent) {
-            return null;
-        }
-
-        @Override
-        public void setEnabled(boolean enabled)
-        {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public boolean isEnabled()
-        {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
     }
 
 }

@@ -422,7 +422,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
     }
 
     @Override
-    public Object getEntity() {
+    public InvoiceItem getEntity() {
         return entity;
     }
 
@@ -662,7 +662,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     }
                 
                     @Override
-                    public Object getSelectedRowObject() {
+                    public InvoiceItem getSelectedRowObject() {
                         return null;
                     }
                 

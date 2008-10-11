@@ -7,9 +7,11 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.InvoiceItemLink;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
@@ -34,9 +36,10 @@ public interface InvoiceListRemote {
     /**
      * Return all invoices for a given parent.
      * @param parentDataObjectId - mandatory
+     * @param proform - whether to fetch the invoices or proforma invoices
      * @return not null list
      */
-    List<Invoice> listInvoices(BigInteger parentDataObjectId);
+    List<Invoice> listInvoices(BigInteger parentDataObjectId, Boolean proform);
 
     /**
      * Deletes the invoice, - if the integrity is violated, throws an {@link ValidationException} 
@@ -193,4 +196,37 @@ public interface InvoiceListRemote {
      * @return
      */
     WarehouseProduct getWarehouseProduct(SimpleProduct product);
+
+    /**
+     * Returns list which consist of documents used as template for new invoices. 
+     * Can contain different types of documents (for ex. Sales Offers, Invoices, etc) 
+     * @param includeSalesOffers 
+     * @param includeProformas 
+     * @param includeInvoices 
+     * @param onlyPending - only not finalized documents
+     * @return
+     */
+    List<?> getTemplateDocuments(Boolean onlyPending, Boolean includeInvoices, Boolean includeProformas, Boolean includeSalesOffers);
+
+    /**
+     * Returns the items present in this template document.
+     * @param document
+     * @return
+     */
+    List<?> getDocumentItems(DataObjectBean document);
+
+    /**
+     * Saves the item links and also the actual items referenced by the link.
+     * (The invoice item links are used to remember the documents items used as templates for
+     * a given invoice item) 
+     * @param itemLinks
+     */
+    void addInvoiceItems(List<InvoiceItemLink> itemLinks);
+
+    /**
+     * Get invoice items links for a given item
+     * @param invoiceItem
+     * @return
+     */
+    List<InvoiceItemLink> getInvoiceItemLinks(InvoiceItem invoiceItem);
 }
