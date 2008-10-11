@@ -31,6 +31,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -53,6 +54,7 @@ public class AssemblingSchemaItem
     implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(AssemblingSchemaItem.class);
 
     public enum DataType
         implements DatabaseResource
@@ -60,7 +62,9 @@ public class AssemblingSchemaItem
         IntegerType("IntegerType"),
         DecimalType("DecimalType"),
         DateType("DateType"),
-        StringType("StringType");
+        StringType("StringType"),
+        EnumerationType("EnumerationType"),
+        ;
 
         private DataType(String name){
             this.name = name;
@@ -99,6 +103,8 @@ public class AssemblingSchemaItem
 
         public Serializable toDataType(Serializable source)
         {
+            logger.info("DataType.toDataType: " + source);
+
             if(source == null)
                 throw new IllegalArgumentException("The source can not be null.");
 
@@ -108,8 +114,8 @@ public class AssemblingSchemaItem
             switch(this)
             {
                 case IntegerType:
-                    if(source instanceof Integer)
-                        return source;
+                    if(source instanceof Number)
+                        return ((Number)source).intValue();
                     if(source instanceof String)
                         return Integer.valueOf((String)source);
                     throw new NumberFormatException(String.valueOf(source));

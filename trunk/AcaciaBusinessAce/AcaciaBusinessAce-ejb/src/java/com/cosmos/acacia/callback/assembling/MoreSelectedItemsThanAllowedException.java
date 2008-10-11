@@ -11,13 +11,13 @@ import com.cosmos.acacia.crm.assembling.AlgorithmException;
  *
  * @author Miro
  */
-public class MoreSelectedItemsThanAllowed
+public class MoreSelectedItemsThanAllowedException
     extends AlgorithmException
 {
     int selected;
     int allowed;
 
-    public MoreSelectedItemsThanAllowed(int selected, int allowed)
+    public MoreSelectedItemsThanAllowedException(int selected, int allowed)
     {
         super("The selected (" + selected + ") items are more than the allowed (" + allowed +")");
         this.selected = selected;

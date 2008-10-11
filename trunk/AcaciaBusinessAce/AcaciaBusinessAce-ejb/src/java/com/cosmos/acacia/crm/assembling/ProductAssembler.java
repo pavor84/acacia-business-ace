@@ -68,8 +68,6 @@ public class ProductAssembler
         throws AlgorithmException
     {
         logger.info("assemble(parameters: " + parameters + "), assemblingSchema: " + assemblingSchema);
-        
-
         int itemCounter = 0;
         List<AssemblingSchemaItem> asiList = getAssemblingSchemaItems();
         logger.info("assemble(Map), List<AssemblingSchemaItem>: " + asiList);
@@ -115,6 +113,8 @@ public class ProductAssembler
         algorithm.setCallbackHandler(getCallbackHandler());
         Object valueAgainstConstraints = getAlgorithmValue(asi, parameters);
         logger.info("valueAgainstConstraints: " + valueAgainstConstraints);
+        Algorithm.Type algorithmType = asi.getAlgorithmType();
+        logger.info("algorithmType: " + algorithmType);
         List<AssemblingSchemaItemValue> itemValues = algorithm.apply(valueAgainstConstraints);
         List<ComplexProductItem> productItems = new ArrayList<ComplexProductItem>(itemValues.size());
         logger.info("assemble(...), AssemblingSchemaItemValues: " + itemValues);
