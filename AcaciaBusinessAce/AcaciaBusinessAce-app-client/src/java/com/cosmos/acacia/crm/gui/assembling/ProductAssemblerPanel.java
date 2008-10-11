@@ -17,12 +17,12 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingParameter;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
-import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBFormattedTextField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -32,14 +32,12 @@ import java.awt.Component;
 import java.io.Serializable;
 import java.lang.Object;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.ejb.EJB;
-import javax.swing.text.MaskFormatter;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -164,7 +162,6 @@ public class ProductAssemblerPanel
     private JBFormattedTextField productPriceTextField;
 
     private AssemblingSchema assemblingSchema;
-    private List<AssemblingSchemaItem> schemaItems;
 
     private List<ComplexProductItem> complexProductItems;
 
@@ -221,9 +218,12 @@ public class ProductAssemblerPanel
         ResourceMap resource = getResourceMap();
         AssemblingSchema schema = getAssemblingSchema();
 
-        List<AssemblingParameter> parameters = parametersTable.getData();
-        for(AssemblingSchemaItem item : getSchemaItems())
+        Map<AssemblingMessage, AssemblingParameter> parametersMap =
+            new TreeMap<AssemblingMessage, AssemblingParameter>();
+        initParameters(schema, parametersMap);
+        /*for(AssemblingSchemaItem item : getSchemaItems())
         {
+            initParameters(item, parametersMap);
             AssemblingMessage message = item.getAssemblingMessage();
             if(message == null)
                 continue;
@@ -232,16 +232,59 @@ public class ProductAssemblerPanel
             AssemblingParameter parameter = new AssemblingParameter();
             parameter.setAssemblingMessage(message);
             DbResource dbResource = item.getDataType();
-            parameter.setDataType((AssemblingSchemaItem.DataType)dbResource.getEnumValue());
+            AssemblingSchemaItem.DataType dataType =
+                (AssemblingSchemaItem.DataType)dbResource.getEnumValue();
+            parameter.setDataType(dataType);
             parameter.setValue(value);
-            parameters.add(parameter);
-        }
+            //parameters.add(parameter);
+        }*/
+
+        List<AssemblingParameter> parameters = parametersTable.getData();
+        parameters.addAll(parametersMap.values());
 
         String schemaName = schema.getSchemaCode() + " - " + schema.getSchemaName();
         String strValue = resource.getString("schemaTitledPanel.title");
         schemaTitledPanel.setTitle(strValue + schemaName);
 
         parametersTable.packAll();
+    }
+
+    private void initParameters(
+        AssemblingSchema schema,
+        Map<AssemblingMessage, AssemblingParameter> parametersMap)
+    {
+        for(AssemblingSchemaItem schemaItem : getSchemaItems(schema))
+        {
+            initParameters(schemaItem, parametersMap);
+
+            AssemblingMessage message = schemaItem.getAssemblingMessage();
+            if(message == null)
+                continue;
+
+            Object value = schemaItem.getDefaultValue();
+            AssemblingParameter parameter = new AssemblingParameter();
+            parameter.setAssemblingMessage(message);
+            DbResource dbResource = schemaItem.getDataType();
+            AssemblingSchemaItem.DataType dataType =
+                (AssemblingSchemaItem.DataType)dbResource.getEnumValue();
+            parameter.setDataType(dataType);
+            parameter.setValue(value);
+            parametersMap.put(message, parameter);
+        }
+    }
+
+    private void initParameters(
+        AssemblingSchemaItem schemaItem,
+        Map<AssemblingMessage, AssemblingParameter> parametersMap)
+    {
+        for(AssemblingSchemaItemValue itemValue : getItemValues(schemaItem))
+        {
+            VirtualProduct virtualProduct = itemValue.getVirtualProduct();
+            if(virtualProduct instanceof AssemblingSchema)
+            {
+                initParameters((AssemblingSchema)virtualProduct, parametersMap);
+            }
+        }
     }
 
     @Override
@@ -383,14 +426,14 @@ public class ProductAssemblerPanel
         this.assemblingSchema = assemblingSchema;
     }
 
-    public List<AssemblingSchemaItem> getSchemaItems()
+    public List<AssemblingSchemaItem> getSchemaItems(AssemblingSchema schema)
     {
-        if(schemaItems == null)
-        {
-            schemaItems = getFormSession().getAssemblingSchemaItems(getAssemblingSchema());
-        }
+        return getFormSession().getAssemblingSchemaItems(schema);
+    }
 
-        return schemaItems;
+    public List<AssemblingSchemaItemValue> getItemValues(AssemblingSchemaItem schemaItem)
+    {
+        return getFormSession().getAssemblingSchemaItemValues(schemaItem);
     }
 
     public List<ComplexProductItem> getComplexProductItems()
