@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a method's function is to read entity/entities
+ * Indicates that a method's function is to remove an entity
  *
  * @author Bozhidar Bozhanov
  *
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Read {
+public @interface RequiresDeleteRight {
 
 }
