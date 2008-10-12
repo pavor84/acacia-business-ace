@@ -13,10 +13,10 @@ import javax.ejb.Stateful;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
-import com.cosmos.acacia.crm.bl.users.annotations.Create;
-import com.cosmos.acacia.crm.bl.users.annotations.Delete;
-import com.cosmos.acacia.crm.bl.users.annotations.Modify;
-import com.cosmos.acacia.crm.bl.users.annotations.Read;
+import com.cosmos.acacia.crm.bl.users.annotations.RequiresCreateRight;
+import com.cosmos.acacia.crm.bl.users.annotations.RequiresDeleteRight;
+import com.cosmos.acacia.crm.bl.users.annotations.RequiresModifyRight;
+import com.cosmos.acacia.crm.bl.users.annotations.RequiresReadRight;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -235,22 +235,22 @@ public class PermissionsManager implements PermissionsManagerLocal {
     private static final String MODIFY_METHOD_PREFIX = "save";
 
     private boolean isCreateMethod(Method method) {
-        return method.isAnnotationPresent(Create.class)
+        return method.isAnnotationPresent(RequiresCreateRight.class)
         || method.getName().startsWith(CREATE_METHOD_PREFIX);
     }
 
     private boolean isModifyMethod(Method method) {
-        return method.isAnnotationPresent(Modify.class)
+        return method.isAnnotationPresent(RequiresModifyRight.class)
         || method.getName().startsWith(MODIFY_METHOD_PREFIX);
     }
 
     private boolean isDeleteMethod(Method method) {
-        return method.isAnnotationPresent(Delete.class)
+        return method.isAnnotationPresent(RequiresDeleteRight.class)
         || method.getName().startsWith(DELETE_METHOD_PREFIX1)
         || method.getName().startsWith(DELETE_METHOD_PREFIX2);
     }
 
     private boolean isReadMethod(Method method) {
-        return method.isAnnotationPresent(Read.class);
+        return method.isAnnotationPresent(RequiresReadRight.class);
     }
 }
