@@ -7,7 +7,9 @@ package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.crm.assembling.ProductAssemblerService;
 import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
@@ -55,7 +57,7 @@ public interface AssemblingRemote
     AssemblingMessage saveAssemblingMessage(AssemblingMessage assemblingMessage);
 
     AssemblingCategory updateParents(AssemblingCategory newParent, AssemblingCategory newChildren);
-    AssemblingCategory getParent(AssemblingCategory child);
+    AssemblingCategory getParentCategory(AssemblingCategory child);
     //AssemblingCategory setParent(AssemblingCategory entity, AssemblingCategory parent);
     RealProduct getRealProduct(SimpleProduct simpleProduct);
 
@@ -63,6 +65,9 @@ public interface AssemblingRemote
     List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory);
     List<VirtualProduct> getVirtualProducts();
     List<AssemblingMessage> getAssemblingMessages();
+
+    DataObjectBean getParentProduct(Product product);
+    List<Product> getChildProducts(DataObjectBean parent);
 
     EntityProperties getAssemblingSchemaEntityProperties();
     EntityProperties getAssemblingSchemaItemEntityProperties();

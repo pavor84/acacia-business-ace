@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.assembling.ProductSelectionRow;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Product;
@@ -373,7 +374,7 @@ public class AssemblingBean
     }
 
     @Override
-    public AssemblingCategory getParent(AssemblingCategory child)
+    public AssemblingCategory getParentCategory(AssemblingCategory child)
     {
         BigInteger parentId;
         if((parentId = child.getParentId()) == null)
@@ -613,5 +614,17 @@ public class AssemblingBean
     public DbResource getDbResource(DatabaseResource databaseResource)
     {
         return databaseResource.getDbResource();
+    }
+
+    @Override
+    public DataObjectBean getParentProduct(Product product)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Product> getChildProducts(DataObjectBean parent)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
