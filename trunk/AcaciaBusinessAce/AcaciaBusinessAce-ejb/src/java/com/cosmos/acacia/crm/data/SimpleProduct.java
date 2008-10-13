@@ -37,12 +37,12 @@ import javax.persistence.DiscriminatorValue;
     {
         @NamedQuery
             (
-                name = "Product.findByParentDataObjectAndDeleted",
+                name = "SimpleProduct.findByParentDataObjectAndDeleted",
                 query = "select p from SimpleProduct p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
-                name = "Product.findByParentDataObjectIsNullAndDeleted",
+                name = "SimpleProduct.findByParentDataObjectIsNullAndDeleted",
                 query = "select p from SimpleProduct p where p.dataObject.parentDataObjectId is null and p.dataObject.deleted = :deleted"
             ),
         @NamedQuery
@@ -51,7 +51,7 @@ import javax.persistence.DiscriminatorValue;
                  * Parameters:
                  * - productName - find all undeleted products with the same name (at most one should exist)
                  */
-                name = "Product.findByProductName",
+                name = "SimpleProduct.findByProductName",
                 query = "select p from SimpleProduct p where p.productName like :productName and p.dataObject.deleted = false"
             ),
         @NamedQuery
@@ -60,7 +60,7 @@ import javax.persistence.DiscriminatorValue;
                  * Parameters:
                  * - productCode - find all undeleted products with the same code (at most one should exist)
                  */
-                name = "Product.findByProductCode",
+                name = "SimpleProduct.findByProductCode",
                 query = "select p from SimpleProduct p where p.productCode like :productCode and p.dataObject.deleted = false"
             )
     })
