@@ -90,6 +90,10 @@ public class UserRight implements Serializable, Comparable<UserRight> {
     @Property(title="Delete")
     private boolean delete;
 
+    @Column(name="can_execute")
+    @Property(title="Execute")
+    private boolean execute;
+
     @ManyToOne
     @JoinColumn(name = "special_permission_id", referencedColumnName = "resource_id")
     @Property(title="Special permission")
@@ -176,8 +180,16 @@ public class UserRight implements Serializable, Comparable<UserRight> {
         this.modify = modify;
     }
 
+    public void setExecute(boolean execute) {
+        this.execute = execute;
+    }
+
     public boolean canDelete() {
         return delete;
+    }
+
+    public boolean canExecute() {
+        return execute;
     }
 
     public void setDelete(boolean delete) {
@@ -266,6 +278,10 @@ public class UserRight implements Serializable, Comparable<UserRight> {
 
     public boolean isRead() {
         return read;
+    }
+
+    public boolean isExecute() {
+        return execute;
     }
 
     public String getObjectInfo() {

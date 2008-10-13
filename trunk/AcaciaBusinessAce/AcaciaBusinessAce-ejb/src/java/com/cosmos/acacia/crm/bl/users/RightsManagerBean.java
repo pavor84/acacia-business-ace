@@ -8,14 +8,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
@@ -39,6 +35,7 @@ public class RightsManagerBean
     private static final boolean DEFAULT_READ_RIGHT = true;
     private static final boolean DEFAULT_MODIFY_RIGHT = true;
     private static final boolean DEFAULT_DELETE_RIGHT = true;
+    private static final boolean DEFAULT_EXECUTE_RIGHT = true;
 
     @PersistenceContext
     EntityManager em;
@@ -107,6 +104,8 @@ public class RightsManagerBean
                 return DEFAULT_MODIFY_RIGHT;
             if (rightType == UserRightType.DELETE)
                 return DEFAULT_DELETE_RIGHT;
+            if (rightType == UserRightType.EXECUTE)
+                return DEFAULT_EXECUTE_RIGHT;
         }
 
 //        if (generalSubsetArray.length > 1) {
@@ -139,21 +138,27 @@ public class RightsManagerBean
 
             if (highestPriorityExclusionRight.canRead())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setCreate(generalSubsetArray[1].canRead());
+                    highestPriorityRight.setRead(generalSubsetArray[1].canRead());
                 else
-                    highestPriorityRight.setCreate(DEFAULT_READ_RIGHT);
+                    highestPriorityRight.setRead(DEFAULT_READ_RIGHT);
 
             if (highestPriorityExclusionRight.canModify())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setCreate(generalSubsetArray[1].canModify());
+                    highestPriorityRight.setModify(generalSubsetArray[1].canModify());
                 else
-                    highestPriorityRight.setCreate(DEFAULT_MODIFY_RIGHT);
+                    highestPriorityRight.setModify(DEFAULT_MODIFY_RIGHT);
 
             if (highestPriorityExclusionRight.canDelete())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setCreate(generalSubsetArray[1].canDelete());
+                    highestPriorityRight.setDelete(generalSubsetArray[1].canDelete());
                 else
-                    highestPriorityRight.setCreate(DEFAULT_DELETE_RIGHT);
+                    highestPriorityRight.setDelete(DEFAULT_DELETE_RIGHT);
+
+            if (highestPriorityExclusionRight.canExecute())
+                if (generalSubsetArray.length > 1)
+                    highestPriorityRight.setExecute(generalSubsetArray[1].canDelete());
+                else
+                    highestPriorityRight.setExecute(DEFAULT_DELETE_RIGHT);
         }
 
 
@@ -168,6 +173,9 @@ public class RightsManagerBean
 
         if (rightType == UserRightType.DELETE)
             return highestPriorityRight.canDelete();
+
+        if (rightType == UserRightType.EXECUTE)
+            return highestPriorityRight.canExecute();
 
         return false;
     }
@@ -345,7 +353,7 @@ public class RightsManagerBean
         setSpecialRights(null);
         setGeneralRights(null);
     }
-    
+
     private User getUser() {
         return session.getUser();
     }

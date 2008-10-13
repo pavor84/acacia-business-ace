@@ -15,6 +15,7 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
 import com.cosmos.acacia.crm.bl.users.annotations.RequiresCreateRight;
 import com.cosmos.acacia.crm.bl.users.annotations.RequiresDeleteRight;
+import com.cosmos.acacia.crm.bl.users.annotations.RequiresExecuteRight;
 import com.cosmos.acacia.crm.bl.users.annotations.RequiresModifyRight;
 import com.cosmos.acacia.crm.bl.users.annotations.RequiresReadRight;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -92,6 +93,13 @@ public class PermissionsManager implements PermissionsManagerLocal {
                 return manager.isAllowed(tmpDataObject, UserRightType.READ);
         }
 
+        if (isExecuteMethod(method)) {
+            DataObject tmpDataObject = new DataObject();
+            tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
+            if (tmpDataObject.getDataObjectType() != null)
+                return manager.isAllowed(tmpDataObject, UserRightType.EXECUTE);
+        }
+
         return true;
     }
 
@@ -136,7 +144,9 @@ public class PermissionsManager implements PermissionsManagerLocal {
             if (allowed)
                 allowed = manager.isAllowed(
                      dob.getDataObject(),
-                     UserRightType.READ);
+                     UserRightType.READ) || manager.isAllowed(
+                             dob.getDataObject(),
+                             UserRightType.EXECUTE);
         }
         return allowed;
     }
@@ -179,7 +189,10 @@ public class PermissionsManager implements PermissionsManagerLocal {
                         tmpCollection.remove(obj);
                     } else if (!manager.isAllowed(
                             dob.getDataObject(),
-                            UserRightType.READ)) {
+                            UserRightType.READ)
+                            || !manager.isAllowed(
+                                    dob.getDataObject(),
+                                    UserRightType.EXECUTE)) {
 
                         tmpCollection.remove(obj);
                     }
@@ -252,5 +265,9 @@ public class PermissionsManager implements PermissionsManagerLocal {
 
     private boolean isReadMethod(Method method) {
         return method.isAnnotationPresent(RequiresReadRight.class);
+    }
+
+    private boolean isExecuteMethod(Method method) {
+        return method.isAnnotationPresent(RequiresExecuteRight.class);
     }
 }
