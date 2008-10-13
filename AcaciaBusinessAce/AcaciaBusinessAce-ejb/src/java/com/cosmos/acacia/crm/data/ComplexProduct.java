@@ -35,8 +35,17 @@ import javax.persistence.Transient;
     {
         @NamedQuery
             (
+                name = "Product.findByParentDataObjectIsNullAndDeleted",
+                query = "select p from Product p" +
+                        " where p.dataObject.parentDataObjectId is NULL" +
+                        " and p.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
                 name = "Product.findByParentDataObjectAndDeleted",
-                query = "select p from SimpleProduct p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.dataObject.deleted = :deleted"
+                query = "select p from Product p" +
+                        " where p.dataObject.parentDataObjectId = :parentDataObjectId" +
+                        " and p.dataObject.deleted = :deleted"
             )
     })
 public class ComplexProduct

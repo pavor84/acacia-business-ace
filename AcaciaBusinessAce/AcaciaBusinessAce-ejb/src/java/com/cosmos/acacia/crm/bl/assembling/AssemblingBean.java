@@ -630,11 +630,18 @@ public class AssemblingBean
     @Override
     public List<Product> getChildProducts(DataObjectBean parent)
     {
+        Query q;
         if(parent == null)
         {
-            
+            q = em.createNamedQuery("Product.findByParentDataObjectIsNullAndDeleted");
         }
+        else
+        {
+            q = em.createNamedQuery("Product.findByParentDataObjectAndDeleted");
+            q.setParameter("parentDataObjectId", parent.getId());
+        }
+        q.setParameter("deleted", false);
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new ArrayList<Product>(q.getResultList());
     }
 }
