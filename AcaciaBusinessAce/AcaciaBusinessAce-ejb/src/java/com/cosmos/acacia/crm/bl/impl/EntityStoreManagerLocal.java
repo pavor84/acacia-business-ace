@@ -5,9 +5,12 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 
+import java.math.BigInteger;
 import javax.ejb.Local;
 import javax.persistence.EntityManager;
 
@@ -40,4 +43,7 @@ public interface EntityStoreManagerLocal
      * @return
      */
     PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position);
+
+    DataObjectBean getDataObjectBean(EntityManager em, DataObject dataObject);
+    DataObjectBean getDataObjectBean(EntityManager em, BigInteger dataObjectId);
 }

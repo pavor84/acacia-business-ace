@@ -41,6 +41,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
 
+    @Override
     public void persist(EntityManager em, Object entity) {
         boolean mustMerge = false;
         if(entity instanceof DataObjectBean)
@@ -132,6 +133,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         em.persist(entity);
     }
 
+    @Override
     public int remove(EntityManager em, Object entity) {
         int version = -1;
         if(entity instanceof DataObjectBean)
@@ -194,6 +196,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         return dotLocal;
     }
 
+    @Override
     public void prePersist(DataObjectBean entity)
     {
         System.out.println("EntityStoreManager.prePersist: " + entity);
@@ -204,6 +207,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
 
     @SuppressWarnings("unchecked")
+    @Override
     public EntityProperties getEntityProperties(Class entityClass)
     {
         String entityClassName = entityClass.getName();
@@ -218,8 +222,38 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position){
         return BeansBindingHelper.createPropertyDetails(entityClass, propertyName, position);
     }
 
+    @Override
+    public DataObjectBean getDataObjectBean(EntityManager em, DataObject dataObject)
+    {
+        if(dataObject == null)
+            return null;
+
+        DataObjectType dot = dataObject.getDataObjectType();
+        Class cls;
+        try
+        {
+            cls = Class.forName(dot.getDataObjectType());
+        }
+        catch(ClassNotFoundException ex)
+        {
+            throw new RuntimeException(ex);
+        }
+        DataObjectBean dob = (DataObjectBean)em.find(cls, dataObject.getDataObjectId());
+        return dob;
+    }
+
+    @Override
+    public DataObjectBean getDataObjectBean(EntityManager em, BigInteger dataObjectId)
+    {
+        DataObject dataObject = em.find(DataObject.class, dataObjectId);
+        if(dataObject == null)
+            return null;
+
+        return getDataObjectBean(em, dataObject);
+    }
 }
