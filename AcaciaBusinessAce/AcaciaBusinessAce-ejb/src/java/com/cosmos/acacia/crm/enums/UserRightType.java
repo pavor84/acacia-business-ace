@@ -9,5 +9,6 @@ public enum UserRightType {
     READ,
     CREATE,
     MODIFY,
-    DELETE
+    DELETE,
+    EXECUTE
 }

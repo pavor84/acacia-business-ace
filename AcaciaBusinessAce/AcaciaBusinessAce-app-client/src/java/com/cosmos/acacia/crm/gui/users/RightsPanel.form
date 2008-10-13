@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -18,41 +19,47 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="entityFormButtonPanel" pref="378" max="32767" attributes="2"/>
-              <EmptySpace pref="10" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="10" max="32767" attributes="0"/>
-              <Component id="readCheckBox" linkSize="1" min="-2" pref="87" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="32767" attributes="1"/>
-              <Component id="createCheckBox" linkSize="1" min="-2" pref="89" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="modifyCheckBox" linkSize="1" min="-2" pref="91" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="deleteCheckBox" linkSize="1" min="-2" pref="93" max="-2" attributes="0"/>
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="excludedCheckBox" pref="378" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="dataObjectLabel" alignment="1" pref="75" max="32767" attributes="1"/>
+                          <Component id="dataObjectTypeLabel" alignment="1" pref="75" max="32767" attributes="1"/>
+                          <Component id="expiresLabel" alignment="1" pref="75" max="32767" attributes="1"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="readCheckBox" pref="75" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="dataObjectComboBox" alignment="1" max="32767" attributes="1"/>
+                                  <Component id="dataObjectTypeComboBox" alignment="1" max="32767" attributes="1"/>
+                                  <Component id="expiresDatePicker" alignment="1" min="-2" pref="314" max="-2" attributes="1"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Component id="createCheckBox" min="-2" pref="75" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="modifyCheckBox" min="-2" pref="80" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="deleteCheckBox" min="-2" pref="75" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="executeCheckBox" pref="84" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="dataObjectLabel" pref="83" max="32767" attributes="1"/>
-                          <Component id="dataObjectTypeLabel" alignment="1" pref="83" max="32767" attributes="1"/>
-                          <Component id="expiresLabel" alignment="1" pref="83" max="32767" attributes="1"/>
-                      </Group>
+                      <Component id="entityFormButtonPanel" pref="393" max="32767" attributes="2"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="expiresDatePicker" alignment="1" max="32767" attributes="1"/>
-                          <Component id="dataObjectComboBox" alignment="1" max="32767" attributes="1"/>
-                          <Component id="dataObjectTypeComboBox" alignment="1" min="-2" pref="291" max="-2" attributes="1"/>
-                      </Group>
+                      <Component id="excludedCheckBox" pref="397" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -74,10 +81,11 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="readCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="createCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="modifyCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="executeCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="deleteCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="modifyCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="readCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="excludedCheckBox" min="-2" max="-2" attributes="0"/>
@@ -166,6 +174,12 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="expiresLabel.text"/>
         <Property name="name" type="java.lang.String" value="expiresLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="executeCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="executeCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="executeCheckBox" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
