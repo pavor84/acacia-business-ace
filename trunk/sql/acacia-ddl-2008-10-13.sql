@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Started on 2008-10-11 20:48:11
+-- Started on 2008-10-14 00:19:14
 
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = off;
@@ -70,7 +70,7 @@ CREATE TABLE assembling_messages (
 
 --
 -- TOC entry 1688 (class 1259 OID 44508)
--- Dependencies: 1985 6
+-- Dependencies: 1986 6
 -- Name: assembling_schema_item_values; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -86,7 +86,7 @@ CREATE TABLE assembling_schema_item_values (
 
 --
 -- TOC entry 1687 (class 1259 OID 44479)
--- Dependencies: 1984 6
+-- Dependencies: 1985 6
 -- Name: assembling_schema_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -106,7 +106,7 @@ CREATE TABLE assembling_schema_items (
 
 --
 -- TOC entry 1686 (class 1259 OID 44456)
--- Dependencies: 1983 6
+-- Dependencies: 1984 6
 -- Name: assembling_schemas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -244,7 +244,7 @@ CREATE TABLE communication_contacts (
 
 
 --
--- TOC entry 2428 (class 0 OID 0)
+-- TOC entry 2429 (class 0 OID 0)
 -- Dependencies: 1631
 -- Name: COLUMN communication_contacts.communication_type_id; Type: COMMENT; Schema: public; Owner: -
 --
@@ -488,7 +488,7 @@ CREATE TABLE delivery_certificates (
 
 
 --
--- TOC entry 2429 (class 0 OID 0)
+-- TOC entry 2430 (class 0 OID 0)
 -- Dependencies: 1644
 -- Name: COLUMN delivery_certificates.forwarder_branch_id; Type: COMMENT; Schema: public; Owner: -
 --
@@ -497,7 +497,7 @@ COMMENT ON COLUMN delivery_certificates.forwarder_branch_id IS 'As the Forwarder
 
 
 --
--- TOC entry 2430 (class 0 OID 0)
+-- TOC entry 2431 (class 0 OID 0)
 -- Dependencies: 1644
 -- Name: COLUMN delivery_certificates.recipient_branch_id; Type: COMMENT; Schema: public; Owner: -
 --
@@ -724,7 +724,7 @@ CREATE TABLE passports (
 
 
 --
--- TOC entry 2431 (class 0 OID 0)
+-- TOC entry 2432 (class 0 OID 0)
 -- Dependencies: 1650
 -- Name: COLUMN passports.passport_type_id; Type: COMMENT; Schema: public; Owner: -
 --
@@ -789,7 +789,7 @@ CREATE TABLE position_types (
 
 
 --
--- TOC entry 2432 (class 0 OID 0)
+-- TOC entry 2433 (class 0 OID 0)
 -- Dependencies: 1652
 -- Name: COLUMN position_types.owner_type; Type: COMMENT; Schema: public; Owner: -
 --
@@ -1052,7 +1052,7 @@ CREATE TABLE user_groups (
 
 --
 -- TOC entry 1667 (class 1259 OID 36926)
--- Dependencies: 1977 1978 1979 1980 1981 6
+-- Dependencies: 1977 1978 1979 1980 1981 1982 6
 -- Name: user_rights; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1068,13 +1068,14 @@ CREATE TABLE user_rights (
     user_right_id bigint NOT NULL,
     special_permission_id integer,
     excluded boolean DEFAULT false NOT NULL,
-    expires timestamp without time zone
+    expires timestamp without time zone,
+    can_execute boolean DEFAULT false NOT NULL
 );
 
 
 --
 -- TOC entry 1668 (class 1259 OID 36934)
--- Dependencies: 1982 6
+-- Dependencies: 1983 6
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1185,7 +1186,7 @@ CREATE SEQUENCE countries_seq
 
 
 --
--- TOC entry 2433 (class 0 OID 0)
+-- TOC entry 2434 (class 0 OID 0)
 -- Dependencies: 1672
 -- Name: countries_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1207,7 +1208,7 @@ CREATE SEQUENCE data_object_type_seq
 
 
 --
--- TOC entry 2434 (class 0 OID 0)
+-- TOC entry 2435 (class 0 OID 0)
 -- Dependencies: 1673
 -- Name: data_object_type_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1229,7 +1230,7 @@ CREATE SEQUENCE data_objects_seq
 
 
 --
--- TOC entry 2435 (class 0 OID 0)
+-- TOC entry 2436 (class 0 OID 0)
 -- Dependencies: 1674
 -- Name: data_objects_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1251,7 +1252,7 @@ CREATE SEQUENCE enum_classes_seq
 
 
 --
--- TOC entry 2436 (class 0 OID 0)
+-- TOC entry 2437 (class 0 OID 0)
 -- Dependencies: 1675
 -- Name: enum_classes_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1273,7 +1274,7 @@ CREATE SEQUENCE invoice_item_link_seq
 
 
 --
--- TOC entry 2437 (class 0 OID 0)
+-- TOC entry 2438 (class 0 OID 0)
 -- Dependencies: 1691
 -- Name: invoice_item_link_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1295,7 +1296,7 @@ CREATE SEQUENCE order_item_match_seq
 
 
 --
--- TOC entry 2438 (class 0 OID 0)
+-- TOC entry 2439 (class 0 OID 0)
 -- Dependencies: 1676
 -- Name: order_item_match_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1317,7 +1318,7 @@ CREATE SEQUENCE pattern_mask_formats_seq
 
 
 --
--- TOC entry 2439 (class 0 OID 0)
+-- TOC entry 2440 (class 0 OID 0)
 -- Dependencies: 1677
 -- Name: pattern_mask_formats_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1339,12 +1340,12 @@ CREATE SEQUENCE resource_bundle_seq
 
 
 --
--- TOC entry 2440 (class 0 OID 0)
+-- TOC entry 2441 (class 0 OID 0)
 -- Dependencies: 1678
 -- Name: resource_bundle_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('resource_bundle_seq', 167, true);
+SELECT pg_catalog.setval('resource_bundle_seq', 168, true);
 
 
 --
@@ -1362,7 +1363,7 @@ CREATE SEQUENCE sequence_identifiers_seq_id_key_seq
 
 
 --
--- TOC entry 2441 (class 0 OID 0)
+-- TOC entry 2442 (class 0 OID 0)
 -- Dependencies: 1679
 -- Name: sequence_identifiers_seq_id_key_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -1371,7 +1372,7 @@ ALTER SEQUENCE sequence_identifiers_seq_id_key_seq OWNED BY sequence_identifiers
 
 
 --
--- TOC entry 2442 (class 0 OID 0)
+-- TOC entry 2443 (class 0 OID 0)
 -- Dependencies: 1679
 -- Name: sequence_identifiers_seq_id_key_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1393,12 +1394,12 @@ CREATE SEQUENCE user_rights_seq
 
 
 --
--- TOC entry 2443 (class 0 OID 0)
+-- TOC entry 2444 (class 0 OID 0)
 -- Dependencies: 1680
 -- Name: user_rights_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('user_rights_seq', 1161, true);
+SELECT pg_catalog.setval('user_rights_seq', 1162, true);
 
 
 --
@@ -1415,7 +1416,7 @@ CREATE SEQUENCE warehouse_product_seq
 
 
 --
--- TOC entry 2444 (class 0 OID 0)
+-- TOC entry 2445 (class 0 OID 0)
 -- Dependencies: 1681
 -- Name: warehouse_product_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1438,7 +1439,7 @@ CREATE SEQUENCE xyz_id_sequence
 
 
 --
--- TOC entry 2445 (class 0 OID 0)
+-- TOC entry 2446 (class 0 OID 0)
 -- Dependencies: 1682
 -- Name: xyz_id_sequence; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -1456,7 +1457,7 @@ ALTER TABLE sequence_identifiers ALTER COLUMN seq_id_key SET DEFAULT nextval('se
 
 
 --
--- TOC entry 2364 (class 0 OID 36675)
+-- TOC entry 2365 (class 0 OID 36675)
 -- Dependencies: 1622
 -- Data for Name: addresses; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1501,10 +1502,12 @@ INSERT INTO addresses (address_id, parent_id, address_name, country_id, city_id,
 INSERT INTO addresses (address_id, parent_id, address_name, country_id, city_id, postal_code, postal_address, description, user_group_id) VALUES (1223120621778, 1223120606803, 'Home address', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO addresses (address_id, parent_id, address_name, country_id, city_id, postal_code, postal_address, description, user_group_id) VALUES (1223120641341, 1223120596192, 'Home address', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO addresses (address_id, parent_id, address_name, country_id, city_id, postal_code, postal_address, description, user_group_id) VALUES (1223120672286, 1223120577767, 'Central office', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO addresses (address_id, parent_id, address_name, country_id, city_id, postal_code, postal_address, description, user_group_id) VALUES (1223752978604, 1223752974493, 'Central office', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO addresses (address_id, parent_id, address_name, country_id, city_id, postal_code, postal_address, description, user_group_id) VALUES (1223753632073, 1223753628322, 'Central office', NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 --
--- TOC entry 2365 (class 0 OID 36681)
+-- TOC entry 2366 (class 0 OID 36681)
 -- Dependencies: 1623
 -- Data for Name: assembling_categories; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1514,7 +1517,7 @@ INSERT INTO assembling_categories (assembling_category_id, parent_id, category_c
 
 
 --
--- TOC entry 2416 (class 0 OID 44388)
+-- TOC entry 2417 (class 0 OID 44388)
 -- Dependencies: 1685
 -- Data for Name: assembling_messages; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1538,7 +1541,7 @@ INSERT INTO assembling_messages (message_id, organization_id, message_code, mess
 
 
 --
--- TOC entry 2419 (class 0 OID 44508)
+-- TOC entry 2420 (class 0 OID 44508)
 -- Dependencies: 1688
 -- Data for Name: assembling_schema_item_values; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1550,7 +1553,7 @@ INSERT INTO assembling_schema_item_values (item_value_id, item_id, min_constrain
 
 
 --
--- TOC entry 2418 (class 0 OID 44479)
+-- TOC entry 2419 (class 0 OID 44479)
 -- Dependencies: 1687
 -- Data for Name: assembling_schema_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1559,7 +1562,7 @@ INSERT INTO assembling_schema_items (item_id, assembling_schema_id, algorithm_id
 
 
 --
--- TOC entry 2417 (class 0 OID 44456)
+-- TOC entry 2418 (class 0 OID 44456)
 -- Dependencies: 1686
 -- Data for Name: assembling_schemas; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1568,7 +1571,7 @@ INSERT INTO assembling_schemas (product_id, category_id, schema_code, schema_nam
 
 
 --
--- TOC entry 2366 (class 0 OID 36708)
+-- TOC entry 2367 (class 0 OID 36708)
 -- Dependencies: 1624
 -- Data for Name: bank_details; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1583,7 +1586,7 @@ INSERT INTO bank_details (bank_detail_id, parent_id, is_default, currency_id, ba
 
 
 --
--- TOC entry 2367 (class 0 OID 36716)
+-- TOC entry 2368 (class 0 OID 36716)
 -- Dependencies: 1625
 -- Data for Name: business_partners; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1678,10 +1681,13 @@ INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1222977159237,
 INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1223120577767, 1209222047860, NULL);
 INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1223120596192, 1209222047860, NULL);
 INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1223120606803, 1209222047860, NULL);
+INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1223752974493, 1209222047860, NULL);
+INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1223753592227, 1209222047860, NULL);
+INSERT INTO business_partners (partner_id, parent_id, id) VALUES (1223753628322, 1209222047860, NULL);
 
 
 --
--- TOC entry 2368 (class 0 OID 36719)
+-- TOC entry 2369 (class 0 OID 36719)
 -- Dependencies: 1626
 -- Data for Name: cities; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1696,7 +1702,7 @@ INSERT INTO cities (city_id, country_id, city_name, postal_code, city_code, city
 
 
 --
--- TOC entry 2369 (class 0 OID 36725)
+-- TOC entry 2370 (class 0 OID 36725)
 -- Dependencies: 1627
 -- Data for Name: classified_objects; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1723,10 +1729,13 @@ INSERT INTO classified_objects (classifier_id, classified_object_id, description
 INSERT INTO classified_objects (classifier_id, classified_object_id, description) VALUES (1223120525236, 1223120596192, NULL);
 INSERT INTO classified_objects (classifier_id, classified_object_id, description) VALUES (1223120525236, 1223120606803, NULL);
 INSERT INTO classified_objects (classifier_id, classified_object_id, description) VALUES (1223327499800, 1216474970646, NULL);
+INSERT INTO classified_objects (classifier_id, classified_object_id, description) VALUES (1213515923514, 1223752974493, NULL);
+INSERT INTO classified_objects (classifier_id, classified_object_id, description) VALUES (1223120534404, 1223753592227, NULL);
+INSERT INTO classified_objects (classifier_id, classified_object_id, description) VALUES (1223120534404, 1223753628322, NULL);
 
 
 --
--- TOC entry 2370 (class 0 OID 36731)
+-- TOC entry 2371 (class 0 OID 36731)
 -- Dependencies: 1628
 -- Data for Name: classifier_applied_for_dot; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1739,7 +1748,7 @@ INSERT INTO classifier_applied_for_dot (classifier_id, data_object_type_id) VALU
 
 
 --
--- TOC entry 2371 (class 0 OID 36734)
+-- TOC entry 2372 (class 0 OID 36734)
 -- Dependencies: 1629
 -- Data for Name: classifier_groups; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1749,7 +1758,7 @@ INSERT INTO classifier_groups (classifier_group_id, is_system_group, classifier_
 
 
 --
--- TOC entry 2372 (class 0 OID 36741)
+-- TOC entry 2373 (class 0 OID 36741)
 -- Dependencies: 1630
 -- Data for Name: classifiers; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1767,7 +1776,7 @@ INSERT INTO classifiers (classifier_id, parent_id, classifier_code, classifier_n
 
 
 --
--- TOC entry 2373 (class 0 OID 36747)
+-- TOC entry 2374 (class 0 OID 36747)
 -- Dependencies: 1631
 -- Data for Name: communication_contacts; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1791,7 +1800,7 @@ INSERT INTO communication_contacts (communication_contact_id, parent_id, communi
 
 
 --
--- TOC entry 2374 (class 0 OID 36750)
+-- TOC entry 2375 (class 0 OID 36750)
 -- Dependencies: 1632
 -- Data for Name: complex_product_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1800,7 +1809,7 @@ INSERT INTO complex_product_items (complex_product_item_id, complex_product_id, 
 
 
 --
--- TOC entry 2375 (class 0 OID 36756)
+-- TOC entry 2376 (class 0 OID 36756)
 -- Dependencies: 1633
 -- Data for Name: complex_products; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1809,7 +1818,7 @@ INSERT INTO complex_products (product_id, applied_schema_id, product_name, produ
 
 
 --
--- TOC entry 2376 (class 0 OID 36759)
+-- TOC entry 2377 (class 0 OID 36759)
 -- Dependencies: 1634
 -- Data for Name: contact_persons; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -2100,7 +2109,7 @@ INSERT INTO contact_persons (contact_person_id, parent_id, position_type_id, con
 
 
 --
--- TOC entry 2377 (class 0 OID 36762)
+-- TOC entry 2378 (class 0 OID 36762)
 -- Dependencies: 1635
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -2116,7 +2125,7 @@ INSERT INTO countries (country_id, country_name, country_code_a2, country_code_a
 
 
 --
--- TOC entry 2378 (class 0 OID 36768)
+-- TOC entry 2379 (class 0 OID 36768)
 -- Dependencies: 1636
 -- Data for Name: currencies; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -2124,7 +2133,7 @@ INSERT INTO countries (country_id, country_name, country_code_a2, country_code_a
 
 
 --
--- TOC entry 2379 (class 0 OID 36774)
+-- TOC entry 2380 (class 0 OID 36774)
 -- Dependencies: 1637
 -- Data for Name: data_object_details; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -2132,7 +2141,7 @@ INSERT INTO countries (country_id, country_name, country_code_a2, country_code_a
 
 
 --
--- TOC entry 2380 (class 0 OID 36780)
+-- TOC entry 2381 (class 0 OID 36780)
 -- Dependencies: 1638
 -- Data for Name: data_object_links; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -2141,7 +2150,7 @@ INSERT INTO data_object_links (data_object_link_id, parent_id, linked_data_objec
 
 
 --
--- TOC entry 2381 (class 0 OID 36783)
+-- TOC entry 2382 (class 0 OID 36783)
 -- Dependencies: 1639
 -- Data for Name: data_object_types; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -2186,7 +2195,7 @@ INSERT INTO data_object_types (data_object_type_id, data_object_type, notes, sma
 
 
 --
--- TOC entry 2382 (class 0 OID 36789)
+-- TOC entry 2383 (class 0 OID 36789)
 -- Dependencies: 1640
 -- Data for Name: data_objects; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4165,10 +4174,16 @@ INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_
 INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223727241227, 1, 115, '2008-10-11 15:14:01.216+03', 1214836145032, 1209222423971, false, false, false, false, false, 1223727212587, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223727314571, 1, 115, '2008-10-11 15:15:14.559+03', 1214836145032, 1209222423971, false, false, false, false, false, 1223727212587, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223727212587, 2, 89, '2008-10-11 15:13:32.577+03', 1214836145032, 1209222423971, false, false, false, false, false, 1209222047860, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223752978604, 1, 40, '2008-10-11 22:22:58.602+03', 1214836145032, 1209222423971, false, false, false, false, false, 1223752974493, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223752974493, 2, 1, '2008-10-11 22:22:54.477+03', 1214836145032, 1209222423971, false, false, false, false, false, 1209222047860, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223753592227, 1, 1, '2008-10-11 22:33:12.211+03', 1214836145032, 1209222423971, false, false, false, false, false, 1209222047860, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223753632073, 1, 40, '2008-10-11 22:33:52.07+03', 1214836145032, 1209222423971, false, false, false, false, false, 1223753628322, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223753628322, 2, 1, '2008-10-11 22:33:48.32+03', 1214836145032, 1209222423971, false, false, false, false, false, 1209222047860, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO data_objects (data_object_id, data_object_version, data_object_type_id, creation_time, creator_id, owner_id, is_deleted, is_read_only, is_system, is_folder, is_link, parent_data_object_id, linked_data_object_id, order_position, child_counter, notes, small_image_uri, small_image, medium_image_uri, medium_image, data_object_uri) VALUES (1223753653840, 1, 89, '2008-10-11 22:34:13.836+03', 1214836145032, 1209222423971, false, false, false, false, false, 1209222047860, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 
 --
--- TOC entry 2383 (class 0 OID 36801)
+-- TOC entry 2384 (class 0 OID 36801)
 -- Dependencies: 1641
 -- Data for Name: delivery_certificate_assignments; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4180,7 +4195,7 @@ INSERT INTO delivery_certificate_assignments (delivery_certificate_id, document_
 
 
 --
--- TOC entry 2384 (class 0 OID 36804)
+-- TOC entry 2385 (class 0 OID 36804)
 -- Dependencies: 1642
 -- Data for Name: delivery_certificate_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4192,7 +4207,7 @@ INSERT INTO delivery_certificate_items (certificate_item_id, parent_id, product_
 
 
 --
--- TOC entry 2385 (class 0 OID 36807)
+-- TOC entry 2386 (class 0 OID 36807)
 -- Dependencies: 1643
 -- Data for Name: delivery_certificate_serial_numbers; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4200,7 +4215,7 @@ INSERT INTO delivery_certificate_items (certificate_item_id, parent_id, product_
 
 
 --
--- TOC entry 2386 (class 0 OID 36810)
+-- TOC entry 2387 (class 0 OID 36810)
 -- Dependencies: 1644
 -- Data for Name: delivery_certificates; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4216,7 +4231,7 @@ INSERT INTO delivery_certificates (delivery_certificate_id, parent_id, warehouse
 
 
 --
--- TOC entry 2387 (class 0 OID 36813)
+-- TOC entry 2388 (class 0 OID 36813)
 -- Dependencies: 1645
 -- Data for Name: enum_classes; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4247,7 +4262,7 @@ INSERT INTO enum_classes (enum_class_id, enum_class_name) VALUES (26, 'com.cosmo
 
 
 --
--- TOC entry 2422 (class 0 OID 44761)
+-- TOC entry 2423 (class 0 OID 44761)
 -- Dependencies: 1692
 -- Data for Name: invoice_item_link; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4259,7 +4274,7 @@ INSERT INTO invoice_item_link (id, template_item_id, invoice_item_id) VALUES (22
 
 
 --
--- TOC entry 2421 (class 0 OID 44736)
+-- TOC entry 2422 (class 0 OID 44736)
 -- Dependencies: 1690
 -- Data for Name: invoice_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4274,7 +4289,7 @@ INSERT INTO invoice_items (invoice_item_id, discount_amount, discount_percent, e
 
 
 --
--- TOC entry 2420 (class 0 OID 44653)
+-- TOC entry 2421 (class 0 OID 44653)
 -- Dependencies: 1689
 -- Data for Name: invoices; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4284,10 +4299,11 @@ INSERT INTO invoices (invoice_id, branch_name, creation_time, creator_name, days
 INSERT INTO invoices (invoice_id, branch_name, creation_time, creator_name, days_between_payments, discount_amount, discount_percent, excise_duty_percent, excise_duty_amount, finalizing_date, invoice_date, invoice_number, invoice_sub_value, notes, parent_id, payment_due_date, payments_count, recipient_contact_name, recipient_name, sender_name, sent_time, ship_date_from, ship_date_to, ship_week, single_pay, total_value, transport_price, vat, vat_condition_notes, doc_delivery_method_id, sender_id, currency_id, recipient_id, branch_id, delivery_type_id, creator_id, payment_terms_id, payment_type_id, supplier_contact_id, invoice_type_id, vat_condition_id, shippingagent_partner_id, status_id, transportation_method_id, proforma) VALUES (1223726626112.00, 'Holland, Hilversum', '2008-10-11', 'Edwin R. Poot Hairy A** Man', NULL, 0.00, 0.00, 0.00, 0.00, NULL, '2008-10-11', 600000002.00, 529.00, NULL, 1209222047860.00, '2008-10-11', NULL, 'Client Bai Tosho ', 'Client Bai Tosho ', NULL, NULL, '2008-12-20', '2008-12-25', 51, NULL, 634.80, 0.00, 20.00, NULL, 116, NULL, 49, 1223120606803.00, 1209222423971.00, 151, 1211472878364.00, 108, 105, 1223120627520.00, 81, 103, NULL, 154, 95, false);
 INSERT INTO invoices (invoice_id, branch_name, creation_time, creator_name, days_between_payments, discount_amount, discount_percent, excise_duty_percent, excise_duty_amount, finalizing_date, invoice_date, invoice_number, invoice_sub_value, notes, parent_id, payment_due_date, payments_count, recipient_contact_name, recipient_name, sender_name, sent_time, ship_date_from, ship_date_to, ship_week, single_pay, total_value, transport_price, vat, vat_condition_notes, doc_delivery_method_id, sender_id, currency_id, recipient_id, branch_id, delivery_type_id, creator_id, payment_terms_id, payment_type_id, supplier_contact_id, invoice_type_id, vat_condition_id, shippingagent_partner_id, status_id, transportation_method_id, proforma) VALUES (1223726880973.00, 'Holland, Hilversum', '2008-10-11', 'Edwin R. Poot Hairy A** Man', NULL, 0.00, 0.00, 0.00, 0.00, NULL, '2008-10-11', 600000000.00, 673.00, NULL, 1209222047860.00, '2008-10-11', NULL, 'Client Bai Tosho ', 'Client Bai Tosho ', 'Edwin R. Poot Hairy A** Man', '2008-10-11', '2008-01-26', '2008-01-31', 4, NULL, 807.60, 0.00, 20.00, NULL, 116, 1211472878364.00, 49, 1223120606803.00, 1209222423971.00, 151, 1211472878364.00, 108, 105, 1223120627520.00, 81, 103, NULL, 76, 95, true);
 INSERT INTO invoices (invoice_id, branch_name, creation_time, creator_name, days_between_payments, discount_amount, discount_percent, excise_duty_percent, excise_duty_amount, finalizing_date, invoice_date, invoice_number, invoice_sub_value, notes, parent_id, payment_due_date, payments_count, recipient_contact_name, recipient_name, sender_name, sent_time, ship_date_from, ship_date_to, ship_week, single_pay, total_value, transport_price, vat, vat_condition_notes, doc_delivery_method_id, sender_id, currency_id, recipient_id, branch_id, delivery_type_id, creator_id, payment_terms_id, payment_type_id, supplier_contact_id, invoice_type_id, vat_condition_id, shippingagent_partner_id, status_id, transportation_method_id, proforma) VALUES (1223727212587.00, 'Holland, Hilversum', '2008-10-11', 'Edwin R. Poot Hairy A** Man', NULL, 0.00, 0.00, 0.00, 0.00, NULL, '2008-10-11', NULL, 547.00, NULL, 1209222047860.00, '2008-10-11', NULL, 'Client Bai Tosho ', 'Client Bai Tosho ', NULL, NULL, '2008-01-26', '2008-01-31', 4, NULL, 656.40, 0.00, 20.00, NULL, 116, NULL, 49, 1223120606803.00, 1209222423971.00, 151, 1211472878364.00, 108, 105, 1223120627520.00, 81, 103, NULL, 75, 95, true);
+INSERT INTO invoices (invoice_id, branch_name, creation_time, creator_name, days_between_payments, discount_amount, discount_percent, excise_duty_percent, excise_duty_amount, finalizing_date, invoice_date, invoice_number, invoice_sub_value, notes, parent_id, payment_due_date, payments_count, recipient_contact_name, recipient_name, sender_name, sent_time, ship_date_from, ship_date_to, ship_week, single_pay, total_value, transport_price, vat, vat_condition_notes, doc_delivery_method_id, sender_id, currency_id, recipient_id, branch_id, delivery_type_id, creator_id, payment_terms_id, payment_type_id, supplier_contact_id, invoice_type_id, vat_condition_id, shippingagent_partner_id, status_id, transportation_method_id, proforma) VALUES (1223753653840.00, 'Holland, Hilversum', '2008-10-11', 'Edwin R. Poot Hairy A** Man', NULL, 0.00, 0.00, 0.00, 0.00, NULL, '2008-10-11', NULL, 0.00, NULL, 1209222047860.00, '2008-10-11', NULL, 'Ceko malkata Shtanga ', 'Client Dudukov', NULL, NULL, '2008-10-11', '2008-10-11', 41, NULL, 0.00, 0.00, 20.00, NULL, 116, NULL, 49, 1223120577767.00, 1209222423971.00, 151, 1211472878364.00, 108, 105, 1223120680805.00, 81, 103, 1223753628322.00, 75, 95, false);
 
 
 --
--- TOC entry 2388 (class 0 OID 36822)
+-- TOC entry 2389 (class 0 OID 36822)
 -- Dependencies: 1646
 -- Data for Name: order_confirmation_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4309,7 +4325,7 @@ INSERT INTO order_confirmation_items (confirmation_item_id, confirmed_quantity, 
 
 
 --
--- TOC entry 2389 (class 0 OID 36825)
+-- TOC entry 2390 (class 0 OID 36825)
 -- Dependencies: 1647
 -- Data for Name: order_confirmations; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4328,7 +4344,7 @@ INSERT INTO order_confirmations (order_confirmation_id, discount_amount, discoun
 
 
 --
--- TOC entry 2390 (class 0 OID 36831)
+-- TOC entry 2391 (class 0 OID 36831)
 -- Dependencies: 1648
 -- Data for Name: order_item_match; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4338,7 +4354,7 @@ INSERT INTO order_item_match (id, matchquantity, purchaseorderitem_order_item_id
 
 
 --
--- TOC entry 2391 (class 0 OID 36834)
+-- TOC entry 2392 (class 0 OID 36834)
 -- Dependencies: 1649
 -- Data for Name: organizations; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4374,10 +4390,13 @@ INSERT INTO organizations (organization_id, description, nickname, organization_
 INSERT INTO organizations (organization_id, description, nickname, organization_name, registration_date, share_capital, unique_identifier_code, vat_number, organization_type_id, registration_address_id, registration_organization_id, administration_address_id, currency_id, is_active) VALUES (1222977154705, NULL, NULL, 'org7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false);
 INSERT INTO organizations (organization_id, description, nickname, organization_name, registration_date, share_capital, unique_identifier_code, vat_number, organization_type_id, registration_address_id, registration_organization_id, administration_address_id, currency_id, is_active) VALUES (1222977159237, NULL, NULL, 'org8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false);
 INSERT INTO organizations (organization_id, description, nickname, organization_name, registration_date, share_capital, unique_identifier_code, vat_number, organization_type_id, registration_address_id, registration_organization_id, administration_address_id, currency_id, is_active) VALUES (1223120577767, NULL, NULL, 'Client Dudukov', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false);
+INSERT INTO organizations (organization_id, description, nickname, organization_name, registration_date, share_capital, unique_identifier_code, vat_number, organization_type_id, registration_address_id, registration_organization_id, administration_address_id, currency_id, is_active) VALUES (1223752974493, NULL, NULL, 'Temp provider', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false);
+INSERT INTO organizations (organization_id, description, nickname, organization_name, registration_date, share_capital, unique_identifier_code, vat_number, organization_type_id, registration_address_id, registration_organization_id, administration_address_id, currency_id, is_active) VALUES (1223753592227, NULL, NULL, 'Temp shipping agent', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false);
+INSERT INTO organizations (organization_id, description, nickname, organization_name, registration_date, share_capital, unique_identifier_code, vat_number, organization_type_id, registration_address_id, registration_organization_id, administration_address_id, currency_id, is_active) VALUES (1223753628322, NULL, NULL, 'Temp shipper 2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false);
 
 
 --
--- TOC entry 2392 (class 0 OID 36841)
+-- TOC entry 2393 (class 0 OID 36841)
 -- Dependencies: 1650
 -- Data for Name: passports; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4388,7 +4407,7 @@ INSERT INTO passports (passport_id, parent_id, passport_type_id, passport_number
 
 
 --
--- TOC entry 2414 (class 0 OID 38338)
+-- TOC entry 2415 (class 0 OID 38338)
 -- Dependencies: 1683
 -- Data for Name: pattern_mask_formats; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4398,7 +4417,7 @@ INSERT INTO pattern_mask_formats (pattern_mask_format_id, description, format, f
 
 
 --
--- TOC entry 2393 (class 0 OID 36850)
+-- TOC entry 2394 (class 0 OID 36850)
 -- Dependencies: 1651
 -- Data for Name: persons; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4442,7 +4461,7 @@ INSERT INTO persons (partner_id, birth_date, description, extra_name, first_name
 
 
 --
--- TOC entry 2394 (class 0 OID 36856)
+-- TOC entry 2395 (class 0 OID 36856)
 -- Dependencies: 1652
 -- Data for Name: position_types; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4467,7 +4486,7 @@ INSERT INTO position_types (position_type_id, parent_id, owner_type, position_ty
 
 
 --
--- TOC entry 2395 (class 0 OID 36863)
+-- TOC entry 2396 (class 0 OID 36863)
 -- Dependencies: 1653
 -- Data for Name: product_categories; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4504,7 +4523,7 @@ INSERT INTO product_categories (product_category_id, parent_id, category_name, d
 
 
 --
--- TOC entry 2396 (class 0 OID 36869)
+-- TOC entry 2397 (class 0 OID 36869)
 -- Dependencies: 1654
 -- Data for Name: product_suppliers; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4512,7 +4531,7 @@ INSERT INTO product_categories (product_category_id, parent_id, category_name, d
 
 
 --
--- TOC entry 2397 (class 0 OID 36875)
+-- TOC entry 2398 (class 0 OID 36875)
 -- Dependencies: 1655
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4546,7 +4565,7 @@ INSERT INTO products (product_id, parent_id, product_type) VALUES (1223414152435
 
 
 --
--- TOC entry 2398 (class 0 OID 36878)
+-- TOC entry 2399 (class 0 OID 36878)
 -- Dependencies: 1656
 -- Data for Name: purchase_order_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4575,7 +4594,7 @@ INSERT INTO purchase_order_items (order_item_id, parent_id, product_id, measure_
 
 
 --
--- TOC entry 2399 (class 0 OID 36881)
+-- TOC entry 2400 (class 0 OID 36881)
 -- Dependencies: 1657
 -- Data for Name: purchase_orders; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4602,7 +4621,7 @@ INSERT INTO purchase_orders (purchase_order_id, branch_name, creation_time, crea
 
 
 --
--- TOC entry 2400 (class 0 OID 36887)
+-- TOC entry 2401 (class 0 OID 36887)
 -- Dependencies: 1658
 -- Data for Name: real_products; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4615,7 +4634,7 @@ INSERT INTO real_products (product_id, simple_product_id) VALUES (1223414093014,
 
 
 --
--- TOC entry 2401 (class 0 OID 36890)
+-- TOC entry 2402 (class 0 OID 36890)
 -- Dependencies: 1659
 -- Data for Name: receipt_certificate_items; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4623,7 +4642,7 @@ INSERT INTO real_products (product_id, simple_product_id) VALUES (1223414093014,
 
 
 --
--- TOC entry 2402 (class 0 OID 36893)
+-- TOC entry 2403 (class 0 OID 36893)
 -- Dependencies: 1660
 -- Data for Name: receipt_certificate_serial_numbers; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4631,7 +4650,7 @@ INSERT INTO real_products (product_id, simple_product_id) VALUES (1223414093014,
 
 
 --
--- TOC entry 2403 (class 0 OID 36896)
+-- TOC entry 2404 (class 0 OID 36896)
 -- Dependencies: 1661
 -- Data for Name: receipt_certificates; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4639,7 +4658,7 @@ INSERT INTO real_products (product_id, simple_product_id) VALUES (1223414093014,
 
 
 --
--- TOC entry 2404 (class 0 OID 36899)
+-- TOC entry 2405 (class 0 OID 36899)
 -- Dependencies: 1662
 -- Data for Name: registration_codes; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4647,7 +4666,7 @@ INSERT INTO real_products (product_id, simple_product_id) VALUES (1223414093014,
 
 
 --
--- TOC entry 2405 (class 0 OID 36902)
+-- TOC entry 2406 (class 0 OID 36902)
 -- Dependencies: 1663
 -- Data for Name: resource_bundle; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4800,10 +4819,11 @@ INSERT INTO resource_bundle (resource_id, enum_class_id, enum_name) VALUES (164,
 INSERT INTO resource_bundle (resource_id, enum_class_id, enum_name) VALUES (165, 25, 'DateType');
 INSERT INTO resource_bundle (resource_id, enum_class_id, enum_name) VALUES (166, 25, 'StringType');
 INSERT INTO resource_bundle (resource_id, enum_class_id, enum_name) VALUES (167, 9, 'Finalized');
+INSERT INTO resource_bundle (resource_id, enum_class_id, enum_name) VALUES (168, 25, 'EnumerationType');
 
 
 --
--- TOC entry 2406 (class 0 OID 36905)
+-- TOC entry 2407 (class 0 OID 36905)
 -- Dependencies: 1664
 -- Data for Name: sequence_identifiers; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4811,7 +4831,7 @@ INSERT INTO resource_bundle (resource_id, enum_class_id, enum_name) VALUES (167,
 
 
 --
--- TOC entry 2407 (class 0 OID 36909)
+-- TOC entry 2408 (class 0 OID 36909)
 -- Dependencies: 1665
 -- Data for Name: simple_products; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4844,7 +4864,7 @@ INSERT INTO simple_products (product_id, category_id, product_name, product_code
 
 
 --
--- TOC entry 2408 (class 0 OID 36920)
+-- TOC entry 2409 (class 0 OID 36920)
 -- Dependencies: 1666
 -- Data for Name: user_groups; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4864,30 +4884,30 @@ INSERT INTO user_groups (user_group_id, name, parent_id, description) VALUES (12
 
 
 --
--- TOC entry 2409 (class 0 OID 36926)
+-- TOC entry 2410 (class 0 OID 36926)
 -- Dependencies: 1667
 -- Data for Name: user_rights; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (1217053087891, NULL, 35, NULL, false, false, false, false, 19, NULL, true, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (1217053087891, NULL, 1, NULL, false, false, false, false, 20, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, 1217070935442, 1, NULL, false, false, false, false, 22, NULL, true, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, 1214836145032, NULL, NULL, false, false, false, false, 295, 146, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, 1214836145032, 1, 1209222047860, true, true, true, true, 194, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 195, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 196, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 197, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 198, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 199, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 200, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 201, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 202, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 203, NULL, false, NULL);
-INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 204, NULL, false, NULL);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (1217053087891, NULL, 35, NULL, false, false, false, false, 19, NULL, true, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (1217053087891, NULL, 1, NULL, false, false, false, false, 20, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, 1217070935442, 1, NULL, false, false, false, false, 22, NULL, true, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, 1214836145032, 1, 1209222047860, true, true, true, true, 194, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 195, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 196, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 197, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 198, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 199, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, true, false, false, 200, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 201, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 202, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 203, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, NULL, NULL, NULL, false, false, false, false, 204, NULL, false, NULL, false);
+INSERT INTO user_rights (user_group_id, user_id, data_object_type_id, data_object_id, can_read, can_create, can_modify, can_delete, user_right_id, special_permission_id, excluded, expires, can_execute) VALUES (NULL, 1214836145032, NULL, NULL, false, false, false, false, 295, 146, false, NULL, false);
 
 
 --
--- TOC entry 2410 (class 0 OID 36934)
+-- TOC entry 2411 (class 0 OID 36934)
 -- Dependencies: 1668
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4920,7 +4940,7 @@ INSERT INTO users (user_id, version, user_name, email_address, user_password, sy
 
 
 --
--- TOC entry 2411 (class 0 OID 36941)
+-- TOC entry 2412 (class 0 OID 36941)
 -- Dependencies: 1669
 -- Data for Name: users_organizations; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4950,7 +4970,7 @@ INSERT INTO users_organizations (user_id, organization_id, branch_id, is_user_ac
 
 
 --
--- TOC entry 2412 (class 0 OID 36944)
+-- TOC entry 2413 (class 0 OID 36944)
 -- Dependencies: 1670
 -- Data for Name: virtual_products; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4969,7 +4989,7 @@ INSERT INTO virtual_products (product_id, product_type, parent_id) VALUES (12234
 
 
 --
--- TOC entry 2415 (class 0 OID 38351)
+-- TOC entry 2416 (class 0 OID 38351)
 -- Dependencies: 1684
 -- Data for Name: warehouse_products; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4979,7 +4999,7 @@ INSERT INTO warehouse_products (warehouse_product_id, default_quantity, delivery
 
 
 --
--- TOC entry 2413 (class 0 OID 36950)
+-- TOC entry 2414 (class 0 OID 36950)
 -- Dependencies: 1671
 -- Data for Name: warehouses; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -4993,7 +5013,7 @@ INSERT INTO warehouses (warehouse_id, parent_id, address_id, warehouseman_id, de
 
 
 --
--- TOC entry 1997 (class 2606 OID 36980)
+-- TOC entry 1998 (class 2606 OID 36980)
 -- Dependencies: 1625 1625
 -- Name: business_partners_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5003,7 +5023,7 @@ ALTER TABLE ONLY business_partners
 
 
 --
--- TOC entry 2151 (class 2606 OID 44765)
+-- TOC entry 2152 (class 2606 OID 44765)
 -- Dependencies: 1692 1692
 -- Name: invoice_item_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5013,7 +5033,7 @@ ALTER TABLE ONLY invoice_item_link
 
 
 --
--- TOC entry 2149 (class 2606 OID 44743)
+-- TOC entry 2150 (class 2606 OID 44743)
 -- Dependencies: 1690 1690
 -- Name: invoice_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5023,7 +5043,7 @@ ALTER TABLE ONLY invoice_items
 
 
 --
--- TOC entry 2147 (class 2606 OID 44660)
+-- TOC entry 2148 (class 2606 OID 44660)
 -- Dependencies: 1689 1689
 -- Name: invoices_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5033,7 +5053,7 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2063 (class 2606 OID 36984)
+-- TOC entry 2064 (class 2606 OID 36984)
 -- Dependencies: 1646 1646
 -- Name: order_confirmation_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5043,7 +5063,7 @@ ALTER TABLE ONLY order_confirmation_items
 
 
 --
--- TOC entry 2065 (class 2606 OID 36986)
+-- TOC entry 2066 (class 2606 OID 36986)
 -- Dependencies: 1647 1647
 -- Name: order_confirmations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5053,7 +5073,7 @@ ALTER TABLE ONLY order_confirmations
 
 
 --
--- TOC entry 2067 (class 2606 OID 36988)
+-- TOC entry 2068 (class 2606 OID 36988)
 -- Dependencies: 1648 1648
 -- Name: order_item_match_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5063,7 +5083,7 @@ ALTER TABLE ONLY order_item_match
 
 
 --
--- TOC entry 2069 (class 2606 OID 36990)
+-- TOC entry 2070 (class 2606 OID 36990)
 -- Dependencies: 1649 1649
 -- Name: organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5073,7 +5093,7 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2129 (class 2606 OID 38345)
+-- TOC entry 2130 (class 2606 OID 38345)
 -- Dependencies: 1683 1683
 -- Name: pattern_mask_formats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5083,7 +5103,7 @@ ALTER TABLE ONLY pattern_mask_formats
 
 
 --
--- TOC entry 2075 (class 2606 OID 36992)
+-- TOC entry 2076 (class 2606 OID 36992)
 -- Dependencies: 1651 1651
 -- Name: persons_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5093,7 +5113,7 @@ ALTER TABLE ONLY persons
 
 
 --
--- TOC entry 1987 (class 2606 OID 36994)
+-- TOC entry 1988 (class 2606 OID 36994)
 -- Dependencies: 1622 1622
 -- Name: pk_addresses; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5103,7 +5123,7 @@ ALTER TABLE ONLY addresses
 
 
 --
--- TOC entry 1989 (class 2606 OID 36996)
+-- TOC entry 1990 (class 2606 OID 36996)
 -- Dependencies: 1623 1623
 -- Name: pk_assembling_categories; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5113,7 +5133,7 @@ ALTER TABLE ONLY assembling_categories
 
 
 --
--- TOC entry 2133 (class 2606 OID 44395)
+-- TOC entry 2134 (class 2606 OID 44395)
 -- Dependencies: 1685 1685
 -- Name: pk_assembling_messages; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5123,7 +5143,7 @@ ALTER TABLE ONLY assembling_messages
 
 
 --
--- TOC entry 2145 (class 2606 OID 44516)
+-- TOC entry 2146 (class 2606 OID 44516)
 -- Dependencies: 1688 1688
 -- Name: pk_assembling_schema_item_values; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5133,7 +5153,7 @@ ALTER TABLE ONLY assembling_schema_item_values
 
 
 --
--- TOC entry 2143 (class 2606 OID 44487)
+-- TOC entry 2144 (class 2606 OID 44487)
 -- Dependencies: 1687 1687
 -- Name: pk_assembling_schema_items; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5143,7 +5163,7 @@ ALTER TABLE ONLY assembling_schema_items
 
 
 --
--- TOC entry 2137 (class 2606 OID 44464)
+-- TOC entry 2138 (class 2606 OID 44464)
 -- Dependencies: 1686 1686
 -- Name: pk_assembling_schemas; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5153,7 +5173,7 @@ ALTER TABLE ONLY assembling_schemas
 
 
 --
--- TOC entry 1995 (class 2606 OID 37004)
+-- TOC entry 1996 (class 2606 OID 37004)
 -- Dependencies: 1624 1624
 -- Name: pk_bank_details; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5163,7 +5183,7 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 1999 (class 2606 OID 37006)
+-- TOC entry 2000 (class 2606 OID 37006)
 -- Dependencies: 1626 1626
 -- Name: pk_cities; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5173,7 +5193,7 @@ ALTER TABLE ONLY cities
 
 
 --
--- TOC entry 2003 (class 2606 OID 37008)
+-- TOC entry 2004 (class 2606 OID 37008)
 -- Dependencies: 1627 1627 1627
 -- Name: pk_classified_objects; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5183,7 +5203,7 @@ ALTER TABLE ONLY classified_objects
 
 
 --
--- TOC entry 2005 (class 2606 OID 37010)
+-- TOC entry 2006 (class 2606 OID 37010)
 -- Dependencies: 1628 1628 1628
 -- Name: pk_classifier_applied_for_dot; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5193,7 +5213,7 @@ ALTER TABLE ONLY classifier_applied_for_dot
 
 
 --
--- TOC entry 2007 (class 2606 OID 37012)
+-- TOC entry 2008 (class 2606 OID 37012)
 -- Dependencies: 1629 1629
 -- Name: pk_classifier_groups; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5203,7 +5223,7 @@ ALTER TABLE ONLY classifier_groups
 
 
 --
--- TOC entry 2009 (class 2606 OID 37014)
+-- TOC entry 2010 (class 2606 OID 37014)
 -- Dependencies: 1630 1630
 -- Name: pk_classifiers; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5213,7 +5233,7 @@ ALTER TABLE ONLY classifiers
 
 
 --
--- TOC entry 2012 (class 2606 OID 37016)
+-- TOC entry 2013 (class 2606 OID 37016)
 -- Dependencies: 1631 1631
 -- Name: pk_communication_contacts; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5223,7 +5243,7 @@ ALTER TABLE ONLY communication_contacts
 
 
 --
--- TOC entry 2016 (class 2606 OID 37018)
+-- TOC entry 2017 (class 2606 OID 37018)
 -- Dependencies: 1632 1632
 -- Name: pk_complex_product_items; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5233,7 +5253,7 @@ ALTER TABLE ONLY complex_product_items
 
 
 --
--- TOC entry 2018 (class 2606 OID 37020)
+-- TOC entry 2019 (class 2606 OID 37020)
 -- Dependencies: 1633 1633
 -- Name: pk_complex_products; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5243,7 +5263,7 @@ ALTER TABLE ONLY complex_products
 
 
 --
--- TOC entry 2020 (class 2606 OID 37022)
+-- TOC entry 2021 (class 2606 OID 37022)
 -- Dependencies: 1634 1634
 -- Name: pk_contact_persons; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5253,7 +5273,7 @@ ALTER TABLE ONLY contact_persons
 
 
 --
--- TOC entry 2022 (class 2606 OID 37024)
+-- TOC entry 2023 (class 2606 OID 37024)
 -- Dependencies: 1635 1635
 -- Name: pk_countries; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5263,7 +5283,7 @@ ALTER TABLE ONLY countries
 
 
 --
--- TOC entry 2026 (class 2606 OID 37026)
+-- TOC entry 2027 (class 2606 OID 37026)
 -- Dependencies: 1636 1636
 -- Name: pk_currencies; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5273,7 +5293,7 @@ ALTER TABLE ONLY currencies
 
 
 --
--- TOC entry 2030 (class 2606 OID 37028)
+-- TOC entry 2031 (class 2606 OID 37028)
 -- Dependencies: 1637 1637
 -- Name: pk_data_object_details; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5283,7 +5303,7 @@ ALTER TABLE ONLY data_object_details
 
 
 --
--- TOC entry 2034 (class 2606 OID 37030)
+-- TOC entry 2035 (class 2606 OID 37030)
 -- Dependencies: 1638 1638
 -- Name: pk_data_object_links; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5293,7 +5313,7 @@ ALTER TABLE ONLY data_object_links
 
 
 --
--- TOC entry 2038 (class 2606 OID 37032)
+-- TOC entry 2039 (class 2606 OID 37032)
 -- Dependencies: 1639 1639
 -- Name: pk_data_object_types; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5303,7 +5323,7 @@ ALTER TABLE ONLY data_object_types
 
 
 --
--- TOC entry 2042 (class 2606 OID 37034)
+-- TOC entry 2043 (class 2606 OID 37034)
 -- Dependencies: 1640 1640
 -- Name: pk_data_objects; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5313,7 +5333,7 @@ ALTER TABLE ONLY data_objects
 
 
 --
--- TOC entry 2044 (class 2606 OID 44356)
+-- TOC entry 2045 (class 2606 OID 44356)
 -- Dependencies: 1641 1641
 -- Name: pk_delivery_certificate_assignments; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5323,7 +5343,7 @@ ALTER TABLE ONLY delivery_certificate_assignments
 
 
 --
--- TOC entry 2046 (class 2606 OID 37036)
+-- TOC entry 2047 (class 2606 OID 37036)
 -- Dependencies: 1642 1642
 -- Name: pk_delivery_certificate_items; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5333,7 +5353,7 @@ ALTER TABLE ONLY delivery_certificate_items
 
 
 --
--- TOC entry 2048 (class 2606 OID 37038)
+-- TOC entry 2049 (class 2606 OID 37038)
 -- Dependencies: 1643 1643 1643
 -- Name: pk_delivery_certificate_serial_numbers; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5343,7 +5363,7 @@ ALTER TABLE ONLY delivery_certificate_serial_numbers
 
 
 --
--- TOC entry 2055 (class 2606 OID 37040)
+-- TOC entry 2056 (class 2606 OID 37040)
 -- Dependencies: 1644 1644
 -- Name: pk_delivery_certificates; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5353,7 +5373,7 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2059 (class 2606 OID 37042)
+-- TOC entry 2060 (class 2606 OID 37042)
 -- Dependencies: 1645 1645
 -- Name: pk_enum_classes; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5363,7 +5383,7 @@ ALTER TABLE ONLY enum_classes
 
 
 --
--- TOC entry 2071 (class 2606 OID 37048)
+-- TOC entry 2072 (class 2606 OID 37048)
 -- Dependencies: 1650 1650
 -- Name: pk_passports; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5373,7 +5393,7 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2077 (class 2606 OID 37052)
+-- TOC entry 2078 (class 2606 OID 37052)
 -- Dependencies: 1652 1652
 -- Name: pk_position_types; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5383,7 +5403,7 @@ ALTER TABLE ONLY position_types
 
 
 --
--- TOC entry 2079 (class 2606 OID 37054)
+-- TOC entry 2080 (class 2606 OID 37054)
 -- Dependencies: 1653 1653
 -- Name: pk_product_categories; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5393,7 +5413,7 @@ ALTER TABLE ONLY product_categories
 
 
 --
--- TOC entry 2083 (class 2606 OID 37056)
+-- TOC entry 2084 (class 2606 OID 37056)
 -- Dependencies: 1654 1654 1654
 -- Name: pk_product_suppliers; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5403,7 +5423,7 @@ ALTER TABLE ONLY product_suppliers
 
 
 --
--- TOC entry 2109 (class 2606 OID 37058)
+-- TOC entry 2110 (class 2606 OID 37058)
 -- Dependencies: 1665 1665
 -- Name: pk_products; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5413,7 +5433,7 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2085 (class 2606 OID 37060)
+-- TOC entry 2086 (class 2606 OID 37060)
 -- Dependencies: 1655 1655
 -- Name: pk_products1; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5423,7 +5443,7 @@ ALTER TABLE ONLY products
 
 
 --
--- TOC entry 2087 (class 2606 OID 37062)
+-- TOC entry 2088 (class 2606 OID 37062)
 -- Dependencies: 1656 1656
 -- Name: pk_purchase_order_items; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5433,7 +5453,7 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2091 (class 2606 OID 37064)
+-- TOC entry 2092 (class 2606 OID 37064)
 -- Dependencies: 1658 1658
 -- Name: pk_real_products; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5443,7 +5463,7 @@ ALTER TABLE ONLY real_products
 
 
 --
--- TOC entry 2095 (class 2606 OID 37066)
+-- TOC entry 2096 (class 2606 OID 37066)
 -- Dependencies: 1659 1659
 -- Name: pk_receipt_certificate_items; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5453,7 +5473,7 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2097 (class 2606 OID 37068)
+-- TOC entry 2098 (class 2606 OID 37068)
 -- Dependencies: 1660 1660 1660
 -- Name: pk_receipt_certificate_serial_numbers; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5463,7 +5483,7 @@ ALTER TABLE ONLY receipt_certificate_serial_numbers
 
 
 --
--- TOC entry 2099 (class 2606 OID 37070)
+-- TOC entry 2100 (class 2606 OID 37070)
 -- Dependencies: 1661 1661
 -- Name: pk_receipt_certificates; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5473,7 +5493,7 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2105 (class 2606 OID 37072)
+-- TOC entry 2106 (class 2606 OID 37072)
 -- Dependencies: 1663 1663
 -- Name: pk_resource_bundle; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5483,7 +5503,7 @@ ALTER TABLE ONLY resource_bundle
 
 
 --
--- TOC entry 2117 (class 2606 OID 37074)
+-- TOC entry 2118 (class 2606 OID 37074)
 -- Dependencies: 1668 1668
 -- Name: pk_users; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5493,7 +5513,7 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2125 (class 2606 OID 37076)
+-- TOC entry 2126 (class 2606 OID 37076)
 -- Dependencies: 1670 1670
 -- Name: pk_virtual_products; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5503,7 +5523,7 @@ ALTER TABLE ONLY virtual_products
 
 
 --
--- TOC entry 2127 (class 2606 OID 37078)
+-- TOC entry 2128 (class 2606 OID 37078)
 -- Dependencies: 1671 1671
 -- Name: pk_warehouses; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5513,7 +5533,7 @@ ALTER TABLE ONLY warehouses
 
 
 --
--- TOC entry 2089 (class 2606 OID 37080)
+-- TOC entry 2090 (class 2606 OID 37080)
 -- Dependencies: 1657 1657
 -- Name: purchase_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5523,7 +5543,7 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2103 (class 2606 OID 37082)
+-- TOC entry 2104 (class 2606 OID 37082)
 -- Dependencies: 1662 1662
 -- Name: registration_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5533,7 +5553,7 @@ ALTER TABLE ONLY registration_codes
 
 
 --
--- TOC entry 1991 (class 2606 OID 37084)
+-- TOC entry 1992 (class 2606 OID 37084)
 -- Dependencies: 1623 1623 1623 1623
 -- Name: uk_assembling_categories_by_code; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5543,7 +5563,7 @@ ALTER TABLE ONLY assembling_categories
 
 
 --
--- TOC entry 1993 (class 2606 OID 37086)
+-- TOC entry 1994 (class 2606 OID 37086)
 -- Dependencies: 1623 1623 1623 1623
 -- Name: uk_assembling_categories_by_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5553,7 +5573,7 @@ ALTER TABLE ONLY assembling_categories
 
 
 --
--- TOC entry 2135 (class 2606 OID 44397)
+-- TOC entry 2136 (class 2606 OID 44397)
 -- Dependencies: 1685 1685 1685
 -- Name: uk_assembling_messages_org_code; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5563,7 +5583,7 @@ ALTER TABLE ONLY assembling_messages
 
 
 --
--- TOC entry 2139 (class 2606 OID 44466)
+-- TOC entry 2140 (class 2606 OID 44466)
 -- Dependencies: 1686 1686 1686
 -- Name: uk_assembling_schemas_by_code; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5573,7 +5593,7 @@ ALTER TABLE ONLY assembling_schemas
 
 
 --
--- TOC entry 2141 (class 2606 OID 44468)
+-- TOC entry 2142 (class 2606 OID 44468)
 -- Dependencies: 1686 1686 1686
 -- Name: uk_assembling_schemas_by_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5583,7 +5603,7 @@ ALTER TABLE ONLY assembling_schemas
 
 
 --
--- TOC entry 2001 (class 2606 OID 37092)
+-- TOC entry 2002 (class 2606 OID 37092)
 -- Dependencies: 1626 1626 1626
 -- Name: uk_cities_country_id_city_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5593,7 +5613,7 @@ ALTER TABLE ONLY cities
 
 
 --
--- TOC entry 2014 (class 2606 OID 37102)
+-- TOC entry 2015 (class 2606 OID 37102)
 -- Dependencies: 1631 1631 1631 1631 1631
 -- Name: uk_communication_contacts_parent_type_value_contact_person; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5603,7 +5623,7 @@ ALTER TABLE ONLY communication_contacts
 
 
 --
--- TOC entry 2024 (class 2606 OID 37104)
+-- TOC entry 2025 (class 2606 OID 37104)
 -- Dependencies: 1635 1635
 -- Name: uk_countries_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5613,7 +5633,7 @@ ALTER TABLE ONLY countries
 
 
 --
--- TOC entry 2028 (class 2606 OID 37106)
+-- TOC entry 2029 (class 2606 OID 37106)
 -- Dependencies: 1636 1636
 -- Name: uk_currencies_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5623,7 +5643,7 @@ ALTER TABLE ONLY currencies
 
 
 --
--- TOC entry 2032 (class 2606 OID 37108)
+-- TOC entry 2033 (class 2606 OID 37108)
 -- Dependencies: 1637 1637 1637
 -- Name: uk_data_object_details_do_id_code; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5633,7 +5653,7 @@ ALTER TABLE ONLY data_object_details
 
 
 --
--- TOC entry 2036 (class 2606 OID 37110)
+-- TOC entry 2037 (class 2606 OID 37110)
 -- Dependencies: 1638 1638 1638
 -- Name: uk_data_object_links_parent_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5643,7 +5663,7 @@ ALTER TABLE ONLY data_object_links
 
 
 --
--- TOC entry 2057 (class 2606 OID 37112)
+-- TOC entry 2058 (class 2606 OID 37112)
 -- Dependencies: 1644 1644 1644
 -- Name: uk_delivery_certificates_parent_cert_number; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5653,7 +5673,7 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2040 (class 2606 OID 37114)
+-- TOC entry 2041 (class 2606 OID 37114)
 -- Dependencies: 1639 1639
 -- Name: uk_dot_data_object_type; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5663,7 +5683,7 @@ ALTER TABLE ONLY data_object_types
 
 
 --
--- TOC entry 2061 (class 2606 OID 37116)
+-- TOC entry 2062 (class 2606 OID 37116)
 -- Dependencies: 1645 1645
 -- Name: uk_enum_classes; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5673,7 +5693,7 @@ ALTER TABLE ONLY enum_classes
 
 
 --
--- TOC entry 2073 (class 2606 OID 37120)
+-- TOC entry 2074 (class 2606 OID 37120)
 -- Dependencies: 1650 1650 1650 1650
 -- Name: uk_passports_parent_type_number; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5683,7 +5703,7 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2081 (class 2606 OID 37122)
+-- TOC entry 2082 (class 2606 OID 37122)
 -- Dependencies: 1653 1653 1653
 -- Name: uk_product_categories_parent_category_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5693,7 +5713,7 @@ ALTER TABLE ONLY product_categories
 
 
 --
--- TOC entry 2093 (class 2606 OID 37124)
+-- TOC entry 2094 (class 2606 OID 37124)
 -- Dependencies: 1658 1658
 -- Name: uk_real_products_by_simple_product; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5703,7 +5723,7 @@ ALTER TABLE ONLY real_products
 
 
 --
--- TOC entry 2101 (class 2606 OID 37126)
+-- TOC entry 2102 (class 2606 OID 37126)
 -- Dependencies: 1661 1661 1661
 -- Name: uk_receipt_certificates_parent_cert_number; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5713,7 +5733,7 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2107 (class 2606 OID 37128)
+-- TOC entry 2108 (class 2606 OID 37128)
 -- Dependencies: 1664 1664
 -- Name: uk_seq_id_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5723,7 +5743,7 @@ ALTER TABLE ONLY sequence_identifiers
 
 
 --
--- TOC entry 2119 (class 2606 OID 37130)
+-- TOC entry 2120 (class 2606 OID 37130)
 -- Dependencies: 1668 1668
 -- Name: uk_users_email_address; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5733,7 +5753,7 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2121 (class 2606 OID 37132)
+-- TOC entry 2122 (class 2606 OID 37132)
 -- Dependencies: 1668 1668
 -- Name: uk_users_user_name; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5743,7 +5763,7 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2111 (class 2606 OID 37134)
+-- TOC entry 2112 (class 2606 OID 37134)
 -- Dependencies: 1666 1666
 -- Name: user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5753,7 +5773,7 @@ ALTER TABLE ONLY user_groups
 
 
 --
--- TOC entry 2115 (class 2606 OID 37136)
+-- TOC entry 2116 (class 2606 OID 37136)
 -- Dependencies: 1667 1667
 -- Name: user_rights_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5763,7 +5783,7 @@ ALTER TABLE ONLY user_rights
 
 
 --
--- TOC entry 2123 (class 2606 OID 37138)
+-- TOC entry 2124 (class 2606 OID 37138)
 -- Dependencies: 1669 1669 1669
 -- Name: users_organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5773,7 +5793,7 @@ ALTER TABLE ONLY users_organizations
 
 
 --
--- TOC entry 2131 (class 2606 OID 38355)
+-- TOC entry 2132 (class 2606 OID 38355)
 -- Dependencies: 1684 1684
 -- Name: warehouse_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
@@ -5783,7 +5803,7 @@ ALTER TABLE ONLY warehouse_products
 
 
 --
--- TOC entry 2010 (class 1259 OID 37141)
+-- TOC entry 2011 (class 1259 OID 37141)
 -- Dependencies: 1631
 -- Name: fk_contact_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5792,7 +5812,7 @@ CREATE INDEX fk_contact_person_id ON communication_contacts USING btree (contact
 
 
 --
--- TOC entry 2049 (class 1259 OID 44343)
+-- TOC entry 2050 (class 1259 OID 44343)
 -- Dependencies: 1644
 -- Name: fki_creator_branch; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5801,7 +5821,7 @@ CREATE INDEX fki_creator_branch ON delivery_certificates USING btree (creator_br
 
 
 --
--- TOC entry 2050 (class 1259 OID 44337)
+-- TOC entry 2051 (class 1259 OID 44337)
 -- Dependencies: 1644
 -- Name: fki_creator_organization; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5810,7 +5830,7 @@ CREATE INDEX fki_creator_organization ON delivery_certificates USING btree (crea
 
 
 --
--- TOC entry 2051 (class 1259 OID 37142)
+-- TOC entry 2052 (class 1259 OID 37142)
 -- Dependencies: 1644
 -- Name: fki_delivery_certificates_recipient; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5819,7 +5839,7 @@ CREATE INDEX fki_delivery_certificates_recipient ON delivery_certificates USING 
 
 
 --
--- TOC entry 2052 (class 1259 OID 37144)
+-- TOC entry 2053 (class 1259 OID 37144)
 -- Dependencies: 1644
 -- Name: fki_forwarder_address_constraint; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5828,7 +5848,7 @@ CREATE INDEX fki_forwarder_address_constraint ON delivery_certificates USING btr
 
 
 --
--- TOC entry 2053 (class 1259 OID 37145)
+-- TOC entry 2054 (class 1259 OID 37145)
 -- Dependencies: 1644
 -- Name: fki_recipient_address_constraint; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5837,7 +5857,7 @@ CREATE INDEX fki_recipient_address_constraint ON delivery_certificates USING btr
 
 
 --
--- TOC entry 2112 (class 1259 OID 37146)
+-- TOC entry 2113 (class 1259 OID 37146)
 -- Dependencies: 1667
 -- Name: user_group_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5846,7 +5866,7 @@ CREATE INDEX user_group_idx ON user_rights USING btree (user_group_id);
 
 
 --
--- TOC entry 2113 (class 1259 OID 37147)
+-- TOC entry 2114 (class 1259 OID 37147)
 -- Dependencies: 1667
 -- Name: user_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
@@ -5855,8 +5875,8 @@ CREATE INDEX user_idx ON user_rights USING btree (user_id);
 
 
 --
--- TOC entry 2152 (class 2606 OID 37148)
--- Dependencies: 1622 1625 1996
+-- TOC entry 2153 (class 2606 OID 37148)
+-- Dependencies: 1625 1622 1997
 -- Name: addresses_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5865,8 +5885,8 @@ ALTER TABLE ONLY addresses
 
 
 --
--- TOC entry 2156 (class 2606 OID 44357)
--- Dependencies: 1666 2110 1622
+-- TOC entry 2157 (class 2606 OID 44357)
+-- Dependencies: 1622 1666 2111
 -- Name: addresses_user_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5875,8 +5895,8 @@ ALTER TABLE ONLY addresses
 
 
 --
--- TOC entry 2159 (class 2606 OID 37153)
--- Dependencies: 2104 1663 1624
+-- TOC entry 2160 (class 2606 OID 37153)
+-- Dependencies: 1624 1663 2105
 -- Name: bank_details_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5885,8 +5905,8 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 2160 (class 2606 OID 37158)
--- Dependencies: 1624 1622 1986
+-- TOC entry 2161 (class 2606 OID 37158)
+-- Dependencies: 1987 1624 1622
 -- Name: bank_details_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5895,8 +5915,8 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 2166 (class 2606 OID 37163)
--- Dependencies: 1626 1635 2021
+-- TOC entry 2167 (class 2606 OID 37163)
+-- Dependencies: 1635 2022 1626
 -- Name: cities_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5905,8 +5925,8 @@ ALTER TABLE ONLY cities
 
 
 --
--- TOC entry 2168 (class 2606 OID 37168)
--- Dependencies: 2041 1640 1627
+-- TOC entry 2169 (class 2606 OID 37168)
+-- Dependencies: 1640 1627 2042
 -- Name: classified_objects_classified_object_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5915,8 +5935,8 @@ ALTER TABLE ONLY classified_objects
 
 
 --
--- TOC entry 2170 (class 2606 OID 37173)
--- Dependencies: 2008 1630 1628
+-- TOC entry 2171 (class 2606 OID 37173)
+-- Dependencies: 1630 2009 1628
 -- Name: classifier_applied_for_dot_classifier_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5925,8 +5945,8 @@ ALTER TABLE ONLY classifier_applied_for_dot
 
 
 --
--- TOC entry 2173 (class 2606 OID 37178)
--- Dependencies: 1630 2006 1629
+-- TOC entry 2174 (class 2606 OID 37178)
+-- Dependencies: 1630 1629 2007
 -- Name: classifiers_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5935,8 +5955,8 @@ ALTER TABLE ONLY classifiers
 
 
 --
--- TOC entry 2175 (class 2606 OID 37183)
--- Dependencies: 1631 2019 1634
+-- TOC entry 2176 (class 2606 OID 37183)
+-- Dependencies: 1634 1631 2020
 -- Name: communication_contacts_contact_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5945,8 +5965,8 @@ ALTER TABLE ONLY communication_contacts
 
 
 --
--- TOC entry 2176 (class 2606 OID 37188)
--- Dependencies: 1986 1631 1622
+-- TOC entry 2177 (class 2606 OID 37188)
+-- Dependencies: 1631 1987 1622
 -- Name: communication_contacts_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5955,8 +5975,8 @@ ALTER TABLE ONLY communication_contacts
 
 
 --
--- TOC entry 2184 (class 2606 OID 37193)
--- Dependencies: 2074 1651 1634
+-- TOC entry 2185 (class 2606 OID 37193)
+-- Dependencies: 1651 1634 2075
 -- Name: contact_persons_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5965,8 +5985,8 @@ ALTER TABLE ONLY contact_persons
 
 
 --
--- TOC entry 2185 (class 2606 OID 37198)
--- Dependencies: 1634 1986 1622
+-- TOC entry 2186 (class 2606 OID 37198)
+-- Dependencies: 1622 1987 1634
 -- Name: contact_persons_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5975,8 +5995,8 @@ ALTER TABLE ONLY contact_persons
 
 
 --
--- TOC entry 2188 (class 2606 OID 37203)
--- Dependencies: 2104 1635 1663
+-- TOC entry 2189 (class 2606 OID 37203)
+-- Dependencies: 1663 1635 2105
 -- Name: countries_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5985,8 +6005,8 @@ ALTER TABLE ONLY countries
 
 
 --
--- TOC entry 2167 (class 2606 OID 37208)
--- Dependencies: 2041 1626 1640
+-- TOC entry 2168 (class 2606 OID 37208)
+-- Dependencies: 2042 1626 1640
 -- Name: data_object_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5995,8 +6015,8 @@ ALTER TABLE ONLY cities
 
 
 --
--- TOC entry 2314 (class 2606 OID 37213)
--- Dependencies: 1667 1639 2037
+-- TOC entry 2315 (class 2606 OID 37213)
+-- Dependencies: 2038 1667 1639
 -- Name: data_object_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6005,8 +6025,8 @@ ALTER TABLE ONLY user_rights
 
 
 --
--- TOC entry 2315 (class 2606 OID 37218)
--- Dependencies: 1667 1640 2041
+-- TOC entry 2316 (class 2606 OID 37218)
+-- Dependencies: 1667 1640 2042
 -- Name: data_objects; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6015,8 +6035,8 @@ ALTER TABLE ONLY user_rights
 
 
 --
--- TOC entry 2293 (class 2606 OID 37223)
--- Dependencies: 1663 1645 2058
+-- TOC entry 2294 (class 2606 OID 37223)
+-- Dependencies: 1663 1645 2059
 -- Name: fk11ef5dd39219a9be; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6025,8 +6045,8 @@ ALTER TABLE ONLY resource_bundle
 
 
 --
--- TOC entry 2345 (class 2606 OID 44661)
--- Dependencies: 1689 1996 1625
+-- TOC entry 2346 (class 2606 OID 44661)
+-- Dependencies: 1625 1997 1689
 -- Name: fk25f222e6134fe2b0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6035,8 +6055,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2346 (class 2606 OID 44666)
--- Dependencies: 2104 1689 1663
+-- TOC entry 2347 (class 2606 OID 44666)
+-- Dependencies: 2105 1689 1663
 -- Name: fk25f222e617174fab; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6045,8 +6065,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2347 (class 2606 OID 44671)
--- Dependencies: 2104 1663 1689
+-- TOC entry 2348 (class 2606 OID 44671)
+-- Dependencies: 1663 2105 1689
 -- Name: fk25f222e61808129a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6055,8 +6075,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2348 (class 2606 OID 44676)
--- Dependencies: 1622 1689 1986
+-- TOC entry 2349 (class 2606 OID 44676)
+-- Dependencies: 1622 1987 1689
 -- Name: fk25f222e627a66c93; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6065,8 +6085,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2349 (class 2606 OID 44681)
--- Dependencies: 1663 2104 1689
+-- TOC entry 2350 (class 2606 OID 44681)
+-- Dependencies: 1663 1689 2105
 -- Name: fk25f222e63aa5298e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6075,8 +6095,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2350 (class 2606 OID 44686)
--- Dependencies: 1689 1663 2104
+-- TOC entry 2351 (class 2606 OID 44686)
+-- Dependencies: 1663 1689 2105
 -- Name: fk25f222e63dc9408c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6085,8 +6105,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2351 (class 2606 OID 44691)
--- Dependencies: 1689 1663 2104
+-- TOC entry 2352 (class 2606 OID 44691)
+-- Dependencies: 1689 2105 1663
 -- Name: fk25f222e646685c7a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6095,8 +6115,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2352 (class 2606 OID 44696)
--- Dependencies: 2074 1651 1689
+-- TOC entry 2353 (class 2606 OID 44696)
+-- Dependencies: 2075 1651 1689
 -- Name: fk25f222e64da6f8bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6105,8 +6125,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2353 (class 2606 OID 44701)
--- Dependencies: 1689 1625 1996
+-- TOC entry 2354 (class 2606 OID 44701)
+-- Dependencies: 1625 1689 1997
 -- Name: fk25f222e66d20f4c9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6115,8 +6135,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2354 (class 2606 OID 44706)
--- Dependencies: 2019 1689 1634
+-- TOC entry 2355 (class 2606 OID 44706)
+-- Dependencies: 2020 1634 1689
 -- Name: fk25f222e67ebcc009; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6125,8 +6145,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2355 (class 2606 OID 44711)
--- Dependencies: 1689 1663 2104
+-- TOC entry 2356 (class 2606 OID 44711)
+-- Dependencies: 1663 2105 1689
 -- Name: fk25f222e696e3ba71; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6135,8 +6155,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2356 (class 2606 OID 44716)
--- Dependencies: 1663 2104 1689
+-- TOC entry 2357 (class 2606 OID 44716)
+-- Dependencies: 2105 1663 1689
 -- Name: fk25f222e69c49320d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6145,8 +6165,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2357 (class 2606 OID 44721)
--- Dependencies: 1689 1663 2104
+-- TOC entry 2358 (class 2606 OID 44721)
+-- Dependencies: 1663 2105 1689
 -- Name: fk25f222e6a94f3ab3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6155,8 +6175,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2358 (class 2606 OID 44726)
--- Dependencies: 1689 1663 2104
+-- TOC entry 2359 (class 2606 OID 44726)
+-- Dependencies: 1689 2105 1663
 -- Name: fk25f222e6b07d659a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6165,8 +6185,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2359 (class 2606 OID 44731)
--- Dependencies: 2074 1651 1689
+-- TOC entry 2360 (class 2606 OID 44731)
+-- Dependencies: 1651 1689 2075
 -- Name: fk25f222e6fd5b3613; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6175,8 +6195,8 @@ ALTER TABLE ONLY invoices
 
 
 --
--- TOC entry 2360 (class 2606 OID 44744)
--- Dependencies: 2104 1663 1690
+-- TOC entry 2361 (class 2606 OID 44744)
+-- Dependencies: 1663 1690 2105
 -- Name: fk326ab82e1ac2f55a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6185,8 +6205,8 @@ ALTER TABLE ONLY invoice_items
 
 
 --
--- TOC entry 2361 (class 2606 OID 44749)
--- Dependencies: 2126 1690 1671
+-- TOC entry 2362 (class 2606 OID 44749)
+-- Dependencies: 1671 2127 1690
 -- Name: fk326ab82e9f1800e1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6195,8 +6215,8 @@ ALTER TABLE ONLY invoice_items
 
 
 --
--- TOC entry 2362 (class 2606 OID 44754)
--- Dependencies: 1655 1690 2084
+-- TOC entry 2363 (class 2606 OID 44754)
+-- Dependencies: 1655 1690 2085
 -- Name: fk326ab82ef10b9721; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6205,8 +6225,8 @@ ALTER TABLE ONLY invoice_items
 
 
 --
--- TOC entry 2221 (class 2606 OID 37328)
--- Dependencies: 1622 1647 1986
+-- TOC entry 2222 (class 2606 OID 37328)
+-- Dependencies: 1987 1622 1647
 -- Name: fk327473ad27a66c93; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6215,8 +6235,8 @@ ALTER TABLE ONLY order_confirmations
 
 
 --
--- TOC entry 2222 (class 2606 OID 37333)
--- Dependencies: 2104 1663 1647
+-- TOC entry 2223 (class 2606 OID 37333)
+-- Dependencies: 1663 1647 2105
 -- Name: fk327473ad3aa5298e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6225,8 +6245,8 @@ ALTER TABLE ONLY order_confirmations
 
 
 --
--- TOC entry 2223 (class 2606 OID 37338)
--- Dependencies: 1647 1996 1625
+-- TOC entry 2224 (class 2606 OID 37338)
+-- Dependencies: 1625 1647 1997
 -- Name: fk327473ad5aa049f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6235,8 +6255,8 @@ ALTER TABLE ONLY order_confirmations
 
 
 --
--- TOC entry 2224 (class 2606 OID 37343)
--- Dependencies: 1634 1647 2019
+-- TOC entry 2225 (class 2606 OID 37343)
+-- Dependencies: 2020 1647 1634
 -- Name: fk327473ad7ebcc009; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6245,8 +6265,8 @@ ALTER TABLE ONLY order_confirmations
 
 
 --
--- TOC entry 2225 (class 2606 OID 37348)
--- Dependencies: 1663 2104 1647
+-- TOC entry 2226 (class 2606 OID 37348)
+-- Dependencies: 2105 1647 1663
 -- Name: fk327473ada97faa1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6255,8 +6275,8 @@ ALTER TABLE ONLY order_confirmations
 
 
 --
--- TOC entry 2161 (class 2606 OID 37353)
--- Dependencies: 2068 1624 1649
+-- TOC entry 2162 (class 2606 OID 37353)
+-- Dependencies: 1624 1649 2069
 -- Name: fk363aa33fee88a3ca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6265,8 +6285,8 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 2162 (class 2606 OID 37358)
--- Dependencies: 1651 2074 1624
+-- TOC entry 2163 (class 2606 OID 37358)
+-- Dependencies: 2075 1624 1651
 -- Name: fk363aa33ff339b22b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6275,8 +6295,8 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 2202 (class 2606 OID 37363)
--- Dependencies: 1644 1651 2074
+-- TOC entry 2203 (class 2606 OID 37363)
+-- Dependencies: 1651 1644 2075
 -- Name: fk3edb4c27157c075; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6285,8 +6305,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2203 (class 2606 OID 37368)
--- Dependencies: 1663 2104 1644
+-- TOC entry 2204 (class 2606 OID 37368)
+-- Dependencies: 2105 1644 1663
 -- Name: fk3edb4c2746dd317; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6295,8 +6315,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2204 (class 2606 OID 37378)
--- Dependencies: 1651 2074 1644
+-- TOC entry 2205 (class 2606 OID 37378)
+-- Dependencies: 1644 2075 1651
 -- Name: fk3edb4c274da6f8bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6305,8 +6325,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2205 (class 2606 OID 37383)
--- Dependencies: 2104 1644 1663
+-- TOC entry 2206 (class 2606 OID 37383)
+-- Dependencies: 1663 2105 1644
 -- Name: fk3edb4c278a6109cb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6315,8 +6335,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2206 (class 2606 OID 37388)
--- Dependencies: 1644 1671 2126
+-- TOC entry 2207 (class 2606 OID 37388)
+-- Dependencies: 1644 2127 1671
 -- Name: fk3edb4c279f1800e1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6325,8 +6345,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2207 (class 2606 OID 37393)
--- Dependencies: 1644 2068 1649
+-- TOC entry 2208 (class 2606 OID 37393)
+-- Dependencies: 2069 1649 1644
 -- Name: fk3edb4c27f2569c14; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6335,8 +6355,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2331 (class 2606 OID 38346)
--- Dependencies: 1996 1683 1625
+-- TOC entry 2332 (class 2606 OID 38346)
+-- Dependencies: 1683 1625 1997
 -- Name: fk40afd1582b1363d6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6345,8 +6365,8 @@ ALTER TABLE ONLY pattern_mask_formats
 
 
 --
--- TOC entry 2246 (class 2606 OID 37408)
--- Dependencies: 2078 1653 1653
+-- TOC entry 2247 (class 2606 OID 37408)
+-- Dependencies: 1653 1653 2079
 -- Name: fk5519b36c1c57732d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6355,8 +6375,8 @@ ALTER TABLE ONLY product_categories
 
 
 --
--- TOC entry 2248 (class 2606 OID 38371)
--- Dependencies: 1653 2128 1683
+-- TOC entry 2249 (class 2606 OID 38371)
+-- Dependencies: 1653 1683 2129
 -- Name: fk5519b36c7a956e19; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6365,8 +6385,8 @@ ALTER TABLE ONLY product_categories
 
 
 --
--- TOC entry 2226 (class 2606 OID 37418)
--- Dependencies: 1646 1648 2062
+-- TOC entry 2227 (class 2606 OID 37418)
+-- Dependencies: 2063 1648 1646
 -- Name: fk5f8caf2a59f71c23; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6375,8 +6395,8 @@ ALTER TABLE ONLY order_item_match
 
 
 --
--- TOC entry 2227 (class 2606 OID 37423)
--- Dependencies: 1648 2086 1656
+-- TOC entry 2228 (class 2606 OID 37423)
+-- Dependencies: 1648 2087 1656
 -- Name: fk5f8caf2a867a1de; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6385,8 +6405,8 @@ ALTER TABLE ONLY order_item_match
 
 
 --
--- TOC entry 2319 (class 2606 OID 37428)
--- Dependencies: 1668 1668 2116
+-- TOC entry 2320 (class 2606 OID 37428)
+-- Dependencies: 1668 2117 1668
 -- Name: fk6a68e0844bb6904; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6395,8 +6415,8 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2320 (class 2606 OID 37433)
--- Dependencies: 2116 1668 1668
+-- TOC entry 2321 (class 2606 OID 37433)
+-- Dependencies: 2117 1668 1668
 -- Name: fk6a68e08f9f4b72; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6405,8 +6425,8 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2165 (class 2606 OID 37438)
--- Dependencies: 2041 1625 1640
+-- TOC entry 2166 (class 2606 OID 37438)
+-- Dependencies: 1625 1640 2042
 -- Name: fk6b9ae64a3d8dbb7d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6415,8 +6435,8 @@ ALTER TABLE ONLY business_partners
 
 
 --
--- TOC entry 2249 (class 2606 OID 37443)
--- Dependencies: 2033 1654 1638
+-- TOC entry 2250 (class 2606 OID 37443)
+-- Dependencies: 1638 1654 2034
 -- Name: fk725e8d72b6365ea; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6425,8 +6445,8 @@ ALTER TABLE ONLY product_suppliers
 
 
 --
--- TOC entry 2250 (class 2606 OID 37448)
--- Dependencies: 1654 1665 2108
+-- TOC entry 2251 (class 2606 OID 37448)
+-- Dependencies: 2109 1654 1665
 -- Name: fk725e8d7a330dfcf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6435,8 +6455,8 @@ ALTER TABLE ONLY product_suppliers
 
 
 --
--- TOC entry 2251 (class 2606 OID 37453)
--- Dependencies: 2108 1654 1665
+-- TOC entry 2252 (class 2606 OID 37453)
+-- Dependencies: 1665 1654 2109
 -- Name: fk725e8d7f10b9721; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6445,8 +6465,8 @@ ALTER TABLE ONLY product_suppliers
 
 
 --
--- TOC entry 2271 (class 2606 OID 37473)
--- Dependencies: 2104 1659 1663
+-- TOC entry 2272 (class 2606 OID 37473)
+-- Dependencies: 1663 2105 1659
 -- Name: fk7503fcd11ac2f55a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6455,8 +6475,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2272 (class 2606 OID 37478)
--- Dependencies: 1659 2108 1665
+-- TOC entry 2273 (class 2606 OID 37478)
+-- Dependencies: 1659 2109 1665
 -- Name: fk7503fcd1a330dfcf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6465,8 +6485,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2273 (class 2606 OID 37483)
--- Dependencies: 2108 1665 1659
+-- TOC entry 2274 (class 2606 OID 37483)
+-- Dependencies: 1665 1659 2109
 -- Name: fk7503fcd1f10b9721; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6475,8 +6495,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2218 (class 2606 OID 37488)
--- Dependencies: 2104 1663 1646
+-- TOC entry 2219 (class 2606 OID 37488)
+-- Dependencies: 1646 1663 2105
 -- Name: fk7e6ecbc71ac2f55a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6485,8 +6505,8 @@ ALTER TABLE ONLY order_confirmation_items
 
 
 --
--- TOC entry 2219 (class 2606 OID 37493)
--- Dependencies: 1646 1663 2104
+-- TOC entry 2220 (class 2606 OID 37493)
+-- Dependencies: 1663 1646 2105
 -- Name: fk7e6ecbc73aa5298e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6495,8 +6515,8 @@ ALTER TABLE ONLY order_confirmation_items
 
 
 --
--- TOC entry 2220 (class 2606 OID 37498)
--- Dependencies: 1646 2108 1665
+-- TOC entry 2221 (class 2606 OID 37498)
+-- Dependencies: 1646 1665 2109
 -- Name: fk7e6ecbc7a330dfcf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6505,8 +6525,8 @@ ALTER TABLE ONLY order_confirmation_items
 
 
 --
--- TOC entry 2228 (class 2606 OID 37503)
--- Dependencies: 1625 1649 1996
+-- TOC entry 2229 (class 2606 OID 37503)
+-- Dependencies: 1649 1625 1997
 -- Name: fk8258b9a017025956; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6515,8 +6535,8 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2229 (class 2606 OID 37508)
--- Dependencies: 2104 1663 1649
+-- TOC entry 2230 (class 2606 OID 37508)
+-- Dependencies: 1649 1663 2105
 -- Name: fk8258b9a0180e7eb9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6525,8 +6545,8 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2230 (class 2606 OID 37518)
--- Dependencies: 1649 2068 1649
+-- TOC entry 2231 (class 2606 OID 37518)
+-- Dependencies: 1649 1649 2069
 -- Name: fk8258b9a08c46f1ed; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6535,8 +6555,8 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2190 (class 2606 OID 37523)
--- Dependencies: 2041 1640 1638
+-- TOC entry 2191 (class 2606 OID 37523)
+-- Dependencies: 1638 1640 2042
 -- Name: fk9157692e2ff7d10e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6545,8 +6565,8 @@ ALTER TABLE ONLY data_object_links
 
 
 --
--- TOC entry 2328 (class 2606 OID 37528)
--- Dependencies: 1651 1671 2074
+-- TOC entry 2329 (class 2606 OID 37528)
+-- Dependencies: 1671 1651 2075
 -- Name: fk94f81e109757951; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6555,8 +6575,8 @@ ALTER TABLE ONLY warehouses
 
 
 --
--- TOC entry 2332 (class 2606 OID 38356)
--- Dependencies: 1684 2126 1671
+-- TOC entry 2333 (class 2606 OID 38356)
+-- Dependencies: 1684 1671 2127
 -- Name: fk951433609f1800e1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6565,8 +6585,8 @@ ALTER TABLE ONLY warehouse_products
 
 
 --
--- TOC entry 2333 (class 2606 OID 38361)
--- Dependencies: 1665 2108 1684
+-- TOC entry 2334 (class 2606 OID 38361)
+-- Dependencies: 1684 1665 2109
 -- Name: fk95143360a330dfcf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6575,8 +6595,8 @@ ALTER TABLE ONLY warehouse_products
 
 
 --
--- TOC entry 2278 (class 2606 OID 37543)
--- Dependencies: 1659 1660 2094
+-- TOC entry 2279 (class 2606 OID 37543)
+-- Dependencies: 1660 1659 2095
 -- Name: fk98230d0e73d2d06a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6585,8 +6605,8 @@ ALTER TABLE ONLY receipt_certificate_serial_numbers
 
 
 --
--- TOC entry 2153 (class 2606 OID 37548)
--- Dependencies: 1998 1626 1622
+-- TOC entry 2154 (class 2606 OID 37548)
+-- Dependencies: 1622 1626 1999
 -- Name: fk_addresses_city_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6595,8 +6615,8 @@ ALTER TABLE ONLY addresses
 
 
 --
--- TOC entry 2154 (class 2606 OID 37553)
--- Dependencies: 1635 1622 2021
+-- TOC entry 2155 (class 2606 OID 37553)
+-- Dependencies: 1622 1635 2022
 -- Name: fk_addresses_country_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6605,8 +6625,8 @@ ALTER TABLE ONLY addresses
 
 
 --
--- TOC entry 2155 (class 2606 OID 37558)
--- Dependencies: 2041 1622 1640
+-- TOC entry 2156 (class 2606 OID 37558)
+-- Dependencies: 1622 1640 2042
 -- Name: fk_addresses_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6615,8 +6635,8 @@ ALTER TABLE ONLY addresses
 
 
 --
--- TOC entry 2157 (class 2606 OID 37563)
--- Dependencies: 1640 2041 1623
+-- TOC entry 2158 (class 2606 OID 37563)
+-- Dependencies: 1623 1640 2042
 -- Name: fk_assembling_categories_do; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6625,8 +6645,8 @@ ALTER TABLE ONLY assembling_categories
 
 
 --
--- TOC entry 2158 (class 2606 OID 37568)
--- Dependencies: 1623 1988 1623
+-- TOC entry 2159 (class 2606 OID 37568)
+-- Dependencies: 1623 1623 1989
 -- Name: fk_assembling_categories_parent_category; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6635,8 +6655,8 @@ ALTER TABLE ONLY assembling_categories
 
 
 --
--- TOC entry 2334 (class 2606 OID 44398)
--- Dependencies: 2041 1640 1685
+-- TOC entry 2335 (class 2606 OID 44398)
+-- Dependencies: 1685 1640 2042
 -- Name: fk_assembling_messages_do; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6645,8 +6665,8 @@ ALTER TABLE ONLY assembling_messages
 
 
 --
--- TOC entry 2335 (class 2606 OID 44403)
--- Dependencies: 2068 1649 1685
+-- TOC entry 2336 (class 2606 OID 44403)
+-- Dependencies: 1685 1649 2069
 -- Name: fk_assembling_messages_organization; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6655,8 +6675,8 @@ ALTER TABLE ONLY assembling_messages
 
 
 --
--- TOC entry 2343 (class 2606 OID 44517)
--- Dependencies: 2142 1687 1688
+-- TOC entry 2344 (class 2606 OID 44517)
+-- Dependencies: 1687 2143 1688
 -- Name: fk_assembling_schema_item_values_as_item; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6665,8 +6685,8 @@ ALTER TABLE ONLY assembling_schema_item_values
 
 
 --
--- TOC entry 2344 (class 2606 OID 44522)
--- Dependencies: 2124 1688 1670
+-- TOC entry 2345 (class 2606 OID 44522)
+-- Dependencies: 1688 1670 2125
 -- Name: fk_assembling_schema_item_values_vp; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6675,8 +6695,8 @@ ALTER TABLE ONLY assembling_schema_item_values
 
 
 --
--- TOC entry 2339 (class 2606 OID 44488)
--- Dependencies: 1663 1687 2104
+-- TOC entry 2340 (class 2606 OID 44488)
+-- Dependencies: 1687 2105 1663
 -- Name: fk_assembling_schema_items_algorithm; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6685,8 +6705,8 @@ ALTER TABLE ONLY assembling_schema_items
 
 
 --
--- TOC entry 2340 (class 2606 OID 44493)
--- Dependencies: 1663 1687 2104
+-- TOC entry 2341 (class 2606 OID 44493)
+-- Dependencies: 2105 1663 1687
 -- Name: fk_assembling_schema_items_data_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6695,8 +6715,8 @@ ALTER TABLE ONLY assembling_schema_items
 
 
 --
--- TOC entry 2341 (class 2606 OID 44498)
--- Dependencies: 2132 1687 1685
+-- TOC entry 2342 (class 2606 OID 44498)
+-- Dependencies: 1687 1685 2133
 -- Name: fk_assembling_schema_items_message; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6705,8 +6725,8 @@ ALTER TABLE ONLY assembling_schema_items
 
 
 --
--- TOC entry 2342 (class 2606 OID 44503)
--- Dependencies: 1686 2136 1687
+-- TOC entry 2343 (class 2606 OID 44503)
+-- Dependencies: 2137 1686 1687
 -- Name: fk_assembling_schema_items_owner; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6715,8 +6735,8 @@ ALTER TABLE ONLY assembling_schema_items
 
 
 --
--- TOC entry 2336 (class 2606 OID 44469)
--- Dependencies: 1686 1988 1623
+-- TOC entry 2337 (class 2606 OID 44469)
+-- Dependencies: 1686 1623 1989
 -- Name: fk_assembling_schemas_categories; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6725,8 +6745,8 @@ ALTER TABLE ONLY assembling_schemas
 
 
 --
--- TOC entry 2338 (class 2606 OID 44648)
--- Dependencies: 2104 1663 1686
+-- TOC entry 2339 (class 2606 OID 44648)
+-- Dependencies: 1686 1663 2105
 -- Name: fk_assembling_schemas_measure_unit; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6735,8 +6755,8 @@ ALTER TABLE ONLY assembling_schemas
 
 
 --
--- TOC entry 2337 (class 2606 OID 44474)
--- Dependencies: 1670 2124 1686
+-- TOC entry 2338 (class 2606 OID 44474)
+-- Dependencies: 2125 1686 1670
 -- Name: fk_assembling_schemas_virtual_products; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6745,8 +6765,8 @@ ALTER TABLE ONLY assembling_schemas
 
 
 --
--- TOC entry 2163 (class 2606 OID 37608)
--- Dependencies: 1624 1622 1986
+-- TOC entry 2164 (class 2606 OID 37608)
+-- Dependencies: 1624 1622 1987
 -- Name: fk_bank_details_bank_branch; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6755,8 +6775,8 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 2164 (class 2606 OID 37613)
--- Dependencies: 1624 1640 2041
+-- TOC entry 2165 (class 2606 OID 37613)
+-- Dependencies: 1624 1640 2042
 -- Name: fk_bank_details_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6765,8 +6785,8 @@ ALTER TABLE ONLY bank_details
 
 
 --
--- TOC entry 2169 (class 2606 OID 37618)
--- Dependencies: 1627 1630 2008
+-- TOC entry 2170 (class 2606 OID 37618)
+-- Dependencies: 1627 1630 2009
 -- Name: fk_classified_objects_classifier_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6775,8 +6795,8 @@ ALTER TABLE ONLY classified_objects
 
 
 --
--- TOC entry 2171 (class 2606 OID 37623)
--- Dependencies: 1628 1639 2037
+-- TOC entry 2172 (class 2606 OID 37623)
+-- Dependencies: 1628 1639 2038
 -- Name: fk_classifier_applied_for_dot_dot_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6785,8 +6805,8 @@ ALTER TABLE ONLY classifier_applied_for_dot
 
 
 --
--- TOC entry 2172 (class 2606 OID 37628)
--- Dependencies: 1629 1640 2041
+-- TOC entry 2173 (class 2606 OID 37628)
+-- Dependencies: 1629 1640 2042
 -- Name: fk_classifier_groups_cg_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6795,8 +6815,8 @@ ALTER TABLE ONLY classifier_groups
 
 
 --
--- TOC entry 2174 (class 2606 OID 37633)
--- Dependencies: 1630 1640 2041
+-- TOC entry 2175 (class 2606 OID 37633)
+-- Dependencies: 1630 1640 2042
 -- Name: fk_classifiers_id_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6805,8 +6825,8 @@ ALTER TABLE ONLY classifiers
 
 
 --
--- TOC entry 2177 (class 2606 OID 37638)
--- Dependencies: 2104 1631 1663
+-- TOC entry 2178 (class 2606 OID 37638)
+-- Dependencies: 1631 1663 2105
 -- Name: fk_communication_contacts_comm_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6815,8 +6835,8 @@ ALTER TABLE ONLY communication_contacts
 
 
 --
--- TOC entry 2178 (class 2606 OID 37643)
--- Dependencies: 1640 2041 1631
+-- TOC entry 2179 (class 2606 OID 37643)
+-- Dependencies: 1631 1640 2042
 -- Name: fk_communication_contacts_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6825,8 +6845,8 @@ ALTER TABLE ONLY communication_contacts
 
 
 --
--- TOC entry 2179 (class 2606 OID 37648)
--- Dependencies: 1632 2104 1663
+-- TOC entry 2180 (class 2606 OID 37648)
+-- Dependencies: 1632 1663 2105
 -- Name: fk_complex_product_items_algorithm; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6835,8 +6855,8 @@ ALTER TABLE ONLY complex_product_items
 
 
 --
--- TOC entry 2180 (class 2606 OID 37653)
--- Dependencies: 1632 1633 2017
+-- TOC entry 2181 (class 2606 OID 37653)
+-- Dependencies: 1632 1633 2018
 -- Name: fk_complex_product_items_cp; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6845,8 +6865,8 @@ ALTER TABLE ONLY complex_product_items
 
 
 --
--- TOC entry 2181 (class 2606 OID 37658)
--- Dependencies: 2084 1655 1632
+-- TOC entry 2182 (class 2606 OID 37658)
+-- Dependencies: 1632 1655 2085
 -- Name: fk_complex_product_items_products; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6855,8 +6875,8 @@ ALTER TABLE ONLY complex_product_items
 
 
 --
--- TOC entry 2182 (class 2606 OID 37663)
--- Dependencies: 1633 2084 1655
+-- TOC entry 2183 (class 2606 OID 37663)
+-- Dependencies: 1633 1655 2085
 -- Name: fk_complex_products_products; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6865,8 +6885,8 @@ ALTER TABLE ONLY complex_products
 
 
 --
--- TOC entry 2183 (class 2606 OID 37668)
--- Dependencies: 1633 1663 2104
+-- TOC entry 2184 (class 2606 OID 37668)
+-- Dependencies: 1633 1663 2105
 -- Name: fk_complex_products_resource_bundle; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6875,8 +6895,8 @@ ALTER TABLE ONLY complex_products
 
 
 --
--- TOC entry 2186 (class 2606 OID 37673)
--- Dependencies: 1634 2041 1640
+-- TOC entry 2187 (class 2606 OID 37673)
+-- Dependencies: 1634 1640 2042
 -- Name: fk_contact_persons_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6885,8 +6905,8 @@ ALTER TABLE ONLY contact_persons
 
 
 --
--- TOC entry 2187 (class 2606 OID 37678)
--- Dependencies: 2076 1652 1634
+-- TOC entry 2188 (class 2606 OID 37678)
+-- Dependencies: 1634 1652 2077
 -- Name: fk_contact_persons_position_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6895,8 +6915,8 @@ ALTER TABLE ONLY contact_persons
 
 
 --
--- TOC entry 2216 (class 2606 OID 44338)
--- Dependencies: 1622 1644 1986
+-- TOC entry 2217 (class 2606 OID 44338)
+-- Dependencies: 1644 1622 1987
 -- Name: fk_creator_branch; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6905,8 +6925,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2215 (class 2606 OID 44332)
--- Dependencies: 1644 2068 1649
+-- TOC entry 2216 (class 2606 OID 44332)
+-- Dependencies: 1644 1649 2069
 -- Name: fk_creator_organization; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6915,8 +6935,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2189 (class 2606 OID 37683)
--- Dependencies: 2041 1640 1637
+-- TOC entry 2190 (class 2606 OID 37683)
+-- Dependencies: 1637 1640 2042
 -- Name: fk_data_object_details_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6925,8 +6945,8 @@ ALTER TABLE ONLY data_object_details
 
 
 --
--- TOC entry 2191 (class 2606 OID 37688)
--- Dependencies: 1638 2041 1640
+-- TOC entry 2192 (class 2606 OID 37688)
+-- Dependencies: 1638 1640 2042
 -- Name: fk_data_object_links_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6935,8 +6955,8 @@ ALTER TABLE ONLY data_object_links
 
 
 --
--- TOC entry 2192 (class 2606 OID 37693)
--- Dependencies: 1640 2041 1638
+-- TOC entry 2193 (class 2606 OID 37693)
+-- Dependencies: 1638 1640 2042
 -- Name: fk_data_object_links_linked_object; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6945,8 +6965,8 @@ ALTER TABLE ONLY data_object_links
 
 
 --
--- TOC entry 2193 (class 2606 OID 37698)
--- Dependencies: 1640 1639 2037
+-- TOC entry 2194 (class 2606 OID 37698)
+-- Dependencies: 1640 1639 2038
 -- Name: fk_data_objects_do_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6955,8 +6975,8 @@ ALTER TABLE ONLY data_objects
 
 
 --
--- TOC entry 2194 (class 2606 OID 37703)
--- Dependencies: 2041 1640 1640
+-- TOC entry 2195 (class 2606 OID 37703)
+-- Dependencies: 1640 1640 2042
 -- Name: fk_data_objects_linked_data_object_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6965,8 +6985,8 @@ ALTER TABLE ONLY data_objects
 
 
 --
--- TOC entry 2195 (class 2606 OID 37708)
--- Dependencies: 1640 2041 1640
+-- TOC entry 2196 (class 2606 OID 37708)
+-- Dependencies: 1640 1640 2042
 -- Name: fk_data_objects_parent_data_object_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6975,8 +6995,8 @@ ALTER TABLE ONLY data_objects
 
 
 --
--- TOC entry 2200 (class 2606 OID 44643)
--- Dependencies: 1642 2084 1655
+-- TOC entry 2201 (class 2606 OID 44643)
+-- Dependencies: 1655 1642 2085
 -- Name: fk_delivery_certifiate_items_product; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6985,8 +7005,8 @@ ALTER TABLE ONLY delivery_certificate_items
 
 
 --
--- TOC entry 2196 (class 2606 OID 37713)
--- Dependencies: 2054 1644 1641
+-- TOC entry 2197 (class 2606 OID 37713)
+-- Dependencies: 1641 1644 2055
 -- Name: fk_delivery_certificate; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6995,8 +7015,8 @@ ALTER TABLE ONLY delivery_certificate_assignments
 
 
 --
--- TOC entry 2197 (class 2606 OID 37718)
--- Dependencies: 1644 1642 2054
+-- TOC entry 2198 (class 2606 OID 37718)
+-- Dependencies: 1642 1644 2055
 -- Name: fk_delivery_certificate_items_delivery_cert; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7005,8 +7025,8 @@ ALTER TABLE ONLY delivery_certificate_items
 
 
 --
--- TOC entry 2198 (class 2606 OID 37723)
--- Dependencies: 1640 1642 2041
+-- TOC entry 2199 (class 2606 OID 37723)
+-- Dependencies: 1642 1640 2042
 -- Name: fk_delivery_certificate_items_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7015,8 +7035,8 @@ ALTER TABLE ONLY delivery_certificate_items
 
 
 --
--- TOC entry 2199 (class 2606 OID 37728)
--- Dependencies: 1663 1642 2104
+-- TOC entry 2200 (class 2606 OID 37728)
+-- Dependencies: 1642 1663 2105
 -- Name: fk_delivery_certificate_items_measure_unit; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7025,8 +7045,8 @@ ALTER TABLE ONLY delivery_certificate_items
 
 
 --
--- TOC entry 2201 (class 2606 OID 37738)
--- Dependencies: 2045 1642 1643
+-- TOC entry 2202 (class 2606 OID 37738)
+-- Dependencies: 1643 1642 2046
 -- Name: fk_delivery_certificate_serial_numbers_dci; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7035,8 +7055,8 @@ ALTER TABLE ONLY delivery_certificate_serial_numbers
 
 
 --
--- TOC entry 2208 (class 2606 OID 37743)
--- Dependencies: 1640 1644 2041
+-- TOC entry 2209 (class 2606 OID 37743)
+-- Dependencies: 1644 1640 2042
 -- Name: fk_delivery_certificates_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7045,8 +7065,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2209 (class 2606 OID 37748)
--- Dependencies: 1663 2104 1644
+-- TOC entry 2210 (class 2606 OID 37748)
+-- Dependencies: 1644 1663 2105
 -- Name: fk_delivery_certificates_reason; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7055,8 +7075,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2210 (class 2606 OID 37753)
--- Dependencies: 1996 1625 1644
+-- TOC entry 2211 (class 2606 OID 37753)
+-- Dependencies: 1644 1625 1997
 -- Name: fk_delivery_certificates_recipient; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7065,8 +7085,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2211 (class 2606 OID 37758)
--- Dependencies: 1663 1644 2104
+-- TOC entry 2212 (class 2606 OID 37758)
+-- Dependencies: 1644 1663 2105
 -- Name: fk_delivery_certificates_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7075,8 +7095,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2212 (class 2606 OID 37763)
--- Dependencies: 1644 2126 1671
+-- TOC entry 2213 (class 2606 OID 37763)
+-- Dependencies: 1644 1671 2127
 -- Name: fk_delivery_certificates_warehouse; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7085,8 +7105,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2213 (class 2606 OID 37768)
--- Dependencies: 1644 1986 1622
+-- TOC entry 2214 (class 2606 OID 37768)
+-- Dependencies: 1644 1622 1987
 -- Name: fk_forwarder_address_constraint; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7095,8 +7115,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2234 (class 2606 OID 37853)
--- Dependencies: 1650 2041 1640
+-- TOC entry 2235 (class 2606 OID 37853)
+-- Dependencies: 1650 1640 2042
 -- Name: fk_passports_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7105,8 +7125,8 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2235 (class 2606 OID 37858)
--- Dependencies: 1986 1622 1650
+-- TOC entry 2236 (class 2606 OID 37858)
+-- Dependencies: 1987 1622 1650
 -- Name: fk_passports_issuer_branch; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7115,8 +7135,8 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2236 (class 2606 OID 37863)
--- Dependencies: 1663 1650 2104
+-- TOC entry 2237 (class 2606 OID 37863)
+-- Dependencies: 1650 1663 2105
 -- Name: fk_passports_pass_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7125,8 +7145,8 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2243 (class 2606 OID 37868)
--- Dependencies: 2041 1652 1640
+-- TOC entry 2244 (class 2606 OID 37868)
+-- Dependencies: 1652 1640 2042
 -- Name: fk_position_types_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7135,8 +7155,8 @@ ALTER TABLE ONLY position_types
 
 
 --
--- TOC entry 2247 (class 2606 OID 37878)
--- Dependencies: 2041 1653 1640
+-- TOC entry 2248 (class 2606 OID 37878)
+-- Dependencies: 1653 1640 2042
 -- Name: fk_product_categories_product_category_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7145,8 +7165,8 @@ ALTER TABLE ONLY product_categories
 
 
 --
--- TOC entry 2295 (class 2606 OID 37883)
--- Dependencies: 1653 2078 1665
+-- TOC entry 2296 (class 2606 OID 37883)
+-- Dependencies: 1665 1653 2079
 -- Name: fk_product_category_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7155,8 +7175,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2252 (class 2606 OID 37888)
--- Dependencies: 1654 2108 1665
+-- TOC entry 2253 (class 2606 OID 37888)
+-- Dependencies: 1654 1665 2109
 -- Name: fk_product_suppliers_product_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7165,8 +7185,8 @@ ALTER TABLE ONLY product_suppliers
 
 
 --
--- TOC entry 2253 (class 2606 OID 37893)
--- Dependencies: 1654 2033 1638
+-- TOC entry 2254 (class 2606 OID 37893)
+-- Dependencies: 1654 1638 2034
 -- Name: fk_product_suppliers_supplier; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7175,8 +7195,8 @@ ALTER TABLE ONLY product_suppliers
 
 
 --
--- TOC entry 2254 (class 2606 OID 37898)
--- Dependencies: 2041 1655 1640
+-- TOC entry 2255 (class 2606 OID 37898)
+-- Dependencies: 1655 1640 2042
 -- Name: fk_products1_product_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7185,8 +7205,8 @@ ALTER TABLE ONLY products
 
 
 --
--- TOC entry 2296 (class 2606 OID 37903)
--- Dependencies: 1665 2104 1663
+-- TOC entry 2297 (class 2606 OID 37903)
+-- Dependencies: 1665 1663 2105
 -- Name: fk_products_color_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7195,8 +7215,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2297 (class 2606 OID 37908)
--- Dependencies: 1665 1663 2104
+-- TOC entry 2298 (class 2606 OID 37908)
+-- Dependencies: 1665 1663 2105
 -- Name: fk_products_dimension_unit_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7205,8 +7225,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2298 (class 2606 OID 37913)
--- Dependencies: 1665 2104 1663
+-- TOC entry 2299 (class 2606 OID 37913)
+-- Dependencies: 1665 1663 2105
 -- Name: fk_products_measure_unit_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7215,8 +7235,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2299 (class 2606 OID 37923)
--- Dependencies: 1665 2104 1663
+-- TOC entry 2300 (class 2606 OID 37923)
+-- Dependencies: 1665 1663 2105
 -- Name: fk_products_weight_unit_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7225,8 +7245,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2255 (class 2606 OID 37928)
--- Dependencies: 2041 1656 1640
+-- TOC entry 2256 (class 2606 OID 37928)
+-- Dependencies: 1656 1640 2042
 -- Name: fk_purchase_order_items_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7235,8 +7255,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2256 (class 2606 OID 37933)
--- Dependencies: 1663 2104 1656
+-- TOC entry 2257 (class 2606 OID 37933)
+-- Dependencies: 1656 1663 2105
 -- Name: fk_purchase_order_items_measure_unit; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7245,8 +7265,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2257 (class 2606 OID 37938)
--- Dependencies: 1656 2108 1665
+-- TOC entry 2258 (class 2606 OID 37938)
+-- Dependencies: 1656 1665 2109
 -- Name: fk_purchase_order_items_product; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7255,8 +7275,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2269 (class 2606 OID 37943)
--- Dependencies: 1665 2108 1658
+-- TOC entry 2270 (class 2606 OID 37943)
+-- Dependencies: 1658 1665 2109
 -- Name: fk_real_products_simple_product; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7265,8 +7285,8 @@ ALTER TABLE ONLY real_products
 
 
 --
--- TOC entry 2270 (class 2606 OID 37948)
--- Dependencies: 1658 2124 1670
+-- TOC entry 2271 (class 2606 OID 37948)
+-- Dependencies: 1658 1670 2125
 -- Name: fk_real_products_virtual_product; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7275,8 +7295,8 @@ ALTER TABLE ONLY real_products
 
 
 --
--- TOC entry 2274 (class 2606 OID 37953)
--- Dependencies: 1640 1659 2041
+-- TOC entry 2275 (class 2606 OID 37953)
+-- Dependencies: 1659 1640 2042
 -- Name: fk_receipt_certificate_items_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7285,8 +7305,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2275 (class 2606 OID 37958)
--- Dependencies: 2104 1663 1659
+-- TOC entry 2276 (class 2606 OID 37958)
+-- Dependencies: 1659 1663 2105
 -- Name: fk_receipt_certificate_items_measure_unit; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7295,8 +7315,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2276 (class 2606 OID 37963)
--- Dependencies: 1659 1665 2108
+-- TOC entry 2277 (class 2606 OID 37963)
+-- Dependencies: 1659 1665 2109
 -- Name: fk_receipt_certificate_items_product; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7305,8 +7325,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2277 (class 2606 OID 37968)
--- Dependencies: 2098 1659 1661
+-- TOC entry 2278 (class 2606 OID 37968)
+-- Dependencies: 1659 1661 2099
 -- Name: fk_receipt_certificate_items_receipt_cert; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7315,8 +7335,8 @@ ALTER TABLE ONLY receipt_certificate_items
 
 
 --
--- TOC entry 2279 (class 2606 OID 37973)
--- Dependencies: 1659 2094 1660
+-- TOC entry 2280 (class 2606 OID 37973)
+-- Dependencies: 1660 1659 2095
 -- Name: fk_receipt_certificate_serial_numbers_dci; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7325,8 +7345,8 @@ ALTER TABLE ONLY receipt_certificate_serial_numbers
 
 
 --
--- TOC entry 2280 (class 2606 OID 37978)
--- Dependencies: 1638 2033 1661
+-- TOC entry 2281 (class 2606 OID 37978)
+-- Dependencies: 1661 1638 2034
 -- Name: fk_receipt_certificates_deliverer; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7335,8 +7355,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2281 (class 2606 OID 37983)
--- Dependencies: 2041 1661 1640
+-- TOC entry 2282 (class 2606 OID 37983)
+-- Dependencies: 1661 1640 2042
 -- Name: fk_receipt_certificates_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7345,8 +7365,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2282 (class 2606 OID 37988)
--- Dependencies: 1661 1663 2104
+-- TOC entry 2283 (class 2606 OID 37988)
+-- Dependencies: 1661 1663 2105
 -- Name: fk_receipt_certificates_reason; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7355,8 +7375,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2283 (class 2606 OID 37993)
--- Dependencies: 2104 1663 1661
+-- TOC entry 2284 (class 2606 OID 37993)
+-- Dependencies: 1661 1663 2105
 -- Name: fk_receipt_certificates_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7365,8 +7385,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2284 (class 2606 OID 37998)
--- Dependencies: 1661 1671 2126
+-- TOC entry 2285 (class 2606 OID 37998)
+-- Dependencies: 1661 1671 2127
 -- Name: fk_receipt_certificates_warehouse; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7375,8 +7395,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2214 (class 2606 OID 38003)
--- Dependencies: 1986 1644 1622
+-- TOC entry 2215 (class 2606 OID 38003)
+-- Dependencies: 1644 1622 1987
 -- Name: fk_recipient_address_constraint; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7385,8 +7405,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2217 (class 2606 OID 44638)
--- Dependencies: 2019 1644 1634
+-- TOC entry 2218 (class 2606 OID 44638)
+-- Dependencies: 1644 2020 1634
 -- Name: fk_recipient_contact_person; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7395,8 +7415,8 @@ ALTER TABLE ONLY delivery_certificates
 
 
 --
--- TOC entry 2294 (class 2606 OID 38008)
--- Dependencies: 1663 2058 1645
+-- TOC entry 2295 (class 2606 OID 38008)
+-- Dependencies: 1663 1645 2059
 -- Name: fk_resource_bundle_enum_class_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7405,8 +7425,8 @@ ALTER TABLE ONLY resource_bundle
 
 
 --
--- TOC entry 2300 (class 2606 OID 38013)
--- Dependencies: 2084 1655 1665
+-- TOC entry 2301 (class 2606 OID 38013)
+-- Dependencies: 1665 1655 2085
 -- Name: fk_simple_products_products; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7415,8 +7435,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2321 (class 2606 OID 38018)
--- Dependencies: 2116 1668 1668
+-- TOC entry 2322 (class 2606 OID 38018)
+-- Dependencies: 1668 1668 2117
 -- Name: fk_users_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7425,8 +7445,8 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2327 (class 2606 OID 38023)
--- Dependencies: 1640 2041 1670
+-- TOC entry 2328 (class 2606 OID 38023)
+-- Dependencies: 1670 1640 2042
 -- Name: fk_virtual_products_do; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7435,8 +7455,8 @@ ALTER TABLE ONLY virtual_products
 
 
 --
--- TOC entry 2329 (class 2606 OID 38028)
--- Dependencies: 1671 1622 1986
+-- TOC entry 2330 (class 2606 OID 38028)
+-- Dependencies: 1671 1622 1987
 -- Name: fk_warehouses_address_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7445,8 +7465,8 @@ ALTER TABLE ONLY warehouses
 
 
 --
--- TOC entry 2330 (class 2606 OID 38033)
--- Dependencies: 1640 2041 1671
+-- TOC entry 2331 (class 2606 OID 38033)
+-- Dependencies: 1671 1640 2042
 -- Name: fk_warehouses_do_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7455,8 +7475,8 @@ ALTER TABLE ONLY warehouses
 
 
 --
--- TOC entry 2258 (class 2606 OID 38038)
--- Dependencies: 1656 1663 2104
+-- TOC entry 2259 (class 2606 OID 38038)
+-- Dependencies: 1656 1663 2105
 -- Name: fka00989511ac2f55a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7465,8 +7485,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2259 (class 2606 OID 38043)
--- Dependencies: 2104 1656 1663
+-- TOC entry 2260 (class 2606 OID 38043)
+-- Dependencies: 1656 1663 2105
 -- Name: fka00989513aa5298e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7475,8 +7495,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2260 (class 2606 OID 38048)
--- Dependencies: 1656 1665 2108
+-- TOC entry 2261 (class 2606 OID 38048)
+-- Dependencies: 1656 1665 2109
 -- Name: fka0098951a330dfcf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7485,8 +7505,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2261 (class 2606 OID 38053)
--- Dependencies: 1665 2108 1656
+-- TOC entry 2262 (class 2606 OID 38053)
+-- Dependencies: 1656 1665 2109
 -- Name: fka0098951f10b9721; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7495,8 +7515,8 @@ ALTER TABLE ONLY purchase_order_items
 
 
 --
--- TOC entry 2262 (class 2606 OID 38093)
--- Dependencies: 1663 1657 2104
+-- TOC entry 2263 (class 2606 OID 38093)
+-- Dependencies: 1657 1663 2105
 -- Name: fkc307e7e31808129a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7505,8 +7525,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2263 (class 2606 OID 38098)
--- Dependencies: 1657 1986 1622
+-- TOC entry 2264 (class 2606 OID 38098)
+-- Dependencies: 1657 1622 1987
 -- Name: fkc307e7e327a66c93; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7515,8 +7535,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2264 (class 2606 OID 38103)
--- Dependencies: 1657 2074 1651
+-- TOC entry 2265 (class 2606 OID 38103)
+-- Dependencies: 1657 1651 2075
 -- Name: fkc307e7e34da6f8bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7525,8 +7545,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2265 (class 2606 OID 38108)
--- Dependencies: 1996 1657 1625
+-- TOC entry 2266 (class 2606 OID 38108)
+-- Dependencies: 1657 1625 1997
 -- Name: fkc307e7e35aa049f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7535,8 +7555,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2266 (class 2606 OID 38113)
--- Dependencies: 1634 1657 2019
+-- TOC entry 2267 (class 2606 OID 38113)
+-- Dependencies: 1657 1634 2020
 -- Name: fkc307e7e37ebcc009; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7545,8 +7565,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2267 (class 2606 OID 38118)
--- Dependencies: 1663 2104 1657
+-- TOC entry 2268 (class 2606 OID 38118)
+-- Dependencies: 1657 1663 2105
 -- Name: fkc307e7e39c49320d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7555,8 +7575,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2268 (class 2606 OID 38123)
--- Dependencies: 1657 2074 1651
+-- TOC entry 2269 (class 2606 OID 38123)
+-- Dependencies: 1657 1651 2075
 -- Name: fkc307e7e3fd5b3613; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7565,8 +7585,8 @@ ALTER TABLE ONLY purchase_orders
 
 
 --
--- TOC entry 2301 (class 2606 OID 38128)
--- Dependencies: 1665 1663 2104
+-- TOC entry 2302 (class 2606 OID 38128)
+-- Dependencies: 1665 1663 2105
 -- Name: fkc42bd1641ac2f55a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7575,8 +7595,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2302 (class 2606 OID 38133)
--- Dependencies: 1663 2104 1665
+-- TOC entry 2303 (class 2606 OID 38133)
+-- Dependencies: 1665 1663 2105
 -- Name: fkc42bd16427acd874; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7585,8 +7605,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2303 (class 2606 OID 38138)
--- Dependencies: 1665 1653 2078
+-- TOC entry 2304 (class 2606 OID 38138)
+-- Dependencies: 1665 1653 2079
 -- Name: fkc42bd1646e2f83d0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7595,8 +7615,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2304 (class 2606 OID 38143)
--- Dependencies: 1625 1665 1996
+-- TOC entry 2305 (class 2606 OID 38143)
+-- Dependencies: 1665 1625 1997
 -- Name: fkc42bd1646e436697; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7605,8 +7625,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2313 (class 2606 OID 38366)
--- Dependencies: 2128 1665 1683
+-- TOC entry 2314 (class 2606 OID 38366)
+-- Dependencies: 1665 1683 2129
 -- Name: fkc42bd1647a956e19; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7615,8 +7635,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2305 (class 2606 OID 38153)
--- Dependencies: 2104 1665 1663
+-- TOC entry 2306 (class 2606 OID 38153)
+-- Dependencies: 1665 1663 2105
 -- Name: fkc42bd1648f60524c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7625,8 +7645,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2306 (class 2606 OID 38158)
--- Dependencies: 2104 1663 1665
+-- TOC entry 2307 (class 2606 OID 38158)
+-- Dependencies: 1665 1663 2105
 -- Name: fkc42bd1649d6c3562; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7635,8 +7655,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2237 (class 2606 OID 38168)
--- Dependencies: 1650 2068 1649
+-- TOC entry 2238 (class 2606 OID 38168)
+-- Dependencies: 1650 1649 2069
 -- Name: fkc84af6a1db08a2d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7645,8 +7665,8 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2239 (class 2606 OID 38173)
--- Dependencies: 2021 1651 1635
+-- TOC entry 2240 (class 2606 OID 38173)
+-- Dependencies: 1651 1635 2022
 -- Name: fkd78fcfbe16ffc779; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7655,8 +7675,8 @@ ALTER TABLE ONLY persons
 
 
 --
--- TOC entry 2240 (class 2606 OID 38178)
--- Dependencies: 1663 2104 1651
+-- TOC entry 2241 (class 2606 OID 38178)
+-- Dependencies: 1651 1663 2105
 -- Name: fkd78fcfbe2663e8de; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7665,8 +7685,8 @@ ALTER TABLE ONLY persons
 
 
 --
--- TOC entry 2241 (class 2606 OID 38183)
--- Dependencies: 1651 1998 1626
+-- TOC entry 2242 (class 2606 OID 38183)
+-- Dependencies: 1651 1626 1999
 -- Name: fkd78fcfbe4250f8bb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7675,8 +7695,8 @@ ALTER TABLE ONLY persons
 
 
 --
--- TOC entry 2242 (class 2606 OID 38188)
--- Dependencies: 1625 1651 1996
+-- TOC entry 2243 (class 2606 OID 38188)
+-- Dependencies: 1651 1625 1997
 -- Name: fkd78fcfbed213c5a1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7685,8 +7705,8 @@ ALTER TABLE ONLY persons
 
 
 --
--- TOC entry 2307 (class 2606 OID 38193)
--- Dependencies: 1663 2104 1665
+-- TOC entry 2308 (class 2606 OID 38193)
+-- Dependencies: 1665 1663 2105
 -- Name: fke81099511ac2f55a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7695,8 +7715,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2308 (class 2606 OID 38198)
--- Dependencies: 1665 1663 2104
+-- TOC entry 2309 (class 2606 OID 38198)
+-- Dependencies: 1665 1663 2105
 -- Name: fke810995127acd874; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7705,8 +7725,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2309 (class 2606 OID 38203)
--- Dependencies: 2078 1653 1665
+-- TOC entry 2310 (class 2606 OID 38203)
+-- Dependencies: 1665 1653 2079
 -- Name: fke81099516e2f83d0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7715,8 +7735,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2310 (class 2606 OID 38208)
--- Dependencies: 1665 1625 1996
+-- TOC entry 2311 (class 2606 OID 38208)
+-- Dependencies: 1665 1625 1997
 -- Name: fke81099516e436697; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7725,8 +7745,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2311 (class 2606 OID 38218)
--- Dependencies: 2104 1663 1665
+-- TOC entry 2312 (class 2606 OID 38218)
+-- Dependencies: 1665 1663 2105
 -- Name: fke81099518f60524c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7735,8 +7755,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2312 (class 2606 OID 38223)
--- Dependencies: 2104 1663 1665
+-- TOC entry 2313 (class 2606 OID 38223)
+-- Dependencies: 1665 1663 2105
 -- Name: fke81099519d6c3562; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7745,8 +7765,8 @@ ALTER TABLE ONLY simple_products
 
 
 --
--- TOC entry 2285 (class 2606 OID 38228)
--- Dependencies: 1651 2074 1661
+-- TOC entry 2286 (class 2606 OID 38228)
+-- Dependencies: 1661 1651 2075
 -- Name: fke9334463157c075; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7755,8 +7775,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2286 (class 2606 OID 38233)
--- Dependencies: 2074 1651 1661
+-- TOC entry 2287 (class 2606 OID 38233)
+-- Dependencies: 1661 1651 2075
 -- Name: fke93344634da6f8bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7765,8 +7785,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2287 (class 2606 OID 38238)
--- Dependencies: 1661 1651 2074
+-- TOC entry 2288 (class 2606 OID 38238)
+-- Dependencies: 1661 1651 2075
 -- Name: fke93344636faaa615; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7775,8 +7795,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2288 (class 2606 OID 38243)
--- Dependencies: 1661 2033 1638
+-- TOC entry 2289 (class 2606 OID 38243)
+-- Dependencies: 1661 1638 2034
 -- Name: fke933446370294164; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7785,8 +7805,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2289 (class 2606 OID 38248)
--- Dependencies: 1661 2126 1671
+-- TOC entry 2290 (class 2606 OID 38248)
+-- Dependencies: 1661 1671 2127
 -- Name: fke93344639f1800e1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7795,8 +7815,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2290 (class 2606 OID 38253)
--- Dependencies: 2104 1663 1661
+-- TOC entry 2291 (class 2606 OID 38253)
+-- Dependencies: 1661 1663 2105
 -- Name: fke9334463d6755f5b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7805,8 +7825,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2291 (class 2606 OID 38258)
--- Dependencies: 1661 2068 1649
+-- TOC entry 2292 (class 2606 OID 38258)
+-- Dependencies: 1661 1649 2069
 -- Name: fke9334463f2569c14; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7815,8 +7835,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2292 (class 2606 OID 38263)
--- Dependencies: 1661 1663 2104
+-- TOC entry 2293 (class 2606 OID 38263)
+-- Dependencies: 1661 1663 2105
 -- Name: fke9334463fe9be307; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7825,8 +7845,8 @@ ALTER TABLE ONLY receipt_certificates
 
 
 --
--- TOC entry 2363 (class 2606 OID 44766)
--- Dependencies: 2148 1692 1690
+-- TOC entry 2364 (class 2606 OID 44766)
+-- Dependencies: 2149 1690 1692
 -- Name: fkfefcb143e94bedc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7835,8 +7855,8 @@ ALTER TABLE ONLY invoice_item_link
 
 
 --
--- TOC entry 2231 (class 2606 OID 38268)
--- Dependencies: 1622 1986 1649
+-- TOC entry 2232 (class 2606 OID 38268)
+-- Dependencies: 1649 1622 1987
 -- Name: organizations_administration_address_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7845,8 +7865,8 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2232 (class 2606 OID 38273)
--- Dependencies: 1649 2104 1663
+-- TOC entry 2233 (class 2606 OID 38273)
+-- Dependencies: 1649 1663 2105
 -- Name: organizations_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7855,8 +7875,8 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2233 (class 2606 OID 38278)
--- Dependencies: 1649 1986 1622
+-- TOC entry 2234 (class 2606 OID 38278)
+-- Dependencies: 1649 1622 1987
 -- Name: organizations_registration_address_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7865,8 +7885,8 @@ ALTER TABLE ONLY organizations
 
 
 --
--- TOC entry 2238 (class 2606 OID 38283)
--- Dependencies: 1650 2074 1651
+-- TOC entry 2239 (class 2606 OID 38283)
+-- Dependencies: 1650 1651 2075
 -- Name: passports_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7875,8 +7895,8 @@ ALTER TABLE ONLY passports
 
 
 --
--- TOC entry 2244 (class 2606 OID 38293)
--- Dependencies: 1652 2076 1652
+-- TOC entry 2245 (class 2606 OID 38293)
+-- Dependencies: 1652 1652 2077
 -- Name: position_types_parent_position_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7885,8 +7905,8 @@ ALTER TABLE ONLY position_types
 
 
 --
--- TOC entry 2245 (class 2606 OID 38298)
--- Dependencies: 1652 2110 1666
+-- TOC entry 2246 (class 2606 OID 38298)
+-- Dependencies: 1652 1666 2111
 -- Name: position_types_user_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7895,8 +7915,8 @@ ALTER TABLE ONLY position_types
 
 
 --
--- TOC entry 2316 (class 2606 OID 38303)
--- Dependencies: 1667 2104 1663
+-- TOC entry 2317 (class 2606 OID 38303)
+-- Dependencies: 1667 1663 2105
 -- Name: user_rights_special_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7905,8 +7925,8 @@ ALTER TABLE ONLY user_rights
 
 
 --
--- TOC entry 2317 (class 2606 OID 38308)
--- Dependencies: 1667 2110 1666
+-- TOC entry 2318 (class 2606 OID 38308)
+-- Dependencies: 1667 1666 2111
 -- Name: user_rights_user_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7915,8 +7935,8 @@ ALTER TABLE ONLY user_rights
 
 
 --
--- TOC entry 2318 (class 2606 OID 38313)
--- Dependencies: 1667 2116 1668
+-- TOC entry 2319 (class 2606 OID 38313)
+-- Dependencies: 1667 1668 2117
 -- Name: user_rights_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7925,8 +7945,8 @@ ALTER TABLE ONLY user_rights
 
 
 --
--- TOC entry 2323 (class 2606 OID 38318)
--- Dependencies: 1669 2068 1649
+-- TOC entry 2324 (class 2606 OID 38318)
+-- Dependencies: 1669 1649 2069
 -- Name: users_organizations_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7935,8 +7955,8 @@ ALTER TABLE ONLY users_organizations
 
 
 --
--- TOC entry 2326 (class 2606 OID 38381)
--- Dependencies: 1651 1669 2074
+-- TOC entry 2327 (class 2606 OID 38381)
+-- Dependencies: 1669 1651 2075
 -- Name: users_organizations_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7945,8 +7965,8 @@ ALTER TABLE ONLY users_organizations
 
 
 --
--- TOC entry 2324 (class 2606 OID 38328)
--- Dependencies: 1669 1666 2110
+-- TOC entry 2325 (class 2606 OID 38328)
+-- Dependencies: 1669 1666 2111
 -- Name: users_organizations_user_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7955,8 +7975,8 @@ ALTER TABLE ONLY users_organizations
 
 
 --
--- TOC entry 2325 (class 2606 OID 38333)
--- Dependencies: 1668 1669 2116
+-- TOC entry 2326 (class 2606 OID 38333)
+-- Dependencies: 1669 1668 2117
 -- Name: users_organizations_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7965,8 +7985,8 @@ ALTER TABLE ONLY users_organizations
 
 
 --
--- TOC entry 2322 (class 2606 OID 38376)
--- Dependencies: 1668 1651 2074
+-- TOC entry 2323 (class 2606 OID 38376)
+-- Dependencies: 1668 1651 2075
 -- Name: users_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7975,7 +7995,7 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2427 (class 0 OID 0)
+-- TOC entry 2428 (class 0 OID 0)
 -- Dependencies: 6
 -- Name: public; Type: ACL; Schema: -; Owner: -
 --
@@ -7986,7 +8006,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2008-10-11 20:48:29
+-- Completed on 2008-10-14 00:19:31
 
 --
 -- PostgreSQL database dump complete
