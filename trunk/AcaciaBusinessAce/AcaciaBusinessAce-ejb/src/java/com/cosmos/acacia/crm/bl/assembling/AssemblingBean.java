@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -619,12 +620,21 @@ public class AssemblingBean
     @Override
     public DataObjectBean getParentProduct(Product product)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        BigInteger parentId = product.getParentId();
+        if(parentId == null)
+            return null;
+
+        return esm.getDataObjectBean(em, parentId);
     }
 
     @Override
     public List<Product> getChildProducts(DataObjectBean parent)
     {
+        if(parent == null)
+        {
+            
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

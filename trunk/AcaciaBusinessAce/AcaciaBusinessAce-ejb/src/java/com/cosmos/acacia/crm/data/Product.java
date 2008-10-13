@@ -124,6 +124,7 @@ public abstract class Product
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getName()).append("[productId=");
         sb.append(productId);
+        sb.append(", parentId=").append(parentId);
         sb.append(", productName=").append(getProductName());
         sb.append(", productCode=").append(getProductCode());
         DataObject dataObject = getDataObject();
