@@ -21,6 +21,8 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -31,6 +33,23 @@ import javax.persistence.InheritanceType;
 @Table(name = "products")
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING, length=2, name="product_type")
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "Product.findByParentDataObjectIsNullAndDeleted",
+                query = "select p from Product p" +
+                        " where p.dataObject.parentDataObjectId is NULL" +
+                        " and p.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "Product.findByParentDataObjectAndDeleted",
+                query = "select p from Product p" +
+                        " where p.dataObject.parentDataObjectId = :parentDataObjectId" +
+                        " and p.dataObject.deleted = :deleted"
+            )
+    })
 public abstract class Product
     extends DataObjectBean
     implements Serializable
