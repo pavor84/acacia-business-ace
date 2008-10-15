@@ -276,6 +276,8 @@ public class RightsManagerBean
         while (applicableRights.size() == 0 && tmpDataObject != null) {
             for (UserRight right : rights) {
                 if (right.getDataObjectType() == null) {
+                    // If neighter type nor object is specified, the right
+                    // is valid for all objects
                     applicableRights.add(right);
                 } else {
                     if (right.getDataObject() != null) {
