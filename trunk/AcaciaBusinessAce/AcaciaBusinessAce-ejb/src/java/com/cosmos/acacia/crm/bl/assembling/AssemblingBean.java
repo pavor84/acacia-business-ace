@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Product;
@@ -511,6 +512,22 @@ public class AssemblingBean
             esm.persist(em, realProduct);
             return realProduct;
         }
+    }
+
+    @Override
+    public List<ComplexProductItem> getComplexProductItems(ComplexProduct complexProduct)
+    {
+        logger.info("getComplexProductItems(complexProduct=" + complexProduct + ")");
+        Query q = em.createNamedQuery("ComplexProductItem.findByComplexProductAndDeleted");
+        q.setParameter("complexProduct", complexProduct);
+        q.setParameter("deleted", false);
+        return new ArrayList<ComplexProductItem>(q.getResultList());
+    }
+
+    @Override
+    public List<InvoiceItem> getInvoiceItems(Invoice invoice)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
