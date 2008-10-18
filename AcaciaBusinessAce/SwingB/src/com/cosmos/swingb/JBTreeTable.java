@@ -70,10 +70,10 @@ public class JBTreeTable
 
     protected void internalInitialization()
     {
-        setSelectionModel(new TableSelectionModel());
+        //setSelectionModel(new TableSelectionModel());
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setAutoResizeMode(AUTO_RESIZE_OFF);
         setColumnControlVisible(true);
-        getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setHorizontalScrollEnabled(true);
         setEditable(false);
     }
