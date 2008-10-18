@@ -6,9 +6,22 @@
 
 package com.cosmos.acacia.crm.gui.assembling;
 
+import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.swingb.JBTreeTable;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.ejb.EJB;
+import javax.swing.DefaultComboBoxModel;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
+import org.jdesktop.swingx.treetable.TreeTableNode;
 
 /**
  *
@@ -35,23 +48,23 @@ public class ComplexProductPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        jBComboBox1 = new com.cosmos.swingb.JBComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jXTreeTable1 = new org.jdesktop.swingx.JXTreeTable();
+        complexProductLabel = new com.cosmos.swingb.JBLabel();
+        complexProductComboBox = new com.cosmos.swingb.JBComboBox();
+        productsScrollPane = new javax.swing.JScrollPane();
+        productsTreeTable = new JBTreeTable();
 
         setName("Form"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ComplexProductPanel.class);
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
+        complexProductLabel.setText(resourceMap.getString("complexProductLabel.text")); // NOI18N
+        complexProductLabel.setName("complexProductLabel"); // NOI18N
 
-        jBComboBox1.setName("jBComboBox1"); // NOI18N
+        complexProductComboBox.setName("complexProductComboBox"); // NOI18N
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        productsScrollPane.setName("productsScrollPane"); // NOI18N
 
-        jXTreeTable1.setName("jXTreeTable1"); // NOI18N
-        jScrollPane1.setViewportView(jXTreeTable1);
+        productsTreeTable.setName("productsTreeTable"); // NOI18N
+        productsScrollPane.setViewportView(productsTreeTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -60,11 +73,11 @@ public class ComplexProductPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
+                    .addComponent(productsScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(complexProductLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)))
+                        .addComponent(complexProductComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -72,26 +85,80 @@ public class ComplexProductPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(complexProductLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(complexProductComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(productsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBComboBox jBComboBox1;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXTreeTable jXTreeTable1;
+    private com.cosmos.swingb.JBComboBox complexProductComboBox;
+    private com.cosmos.swingb.JBLabel complexProductLabel;
+    private javax.swing.JScrollPane productsScrollPane;
+    private org.jdesktop.swingx.JXTreeTable productsTreeTable;
     // End of variables declaration//GEN-END:variables
 
 
+    private DefaultMutableTreeTableNode emptyNode =
+        new DefaultMutableTreeTableNode();
+
+    @Override
     protected void initData()
     {
-        
+        complexProductComboBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent event)
+            {
+                DefaultTreeTableModel treeTableModel =
+                    (DefaultTreeTableModel)productsTreeTable.getTreeTableModel();
+                TreeTableNode rootNode;
+                ComplexProduct product =
+                    (ComplexProduct)complexProductComboBox.getSelectedItem();
+                if(product == null)
+                {
+                    rootNode = emptyNode;
+                }
+                else
+                {
+                    rootNode = new ProductItemTreeTableNode(product, getFormSession());
+                }
+
+                treeTableModel.setRoot(rootNode);
+            }
+        }, true);
+
+        DefaultComboBoxModel comboBoxModel = 
+            (DefaultComboBoxModel)complexProductComboBox.getModel();
+        for(ComplexProduct product : getComplexProducts())
+        {
+            comboBoxModel.addElement(product);
+        }
+
+    }
+
+    private List<ComplexProduct> getComplexProducts()
+    {
+        int size;
+        List<Product> products = 
+            getFormSession().getChildProducts(null);
+        if((products = getFormSession().getChildProducts(null)) != null &&
+            (size = products.size()) > 0)
+        {
+            List<ComplexProduct> complexProducts = new ArrayList<ComplexProduct>(size);
+            for(Product product : products)
+            {
+                if(product instanceof ComplexProduct)
+                    complexProducts.add((ComplexProduct)product);
+            }
+
+            return complexProducts;
+        }
+
+        return Collections.emptyList();
     }
 
     protected AssemblingRemote getFormSession()

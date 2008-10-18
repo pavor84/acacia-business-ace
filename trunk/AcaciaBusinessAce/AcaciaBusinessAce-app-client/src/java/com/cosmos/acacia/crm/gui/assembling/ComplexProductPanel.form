@@ -21,11 +21,11 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="543" max="32767" attributes="0"/>
+                  <Component id="productsScrollPane" alignment="0" pref="543" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jBLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="complexProductLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jBComboBox1" pref="398" max="32767" attributes="0"/>
+                      <Component id="complexProductComboBox" pref="398" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -37,31 +37,31 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jBLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jBComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="complexProductLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="complexProductComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="473" max="32767" attributes="0"/>
+              <Component id="productsScrollPane" pref="473" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
+    <Component class="com.cosmos.swingb.JBLabel" name="complexProductLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="complexProductLabel.text"/>
+        <Property name="name" type="java.lang.String" value="complexProductLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBComboBox" name="jBComboBox1">
+    <Component class="com.cosmos.swingb.JBComboBox" name="complexProductComboBox">
       <Properties>
-        <Property name="name" type="java.lang.String" value="jBComboBox1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="complexProductComboBox" noResource="true"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+    <Container class="javax.swing.JScrollPane" name="productsScrollPane">
       <Properties>
-        <Property name="name" type="java.lang.String" value="jScrollPane1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="productsScrollPane" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -69,10 +69,13 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="org.jdesktop.swingx.JXTreeTable" name="jXTreeTable1">
+        <Component class="org.jdesktop.swingx.JXTreeTable" name="productsTreeTable">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jXTreeTable1" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="productsTreeTable" noResource="true"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JBTreeTable()"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
