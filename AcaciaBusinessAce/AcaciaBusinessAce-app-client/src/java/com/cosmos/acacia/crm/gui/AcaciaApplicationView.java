@@ -48,6 +48,7 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingMessageListPanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
+import com.cosmos.acacia.crm.gui.assembling.ComplexProductPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BranchSelectionPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
@@ -83,7 +84,6 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
-import com.cosmos.acacia.crm.enums.UserRightType;
 
 /**
  * The application's main frame.
@@ -387,7 +387,7 @@ public class AcaciaApplicationView extends FrameView {
     @Action
     public void productAssemblerAction()
     {
-        ProductAssemblerPanel panel = new ProductAssemblerPanel();
+        JBPanel panel = new ProductAssemblerPanel();
         panel.showFrame();
     }
 
