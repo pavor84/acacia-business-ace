@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -27,7 +28,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "complex_product_items")
-@NamedQueries({})
+@NamedQueries(
+    {
+        @NamedQuery
+            (
+                name = "ComplexProductItem.findByComplexProductAndDeleted",
+                query = "select t from ComplexProductItem t" +
+                        " where t.complexProduct = :complexProduct" +
+                        " and t.dataObject.deleted = :deleted" +
+                        " order by t.orderPosition"
+            )
+    })
 public class ComplexProductItem
     extends DataObjectBean
     implements Serializable
@@ -37,10 +48,6 @@ public class ComplexProductItem
     @Id
     @Column(name = "complex_product_item_id", nullable = false)
     private BigInteger complexProductItemId;
-
-//    @Column(name = "parent_id")
-//    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-//    private BigInteger parentId;
 
     @Column(name = "order_position")
     @Property(title="Order Position", editable=false, readOnly=true, visible=false, hidden=true)
