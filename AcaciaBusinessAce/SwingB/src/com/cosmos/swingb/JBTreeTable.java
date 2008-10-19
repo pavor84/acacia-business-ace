@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb;
 
+import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.TreePath;
@@ -150,6 +151,12 @@ public class JBTreeTable
             observableData = (ObservableList)data;
         }
     }*/
+
+    public void setColumnIdentifiers(List<?> columnIdentifiers)
+    {
+        DefaultTreeTableModel treeTableModel = (DefaultTreeTableModel)getTreeTableModel();
+        treeTableModel.setColumnIdentifiers(columnIdentifiers);
+    }
 
     public DefaultMutableTreeTableNode getRoot()
     {
