@@ -32,8 +32,16 @@ import javax.persistence.Table;
     {
         @NamedQuery
             (
-                name = "ComplexProductItem.findByComplexProductAndDeleted",
+                name = "ComplexProductItem.findItemsByComplexProductAndDeleted",
                 query = "select t from ComplexProductItem t" +
+                        " where t.complexProduct = :complexProduct" +
+                        " and t.dataObject.deleted = :deleted" +
+                        " order by t.orderPosition"
+            ),
+        @NamedQuery
+            (
+                name = "ComplexProductItem.findItemsCountByComplexProductAndDeleted",
+                query = "select count(*) from ComplexProductItem t" +
                         " where t.complexProduct = :complexProduct" +
                         " and t.dataObject.deleted = :deleted" +
                         " order by t.orderPosition"

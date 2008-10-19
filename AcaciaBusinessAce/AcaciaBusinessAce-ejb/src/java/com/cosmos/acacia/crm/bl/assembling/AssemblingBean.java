@@ -518,14 +518,32 @@ public class AssemblingBean
     public List<ComplexProductItem> getComplexProductItems(ComplexProduct complexProduct)
     {
         logger.info("getComplexProductItems(complexProduct=" + complexProduct + ")");
-        Query q = em.createNamedQuery("ComplexProductItem.findByComplexProductAndDeleted");
+        Query q = em.createNamedQuery("ComplexProductItem.findItemsByComplexProductAndDeleted");
         q.setParameter("complexProduct", complexProduct);
         q.setParameter("deleted", false);
         return new ArrayList<ComplexProductItem>(q.getResultList());
     }
 
     @Override
+    public int getComplexProductItemsCount(ComplexProduct complexProduct)
+    {
+        logger.info("getComplexProductItems(complexProduct=" + complexProduct + ")");
+        Query q = em.createNamedQuery("ComplexProductItem.findItemsCountByComplexProductAndDeleted");
+        q.setParameter("complexProduct", complexProduct);
+        q.setParameter("deleted", false);
+        Object object = q.getSingleResult();
+        Number result = (Number)object;
+        return result.intValue();
+    }
+
+    @Override
     public List<InvoiceItem> getInvoiceItems(Invoice invoice)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getInvoiceItemsCount(Invoice invoice)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
