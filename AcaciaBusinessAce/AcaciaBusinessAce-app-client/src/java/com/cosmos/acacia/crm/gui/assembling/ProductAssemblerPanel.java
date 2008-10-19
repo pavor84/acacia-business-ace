@@ -19,8 +19,10 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.AcaciaTreeTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBFormattedTextField;
@@ -42,6 +44,8 @@ import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 /**
  *
@@ -157,8 +161,8 @@ public class ProductAssemblerPanel
 
 
     private AcaciaTable parametersTable;
-    //private AcaciaTreeTable productTreeTable;
-    private AcaciaTable productTreeTable;
+    private AcaciaTreeTable productTreeTable;
+    //private AcaciaTable productTreeTable;
     private JBFormattedTextField productPriceTextField;
 
     private AssemblingSchema assemblingSchema;
@@ -185,12 +189,12 @@ public class ProductAssemblerPanel
 
         strValue = resource.getString("productTitledPanel.title");
         productTitledPanel.setTitle(strValue);
-        //productTreeTable = new AcaciaTreeTable();
-        productTreeTable = new AcaciaTable();
+        productTreeTable = new AcaciaTreeTable();
+        /*productTreeTable = new AcaciaTable();
         bindingGroup = new BindingGroup();
         entityProperties = getFormSession().getComplexProductItemEntityProperties();
         productTreeTable.bind(bindingGroup, getComplexProductItems(), entityProperties);
-        bindingGroup.bind();
+        bindingGroup.bind();*/
         scrollPane = new JBScrollPane();
         scrollPane.setViewportView(productTreeTable);
 
@@ -358,7 +362,7 @@ public class ProductAssemblerPanel
     @Action
     public void assembleAction()
     {
-        productTreeTable.getData().clear();
+        //productTreeTable.getData().clear();
         productAssemble();
     }
 
@@ -474,11 +478,28 @@ public class ProductAssemblerPanel
             logger.info("\t Product: " + productItem.getProduct());
             logger.info("\t Quantity: " + productItem.getQuantity());
             logger.info("\t UnitPrice: " + productItem.getUnitPrice());
-            productTreeTable.addRow(productItem);
-            productTreeTable.packAll();
 
             ComplexProduct product = event.getComplexProduct();
             productPriceTextField.setValue(product.getSalePrice());
+
+            //productTreeTable.addRow(productItem);
+            DefaultTreeTableModel treeTableModel = 
+                (DefaultTreeTableModel)productTreeTable.getTreeTableModel();
+            DefaultMutableTreeTableNode rootNode;
+            if((rootNode = (DefaultMutableTreeTableNode)treeTableModel.getRoot()) == null)
+            {
+                rootNode = new ProductItemTreeTableNode(product, getFormSession());
+                treeTableModel.setRoot(rootNode);
+            }
+            else
+            {
+                //System.out.println("rootNode: " + rootNode + ", ComplexProduct: " + product);
+                //((ProductItemTreeTableNode)rootNode).refresh();
+                rootNode = new ProductItemTreeTableNode(product, getFormSession());
+                treeTableModel.setRoot(rootNode);
+            }
+            
+            productTreeTable.packAll();
         }
 
     }
