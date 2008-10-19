@@ -5,34 +5,16 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.beansbinding.converters.ResourceConverter;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.TreePath;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.observablecollections.ObservableCollections;
-import org.jdesktop.observablecollections.ObservableList;
-import org.jdesktop.swingbinding.JTableBinding;
-import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
-import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
-import org.jdesktop.swingx.table.TableColumnExt;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 /**
  *
@@ -46,10 +28,10 @@ public class JBTreeTable
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
 
-    private ObservableList observableData;
-    private EntityProperties entityProperties;
+    //private ObservableList observableData;
+    //private EntityProperties entityProperties;
 
-    private BeanTableCellRenderer beanResourceCellRenderer;
+    //private BeanTableCellRenderer beanResourceCellRenderer;
 
 
     public JBTreeTable()
@@ -146,7 +128,7 @@ public class JBTreeTable
         this.application = application;
     }
 
-    public List getData()
+    /*public List getData()
     {
         return observableData;
     }
@@ -167,17 +149,127 @@ public class JBTreeTable
         {
             observableData = (ObservableList)data;
         }
-    }
+    }*/
 
-    public int addRow(Object bean)
+    public DefaultMutableTreeTableNode getRoot()
     {
-        if(observableData == null)
-            return -1;
-        observableData.add(bean);
-        return observableData.size() - 1;
+        DefaultTreeTableModel treeTableModel = (DefaultTreeTableModel)getTreeTableModel();
+        return (DefaultMutableTreeTableNode)treeTableModel.getRoot();
     }
 
-    public void setRow(int rowIndex, Object bean)
+    public void setRoot(DefaultMutableTreeTableNode rootNode)
+    {
+        DefaultTreeTableModel treeTableModel = (DefaultTreeTableModel)getTreeTableModel();
+        treeTableModel.setRoot(rootNode);
+    }
+
+    /**
+     * Add new row to the TreeTable using Root Node as Parent. If Root Node is
+     * not set (root = null) then IllegalStateException will be trown.
+     * If the @code bean doesn't extend DefaultMutableTreeTableNode then
+     * bean will be wrapped in new DefaultMutableTreeTableNode object and set as
+     * UserObject
+     * @param bean
+     * @return
+     */
+    public void addRow(Object bean)
+    {
+        DefaultMutableTreeTableNode rootNode = getRoot();
+        if(rootNode == null)
+            throw new IllegalStateException("The Root Node can not be null. Use setRoot() first.");
+
+        int index = rootNode.getChildCount();
+        DefaultMutableTreeTableNode child;
+        if(bean instanceof DefaultMutableTreeTableNode)
+        {
+            child = (DefaultMutableTreeTableNode)bean;
+        }
+        else
+        {
+            child = new DefaultMutableTreeTableNode(bean);
+        }
+        DefaultTreeTableModel treeTableModel = (DefaultTreeTableModel)getTreeTableModel();
+        treeTableModel.insertNodeInto(child, rootNode, index);
+    }
+
+    /**
+     * Removes the row for the given object.
+     * If the rowObject is not found, {@link IllegalArgumentException} is thrown.
+     * @param rowObject
+     */
+    public void removeRow(Object rowObject)
+    {
+        DefaultMutableTreeTableNode rootNode = getRoot();
+        if(rootNode == null)
+            throw new IllegalStateException("The Root Node can not be null. Use setRoot() first.");
+
+        DefaultMutableTreeTableNode child = null;
+        if(rowObject instanceof DefaultMutableTreeTableNode)
+        {
+            child = (DefaultMutableTreeTableNode)rowObject;
+        }
+        else
+        {
+            int size;
+            if((size = rootNode.getChildCount()) == 0)
+                return;
+
+            for(int i = 0; i < size; i++)
+            {
+                DefaultMutableTreeTableNode node =
+                        (DefaultMutableTreeTableNode)rootNode.getChildAt(i);
+                Object userObject = node.getUserObject();
+                if(rowObject == userObject || rowObject.equals(userObject))
+                {
+                    child = node;
+                    break;
+                }
+            }
+
+            if(child == null)
+                return;
+        }
+
+        DefaultTreeTableModel treeTableModel = (DefaultTreeTableModel)getTreeTableModel();
+        treeTableModel.removeNodeFromParent(child);
+    }
+
+    public DefaultMutableTreeTableNode getSelectedTreeTableNode()
+    {
+        TreePath selectionPath = getTreeSelectionModel().getSelectionPath();
+        if(selectionPath == null)
+            return null;
+
+        return (DefaultMutableTreeTableNode)selectionPath.getLastPathComponent();
+    }
+
+    public Object getSelectedRowObject()
+    {
+        DefaultMutableTreeTableNode node = getSelectedTreeTableNode();
+        if(node == null)
+            return null;
+
+        return node.getUserObject();
+    }
+
+    public void refresh()
+    {
+        DefaultMutableTreeTableNode rootNode = getRoot();
+        setRoot(rootNode);
+    }
+
+    /*public Object removeSelectedRow()
+    {
+        int rowIndex = getSelectedModelRowIndex();
+        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
+        {
+            return observableData.remove(rowIndex);
+        }
+
+        return null;
+    }*/
+
+    /*public void setRow(int rowIndex, Object bean)
     {
         if(observableData != null)
             observableData.set(convertRowIndexToModel(rowIndex), bean);
@@ -187,7 +279,7 @@ public class JBTreeTable
     {
         int rowIndex = getSelectedRow();
         setRow(rowIndex, bean);
-    }
+    }*/
     
     /**
      * Updates the visualization of a given row associated with a given bean.
@@ -195,7 +287,7 @@ public class JBTreeTable
      * method throws {@link IllegalArgumentException}
      * @param bean
      */
-    public void updateRow(Object bean)
+    /*public void updateRow(Object bean)
     {
         int rowIndex = getRowIndex(bean);
         if ( rowIndex==-1 )
@@ -250,17 +342,6 @@ public class JBTreeTable
         return selectedRowIndexes;
     }
 
-    public Object getSelectedRowObject()
-    {
-        int rowIndex = getSelectedModelRowIndex();
-        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
-        {
-            return observableData.get(rowIndex);
-        }
-
-        return null;
-    }
-
     public List getSelectedRowObjects()
     {
         int[] rowIndexes = getSelectedModelRowIndexes();
@@ -277,34 +358,6 @@ public class JBTreeTable
 
         return Collections.EMPTY_LIST;
     }
-    
-    /**
-     * Removes the row for the given object.
-     * If the rowObject is not found, {@link IllegalArgumentException} is thrown.
-     * @param rowObject
-     */
-    public void removeRow(Object rowObject)
-    {
-        int rowIndex = getRowIndex(rowObject);
-        if ( rowIndex==-1 )
-            throw new IllegalArgumentException("Row for object not found. Object: "+rowObject);
-        
-        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
-        {
-            observableData.remove(rowIndex);
-        }
-    }
-
-    public Object removeSelectedRow()
-    {
-        int rowIndex = getSelectedModelRowIndex();
-        if(rowIndex >= 0 && observableData != null && observableData.size() > rowIndex)
-        {
-            return observableData.remove(rowIndex);
-        }
-
-        return null;
-    }
 
     public JTableBinding bind(
             BindingGroup bindingGroup,
@@ -314,7 +367,7 @@ public class JBTreeTable
         if(updateStrategy == null)
             updateStrategy = AutoBinding.UpdateStrategy.READ;
         return bind(bindingGroup, data, entityProperties, updateStrategy);
-    }
+    }*/
 
     /**
      * You may need to bind to JTable without having to use EntityProperties.
@@ -325,7 +378,7 @@ public class JBTreeTable
      * @param updateStrategy
      * @return
      */
-    public JTableBinding bind(
+    /*public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
             Collection<PropertyDetails> propertyDetails,
@@ -485,7 +538,7 @@ public class JBTreeTable
         column.setCellEditor(comboBoxCellEditor);
         if(app != null && column.getCellRenderer() == null)
             column.setCellRenderer(getBeanResourceCellRenderer());
-    }
+    }*/
 
   /*      AcaciaComboBox categoryComboBox = new AcaciaComboBox();
         categoryComboBox.bind(productsBindingGroup, getProductsCategories(), productsTable, "category");
@@ -495,7 +548,7 @@ public class JBTreeTable
   */
 
 
-    public void bindComboListCellEditor(
+    /*public void bindComboListCellEditor(
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             PropertyDetails propertyDetails,
@@ -546,7 +599,7 @@ public class JBTreeTable
 
         if(app != null && column.getCellRenderer() == null)
             column.setCellRenderer(getBeanResourceCellRenderer());
-    }
+    }*/
 
 
     /**
@@ -556,7 +609,7 @@ public class JBTreeTable
      * @param comboBoxValues
      * @param propertyName
      */
-    public void bindDatePickerCellEditor(
+    /*public void bindDatePickerCellEditor(
             BindingGroup bindingGroup,
             PropertyDetails propertyDetails,
             DateFormat dateFormat)
@@ -623,5 +676,5 @@ public class JBTreeTable
         
         return propertyDetails.getPropertyClass().getName()
                 .equals("com.cosmos.acacia.crm.data.DbResource");
-    }
+    }*/
 }
