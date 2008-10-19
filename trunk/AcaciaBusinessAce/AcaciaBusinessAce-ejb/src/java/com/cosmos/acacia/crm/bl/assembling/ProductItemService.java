@@ -20,5 +20,7 @@ public interface ProductItemService
     extends ProductAssemblerService
 {
     List<ComplexProductItem> getComplexProductItems(ComplexProduct complexProduct);
+    int getComplexProductItemsCount(ComplexProduct complexProduct);
     List<InvoiceItem> getInvoiceItems(Invoice invoice);
+    int getInvoiceItemsCount(Invoice invoice);
 }
