@@ -40,6 +40,9 @@
             <included-library files="1">file.reference.beansbinding.jar</included-library>
             <included-library files="1">file.reference.jbosscache-core-2.2.0.GA.jar</included-library>
             <included-library files="1">file.reference.jgroups.jar</included-library>
+            <included-library files="1">file.reference.jboss-common-core-2.2.8.GA.jar</included-library>
+            <included-library files="1">file.reference.swingx-beaninfo-2008_10_12.jar</included-library>
+            <included-library files="1">file.reference.swingx-2008_10_12.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
