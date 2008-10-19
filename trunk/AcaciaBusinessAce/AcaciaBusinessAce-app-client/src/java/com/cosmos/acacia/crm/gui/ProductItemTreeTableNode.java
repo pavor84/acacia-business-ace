@@ -201,4 +201,15 @@ public class ProductItemTreeTableNode
                 return null;
         }
     }
+
+    public void refresh()
+    {
+        refresh(false);
+    }
+
+    public void refresh(boolean deep)
+    {
+        children.clear();
+        children.addAll(createChildren());
+    }
 }
