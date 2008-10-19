@@ -225,7 +225,7 @@ public class ProductItemTreeTableNode
         return childCount;
     }
 
-    protected void synchronizeChildren()
+    public void synchronizeChildren()
     {
         children.clear();
         children.addAll(createChildren());

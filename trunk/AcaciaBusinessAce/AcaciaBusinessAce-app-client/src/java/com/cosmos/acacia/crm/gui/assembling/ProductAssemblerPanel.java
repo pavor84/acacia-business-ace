@@ -35,6 +35,7 @@ import java.io.Serializable;
 import java.lang.Object;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,6 +170,8 @@ public class ProductAssemblerPanel
 
     private List<ComplexProductItem> complexProductItems;
 
+    private List<String> columnIdentifiers;
+
     @Override
     protected void initData()
     {
@@ -190,6 +193,9 @@ public class ProductAssemblerPanel
         strValue = resource.getString("productTitledPanel.title");
         productTitledPanel.setTitle(strValue);
         productTreeTable = new AcaciaTreeTable();
+        DefaultTreeTableModel treeTableModel =
+                (DefaultTreeTableModel)productTreeTable.getTreeTableModel();
+        treeTableModel.setColumnIdentifiers(getColumnIdentifiers());
         /*productTreeTable = new AcaciaTable();
         bindingGroup = new BindingGroup();
         entityProperties = getFormSession().getComplexProductItemEntityProperties();
@@ -215,6 +221,25 @@ public class ProductAssemblerPanel
         productTitledPanel.setContentContainer(complexProductPanel);
 
         parametersTable.setEditable(true);
+    }
+
+    private List<?> getColumnIdentifiers()
+    {
+        if(columnIdentifiers == null)
+        {
+            columnIdentifiers = Arrays.asList(
+                    "Product Code",
+                    "Product Name",
+                    "Measure Unit",
+                    "Sale Price",
+                    "Quantity",
+                    "Unit Price",
+                    "Item Price",
+                    "Applied Algorithm",
+                    "Applied Value");
+        }
+
+        return columnIdentifiers;
     }
 
     private void initParameters()
