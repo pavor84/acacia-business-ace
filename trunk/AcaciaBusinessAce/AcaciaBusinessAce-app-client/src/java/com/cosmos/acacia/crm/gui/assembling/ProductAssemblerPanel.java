@@ -495,10 +495,17 @@ public class ProductAssemblerPanel
             {
                 //System.out.println("rootNode: " + rootNode + ", ComplexProduct: " + product);
                 //((ProductItemTreeTableNode)rootNode).refresh();
-                rootNode = new ProductItemTreeTableNode(product, getFormSession());
-                treeTableModel.setRoot(rootNode);
+
+                //rootNode = new ProductItemTreeTableNode(product, getFormSession());
+                //treeTableModel.setRoot(rootNode);
+
+                /*ProductItemTreeTableNode childNode = new ProductItemTreeTableNode(
+                        productItem,
+                        getFormSession());
+                productTreeTable.addRow(childNode);*/
+                productTreeTable.refresh();
             }
-            
+
             productTreeTable.packAll();
         }
 
