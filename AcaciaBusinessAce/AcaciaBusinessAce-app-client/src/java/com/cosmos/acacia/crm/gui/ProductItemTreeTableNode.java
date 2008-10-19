@@ -32,27 +32,12 @@ public class ProductItemTreeTableNode
     private ProductItemService service;
 
     public ProductItemTreeTableNode(
-        ComplexProduct complexProduct,
-        ProductItemService service)
-    {
-        this((DataObjectBean)complexProduct, service);
-    }
-
-    public ProductItemTreeTableNode(
-        Invoice invoice,
-        ProductItemService service)
-    {
-        //this((DataObjectBean)invoice, service);
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    protected ProductItemTreeTableNode(
         DataObjectBean dataObject,
         ProductItemService service)
     {
         super(dataObject);
         this.service = service;
-        children.addAll(createChildren());
+        synchronizeChildren();
     }
 
     protected DataObjectBean getDataObjectBean()
@@ -62,31 +47,42 @@ public class ProductItemTreeTableNode
 
     protected List getChildItems()
     {
+        ComplexProduct complexProduct = getComplexProduct();
+        if(complexProduct != null)
+            return getComplexProductItems(complexProduct);
+
+        DataObjectBean dataObjectBean = getDataObjectBean();
+        if(dataObjectBean instanceof Invoice)
+        {
+            return service.getInvoiceItems((Invoice)dataObjectBean);
+        }
+
+        return Collections.emptyList();
+    }
+
+    protected ComplexProduct getComplexProduct()
+    {
         DataObjectBean dataObjectBean = getDataObjectBean();
         if(dataObjectBean instanceof ComplexProduct)
         {
-            return getComplexProductItems((ComplexProduct)dataObjectBean);
+            return (ComplexProduct)dataObjectBean;
         }
         else if(dataObjectBean instanceof ComplexProductItem)
         {
             ComplexProductItem productItem = (ComplexProductItem)dataObjectBean;
             Product product = productItem.getProduct();
             if(product instanceof ComplexProduct)
-                return getComplexProductItems((ComplexProduct)product);
+                return (ComplexProduct)product;
         }
         else if(dataObjectBean instanceof InvoiceItem)
         {
             InvoiceItem invoiceItem = (InvoiceItem)dataObjectBean;
             Product product = invoiceItem.getProduct();
             if(product instanceof ComplexProduct)
-                return getComplexProductItems((ComplexProduct)product);
-        }
-        else if(dataObjectBean instanceof Invoice)
-        {
-            return service.getInvoiceItems((Invoice)dataObjectBean);
+                return (ComplexProduct)product;
         }
 
-        return Collections.emptyList();
+        return null;
     }
 
     protected List<ComplexProductItem> getComplexProductItems(ComplexProduct product)
@@ -202,12 +198,34 @@ public class ProductItemTreeTableNode
         }
     }
 
-    public void refresh()
+    @Override
+    public int getChildCount()
     {
-        refresh(false);
+        int childCount = 0;
+        ComplexProduct complexProduct = getComplexProduct();
+        if(complexProduct != null)
+        {
+            if(complexProduct.getProductId() != null)
+                childCount = service.getComplexProductItemsCount(complexProduct);
+            else
+                childCount = complexProduct.getComplexProductItems().size();
+        }
+        else
+        {
+            DataObjectBean dataObjectBean = getDataObjectBean();
+            if(dataObjectBean instanceof Invoice)
+            {
+                childCount = service.getInvoiceItemsCount((Invoice)dataObjectBean);
+            }
+        }
+
+        if(children.size() != childCount)
+            synchronizeChildren();
+
+        return childCount;
     }
 
-    public void refresh(boolean deep)
+    protected void synchronizeChildren()
     {
         children.clear();
         children.addAll(createChildren());

@@ -24,7 +24,7 @@ public class AcaciaTreeTable
         super(AcaciaApplication.class);
     }
 
-    public void bindComboListCellEditor(
+    /*public void bindComboListCellEditor(
         BindingGroup bindingGroup,
         SelectableListDialog selectableListDialog,
         PropertyDetails propertyDetails)
@@ -53,5 +53,5 @@ public class AcaciaTreeTable
             selectableListDialog,
             propertyDetails,
             converter);
-    }
+    }*/
 }
