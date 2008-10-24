@@ -6,19 +6,7 @@
 package com.cosmos.util;
 
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
-/**
- *  Current
- *      Client
- *          Users
- *              Branch
- *                  Organization
- *                      System
- */
 
 
 /**
@@ -30,26 +18,24 @@ public class Properties
 {
     private static final long serialVersionUID = 8527276141572799592L;
 
-    protected Properties defaults;
-    private String schemaName;
+    private int level;
 
-    private String usedSchemaName;
-
-    private TreeMap<String, Object> map;
+    private TreeMap<Integer, Properties> levels =
+            new TreeMap<Integer, Properties>();
 
 
     public Properties()
     {
-        this(null);
+        this(Integer.MAX_VALUE);
     }
 
-    public Properties(Properties defaults)
+    public Properties(int level)
     {
-        this.defaults = defaults;
-        map = new TreeMap<String, Object>();
+        this.level = level;
+        levels.put(level, this);
     }
 
-    public Object getProperty(String key)
+    /*public Object getProperty(String key)
     {
         return getProperty(key, null);
     }
@@ -57,7 +43,7 @@ public class Properties
     public Object getProperty(String key, Object defaultValue)
     {
         Object value;
-        if((value = map.get(key)) != null)
+        if((value = getProperties().get(key)) != null)
             return value;
 
         if(defaults != null && (value = defaults.getProperty(key)) != null)
@@ -139,26 +125,20 @@ public class Properties
         }
 
         return keySet;
-    }
+    }*/
 
-    public String getSchemaName()
+    private Properties getProperties()
     {
-        return schemaName;
+        return getProperties(level);
     }
 
-    public void setSchemaName(String schemaName)
+    public Properties getProperties(int level)
     {
-        this.schemaName = schemaName;
+        return levels.get(level);
     }
 
-    public String getUsedSchemaName()
+    public Properties putProperties(int level, Properties properties)
     {
-        return usedSchemaName;
+        return levels.put(level, properties);
     }
-
-    void setUsedSchemaName(String usedSchemaName)
-    {
-        this.usedSchemaName = usedSchemaName;
-    }
-
 }
