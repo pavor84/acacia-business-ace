@@ -14,6 +14,8 @@
       <property name="hibernate.ejb.event.pre-insert" value="com.cosmos.acacia.crm.data.AcaciaPreInsertEventListener" /> 
       <property name="hibernate.ejb.event.pre-update" value="com.cosmos.acacia.crm.data.AcaciaPreUpdateEventListener" /> 
       <property name="hibernate.ejb.event.pre-delete" value="com.cosmos.acacia.crm.data.AcaciaPreDeleteEventListener" />
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
+      <!--property name="hibernate.cache.provider_class" value="org.hibernate.cache.TreeCacheProvider"/-->
       <!--property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook"/>
       <property name="hibernate.treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/-->
       <!--property name="hibernate.cache.use_second_level_cache" value="true"/>

@@ -11,17 +11,14 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.jboss.cache.Cache;
-import org.jboss.cache.CacheFactory;
-import org.jboss.cache.DefaultCacheFactory;
-import org.jboss.cache.Fqn;
-import org.jboss.cache.Node;
 
 /**
  *
@@ -30,12 +27,16 @@ import org.jboss.cache.Node;
 @Stateless
 public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeLocal {
 
+    /*
     private static CacheFactory cacheFactory;
     private static Cache cache;
     private static Fqn fqnDOTName =
         Fqn.fromString("/" + DataObjectType.class.getName().replace('.', '/') + "/name");
     private static Fqn fqnDOTId =
         Fqn.fromString("/" + DataObjectType.class.getName().replace('.', '/') + "/id");
+    */
+    private static Map cacheByName = new TreeMap();
+    private static Map cacheById = new TreeMap();
 
     @PersistenceContext
     private EntityManager em;
@@ -45,7 +46,8 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
     
 
     public DataObjectType getDataObjectType(int id) {
-        Node idCache = getCacheById();
+        //Node idCache = getCacheById();
+        Map idCache = getCacheById();
         DataObjectType dot = (DataObjectType)idCache.get(id);
         if(dot == null)
         {
@@ -61,7 +63,7 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
             }
             if(dot != null)
             {
-                Node nameCache = getCacheByName();
+                Map nameCache = getCacheByName();
                 idCache.put(id, dot);
                 nameCache.put(dot.getDataObjectType(), dot);
             }
@@ -71,7 +73,7 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
     }
     
     public DataObjectType getDataObjectType(String name) {
-        Node nameCache = getCacheByName();
+        Map nameCache = getCacheByName();
         DataObjectType dot = (DataObjectType)nameCache.get(name);
         if(dot == null)
         {
@@ -90,7 +92,7 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
 
             if(dot != null)
             {
-                Node idCache = getCacheById();
+                Map idCache = getCacheById();
                 nameCache.put(name, dot);
                 idCache.put(dot.getDataObjectTypeId(), dot);
             }
@@ -99,6 +101,17 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
         return dot;
     }
 
+    private Map getCacheByName()
+    {
+        return cacheByName;
+    }
+
+    private Map getCacheById()
+    {
+        return cacheById;
+    }
+
+    /*
     private Node getCacheByName()
     {
         return getNode(fqnDOTName);
@@ -108,11 +121,12 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
     {
         return getNode(fqnDOTId);
     }
+    */
 
     private void removeFromCache(DataObjectType dataObjectType)
     {
-        Node nameCache = getCacheByName();
-        Node idCache = getCacheById();
+        Map nameCache = getCacheByName();
+        Map idCache = getCacheById();
         nameCache.remove(dataObjectType.getDataObjectType());
         idCache.remove(dataObjectType.getDataObjectTypeId());
     }
@@ -148,7 +162,7 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
         }
     }
 
-    public CacheFactory getCacheFactory()
+    /*public CacheFactory getCacheFactory()
     {
         if(cacheFactory == null)
         {
@@ -179,5 +193,5 @@ public class DataObjectTypeBean implements DataObjectTypeRemote, DataObjectTypeL
         }
 
         return node;
-    }
+    }*/
 }
