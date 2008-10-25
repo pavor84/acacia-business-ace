@@ -23,7 +23,7 @@ public class Properties
     private static final long serialVersionUID = 8527276141572799592L;
 
     private int level;
-    private HashMap<String, Object> data = new HashMap<String, Object>();
+    protected HashMap<String, Object> data = new HashMap<String, Object>();
 
     private TreeMap<Integer, Properties> levels =
             new TreeMap<Integer, Properties>();
