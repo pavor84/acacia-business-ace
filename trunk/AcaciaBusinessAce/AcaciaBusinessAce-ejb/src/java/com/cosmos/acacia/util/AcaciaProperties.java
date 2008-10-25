@@ -5,8 +5,10 @@
 
 package com.cosmos.acacia.util;
 
+import com.cosmos.acacia.crm.data.properties.DbProperty;
 import com.cosmos.util.Properties;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -76,5 +78,18 @@ public class AcaciaProperties
     public Properties putProperties(Level level, Properties properties)
     {
         return putProperties(level.getPriority(), properties);
+    }
+
+    public Properties putProperties(Level level, List<DbProperty> dbProperties)
+    {
+        AcaciaProperties properties = new AcaciaProperties(level);
+        for(DbProperty property : dbProperties)
+        {
+            String key = property.getDbPropertyPK().getPropertyKey();
+            Object value = property.getPropertyValue();
+            properties.setProperty(key, value);
+        }
+
+        return putProperties(level, properties);
     }
 }

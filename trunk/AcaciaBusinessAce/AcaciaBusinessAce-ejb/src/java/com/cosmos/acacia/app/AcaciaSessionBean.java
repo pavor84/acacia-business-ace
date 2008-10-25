@@ -3,6 +3,8 @@ package com.cosmos.acacia.app;
 import static com.cosmos.acacia.app.SessionContext.BRANCH_KEY;
 import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
+import com.cosmos.acacia.crm.data.properties.DbProperty;
 import org.apache.log4j.Logger;
 
 /**
@@ -170,4 +173,77 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     public void put(String key, Object value) {
         SessionRegistry.getSession().setValue(key, value);
     }
+
+    @Override
+    public AcaciaProperties getProperties(BusinessPartner client)
+    {
+        AcaciaProperties properties =
+                (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
+        if(properties == null)
+        {
+            properties = new AcaciaProperties();
+        }
+
+        Organization organization = getOrganization();
+        Address branch = getBranch();
+        User user = getUser();
+        int levelId;
+        BigInteger relatedObjectId;
+        Query q = em.createNamedQuery("DbProperty.findByLevelIdAndRelatedObjectId");
+        for(AcaciaProperties.Level level : AcaciaProperties.Level.values())
+        {
+            levelId = level.getPriority();
+            switch(level)
+            {
+                case System:
+                case SystemAdministrator:
+                    // ToDo: Put some real object because of FK constraint
+                    relatedObjectId = BigInteger.ZERO;
+                    break;
+
+                case Organization:
+                case OrganizationAdministrator:
+                    relatedObjectId = organization.getId();
+                    break;
+
+                case Branch:
+                case BranchAdministrator:
+                    relatedObjectId = branch.getId();
+                    break;
+
+                case User:
+                    relatedObjectId = user.getUserId();
+                    break;
+
+                case Client:
+                    if(client == null)
+                    {
+                        properties.removeProperties(levelId);
+                        continue;
+                    }
+                    relatedObjectId = client.getPartnerId();
+                    break;
+
+                case Current:
+                    continue;
+
+                default:
+                    throw new UnsupportedOperationException("Unknown level: " + level);
+            }
+
+            q.setParameter("levelId", levelId);
+            q.setParameter("relatedObjectId", relatedObjectId);
+            List<DbProperty> dbProperties = q.getResultList();
+            properties.putProperties(level, dbProperties);
+        }
+
+        return properties;
+    }
+
+    @Override
+    public AcaciaProperties getProperties()
+    {
+        return getProperties(null);
+    }
+
 }
