@@ -32,7 +32,6 @@ import com.cosmos.swingb.JBScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.Serializable;
-import java.lang.Object;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;

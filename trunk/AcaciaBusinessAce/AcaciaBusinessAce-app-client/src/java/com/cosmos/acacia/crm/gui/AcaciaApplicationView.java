@@ -48,7 +48,6 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingMessageListPanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
-import com.cosmos.acacia.crm.gui.assembling.ComplexProductPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BranchSelectionPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;

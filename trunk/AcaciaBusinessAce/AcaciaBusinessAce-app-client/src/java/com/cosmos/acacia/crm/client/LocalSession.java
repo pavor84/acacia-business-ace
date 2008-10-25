@@ -1,5 +1,7 @@
 package com.cosmos.acacia.crm.client;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -149,5 +151,17 @@ public class LocalSession implements AcaciaSessionRemote {
             listServer = AcaciaPanel.getBean(DeferredListServerRemote.class, false);
 
         return listServer;
+    }
+
+    @Override
+    public AcaciaProperties getProperties(BusinessPartner client)
+    {
+        return remoteSession.getProperties(client);
+    }
+
+    @Override
+    public AcaciaProperties getProperties()
+    {
+        return remoteSession.getProperties();
     }
 }
