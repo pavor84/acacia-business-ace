@@ -9,6 +9,7 @@ import com.cosmos.acacia.crm.data.properties.DbProperty;
 import com.cosmos.util.Properties;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -71,11 +72,12 @@ public class AcaciaProperties
     public Properties putProperties(Level level, List<DbProperty> dbProperties)
     {
         AcaciaProperties properties = new AcaciaProperties(level);
+        Map<String, Object> propertiesData = properties.data;
         for(DbProperty property : dbProperties)
         {
             String key = property.getDbPropertyPK().getPropertyKey();
             Object value = property.getPropertyValue();
-            properties.setProperty(key, value);
+            propertiesData.put(key, value);
         }
 
         return putProperties(level, properties);
