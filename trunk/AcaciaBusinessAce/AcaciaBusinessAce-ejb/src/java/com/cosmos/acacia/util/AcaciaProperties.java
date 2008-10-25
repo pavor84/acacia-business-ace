@@ -22,14 +22,14 @@ public class AcaciaProperties
 
     public enum Level
     {
-        System(1000),
-        SystemAdministrator(2000),
-        Organization(3000),
-        OrganizationAdministrator(4000),
-        Branch(5000),
-        BranchAdministrator(6000),
-        User(7000),
-        Client(8000),
+        System(100000000),
+        SystemAdministrator(200000000),
+        Organization(300000000),
+        OrganizationAdministrator(400000000),
+        Branch(500000000),
+        BranchAdministrator(600000000),
+        User(700000000),
+        Client(800000000),
         Current(Integer.MAX_VALUE), //2,147,483,647 = 0x7fff ffff
         ;
 
@@ -47,8 +47,6 @@ public class AcaciaProperties
 
     };
 
-    private String schemaName;
-
 
     public AcaciaProperties(Level level)
     {
@@ -58,16 +56,6 @@ public class AcaciaProperties
     public AcaciaProperties()
     {
         this(Level.Current);
-    }
-
-    public String getSchemaName()
-    {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName)
-    {
-        this.schemaName = schemaName;
     }
 
     public Properties getProperties(Level level)

@@ -69,6 +69,22 @@ public interface AcaciaSessionRemote {
     Boolean getViewDataFromAllBranches();
 
     /**
+     * If baseLevel and sublevelName are specified (not null) then additional
+     * level will be added. For example if baseLevel = Client and
+     * sublevelName = "AssemblingSchema.AluminiumFramework-AF-01", this
+     * sublevel will be added after Client and this sublevel will be with higher
+     * priority than baseLevel.
+     * @param client
+     * @param baseLevel
+     * @param sublevelName
+     * @return
+     */
+    AcaciaProperties getProperties(
+            BusinessPartner client,
+            AcaciaProperties.Level baseLevel,
+            String sublevelName);
+
+    /**
      * Retrieves the parameters for all possible levels. If the client is null
      * then the Client Level will not be retreived.
      * @param client
@@ -82,5 +98,7 @@ public interface AcaciaSessionRemote {
      * @return
      */
     AcaciaProperties getProperties();
+
+    void saveProperties(AcaciaProperties properties);
 }
 

@@ -6,6 +6,7 @@
 package com.cosmos.util;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -22,10 +23,12 @@ public class Properties
     private static final long serialVersionUID = 8527276141572799592L;
 
     private int level;
-    private TreeMap<String, Object> data = new TreeMap<String, Object>();
+    private HashMap<String, Object> data = new HashMap<String, Object>();
 
     private TreeMap<Integer, Properties> levels =
             new TreeMap<Integer, Properties>();
+
+    private boolean changed;
 
 
     public Properties()
@@ -42,6 +45,12 @@ public class Properties
     {
         return level;
     }
+
+    public boolean isChanged()
+    {
+        return changed;
+    }
+
 
     public Object getProperty(String key)
     {
@@ -65,7 +74,21 @@ public class Properties
 
     public Object setProperty(String key, Object value)
     {
+        if(!changed)
+            changed = true;
+
         return data.put(key, value);
+    }
+
+    public Object removeProperty(String key)
+    {
+        if(!data.containsKey(key))
+            return null;
+
+        if(!changed)
+            changed = true;
+
+        return data.remove(key);
     }
 
     public boolean containsKey(String key)
@@ -115,11 +138,17 @@ public class Properties
 
     public void putAll(Map<String, Object> sourceMap)
     {
+        if(!changed)
+            changed = true;
+
         data.putAll(sourceMap);
     }
 
     public void clear()
     {
+        if(!changed)
+            changed = true;
+
         data.clear();
     }
 
@@ -155,8 +184,18 @@ public class Properties
         return levels.put(level, properties);
     }
 
-    public Properties removeProperties(int level)
+    public Set<Integer> getLevels()
+    {
+        return levels.keySet();
+    }
+
+    public Properties removeLevel(int level)
     {
         return levels.remove(level);
+    }
+
+    public void removeAllLevels()
+    {
+        levels.clear();
     }
 }
