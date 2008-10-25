@@ -27,6 +27,10 @@ public interface SessionContext {
     static String GENERAL_RIGHTS_KEY = "GENERAL_RIGHTS_KEY";
     /** Currently logged person */
     static String SPECIAL_PERMISSIONS_KEY = "SPECIAL_PERMISSIONS_KEY";
+
+    /** Acacia Properties */
+    static String ACACIA_PROPERTIES = "ACACIA_PROPERTIES";
+
     /**
      * Value read.
      * Behavior similar to {@link Map#get(Object)}

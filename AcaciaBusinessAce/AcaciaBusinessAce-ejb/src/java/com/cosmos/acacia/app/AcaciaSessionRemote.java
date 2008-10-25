@@ -6,11 +6,13 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.util.AcaciaProperties;
 
 /**
  * Created	:	19.05.2008
@@ -65,5 +67,20 @@ public interface AcaciaSessionRemote {
      * @return
      */
     Boolean getViewDataFromAllBranches();
+
+    /**
+     * Retrieves the parameters for all possible levels. If the client is null
+     * then the Client Level will not be retreived.
+     * @param client
+     * @return
+     */
+    AcaciaProperties getProperties(BusinessPartner client);
+
+    /**
+     * The This method calls getProperties(BusinessPartner client) with null as
+     * parameter for client.
+     * @return
+     */
+    AcaciaProperties getProperties();
 }
 

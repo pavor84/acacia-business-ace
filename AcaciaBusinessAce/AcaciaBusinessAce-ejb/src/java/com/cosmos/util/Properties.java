@@ -6,7 +6,10 @@
 package com.cosmos.util;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 
 /**
@@ -19,6 +22,7 @@ public class Properties
     private static final long serialVersionUID = 8527276141572799592L;
 
     private int level;
+    private TreeMap<String, Object> data = new TreeMap<String, Object>();
 
     private TreeMap<Integer, Properties> levels =
             new TreeMap<Integer, Properties>();
@@ -32,26 +36,64 @@ public class Properties
     public Properties(int level)
     {
         this.level = level;
-        levels.put(level, this);
     }
 
-    /*public Object getProperty(String key)
+    public int getLevel()
+    {
+        return level;
+    }
+
+    public Object getProperty(String key)
     {
         return getProperty(key, null);
     }
 
     public Object getProperty(String key, Object defaultValue)
     {
-        Object value;
-        if((value = getProperties().get(key)) != null)
-            return value;
+        if(data.containsKey(key))
+            return data.get(key);
 
-        if(defaults != null && (value = defaults.getProperty(key)) != null)
+        for(Integer levelId : levels.descendingKeySet())
         {
-            return value;
+            Properties properties = levels.get(levelId);
+            if(properties.containsKey(key))
+                return properties.getProperty(key, defaultValue);
         }
 
         return defaultValue;
+    }
+
+    public Object setProperty(String key, Object value)
+    {
+        return data.put(key, value);
+    }
+
+    public boolean containsKey(String key)
+    {
+        if(data.containsKey(key))
+            return true;
+
+        for(Integer levelId : levels.descendingKeySet())
+        {
+            if(levels.get(levelId).containsKey(key))
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean containsValue(Object value)
+    {
+        if(data.containsValue(value))
+            return true;
+
+        for(Integer levelId : levels.descendingKeySet())
+        {
+            if(levels.get(levelId).containsValue(value))
+                return true;
+        }
+
+        return false;
     }
 
     public String getPropertyString(String key)
@@ -71,65 +113,36 @@ public class Properties
         return String.valueOf(value);
     }
 
-    public Object setProperty(String key, Object value)
-    {
-        return map.put(key, value);
-    }
-
     public void putAll(Map<String, Object> sourceMap)
     {
-        map.putAll(sourceMap);
-    }
-
-    public boolean containsKey(String key)
-    {
-        if(map.containsKey(key))
-            return true;
-
-        if(defaults == null)
-            return false;
-
-        return defaults.containsKey(key);
-    }
-
-    public boolean containsValue(Object value)
-    {
-        if(map.containsValue(value))
-            return true;
-
-        if(defaults == null)
-            return false;
-
-        return defaults.containsValue(value);
+        data.putAll(sourceMap);
     }
 
     public void clear()
     {
-        map.clear();
+        data.clear();
     }
 
     public Set<String> keySet()
     {
-        if(defaults == null)
-            return map.keySet();
+        if(levels.size() == 0)
+            return data.keySet();
 
-        TreeSet keySet = new TreeSet(map.keySet());
+        TreeSet keySet = new TreeSet(data.keySet());
 
-        Set<String> defaultsKeySet = defaults.keySet();
-        for(String key : defaultsKeySet)
+        for(Integer levelId : levels.descendingKeySet())
         {
-            if(!keySet.contains(key))
+            Properties properties = levels.get(levelId);
+            for(String key : properties.keySet())
             {
-                keySet.add(key);
+                if(!keySet.contains(key))
+                {
+                    keySet.add(key);
+                }
             }
         }
 
         return keySet;
-    }*/
-
-    private Properties getProperties()
-    {
-        return getProperties(level);
     }
 
     public Properties getProperties(int level)
@@ -140,5 +153,10 @@ public class Properties
     public Properties putProperties(int level, Properties properties)
     {
         return levels.put(level, properties);
+    }
+
+    public Properties removeProperties(int level)
+    {
+        return levels.remove(level);
     }
 }
