@@ -23,6 +23,9 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
+import com.cosmos.acacia.crm.data.properties.DbPropertySublevel;
+import java.util.concurrent.locks.ReentrantLock;
+import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 
 /**
@@ -48,6 +51,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @PersistenceContext
     private EntityManager em;
 
+    private final ReentrantLock sublevelLock = new ReentrantLock();
 
     @Override
     public Integer login(User user) {
@@ -174,14 +178,64 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         SessionRegistry.getSession().setValue(key, value);
     }
 
+    private int getSublevelId(int levelId, String sublevelName)
+    {
+        Query q = em.createNamedQuery("DbPropertySublevel.findByLevelIdAndSublevelName");
+        q.setParameter("levelId", levelId);
+        q.setParameter("sublevelName", sublevelName);
+        try
+        {
+            return (Integer)q.getSingleResult();
+        }
+        catch(NoResultException ex) {}
+
+        sublevelLock.lock();
+        try
+        {
+            int sublevelId;
+            q = em.createNamedQuery("DbPropertySublevel.maxSublevelIdByLevelId");
+            q.setParameter("levelId", levelId);
+            try
+            {
+                sublevelId = (Integer)q.getSingleResult();
+            }
+            catch(NoResultException ex)
+            {
+                sublevelId = 0;
+            }
+
+            DbPropertySublevel propertySublevel = new DbPropertySublevel(levelId, sublevelName);
+            propertySublevel.setSublevelId(++sublevelId);
+            em.persist(propertySublevel);
+            return sublevelId;
+        }
+        finally
+        {
+            sublevelLock.unlock();
+        }
+    }
+
     @Override
-    public AcaciaProperties getProperties(BusinessPartner client)
+    public AcaciaProperties getProperties(
+            BusinessPartner client,
+            AcaciaProperties.Level baseLevel,
+            String sublevelName)
     {
         AcaciaProperties properties =
                 (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
         if(properties == null)
         {
             properties = new AcaciaProperties();
+        }
+        else
+        {
+            properties.removeAllLevels();
+        }
+
+        Integer sublevelId = null;
+        if(baseLevel != null && (sublevelName = sublevelName.trim()).length() > 0)
+        {
+            sublevelId = getSublevelId(baseLevel.getPriority(), sublevelName);
         }
 
         Organization organization = getOrganization();
@@ -190,6 +244,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         int levelId;
         BigInteger relatedObjectId;
         Query q = em.createNamedQuery("DbProperty.findByLevelIdAndRelatedObjectId");
+
         for(AcaciaProperties.Level level : AcaciaProperties.Level.values())
         {
             levelId = level.getPriority();
@@ -217,10 +272,8 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
                 case Client:
                     if(client == null)
-                    {
-                        properties.removeProperties(levelId);
                         continue;
-                    }
+
                     relatedObjectId = client.getPartnerId();
                     break;
 
@@ -235,9 +288,22 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             q.setParameter("relatedObjectId", relatedObjectId);
             List<DbProperty> dbProperties = q.getResultList();
             properties.putProperties(level, dbProperties);
+
+            if(sublevelId != null && level.equals(baseLevel))
+            {
+                q.setParameter("levelId", sublevelId);
+                dbProperties = q.getResultList();
+                properties.putProperties(level, dbProperties);
+            }
         }
 
         return properties;
+    }
+
+    @Override
+    public AcaciaProperties getProperties(BusinessPartner client)
+    {
+        return getProperties(client, null, null);
     }
 
     @Override
@@ -246,4 +312,13 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return getProperties(null);
     }
 
+    @Override
+    public void saveProperties(AcaciaProperties properties)
+    {
+        
+    }
+
+    /*private void saveProperties(AcaciaProperties properties)
+    {
+    }*/
 }
