@@ -5,8 +5,11 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.util.AcaciaProperties;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -16,10 +19,15 @@ import javax.ejb.Stateless;
 public class AcaciaEjbInitBean
     implements AcaciaEjbInitRemote
 {
-    @EJB DatabaseResourceLocal databaseResource;
+    private static final Logger logger = Logger.getLogger(AcaciaEjbInitBean.class);
+
+    @EJB
+    private DatabaseResourceLocal databaseResource;
+
 
     public void init()
     {
+        logger.info("AcaciaEjbInitBean.init().databaseResource.initDatabaseResource()");
         databaseResource.initDatabaseResource();
     }
 
