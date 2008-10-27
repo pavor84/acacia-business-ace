@@ -15,6 +15,7 @@ import org.junit.Before;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
@@ -30,7 +31,8 @@ public class BaseTest {
 
     protected UsersRemote usersRemote = getBean(UsersRemote.class, false);
 
-    protected AcaciaSessionRemote session = getBean(AcaciaSessionRemote.class, false);
+    protected AcaciaSessionRemote session = //getBean(AcaciaSessionRemote.class, false);
+            LocalSession.instance();
 
     protected Random random = new Random();
 
@@ -101,5 +103,10 @@ public class BaseTest {
         this.sessionCaching = sessionCaching;
         if ( !sessionCaching )
             sessionCache.clear();
+    }
+
+    public AcaciaSessionRemote getSession()
+    {
+        return session;
     }
 }
