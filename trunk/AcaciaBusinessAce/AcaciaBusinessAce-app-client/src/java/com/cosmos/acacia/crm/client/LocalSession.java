@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.DeferredListServerRemote;
+import com.cosmos.acacia.app.SessionContext;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -159,19 +160,30 @@ public class LocalSession implements AcaciaSessionRemote {
             AcaciaProperties.Level baseLevel,
             String sublevelName)
     {
-        return remoteSession.getProperties(client, baseLevel, sublevelName);
+        AcaciaProperties properties = remoteSession.getProperties(client, baseLevel, sublevelName);
+
+        AcaciaProperties currentProperties =
+                (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
+        if(currentProperties != null)
+        {
+            System.out.println("currentProperties: " + currentProperties);
+            properties.updateProperties(currentProperties);
+        }
+        put(SessionContext.ACACIA_PROPERTIES, properties);
+
+        return properties;
     }
 
     @Override
     public AcaciaProperties getProperties(BusinessPartner client)
     {
-        return remoteSession.getProperties(client);
+        return getProperties(client, null, null);
     }
 
     @Override
     public AcaciaProperties getProperties()
     {
-        return remoteSession.getProperties();
+        return getProperties(null);
     }
 
     @Override
