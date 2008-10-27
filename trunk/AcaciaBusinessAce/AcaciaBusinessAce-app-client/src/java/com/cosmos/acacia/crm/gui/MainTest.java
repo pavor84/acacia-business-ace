@@ -44,7 +44,6 @@ public class MainTest {
            ProductAssemblerTest.class.getName(),
         };
         tests = new String[] {ProductAssemblerTest.class.getName()};
-        tests = new String[] {AcaciaPropertiesTest.class.getName()};
 
         JUnitCore.main(tests);
     }

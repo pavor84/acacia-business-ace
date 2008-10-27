@@ -9,6 +9,7 @@ import com.cosmos.acacia.util.AcaciaProperties;
 import com.cosmos.test.bl.BaseTest;
 import javax.ejb.EJB;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -45,8 +46,8 @@ public class AcaciaPropertiesTest
         properties.setProperty(level, "test.u6", "User u6");
         util.getSession().saveProperties(properties);
 
-        assertEquals(properties.size(), 7);
-        assertEquals(userProps.size(), 6);
+        assertEquals(7, properties.size());
+        assertEquals(6, userProps.size());
     }
 
     @Test
@@ -55,20 +56,22 @@ public class AcaciaPropertiesTest
         AcaciaProperties properties = util.getSession().getProperties();
         AcaciaProperties.Level level = AcaciaProperties.Level.User;
         AcaciaProperties userProps = (AcaciaProperties)properties.getProperties(level);
-        System.out.println("properties.size(): " + properties.size());
-        System.out.println("userProps.size(): " + userProps.size());
-        assertEquals(properties.size(), 7);
-        assertEquals(userProps.size(), 6);
+        assertEquals(7, properties.size());
+        assertEquals(6, userProps.size());
 
         userProps.removeProperty("test.u3");
         properties.removeProperty(level, "test.u5");
         util.getSession().saveProperties(properties);
 
         properties = util.getSession().getProperties();
-        assertEquals(properties.size(), 5);
+        assertEquals(5, properties.size());
         assertFalse(properties.containsKey("test.u3"));
         assertFalse(properties.containsKey("test.u5"));
 
-        
+        for(String key : properties.keySet())
+        {
+            properties.removeProperty(level, key);
+        }
+        util.getSession().saveProperties(properties);
     }
 }

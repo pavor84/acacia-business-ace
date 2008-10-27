@@ -166,7 +166,6 @@ public class LocalSession implements AcaciaSessionRemote {
                 (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
         if(currentProperties != null)
         {
-            System.out.println("currentProperties: " + currentProperties);
             properties.updateProperties(currentProperties);
         }
         put(SessionContext.ACACIA_PROPERTIES, properties);
