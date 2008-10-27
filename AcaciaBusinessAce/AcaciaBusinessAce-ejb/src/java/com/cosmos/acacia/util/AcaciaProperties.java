@@ -120,11 +120,7 @@ public class AcaciaProperties
 
     public void save(EntityManager em)
     {
-        System.out.println("AcaciaProperties().save(" + em + ")");
-        System.out.println("AcaciaProperties().save(): changed=" + changed +
-                ", getLevel()=" + getLevel() +
-                ", Level.Current.getPriority()=" + Level.Current.getPriority());
-        if(!changed)
+        if(!isChanged())
             return;
 
         if(Level.Current.getPriority() != getLevel())
@@ -147,7 +143,6 @@ public class AcaciaProperties
 
     private void removeDeleted(EntityManager em)
     {
-        System.out.println("AcaciaProperties().removeDeleted().deletedItems: " + deletedItems);
         if(deletedItems.size() == 0)
             return;
 
@@ -161,7 +156,6 @@ public class AcaciaProperties
 
     private void insertOrUpdate(EntityManager em)
     {
-        System.out.println("AcaciaProperties().insertOrUpdate().newItems: " + newItems);
         if(newItems.size() == 0)
             return;
 

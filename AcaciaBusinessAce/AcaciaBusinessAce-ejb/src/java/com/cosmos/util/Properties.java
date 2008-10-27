@@ -51,6 +51,16 @@ public class Properties
 
     public boolean isChanged()
     {
+        if(changed)
+            return true;
+
+        for(Integer levelId : levels.descendingKeySet())
+        {
+            Properties properties = levels.get(levelId);
+            if(properties.isChanged())
+                return true;
+        }
+
         return changed;
     }
 
