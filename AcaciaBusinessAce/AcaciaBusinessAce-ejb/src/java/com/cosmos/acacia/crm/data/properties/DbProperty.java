@@ -47,6 +47,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
                 " AND" +
                 " d.dbPropertyPK.propertyKey = :propertyKey"/*,
             hints=@QueryHint(name="org.hibernate.cacheable", value="true")*/
+            ),
+        @NamedQuery(
+            name = "DbProperty.removeByLevelIdAndRelatedObjectIdAndPropertyKeys",
+            query = "DELETE FROM DbProperty d" +
+                " WHERE" +
+                " d.dbPropertyPK.levelId = :levelId" +
+                " AND" +
+                " d.dbPropertyPK.relatedObjectId = :relatedObjectId" +
+                " AND" +
+                " d.dbPropertyPK.propertyKey in (:propertyKeys)"/*,
+            hints=@QueryHint(name="org.hibernate.cacheable", value="true")*/
             )
     })
 public class DbProperty

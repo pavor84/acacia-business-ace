@@ -12,7 +12,10 @@ import java.util.List;
  */
 public enum SpecialPermission implements DatabaseResource {
 
-    CanViewDataFromAllBranches
+    CanViewDataFromAllBranches,
+    SystemAdministrator,
+    OrganizationAdministrator,
+    BranchAdministrator,
     ;
 
     private DbResource dbResource;
