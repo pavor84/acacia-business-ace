@@ -25,10 +25,13 @@ public class Properties
     private int level;
     protected HashMap<String, Object> data = new HashMap<String, Object>();
 
-    private TreeMap<Integer, Properties> levels =
+    protected TreeMap<Integer, Properties> levels =
             new TreeMap<Integer, Properties>();
 
-    private boolean changed;
+    protected TreeSet<String> deletedItems = new TreeSet<String>();
+    protected TreeSet<String> newItems = new TreeSet<String>();
+
+    protected boolean changed;
 
 
     public Properties()
@@ -77,7 +80,19 @@ public class Properties
         if(!changed)
             changed = true;
 
+        deletedItems.remove(key);
+        newItems.add(key);
+
         return data.put(key, value);
+    }
+
+    public Object setProperty(int level, String key, Object value)
+    {
+        Properties properties;
+        if((properties = getProperties(level)) == null)
+            throw new IllegalArgumentException("No such Properties for level " + level);
+
+        return properties.setProperty(key, value);
     }
 
     public Object removeProperty(String key)
@@ -88,7 +103,19 @@ public class Properties
         if(!changed)
             changed = true;
 
+        deletedItems.add(key);
+        newItems.remove(key);
+
         return data.remove(key);
+    }
+
+    public Object removeProperty(int level, String key)
+    {
+        Properties properties;
+        if((properties = getProperties(level)) == null)
+            throw new IllegalArgumentException("No such Properties for level " + level);
+
+        return properties.removeProperty(key);
     }
 
     public boolean containsKey(String key)
@@ -141,6 +168,10 @@ public class Properties
         if(!changed)
             changed = true;
 
+        Set<String> keys = sourceMap.keySet();
+        deletedItems.removeAll(keys);
+        newItems.addAll(keys);
+
         data.putAll(sourceMap);
     }
 
@@ -149,7 +180,18 @@ public class Properties
         if(!changed)
             changed = true;
 
+        deletedItems.addAll(data.keySet());
+        newItems.clear();
+
         data.clear();
+    }
+
+    public int size()
+    {
+        if(levels.size() == 0)
+            return data.size();
+
+        return keySet().size();
     }
 
     public Set<String> keySet()
@@ -198,4 +240,5 @@ public class Properties
     {
         levels.clear();
     }
+
 }

@@ -6,10 +6,15 @@
 package com.cosmos.acacia.util;
 
 import com.cosmos.acacia.crm.data.properties.DbProperty;
+import com.cosmos.acacia.crm.data.properties.DbPropertyPK;
 import com.cosmos.util.Properties;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,6 +25,8 @@ public class AcaciaProperties
     implements Serializable
 {
     private static final long serialVersionUID = 3758888654566816952L;
+
+    private static final Logger logger = Logger.getLogger(AcaciaProperties.class);
 
     public enum Level
     {
@@ -49,14 +56,39 @@ public class AcaciaProperties
     };
 
 
-    public AcaciaProperties(Level level)
+    private BigInteger relatedObjectId;
+
+
+    public AcaciaProperties(Level level, BigInteger relatedObjectId)
     {
         super(level.getPriority());
+        this.relatedObjectId = relatedObjectId;
     }
 
     public AcaciaProperties()
     {
-        this(Level.Current);
+        this(Level.Current, null);
+    }
+
+    public BigInteger getRelatedObjectId()
+    {
+        return relatedObjectId;
+    }
+
+    public Object setProperty(Level level, String key, Object value)
+    {
+        return setProperty(level.getPriority(), key, value);
+    }
+
+    public Object removeProperty(Level level, String key)
+    {
+        return removeProperty(level.getPriority(), key);
+    }
+
+    public void updateProperties(AcaciaProperties properties)
+    {
+        data.clear();
+        data.putAll(properties.data);
     }
 
     public Properties getProperties(Level level)
@@ -69,9 +101,12 @@ public class AcaciaProperties
         return putProperties(level.getPriority(), properties);
     }
 
-    public Properties putProperties(Level level, List<DbProperty> dbProperties)
+    public Properties putProperties(
+            Level level,
+            BigInteger relatedObjectId,
+            List<DbProperty> dbProperties)
     {
-        AcaciaProperties properties = new AcaciaProperties(level);
+        AcaciaProperties properties = new AcaciaProperties(level, relatedObjectId);
         Map<String, Object> propertiesData = properties.data;
         for(DbProperty property : dbProperties)
         {
@@ -81,5 +116,67 @@ public class AcaciaProperties
         }
 
         return putProperties(level, properties);
+    }
+
+    public void save(EntityManager em)
+    {
+        System.out.println("AcaciaProperties().save(" + em + ")");
+        System.out.println("AcaciaProperties().save(): changed=" + changed +
+                ", getLevel()=" + getLevel() +
+                ", Level.Current.getPriority()=" + Level.Current.getPriority());
+        if(!changed)
+            return;
+
+        if(Level.Current.getPriority() != getLevel())
+        {
+            removeDeleted(em);
+            insertOrUpdate(em);
+
+            deletedItems.clear();
+            newItems.clear();
+        }
+
+        for(Properties props : levels.values())
+        {
+            if(props instanceof AcaciaProperties)
+                ((AcaciaProperties)props).save(em);
+        }
+
+        changed = false;
+    }
+
+    private void removeDeleted(EntityManager em)
+    {
+        System.out.println("AcaciaProperties().removeDeleted().deletedItems: " + deletedItems);
+        if(deletedItems.size() == 0)
+            return;
+
+        int levelId = getLevel();
+        Query q = em.createNamedQuery("DbProperty.removeByLevelIdAndRelatedObjectIdAndPropertyKeys");
+        q.setParameter("levelId", levelId);
+        q.setParameter("relatedObjectId", relatedObjectId);
+        q.setParameter("propertyKeys", deletedItems);
+        q.executeUpdate();
+    }
+
+    private void insertOrUpdate(EntityManager em)
+    {
+        System.out.println("AcaciaProperties().insertOrUpdate().newItems: " + newItems);
+        if(newItems.size() == 0)
+            return;
+
+        int levelId = getLevel();
+        DbPropertyPK propertyPK = new DbPropertyPK(levelId, relatedObjectId, null);
+        for(String key : newItems)
+        {
+            propertyPK.setPropertyKey(key);
+            DbProperty property = em.find(DbProperty.class, propertyPK);
+            if(property == null)
+            {
+                property = new DbProperty(levelId, relatedObjectId, key);
+            }
+            property.setPropertyValue((Serializable)data.get(key));
+            em.persist(property);
+        }
     }
 }
