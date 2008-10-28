@@ -182,6 +182,22 @@ public enum MeasurementUnit
             Category.TimeInterval,
             new BigDecimal(1/12), Year,
             new BigDecimal(1/12), Year),
+    MilliSecond("millisecond", "ms",
+            Category.TimeInterval,
+            new BigDecimal(1/1000), Second,
+            new BigDecimal(1/1000), Second),
+    MicroSecond("microsecond", "us",
+            Category.TimeInterval,
+            new BigDecimal(1/1000), MilliSecond,
+            new BigDecimal(1/1000), MilliSecond),
+    NanoSecond("nanosecond", "ns",
+            Category.TimeInterval,
+            new BigDecimal(1/1000), MicroSecond,
+            new BigDecimal(1/1000), MicroSecond),
+    PicoSecond("picosecond", "ps",
+            Category.TimeInterval,
+            new BigDecimal(1/1000), NanoSecond,
+            new BigDecimal(1/1000), NanoSecond),
     ;
 
     static
