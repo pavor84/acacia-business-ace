@@ -66,29 +66,31 @@ public enum MeasurementUnit
             Category.Integer,
             BigDecimal.ONE, null,
             BigDecimal.ONE, null),
+
     Centimeter("centimeter", "cm",
             Category.DistanceLength,
-            new BigDecimal("0.01"), null,
+            new BigDecimal(0.01), null,
             BigDecimal.ONE, null),
     Meter("meter", "m",
             Category.DistanceLength,
             BigDecimal.ONE, null,
-            new BigDecimal("100"), Centimeter),
+            new BigDecimal(100), Centimeter),
     Decimeter("decimeter", "dm",
             Category.DistanceLength,
-            new BigDecimal("0.1"), Meter,
-            new BigDecimal("100"), Centimeter),
+            new BigDecimal(0.1), Meter,
+            new BigDecimal(100), Centimeter),
     Kilometer("kilometer", "km",
             Category.DistanceLength,
-            new BigDecimal("1000"), Meter,
-            new BigDecimal("100000"), Centimeter),
+            new BigDecimal(1000), Meter,
+            new BigDecimal(100000), Centimeter),
     Millimeter("millimeter", "mm",
             Category.DistanceLength,
-            new BigDecimal("0.001"), Meter,
-            new BigDecimal("0.1"), Centimeter),
+            new BigDecimal(0.001), Meter,
+            new BigDecimal(0.1), Centimeter),
+
     Gram("gram", "g",
             Category.MassWeight,
-            new BigDecimal("0.001"), null,
+            new BigDecimal(0.001), null,
             BigDecimal.ONE, null),
     Kilogram("kilogram", "kg",
             Category.MassWeight,
@@ -98,6 +100,7 @@ public enum MeasurementUnit
             Category.MassWeight,
             BigDecimal.valueOf(1000), Kilogram,
             BigDecimal.valueOf(1000000), Gram),
+
     SquareCentimeter("square centimeter", "cm2",
             Category.Area,
             new BigDecimal(0.0001), null,
@@ -112,28 +115,29 @@ public enum MeasurementUnit
             BigDecimal.valueOf(1000000), SquareCentimeter),
     SquareKilometer("square kilometer", "km2",
             Category.Area,
-            new BigDecimal("1.0E+6"), SquareMeter,
-            new BigDecimal("1.0E+10"), SquareCentimeter),
+            new BigDecimal(1.0E+6), SquareMeter,
+            new BigDecimal(1.0E+10), SquareCentimeter),
+
     CubicCentimeter("cubic centimeter", "cm3",
             Category.Volume,
-            new BigDecimal("1.0E-6"), null,
+            new BigDecimal(1.0E-6), null,
             BigDecimal.ONE, null),
     CubicMeter("cubic meter", "m3",
             Category.Volume,
             BigDecimal.ONE, null,
-            new BigDecimal("1.0E+6"), CubicCentimeter),
+            new BigDecimal(1.0E+6), CubicCentimeter),
     CubicKilometer("cubic kilometer", "km3",
             Category.Volume,
-            new BigDecimal("1.0E+9"), CubicMeter,
-            new BigDecimal("1.0E+15"), CubicCentimeter),
+            new BigDecimal(1.0E+9), CubicMeter,
+            new BigDecimal(1.0E+15), CubicCentimeter),
     CubicMillimeter("cubic millimeter", "mm3",
             Category.Volume,
-            new BigDecimal("1.0E-9"), CubicMeter,
-            new BigDecimal("1.0E-3"), CubicCentimeter),
+            new BigDecimal(1.0E-9), CubicMeter,
+            new BigDecimal(1.0E-3), CubicCentimeter),
     Liter("liter", "lt",
             Category.Volume,
-            new BigDecimal("0.001"), CubicMeter,
-            new BigDecimal("1000"), CubicCentimeter),
+            new BigDecimal(0.001), CubicMeter,
+            new BigDecimal(1000), CubicCentimeter),
     BiWeeksPerYear("bi weeks per year", "bwpy",
             Category.TimeIntervalUnits,
             new BigDecimal(26.1), null,
@@ -318,6 +322,32 @@ public enum MeasurementUnit
 
     public String getUnitName() {
         return unitName;
+    }
+
+    public BigDecimal toSiUnit(MeasurementUnit unit)
+    {
+        if(!category.equals(unit.category))
+            throw new IllegalArgumentException("Can not convert units with different categories: " +
+                    category + " and " + unit.category);
+
+        if(unit.equals(this))
+            return BigDecimal.ONE;
+
+        // ToDo
+        return null;
+    }
+
+    public BigDecimal toCgsUnit(MeasurementUnit unit)
+    {
+        if(!category.equals(unit.category))
+            throw new IllegalArgumentException("Can not convert units with different categories: " +
+                    category + " and " + unit.category);
+
+        if(unit.equals(this))
+            return BigDecimal.ONE;
+
+        // ToDo
+        return null;
     }
 
     @Override
