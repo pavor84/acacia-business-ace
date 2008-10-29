@@ -160,7 +160,13 @@ public class LocalSession implements AcaciaSessionRemote {
             AcaciaProperties.Level baseLevel,
             String sublevelName)
     {
-        AcaciaProperties properties = remoteSession.getProperties(client, baseLevel, sublevelName);
+        return remoteSession.getProperties(client, baseLevel, sublevelName);
+    }
+
+    @Override
+    public AcaciaProperties getProperties(BusinessPartner client)
+    {
+        AcaciaProperties properties = remoteSession.getProperties(client);
 
         AcaciaProperties currentProperties =
                 (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
@@ -171,12 +177,6 @@ public class LocalSession implements AcaciaSessionRemote {
         put(SessionContext.ACACIA_PROPERTIES, properties);
 
         return properties;
-    }
-
-    @Override
-    public AcaciaProperties getProperties(BusinessPartner client)
-    {
-        return getProperties(client, null, null);
     }
 
     @Override

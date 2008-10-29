@@ -23,6 +23,7 @@ import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaTreeTable;
+import com.cosmos.acacia.util.AcaciaProperties;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBFormattedTextField;
@@ -40,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.ejb.EJB;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -81,6 +84,7 @@ public class ProductAssemblerPanel
         assembleButton = new com.cosmos.swingb.JBButton();
         cancelButton = new com.cosmos.swingb.JBButton();
         okButton = new com.cosmos.swingb.JBButton();
+        sourceButton = new com.cosmos.swingb.JBButton();
         productTitledPanel = new com.cosmos.swingb.JBTitledPanel();
 
         setName("Form"); // NOI18N
@@ -99,6 +103,9 @@ public class ProductAssemblerPanel
         okButton.setAction(actionMap.get("okAction")); // NOI18N
         okButton.setName("okButton"); // NOI18N
 
+        sourceButton.setAction(actionMap.get("sourceAction")); // NOI18N
+        sourceButton.setName("sourceButton"); // NOI18N
+
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
         buttonsPanelLayout.setHorizontalGroup(
@@ -107,13 +114,15 @@ public class ProductAssemblerPanel
                 .addContainerGap()
                 .addComponent(assembleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(sourceButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
                 .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {assembleButton, cancelButton, okButton});
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {assembleButton, cancelButton, okButton, sourceButton});
 
         buttonsPanelLayout.setVerticalGroup(
             buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,11 +131,12 @@ public class ProductAssemblerPanel
                 .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(assembleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sourceButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {assembleButton, cancelButton, okButton});
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {assembleButton, cancelButton, okButton, sourceButton});
 
         productTitledPanel.setName("productTitledPanel"); // NOI18N
 
@@ -135,8 +145,8 @@ public class ProductAssemblerPanel
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(buttonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(schemaTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
-            .addComponent(productTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+            .addComponent(schemaTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+            .addComponent(productTitledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,6 +167,7 @@ public class ProductAssemblerPanel
     private com.cosmos.swingb.JBButton okButton;
     private com.cosmos.swingb.JBTitledPanel productTitledPanel;
     private com.cosmos.swingb.JBTitledPanel schemaTitledPanel;
+    private com.cosmos.swingb.JBButton sourceButton;
     // End of variables declaration//GEN-END:variables
 
 
@@ -171,10 +182,13 @@ public class ProductAssemblerPanel
 
     private List<String> columnIdentifiers;
 
+    private AcaciaProperties parameters;
+
     @Override
     protected void initData()
     {
         okButton.setEnabled(false);
+        sourceButton.setEnabled(false);
         ResourceMap resource = getResourceMap();
 
         String strValue;
@@ -220,6 +234,8 @@ public class ProductAssemblerPanel
         productTitledPanel.setContentContainer(complexProductPanel);
 
         parametersTable.setEditable(true);
+        parametersTable.getSelectionModel().addListSelectionListener(
+                new ParametersTableSelectionListener());
     }
 
     private List<?> getColumnIdentifiers()
@@ -267,8 +283,8 @@ public class ProductAssemblerPanel
             //parameters.add(parameter);
         }*/
 
-        List<AssemblingParameter> parameters = parametersTable.getData();
-        parameters.addAll(parametersMap.values());
+        List<AssemblingParameter> parametersList = parametersTable.getData();
+        parametersList.addAll(parametersMap.values());
 
         String schemaName = schema.getSchemaCode() + " - " + schema.getSchemaName();
         String strValue = resource.getString("schemaTitledPanel.title");
@@ -297,6 +313,7 @@ public class ProductAssemblerPanel
                 (AssemblingSchemaItem.DataType)dbResource.getEnumValue();
             parameter.setDataType(dataType);
             parameter.setValue(value);
+//parameter.setValuesSource();
             parametersMap.put(message, parameter);
         }
     }
@@ -390,14 +407,20 @@ public class ProductAssemblerPanel
         productAssemble();
     }
 
-    private Map<String, Object> getParameters()
+    @Action
+    public void sourceAction()
+    {
+    }
+
+    //private AcaciaProperties getParameters()
+    private Map getParameters()
     {
         HashMap params = new HashMap();
-        List<AssemblingParameter> parameters = parametersTable.getData();
-        if((parameters = parametersTable.getData()) != null &&
-            parameters.size() > 0)
+        List<AssemblingParameter> parametersList = parametersTable.getData();
+        if((parametersList = parametersTable.getData()) != null &&
+            parametersList.size() > 0)
         {
-            for(AssemblingParameter parameter : parameters)
+            for(AssemblingParameter parameter : parametersList)
             {
                 AssemblingMessage message = parameter.getAssemblingMessage();
                 String key = message.getMessageCode();
@@ -535,5 +558,22 @@ public class ProductAssemblerPanel
 
     }
 
+    private class ParametersTableSelectionListener
+        implements ListSelectionListener
+    {
 
+        @Override
+        public void valueChanged(ListSelectionEvent event)
+        {
+            AssemblingParameter parameter;
+            if((parameter = (AssemblingParameter)parametersTable.getSelectedRowObject()) != null)
+            {
+                sourceButton.setEnabled(true);
+            }
+            else
+            {
+                sourceButton.setEnabled(false);
+            }
+        }
+    }
 }
