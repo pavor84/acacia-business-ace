@@ -13,8 +13,6 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.util.List;
 
-import javax.naming.InitialContext;
-
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -137,13 +135,8 @@ public class BranchSelectionPanel extends AcaciaPanel {
 
     protected AddressesListRemote getFormSession()
     {
-        if(formSession == null) {
-            try {
-                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if(formSession == null)
+            formSession = getBean(AddressesListRemote.class);
 
         return formSession;
     }

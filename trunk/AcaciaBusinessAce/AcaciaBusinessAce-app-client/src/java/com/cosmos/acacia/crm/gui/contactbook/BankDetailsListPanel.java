@@ -9,7 +9,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
@@ -18,7 +17,6 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -75,16 +73,7 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     protected BankDetailsListRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(BankDetailsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(BankDetailsListRemote.class);
 
         return formSession;
     }

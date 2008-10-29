@@ -1,17 +1,19 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.PassportsListRemote;
-import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
@@ -23,10 +25,6 @@ import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import javax.swing.JOptionPane;
-import org.jdesktop.beansbinding.AbstractBindingListener;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -290,7 +288,7 @@ public class PassportPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseIssuer() {
-        OrganizationsListPanel listPanel = 
+        OrganizationsListPanel listPanel =
                 new OrganizationsListPanel(getOrganizationDataObjectId());
         listPanel.setClassifier(getClassifiersFormSession().getClassifier("passport_issuer"));
 
@@ -341,30 +339,18 @@ public class PassportPanel extends BaseEntityPanel {
     }
 
 
-    protected PassportsListRemote getFormSession()
-    {
+    protected PassportsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(PassportsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(PassportsListRemote.class);
 
         return formSession;
     }
 
-    protected List<DbResource> getPassportTypes()
-    {
+    protected List<DbResource> getPassportTypes() {
         return getFormSession().getPassportTypes();
     }
 
-    protected EntityProperties getPassportEntityProperties()
-    {
+    protected EntityProperties getPassportEntityProperties() {
         return getFormSession().getPassportEntityProperties();
     }
 

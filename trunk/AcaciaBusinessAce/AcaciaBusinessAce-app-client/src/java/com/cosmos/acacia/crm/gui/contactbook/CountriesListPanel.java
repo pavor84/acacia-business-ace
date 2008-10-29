@@ -8,20 +8,19 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListRemote;
-import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
 
 /**
  *
@@ -49,7 +48,7 @@ public class CountriesListPanel extends AbstractTablePanel {
 
         setVisible(Button.Select, false);
         setVisible(Button.Classify, false);
-        
+
         countriesBindingGroup = new BindingGroup();
         AcaciaTable countriesTable = getDataTable();
         JTableBinding tableBinding = countriesTable.bind(countriesBindingGroup, getCountries(), getCountryEntityProperties());
@@ -77,16 +76,7 @@ public class CountriesListPanel extends AbstractTablePanel {
     protected LocationsListRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(LocationsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(LocationsListRemote.class);
 
         return formSession;
     }
@@ -103,14 +93,14 @@ public class CountriesListPanel extends AbstractTablePanel {
     public void setContactPerson(ContactPerson contactPerson) {
         this.contactPerson = contactPerson;
     }
-    
+
     @Override
     @Action
     public void selectAction(){
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -126,22 +116,22 @@ public class CountriesListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (countriesBindingGroup != null)
             countriesBindingGroup.unbind();
-        
+
         countries = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object modifyRow(Object rowObject) {
         if(rowObject != null)
         {
-            CountryPanel countryPanel = 
+            CountryPanel countryPanel =
                     new CountryPanel((Country) rowObject);
             DialogResponse response = countryPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
@@ -149,14 +139,14 @@ public class CountriesListPanel extends AbstractTablePanel {
                 return countryPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
     @Override
     protected Object newRow() {
         CountryPanel countryPanel = new CountryPanel();
-        
+
         DialogResponse response = countryPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -164,7 +154,7 @@ public class CountriesListPanel extends AbstractTablePanel {
         }
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

@@ -5,11 +5,13 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -19,9 +21,6 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
 
 /**
  *
@@ -46,7 +45,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
 
         super.initData();
         this.setVisible(Button.Classify, false);
-        
+
         classifierGroupsBindingGroup = new BindingGroup();
         AcaciaTable classifierGroupsTable = getDataTable();
         JTableBinding tableBinding = classifierGroupsTable.bind(classifierGroupsBindingGroup, getClassifierGroups(), getClassifierGroupEntityProperties());
@@ -74,16 +73,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
     protected ClassifiersRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ClassifiersRemote.class);
 
         return formSession;
     }
@@ -99,7 +89,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
         super.selectAction();
         //
     }
-    
+
     @Override
     protected boolean deleteRow(Object rowObject) {
          if(rowObject != null)
@@ -122,7 +112,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
                 return classifierGroupPanel.getSelectedValue();
             }
         }
-         
+
         return null;
     }
 
@@ -130,17 +120,17 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         if (classifierGroupsBindingGroup != null)
             classifierGroupsBindingGroup.unbind();
-        
+
         classifierGroups = null;
-        
+
         initData();
-        
+
         return t;
     }
-        
+
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed())
@@ -153,10 +143,10 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
                 return classifierGroupPanel.getSelectedValue();
             }
         }
-        
+
         return null;
     }
-    
+
     @Override
     public boolean canCreate() {
         return true;

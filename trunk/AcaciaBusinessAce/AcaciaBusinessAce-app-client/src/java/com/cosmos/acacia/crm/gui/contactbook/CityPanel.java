@@ -1,5 +1,12 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.util.List;
+
+import javax.ejb.EJB;
+
+import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.BindingGroup;
+
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListRemote;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
@@ -7,14 +14,6 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-
-import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
-import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
@@ -45,7 +44,7 @@ public class CityPanel extends BaseEntityPanel {
         countryComboBox.setSelectedItem(country);
         countryComboBox.setEnabled(false);
     }
-    
+
     @Override
     protected void init()
     {
@@ -224,7 +223,7 @@ public class CityPanel extends BaseEntityPanel {
 
     private BindingGroup cityBindingGroup;
     private City city;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -249,25 +248,14 @@ public class CityPanel extends BaseEntityPanel {
         cityBindingGroup.bind();
     }
 
-    protected LocationsListRemote getFormSession()
-    {
+    protected LocationsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(LocationsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(LocationsListRemote.class);
 
         return formSession;
     }
 
-    protected EntityProperties getCityEntityProperties()
-    {
+    protected EntityProperties getCityEntityProperties() {
         return getFormSession().getCityEntityProperties();
     }
 

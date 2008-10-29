@@ -5,11 +5,11 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -25,7 +25,6 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
 
 /**
  *
@@ -51,39 +50,39 @@ public class ProductsListPanel
     @Override
     protected void initData() {
         super.initData();
-        
+
         entityProps = getFormSession().getProductEntityProperties();
-        
-        List<PropertyDetails> propertyDetails = 
+
+        List<PropertyDetails> propertyDetails =
             new ArrayList<PropertyDetails>(entityProps.getValues());
-        
+
         //set custom display for 'productCategory'
-        setCustomDisplay(propertyDetails, "category", 
+        setCustomDisplay(propertyDetails, "category",
             "${category.categoryName}");
-        
+
         //set custom display for 'patternMaskFormat'
-        setCustomDisplay(propertyDetails, "patternMaskFormat", 
+        setCustomDisplay(propertyDetails, "patternMaskFormat",
             "${patternMaskFormat.patternName} (${patternMaskFormat.format})");
-        
+
         //set custom display for 'producer'
         setCustomDisplay(propertyDetails, "producer", "${producer.displayName}");
-        
+
         //add column
         addColumn(55, "codeFormatted", getString("ProductList.codeFormatted"), "${codeFormatted}", entityProps);
-        
+
         refreshDataTable(entityProps);
     }
-    
+
     @SuppressWarnings("unchecked")
     private void refreshDataTable(EntityProperties entProps){
         if ( productsBindingGroup!=null )
             productsBindingGroup.unbind();
-        
+
         productsBindingGroup = new BindingGroup();
         AcaciaTable productsTable = getDataTable();
-        
+
         JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps, UpdateStrategy.READ);
-        
+
         tableBinding.setEditable(false);
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), entityProps.getPropertyDetails("measureUnit"));
         productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.Volume), entityProps.getPropertyDetails("dimensionUnit"));
@@ -93,7 +92,7 @@ public class ProductsListPanel
         productsBindingGroup.bind();
 
     }
-    
+
     protected boolean deleteRow(Object rowObject)
     {
         if(rowObject != null)
@@ -152,17 +151,17 @@ public class ProductsListPanel
     {
         if(products == null)
         {
-   	   		products = getFormSession().getProducts(getParentDataObjectId());
+                  products = getFormSession().getProducts(getParentDataObjectId());
         }
 
         return products;
     }
-    
+
     private List<DbResource> getMeasureUnits()
     {
         return getFormSession().getMeasureUnits();
     }
-    
+
     private List<DbResource> getMeasureUnits(MeasurementUnit.Category category)
     {
         return getFormSession().getMeasureUnits(category);
@@ -173,19 +172,9 @@ public class ProductsListPanel
         return getFormSession().getProductEntityProperties();
     }
 
-    protected ProductsListRemote getFormSession()
-    {
+    protected ProductsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ProductsListRemote.class);
 
         return formSession;
     }
@@ -194,16 +183,16 @@ public class ProductsListPanel
     {
         return getFormSession().deleteProduct(product);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-        
+
         //reset the products - they will be reinitialized
         products = null;
         refreshDataTable(entityProps);
-        
+
         return t;
     }
 }

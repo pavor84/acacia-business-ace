@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Task;
@@ -30,22 +29,22 @@ import com.cosmos.swingb.DialogResponse;
 public class WarehouseProductListPanel extends AbstractTablePanel {
 
     private EntityProperties entityProps;
-    
+
     @EJB
     private WarehouseListRemote formSession;
     private BindingGroup bindingGroup;
-    
+
     //the current warehouse in which context the list of products is shown
     private Warehouse warehouse;
 
     private boolean readonly;
-    
+
     private List<WarehouseProduct> list;
 
     private boolean allowDetailsView = true;
-    
+
     private boolean showSummaryProducts = false;
-    
+
     /**
      * @param parentDataObject
      */
@@ -53,15 +52,15 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
         customInit();
     }
-    
+
     public WarehouseProductListPanel(BigInteger parentDataObjectId, Warehouse warehouse) {
         super(parentDataObjectId);
         this.warehouse = warehouse;
         customInit();
     }
-    
+
     /**
-     * If showSummaryProducts is true - 
+     * If showSummaryProducts is true -
      * shows only the columns that have meaning for summary products (for example all quantities columns).
      * Hides the columns that have no summary meaning (e.g. notes column).
      * Otherwise the same as WarehouseProductListPanel().
@@ -75,7 +74,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
 
     private void customInit() {
         entityProps = getFormSession().getWarehouseProductTableProperties();
-        
+
         //free quantity column - add it by hand since it's synthetic value
         addColumn(25, "freeQuantity", getResourceMap().getString("WarehouseProduct.freeQuantity.columnName"),
             "${freeQuantity}", entityProps);
@@ -88,7 +87,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         //default quantity column - add it by hand since it's synthetic value
         addColumn(28, "prefferedDefaultQuantity", getResourceMap().getString("WarehouseProduct.defaultQuantity.columnName"),
             "${prefferedDefaultQuantity}", entityProps);
-        
+
         //remove the columns that doesn't have summary meaning if this is set to true
         if ( showSummaryProducts ){
             entityProps.removePropertyDetails("warehouse");
@@ -96,7 +95,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
             entityProps.removePropertyDetails("deliveryTime");
             entityProps.removePropertyDetails("salePrice");
         }
-        
+
         refreshDataTable(entityProps);
     }
 
@@ -104,27 +103,22 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
     }
-    
+
     protected WarehouseListRemote getFormSession() {
-        if (formSession == null) {
-            try {
-                formSession = InitialContext.doLookup(WarehouseListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if (formSession == null)
+            formSession = getBean(WarehouseListRemote.class);
 
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
     private void refreshDataTable(EntityProperties entProps){
         if ( bindingGroup!=null )
             bindingGroup.unbind();
-        
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -139,15 +133,15 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
             else
                 list = getFormSession().listWarehouseProducts(warehouse);
         }
-        
+
         return list;
     }
-    
+
     @SuppressWarnings("unchecked")
     public void refreshList(List newList){
         if ( newList==null )
             throw new IllegalStateException("Null parameter is illegal!");
-        
+
         list = newList;
         refreshDataTable(entityProps);
     }
@@ -173,7 +167,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     public boolean canModify(Object rowObject) {
         if ( readonly && allowDetailsView==false )
             return false;
-        
+
         return true;
     }
 
@@ -185,7 +179,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
           getFormSession().deleteWarehouseProduct((WarehouseProduct) rowObject);
           return true;
         }catch ( Exception e ){
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                 getResourceMap().getString("WarehouseListPanel.err.cantDelete"),
                 getResourceMap().getString("WarehouseListPanel.err.cantDeleteTitle"),
                 JOptionPane.DEFAULT_OPTION);
@@ -209,7 +203,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         wp.setQuantityInStock(BigDecimal.ZERO);
         wp.setOrderedQuantity(BigDecimal.ZERO);
         wp.setSoldQuantity(BigDecimal.ZERO);
-        wp.setQuantityDue(BigDecimal.ZERO); 
+        wp.setQuantityDue(BigDecimal.ZERO);
         wp.setReservedQuantity(BigDecimal.ZERO);
         wp.setWarehouse(warehouse);
         return onEditEntity(wp, false);
@@ -228,17 +222,17 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
 
         return null;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
-    
+
     @Override
     protected void viewRow(Object rowObject) {
         WarehouseProduct wp = (WarehouseProduct) rowObject;
@@ -253,7 +247,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         for (Button button : Button.values()) {
             setVisible(button, !readonly);
         }
-        
+
         this.allowDetailsView = allowDetailsView;
         if ( allowDetailsView ){
             setVisible(Button.Modify, true);

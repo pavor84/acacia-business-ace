@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -25,13 +25,11 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
-import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -125,16 +123,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     protected PositionTypesListRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(PositionTypesListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(PositionTypesListRemote.class);
 
         return formSession;
     }
@@ -166,7 +155,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
             List<PositionType> withSubPositions = null;
             if (isInternal)
                 withSubPositions = getWithSubCategories((PositionType) rowObject);
-            
+
             try {
                 if (isInternal) {
                     getFormSession().deletePositionTypes(withSubPositions);
@@ -174,7 +163,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
                 } else {
                     deletePositionType((PositionType) rowObject);
                 }
-                
+
                 return true;
             } catch (Exception e){
                 ValidationException ve = extractValidationException(e);
@@ -197,7 +186,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
                     log.error(e);
                 }
             }
-            
+
         }
         return false;
     }
@@ -253,7 +242,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
                 positionTypePanel.setParentPosition(autoParent);
             }
         }
-        
+
         DialogResponse response = positionTypePanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {

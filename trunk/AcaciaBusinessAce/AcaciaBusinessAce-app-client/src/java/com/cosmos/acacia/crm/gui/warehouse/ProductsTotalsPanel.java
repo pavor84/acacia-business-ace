@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
@@ -25,10 +24,10 @@ import com.cosmos.acacia.gui.TablePanelListener;
  * @author  jchan
  */
 public class ProductsTotalsPanel extends AcaciaPanel {
-    
+
     @EJB
     private WarehouseListRemote formSession;
-    
+
     private Map<WarehouseProduct, List<WarehouseProduct>> warehouseProductsData;
 
     /** Creates new form ProductsTotalsPanel */
@@ -43,7 +42,7 @@ public class ProductsTotalsPanel extends AcaciaPanel {
         totalsListPanel = new WarehouseProductListPanel(getParentDataObjectId(), true);
         totalsListPanel.setReadonly(true, false);
         totalsPanel.setContentContainer(totalsListPanel);
-        
+
         byWarehousesListPanel = new WarehouseProductListPanel(getParentDataObjectId());
         byWarehousesListPanel.setReadonly();
         byWarehousesListPanel.addTablePanelListener(new AbstractTablePanelListener() {
@@ -109,11 +108,11 @@ public class ProductsTotalsPanel extends AcaciaPanel {
         List<WarehouseProduct> productsSummary = new ArrayList<WarehouseProduct>(
                 warehouseProductsData.keySet());
         totalsListPanel.addTablePanelListener(new TablePanelListener() {
-        
+
             @Override
             public void tableRefreshed() {
             }
-        
+
             @Override
             public void tablePanelClose() {
             }
@@ -121,17 +120,17 @@ public class ProductsTotalsPanel extends AcaciaPanel {
             public void selectionRowChanged() {
                 onSummaryProductSelected();
             }
-        
+
             @Override
             public void selectAction() {
             }
-        
+
         });
-        
+
         totalsListPanel.refreshList(productsSummary);
         byWarehousesListPanel.refreshList(new ArrayList<WarehouseProduct>());
     }
-    
+
     protected void onSummaryProductSelected() {
         WarehouseProduct selected = (WarehouseProduct) totalsListPanel.getDataTable().getSelectedRowObject();
         List<WarehouseProduct> objects = warehouseProductsData.get(selected);
@@ -140,13 +139,9 @@ public class ProductsTotalsPanel extends AcaciaPanel {
 
     protected WarehouseListRemote getFormSession() {
         if (formSession == null)
-            try {
-                formSession = InitialContext.doLookup(WarehouseListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            formSession = getBean(WarehouseListRemote.class);
 
         return formSession;
     }
-    
+
 }

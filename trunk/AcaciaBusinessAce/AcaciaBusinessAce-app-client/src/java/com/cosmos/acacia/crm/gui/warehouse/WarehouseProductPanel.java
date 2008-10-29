@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -38,14 +37,14 @@ import com.cosmos.swingb.DialogResponse;
  * @author  jchan
  */
 public class WarehouseProductPanel extends BaseEntityPanel {
-    
+
     @EJB
     private WarehouseListRemote formSession;
-    
+
     private WarehouseProduct entity;
     private BindingGroup bindGroup;
     private EntityProperties entProps;
-    
+
     /** Creates new form WarehouseProductPanel */
     public WarehouseProductPanel(WarehouseProduct warehouseProduct, BigInteger parentId) {
         super(parentId);
@@ -59,7 +58,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         initComponents();
         super.init();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -462,24 +461,24 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        
+
         entProps = getFormSession().getWarehouseProductEntityProperties();
         PropertyDetails propDetails;
-        
+
         bindGroup = new BindingGroup();
-        
+
         //product field
         propDetails = entProps.getPropertyDetails("product");
         Binding productBinding = productField.bind(new AcaciaLookupProvider() {
-            
+
             @Override
             public Object showSelectionControl() {
                 return onChooseProduct();
             }
-        
-        }, bindGroup, 
-        entity, 
-        propDetails, 
+
+        }, bindGroup,
+        entity,
+        propDetails,
         "${productName}",
         UpdateStrategy.READ_WRITE);
         productBinding.addBindingListener(new AbstractBindingListener() {
@@ -493,22 +492,22 @@ public class WarehouseProductPanel extends BaseEntityPanel {
                 updateProductQuantities(binding);
             }
         });
-        
-        //warehouse 
+
+        //warehouse
         propDetails = entProps.getPropertyDetails("warehouse");
         warehouseField.bind(new AcaciaLookupProvider() {
-            
+
             @Override
             public Object showSelectionControl() {
                 return onChooseWarehous();
             }
-        
-        }, bindGroup, 
-        entity, 
-        propDetails, 
+
+        }, bindGroup,
+        entity,
+        propDetails,
         "${address.addressName}",
         UpdateStrategy.READ_WRITE);
-        
+
         //quantityInStock
         qtyInStockField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityInStock"))
             .addBindingListener(new FreeQuantityChangeListener());
@@ -522,7 +521,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
             .addBindingListener(new FreeQuantityChangeListener());
         //quantityDue
         qtyDueField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityDue"));
-        
+
         //minimumQuantity
         minQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("minimumQuantity"));
         //maximumQuantity
@@ -532,42 +531,42 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         //sale price in current form
         final Binding salesPriceFieldBinding = salesPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
         salesPriceField.setEditable(false);
-        
+
         pricingPanel = new WarehouseProductPricingPanel();
         //purchase price
         pricingPanel.getPurchasePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"));
         //sale price
         Binding pricingPanelSalesBinding = pricingPanel.getSalePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
         pricingPanelSalesBinding.addBindingListener(new AbstractBindingListener() {
-			@Override
-			public void targetChanged(Binding binding, PropertyStateEvent event) {
-				Object newValue = binding.getTargetProperty().getValue(pricingPanel.getSalePriceField());
-				salesPriceFieldBinding.getTargetProperty().setValue(salesPriceField, newValue);
-			}
-		});
-        
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                Object newValue = binding.getTargetProperty().getValue(pricingPanel.getSalePriceField());
+                salesPriceFieldBinding.getTargetProperty().setValue(salesPriceField, newValue);
+            }
+        });
+
         //delivery time
         deliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveryTime"));
-        
+
         //notes
         notesField.bind(bindGroup, entity, "notes");
-        
+
         warehouseField.setEditable(false);
         qtyInStockField.setEditable(false);
-        
+
         bindGroup.bind();
     }
-    
+
     @SuppressWarnings("unchecked")
     protected void updateProductQuantities(Binding binding) {
         SimpleProduct product = entity.getProduct();
-        
+
         maxFromProductField.setText("-");
         minFromProductField.setText("-");
         defaultFromProductField.setText("-");
-        
+
         ObjectToStringConverter toString = new AcaciaToStringConverter();
-        
+
         if ( product!=null && binding.isContentValid() ){
             BigDecimal maxQty = product.getMaximumQuantity();
             if ( maxQty!=null ){
@@ -600,15 +599,15 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         public void bindingBecameBound(Binding binding) {
             updateFreeQuantityField(true);
         }
-        
+
         @SuppressWarnings("unchecked")
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
             updateFreeQuantityField(binding.isContentValid());
         }
     }
-    
-    
+
+
     protected Object onChooseWarehous() {
         WarehouseListPanel listPanel = new WarehouseListPanel(null);
         DialogResponse dResponse = listPanel.showDialog(this);
@@ -629,15 +628,10 @@ public class WarehouseProductPanel extends BaseEntityPanel {
             qtyFreeField.setText(display);
         }
     }
-    
+
     protected WarehouseListRemote getFormSession() {
-        if (formSession == null) {
-            try {
-                formSession = InitialContext.doLookup(WarehouseListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if (formSession == null)
+            formSession = getBean(WarehouseListRemote.class);
 
         return formSession;
     }
@@ -646,7 +640,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     public void productPricingAction() {
         pricingPanel.setTitle(getResourceMap().getString("PricingPanel.title"));
         pricingPanel.showDialog(this);
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -690,9 +684,9 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     // End of variables declaration//GEN-END:variables
 
     private WarehouseProductPricingPanel pricingPanel;
-    
+
     public void setReadonlyMode(boolean readonly) {
-        
+
         productField.setEditable(!readonly);
         minQtyField.setEditable(!readonly);
         maxQtyField.setEditable(!readonly);
@@ -700,7 +694,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         deliveryTimeField.setEditable(!readonly);
         notesField.setEditable(!readonly);
         entityFormButtonPanel1.setVisible(Button.Save, !readonly);
-        
+
         pricingPanel.setReadonlyMode(readonly);
 
         if ( readonly )

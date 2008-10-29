@@ -1,7 +1,6 @@
 package com.cosmos.acacia.crm.gui;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -184,25 +183,14 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     }
 
 
-    protected ClassifiersRemote getFormSession()
-    {
+    protected ClassifiersRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ClassifiersRemote.class);
 
         return formSession;
     }
 
-    protected EntityProperties getClassifierGroupEntityProperties()
-    {
+    protected EntityProperties getClassifierGroupEntityProperties() {
         return getFormSession().getClassifierGroupEntityProperties();
     }
 

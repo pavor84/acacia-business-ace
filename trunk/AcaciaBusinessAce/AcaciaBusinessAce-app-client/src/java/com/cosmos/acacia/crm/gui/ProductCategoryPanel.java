@@ -9,7 +9,6 @@ package com.cosmos.acacia.crm.gui;
 import java.math.BigInteger;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -24,7 +23,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 
 /**
- * 
+ *
  * Created	:	21.04.2008
  * @author	Petar Milev
  * @version $Id: $
@@ -32,12 +31,12 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class ProductCategoryPanel extends BaseEntityPanel {
     private ProductCategory entity;
-    
+
     @EJB
     private ProductsListRemote formSession;
-    
+
     private EntityProperties entProps;
-    
+
     private BindingGroup bindGroup;
 
     /** Creates new form ProductCategoryPanel */
@@ -47,18 +46,18 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         this.entity = category;
         init();
     }
-    
+
     @Override
     protected void init()
     {
         initComponents();
         super.init();
     }
-    
+
     public ProductCategoryPanel(){
         super(null);
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -164,72 +163,72 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     protected void initData() {
         entProps = getFormSession().getProductCategoryEntityProperties();
         PropertyDetails propDetails;
-        
+
         bindGroup = new BindingGroup();
-        
+
         //parent category
         propDetails = entProps.getPropertyDetails("parentCategory");
         categoryField.bind(new AcaciaLookupProvider() {
-            
+
             @Override
             public Object showSelectionControl() {
                 return onChooseCategory();
             }
-        
-        }, bindGroup, 
-        entity, 
-        propDetails, 
+
+        }, bindGroup,
+        entity,
+        propDetails,
         "${categoryName}",
         UpdateStrategy.READ_WRITE);
-        
+
         //category name
         propDetails = entProps.getPropertyDetails("categoryName");
         nameField.bind(bindGroup, entity, propDetails);
-        
+
         //pattern mask format
         propDetails = entProps.getPropertyDetails("patternMaskFormat");
         patternMaskFormatField.bind(new AcaciaLookupProvider() {
-            
+
             @Override
             public Object showSelectionControl() {
                 return onChoosePatternMask();
             }
-        
-        }, bindGroup, 
-        entity, 
-        propDetails, 
+
+        }, bindGroup,
+        entity,
+        propDetails,
         "${patternName} (${format})",
         UpdateStrategy.READ_WRITE);
-        
+
         //description
         descriptionField.bind(bindGroup, entity, "description");
-        
+
         bindGroup.bind();
     }
-    
+
     @SuppressWarnings("unchecked")
     protected Object onChooseCategory() {
         ProductCategoriesTreePanel panel = new ProductCategoriesTreePanel(null);
         panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
         panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
         panel.setModificationsEnabled(false);
-        
+
         DialogResponse dResponse = panel.showDialog(this);
-        
+
         if ( DialogResponse.SELECT.equals(dResponse) ){
-            
+
             ProductCategory category = (ProductCategory)
                 panel.getListPanel().getSelectedRowObject();
-            
-//            PatternMaskFormat oldFormat = 
+
+//            PatternMaskFormat oldFormat =
 //                (PatternMaskFormat) patternMaskBinding.getTargetProperty()
 //                    .getValue(patternMaskBinding.getTargetObject());
-//            
+//
 //            if ( oldFormat==null && category!=null ){
 //                patternMaskBinding.getTargetProperty()
 //                    .setValue(patternMaskBinding.getTargetObject(), category.getPatternMaskFormat());
 //            }
-            
+
             return category;
         }else{
             return null;
@@ -282,15 +281,10 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel1;
     }
-    
+
     protected ProductsListRemote getFormSession() {
-        if (formSession == null) {
-            try {
-                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if (formSession == null)
+                formSession = getBean(ProductsListRemote.class);
 
         return formSession;
     }

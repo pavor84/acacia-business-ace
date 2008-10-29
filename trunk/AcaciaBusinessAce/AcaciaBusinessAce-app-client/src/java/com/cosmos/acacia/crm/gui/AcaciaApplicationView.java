@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -88,10 +87,10 @@ import com.cosmos.swingb.JBToolBar;
  * The application's main frame.
  */
 public class AcaciaApplicationView extends FrameView {
-    
+
     @EJB
     private WarehouseListRemote warehouseBean;
-    
+
     protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
 
     public AcaciaApplicationView(SingleFrameApplication app) {
@@ -665,7 +664,7 @@ public class AcaciaApplicationView extends FrameView {
 
         invoicesListItem.setAction(actionMap.get("invoicesListAction"));
         salesMenu.add(invoicesListItem);
-        
+
         JBMenuItem proformaInvoicesItem = new JBMenuItem();
         proformaInvoicesItem.setAction(actionMap.get("proformaInvoicesListAction"));
         salesMenu.add(proformaInvoicesItem);
@@ -1098,17 +1097,12 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     protected WarehouseListRemote getWarehouseBean() {
-        if (warehouseBean == null) {
-            try {
-                warehouseBean = InitialContext.doLookup(WarehouseListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if (warehouseBean == null)
+                warehouseBean = AcaciaPanel.getBean(WarehouseListRemote.class);
 
         return warehouseBean;
     }
-    
+
     private RightsManagerRemote rightsManager =
         AcaciaPanel.getBean(RightsManagerRemote.class, false);
     /**

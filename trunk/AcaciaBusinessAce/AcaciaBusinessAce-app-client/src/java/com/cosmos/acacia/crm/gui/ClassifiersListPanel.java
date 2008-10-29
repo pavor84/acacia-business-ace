@@ -5,11 +5,14 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -21,10 +24,6 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
 
 /**
  *
@@ -52,7 +51,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         super(parentId);
         postInitData();
     }
-    
+
     @EJB
     private ClassifiersRemote formSession;
 
@@ -71,7 +70,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     protected void postInitData() {
-        
+
         classifiersBindingGroup = new BindingGroup();
         AcaciaTable classifiersTable = getDataTable();
         JTableBinding tableBinding = classifiersTable.bind(classifiersBindingGroup, getClassifiers(), getClassifierEntityProperties());
@@ -114,13 +113,8 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     public ClassifiersRemote getFormSession() {
-        if(formSession == null) {
-            try {
-                formSession = getBean(ClassifiersRemote.class);
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if(formSession == null)
+            formSession = getBean(ClassifiersRemote.class);
 
         return formSession;
     }
@@ -131,7 +125,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
 
 
     public void filter(List<Classifier> filterList) {
-        
+
         List<Classifier> classifiersMirror = new ArrayList<Classifier>(classifiers);
         for (Classifier classifier : classifiersMirror) {
             if (filterList.contains(classifier))
@@ -163,11 +157,11 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         if(rowObject != null)
         {
             boolean allowCafdModifications = dataObjectType == null;
-            
+
             ClassifierPanel classifierPanel = new ClassifierPanel(
-                    (Classifier)rowObject, 
+                    (Classifier)rowObject,
                     allowCafdModifications);
-            
+
             DialogResponse response = classifierPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {

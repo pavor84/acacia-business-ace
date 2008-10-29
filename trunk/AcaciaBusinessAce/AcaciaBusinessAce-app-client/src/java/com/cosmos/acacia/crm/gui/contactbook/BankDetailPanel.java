@@ -1,9 +1,22 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
 import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -16,20 +29,6 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-
-import javax.swing.JOptionPane;
-import org.apache.log4j.Logger;
-import org.jdesktop.beansbinding.AbstractBindingListener;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -431,16 +430,7 @@ public class BankDetailPanel extends BaseEntityPanel {
     protected BankDetailsListRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(BankDetailsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(BankDetailsListRemote.class);
 
         return formSession;
     }

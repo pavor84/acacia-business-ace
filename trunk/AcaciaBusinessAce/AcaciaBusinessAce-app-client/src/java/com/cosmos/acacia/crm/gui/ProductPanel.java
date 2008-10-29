@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
@@ -51,7 +50,7 @@ import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 
 /**
- * 
+ *
  * Created	:	28.07.2008
  * @author	Petar Milev
  *
@@ -75,7 +74,7 @@ public class ProductPanel extends AcaciaPanel {
         initComponents();
         initData();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -612,8 +611,8 @@ public class ProductPanel extends AcaciaPanel {
                 .addGap(53, 53, 53))
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonPanel;
     private com.cosmos.acacia.gui.AcaciaLookup categoryField;
@@ -679,11 +678,11 @@ public class ProductPanel extends AcaciaPanel {
 
     private BindingGroup productBindingGroup;
     private SimpleProduct product;
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     private Binding productCodeBinding;
     @SuppressWarnings("unchecked")
     private Binding patternMaskBinding;
-    
+
     protected void initData()
     {
         setDialogResponse(DialogResponse.CLOSE);
@@ -716,7 +715,7 @@ public class ProductPanel extends AcaciaPanel {
                 }
             });
         }
-        
+
     }
 
     protected BindingGroup getBindingGroup()
@@ -739,15 +738,15 @@ public class ProductPanel extends AcaciaPanel {
 
             propDetails = entityProps.getPropertyDetails("category");
             categoryField.bind(new AcaciaLookupProvider() {
-                
+
                 @Override
                 public Object showSelectionControl() {
                     return onChooseCategory();
                 }
-            
-            }, productBindingGroup, 
-            product, 
-            propDetails, 
+
+            }, productBindingGroup,
+            product,
+            propDetails,
             "${categoryName}",
             UpdateStrategy.READ_WRITE);
 
@@ -762,19 +761,19 @@ public class ProductPanel extends AcaciaPanel {
 
             propDetails = entityProps.getPropertyDetails("patternMaskFormat");
             patternMaskBinding = patternMaskField.bind(new AcaciaLookupProvider() {
-                
+
                 @Override
                 public Object showSelectionControl() {
                     return onChoosePatternMask();
                 }
-            
-            }, productBindingGroup, 
-            product, 
-            propDetails, 
+
+            }, productBindingGroup,
+            product,
+            propDetails,
             "${patternName} (${format})",
             UpdateStrategy.READ_WRITE);
             patternMaskBinding.addBindingListener(updateCodeListener);
-            
+
             propDetails = entityProps.getPropertyDetails("productColor");
             productColorComboBox.bind(productBindingGroup, getProductColors(), product, propDetails);
 
@@ -808,27 +807,27 @@ public class ProductPanel extends AcaciaPanel {
 
             propDetails = entityProps.getPropertyDetails("producer");
             producerField.bind(new AcaciaLookupProvider() {
-                
+
                 @Override
                 public Object showSelectionControl() {
                     return onChooseProducer();
                 }
-            
-            }, productBindingGroup, 
+
+            }, productBindingGroup,
             product,
-            propDetails, 
+            propDetails,
             "${displayName}",
             UpdateStrategy.READ_WRITE);
 
             propDetails = entityProps.getPropertyDetails("description");
             descriptionTextPane.bind(productBindingGroup, product, propDetails);
-            
+
             productBindingGroup.bind();
         }
 
         return productBindingGroup;
     }
-    
+
     protected Object onChooseProducer() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
         DialogResponse dResponse = listPanel.showDialog(this);
@@ -844,14 +843,14 @@ public class ProductPanel extends AcaciaPanel {
         ProductCategoriesTreePanelBackup panel = new ProductCategoriesTreePanelBackup(null);
         panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
         panel.getCategoryListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
-        
+
         DialogResponse dResponse = panel.showDialog(this);
-        
+
         if ( DialogResponse.SELECT.equals(dResponse) ){
-            
+
             ProductCategory category = (ProductCategory)
                 panel.getCategoryListPanel().getSelectedRowObject();
-            
+
             return category;
         }else{
             return null;
@@ -863,20 +862,20 @@ public class ProductPanel extends AcaciaPanel {
         if ( productColors==null ){
             productColors = getFormSession().getProductColors();
         }
-            
+
         return productColors;
     }
 
-    private UpdateCodePreviewListener updateCodeListener 
+    private UpdateCodePreviewListener updateCodeListener
         = new UpdateCodePreviewListener();
-    
+
     private class UpdateCodePreviewListener extends AbstractBindingListener{
         @SuppressWarnings("unchecked")
         @Override
         public void bindingBecameBound(Binding binding) {
             updateCodePreview(product.getCodeFormatted());
         }
-        
+
         @SuppressWarnings("unchecked")
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -887,8 +886,8 @@ public class ProductPanel extends AcaciaPanel {
             }
         }
     }
-    
-//    private UpdateFormatListener updateFormatListener 
+
+//    private UpdateFormatListener updateFormatListener
 //        = new UpdateFormatListener();
 //
 //    private class UpdateFormatListener extends AbstractBindingListener {
@@ -900,24 +899,24 @@ public class ProductPanel extends AcaciaPanel {
 //                updateFormatField();
 //        }
 //    }
-    
+
     protected void updateCodePreview(String newText) {
         codePreviewField.setText(newText);
     }
 
 //    protected void updateFormatField() {
-//        
+//
 //        PatternMaskFormat f = (PatternMaskFormat) patternMaskField.getSelectedItem();
 //        if ( f==null ){
 //            patternMaskBinding.getTargetObject();
 //            patternMaskBinding.setTargetObject(f);
 //        }
-//        
+//
 //        ProductCategory category = (ProductCategory)
 //            panel.getCategoryListPanel().getSelectedRowObject();
 //        if ( category!=null ){
 //            PatternMaskFormat categoryFormat = category.getPatternMaskFormat();
-//            
+//
 //            //if the currently selected format is not set or is probably set from the
 //            //previous category selection - then replace it
 //            if ( oldFormat==null || oldFormatInheritedByOldCategory ){
@@ -938,25 +937,15 @@ public class ProductPanel extends AcaciaPanel {
             return null;
         }
     }
-    
+
     protected void setSaveActionState()
     {
         setEnabled(Button.Save, productBindingGroup.isContentValid());
     }
 
-    protected ProductsListRemote getFormSession()
-    {
+    protected ProductsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ProductsListRemote.class);
 
         return formSession;
     }
@@ -989,9 +978,9 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     /**
-     * Iterates through all fields and updates there appearance to error state if 
+     * Iterates through all fields and updates there appearance to error state if
      * some of the messages is related to their respective property.
-     * 
+     *
      * Note: currently - test support.
      * @param messages
      */
@@ -1006,7 +995,7 @@ public class ProductPanel extends AcaciaPanel {
                 errorProperties.add(el);
             }
         }
-        
+
         for (Binding binding : productBindingGroup.getBindings()) {
             if ( binding.getTargetObject() instanceof JBTextField ){
                 JBTextField textField = (JBTextField)binding.getTargetObject();
@@ -1015,7 +1004,7 @@ public class ProductPanel extends AcaciaPanel {
             }else if ( binding.getTargetObject() instanceof JBComboBox){
                 JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
                 if ( errorProperties.contains(comboBox.getPropertyName()) )
-                    comboBox.setStyleInvalid(); 
+                    comboBox.setStyleInvalid();
             }
         }
     }
@@ -1028,16 +1017,16 @@ public class ProductPanel extends AcaciaPanel {
     private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
         ResourceMap resource = getResourceMap();
         String title = resource.getString("saveAction.Action.error.title");
-        
+
         String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
         String category = ProductPanel.class.getName() + ": saveAction.";
         Level errorLevel = Level.WARNING;
-        
+
         Map<String, String> state = new HashMap<String, String>();
         state.put("productId", String.valueOf(product.getProductId()));
         state.put("productName", String.valueOf(product.getProductName()));
         state.put("productCode", String.valueOf(product.getProductCode()));
-        
+
         ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
         return errorInfo;
     }
@@ -1150,7 +1139,7 @@ public class ProductPanel extends AcaciaPanel {
         }
     }
 
-    public void setVisible(Button button, boolean visible) {       
+    public void setVisible(Button button, boolean visible) {
         switch(button)
         {
             case Save:
@@ -1182,7 +1171,7 @@ public class ProductPanel extends AcaciaPanel {
     {
         return AcaciaPanel.class;
     }
-    
+
     public static void main(String[] args) throws Exception{
 //        MaskFormatter f = new MaskFormatter("###-###-#");
 //        f.setValidCharacters("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ()!@#$%^*_+=`';:\",.<>/?");
@@ -1190,13 +1179,13 @@ public class ProductPanel extends AcaciaPanel {
 //        f.setValidCharacters("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 //        String result = f.valueToString(new String("42323"));
 //        System.out.println(result);
-        
+
 //        MaskFormatter formatter = new MaskFormatter("0x***");
 //        formatter.setValidCharacters("0123456789abcdefABCDEF");
-        
+
         MaskFormatter formatter = new MaskFormatter("###-####");
         formatter.setPlaceholderCharacter('_');
         System.out.println(formatter.stringToValue("123-1234"));
-          
+
     }
 }

@@ -8,14 +8,18 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.data.City;
@@ -29,11 +33,6 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.awt.event.KeyAdapter;
-import java.math.BigInteger;
-import javax.swing.JOptionPane;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.Binding;
 
 /**
  * A form for adding and editing persons
@@ -490,38 +489,25 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         }
     }
 
-    protected PersonsListRemote getFormSession()
-    {
+    protected PersonsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(PersonsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(PersonsListRemote.class);
 
         return formSession;
     }
 
     @Override
-    public BindingGroup getBindingGroup()
-    {
+    public BindingGroup getBindingGroup() {
         return personBindingGroup;
     }
 
     @Override
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return person;
     }
 
     @Override
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         log.info("Save: person: " + person);
 
         isUnique = true;

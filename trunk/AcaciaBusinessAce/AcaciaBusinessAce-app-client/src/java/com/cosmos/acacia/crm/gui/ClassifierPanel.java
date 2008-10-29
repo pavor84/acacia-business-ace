@@ -2,32 +2,32 @@ package com.cosmos.acacia.crm.gui;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
+import java.awt.event.ItemListener;
+import java.math.BigInteger;
+import java.util.List;
 
+import javax.ejb.EJB;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
 import javax.swing.JList;
+
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
-import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.awt.event.ItemListener;
-import java.math.BigInteger;
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -51,7 +51,7 @@ public class ClassifierPanel extends BaseEntityPanel {
         addObjectTypeButton.setEnabled(allowCafdModifications);
         dataObjectTypesTable.setVisible(Button.Delete, allowCafdModifications);
     }
-    
+
     /** Creates new form ContactPersonPanel */
     public ClassifierPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
@@ -295,9 +295,9 @@ public class ClassifierPanel extends BaseEntityPanel {
                         addObjectTypeButton.setEnabled(true);
                 }
             }
-            
+
         });
-       
+
         classifierBindingGroup.bind();
 
 //        // Bypassing a strange bug
@@ -332,16 +332,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     protected ClassifiersRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ClassifiersRemote.class);
 
         return formSession;
     }
