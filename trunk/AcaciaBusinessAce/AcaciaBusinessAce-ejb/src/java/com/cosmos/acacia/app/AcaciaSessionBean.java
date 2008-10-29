@@ -215,11 +215,74 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         }
     }
 
+    private BigInteger getRelatedObjectId(
+            BusinessPartner client,
+            AcaciaProperties.Level level)
+    {
+        switch(level)
+        {
+            case System:
+            case SystemAdministrator:
+                // ToDo: Put some real object because of FK constraint
+                return BigInteger.ZERO;
+
+            case Organization:
+            case OrganizationAdministrator:
+                return getOrganization().getId();
+
+            case Branch:
+            case BranchAdministrator:
+                return getBranch().getId();
+
+            case User:
+                return getUser().getUserId();
+
+            case Client:
+                if(client == null)
+                    return null;
+
+                return client.getPartnerId();
+
+            case Current:
+                return null;
+
+            default:
+                throw new UnsupportedOperationException("Unknown level: " + level);
+        }
+    }
+
     @Override
     public AcaciaProperties getProperties(
             BusinessPartner client,
             AcaciaProperties.Level baseLevel,
             String sublevelName)
+    {
+        Integer sublevelId;
+        if(baseLevel != null && sublevelName != null && (sublevelName = sublevelName.trim()).length() > 0)
+        {
+            sublevelId = getSublevelId(baseLevel.getPriority(), sublevelName);
+        }
+        else
+        {
+            return null;
+        }
+
+        BigInteger relatedObjectId;
+        Query q = em.createNamedQuery("DbProperty.findByLevelIdAndRelatedObjectId");
+
+        if((relatedObjectId = getRelatedObjectId(client, baseLevel)) == null)
+            return null;
+
+        q.setParameter("levelId", sublevelId);
+        q.setParameter("relatedObjectId", relatedObjectId);
+        List<DbProperty> dbProperties = q.getResultList();
+
+        return new AcaciaProperties(sublevelId, sublevelName,
+                relatedObjectId, dbProperties);
+    }
+
+    @Override
+    public AcaciaProperties getProperties(BusinessPartner client)
     {
         AcaciaProperties properties =
                 (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
@@ -233,15 +296,6 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             properties.removeAllLevels();
         }
 
-        Integer sublevelId = null;
-        if(baseLevel != null && sublevelName != null && (sublevelName = sublevelName.trim()).length() > 0)
-        {
-            sublevelId = getSublevelId(baseLevel.getPriority(), sublevelName);
-        }
-
-        Organization organization = getOrganization();
-        Address branch = getBranch();
-        User user = getUser();
         int levelId;
         BigInteger relatedObjectId;
         Query q = em.createNamedQuery("DbProperty.findByLevelIdAndRelatedObjectId");
@@ -249,62 +303,16 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         for(AcaciaProperties.Level level : AcaciaProperties.Level.values())
         {
             levelId = level.getPriority();
-            switch(level)
-            {
-                case System:
-                case SystemAdministrator:
-                    // ToDo: Put some real object because of FK constraint
-                    relatedObjectId = BigInteger.ZERO;
-                    break;
-
-                case Organization:
-                case OrganizationAdministrator:
-                    relatedObjectId = organization.getId();
-                    break;
-
-                case Branch:
-                case BranchAdministrator:
-                    relatedObjectId = branch.getId();
-                    break;
-
-                case User:
-                    relatedObjectId = user.getUserId();
-                    break;
-
-                case Client:
-                    if(client == null)
-                        continue;
-
-                    relatedObjectId = client.getPartnerId();
-                    break;
-
-                case Current:
-                    continue;
-
-                default:
-                    throw new UnsupportedOperationException("Unknown level: " + level);
-            }
+            if((relatedObjectId = getRelatedObjectId(client, level)) == null)
+                continue;
 
             q.setParameter("levelId", levelId);
             q.setParameter("relatedObjectId", relatedObjectId);
             List<DbProperty> dbProperties = q.getResultList();
             properties.putProperties(level, relatedObjectId, dbProperties);
-
-            if(sublevelId != null && level.equals(baseLevel))
-            {
-                q.setParameter("levelId", sublevelId);
-                dbProperties = q.getResultList();
-                properties.putProperties(level, relatedObjectId, dbProperties);
-            }
         }
 
         return properties;
-    }
-
-    @Override
-    public AcaciaProperties getProperties(BusinessPartner client)
-    {
-        return getProperties(client, null, null);
     }
 
     @Override
