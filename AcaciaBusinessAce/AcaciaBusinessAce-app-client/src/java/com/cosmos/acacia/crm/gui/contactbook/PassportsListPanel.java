@@ -5,12 +5,13 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -21,8 +22,6 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import org.jdesktop.application.Task;
 
 /**
  *
@@ -35,7 +34,7 @@ public class PassportsListPanel extends AbstractTablePanel {
     {
         super(parentDataObjectId);
     }
-    
+
     public PassportsListPanel(DataObjectBean parent) {
         super(parent);
     }
@@ -71,30 +70,18 @@ public class PassportsListPanel extends AbstractTablePanel {
         return passports;
     }
 
-    protected EntityProperties getPassportEntityProperties()
-    {
+    protected EntityProperties getPassportEntityProperties() {
         return getFormSession().getPassportEntityProperties();
     }
 
-    protected PassportsListRemote getFormSession()
-    {
+    protected PassportsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(PassportsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(PassportsListRemote.class);
 
         return formSession;
     }
 
-    protected int deletePassport(Passport passport)
-    {
+    protected int deletePassport(Passport passport) {
         return getFormSession().deletePassport(passport);
     }
 

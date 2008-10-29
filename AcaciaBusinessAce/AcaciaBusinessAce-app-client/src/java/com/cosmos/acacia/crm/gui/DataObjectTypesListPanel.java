@@ -5,25 +5,24 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
-import com.cosmos.acacia.crm.data.Classifier;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.swingbinding.JTableBinding;
 
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
-import org.jdesktop.observablecollections.ObservableCollections;
 
 /**
  *
@@ -110,19 +109,9 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
         return getFormSession().getDataObjectTypeEntityProperties();
     }
 
-    protected ClassifiersRemote getFormSession()
-    {
+    protected ClassifiersRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ClassifiersRemote.class);
 
         return formSession;
     }

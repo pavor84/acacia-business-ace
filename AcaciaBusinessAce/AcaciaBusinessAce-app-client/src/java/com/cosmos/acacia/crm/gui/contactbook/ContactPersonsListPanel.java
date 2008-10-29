@@ -5,11 +5,13 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
+import org.jdesktop.application.Action;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -19,9 +21,6 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.Task;
 
 /**
  *
@@ -73,25 +72,14 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         return getFormSession().getContactPersonEntityProperties();
     }
 
-    protected AddressesListRemote getFormSession()
-    {
+    protected AddressesListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(AddressesListRemote.class);
 
         return formSession;
     }
 
-    protected int deleteContactPerson(ContactPerson contactPerson)
-    {
+    protected int deleteContactPerson(ContactPerson contactPerson) {
         return getFormSession().deleteContactPerson(contactPerson);
     }
 

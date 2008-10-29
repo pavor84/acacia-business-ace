@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Task;
@@ -28,51 +27,46 @@ import com.cosmos.swingb.DialogResponse;
 public class WarehouseListPanel extends AbstractTablePanel {
 
     private EntityProperties entityProps;
-    
+
     @EJB
     private WarehouseListRemote formSession;
     private BindingGroup bindingGroup;
-    
+
     /**
      * @param parentDataObject
      */
     public WarehouseListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
-    
+
     @Override
     protected void initData() {
         super.initData();
-        
+
         setSpecialCaption("enterWarehouse.Action.text");
         setVisible(Button.Special, true);
-        
-        
+
+
         entityProps = getFormSession().getWarehouseEntityProperties();
-        
+
         refreshDataTable(entityProps);
     }
-    
+
     protected WarehouseListRemote getFormSession() {
-        if (formSession == null) {
-            try {
-                formSession = InitialContext.doLookup(WarehouseListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if (formSession == null)
+            formSession = getBean(WarehouseListRemote.class);
 
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
     private void refreshDataTable(EntityProperties entProps){
         if ( bindingGroup!=null )
             bindingGroup.unbind();
-        
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -114,7 +108,7 @@ public class WarehouseListPanel extends AbstractTablePanel {
           getFormSession().deleteWarehouse((Warehouse) rowObject);
           return true;
         }catch ( Exception e ){
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                 getResourceMap().getString("WarehouseListPanel.err.cantDelete"),
                 getResourceMap().getString("WarehouseListPanel.err.cantDeleteTitle"),
                 JOptionPane.DEFAULT_OPTION);
@@ -148,17 +142,17 @@ public class WarehouseListPanel extends AbstractTablePanel {
 
         return null;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
-    
+
     @Override
     public void specialAction() {
         Warehouse warehouse = (Warehouse) getDataTable().getSelectedRowObject();
@@ -166,7 +160,7 @@ public class WarehouseListPanel extends AbstractTablePanel {
             log.warn("Enter warehouse action can't be executed: Warehouse instance expected but "+getSelectedRowObject()+" found! ");
             return;
         }
-        
+
         WarehouseProductListPanel warehouseProductList = new WarehouseProductListPanel(getParentDataObjectId(), warehouse);
         warehouseProductList.showFrame(this);
     }

@@ -9,7 +9,6 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.Binding;
@@ -58,7 +57,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         this.organization = getAcaciaSession().getOrganization();
         init();
     }
-    
+
     @Override
     protected void init()
     {
@@ -384,7 +383,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     private Organization organization;
     private Binding registeringOrganizationBinding;
     private boolean isInternal;
-    
+
     @Override
     protected void initData() {
         setResizable(false);
@@ -441,7 +440,7 @@ public class OrganizationPanel extends BaseEntityPanel {
 
         // Setting the internal flag, in case the current organization is the logged in one
         branchesTable.setInternal(isInternal);
-        
+
         // Adding the nested table listener to ensure that organization is saved
         // before adding branches to it. Also adding a deletion listener for
         // callback when a branch is deleted

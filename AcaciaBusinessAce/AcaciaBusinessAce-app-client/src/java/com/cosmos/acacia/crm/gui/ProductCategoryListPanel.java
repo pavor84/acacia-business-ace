@@ -6,10 +6,10 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -26,7 +26,6 @@ import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
 
 /**
  *
@@ -234,19 +233,9 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
         return t;
     }
 
-    protected ProductsListRemote getFormSession()
-    {
+    protected ProductsListRemote getFormSession() {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ProductsListRemote.class);
 
         return formSession;
     }

@@ -6,17 +6,16 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;
-import java.math.BigInteger;
 
 /**
  *
@@ -82,13 +81,8 @@ public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> {
     }
 
     protected ProductsListRemote getFormSession() {
-        if (formSession == null) {
-            try {
-                formSession = InitialContext.doLookup(ProductsListRemote.class.getName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        if (formSession == null)
+                formSession = getBean(ProductsListRemote.class);
 
         return formSession;
     }

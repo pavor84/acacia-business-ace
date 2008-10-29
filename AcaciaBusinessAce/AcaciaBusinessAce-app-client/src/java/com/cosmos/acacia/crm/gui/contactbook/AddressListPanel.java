@@ -8,7 +8,6 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -96,16 +95,7 @@ public class AddressListPanel extends AbstractTablePanel {
     protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(AddressesListRemote.class);
 
         return formSession;
     }

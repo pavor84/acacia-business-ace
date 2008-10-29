@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.Binding;
@@ -15,7 +14,6 @@ import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
-import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -179,7 +177,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
         if (!isInternal) {
             PositionTypesListPanel listPanel = new PositionTypesListPanel(
                     getParentDataObject().getParentDataObjectId(), false);
-            
+
             DialogResponse dResponse = listPanel.showDialog(this);
             if ( DialogResponse.SELECT.equals(dResponse) ){
                 return listPanel.getSelectedRowObject();
@@ -211,16 +209,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     protected AddressesListRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(AddressesListRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(AddressesListRemote.class);
 
         return formSession;
     }
@@ -230,13 +219,11 @@ public class ContactPersonPanel extends BaseEntityPanel {
         return getFormSession().getContactPersonEntityProperties();
     }
 
-    private List<Person> getPersons()
-    {
+    private List<Person> getPersons() {
         return getFormSession().getPersons();
     }
 
-    private List<PositionType> getPositionTypes()
-    {
+    private List<PositionType> getPositionTypes() {
         return getFormSession().getPositionTypes(getParentDataObject(), getOrganizationDataObjectId());
     }
 

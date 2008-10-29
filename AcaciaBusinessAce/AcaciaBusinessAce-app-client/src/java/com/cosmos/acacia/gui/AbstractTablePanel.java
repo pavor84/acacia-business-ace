@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -732,16 +731,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     protected ClassifiersRemote getClassifiersFormSession()
     {
         if(classifiersFormSession == null)
-        {
-            try
-            {
-                classifiersFormSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            classifiersFormSession = getBean(ClassifiersRemote.class);
 
         return classifiersFormSession;
     }

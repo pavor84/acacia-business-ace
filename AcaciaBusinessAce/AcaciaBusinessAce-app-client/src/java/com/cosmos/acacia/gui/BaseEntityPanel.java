@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
@@ -55,24 +54,15 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     private ClassifiersRemote classifiersFormSession;
 
     private boolean editable = true;
-    
+
     final protected ClassifiersRemote getClassifiersFormSession()
     {
         if(classifiersFormSession == null)
-        {
-            try
-            {
-                classifiersFormSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            classifiersFormSession = getBean(ClassifiersRemote.class);
 
         return classifiersFormSession;
     }
-    
+
     public BaseEntityPanel(BigInteger parentDataObjectId)
     {
         super(parentDataObjectId);
@@ -257,11 +247,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                         try {
                             setModifiedResponse(DialogResponse.SAVE);
                             performSave(false);
-                            
+
                             // Checking is special conditions for disabling new window after save are met
                             if (isSpecialConditionPresent() == true)
                                 return false;
-                            
+
                         } catch (Exception ex) {
                             checkForValidationException(ex);
                             return false;
@@ -292,7 +282,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                     return;
             }
         }
-        
+
         if (modifiedResponse != null)
             setDialogResponse(modifiedResponse);
         else
@@ -316,7 +306,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                 icon);
         return JOptionPane.YES_OPTION == result;
     }
-    
+
     protected boolean showConfirmationDialog(String msg){
         ResourceMap resource = getResourceMap();
         String title = resource.getString("ConfirmDialog.areYouSureTitle");
@@ -348,18 +338,18 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     {
         this.modifiedResponse = modifiedResponse;
     }
-    
+
     /**
      * Override this method if you want to add special conditions,
      * which, if met, will disable the opening of nested forms
-     * 
+     *
      * @return if special conditions are present
      */
     protected boolean isSpecialConditionPresent()
     {
         return false;
     }
-    
+
     private void onKeyEvent(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE){
             closeAction();
@@ -368,13 +358,13 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                 saveAction();
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public void setReadonly(){
         this.editable = false;
         getButtonPanel().getButton(Button.Save).setVisible(editable);
         getButtonPanel().getButton(Button.Problems).setVisible(editable);
-        
+
         BindingGroup bindGroup = getBindingGroup();
         if ( bindGroup!=null ){
             for (Binding binding : bindGroup.getBindings()) {

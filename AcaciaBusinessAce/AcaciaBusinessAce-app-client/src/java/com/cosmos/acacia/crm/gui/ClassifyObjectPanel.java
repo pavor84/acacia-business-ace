@@ -1,7 +1,6 @@
 package com.cosmos.acacia.crm.gui;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
@@ -225,9 +224,8 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
             classifiersTable.setDataObjectType(dataObjectToBeClassified.getDataObjectType());
             classifiersTable.refreshAction();
             return selected;
-        } else {
-            return null;
         }
+        return null;
     }
 
     protected void filterClassifiers() {
@@ -241,16 +239,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     protected ClassifiersRemote getFormSession()
     {
         if(formSession == null)
-        {
-            try
-            {
-                formSession = InitialContext.doLookup(ClassifiersRemote.class.getName());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+            formSession = getBean(ClassifiersRemote.class);
 
         return formSession;
     }
