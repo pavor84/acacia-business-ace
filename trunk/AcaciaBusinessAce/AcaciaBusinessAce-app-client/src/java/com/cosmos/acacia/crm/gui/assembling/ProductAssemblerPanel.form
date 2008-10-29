@@ -20,8 +20,8 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="buttonsPanel" alignment="0" max="32767" attributes="0"/>
-          <Component id="schemaTitledPanel" alignment="0" pref="650" max="32767" attributes="0"/>
-          <Component id="productTitledPanel" alignment="0" pref="650" max="32767" attributes="0"/>
+          <Component id="schemaTitledPanel" alignment="0" pref="658" max="32767" attributes="0"/>
+          <Component id="productTitledPanel" alignment="0" pref="658" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -54,8 +54,10 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="assembleButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="sourceButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="okButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="299" max="32767" attributes="0"/>
+                  <EmptySpace pref="188" max="32767" attributes="0"/>
                   <Component id="cancelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -68,6 +70,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="assembleButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cancelButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sourceButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="okButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -98,6 +101,14 @@
               <action class="com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel" id="okAction" methodName="okAction"/>
             </Property>
             <Property name="name" type="java.lang.String" value="okButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBButton" name="sourceButton">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel" id="sourceAction" methodName="sourceAction"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="sourceButton" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
