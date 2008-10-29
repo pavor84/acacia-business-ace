@@ -31,11 +31,11 @@ public class AcaciaProperties
     public enum Level
     {
         System(100000000),
-        SystemAdministrator(200000000),
+        SystemAdministrator(200000000, "Sys Admin"),
         Organization(300000000),
-        OrganizationAdministrator(400000000),
+        OrganizationAdministrator(400000000, "Company Admin"),
         Branch(500000000),
-        BranchAdministrator(600000000),
+        BranchAdministrator(600000000, "Branch Admin"),
         User(700000000),
         Client(800000000),
         Current(Integer.MAX_VALUE), //2,147,483,647 = 0x7fff ffff
@@ -43,14 +43,29 @@ public class AcaciaProperties
 
         private Level(int priority)
         {
+            this(priority, null);
+        }
+
+        private Level(int priority, String levelName)
+        {
             this.priority = priority;
+            this.levelName = levelName;
         }
 
         private int priority;
+        private String levelName;
 
         public int getPriority()
         {
             return priority;
+        }
+
+        public String getLevelName()
+        {
+            if(levelName != null)
+                return levelName;
+
+            return name();
         }
 
     };
@@ -59,10 +74,43 @@ public class AcaciaProperties
     private BigInteger relatedObjectId;
 
 
+    public AcaciaProperties(
+            int levelId,
+            String levelName,
+            BigInteger relatedObjectId)
+    {
+        super(levelId, levelName);
+        this.relatedObjectId = relatedObjectId;
+    }
+
     public AcaciaProperties(Level level, BigInteger relatedObjectId)
     {
-        super(level.getPriority());
-        this.relatedObjectId = relatedObjectId;
+        this(level.getPriority(), level.getLevelName(), relatedObjectId);
+    }
+
+    public AcaciaProperties(
+            int levelId,
+            String levelName,
+            BigInteger relatedObjectId,
+            List<DbProperty> dbProperties)
+    {
+        this(levelId, levelName, relatedObjectId);
+        for(DbProperty property : dbProperties)
+        {
+            String key = property.getDbPropertyPK().getPropertyKey();
+            if(key == null || (key = key.trim()).length() == 0)
+                throw new NullPointerException("The key can not be null or empty.");
+            Object value = property.getPropertyValue();
+            data.put(key, value);
+        }
+    }
+
+    public AcaciaProperties(
+            Level level,
+            BigInteger relatedObjectId,
+            List<DbProperty> dbProperties)
+    {
+        this(level.getPriority(), level.getLevelName(), relatedObjectId, dbProperties);
     }
 
     public AcaciaProperties()
@@ -106,14 +154,8 @@ public class AcaciaProperties
             BigInteger relatedObjectId,
             List<DbProperty> dbProperties)
     {
-        AcaciaProperties properties = new AcaciaProperties(level, relatedObjectId);
-        Map<String, Object> propertiesData = properties.data;
-        for(DbProperty property : dbProperties)
-        {
-            String key = property.getDbPropertyPK().getPropertyKey();
-            Object value = property.getPropertyValue();
-            propertiesData.put(key, value);
-        }
+        AcaciaProperties properties = new AcaciaProperties(
+                level, relatedObjectId, dbProperties);
 
         return putProperties(level, properties);
     }

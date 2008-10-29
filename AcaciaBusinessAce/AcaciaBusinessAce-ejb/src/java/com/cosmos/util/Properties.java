@@ -23,6 +23,7 @@ public class Properties
     private static final long serialVersionUID = 8527276141572799592L;
 
     private int level;
+    private String levelName;
     protected HashMap<String, Object> data = new HashMap<String, Object>();
 
     protected TreeMap<Integer, Properties> levels =
@@ -34,12 +35,7 @@ public class Properties
     protected boolean changed;
 
 
-    public Properties()
-    {
-        this(Integer.MAX_VALUE);
-    }
-
-    public Properties(int level)
+    public Properties(int level, String levelName)
     {
         this.level = level;
     }
@@ -47,6 +43,11 @@ public class Properties
     public int getLevel()
     {
         return level;
+    }
+
+    public String getLevelName()
+    {
+        return levelName;
     }
 
     public boolean isChanged()
@@ -72,6 +73,9 @@ public class Properties
 
     public Object getProperty(String key, Object defaultValue)
     {
+        if(key == null || (key = key.trim()).length() == 0)
+            throw new NullPointerException("The key can not be null or empty.");
+
         if(data.containsKey(key))
             return data.get(key);
 
@@ -87,6 +91,9 @@ public class Properties
 
     public Object setProperty(String key, Object value)
     {
+        if(key == null || (key = key.trim()).length() == 0)
+            throw new NullPointerException("The key can not be null or empty.");
+
         if(!changed)
             changed = true;
 
@@ -107,6 +114,9 @@ public class Properties
 
     public Object removeProperty(String key)
     {
+        if(key == null || (key = key.trim()).length() == 0)
+            throw new NullPointerException("The key can not be null or empty.");
+
         if(!data.containsKey(key))
             return null;
 
@@ -128,8 +138,29 @@ public class Properties
         return properties.removeProperty(key);
     }
 
+    public Integer containsKeyInLevel(String key)
+    {
+        if(key == null || (key = key.trim()).length() == 0)
+            throw new NullPointerException("The key can not be null or empty.");
+
+        if(data.containsKey(key))
+            return level;
+
+        Integer result;
+        for(Integer levelId : levels.descendingKeySet())
+        {
+            if((result = levels.get(levelId).containsKeyInLevel(key)) != null)
+                return result;
+        }
+
+        return null;
+    }
+
     public boolean containsKey(String key)
     {
+        if(key == null || (key = key.trim()).length() == 0)
+            throw new NullPointerException("The key can not be null or empty.");
+
         if(data.containsKey(key))
             return true;
 
@@ -163,6 +194,9 @@ public class Properties
 
     public String getPropertyString(String key, String defaultValue)
     {
+        if(key == null || (key = key.trim()).length() == 0)
+            throw new NullPointerException("The key can not be null or empty.");
+
         Object value;
         if((value = getProperty(key, defaultValue)) == null)
             return null;
