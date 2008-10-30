@@ -386,8 +386,8 @@ public class AssemblingBean
         return em.find(AssemblingCategory.class, parentId);
     }
 
-    @Override
-    public List<AssemblingSchema> getAssemblingSchemas()
+    /*@Override
+    public List<AssemblingSchema> getAssemblingSchemas(boolean applicable)
     {
         Organization organization = acaciaSessionLocal.getOrganization();
         BigInteger parentId;
@@ -396,19 +396,33 @@ public class AssemblingBean
 
         Query q = em.createNamedQuery("AssemblingSchema.findByParentId");
         q.setParameter("parentId", parentId);
+        q.setParameter("applicable", applicable);
         q.setParameter("deleted", false);
         return new ArrayList<AssemblingSchema>(q.getResultList());
-    }
+    }*/
 
     @Override
-    public List<AssemblingSchema> getAssemblingSchemas(AssemblingCategory assemblingCategory)
+    public List<AssemblingSchema> getAssemblingSchemas(
+            AssemblingCategory assemblingCategory,
+            Boolean applicable)
     {
+        System.out.println("getAssemblingSchemas(assemblingCategory=" + assemblingCategory +
+                ", applicable=" + applicable + ")");
         Query q;
-        if(assemblingCategory != null) {
-            q = em.createNamedQuery("AssemblingSchema.findByAssemblingCategory");
+        if(assemblingCategory != null)
+        {
+            if(applicable)
+                q = em.createNamedQuery("AssemblingSchema.findByAssemblingCategoryAndApplicable");
+            else
+                q = em.createNamedQuery("AssemblingSchema.findByAssemblingCategory");
             q.setParameter("assemblingCategory", assemblingCategory);
-        } else {
-            q = em.createNamedQuery("AssemblingSchema.findByParentId");
+        }
+        else
+        {
+            if(applicable)
+                q = em.createNamedQuery("AssemblingSchema.findByParentIdAndApplicable");
+            else
+                q = em.createNamedQuery("AssemblingSchema.findByParentId");
             q.setParameter("parentId", acaciaSessionLocal.getOrganization().getId());
         }
         q.setParameter("deleted", false);

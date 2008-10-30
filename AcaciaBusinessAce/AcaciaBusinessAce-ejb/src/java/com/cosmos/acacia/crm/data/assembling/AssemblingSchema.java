@@ -30,14 +30,25 @@ import javax.persistence.Table;
     {
         @NamedQuery
             (
-                name = "AssemblingSchema.findBySchemaCode",
-                query = "select t1 from AssemblingSchema t1 where t1.schemaCode = :schemaCode"
+                name = "AssemblingSchema.findByAssemblingCategoryAndApplicable",
+                query = "select t1 from AssemblingSchema t1" +
+                        " where t1.assemblingCategory = :assemblingCategory" +
+                        " and t1.applicable = true" +
+                        " and t1.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
                 name = "AssemblingSchema.findByAssemblingCategory",
                 query = "select t1 from AssemblingSchema t1" +
                         " where t1.assemblingCategory = :assemblingCategory" +
+                        " and t1.dataObject.deleted = :deleted"
+            ),
+        @NamedQuery
+            (
+                name = "AssemblingSchema.findByParentIdAndApplicable",
+                query = "select t1 from AssemblingSchema t1" +
+                        " where t1.parentId = :parentId" +
+                        " and t1.applicable = true" +
                         " and t1.dataObject.deleted = :deleted"
             ),
         @NamedQuery
