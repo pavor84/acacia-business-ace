@@ -85,6 +85,10 @@ public class AssemblingSchema
             required=true))
     private String schemaName;
 
+    @Column(name = "is_applicable", nullable = false)
+    @Property(title="Applicable")
+    private boolean applicable;
+
     @Column(name = "is_obsolete", nullable = false)
     @Property(title="Obsolete")
     private boolean obsolete;
@@ -122,6 +126,14 @@ public class AssemblingSchema
 
     public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
+    }
+
+    public boolean isApplicable() {
+        return applicable;
+    }
+
+    public void setApplicable(boolean applicable) {
+        this.applicable = applicable;
     }
 
     public boolean isObsolete() {
