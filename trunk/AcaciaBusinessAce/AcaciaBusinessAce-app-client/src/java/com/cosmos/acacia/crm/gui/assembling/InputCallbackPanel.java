@@ -9,6 +9,7 @@ package com.cosmos.acacia.crm.gui.assembling;
 import com.cosmos.acacia.callback.assembling.ValueInputCallback;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
@@ -36,14 +37,14 @@ public class InputCallbackPanel
 
     private ValueInputCallback callback;
     private AssemblingSchemaItem schemaItem;
-    private AssemblingSchemaItem.DataType dataType;
+    private DataType dataType;
 
     /** Creates new form InputCallbackPanel */
     public InputCallbackPanel(ValueInputCallback callback)
     {
         this.callback = callback;
         this.schemaItem = callback.getAssemblingSchemaItem();
-        this.dataType = (AssemblingSchemaItem.DataType)schemaItem.getDataType().getEnumValue();
+        this.dataType = (DataType)schemaItem.getDataType().getEnumValue();
         initComponents();
         initData();
     }
@@ -183,22 +184,7 @@ public class InputCallbackPanel
         if(valueTextField == null)
         {
             Format format;
-            switch(dataType)
-            {
-                case IntegerType:
-                    format = AcaciaUtils.getIntegerFormat();
-                    break;
-
-                case DecimalType:
-                    format = AcaciaUtils.getDecimalFormat();
-                    break;
-
-                default:
-                    format = null;
-                    break;
-            }
-
-            if(format != null)
+            if((format = dataType.getFormat()) != null)
                 valueTextField = new JBFormattedTextField(format);
             else
                 valueTextField = new JBFormattedTextField();

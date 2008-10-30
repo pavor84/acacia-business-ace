@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.test.bl.BaseTest;
 import java.io.IOException;
@@ -201,7 +202,7 @@ public class ProductAssemblerTest
 
         AssemblingSchemaItem schemaItem;
         DbResource dataType =
-            getDataType(AssemblingSchemaItem.DataType.IntegerType);
+            getDataType(DataType.IntegerType);
         System.out.println("dataType: " + dataType);
         
         switch(algorithmType)
@@ -218,7 +219,7 @@ public class ProductAssemblerTest
         return formSession.getDataTypes();
     }
 
-    private DbResource getDataType(AssemblingSchemaItem.DataType dataType)
+    private DbResource getDataType(DataType dataType)
     {
         return formSession.getDbResource(dataType);
     }
