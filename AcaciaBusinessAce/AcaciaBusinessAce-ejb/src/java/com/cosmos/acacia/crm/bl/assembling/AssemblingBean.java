@@ -26,6 +26,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -216,7 +217,7 @@ public class AssemblingBean
     {
         AssemblingSchemaItem schemaItem = new AssemblingSchemaItem();
         schemaItem.setAssemblingSchema(assemblingSchema);
-        schemaItem.setDataType(getDbResource(AssemblingSchemaItem.DataType.IntegerType));
+        schemaItem.setDataType(getDbResource(DataType.IntegerType));
         schemaItem.setQuantity(BigDecimal.ONE);
 
         return schemaItem;
@@ -637,7 +638,7 @@ public class AssemblingBean
     @Override
     public List<DbResource> getDataTypes()
     {
-        return AssemblingSchemaItem.DataType.getDbResources();
+        return DataType.getDbResources();
     }
 
     @Override

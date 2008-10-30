@@ -8,11 +8,15 @@ package com.cosmos.acacia.util;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import javax.swing.text.MaskFormatter;
 import org.apache.log4j.Logger;
 
@@ -24,13 +28,24 @@ public class AcaciaUtils
 {
     private static final Logger logger = Logger.getLogger(AcaciaUtils.class);
 
+    private static Locale locale;
+
     private static NumberFormat decimalFormat;
+    private static NumberFormat percentFormat;
     private static NumberFormat integerFormat;
+    private static NumberFormat currencyFormat;
+
+    private static SimpleDateFormat shortDateFormat;
+    private static SimpleDateFormat mediumDateFormat;
+    private static SimpleDateFormat longDateFormat;
+
+    private static DateFormat shortTimeFormat;
+    private static DateFormat mediumTimeFormat;
+    private static DateFormat longTimeFormat;
 
     private static MaskFormatter maskFormatter;
-    private static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
     private static NumberFormat numberFormat = NumberFormat.getNumberInstance();
-    private static NumberFormat percentFormat = NumberFormat.getPercentInstance();
+    //private static NumberFormat percentFormat = NumberFormat.getPercentInstance();
 
     public static String formatMoney(BigDecimal value)
     {
@@ -124,10 +139,10 @@ public class AcaciaUtils
             throw vex;
         }
 
-        AssemblingSchemaItem.DataType dataType;
+        DataType dataType;
         try
         {
-            dataType = (AssemblingSchemaItem.DataType)dataTypeResource.getEnumValue();
+            dataType = (DataType)dataTypeResource.getEnumValue();
         }
         catch(Exception ex)
         {
@@ -142,7 +157,7 @@ public class AcaciaUtils
 
     public static Serializable validateValue(
         Serializable value,
-        AssemblingSchemaItem.DataType dataType,
+        DataType dataType,
         String validationTarget)
         throws ValidationException
     {
@@ -189,5 +204,100 @@ public class AcaciaUtils
         return integerFormat;
     }
 
+    public static NumberFormat getPercentFormat()
+    {
+        if(percentFormat == null)
+        {
+            percentFormat = NumberFormat.getPercentInstance();
+        }
+
+        return percentFormat;
+    }
+
+    public static SimpleDateFormat getShortDateFormat()
+    {
+        if(shortDateFormat == null)
+        {
+            //DateFormat.getDateInstance(DateFormat.SHORT, getLocale());
+            shortDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        }
+
+        return shortDateFormat;
+    }
+
+    public static SimpleDateFormat getMediumDateFormat()
+    {
+        if(mediumDateFormat == null)
+        {
+            mediumDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        }
+
+        return mediumDateFormat;
+    }
+
+    public static SimpleDateFormat getLongDateFormat()
+    {
+        if(longDateFormat == null)
+        {
+            longDateFormat = new SimpleDateFormat("dd MMMMM yyyy");
+        }
+
+        return longDateFormat;
+    }
+
+    public static DateFormat getShortTimeFormat()
+    {
+        if(shortTimeFormat == null)
+        {
+            shortTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, getLocale());
+        }
+
+        return shortTimeFormat;
+    }
+
+    public static DateFormat getMediumTimeFormat()
+    {
+        if(mediumTimeFormat == null)
+        {
+            mediumTimeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, getLocale());
+        }
+
+        return mediumTimeFormat;
+    }
+
+    public static DateFormat getLongTimeFormat()
+    {
+        if(longTimeFormat == null)
+        {
+            longTimeFormat = DateFormat.getTimeInstance(DateFormat.LONG, getLocale());
+        }
+
+        return longTimeFormat;
+    }
+
+    public static NumberFormat getCurrencyFormat()
+    {
+        if(currencyFormat == null)
+        {
+            currencyFormat = NumberFormat.getCurrencyInstance();
+        }
+
+        return currencyFormat;
+    }
+
+    public static Locale getLocale()
+    {
+        if(locale == null)
+        {
+            locale = Locale.getDefault();
+        }
+
+        return locale;
+    }
+
+    public static void setLocale(Locale locale)
+    {
+        AcaciaUtils.locale = locale;
+    }
 
 }

@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data.assembling;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.crm.enums.DataType;
 
 /**
  *
@@ -30,7 +31,7 @@ public class AssemblingParameter
     private Object value;
 
     @Property(title="Data Type", editable=false, readOnly=true, visible=false, hidden=true)
-    private AssemblingSchemaItem.DataType dataType;
+    private DataType dataType;
 
     @Property(title="Value Source", editable=false, readOnly=true)
     private Object valuesSource;
@@ -46,12 +47,12 @@ public class AssemblingParameter
         this.assemblingMessage = assemblingMessage;
     }
 
-    public AssemblingSchemaItem.DataType getDataType()
+    public DataType getDataType()
     {
         return dataType;
     }
 
-    public void setDataType(AssemblingSchemaItem.DataType dataType)
+    public void setDataType(DataType dataType)
     {
         this.dataType = dataType;
     }
