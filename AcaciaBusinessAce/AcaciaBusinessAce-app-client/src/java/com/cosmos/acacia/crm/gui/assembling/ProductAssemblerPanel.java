@@ -19,6 +19,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
+import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -309,8 +310,7 @@ public class ProductAssemblerPanel
             AssemblingParameter parameter = new AssemblingParameter();
             parameter.setAssemblingMessage(message);
             DbResource dbResource = schemaItem.getDataType();
-            AssemblingSchemaItem.DataType dataType =
-                (AssemblingSchemaItem.DataType)dbResource.getEnumValue();
+            DataType dataType = (DataType)dbResource.getEnumValue();
             parameter.setDataType(dataType);
             parameter.setValue(value);
 //parameter.setValuesSource();
@@ -424,7 +424,7 @@ public class ProductAssemblerPanel
             {
                 AssemblingMessage message = parameter.getAssemblingMessage();
                 String key = message.getMessageCode();
-                AssemblingSchemaItem.DataType dataType = parameter.getDataType();
+                DataType dataType = parameter.getDataType();
                 logger.info("AssemblingSchemaItem.DataType: " + dataType);
                 Serializable value = (Serializable)parameter.getValue();
                 if(value != null)
