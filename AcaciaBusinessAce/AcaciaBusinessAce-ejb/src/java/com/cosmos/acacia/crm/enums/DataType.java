@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.Format;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +29,9 @@ public enum DataType
     Percent("Percent", AcaciaUtils.getPercentFormat()),
     DateType("DateType", AcaciaUtils.getShortDateFormat()),
     TimeType("TimeType", AcaciaUtils.getShortTimeFormat()),
+    DayType("DayType", AcaciaUtils.getDayFormat()),
+    HourType("HourType", AcaciaUtils.getHourFormat()),
+    MinuteType("MinuteType", AcaciaUtils.getMinuteFormat()),
     StringType("StringType"),
     EnumerationType("EnumerationType"),
     ;
