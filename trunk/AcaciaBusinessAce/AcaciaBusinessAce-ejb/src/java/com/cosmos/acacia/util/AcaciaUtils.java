@@ -43,6 +43,10 @@ public class AcaciaUtils
     private static DateFormat mediumTimeFormat;
     private static DateFormat longTimeFormat;
 
+    private static SimpleDateFormat dayFormat;
+    private static SimpleDateFormat hourFormat;
+    private static SimpleDateFormat minuteFormat;
+
     private static MaskFormatter maskFormatter;
     private static NumberFormat numberFormat = NumberFormat.getNumberInstance();
     //private static NumberFormat percentFormat = NumberFormat.getPercentInstance();
@@ -273,6 +277,36 @@ public class AcaciaUtils
         }
 
         return longTimeFormat;
+    }
+
+    public static SimpleDateFormat getDayFormat()
+    {
+        if(dayFormat == null)
+        {
+            dayFormat = new SimpleDateFormat("D");
+        }
+
+        return dayFormat;
+    }
+
+    public static SimpleDateFormat getHourFormat()
+    {
+        if(hourFormat == null)
+        {
+            hourFormat = new SimpleDateFormat("k");
+        }
+
+        return hourFormat;
+    }
+
+    public static SimpleDateFormat getMinuteFormat()
+    {
+        if(minuteFormat == null)
+        {
+            minuteFormat = new SimpleDateFormat("m");
+        }
+
+        return minuteFormat;
     }
 
     public static NumberFormat getCurrencyFormat()
