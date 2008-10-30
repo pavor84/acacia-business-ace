@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -18,12 +19,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="entityFormButtonPanel" alignment="0" pref="561" max="32767" attributes="0"/>
-                  <Component id="descriptionPanel" alignment="0" pref="561" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="descriptionPanel" alignment="0" pref="576" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="entityFormButtonPanel" pref="561" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="schemaNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="schemaCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -36,11 +40,15 @@
                           <Component id="measureUnitComboBox" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Component id="schemaCodeTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Component id="schemaNameTextField" alignment="0" pref="448" max="32767" attributes="0"/>
-                          <Component id="isObsoleteCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="applicableCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="isObsoleteCheckBox" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -68,9 +76,12 @@
                   <Component id="schemaNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Component id="isObsoleteCheckBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="descriptionPanel" pref="123" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="applicableCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="isObsoleteCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Component id="descriptionPanel" pref="110" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -170,6 +181,12 @@
     <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="assemblingCategoryComboList">
       <Properties>
         <Property name="name" type="java.lang.String" value="assemblingCategoryComboList" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="applicableCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="applicableCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="applicableCheckBox" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
