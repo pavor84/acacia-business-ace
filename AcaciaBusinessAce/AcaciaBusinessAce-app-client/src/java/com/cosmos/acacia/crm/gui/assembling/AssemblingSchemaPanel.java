@@ -79,7 +79,7 @@ public class AssemblingSchemaPanel
         measureUnitLabel = new com.cosmos.swingb.JBLabel();
         measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         assemblingCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        applicableCheckBox = new com.cosmos.swingb.JBCheckBox();
+        isApplicableCheckBox = new com.cosmos.swingb.JBCheckBox();
 
         setName("Form"); // NOI18N
 
@@ -120,8 +120,8 @@ public class AssemblingSchemaPanel
 
         assemblingCategoryComboList.setName("assemblingCategoryComboList"); // NOI18N
 
-        applicableCheckBox.setText(resourceMap.getString("applicableCheckBox.text")); // NOI18N
-        applicableCheckBox.setName("applicableCheckBox"); // NOI18N
+        isApplicableCheckBox.setText(resourceMap.getString("isApplicableCheckBox.text")); // NOI18N
+        isApplicableCheckBox.setName("isApplicableCheckBox"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -147,7 +147,7 @@ public class AssemblingSchemaPanel
                             .addComponent(schemaCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                             .addComponent(schemaNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(applicableCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(isApplicableCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(isObsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
@@ -173,7 +173,7 @@ public class AssemblingSchemaPanel
                     .addComponent(schemaNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(applicableCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(isApplicableCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(isObsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
@@ -185,13 +185,13 @@ public class AssemblingSchemaPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBCheckBox applicableCheckBox;
     private com.cosmos.acacia.gui.AcaciaComboList assemblingCategoryComboList;
     private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private javax.swing.JScrollPane descriptionScrollPane;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
+    private com.cosmos.swingb.JBCheckBox isApplicableCheckBox;
     private com.cosmos.swingb.JBCheckBox isObsoleteCheckBox;
     private com.cosmos.acacia.gui.AcaciaComboBox measureUnitComboBox;
     private com.cosmos.swingb.JBLabel measureUnitLabel;
@@ -235,6 +235,10 @@ public class AssemblingSchemaPanel
         //schema name
         propDetails = entityProps.getPropertyDetails("schemaName");
         schemaNameTextField.bind(bindingGroup, entity, propDetails);
+
+        //applicable
+        propDetails = entityProps.getPropertyDetails("applicable");
+        isApplicableCheckBox.bind(bindingGroup, entity, propDetails);
 
         //obsolete
         propDetails = entityProps.getPropertyDetails("obsolete");

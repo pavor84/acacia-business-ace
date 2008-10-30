@@ -69,7 +69,8 @@ public class ProductAssemblerTest
     @AfterClass
     public static void tearDownClass() throws Exception
     {
-        List<AssemblingSchema> schemas = formSession.getAssemblingSchemas(assemblingCategory);
+        List<AssemblingSchema> schemas = formSession.getAssemblingSchemas(
+                assemblingCategory, false);
         for(AssemblingSchema schema : schemas)
         {
             List<AssemblingSchemaItem> schemaItems =

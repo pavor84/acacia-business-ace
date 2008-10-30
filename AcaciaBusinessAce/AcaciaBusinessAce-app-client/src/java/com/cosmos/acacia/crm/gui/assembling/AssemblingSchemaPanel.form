@@ -41,7 +41,7 @@
                           <Component id="schemaCodeTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Component id="schemaNameTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="applicableCheckBox" min="-2" max="-2" attributes="0"/>
+                              <Component id="isApplicableCheckBox" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="isObsoleteCheckBox" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -77,7 +77,7 @@
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="applicableCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="isApplicableCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="isObsoleteCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
@@ -183,10 +183,10 @@
         <Property name="name" type="java.lang.String" value="assemblingCategoryComboList" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBCheckBox" name="applicableCheckBox">
+    <Component class="com.cosmos.swingb.JBCheckBox" name="isApplicableCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="applicableCheckBox.text"/>
-        <Property name="name" type="java.lang.String" value="applicableCheckBox" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="isApplicableCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="isApplicableCheckBox" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
