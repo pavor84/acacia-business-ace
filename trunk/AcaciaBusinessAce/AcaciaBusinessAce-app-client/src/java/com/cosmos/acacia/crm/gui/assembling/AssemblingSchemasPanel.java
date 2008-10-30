@@ -526,7 +526,7 @@ public class AssemblingSchemasPanel
                 "${categoryCode}, ${categoryName}",
                 UpdateStrategy.READ_WRITE);
             categoryComboList.addItemListener(this);
-            categoryBindingGroup.bind();
+            //categoryBindingGroup.bind();
 
             addTablePanelListener(new AssemblingSchemasTableListener());
             refreshDataTable(entityProps);
@@ -554,7 +554,11 @@ public class AssemblingSchemasPanel
 
         private List getList()
         {
-            return getFormSession().getAssemblingSchemas(getCategory());
+            System.out.println("getList()");
+            AssemblingCategory category = getCategory();
+            boolean applicable = Mode.AssembleSchemaSelect.equals(mode);
+            System.out.println("category: " + category + ", applicable: " + applicable);
+            return getFormSession().getAssemblingSchemas(category, applicable);
         }
 
         @Override
