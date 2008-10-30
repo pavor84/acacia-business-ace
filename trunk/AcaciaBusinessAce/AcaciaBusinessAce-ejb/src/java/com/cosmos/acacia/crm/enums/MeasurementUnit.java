@@ -202,6 +202,19 @@ public enum MeasurementUnit
             Category.TimeInterval,
             new BigDecimal(1/1000), NanoSecond,
             new BigDecimal(1/1000), NanoSecond),
+
+    KilowattHour("kilowatt hour", "kW/h",
+            Category.Energy,
+            new BigDecimal(3600000.0), null,
+            new BigDecimal(3.6E+13), null),
+    WattHour("watt hour", "W/h",
+            Category.Energy,
+            new BigDecimal(1/1000), KilowattHour,
+            new BigDecimal(1/1000), KilowattHour),
+    MegawattHour("megawatt hour", "MW/h",
+            Category.Energy,
+            new BigDecimal(1000), KilowattHour,
+            new BigDecimal(1000), KilowattHour),
     ;
 
     static
