@@ -554,10 +554,8 @@ public class AssemblingSchemasPanel
 
         private List getList()
         {
-            System.out.println("getList()");
             AssemblingCategory category = getCategory();
             boolean applicable = Mode.AssembleSchemaSelect.equals(mode);
-            System.out.println("category: " + category + ", applicable: " + applicable);
             return getFormSession().getAssemblingSchemas(category, applicable);
         }
 
