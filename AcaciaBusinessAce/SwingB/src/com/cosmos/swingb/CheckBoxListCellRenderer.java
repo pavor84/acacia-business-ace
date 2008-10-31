@@ -13,9 +13,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import sun.swing.DefaultLookup;
 
 /**
  *
@@ -50,8 +50,11 @@ public class CheckBoxListCellRenderer
         JList.DropLocation dropLocation = list.getDropLocation();
         if (dropLocation != null && !dropLocation.isInsert() && dropLocation.getIndex() == index)
         {
-            bg = DefaultLookup.getColor(this, ui, "List.dropCellBackground");
-            fg = DefaultLookup.getColor(this, ui, "List.dropCellForeground");
+            //bg = DefaultLookup.getColor(this, ui, "List.dropCellBackground");
+            bg = UIManager.getColor("List.dropCellBackground");
+
+            //fg = DefaultLookup.getColor(this, ui, "List.dropCellForeground");
+            fg = UIManager.getColor("List.dropCellForeground");
 
             isSelected = true;
         }
@@ -89,11 +92,13 @@ public class CheckBoxListCellRenderer
         {
             if (isSelected)
             {
-                border = DefaultLookup.getBorder(this, ui, "List.focusSelectedCellHighlightBorder");
+                //border = DefaultLookup.getBorder(this, ui, "List.focusSelectedCellHighlightBorder");
+                border = UIManager.getBorder("List.focusSelectedCellHighlightBorder");
             }
             if (border == null)
             {
-                border = DefaultLookup.getBorder(this, ui, "List.focusCellHighlightBorder");
+                //border = DefaultLookup.getBorder(this, ui, "List.focusCellHighlightBorder");
+                border = UIManager.getBorder("List.focusCellHighlightBorder");
             }
         }
         else
@@ -107,7 +112,8 @@ public class CheckBoxListCellRenderer
 
     private Border getNoFocusBorder()
     {
-        Border border = DefaultLookup.getBorder(this, ui, "List.cellNoFocusBorder");
+        //Border border = DefaultLookup.getBorder(this, ui, "List.cellNoFocusBorder");
+        Border border = UIManager.getBorder("List.cellNoFocusBorder");
         if (System.getSecurityManager() != null)
         {
             if (border != null)
