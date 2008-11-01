@@ -217,12 +217,12 @@ public class SelectionCallbackPanel
 
         AssemblingMessage message = getAssemblingMessage();
         String strValue;
-        if((strValue = message.getMessageTitle()) != null)
+        if((strValue = message.getSelectionTitle()) != null)
         {
             setTitle(strValue);
         }
 
-        if((strValue = message.getMessageText()) != null)
+        if((strValue = message.getSelectionText()) != null)
         {
             TitledBorder border = (TitledBorder)tablePanel.getBorder();
             border.setTitle(strValue);
