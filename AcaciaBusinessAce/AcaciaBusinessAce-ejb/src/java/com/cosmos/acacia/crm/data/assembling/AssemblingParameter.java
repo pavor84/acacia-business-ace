@@ -93,6 +93,6 @@ public class AssemblingParameter
         if(assemblingMessage == null)
             return super.toString();
 
-        return assemblingMessage.getMessageCode() + ": " + assemblingMessage.getMessageText();
+        return assemblingMessage.getMessageCode();
     }
 }

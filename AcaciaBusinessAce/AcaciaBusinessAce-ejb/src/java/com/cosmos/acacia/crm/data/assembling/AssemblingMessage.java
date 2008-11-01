@@ -70,23 +70,41 @@ public class AssemblingMessage
             required=true))
     private String messageLabel;
 
-    @Column(name = "message_text", nullable = false)
+    @Column(name = "selection_text", nullable = false)
     @Property(
-        title="Message Text",
+        title="Selection Text",
         propertyValidator=@PropertyValidator(
             validationType=ValidationType.LENGTH,
             maxLength=100,
             required=true))
-    private String messageText;
+    private String selectionText;
 
-    @Column(name = "message_title", nullable = false)
+    @Column(name = "selection_title", nullable = false)
     @Property(
-        title="Message Title",
+        title="Selection Title",
         propertyValidator=@PropertyValidator(
             validationType=ValidationType.LENGTH,
             maxLength=100,
             required=true))
-    private String messageTitle;
+    private String selectionTitle;
+
+    @Column(name = "input_text", nullable = false)
+    @Property(
+        title="Input Text",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=100,
+            required=true))
+    private String inputText;
+
+    @Column(name = "input_title", nullable = false)
+    @Property(
+        title="Input Title",
+        propertyValidator=@PropertyValidator(
+            validationType=ValidationType.LENGTH,
+            maxLength=100,
+            required=true))
+    private String inputTitle;
 
     @Column(name = "description")
     @Property(title="Description")
@@ -103,125 +121,174 @@ public class AssemblingMessage
 
     public enum Unit
     {
-        WidthSelection(
-            "widthSelection",
+        Width(
+            "width",
             "Width",
             "Please select the width",
-            "Width selection"),
-        WidthInput(
-            "widthInput",
-            "Width",
+            "Width selection",
             "Please enter the width",
             "Width input"),
-        HeightSelection(
-            "heightSelection",
+        Height(
+            "height",
             "Height",
             "Please select the height",
-            "Height selection"),
-        HeightInput(
-            "heightInput",
-            "Height",
+            "Height selection",
             "Please enter the height",
             "Height input"),
-        LengthSelection(
-            "lengthSelection",
+        Length(
+            "length",
             "Length",
             "Please select the length",
-            "Length selection"),
-        LengthInput(
-            "lengthInput",
-            "Length",
+            "Length selection",
             "Please enter the length",
             "Length input"),
-        WeightSelection(
-            "weightSelection",
+        Weight(
+            "weight",
             "Weight",
             "Please select the weight",
-            "Weight selection"),
-        WeightInput(
-            "weightInput",
-            "Weight",
+            "Weight selection",
             "Please enter the weight",
             "Weight input"),
-        ColorSelection(
-            "colorSelection",
+        Color(
+            "color",
             "Color",
             "Please select the color",
-            "Color selection"),
-        ProductSelection(
-            "productSelection",
+            "Color selection",
+            "Please enter the color",
+            "Color input"),
+        Product(
+            "product",
             "Product",
             "Please select the product",
-            "Product selection"),
-        SchemaSelection(
-            "schemaSelection",
+            "Product selection",
+            "Please enter the product",
+            "Product input"),
+        Schema(
+            "schema",
             "Schema",
             "Please select the schema",
-            "Schema selection"),
-        MaterialSelection(
-            "materialSelection",
+            "Schema selection",
+            "Please enter the schema",
+            "Schema input"),
+        Material(
+            "material",
             "Material",
             "Please select the material",
-            "Material selection"),
-        DirectionSelection(
-            "directionSelection",
+            "Material selection",
+            "Please enter the material",
+            "Material input"),
+        Direction(
+            "direction",
             "Direction",
             "Please select the direction",
-            "Direction selection"),
-        ProfileSelection(
-            "profileSelection",
+            "Direction selection",
+            "Please enter the direction",
+            "Direction input"),
+        Profile(
+            "profile",
             "Profile",
             "Please select the profile",
-            "Profile selection"),
-        OrientationSelection(
-            "orientationSelection",
+            "Profile selection",
+            "Please enter the profile",
+            "Profile input"),
+        Orientation(
+            "orientation",
             "Orientation",
             "Please select the orientation",
-            "Orientation selection"),
-        SpecificationSelection(
-            "specificationSelection",
+            "Orientation selection",
+            "Please enter the orientation",
+            "Orientation input"),
+        Specification(
+            "specification",
             "Specification",
             "Please select the specification",
-            "Specification selection"),
+            "Specification selection",
+            "Please enter the specification",
+            "Specification input"),
         ;
 
         private Unit(
             String messageCode,
             String messageLabel,
-            String messageText,
-            String messageTitle)
+            String selectionText,
+            String selectionTitle,
+            String inputText,
+            String inputTitle)
         {
-            this(messageCode, messageLabel, messageText, messageTitle, null);
+            this(messageCode,
+                    messageLabel,
+                    selectionText,
+                    selectionTitle,
+                    inputText,
+                    inputTitle,
+                    null);
         }
 
         private Unit(
             String messageCode,
             String messageLabel,
-            String messageText,
-            String messageTitle,
+            String selectionText,
+            String selectionTitle,
+            String inputText,
+            String inputTitle,
             String description)
         {
             this.messageCode = messageCode;
             this.messageLabel = messageLabel;
-            this.messageText = messageText;
-            this.messageTitle = messageTitle;
+            this.selectionText = selectionText;
+            this.selectionTitle = selectionTitle;
+            this.inputText = inputText;
+            this.inputTitle = inputTitle;
             this.description = description;
         }
 
         private String messageCode;
         private String messageLabel;
-        private String messageText;
-        private String messageTitle;
+        private String selectionText;
+        private String selectionTitle;
+        private String inputText;
+        private String inputTitle;
         private String description;
 
         public void initAssemblingMessage(AssemblingMessage message)
         {
             message.messageCode = messageCode;
             message.messageLabel = messageLabel;
-            message.messageText = messageText;
-            message.messageTitle = messageTitle;
+            message.selectionText = selectionText;
+            message.selectionTitle = selectionTitle;
+            message.inputText = inputText;
+            message.inputTitle = inputTitle;
             message.description = description;
         }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getInputText() {
+            return inputText;
+        }
+
+        public String getInputTitle() {
+            return inputTitle;
+        }
+
+        public String getMessageCode() {
+            return messageCode;
+        }
+
+        public String getMessageLabel() {
+            return messageLabel;
+        }
+
+        public String getSelectionText() {
+            return selectionText;
+        }
+
+        public String getSelectionTitle() {
+            return selectionTitle;
+        }
+
     }
 
 
@@ -238,7 +305,7 @@ public class AssemblingMessage
     {
         this.messageId = messageId;
         this.messageCode = messageCode;
-        this.messageText = messageText;
+        this.selectionText = messageText;
     }
 
     public BigInteger getMessageId()
@@ -261,14 +328,14 @@ public class AssemblingMessage
         this.messageCode = messageCode;
     }
 
-    public String getMessageText()
+    public String getSelectionText()
     {
-        return messageText;
+        return selectionText;
     }
 
-    public void setMessageText(String messageText)
+    public void setSelectionText(String selectionText)
     {
-        this.messageText = messageText;
+        this.selectionText = selectionText;
     }
 
     public String getMessageLabel()
@@ -281,14 +348,34 @@ public class AssemblingMessage
         this.messageLabel = messageLabel;
     }
 
-    public String getMessageTitle()
+    public String getSelectionTitle()
     {
-        return messageTitle;
+        return selectionTitle;
     }
 
-    public void setMessageTitle(String messageTitle)
+    public void setSelectionTitle(String selectionTitle)
     {
-        this.messageTitle = messageTitle;
+        this.selectionTitle = selectionTitle;
+    }
+
+    public String getInputText()
+    {
+        return inputText;
+    }
+
+    public void setInputText(String inputText)
+    {
+        this.inputText = inputText;
+    }
+
+    public String getInputTitle()
+    {
+        return inputTitle;
+    }
+
+    public void setInputTitle(String inputTitle)
+    {
+        this.inputTitle = inputTitle;
     }
 
     public String getDescription()
@@ -384,7 +471,7 @@ public class AssemblingMessage
     @Override
     public String getInfo()
     {
-        return getMessageText();
+        return getMessageCode();
     }
 
     @Override
