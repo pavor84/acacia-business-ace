@@ -115,12 +115,12 @@ public class InputCallbackPanel
 
         AssemblingMessage message = getAssemblingMessage();
         String strValue;
-        if((strValue = message.getMessageTitle()) != null)
+        if((strValue = message.getInputTitle()) != null)
         {
             setTitle(strValue);
         }
 
-        if((strValue = message.getMessageText()) != null)
+        if((strValue = message.getInputText()) != null)
         {
             TitledBorder border = (TitledBorder)valuePanel.getBorder();
             border.setTitle(strValue);
