@@ -120,6 +120,7 @@ public class JBPanel
         frame.setResizable(isResizable());
         frame.addWindowListener(new WindowAdapter()
         {
+            @Override
             public void windowClosed(WindowEvent event)
             {
                 JBPanel.this.windowClosed(event);
@@ -148,10 +149,10 @@ public class JBPanel
         contentPane.removeAll();
         contentPane.add(this, BorderLayout.CENTER);
 
-        Dialog.ModalityType modalityType = getModalityType();
-        if(modalityType != null)
+        Dialog.ModalityType modality = getModalityType();
+        if(modality != null)
         {
-            dialog.setModalityType(modalityType);
+            dialog.setModalityType(modality);
         }
 
         dialog.pack();
@@ -252,14 +253,14 @@ public class JBPanel
 
     public void close()
     {
-        Container mainContainer = getMainContainer();
-        if(mainContainer != null)
+        Container container = getMainContainer();
+        if(container != null)
         {
-            mainContainer.setVisible(false);
-            if(mainContainer instanceof Window)
-                ((Window)mainContainer).dispose();
-            else if(mainContainer instanceof JInternalFrame)
-                ((JInternalFrame)mainContainer).dispose();
+            container.setVisible(false);
+            if(container instanceof Window)
+                ((Window)container).dispose();
+            else if(container instanceof JInternalFrame)
+                ((JInternalFrame)container).dispose();
         }
     }
 
@@ -387,13 +388,14 @@ public class JBPanel
 
     protected void dialogWindowClosing(WindowEvent event)
     {
-        JDialog dialog = (JDialog)event.getSource();
-        dialog.setVisible(false);
+        JDialog sourceDialog = (JDialog)event.getSource();
+        sourceDialog.setVisible(false);
     }
 
     private class DialogWindowAdapter
         extends WindowAdapter
     {
+        @Override
         public void windowClosing(WindowEvent event)
         {
             dialogWindowClosing(event);
