@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 
@@ -43,8 +45,17 @@ public class PermissionsManager implements PermissionsManagerLocal {
 
     private List<DataObjectType> dataObjectTypes;
 
-    {
-        Timer timer = new Timer();
+    Timer timer;
+
+    @PreDestroy
+    public void destroy() {
+        timer.cancel();
+        timer = null;
+    }
+
+    @PostConstruct
+    public void init() {
+        timer = new Timer();
         timer.schedule(new ClearingTask(), CLEAR_PERIOD, CLEAR_PERIOD);
     }
 
