@@ -28,11 +28,8 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
-import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
-import java.util.logging.Level;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  *
