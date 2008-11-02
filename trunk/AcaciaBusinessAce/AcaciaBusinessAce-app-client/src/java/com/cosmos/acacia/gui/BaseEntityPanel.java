@@ -5,11 +5,14 @@ import java.awt.TextComponent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,10 +20,18 @@ import java.util.logging.Level;
 
 import javax.ejb.EJB;
 import javax.swing.Icon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+
 import org.apache.log4j.Logger;
+import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -29,6 +40,9 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.reports.CombinedDataSourceObject;
+import com.cosmos.acacia.crm.reports.Report;
+import com.cosmos.acacia.crm.reports.ReportsUtil;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
@@ -87,7 +101,16 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     {
         initData();
         initSaveStateListener();
+        setPrintButtonVisibility();
         setFonts();
+    }
+
+    private void setPrintButtonVisibility() {
+        boolean printButtonVisible = getReport() != null
+            || getReports().size() > 0;
+
+
+        getButtonPanel().setVisible(Button.Print, printButtonVisible);
     }
 
     protected void initSaveStateListener()
@@ -391,5 +414,76 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     public boolean isEditable() {
         return editable;
+    }
+
+    /**
+     * Override this method in order to specify a single report for this form
+     * @return the report name (without .jrxml)
+     */
+    protected Report getReport() {
+        return null;
+    }
+
+    /**
+     * Override this method in order to specify multiple reports for this form.
+     * @return the report names (without .jrxml)
+     */
+    protected Set<Report> getReports() {
+        return new LinkedHashSet<Report>();
+    }
+
+    /**
+     * Triggers the printing process
+     */
+    @Action
+    @SuppressWarnings("unchecked")
+    protected void print() {
+        Report report = getReport();
+
+        if (report == null && getReports().size() > 0) {
+            String[] reportNames = new String[getReports().size()];
+            String[] reportOptions = new String[getReports().size()];
+            Report[] reports = new Report[getReports().size()];
+            int i = 0;
+            for (Report cReport : getReports()) {
+                reportOptions[i] = cReport.getKey();
+                reports[i] = cReport;
+                i++;
+            }
+            int reportChoice = JOptionPane.showOptionDialog(this,
+                    getResourceMap().getString("choose.report"),
+                    getResourceMap().getString("choose.report"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    reportOptions,
+                    reportOptions[0]);
+
+            report = reports[reportChoice];
+        }
+        if (report == null)
+            throw new RuntimeException("No report name specified");
+
+        String reportName = report.getReportName();
+
+        try {
+            InputStream is = this.getClass().getResourceAsStream("/reports/" + reportName + ".jasper");
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
+            //JasperCompileManager.compile***
+
+            List list = new ArrayList(1);
+            CombinedDataSourceObject obj = new CombinedDataSourceObject();
+            obj.setEntity(getEntity());
+            obj.setSubreport1(report.getSubreport1());
+            obj.setSubreport2(report.getSubreport2());
+            list.add(obj);
+
+            JRDataSource ds = new JRBeanCollectionDataSource(list);
+
+            ReportsUtil.print(jasperReport, ds, this, getResourceMap());
+
+        } catch (JRException e) {
+          e.printStackTrace();
+        }
     }
 }

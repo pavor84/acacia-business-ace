@@ -5,7 +5,7 @@
  */
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
-     
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -30,6 +30,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
+import com.cosmos.acacia.crm.reports.Report;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -39,20 +40,20 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 
 /**
- * 
+ *
  * Created	:	14.07.2008
  * @author	Petar Milev
  * @version $Id: $
  *
  */
 public class PurchaseOrderForm extends BaseEntityPanel {
-    
+
     private PurchaseOrder entity;
-    
+
     private EntityProperties entProps;
 
     private BindingGroup bindGroup;
-    
+
     private PurchaseOrderListRemote formSession = getBean(PurchaseOrderListRemote.class);
 
     /** Creates new form PurchaseOrderFormDraft */
@@ -61,13 +62,13 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         this.entity = order;
         initialize();
     }
-    
+
     private void initialize() {
         initComponents();
         intiComponentsCustom();
         init();
     }
-    
+
     private void intiComponentsCustom() {
         // Using an AbstractTablePanel implementation
         itemsTablePanel = new PurchaseOrderItemListPanel(entity.getId());
@@ -76,9 +77,9 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         itemsTablePanel.setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Refresh, false);
         itemsTablePanel.setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Close, false);
         itemsTablePanel.setEnabled(AbstractTablePanel.Button.Special, true);
-        
+
         // Adding the nested table listener to ensure that purchase order is saved before adding
-        //items to it. 
+        //items to it.
         addNestedFormListener(itemsTablePanel);
 
         tableHolderPanel1.add(itemsTablePanel);
@@ -583,7 +584,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private com.cosmos.swingb.JBTextField supplierOrderNumberField;
     private com.cosmos.acacia.gui.TableHolderPanel tableHolderPanel1;
     // End of variables declaration//GEN-END:variables
-    
+
     @SuppressWarnings("unchecked")
     JComboBoxBinding supplierContactBinding;
 
@@ -612,7 +613,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     @Override
     public void performSave(boolean closeAfter) {
         updateSupplierContactName();
-        
+
         entity = getFormSession().savePurchaseOrder(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
@@ -631,19 +632,19 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        
+
         if ( entProps==null )
             entProps = getFormSession().getDetailEntityProperties();
-        
+
         if ( bindGroup==null )
             bindGroup = new BindingGroup();
-        
+
         //if already persisted form - then the supplier can't be changed
         if ( entity.getOrderNumber()!=null &&  entity.getOrderNumber().compareTo(new BigInteger("0"))>0 ){
             entProps.getPropertyDetails("supplier").setReadOnly(true);
             entProps.getPropertyDetails("supplier").setEditable(false);
         }
-        
+
         //order number
         PropertyDetails pd = entProps.getPropertyDetails("orderNumber");
         pd.setRequired(false);
@@ -657,10 +658,10 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         branchField.bind(bindGroup, entity, entProps.getPropertyDetails("branchName"));
         //document delivery
         documentDeliveryField.bind(bindGroup, getDeliveryMethods(), entity, entProps.getPropertyDetails("documentDeliveryMethod"));
-        
+
         //clear explicitly any items
         supplierContactField.setModel(new DefaultComboBoxModel());
-        
+
         //supplier
         BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createProvidersPanel(getParentDataObjectId());
         supplierField.bind(
@@ -676,27 +677,27 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 onSelectSupplier();
             }
         });
-        
+
         if ( entity.getOrderNumber()!=null && entity.getOrderNumber().compareTo(new BigInteger("0"))>0 ){
             supplierField.setEditable(false);
             supplierField.setEnabled(false);
         }
-        
+
         //supplier contact
         supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
         onSelectSupplier();
-        
+
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        
+
         //creator
         creatorField.bind(bindGroup, entity, entProps.getPropertyDetails("creatorName"));
-        
+
         //creation time
         createdAtField.setText(dateFormat.format(entity.getCreationTime()));
-        
+
         //sender
         senderField.bind(bindGroup, entity, entProps.getPropertyDetails("senderName"));
-        
+
         //sent at
         if ( entity.getSentTime()!=null )
             sentAtField.setText(dateFormat.format(entity.getSentTime()));
@@ -704,20 +705,20 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         //fin at
         if ( entity.getFinalizingTime()!=null )
             finalizedAtField.setText(dateFormat.format(entity.getFinalizingTime()));
-        
+
         //first delivery at
         if ( entity.getFirstDeliveryTime()!=null )
             firstDeliveryField.setText(dateFormat.format(entity.getFirstDeliveryTime()));
-        
+
         //last delivery at
         if ( entity.getLastDeliveryTime()!=null )
             lastDeliveryField.setText(dateFormat.format(entity.getLastDeliveryTime()));
-        
+
         //notes
         notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
-        
+
         boolean statusOpen = entity.getStatus()==null || entity.getStatus().getEnumValue()==PurchaseOrderStatus.Open;
-            
+
         //if the order is in OPEN status, show 'sent order' button
         //PurchaseOrderStatus currentStatus = getFormSession().getOrderStatus(entity);
         if ( statusOpen ){
@@ -731,15 +732,15 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             });
         }else{
             itemsTablePanel.setReadonly();
-            
+
             entProps.getPropertyDetails("supplierContact").setReadOnly(true);
         }
-        
+
         bindGroup.bind();
     }
-    
+
     protected void onInsertFromDocument() {
-        
+
     }
 
     protected void onSendButton() {
@@ -751,7 +752,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        
+
         if ( showConfirmationDialog(getResourceMap().getString("sendButton.confirm"))){
             try {
                 entity = getFormSession().updateOrderStatus(entity, PurchaseOrderStatus.Sent);
@@ -776,21 +777,21 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         Object supplier = supplierField.getSelectedItem();
         if ( ! ( supplier instanceof BusinessPartner) )
             return new ArrayList<ContactPerson>();
-        else 
+        else
             return getFormSession().getSupplierContacts((BusinessPartner) supplier);
     }
-    
+
     protected void onSelectSupplier() {
         bindGroup.removeBinding(supplierContactBinding);
         supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
         supplierContactBinding.bind();
-        
+
         //update the supplier name
         if ( entity.getSupplier()!=null )
             entity.setSupplierName(entity.getSupplier().getDisplayName());
-        else 
+        else
             entity.setSupplierName(null);
-        
+
         //auto select if one choice is available
         if ( supplierContactField.getModel().getSize()==1 ){
             supplierContactField.setSelectedIndex(0);
@@ -814,11 +815,17 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     public PurchaseOrderListRemote getFormSession() {
         return formSession;
     }
-    
+
     @Override
     public void setReadonly() {
         super.setReadonly();
         itemsTablePanel.setReadonly();
         getButtonPanel().getButton(Button.Custom).setVisible(false);
+    }
+
+    @Override
+    protected Report getReport() {
+        Report report = new Report("purchase_order", itemsTablePanel.getItems(), null);
+        return report;
     }
 }

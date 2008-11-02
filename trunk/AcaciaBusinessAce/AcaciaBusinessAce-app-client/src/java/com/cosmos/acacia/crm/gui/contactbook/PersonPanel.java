@@ -26,6 +26,7 @@ import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.reports.Report;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -594,5 +595,11 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         public void keyTyped(KeyEvent e) {
             namesChanged = true;
         }
+    }
+
+    @Override
+    protected Report getReport(){
+        Report report = new Report("person", addressesTable.getAddresses(), null);
+        return report;
     }
 }
