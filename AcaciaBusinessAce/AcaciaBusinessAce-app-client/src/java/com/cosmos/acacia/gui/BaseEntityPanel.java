@@ -467,8 +467,12 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         String reportName = report.getReportName();
 
         try {
-            InputStream is = this.getClass().getResourceAsStream("/reports/" + reportName + ".jasper");
+            String resourceName = "/reports/" + reportName + ".jasper";
+            log.info("BaseEntityPanel.print().resourceName: " + resourceName);
+            InputStream is = this.getClass().getResourceAsStream(resourceName);
+            log.info("BaseEntityPanel.print().resourceInputStream: " + is);
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
+            log.info("BaseEntityPanel.print().jasperReport: " + jasperReport);
             //JasperCompileManager.compile***
 
             List list = new ArrayList(1);
