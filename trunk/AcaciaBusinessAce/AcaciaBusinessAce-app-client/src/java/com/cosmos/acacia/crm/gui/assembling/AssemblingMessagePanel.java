@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -59,13 +60,17 @@ public class AssemblingMessagePanel
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         messageCodeTextField = new com.cosmos.swingb.JBTextField();
-        messageTextTextField = new com.cosmos.swingb.JBTextField();
+        selectionTextTextField = new com.cosmos.swingb.JBTextField();
         messageCodeLabel = new com.cosmos.swingb.JBLabel();
-        messageTextLabel = new com.cosmos.swingb.JBLabel();
+        selectionTextLabel = new com.cosmos.swingb.JBLabel();
         messageLabelTextField = new com.cosmos.swingb.JBTextField();
-        messageTitleTextField = new com.cosmos.swingb.JBTextField();
+        selectionTitleTextField = new com.cosmos.swingb.JBTextField();
         messageLabelLabel = new com.cosmos.swingb.JBLabel();
-        messageTitleLabel = new com.cosmos.swingb.JBLabel();
+        selectionTitleLabel = new com.cosmos.swingb.JBLabel();
+        inputTextTextField = new com.cosmos.swingb.JBTextField();
+        inputTitleTextField = new com.cosmos.swingb.JBTextField();
+        inputTextLabel = new com.cosmos.swingb.JBLabel();
+        inputTitleLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -85,23 +90,33 @@ public class AssemblingMessagePanel
 
         messageCodeTextField.setName("messageCodeTextField"); // NOI18N
 
-        messageTextTextField.setName("messageTextTextField"); // NOI18N
+        selectionTextTextField.setName("selectionTextTextField"); // NOI18N
 
         messageCodeLabel.setText(resourceMap.getString("messageCodeLabel.text")); // NOI18N
         messageCodeLabel.setName("messageCodeLabel"); // NOI18N
 
-        messageTextLabel.setText(resourceMap.getString("messageTextLabel.text")); // NOI18N
-        messageTextLabel.setName("messageTextLabel"); // NOI18N
+        selectionTextLabel.setText(resourceMap.getString("selectionTextLabel.text")); // NOI18N
+        selectionTextLabel.setName("selectionTextLabel"); // NOI18N
 
         messageLabelTextField.setName("messageLabelTextField"); // NOI18N
 
-        messageTitleTextField.setName("messageTitleTextField"); // NOI18N
+        selectionTitleTextField.setName("selectionTitleTextField"); // NOI18N
 
         messageLabelLabel.setText(resourceMap.getString("messageLabelLabel.text")); // NOI18N
         messageLabelLabel.setName("messageLabelLabel"); // NOI18N
 
-        messageTitleLabel.setText(resourceMap.getString("messageTitleLabel.text")); // NOI18N
-        messageTitleLabel.setName("messageTitleLabel"); // NOI18N
+        selectionTitleLabel.setText(resourceMap.getString("selectionTitleLabel.text")); // NOI18N
+        selectionTitleLabel.setName("selectionTitleLabel"); // NOI18N
+
+        inputTextTextField.setName("inputTextTextField"); // NOI18N
+
+        inputTitleTextField.setName("inputTitleTextField"); // NOI18N
+
+        inputTextLabel.setText(resourceMap.getString("inputTextLabel.text")); // NOI18N
+        inputTextLabel.setName("inputTextLabel"); // NOI18N
+
+        inputTitleLabel.setText(resourceMap.getString("inputTitleLabel.text")); // NOI18N
+        inputTitleLabel.setName("inputTitleLabel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -116,12 +131,16 @@ public class AssemblingMessagePanel
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(messageLabelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(messageCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(messageTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(messageTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(selectionTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(selectionTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(messageTitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-                            .addComponent(messageTextTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(inputTitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(inputTextTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(selectionTitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                            .addComponent(selectionTextTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                             .addComponent(messageCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                             .addComponent(messageLabelTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))))
                 .addContainerGap())
@@ -139,14 +158,22 @@ public class AssemblingMessagePanel
                     .addComponent(messageLabelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(messageTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(messageTextTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectionTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectionTextTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(messageTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(messageTitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectionTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectionTitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputTextTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputTitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -159,14 +186,18 @@ public class AssemblingMessagePanel
     private javax.swing.JScrollPane descriptionScrollPane;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
+    private com.cosmos.swingb.JBLabel inputTextLabel;
+    private com.cosmos.swingb.JBTextField inputTextTextField;
+    private com.cosmos.swingb.JBLabel inputTitleLabel;
+    private com.cosmos.swingb.JBTextField inputTitleTextField;
     private com.cosmos.swingb.JBLabel messageCodeLabel;
     private com.cosmos.swingb.JBTextField messageCodeTextField;
     private com.cosmos.swingb.JBLabel messageLabelLabel;
     private com.cosmos.swingb.JBTextField messageLabelTextField;
-    private com.cosmos.swingb.JBLabel messageTextLabel;
-    private com.cosmos.swingb.JBTextField messageTextTextField;
-    private com.cosmos.swingb.JBLabel messageTitleLabel;
-    private com.cosmos.swingb.JBTextField messageTitleTextField;
+    private com.cosmos.swingb.JBLabel selectionTextLabel;
+    private com.cosmos.swingb.JBTextField selectionTextTextField;
+    private com.cosmos.swingb.JBLabel selectionTitleLabel;
+    private com.cosmos.swingb.JBTextField selectionTitleTextField;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -218,13 +249,21 @@ public class AssemblingMessagePanel
         propDetails = entityProps.getPropertyDetails("messageLabel");
         messageLabelTextField.bind(bg, entity, propDetails);
 
-        //messageTextTextField
-        propDetails = entityProps.getPropertyDetails("messageText");
-        messageTextTextField.bind(bg, entity, propDetails);
+        //selectionTextTextField
+        propDetails = entityProps.getPropertyDetails("selectionText");
+        selectionTextTextField.bind(bg, entity, propDetails);
 
-        //messageTitleTextField
-        propDetails = entityProps.getPropertyDetails("messageTitle");
-        messageTitleTextField.bind(bg, entity, propDetails);
+        //selectionTitleTextField
+        propDetails = entityProps.getPropertyDetails("selectionTitle");
+        selectionTitleTextField.bind(bg, entity, propDetails);
+
+        //inputTextTextField
+        propDetails = entityProps.getPropertyDetails("inputText");
+        inputTextTextField.bind(bg, entity, propDetails);
+
+        //inputTitleTextField
+        propDetails = entityProps.getPropertyDetails("inputTitle");
+        inputTitleTextField.bind(bg, entity, propDetails);
 
         //descriptionTextPane
         propDetails = entityProps.getPropertyDetails("description");

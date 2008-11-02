@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -27,13 +28,17 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="messageLabelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="messageCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="messageTextLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="messageTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectionTextLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectionTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputTextLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="messageTitleTextField" alignment="0" pref="448" max="32767" attributes="0"/>
-                          <Component id="messageTextTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="inputTitleTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="inputTextTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="selectionTitleTextField" alignment="0" pref="448" max="32767" attributes="0"/>
+                          <Component id="selectionTextTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Component id="messageCodeTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                           <Component id="messageLabelTextField" alignment="0" pref="448" max="32767" attributes="0"/>
                       </Group>
@@ -58,16 +63,26 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="messageTextLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="messageTextTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="selectionTextLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="selectionTextTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="messageTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="messageTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="selectionTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="selectionTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="descriptionPanel" pref="120" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputTextTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputTextLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="descriptionPanel" pref="119" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -124,9 +139,9 @@
         <Property name="name" type="java.lang.String" value="messageCodeTextField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="messageTextTextField">
+    <Component class="com.cosmos.swingb.JBTextField" name="selectionTextTextField">
       <Properties>
-        <Property name="name" type="java.lang.String" value="messageTextTextField" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="selectionTextTextField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="messageCodeLabel">
@@ -135,10 +150,10 @@
         <Property name="name" type="java.lang.String" value="messageCodeLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="messageTextLabel">
+    <Component class="com.cosmos.swingb.JBLabel" name="selectionTextLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="messageTextLabel.text"/>
-        <Property name="name" type="java.lang.String" value="messageTextLabel" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="selectionTextLabel.text"/>
+        <Property name="name" type="java.lang.String" value="selectionTextLabel" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBTextField" name="messageLabelTextField">
@@ -146,9 +161,9 @@
         <Property name="name" type="java.lang.String" value="messageLabelTextField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="messageTitleTextField">
+    <Component class="com.cosmos.swingb.JBTextField" name="selectionTitleTextField">
       <Properties>
-        <Property name="name" type="java.lang.String" value="messageTitleTextField" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="selectionTitleTextField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="messageLabelLabel">
@@ -157,10 +172,32 @@
         <Property name="name" type="java.lang.String" value="messageLabelLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="messageTitleLabel">
+    <Component class="com.cosmos.swingb.JBLabel" name="selectionTitleLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="messageTitleLabel.text"/>
-        <Property name="name" type="java.lang.String" value="messageTitleLabel" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="selectionTitleLabel.text"/>
+        <Property name="name" type="java.lang.String" value="selectionTitleLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="inputTextTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="inputTextTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBTextField" name="inputTitleTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="inputTitleTextField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="inputTextLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="inputTextLabel.text"/>
+        <Property name="name" type="java.lang.String" value="inputTextLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="inputTitleLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="inputTitleLabel.text"/>
+        <Property name="name" type="java.lang.String" value="inputTitleLabel" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
