@@ -48,7 +48,7 @@ public class BeansBindingHelper {
 
     protected static Logger log = Logger.getLogger(BeansBindingHelper.class);
 
-    public static EntityProperties createEntityProperties(Class entityClass) {
+    public static EntityProperties createEntityProperties(Class entityClass, boolean checkExportable) {
         EntityProperties entityProperties = new EntityProperties(entityClass);
 
         boolean isEntity = false;
@@ -62,7 +62,7 @@ public class BeansBindingHelper {
                 entityProperties.setTableName(table.name());
             }
         }
-        
+
 // What if not an entity ?
 //        if(!isEntity)
 //            throw new IllegalArgumentException("The class " + entityClass.getName() + " is not entity because the annotation 'javax.persistence.Entity' is not present into the declared class annotations.");
@@ -80,16 +80,23 @@ public class BeansBindingHelper {
                     field.getName(),
                     ClassHelper.getClassName(field.getType()),
                     orderPosition+=10);
-            
-            if ( detailsForField!=null )
-                properties.add(detailsForField);
+
+            if ( detailsForField!=null ) {
+                // add the property if no exportability check is required,
+                // or the check is required, and the field is exportable
+                if (!checkExportable || detailsForField.isExportable())
+                    properties.add(detailsForField);
+            }
         }
 
         entityProperties.setBeanProperties(properties);
 
         return entityProperties;
     }
-    
+
+    public static EntityProperties createEntityProperties(Class entityClass) {
+        return BeansBindingHelper.createEntityProperties(entityClass, false);
+    }
     /**
      * Create single property details for a given class and property name
      * @param entityClass - not null
@@ -116,9 +123,9 @@ public class BeansBindingHelper {
                 String propertyNameMod = firstLetter + propertyName.substring(1);
                 String getterName = "get"+propertyNameMod;
                 Method getter = entityClass.getMethod(getterName);
-                
+
                 return
-                createPropertyDetails(getter, propertyName, 
+                createPropertyDetails(getter, propertyName,
                     ClassHelper.getClassName(getter.getReturnType()), orderPosition);
             //otherwise use the field
             }else{
@@ -147,6 +154,7 @@ public class BeansBindingHelper {
             pd.setVisible(property.visible());
             pd.setHiden(property.hidden());
             pd.setResourceDisplayInTable(property.resourceDisplayInTable());
+            pd.setExportable(property.exportable());
 
             if ( !Property.NULL.equals(property.customDisplay()) )
                 pd.setCustomDisplay(property.customDisplay());

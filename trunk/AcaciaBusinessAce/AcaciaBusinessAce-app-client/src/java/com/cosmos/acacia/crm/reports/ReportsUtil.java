@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.reports;
 
 import java.awt.Component;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,14 +9,27 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.ResourceMap;
+
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.beansbinding.BeansBindingHelper;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 
 @SuppressWarnings("unchecked")
 public class ReportsUtil {
@@ -28,6 +42,7 @@ public class ReportsUtil {
     protected static final int TYPE_HTML = 2;
     protected static final int TYPE_XML = 3;
 
+    protected static final String SUBREPORT_DIR = "reports/";
 
     public static void print(JasperReport jasperReport,
             JRDataSource ds,
@@ -96,6 +111,143 @@ public class ReportsUtil {
         }
     }
 
+    public static JasperDesign createTableReport(Class entityClass) throws JRException {
+        String underscoreSeparatedName = "";
+        String className = entityClass.getSimpleName();
+        String prefix = "";
+        for (int i = 0; i < className.length(); i ++) {
+            char c = className.charAt(i);
+            if (Character.isUpperCase(c)) {
+                underscoreSeparatedName += prefix + Character.toLowerCase(c);
+            } else {
+                underscoreSeparatedName += c;
+            }
+            prefix = "_";
+        }
+        underscoreSeparatedName = pluralize(underscoreSeparatedName);
+        return createTableReport(entityClass, underscoreSeparatedName);
+    }
+
+    public static JasperDesign createTableReport(Class entityClass,
+            String reportName) throws JRException {
+
+        EntityProperties entityProps =
+            BeansBindingHelper.createEntityProperties(entityClass, true);
+
+        // Initialization
+        JasperDesign design = new JasperDesign();
+        design.setName(reportName);
+        design.setColumnCount(entityProps.getKeys().size());
+        design.setPrintOrder(JasperDesign.PRINT_ORDER_VERTICAL);
+        design.setOrientation(JasperDesign.ORIENTATION_LANDSCAPE);
+        design.setPageWidth(842);
+        design.setPageHeight(595);
+        design.setColumnSpacing(0);
+        design.setLeftMargin(20);
+        design.setRightMargin(20);
+        design.setTopMargin(20);
+        design.setBottomMargin(20);
+        design.setColumnWidth((design.getPageWidth()
+                - (design.getLeftMargin() + design.getRightMargin()))
+                / design.getColumnCount());
+        design.setWhenNoDataType(JasperDesign.WHEN_NO_DATA_TYPE_NO_PAGES);
+        design.setTitleNewPage(false);
+        design.setSummaryNewPage(false);
+        design.setResourceBundle(SUBREPORT_DIR + reportName);
+
+        // iReport properties, in case manual editing is required
+        design.setProperty("ireport.scriptlethandling", "2");
+        design.setProperty("ireport.encoding", "UTF-8");
+
+        // Required imports
+        design.addImport("java.util.*");
+        design.addImport("net.sf.jasperreports.engine.*");
+        design.addImport("net.sf.jasperreports.engine.data.*");
+
+        // Fields
+        for (PropertyDetails pd : entityProps.getValues()) {
+            JRDesignField field = new JRDesignField();
+            String fieldName = "";
+            if (pd.getCustomDisplay() != null) {
+                // Removing EL
+                fieldName = pd.getCustomDisplay().replace("${", "");
+                fieldName = fieldName.replace("}", "");
+            } else {
+                fieldName = pd.getPropertyName();
+            }
+            field.setName(fieldName);
+            Class fieldClass = null;
+            // Checking whether the property is a bean =>
+            // transformed to string by customDisplay
+            log.info("IS: " + DataObjectBean.class.isAssignableFrom(pd.getPropertyClass()));
+            if (DataObjectBean.class.isAssignableFrom(pd.getPropertyClass())) {
+
+                fieldClass = String.class;
+            } else {
+                fieldClass = pd.getPropertyClass();
+            }
+            field.setValueClass(fieldClass);
+            design.addField(field);
+        }
+
+        // Bands TODO: widths modifications
+
+        JRDesignBand columnHeader = new JRDesignBand();
+        columnHeader.setHeight(24);
+
+        JRDesignBand details = new JRDesignBand();
+        details.setHeight(24);
+
+        int i = 0;
+        for (PropertyDetails pd : entityProps.getValues()) {
+            JRDesignTextField caption = new JRDesignTextField();
+            JRDesignExpression expr = new JRDesignExpression();
+            expr.setValueClass(String.class);
+            expr.setText("$R{" + pd.getPropertyName() + "}");
+            caption.setExpression(expr);
+            caption.setBold(true);
+            caption.setX(i * design.getColumnWidth());
+            caption.setWidth(design.getColumnWidth());
+            caption.setHeight(columnHeader.getHeight());
+            columnHeader.addElement(caption);
+            i++;
+        }
+        design.setColumnHeader(columnHeader);
+        i = 0;
+        for (JRField field : design.getFields()) {
+            i++;
+            JRDesignTextField element = new JRDesignTextField();
+            JRDesignExpression expr = new JRDesignExpression();
+
+
+            if (Arrays.binarySearch(getTextFieldClassNames(),
+                    field.getValueClass().getName()) < 0) {
+                expr.setValueClass(String.class);
+                expr.setText("$F{" + field.getName() + "}.toString()");
+
+                // Handling enums: TODO: improve
+                if (DbResource.class.isAssignableFrom(field.getValueClass()))
+                    expr.setText("$F{" + field.getName() + "}.getEnumValue().toString()");
+
+            } else {
+                expr.setText("$F{" + field.getName() + "}");
+                expr.setValueClass(field.getValueClass());
+            }
+
+            element.setExpression(expr);
+            element.setBlankWhenNull(true);
+            element.setY(0);
+            element.setX(i * design.getColumnWidth());
+            element.setWidth(design.getColumnWidth());
+            element.setHeight(details.getHeight());
+            element.setKey("textField-" + i);
+            details.addElement(element);
+        }
+        design.setDetail(details);
+
+        return design;
+    }
+
     private static String chooseTargetPath(Component uiComponent) {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -104,5 +256,31 @@ public class ReportsUtil {
             return fc.getSelectedFile().getAbsolutePath();
         }
         return null;
+    }
+
+    private static String pluralize(String str) {
+        String result = str;
+        if (result.endsWith("s") || result.endsWith("sh") || result.endsWith("ch"))
+            result += "es";
+        else
+            result += "s";
+
+        return result;
+    }
+
+    // Copied from JRValidator (private there)
+
+    private static String[] textFieldClassNames = null;
+
+    private static String[] getTextFieldClassNames() {
+        if(textFieldClassNames == null)
+        {
+            textFieldClassNames = (new String[] {
+                (java.lang.Boolean.class).getName(), (java.lang.Byte.class).getName(), (java.util.Date.class).getName(), (java.sql.Timestamp.class).getName(), (java.sql.Time.class).getName(), (java.lang.Double.class).getName(), (java.lang.Float.class).getName(), (java.lang.Integer.class).getName(), (java.lang.Long.class).getName(), (java.lang.Short.class).getName(),
+                (java.math.BigDecimal.class).getName(), (java.lang.Number.class).getName(), (java.lang.String.class).getName()
+            });
+            Arrays.sort(textFieldClassNames);
+        }
+        return textFieldClassNames;
     }
 }

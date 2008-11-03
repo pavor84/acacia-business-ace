@@ -20,7 +20,6 @@ import java.util.logging.Level;
 
 import javax.ejb.EJB;
 import javax.swing.Icon;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
@@ -417,27 +416,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     /**
-     * Override this method in order to specify a single report for this form
-     * @return the report name (without .jrxml)
-     */
-    protected Report getReport() {
-        return null;
-    }
-
-    /**
-     * Override this method in order to specify multiple reports for this form.
-     * @return the report names (without .jrxml)
-     */
-    protected Set<Report> getReports() {
-        return new LinkedHashSet<Report>();
-    }
-
-    /**
      * Triggers the printing process
      */
     @Action
     @SuppressWarnings("unchecked")
-    protected void print() {
+    protected final void print() {
         Report report = getReport();
 
         if (report == null && getReports().size() > 0) {

@@ -9,6 +9,8 @@ import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
@@ -26,6 +28,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.reports.Report;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.JBPanel;
@@ -327,5 +330,21 @@ public abstract class AcaciaPanel
      */
     public Address getUserBranch() {
         return LocalSession.instance().getBranch();
+    }
+
+    /**
+     * Override this method in order to specify a single report for this form
+     * @return the report name (without .jrxml)
+     */
+    protected Report getReport() {
+        return null;
+    }
+
+    /**
+     * Override this method in order to specify multiple reports for this form.
+     * @return the report names (without .jrxml)
+     */
+    protected Set<Report> getReports() {
+        return new LinkedHashSet<Report>();
     }
 }

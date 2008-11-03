@@ -31,12 +31,13 @@ public class PropertyDetails
     private int orderPosition;
     private Validator validator;
     private ResourceDisplay resourceDisplayInTable;
-    
+    private boolean exportable;
+
     /**
      * @see #getCustomDislay()
      */
     private String customDisplay;
-    
+
     public PropertyDetails() {
     }
 
@@ -232,9 +233,9 @@ public class PropertyDetails
     }
 
     /**
-     * Gets the specific display option for a resource when it is going 
+     * Gets the specific display option for a resource when it is going
      * to be displayed in a table
-     * 
+     *
      * @return the resource display
      */
     public ResourceDisplay getResourceDisplayInTable() {
@@ -242,7 +243,7 @@ public class PropertyDetails
     }
 
     /**
-     * Sets the specific display option for a resource when it is going 
+     * Sets the specific display option for a resource when it is going
      * to be displayed in a table
      * @param resourceDisplayInTable
      */
@@ -250,5 +251,21 @@ public class PropertyDetails
         this.resourceDisplayInTable = resourceDisplayInTable;
     }
 
-    
+    /**
+     * Sets whether the property is exportable (in reports)
+     *
+     * @return exportable
+     */
+    public boolean isExportable() {
+        return exportable;
+    }
+
+    /**
+     * Gets whether the property is exportable (in reports)
+     *
+     * @param exportable
+     */
+    public void setExportable(boolean exportable) {
+        this.exportable = exportable;
+    }
 }
