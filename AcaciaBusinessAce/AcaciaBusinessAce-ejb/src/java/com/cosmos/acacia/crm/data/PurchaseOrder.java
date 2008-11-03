@@ -33,7 +33,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 @NamedQueries(
     {
         /**
-         * Parameters: 
+         * Parameters:
          *  - parentDataObjectId - not null, the parent object id
          *  - deleted - not null - true/false
          */
@@ -44,7 +44,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
                         "and po.dataObject.deleted = :deleted"
             ),
         /**
-         * Parameters: 
+         * Parameters:
          *  - parentDataObjectId - not null, the parent object id
          *  - supplier - not null
          */
@@ -55,7 +55,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
                         "and po.supplier = :supplier"
             ),
         /**
-         * Parameters: 
+         * Parameters:
          *  - branch - not null
          */
         @NamedQuery
@@ -64,7 +64,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
                 query = "select max(po.orderNumber) from PurchaseOrder po where po.branch = :branch "
             ),
         /**
-         * Parameters: 
+         * Parameters:
          *  - parentDataObjectId - not null
          */
         @NamedQuery
@@ -73,8 +73,8 @@ import com.cosmos.acacia.annotation.PropertyValidator;
                 query = "select max(po.orderNumber) from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId "
             ),
         /**
-         * 
-         * Parameters: 
+         *
+         * Parameters:
          *  - parentDataObjectId - not null, the parent object id
          *  - deleted - not null - true/false
          *  - status_sent - should be the value {@link PurchaseOrderStatus#Sent#getDbResource()}
@@ -102,15 +102,15 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     @Column(name = "parent_id", precision=0, length=18)
     private BigInteger parentId;
-    
+
     @Property(title="Order Number", editable=false)
     @Column(name = "order_number", nullable = false)
     private BigInteger orderNumber;
-    
+
     @Property(title="Supp. Order Number", editable=false)
     @Column(name = "supplier_order_number")
     private BigInteger supplierOrderNumber;
-    
+
     @Property(title="Branch", customDisplay="${branch.addressName}", editable=false)
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -119,12 +119,12 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @Property(title="Branch Name", editable=false)
     @Column(name = "branch_name", nullable = false)
     private String branchName;
-    
+
     @Property(title="Status", readOnly=true, propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource status;
-    
+
     @Property(title="Delivery Method", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -136,7 +136,7 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplier.displayName}")
     @ManyToOne
     private BusinessPartner supplier;
-    
+
     @Property(title="Supplier Name", editable=false)
     @Column(name = "supplier_name", nullable = false)
     private String supplierName;
@@ -149,30 +149,30 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @Property(title="Contact Name")
     @Column(name = "supplier_contact_name")
     private String supplierContactName;
-    
+
     @Property(title="Creator", customDisplay="${creator.displayName}")
     @JoinColumn(name = "creator_id")
     @ManyToOne
     private Person creator;
-    
+
     @Property(title="Creator Name", editable=false)
     @Column(name = "creator_name", nullable = false)
     private String creatorName;
-    
+
     @Property(title="Created At", editable=false)
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date creationTime;
-    
-    @Property(title="Sender")
+
+    @Property(title="Sender", customDisplay="${sender.displayName}")
     @JoinColumn(name = "sender_id")
     @ManyToOne
     private Person sender;
-    
+
     @Property(title="Sender Name", editable=false)
     @Column(name = "sender_name")
     private String senderName;
-    
+
     @Property(title="Sent At", editable=false)
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
@@ -192,7 +192,7 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @Column(name = "last_delivery_time")
     @Temporal(TemporalType.DATE)
     private Date lastDeliveryTime;
-    
+
     @Column(name = "notes")
     @Property(title="Notes")
     private String notes;

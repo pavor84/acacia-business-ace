@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Property  
+public @interface Property
 {
     public static final String NULL = NullClass.NULL;
 
@@ -40,15 +40,19 @@ public @interface Property
 
     /**
      * Supply EL property string to use when displaying the given element.
-     * The EL expression will be applied over the current property value. 
+     * The EL expression will be applied over the current property value.
      * If not provided, {@link #propertyName} will be used instead.
      * @return String
      */
     String customDisplay() default NULL;
-    
+
     /**
      * Specifies how is the resource displayed in a table
-     *
      */
      ResourceDisplay resourceDisplayInTable() default ResourceDisplay.ShortName;
+
+     /**
+      * Specified wheter the field is exportable (in reports)
+      */
+     boolean exportable() default true;
 }

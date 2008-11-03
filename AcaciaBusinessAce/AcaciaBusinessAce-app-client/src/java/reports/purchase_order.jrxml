@@ -76,7 +76,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{orderNumber}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="12"
@@ -102,7 +102,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{sequenceNumber}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="36"
@@ -115,7 +115,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.supplierOrderNumber}.toString()]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="60"
@@ -141,7 +141,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{orderStatus}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="12"
@@ -180,7 +180,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{documentDelivery}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="60"
@@ -206,15 +206,13 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{supplier}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="154"
 						width="137"
 						height="18"
-						key="textField-12">
-							<printWhenExpression><![CDATA[new Boolean($F{entity.firstDeliveryTime} != null)]]></printWhenExpression>
-						</reportElement>
+						key="textField-12"/>
 					<box></box>
 					<textElement>
 						<font/>
@@ -247,7 +245,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{firstDeliveryTime}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="130"
@@ -260,7 +258,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.supplierContact.contact.displayName}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="106"
@@ -273,15 +271,13 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.supplier.displayName}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="119"
 						y="178"
 						width="137"
 						height="18"
-						key="textField-17">
-							<printWhenExpression><![CDATA[new Boolean($F{entity.lastDeliveryTime} != null)]]></printWhenExpression>
-						</reportElement>
+						key="textField-17"/>
 					<box></box>
 					<textElement>
 						<font/>
@@ -314,15 +310,13 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{creator}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="178"
 						width="137"
 						height="18"
-						key="textField-20">
-							<printWhenExpression><![CDATA[new Boolean($F{entity.sentTime} != null)]]></printWhenExpression>
-						</reportElement>
+						key="textField-20"/>
 					<box></box>
 					<textElement>
 						<font/>
@@ -355,7 +349,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{sentAt}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="130"
@@ -368,7 +362,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.creationTime}.toString()]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="106"
@@ -381,15 +375,13 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.creator.displayName}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="202"
 						width="137"
 						height="18"
-						key="textField-25">
-							<printWhenExpression><![CDATA[new Boolean($F{entity.finalizingTime} != null)]]></printWhenExpression>
-						</reportElement>
+						key="textField-25"/>
 					<box></box>
 					<textElement>
 						<font/>
@@ -422,15 +414,13 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{sender}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="387"
 						y="154"
 						width="137"
 						height="18"
-						key="textField-28">
-							<printWhenExpression><![CDATA[new Boolean($F{entity.sender.displayName} != null)]]></printWhenExpression>
-						</reportElement>
+						key="textField-28"/>
 					<box></box>
 					<textElement>
 						<font/>

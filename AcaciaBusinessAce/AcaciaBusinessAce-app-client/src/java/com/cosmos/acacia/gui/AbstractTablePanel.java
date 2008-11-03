@@ -29,6 +29,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -43,6 +49,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
+import com.cosmos.acacia.crm.reports.ReportsUtil;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -1241,5 +1248,17 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return super.getSelectedValue();
 
         return getSelectedRowObject();
+    }
+
+    protected final void print(Class entityClass) {
+        try {
+            JasperDesign design = ReportsUtil.createTableReport(entityClass);
+            JasperReport report = JasperCompileManager.compileReport(design);
+            JRDataSource ds = new JRBeanCollectionDataSource(getListData());
+            ReportsUtil.print(report, ds, this, getResourceMap());
+        } catch (Exception ex) {
+            handleException(ex);
+        }
+
     }
 }
