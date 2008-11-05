@@ -12,6 +12,7 @@ import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -51,9 +52,21 @@ public class AcaciaUtils
     private static NumberFormat numberFormat = NumberFormat.getNumberInstance();
     //private static NumberFormat percentFormat = NumberFormat.getPercentInstance();
 
+    private static NumberFormat moneyFormat = createMoneyFormat();
+
     public static String formatMoney(BigDecimal value)
     {
-        return null;
+        return moneyFormat.format(value);
+    }
+
+    private static NumberFormat createMoneyFormat() {
+        //temporal functionality. TODO improve as appropriate
+        NumberFormat f = DecimalFormat.getInstance(Locale.US);
+        f.setGroupingUsed(false);
+        f.setMaximumFractionDigits(3);
+        f.setMinimumFractionDigits(0);
+        f.setRoundingMode(RoundingMode.HALF_EVEN);
+        return f;
     }
 
     public static void validateValue(AssemblingSchemaItemValue itemValue)

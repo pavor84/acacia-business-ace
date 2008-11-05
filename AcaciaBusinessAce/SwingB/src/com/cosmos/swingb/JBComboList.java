@@ -70,6 +70,7 @@ public class JBComboList
 
     private SelectableListDialog selectableListDialog;
     private ObjectToStringConverter converter;
+    private Binding binding;
 
     public JBComboList()
     {
@@ -260,13 +261,12 @@ public class JBComboList
         
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
-        Binding binding = Bindings.createAutoBinding(
+        binding = Bindings.createAutoBinding(
                 updateStrategy,
                 beanEntity,
                 elProperty,
                 comboBox,
                 beanProperty);
-
         Validator validator = propertyDetails.getValidator();
         if(validator != null)
         {
@@ -524,5 +524,9 @@ public class JBComboList
 
     public void setConverter(ObjectToStringConverter converter) {
         this.converter = converter;
+    }
+
+    public Binding getBinding() {
+        return binding;
     }    
 }

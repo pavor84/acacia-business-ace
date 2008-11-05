@@ -78,34 +78,34 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Property(title="Measure Unit")
     private DbResource measureUnit;
 
-    @Column(name = "ordered_quantity", nullable = false)
+    @Column(name = "ordered_quantity", nullable = false, precision=20, scale=4)
     @Property(title="Ordered quantiry")
     private BigDecimal orderedQuantity;
 
-    @Column(name = "shipped_quantity")
+    @Column(name = "shipped_quantity", precision=20, scale=4)
     @Property(title="Shipped quantity", readOnly=true)
     private BigDecimal shippedQuantity;
 
-    @Column(name = "returned_quantity")
+    @Column(name = "returned_quantity", precision=20, scale=4)
     @Property(title="Returned quantiry", readOnly=true)
     private BigDecimal returnedQuantity;
 
-    @Column(name = "unit_price", nullable = false)
-    @Property(title="Unit price")
+    @Column(name = "unit_price", nullable = false, precision=20, scale=4)
+    @Property(title="Unit price", editable=false)
     private BigDecimal unitPrice;
 
-    @Column(name = "extended_price", nullable = false)
+    @Column(name = "extended_price", nullable = false, precision=20, scale=4)
     @Property(title="Extended price", readOnly=true)
     private BigDecimal extendedPrice;
     
     @Property(title="Discount", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "discount_amount")
+    @Column(name = "discount_amount", precision=20, scale=4)
     private BigDecimal discountAmount;
     
     @Property(title="Discount %", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "discount_percent")
+    @Column(name = "discount_percent", precision=20, scale=4)
     private BigDecimal discountPercent;
 
     @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))

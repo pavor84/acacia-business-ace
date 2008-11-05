@@ -137,16 +137,16 @@ public class OrderConfirmation extends DataObjectBean implements Serializable {
     @Property(title="Notes")
     private String notes;
     
-    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53, required=true))
+    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))
     @Column(name = "ship_week")
     private Integer shipWeek;
     
-    @Property(title="Ship Date From", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Ship Date From")
     @Column(name = "ship_date_from")
     @Temporal(TemporalType.DATE)
     private Date shipDateFrom;
     
-    @Property(title="Ship Date To", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Ship Date To")
     @Column(name = "ship_date_to")
     @Temporal(TemporalType.DATE)
     private Date shipDateTo;

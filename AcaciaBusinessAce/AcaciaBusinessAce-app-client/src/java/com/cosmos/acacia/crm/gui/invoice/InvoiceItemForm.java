@@ -6,24 +6,27 @@
 
 package com.cosmos.acacia.crm.gui.invoice;
 
-import java.awt.Component;
+import static com.cosmos.acacia.util.AcaciaUtils.formatMoney;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
 
+import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -35,7 +38,10 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
+import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -43,8 +49,6 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.JBRadioButton;
-import com.cosmos.swingb.SelectableListDialog;
 
 /**
  * 
@@ -78,7 +82,6 @@ public class InvoiceItemForm extends BaseEntityPanel {
     private void initComponents() {
 
         jBLabel1 = new com.cosmos.swingb.JBLabel();
-        productField = new com.cosmos.acacia.gui.AcaciaComboList();
         measureUnitField = new com.cosmos.swingb.JBComboBox();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
@@ -99,28 +102,24 @@ public class InvoiceItemForm extends BaseEntityPanel {
         shipWeekField = new com.cosmos.swingb.JBTextField();
         warehouseForShipField = new com.cosmos.acacia.gui.AcaciaComboList();
         jBLabel11 = new com.cosmos.swingb.JBLabel();
-        jBLabel28 = new com.cosmos.swingb.JBLabel();
-        totalItemDiscountValueField = new com.cosmos.swingb.JBTextField();
-        totalItemDiscountPercentField = new com.cosmos.swingb.JBTextField();
-        jBLabel33 = new com.cosmos.swingb.JBLabel();
         jBLabel12 = new com.cosmos.swingb.JBLabel();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        productTypeRadioSimple = new com.cosmos.swingb.JBRadioButton();
-        productTypeRadioComplex = new com.cosmos.swingb.JBRadioButton();
-        jBLabel13 = new com.cosmos.swingb.JBLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         productDescriptionField = new com.cosmos.swingb.JBTextPane();
         jBLabel14 = new com.cosmos.swingb.JBLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         notesField = new com.cosmos.swingb.JBTextPane();
+        forUnitsLabel = new com.cosmos.swingb.JBLabel();
+        productDetailsButton = new com.cosmos.swingb.JBButton();
+        productOrSchemaTextField = new com.cosmos.swingb.JBTextField();
+        clearProductButton = new com.cosmos.swingb.JBButton();
+        selectProductOrSchemaButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(InvoiceItemForm.class);
         jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
         jBLabel1.setName("jBLabel1"); // NOI18N
-
-        productField.setName("productField"); // NOI18N
 
         measureUnitField.setName("measureUnitField"); // NOI18N
 
@@ -175,31 +174,10 @@ public class InvoiceItemForm extends BaseEntityPanel {
         jBLabel11.setText(resourceMap.getString("jBLabel11.text")); // NOI18N
         jBLabel11.setName("jBLabel11"); // NOI18N
 
-        jBLabel28.setText(resourceMap.getString("jBLabel28.text")); // NOI18N
-        jBLabel28.setName("jBLabel28"); // NOI18N
-
-        totalItemDiscountValueField.setName("totalItemDiscountValueField"); // NOI18N
-
-        totalItemDiscountPercentField.setName("totalItemDiscountPercentField"); // NOI18N
-
-        jBLabel33.setText(resourceMap.getString("jBLabel33.text")); // NOI18N
-        jBLabel33.setName("jBLabel33"); // NOI18N
-
         jBLabel12.setText(resourceMap.getString("jBLabel12.text")); // NOI18N
         jBLabel12.setName("jBLabel12"); // NOI18N
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
-
-        productTypeRadioSimple.setMnemonic('S');
-        productTypeRadioSimple.setText(resourceMap.getString("productTypeRadioSimple.text")); // NOI18N
-        productTypeRadioSimple.setName("productTypeRadioSimple"); // NOI18N
-
-        productTypeRadioComplex.setMnemonic('C');
-        productTypeRadioComplex.setText(resourceMap.getString("productTypeRadioComplex.text")); // NOI18N
-        productTypeRadioComplex.setName("productTypeRadioComplex"); // NOI18N
-
-        jBLabel13.setText(resourceMap.getString("jBLabel13.text")); // NOI18N
-        jBLabel13.setName("jBLabel13"); // NOI18N
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -214,6 +192,27 @@ public class InvoiceItemForm extends BaseEntityPanel {
         notesField.setName("notesField"); // NOI18N
         jScrollPane3.setViewportView(notesField);
 
+        forUnitsLabel.setText(resourceMap.getString("forUnitsLabel.text")); // NOI18N
+        forUnitsLabel.setName("forUnitsLabel"); // NOI18N
+
+        productDetailsButton.setMnemonic('D');
+        productDetailsButton.setText(resourceMap.getString("productDetailsButton.text")); // NOI18N
+        productDetailsButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        productDetailsButton.setName("productDetailsButton"); // NOI18N
+
+        productOrSchemaTextField.setEditable(false);
+        productOrSchemaTextField.setName("productOrSchemaTextField"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(InvoiceItemForm.class, this);
+        clearProductButton.setAction(actionMap.get("clearProductOrSchema")); // NOI18N
+        clearProductButton.setName("clearProductButton"); // NOI18N
+
+        selectProductOrSchemaButton.setAction(actionMap.get("productOrSchemaSelectAction")); // NOI18N
+        selectProductOrSchemaButton.setIcon(resourceMap.getIcon("selectProductOrSchemaButton.icon")); // NOI18N
+        selectProductOrSchemaButton.setText(resourceMap.getString("selectProductOrSchemaButton.text")); // NOI18N
+        selectProductOrSchemaButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        selectProductOrSchemaButton.setName("selectProductOrSchemaButton"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,92 +220,77 @@ public class InvoiceItemForm extends BaseEntityPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                            .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(productTypeRadioSimple, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(productTypeRadioComplex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(productField, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(measureUnitField, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(orderedQtyField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(shippedQtyField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(returnedQtyField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                        .addComponent(unitPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                                .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                                    .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+                                .addGap(27, 27, 27))
+                            .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jBLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jBLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jBLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                                .addGap(2, 2, 2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(warehouseForShipField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(totalItemDiscountValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                                .addComponent(unitPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(totalItemDiscountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(forUnitsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+                            .addComponent(shipDateToField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(shippedQtyField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(extendedPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                            .addComponent(shipWeekField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                        .addGap(387, 387, 387))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                                .addGap(2, 2, 2))
-                            .addComponent(jBLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(shipDateToField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                            .addComponent(shipDateFromField, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(warehouseForShipField, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                        .addGap(2, 2, 2)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
+                                .addComponent(clearProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(productDetailsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
+                            .addComponent(orderedQtyField, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(returnedQtyField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(extendedPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, 0)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(shipWeekField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                                    .addComponent(shipDateFromField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)))
+                            .addComponent(measureUnitField, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(productTypeRadioSimple, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productTypeRadioComplex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                        .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(clearProductButton, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(productDetailsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -317,14 +301,15 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(shippedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(shippedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(returnedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(returnedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(forUnitsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unitPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -333,14 +318,8 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     .addComponent(extendedPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(totalItemDiscountValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(totalItemDiscountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(shipWeekField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(shipWeekField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -351,32 +330,31 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     .addComponent(shipDateToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(warehouseForShipField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(warehouseForShipField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBButton clearProductButton;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBTextField extendedPriceField;
+    private com.cosmos.swingb.JBLabel forUnitsLabel;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
     private com.cosmos.swingb.JBLabel jBLabel11;
     private com.cosmos.swingb.JBLabel jBLabel12;
-    private com.cosmos.swingb.JBLabel jBLabel13;
     private com.cosmos.swingb.JBLabel jBLabel14;
     private com.cosmos.swingb.JBLabel jBLabel2;
-    private com.cosmos.swingb.JBLabel jBLabel28;
     private com.cosmos.swingb.JBLabel jBLabel3;
-    private com.cosmos.swingb.JBLabel jBLabel33;
     private com.cosmos.swingb.JBLabel jBLabel4;
     private com.cosmos.swingb.JBLabel jBLabel5;
     private com.cosmos.swingb.JBLabel jBLabel6;
@@ -389,16 +367,14 @@ public class InvoiceItemForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextPane notesField;
     private com.cosmos.swingb.JBTextField orderedQtyField;
     private com.cosmos.swingb.JBTextPane productDescriptionField;
-    private com.cosmos.acacia.gui.AcaciaComboList productField;
-    private com.cosmos.swingb.JBRadioButton productTypeRadioComplex;
-    private com.cosmos.swingb.JBRadioButton productTypeRadioSimple;
+    private com.cosmos.swingb.JBButton productDetailsButton;
+    private com.cosmos.swingb.JBTextField productOrSchemaTextField;
     private com.cosmos.swingb.JBTextField returnedQtyField;
+    private com.cosmos.swingb.JBButton selectProductOrSchemaButton;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
     private com.cosmos.swingb.JBTextField shipWeekField;
     private com.cosmos.swingb.JBTextField shippedQtyField;
-    private com.cosmos.swingb.JBTextField totalItemDiscountPercentField;
-    private com.cosmos.swingb.JBTextField totalItemDiscountValueField;
     private com.cosmos.swingb.JBTextField unitPriceField;
     private com.cosmos.acacia.gui.AcaciaComboList warehouseForShipField;
     // End of variables declaration//GEN-END:variables
@@ -458,23 +434,6 @@ public class InvoiceItemForm extends BaseEntityPanel {
         
         bindGroup = new BindingGroup();
         
-        productTypeGroup = new ButtonGroup();
-        productTypeGroup.add(productTypeRadioSimple);
-        productTypeGroup.add(productTypeRadioComplex);
-        if ( entity.getProduct() instanceof ComplexProduct ){
-            productTypeGroup.setSelected(productTypeRadioComplex.getModel(), true);
-        }else{
-            productTypeGroup.setSelected(productTypeRadioSimple.getModel(), true);
-        }
-        ActionListener productTypeListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onProductTypeAction((JBRadioButton)e.getSource());
-            }
-        };
-        productTypeRadioSimple.addActionListener(productTypeListener);
-        productTypeRadioComplex.addActionListener(productTypeListener);
-        
         //auto set the dates if the item is new
         if ( entity.getId()==null && (lastShipDateTo!=null || lastShipDateFrom!=null) ){
             entity.setShipDateFrom(lastShipDateFrom);
@@ -485,7 +444,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         bindProductField( entity.getProduct() instanceof ComplexProduct );
         
         //measure unit 
-        measureUnitField.bind(bindGroup, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
+        bindMeasureUnitField(new ArrayList());
         
         //ordered quantity
         Binding orderedQtyBinding = orderedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"));
@@ -515,37 +474,37 @@ public class InvoiceItemForm extends BaseEntityPanel {
         extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"));
         
         //variable for re-use
-        Binding amountsBinding = null;
+//        Binding amountsBinding = null;
         
         //discount value 
-        amountsBinding = totalItemDiscountValueField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"));
-        amountsBinding.addBindingListener(new AbstractBindingListener() {
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                if ( updatingAmounts )
-                    return; 
-                else{
-                    updatingAmounts = true;
-                    updateDiscountPercent(binding.isContentValid());
-                    updatingAmounts = false;
-                }
-            }
-        });
+//        amountsBinding = totalItemDiscountValueField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"));
+//        amountsBinding.addBindingListener(new AbstractBindingListener() {
+//            @Override
+//            public void targetChanged(Binding binding, PropertyStateEvent event) {
+//                if ( updatingAmounts )
+//                    return; 
+//                else{
+//                    updatingAmounts = true;
+//                    updateDiscountPercent(binding.isContentValid());
+//                    updatingAmounts = false;
+//                }
+//            }
+//        });
         
         //discount percent
-        amountsBinding = totalItemDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
-        amountsBinding.addBindingListener(new AbstractBindingListener() {
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                if ( updatingAmounts )
-                    return;
-                else{
-                    updatingAmounts = true;
-                    updateDiscountAmount(binding.isContentValid());
-                    updatingAmounts = false;
-                }
-            }
-        });
+//        amountsBinding = totalItemDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
+//        amountsBinding.addBindingListener(new AbstractBindingListener() {
+//            @Override
+//            public void targetChanged(Binding binding, PropertyStateEvent event) {
+//                if ( updatingAmounts )
+//                    return;
+//                else{
+//                    updatingAmounts = true;
+//                    updateDiscountAmount(binding.isContentValid());
+//                    updatingAmounts = false;
+//                }
+//            }
+//        });
         
         //ship week
         shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"))
@@ -592,11 +551,53 @@ public class InvoiceItemForm extends BaseEntityPanel {
         //product description
         productDescriptionField.bind(bindGroup, entity, entProps.getPropertyDetails("productDescription"));
         
+        productDetailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComplexProductDetails();
+            }
+        });
+        
         bindGroup.bind(); 
         
         calculateShipWeek(true, true, false);
+        updateUnitLabel();
+        updateExtendedPrice(true);
+        product = entity.getProduct();
+        onSelectProduct();
     }
     
+    protected void onComplexProductDetails() {
+        ComplexProductDetailsPanel detailsPanel = new ComplexProductDetailsPanel((ComplexProduct)product);
+        detailsPanel.showDialog(this);
+    }
+    
+    @Override
+    public void setReadonly() {
+        super.setReadonly();
+        clearProductButton.setEnabled(false);
+        selectProductOrSchemaButton.setEnabled(false);
+        warehouseForShipField.setEnabled(false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Binding measureUnitBinding = null;
+    
+    private void bindMeasureUnitField(List<DbResource> mUnits) {
+        if ( measureUnitBinding!=null ){
+            measureUnitBinding.unbind();
+            bindGroup.removeBinding(measureUnitBinding);
+        }
+        measureUnitBinding = measureUnitField.bind(bindGroup, mUnits, entity, entProps.getPropertyDetails("measureUnit"));
+        measureUnitBinding.bind();
+        measureUnitField.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                updateExtendedPrice(measureUnitField.getSelectedItem() instanceof DbResource);
+            }
+        });
+    }
+
     @SuppressWarnings("unchecked")
     Binding productFieldBinding = null;
     
@@ -604,97 +605,65 @@ public class InvoiceItemForm extends BaseEntityPanel {
      * @param complex - false if the field represents simple products, true if complex
      */
     private void bindProductField(boolean complex) {
-        PropertyDetails pd = entProps.getPropertyDetails("product");
-        pd.setRequired(true);
         
-        //un-bind and remove old binding
-        if ( productFieldBinding!=null ){
-            if ( productFieldBinding.isBound() )
-                productFieldBinding.unbind();
-            if ( bindGroup.getBindings().contains(productFieldBinding))
-                bindGroup.removeBinding(productFieldBinding);
+    }
+    
+    private Product product;
+    
+    @Action
+    public void productOrSchemaSelectAction()
+    {
+        if(product == null)
+        {
+            ComplexProductSelectionPanel selectionPanel = new ComplexProductSelectionPanel(getOrganizationDataObjectId());
+            DialogResponse response = selectionPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                product = (Product)selectionPanel.getSelectedValue();
+                onSelectProduct();
+            }
         }
-        
-        //bind simple products to list box
-        if ( !complex ){
-            ProductsListPanel listPanel = new ProductsListPanel(getOrganizationDataObjectId());
-            productFieldBinding = productField.bind(
-                bindGroup, 
-                listPanel,
-                entity,
-                pd,
-                "${productName}",
-                UpdateStrategy.READ_WRITE);
-            productField.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    onSelectProduct();
-                }
-            });
-            productFieldBinding.bind();
-        //bind complex products to list box
-        }else {
-            //TODO - bind product field for complex products.
-            //THE NEXT FUNCTIONALITY IS DUMMY - REPLACE AS APPROPRIATE 
-            productFieldBinding = productField.bind(
-                bindGroup, 
-                new SelectableListDialog() {
-                    @Override
-                    public DialogResponse showDialog(Component parentComponent) {
-                        return null;
-                    }
-                
-                    @Override
-                    public void setVisibleSelectButtons(boolean visible) {
-                    }
-                
-                    @Override
-                    public void setSelectedRowObject(Object selectedObject) {
-                    }
-                
-                    @Override
-                    public void setEditable(boolean editable) {
-                    }
-                
-                    @Override
-                    public boolean isEditable() {
-                        return false;
-                    }
-                
-                    @Override
-                    public InvoiceItem getSelectedRowObject() {
-                        return null;
-                    }
-                
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public List getListData() {
-                        return new ArrayList();
-                    }
-
-                    @Override
-                    public void setEnabled(boolean enabled)
-                    {
-                        throw new UnsupportedOperationException("Not supported yet.");
-                    }
-
-                    @Override
-                    public boolean isEnabled()
-                    {
-                        throw new UnsupportedOperationException("Not supported yet.");
-                    }
-                },
-                entity,
-                pd,
-                "${productName}",
-                UpdateStrategy.READ_WRITE);
+        else if(product instanceof ComplexProduct)
+        {
+            ProductAssemblerPanel asPanel = new ProductAssemblerPanel();
+            DialogResponse response = asPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                product = (ComplexProduct)asPanel.getSelectedValue();
+                onSelectProduct();
+            }
+        }
+        else if(product instanceof SimpleProduct)
+        {
+            SimpleProduct simpleProduct = (SimpleProduct) product;
+            ProductsListPanel productsPanel = new ProductsListPanel(simpleProduct.getParentId());
+            productsPanel.setSelectedRowObject(simpleProduct);
+            DialogResponse response = productsPanel.showDialog(this);
+            if(DialogResponse.SELECT.equals(response))
+            {
+                product = (SimpleProduct)productsPanel.getSelectedRowObject();
+                onSelectProduct();
+            }
         }
     }
-
+    
     protected void onSelectProduct() {
+        Product p = product;
+        WarehouseProduct wp = null;
+        if ( p instanceof SimpleProduct )
+            wp = getFormSession().getWarehouseProduct((SimpleProduct) p);
+        
+        if ( p==null ){
+            productOrSchemaTextField.setText("");
+            entity.setProduct(null);
+        }
+        else{
+            productOrSchemaTextField.setText(p.getProductName());
+            entity.setProduct(p);
+        }
+        
         //automatically copy description text from product if no such was entered
         if ( productDescriptionField.getText()==null || "".equals(productDescriptionField.getText().trim() )){
-            Product p = (Product) productField.getSelectedItem();
             if ( p instanceof SimpleProduct )
                 productDescriptionField.setText(((SimpleProduct)p).getDescription());
             else if ( p instanceof ComplexProduct ){
@@ -702,53 +671,108 @@ public class InvoiceItemForm extends BaseEntityPanel {
                 productDescriptionField.setText(complexProduct.getAppliedSchema().getDescription());
             }
         }
-    }
-
-    protected void onProductTypeAction(JBRadioButton source) {
-        bindProductField(source.equals(productTypeRadioComplex));
-    }
-
-    protected void updateDiscountPercent(boolean contentValid) {
-        if ( !contentValid ){
-            totalItemDiscountPercentField.setText("");
-            return;
-        }
-        if ( "".equals(totalItemDiscountValueField.getText()) ){
-            totalItemDiscountPercentField.setText("");
-            return;
+        
+        //update the unit price
+        BigDecimal salePrice = null;
+        //get from warehouse product first
+        if ( wp!=null )
+            salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(wp);
+        //try product if still null
+        if ( salePrice==null && p!=null )
+            salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(p);
+        //write the field if price is ok
+        if ( salePrice!=null ){
+            unitPriceField.setText(formatMoney(salePrice));
+        }else{
+            unitPriceField.setText("");
         }
         
-        try{
-            BigDecimal totalValue = new BigDecimal(extendedPriceField.getText());  
-            BigDecimal discountAmount = new BigDecimal(totalItemDiscountValueField.getText());
-            BigDecimal result = discountAmount.divide(totalValue, new MathContext(10)).multiply(new BigDecimal(100));
-            result.setScale(4, RoundingMode.HALF_UP);
-            totalItemDiscountPercentField.setText(""+result.toPlainString());
-        }catch (Exception e){
-            totalItemDiscountPercentField.setText("");
-        }
+        updateUnitLabel();
+        updateMeasureUnits(p);
+        
+        productDetailsButton.setEnabled(p instanceof ComplexProduct);
     }
 
-    protected void updateDiscountAmount(boolean contentValid) {
-        if ( !contentValid ){
-            totalItemDiscountValueField.setText("");
-            return;
-        }
-        if ( "".equals(totalItemDiscountPercentField.getText()) ){
-            totalItemDiscountValueField.setText("");
-            return;
+    private void updateMeasureUnits(Product product) {
+        List<DbResource> possibleUnits = new ArrayList<DbResource>();
+        DbResource unitResource = null;
+        if ( product!=null )
+            unitResource = product.getMeasureUnit();
+        if ( unitResource!=null ){
+            MeasurementUnit unit = (MeasurementUnit) unitResource.getEnumValue();
+            EnumSet<MeasurementUnit> unitsFromCategory = 
+                MeasurementUnit.getMeasurementUnitsByCategory(unit.getCategory());
+            for (DbResource unitR : getMeasureUnits()) {
+                if ( unitsFromCategory.contains(unitR.getEnumValue()))
+                    possibleUnits.add(unitR);
+            }
         }
         
-        try{
-            BigDecimal totalValue = new BigDecimal(extendedPriceField.getText());  
-            BigDecimal discountPercent = new BigDecimal(totalItemDiscountPercentField.getText());
-            BigDecimal result = discountPercent.divide(new BigDecimal(100), new MathContext(10)).multiply(totalValue);
-            result.setScale(4, RoundingMode.HALF_EVEN);
-            totalItemDiscountValueField.setText(""+result);
-        }catch (Exception e){
-            totalItemDiscountValueField.setText("");
-        }
+        bindMeasureUnitField(possibleUnits);
     }
+
+    private void updateUnitLabel() {
+        Product p = product;
+        String priceLabelDisplay = "";
+        //update the unit label
+        if ( p!=null ){
+            int quantityPerPackage = 1;
+            if ( p instanceof SimpleProduct )
+                quantityPerPackage = ((SimpleProduct)p).getQuantityPerPackage();
+            MeasurementUnit measureUnit = null;
+            DbResource unitResource = (DbResource) ELProperty.create("${measureUnit}").getValue(p);
+            if ( unitResource!=null )
+                measureUnit = (MeasurementUnit) unitResource.getEnumValue();
+            
+            priceLabelDisplay = getResourceMap().getString("unitPriceLabel.measureUnitPrefix") 
+                + " " + quantityPerPackage + " ";
+            if ( measureUnit!=null )
+                priceLabelDisplay += measureUnit.getShortUnitName();
+        }
+        forUnitsLabel.setText(priceLabelDisplay);
+    }
+
+//    protected void updateDiscountPercent(boolean contentValid) {
+//        if ( !contentValid ){
+//            totalItemDiscountPercentField.setText("");
+//            return;
+//        }
+//        if ( "".equals(totalItemDiscountValueField.getText()) ){
+//            totalItemDiscountPercentField.setText("");
+//            return;
+//        }
+//        
+//        try{
+//            BigDecimal totalValue = new BigDecimal(extendedPriceField.getText());  
+//            BigDecimal discountAmount = new BigDecimal(totalItemDiscountValueField.getText());
+//            BigDecimal result = discountAmount.divide(totalValue, new MathContext(10)).multiply(new BigDecimal(100));
+//            result.setScale(4, RoundingMode.HALF_UP);
+//            totalItemDiscountPercentField.setText(""+result.toPlainString());
+//        }catch (Exception e){
+//            totalItemDiscountPercentField.setText("");
+//        }
+//    }
+//
+//    protected void updateDiscountAmount(boolean contentValid) {
+//        if ( !contentValid ){
+//            totalItemDiscountValueField.setText("");
+//            return;
+//        }
+//        if ( "".equals(totalItemDiscountPercentField.getText()) ){
+//            totalItemDiscountValueField.setText("");
+//            return;
+//        }
+//        
+//        try{
+//            BigDecimal totalValue = new BigDecimal(extendedPriceField.getText());  
+//            BigDecimal discountPercent = new BigDecimal(totalItemDiscountPercentField.getText());
+//            BigDecimal result = discountPercent.divide(new BigDecimal(100), new MathContext(10)).multiply(totalValue);
+//            result.setScale(4, RoundingMode.HALF_EVEN);
+//            totalItemDiscountValueField.setText(""+result);
+//        }catch (Exception e){
+//            totalItemDiscountValueField.setText("");
+//        }
+//    }
 
     protected void calculateShipWeek(boolean contentValid, boolean fromDateChanged, boolean event) {
         //avoid update cycle
@@ -841,21 +865,86 @@ public class InvoiceItemForm extends BaseEntityPanel {
             String qty = orderedQtyField.getText();
             BigDecimal priceLong = new BigDecimal(price);
             BigDecimal qtyLong = new BigDecimal(qty);
-            BigDecimal result = qtyLong.multiply(priceLong);
-            result.setScale(4, RoundingMode.HALF_DOWN);
-            extendedPriceField.setText(""+(result));
-        }catch (Exception e) {
+            BigDecimal pricedPackagesQuantity = getPricedPackagesQuantity(qtyLong);
+            BigDecimal result = pricedPackagesQuantity.multiply(priceLong, MathContext.DECIMAL64);
+            extendedPriceField.setText(formatMoney(result));
+        }catch (NumberFormatException e) {
+            extendedPriceField.setText("");
         }
     }
 
+    private BigDecimal getPricedPackagesQuantity(BigDecimal orderedQuantity) {
+        DbResource currentUnitRes = (DbResource) measureUnitField.getSelectedItem();
+        DbResource originUnitRes = null;
+        Product p = product;
+        if ( p!=null )
+            originUnitRes = p.getMeasureUnit();
+        if ( currentUnitRes==null || originUnitRes==null )
+            return new BigDecimal("0");
+        MeasurementUnit currentUnit = (MeasurementUnit) currentUnitRes.getEnumValue();
+        MeasurementUnit originUnit = (MeasurementUnit) originUnitRes.getEnumValue();
+        
+        BigDecimal currentQuantity = currentUnit.getCgsUnitValue();
+        currentQuantity = currentQuantity.multiply(orderedQuantity);
+        
+        BigDecimal oneUnitQuantity = originUnit.getCgsUnitValue();
+        if ( p instanceof SimpleProduct ){
+            oneUnitQuantity = oneUnitQuantity.multiply(
+                new BigDecimal( ((SimpleProduct)p).getQuantityPerPackage()) );
+        }
+        
+        BigDecimal pricePackagesForThisQuantity =
+            currentQuantity.divide(oneUnitQuantity, MathContext.DECIMAL64);
+        
+        return pricePackagesForThisQuantity;
+    }
+
+    /**
+     * The price in the product is given for its default measure unit.
+     * In the current form we can selected other measure unit (from the same category).
+     * @return
+     */
+//    private BigDecimal getUnitMultiplier() {
+//        DbResource unitToRes = (DbResource) measureUnitField.getSelectedItem();
+//        DbResource unitFromRes = null;
+//        Product product = (Product)productField.getSelectedItem();
+//        if ( product!=null )
+//            unitFromRes = product.getMeasureUnit();
+//        if ( unitToRes==null || unitFromRes==null )
+//            return new BigDecimal("0");
+//        MeasurementUnit unitTo = (MeasurementUnit) unitToRes.getEnumValue();
+//        MeasurementUnit unitFrom = (MeasurementUnit) unitFromRes.getEnumValue();
+//        
+//        BigDecimal to = unitTo.getCgsUnitValue();
+//        if ( product instanceof SimpleProduct ){
+//            SimpleProduct simpleProduct = (SimpleProduct) product;
+//            to = to.multiply(new BigDecimal(simpleProduct.getQuantityPerPackage()));
+//        }
+//        BigDecimal from = unitFrom.getCgsUnitValue();
+//        
+//        System.out.println(" to "+to+" from "+from);
+//        BigDecimal result = from.divide(to);
+//        
+//        return result;
+//    }
+
+    private List<DbResource> measureUnits = null;
     private List<DbResource> getMeasureUnits()
     {
-        return getProductListRemote().getMeasureUnits();
+        if ( measureUnits==null )
+            measureUnits = getProductListRemote().getMeasureUnits();
+        return measureUnits;
     }
 
     private ProductsListRemote getProductListRemote() {
         if ( productListRemote==null )
             productListRemote = getBean(ProductsListRemote.class);
         return productListRemote;
+    }
+    
+    @Action
+    public void clearProductOrSchema(){
+        product = null;
+        onSelectProduct();
     }
 }

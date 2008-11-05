@@ -82,10 +82,14 @@ public interface InvoiceListRemote {
     List<InvoiceItem> getInvoiceItems(BigInteger parentDataObjectId);
 
     /**
-     * Delete invoice item
+     * Delete invoice item.
+     * If the item is copied from other document ( {@link #isTemplateItem(InvoiceItem)} ),
+     * then all items copied from the same document are removed and returned. Otherwise, just
+     * this item is removed and returned one element in the list.
+     * 
      * @param item
      */
-    void deleteInvoiceItem(InvoiceItem item);
+    List<InvoiceItem> deleteInvoiceItem(InvoiceItem item);
 
     /**
      * Create new invoice item for a given invoice
@@ -177,14 +181,6 @@ public interface InvoiceListRemote {
     Invoice sendInvoice(Invoice entity);
 
     /**
-     * Make an invoice in open state {@link InvoiceStatus#Open} to be in published state {@link InvoiceStatus#Published}.
-     * @param entity
-     * @param sent
-     * @return
-     */
-    Invoice publishInvoice(Invoice entity);
-
-    /**
      * Save invoice items
      * @param newItems
      */
@@ -197,16 +193,15 @@ public interface InvoiceListRemote {
      */
     WarehouseProduct getWarehouseProduct(SimpleProduct product);
 
-    /**
-     * Returns list which consist of documents used as template for new invoices. 
-     * Can contain different types of documents (for ex. Sales Offers, Invoices, etc) 
-     * @param includeSalesOffers 
-     * @param includeProformas 
-     * @param includeInvoices 
-     * @param onlyPending - only not finalized documents
-     * @return
-     */
-    List<?> getTemplateDocuments(Boolean onlyPending, Boolean includeInvoices, Boolean includeProformas, Boolean includeSalesOffers);
+//    /**
+//     * Returns list which consist of documents used as template for new invoices. 
+//     * Can contain different types of documents (for ex. Sales Offers, Invoices, etc) 
+//     * @param includeProformas 
+//     * @param includeInvoices 
+//     * @param onlyPending - only not finalized documents
+//     * @return
+//     */
+//    List<?> getTemplateDocuments(Boolean onlyPending, Boolean includeInvoices, Boolean includeProformas);
 
     /**
      * Returns the items present in this template document.
@@ -218,7 +213,7 @@ public interface InvoiceListRemote {
     /**
      * Saves the item links and also the actual items referenced by the link.
      * (The invoice item links are used to remember the documents items used as templates for
-     * a given invoice item) 
+     * a given invoice item). Marks all documents in the links as 'usedAsTemplate'.
      * @param itemLinks
      */
     void addInvoiceItems(List<InvoiceItemLink> itemLinks);
@@ -229,4 +224,53 @@ public interface InvoiceListRemote {
      * @return
      */
     List<InvoiceItemLink> getInvoiceItemLinks(InvoiceItem invoiceItem);
+    
+    /**
+     * Perform user operation 'confirm' on the document. The document becomes {@value InvoiceStatus#WaitForPayment}
+     * The method is smart and does the necessary depending the type and status of the document.
+     * Throws {@link IllegalStateException} if the invoice can not be confirmed.
+     * @param invoice
+     * @return
+     */
+    Invoice confirm(Invoice invoice);
+    
+    /**
+     * Perform user operation 'reopen' on the document. The document becomes {@value InvoiceStatus#Reopen}
+     * The method is smart and does the necessary depending the type and status of the document.
+     * Throws {@link IllegalStateException} if the invoice can not be confirmed.
+     * @param invoice
+     * @return
+     */
+    Invoice reopen(Invoice invoice);
+    
+    /**
+     * Perform user operation 'cancel' on the document. The document becomes {@value InvoiceStatus#Cancelled}
+     * The method is smart and does the necessary depending the type and status of the document.
+     * Throws {@link IllegalStateException} if the invoice can not be confirmed.
+     * @param invoice
+     * @return
+     */
+    Invoice cancel(Invoice invoice);
+
+    /**
+     * Get the possible template documents for the given document.
+     * @param forDocument
+     * @param includeProformas - this is irrelevant if the document is not invoice
+     * @param includeInvoices - this is irrelevant if the document is not invoice
+     * @return
+     */
+    List<?> getTemplateDocuments(Invoice forDocument, Boolean includeInvoices, Boolean includeProformas);
+
+    /**
+     * @param item
+     * @return - true if the item is copied from other document
+     */
+    Boolean isTemplateItem(InvoiceItem item);
+
+    /**
+     * Get the documents that are still not paid for the given recipient (customer).
+     * @param recipient
+     * @return
+     */
+    List<Invoice> getDueDocuments(BusinessPartner recipient);
 }

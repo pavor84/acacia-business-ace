@@ -205,10 +205,17 @@ public class ProductItemTreeTableNode
         ComplexProduct complexProduct = getComplexProduct();
         if(complexProduct != null)
         {
-            if(complexProduct.getProductId() != null)
-                childCount = service.getComplexProductItemsCount(complexProduct);
-            else
-                childCount = complexProduct.getComplexProductItems().size();
+//            if(complexProduct.getProductId() != null)
+//                childCount = service.getComplexProductItemsCount(complexProduct);
+//            else
+//                childCount = complexProduct.getComplexProductItems().size();
+            
+            //Load the children only once, don't query the server on every call for the same information!
+            //NOTE: this method is called on every 'repaint' event, which is unacceptable. TODO (owner): please fix.
+            if(complexProduct.getComplexProductItems() == null){
+                complexProduct.setComplexProductItems(service.getComplexProductItems(complexProduct));
+            }
+            childCount = complexProduct.getComplexProductItems().size();
         }
         else
         {

@@ -6,6 +6,9 @@
 
 package com.cosmos.acacia.gui;
 
+import java.awt.Component;
+import java.awt.FlowLayout;
+
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
@@ -47,6 +50,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         problemsButton = new com.cosmos.swingb.JBButton();
         customButton = new com.cosmos.swingb.JBButton();
         printButton = new com.cosmos.swingb.JBButton();
+        customButtonsPanel = new com.cosmos.swingb.JBPanel();
 
         setName("Form"); // NOI18N
 
@@ -72,6 +76,19 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         printButton.setIcon(resourceMap.getIcon("customButton.icon")); // NOI18N
         printButton.setName("printButton"); // NOI18N
 
+        customButtonsPanel.setName("customButtonsPanel"); // NOI18N
+
+        javax.swing.GroupLayout customButtonsPanelLayout = new javax.swing.GroupLayout(customButtonsPanel);
+        customButtonsPanel.setLayout(customButtonsPanelLayout);
+        customButtonsPanelLayout.setHorizontalGroup(
+            customButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 101, Short.MAX_VALUE)
+        );
+        customButtonsPanelLayout.setVerticalGroup(
+            customButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 25, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,10 +98,12 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(problemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(customButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(printButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(customButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(customButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -93,12 +112,14 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(problemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(customButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(printButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(customButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(problemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(printButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(customButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -107,6 +128,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBButton customButton;
+    private com.cosmos.swingb.JBPanel customButtonsPanel;
     private com.cosmos.swingb.JBButton printButton;
     private com.cosmos.swingb.JBButton problemsButton;
     private com.cosmos.swingb.JBButton saveButton;
@@ -167,11 +189,11 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             {
                 bindingGroup.addBindingListener(new AbstractBindingListener()
                 {
-
                     @SuppressWarnings("unchecked")
                     @Override
                     public void targetChanged(Binding binding, PropertyStateEvent event) {
                         setSaveActionState(parent);
+                        
                     }
                 });
             }
@@ -188,6 +210,14 @@ public class EntityFormButtonPanel extends AcaciaPanel {
             setEnabled(Button.Save, bindingGroup.isContentValid());
             setEnabled(Button.Problems, !bindingGroup.isContentValid());
             setEnabled(Button.Custom, bindingGroup.isContentValid());
+            setEnabledCustomButtons(bindingGroup.isContentValid());
+        }
+    }
+
+
+    protected void setEnabledCustomButtons(boolean enabled) {
+        for (Component button : customButtonsPanel.getComponents()) {
+            button.setEnabled(enabled);
         }
     }
 
@@ -299,6 +329,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     @Override
     protected void initData() {
         setVisible(Button.Custom, false);
+        
+        customButtonsPanel.setLayout(new FlowLayout(FlowLayout.TRAILING, 10, 0));
     }
 
     public com.cosmos.swingb.JBButton getCustomButton() {
@@ -324,5 +356,31 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 return printButton;
         }
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
+    }
+    
+    /**
+     * Adds additional button to the panel. The button is added on the left side of the close button.
+     * Any number of buttons can be added. Their state (visible, enabled) should be managed externally.
+     * @param Button
+     */
+    public void addButton(JBButton button){
+        customButtonsPanel.add(button);
+    }
+    
+    /**
+     * Removes a button from the additional buttons panel. The button should have been added
+     * before with {@link #addButton(JBButton)}
+     * @param button
+     */
+    public void removeButton(JBButton button){
+        customButtonsPanel.remove(button);
+    }
+    
+    /**
+     * Removes all buttons added before with {@link #addButton(JBButton)}
+     * @param button
+     */
+    public void removeAllButtons(){
+        customButtonsPanel.removeAll();
     }
 }
