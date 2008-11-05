@@ -35,7 +35,7 @@ import com.cosmos.acacia.annotation.ValidationType;
 @NamedQueries(
     {
         /**
-         * Parameters: 
+         * Parameters:
          *  - parentDataObjectId - not null, the parent object id
          *  - deleted - not null - true/false
          */
@@ -46,7 +46,7 @@ import com.cosmos.acacia.annotation.ValidationType;
                         "and i.dataObject.deleted = :deleted order by i.orderItemId "
             ),
         /**
-         * Parameters: 
+         * Parameters:
          *  - parentDataObjectId - not null, the parent object id
          *  - product - not null
          */
@@ -95,7 +95,7 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "purchase_price")
     private BigDecimal purchasePrice;
-    
+
     @Property(title="Currency", propertyValidator=@PropertyValidator(required=true), editable=false)
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -105,16 +105,16 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
     @Column(name = "ship_date_from")
     @Temporal(TemporalType.DATE)
     private Date shipDateFrom;
-    
+
     @Property(title="Ship Date To", readOnly=true)
     @Column(name = "ship_date_to")
     @Temporal(TemporalType.DATE)
     private Date shipDateTo;
-    
+
     @Column(name = "notes")
-    @Property(title="Notes")
+    @Property(title="Notes", exportable=false)
     private String notes;
-    
+
     @JoinColumn(name = "order_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -269,7 +269,7 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
     public void setId(BigInteger id) {
         orderItemId = id;
     }
-    
+
     /**
      * This is a synthetic method. Calculates and returns the quantity that is not yet matched against confirmation items.
      * This value is exactly: (orderedQuantity-confirmedQuantity)

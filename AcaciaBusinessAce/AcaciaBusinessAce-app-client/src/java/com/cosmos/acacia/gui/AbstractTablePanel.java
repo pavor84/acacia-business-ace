@@ -1261,15 +1261,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return getSelectedRowObject();
     }
 
-    protected final void print(Class entityClass) {
-        try {
-            JasperDesign design = ReportsUtil.createTableReport(entityClass);
-            JasperReport report = JasperCompileManager.compileReport(design);
-            JRDataSource ds = new JRBeanCollectionDataSource(getListData());
-            ReportsUtil.print(report, ds, this, getResourceMap());
-        } catch (Exception ex) {
-            handleException(ex);
-        }
-
+    @Override
+    protected List getEntities() {
+        return getListData();
     }
 }

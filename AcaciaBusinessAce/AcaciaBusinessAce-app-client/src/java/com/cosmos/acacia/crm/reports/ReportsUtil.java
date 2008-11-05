@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -19,6 +20,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -47,11 +49,13 @@ public class ReportsUtil {
     public static void print(JasperReport jasperReport,
             JRDataSource ds,
             Component uiComponent,
-            ResourceMap resourceMap)
+            ResourceMap resourceMap,
+            Map paramsMap)
     {
         try {
             Map params = new HashMap();
             params.put("REPORTS_DIR", "reports");
+            params.putAll(paramsMap);
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     jasperReport, params, ds);
@@ -139,9 +143,9 @@ public class ReportsUtil {
         design.setName(reportName);
         design.setColumnCount(entityProps.getKeys().size());
         design.setPrintOrder(JasperDesign.PRINT_ORDER_VERTICAL);
-        design.setOrientation(JasperDesign.ORIENTATION_LANDSCAPE);
-        design.setPageWidth(842);
-        design.setPageHeight(595);
+        design.setOrientation(JasperDesign.ORIENTATION_PORTRAIT);
+        design.setPageWidth(595);
+        design.setPageHeight(842);
         design.setColumnSpacing(0);
         design.setLeftMargin(20);
         design.setRightMargin(20);
@@ -179,7 +183,6 @@ public class ReportsUtil {
             Class fieldClass = null;
             // Checking whether the property is a bean =>
             // transformed to string by customDisplay
-            log.info("IS: " + DataObjectBean.class.isAssignableFrom(pd.getPropertyClass()));
             if (DataObjectBean.class.isAssignableFrom(pd.getPropertyClass())) {
 
                 fieldClass = String.class;
@@ -215,10 +218,8 @@ public class ReportsUtil {
         design.setColumnHeader(columnHeader);
         i = 0;
         for (JRField field : design.getFields()) {
-            i++;
             JRDesignTextField element = new JRDesignTextField();
             JRDesignExpression expr = new JRDesignExpression();
-
 
             if (Arrays.binarySearch(getTextFieldClassNames(),
                     field.getValueClass().getName()) < 0) {
@@ -240,8 +241,9 @@ public class ReportsUtil {
             element.setX(i * design.getColumnWidth());
             element.setWidth(design.getColumnWidth());
             element.setHeight(details.getHeight());
-            element.setKey("textField-" + i);
+            element.setKey("textField-" + (i+1));
             details.addElement(element);
+            i++;
         }
         design.setDetail(details);
 

@@ -28,6 +28,7 @@ import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
+import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.reports.Report;
@@ -826,6 +827,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     @Override
     protected Report getReport() {
         Report report = new Report("purchase_order", itemsTablePanel.getItems(), null);
+        report.setAutoSubreport1Class(PurchaseOrderItem.class);
         return report;
     }
 }
