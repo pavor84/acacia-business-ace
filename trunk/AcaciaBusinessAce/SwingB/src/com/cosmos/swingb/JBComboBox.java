@@ -121,13 +121,12 @@ public class JBComboBox
 
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
-        Binding binding = Bindings.createAutoBinding(
+        binding = Bindings.createAutoBinding(
                 updateStrategy,
                 beanEntity,
                 elProperty,
                 this,
                 beanProperty);
-
         Validator validator = propertyDetails.getValidator();
         if(validator != null)
         {
@@ -272,6 +271,9 @@ public class JBComboBox
 
     private ObjectToStringConverter converter;
 
+    @SuppressWarnings("unchecked")
+    private Binding binding;
+
     public ObjectToStringConverter getConverter() {
         return converter;
     }
@@ -347,5 +349,13 @@ public class JBComboBox
         }
 
         fireItemStateChanged(event);
+    }
+
+    public Binding getBinding() {
+        return binding;
+    }
+
+    public void setBinding(Binding binding) {
+        this.binding = binding;
     }
 }

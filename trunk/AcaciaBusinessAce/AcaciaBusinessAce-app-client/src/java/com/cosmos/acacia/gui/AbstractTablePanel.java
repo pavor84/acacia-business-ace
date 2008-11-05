@@ -709,7 +709,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param the name of the table
      * @return the message
      */
-    private String formTableReferencedMessage(String table)
+    protected String formTableReferencedMessage(String table)
     {
         String message = getResourceMap().getString("deleteAction.err.referenced");
         String tableUserfriendly =
@@ -1188,16 +1188,27 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     /**
      * Set a panel regime, where all data is considered read-only.
-     * Classify, Modify and Delete operation are not permitted (therefore the respective buttons are hidden).
-     * Also calls {@link #setEditable(false)}.
+     * The same as {@link #setReadonly(true)}.
      */
     public void setReadonly() {
-        setEditable(false);
+        setReadonly(true);
+    }
+    
+    /**
+     * Set a panel regime, where all data is considered read-only (or disabled it).
+     * In read-only state, Classify, Modify and Delete operation are not permitted (therefore the respective buttons are hidden).
+     * The method calls also {@link #setEditable()}.
+     */
+    public void setReadonly(boolean readonly){
+        setEditable(!readonly);
         viewRowState = true;
-        modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
-        setVisible(Button.Classify, false);
-        setVisible(Button.Delete, false);
-        setVisible(Button.New, false);
+        if ( readonly )
+            modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
+        else
+            modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
+        setVisible(Button.Classify, !readonly);
+        setVisible(Button.Delete, !readonly);
+        setVisible(Button.New, !readonly);
     }
 
     @SuppressWarnings("unchecked")

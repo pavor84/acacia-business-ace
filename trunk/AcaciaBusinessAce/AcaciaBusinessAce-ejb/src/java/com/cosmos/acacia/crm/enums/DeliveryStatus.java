@@ -10,16 +10,12 @@ import java.util.List;
  * @author	Petar Milev
  *
  */
-public enum InvoiceStatus implements DatabaseResource {
-    Open("Open", "The document is created and can be changed."),
-    WaitForPayment("Wait For Payment", "The documents awaits for payment"),
-    Reopen("Reopen", "The document was reopen for modification"),
-    Cancelled("Cancelled", "The document was cancelled"),
-    Paid("Paid", "The document was confirmed and payments were received."),
-    PartlyDelivered("Partly Delivered", "Invoice is partly delivered."),
-    Delivered("Delivered", "Invoice is received from recipient.");
+public enum DeliveryStatus implements DatabaseResource {
+    NotDelivered("NotDelivered", "The delivery is pending."),
+    PartlyDelivered("Partly Delivered", "Quantities are partly delivered."),
+    Delivered("Delivered", "Quantities are received from recipient.");
 
-    private InvoiceStatus(String name, String description) {
+    private DeliveryStatus(String name, String description) {
         this.name = name;
         this.desc = description;
     }
@@ -62,9 +58,9 @@ public enum InvoiceStatus implements DatabaseResource {
     {
         if(dbResources == null)
         {
-            dbResources = new ArrayList<DbResource>(InvoiceStatus.values().length);
+            dbResources = new ArrayList<DbResource>(DeliveryStatus.values().length);
 
-            for(InvoiceStatus unit : InvoiceStatus.values())
+            for(DeliveryStatus unit : DeliveryStatus.values())
             {
                 dbResources.add(unit.getDbResource());
             }

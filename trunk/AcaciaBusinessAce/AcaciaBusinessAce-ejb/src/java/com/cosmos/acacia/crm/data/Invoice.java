@@ -35,29 +35,43 @@ import com.cosmos.acacia.annotation.ValidationType;
 @NamedQueries(
     {
         /**
-         * Get all invoices which are neither open nor finalized for a given branch.
+         * Get all unpaid invoices for the given recipient
          * Parameters: 
-         *  - branch - not null
-         *  - finalizedStatus - provide the resource value of invoice status finalized
-         *  - openStatus - provide the resource value of invoice status open
+         * - recipient - BusinessPartner instance (assuming 'customer' classified), required
+         * - waitingForPayment - status, supply not null InvoiceStatus.WaitForPayment.getDbResource
+         * - proformaInvoice - Boolean value, required - to get the proformas or invoices
          */
         @NamedQuery
             (
-                name = "Invoice.getPendingTemplateInvoices",
-                query = "select i from Invoice i where " +
-                		"i.branch = :branch and i.status <> :finalizedStatus and i.status <> :openStatus"
+                name = "Invoice.getDueInvoicesForRecipient",
+                query = "select i from Invoice i where i.recipient = :recipient and i.status = :waitingForPayment and i.proformaInvoice = :proformaInvoice "
             ),
         /**
-         * Get all invoices which state is past open for a given branch.
+         * If a given InvoiceItem is copied from an other document, then this query returns all
+         * other InvoiceItems of this document. Otherwise returns emtpy list.
          * Parameters: 
-         *  - branch - not null
-         *  - openStatus - provide the resource value of invoice status open
+         * - item - the item instance, required
          */
         @NamedQuery
             (
-                name = "Invoice.getAllTemplateInvoices",
-                query = "select i from Invoice i where " +
-                        "i.branch = :branch and i.status <> :openStatus"
+                name = "Invoice.getCopiedItemsFromTheSameDocument",
+                query = "select link.invoiceItem from InvoiceItemLink link where link.templateDocumentId in "+ 
+                        "(select templateDocumentId from InvoiceItemLink where invoiceItem = :item)"
+            ),
+        /**
+         * Parameters: 
+         * - proformaInvoice - required. Supply Boolean.TRUE as value
+         * - recipient - required - the recipient
+         * - paid - required. Value of InvoiceStatus.PAID.getDbResource()
+         */
+        @NamedQuery
+            (
+                name = "Invoice.getTemplatesForInvoice",
+                query = "select i from Invoice i where i.proformaInvoice = :proformaInvoice " +
+                		"and i.recipient = :recipient " +
+                		"and i.status = :paid " +
+                		//at last, make sure that the selected invoice is not already used as template
+                		"and not exists (from InvoiceItemLink itemLink where itemLink.templateDocumentId = i.invoiceId)"
             ),
         /**
          * Parameters: 
@@ -122,10 +136,9 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Column(name = "invoice_number")
     private BigInteger invoiceNumber;
 
-    @Column(name = "invoice_date", nullable = false)
+    @Column(name = "invoice_date")
     @Temporal(TemporalType.DATE)
-    @Property(title="Date",
-            propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Date", editable=false)
     private Date invoiceDate;
 
     @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id", nullable=false)
@@ -159,10 +172,14 @@ public class Invoice extends DataObjectBean implements Serializable {
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource status;
+    
+    @Property(title="Delivery Status", readOnly=true)
+    @ManyToOne
+    private DbResource deliveryStatus;
 
-    @Column(name = "creation_time", nullable = false)
+    @Column(name = "creation_time")
     @Temporal(TemporalType.DATE)
-    @Property(title="Creation date")
+    @Property(title="Creation date", editable=false)
     private Date creationTime;
 
     @Property(title="Creator", customDisplay="${creator.displayName}")
@@ -171,7 +188,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     private Person creator;
     
     @Property(title="Creator Name", editable=false)
-    @Column(name = "creator_name", nullable = false)
+    @Column(name = "creator_name")
     private String creatorName;
 
     @Property(title="Delivery Method", propertyValidator=@PropertyValidator(required=true))
@@ -191,7 +208,7 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @Property(title="Transport Price", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "transport_price")
+    @Column(name = "transport_price", precision=20, scale=4)
     private BigDecimal transportationPrice;
 
     @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
@@ -201,37 +218,37 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @Property(title="Invoice Sub Value", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "invoice_sub_value", nullable = false)
+    @Column(name = "invoice_sub_value", nullable = false, precision=20, scale=4)
     private BigDecimal invoiceSubValue;
 
     @Property(title="Vat %", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "vat", nullable = false)
+    @Column(name = "vat", nullable = false, precision=20, scale=4)
     private BigDecimal vat;
     
     @Property(title="Discount", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "discount_amount")
+    @Column(name = "discount_amount", precision=20, scale=4)
     private BigDecimal discountAmount;
     
     @Property(title="Discount %", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "discount_percent")
+    @Column(name = "discount_percent", precision=20, scale=4)
     private BigDecimal discountPercent;
     
     @Property(title="Total Value", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d, required=true))
-    @Column(name = "total_value", nullable = false)
+    @Column(name = "total_value", nullable = false, precision=20, scale=4)
     private BigDecimal totalValue;
 
     @Property(title="Excise Duty %", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
-    @Column(name = "excise_duty_percent")
+    @Column(name = "excise_duty_percent", precision=20, scale=4)
     private BigDecimal exciseDutyPercent;
 
     @Property(title="Excise Duty", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "excise_duty_amount")
+    @Column(name = "excise_duty_amount", precision=20, scale=4)
     private BigDecimal exciseDutyValue;
 
     @JoinColumn(name = "vat_condition_id", referencedColumnName = "resource_id")
@@ -258,7 +275,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     
     @Property(title="Single Pay Amount", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "single_pay")
+    @Column(name = "single_pay", precision=20, scale=4)
     private BigDecimal singlePayAmount;
     
     @Property(title="Payments Count", propertyValidator=@PropertyValidator(
@@ -278,7 +295,7 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @Column(name = "sent_time")
     @Temporal(TemporalType.DATE)
-    @Property(title="Sent Time")
+    @Property(title="Sent Time", editable=false)
     private Date sentTime;
 
     @Property(title="Sender")
@@ -290,20 +307,21 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Column(name = "sender_name")
     private String senderName;
 
-    @Column(name = "finalizing_date")
+    @Column(name = "completion_date")
     @Temporal(TemporalType.DATE)
-    private Date finalizingDate;
+    @Property(title="Completion Date", editable=false)
+    private Date completionDate;
     
-    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53, required=true))
+    @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))
     @Column(name = "ship_week")
     private Integer shipWeek;
     
-    @Property(title="Ship Date From", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Ship Date From")
     @Column(name = "ship_date_from")
     @Temporal(TemporalType.DATE)
     private Date shipDateFrom;
     
-    @Property(title="Ship Date To", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Ship Date To")
     @Column(name = "ship_date_to")
     @Temporal(TemporalType.DATE)
     private Date shipDateTo;
@@ -476,15 +494,6 @@ public class Invoice extends DataObjectBean implements Serializable {
     public void setSenderName(String senderName) {
         firePropertyChange("senderName", this.senderName, senderName);
         this.senderName = senderName;
-    }
-
-    public Date getFinalizingDate() {
-        return finalizingDate;
-    }
-
-    public void setFinalizingDate(Date finalizingDate) {
-        firePropertyChange("finalizingDate", this.finalizingDate, finalizingDate);
-        this.finalizingDate = finalizingDate;
     }
 
     public Address getBranch() {
@@ -761,5 +770,21 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     public void setProformaInvoice(Boolean proformaInvoice) {
         this.proformaInvoice = proformaInvoice;
+    }
+
+    public Date getCompletionDate() {
+        return completionDate;
+    }
+
+    public void setCompletionDate(Date completionDate) {
+        this.completionDate = completionDate;
+    }
+
+    public DbResource getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(DbResource deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 }

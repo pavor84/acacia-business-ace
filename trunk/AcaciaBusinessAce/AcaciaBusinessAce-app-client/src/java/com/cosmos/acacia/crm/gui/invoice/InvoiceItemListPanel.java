@@ -10,13 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.swing.JOptionPane;
 
+import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -30,9 +34,12 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class InvoiceItemListPanel extends AbstractTablePanel {
 
+    private Invoice invoice;
+
     /** Creates new form AddresssListPanel */
-    public InvoiceItemListPanel(BigInteger parentDataObjectId) {
+    public InvoiceItemListPanel(BigInteger parentDataObjectId, Invoice invoice) {
         super(parentDataObjectId);
+        this.invoice = invoice;
     }
 
     public InvoiceItemListPanel(DataObjectBean parent) {
@@ -91,15 +98,52 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
             formSession = getBean(InvoiceListRemote.class);
         return formSession;
     }
+    
+    private List<InvoiceItem> deletedItems = null;
 
     @Override
     protected boolean deleteRow(Object rowObject) {
         if (rowObject != null) {
-            getFormSession().deleteInvoiceItem((InvoiceItem)rowObject);
+            deletedItems = getFormSession().deleteInvoiceItem((InvoiceItem)rowObject);
             return true;
         }
 
         return false;
+    }
+    
+    @Action
+    public void deleteAction() {
+        InvoiceItem item = (InvoiceItem) getDataTable().getSelectedRowObject();
+        String warningMessage = null;
+        if ( getFormSession().isTemplateItem(item) ){
+            warningMessage = getResourceMap().getString("deleteAction.ConfirmDialog.templateItemMessage");
+        }else{
+            warningMessage = getResourceMap().getString("deleteAction.ConfirmDialog.message");
+        }
+
+        if ( showDeleteConfirmation(warningMessage) ){
+            try {
+                if(deleteRow(item))
+                {
+                    if ( deletedItems!=null ){
+                        for (InvoiceItem deletedItem : deletedItems) {
+                            getDataTable().removeRow(deletedItem);
+                        }
+                    }else{
+                        getDataTable().removeSelectedRow();
+                    }
+                    fireDelete(item);
+                }
+            } catch (Exception ex) {
+                ValidationException ve = extractValidationException(ex);
+                if (ve != null) {
+                    JOptionPane.showMessageDialog(this, formTableReferencedMessage(ve.getMessage()));
+                } else {
+                    log.error(ex);
+                }
+            }
+
+        }
     }
 
     @Override
@@ -181,9 +225,9 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
     @Override
     public void specialAction() {
         if ( canNestedOperationProceed() ){
-            InvoiceItemListPanel invoiceItemsListPanel = new InvoiceItemListPanel(getParentDataObjectId());
+            InvoiceItemListPanel invoiceItemsListPanel = new InvoiceItemListPanel(getParentDataObjectId(), invoice);
             invoiceItemsListPanel.getButtonsPanel().setVisible(false);
-            InvoiceItemsCopyForm copyForm = new InvoiceItemsCopyForm(getParentDataObjectId(), invoiceItemsListPanel);
+            InvoiceItemsCopyForm copyForm = new InvoiceItemsCopyForm(getParentDataObjectId(), invoiceItemsListPanel, invoice);
             DialogResponse response = copyForm.showDialog(this);
             if ( DialogResponse.SAVE.equals(response) ){
                 refreshAction();

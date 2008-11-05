@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ejb.EJB;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JOptionPane;
 
@@ -53,17 +52,35 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     
     @EJB
     private InvoiceListRemote formSession = getBean(InvoiceListRemote.class);
+    private Invoice invoice;
+    
+    private boolean proform = false;
 
     /** Creates new form InsertFromDocumentForm 
+     * @param invoice 
      * @param templateDocuments */
-    public InvoiceItemsCopyForm(BigInteger parentId, InvoiceItemListPanel invoiceItemsPanel) {
+    public InvoiceItemsCopyForm(BigInteger parentId, InvoiceItemListPanel invoiceItemsPanel, Invoice invoice) {
         super(parentId);
         if ( invoiceItemsPanel==null )
             throw new IllegalArgumentException("cant be null: 'invoiceItemsPanel'");
+        if ( invoice==null )
+            throw new IllegalArgumentException("invoice can not be null");
+        this.invoice = invoice;
+        proform = Boolean.TRUE.equals(invoice.getProformaInvoice());
         this.invoiceItemsListPanel = invoiceItemsPanel;
         this.templateDocuments = new ArrayList<Object>();
         initComponents();
+        initComponentsCustom();
         initData();
+    }
+
+    private void initComponentsCustom() {
+        //hide the checkbox for proforma or sales offer, if this is a proforma
+        if ( proform ){
+            jBLabel4.setVisible(false);
+            proformaInvoicesCheckField.setVisible(false);
+            salesOffersCheckField.setVisible(false);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -77,18 +94,13 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
 
         jBLabel1 = new com.cosmos.swingb.JBLabel();
         copySelectedButton = new com.cosmos.swingb.JBButton();
-        copyAllButton = new com.cosmos.swingb.JBButton();
         closeButton = new com.cosmos.swingb.JBButton();
-        invoicesCheckField = new com.cosmos.swingb.JBCheckBox();
         proformaInvoicesCheckField = new com.cosmos.swingb.JBCheckBox();
-        salesOffersCheckField = new com.cosmos.swingb.JBCheckBox();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
         documentField = new com.cosmos.acacia.gui.AcaciaComboBox();
-        showPendingRadioField = new com.cosmos.swingb.JBRadioButton();
-        showAllRadioField = new com.cosmos.swingb.JBRadioButton();
-        jBLabel5 = new com.cosmos.swingb.JBLabel();
         itemsToCopyTableHolder = new com.cosmos.acacia.gui.TableHolderPanel();
         invoiceItemsTableHolder = new com.cosmos.acacia.gui.TableHolderPanel();
+        salesOffersCheckField = new com.cosmos.swingb.JBCheckBox();
 
         setName("Form"); // NOI18N
 
@@ -99,35 +111,17 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         copySelectedButton.setText(resourceMap.getString("copySelectedButton.text")); // NOI18N
         copySelectedButton.setName("copySelectedButton"); // NOI18N
 
-        copyAllButton.setText(resourceMap.getString("copyAllButton.text")); // NOI18N
-        copyAllButton.setName("copyAllButton"); // NOI18N
-
         closeButton.setIcon(resourceMap.getIcon("closeButton.icon")); // NOI18N
         closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
-        invoicesCheckField.setText(resourceMap.getString("invoicesCheckField.text")); // NOI18N
-        invoicesCheckField.setName("invoicesCheckField"); // NOI18N
-
         proformaInvoicesCheckField.setText(resourceMap.getString("proformaInvoicesCheckField.text")); // NOI18N
         proformaInvoicesCheckField.setName("proformaInvoicesCheckField"); // NOI18N
-
-        salesOffersCheckField.setText(resourceMap.getString("salesOffersCheckField.text")); // NOI18N
-        salesOffersCheckField.setName("salesOffersCheckField"); // NOI18N
 
         jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
         jBLabel4.setName("jBLabel4"); // NOI18N
 
         documentField.setName("documentField"); // NOI18N
-
-        showPendingRadioField.setText(resourceMap.getString("showPendingRadioField.text")); // NOI18N
-        showPendingRadioField.setName("showPendingRadioField"); // NOI18N
-
-        showAllRadioField.setText(resourceMap.getString("showAllRadioField.text")); // NOI18N
-        showAllRadioField.setName("showAllRadioField"); // NOI18N
-
-        jBLabel5.setText(resourceMap.getString("jBLabel5.text")); // NOI18N
-        jBLabel5.setName("jBLabel5"); // NOI18N
 
         itemsToCopyTableHolder.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("itemsToCopyTableHolder.border.title"))); // NOI18N
         itemsToCopyTableHolder.setName("itemsToCopyTableHolder"); // NOI18N
@@ -136,11 +130,11 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         itemsToCopyTableHolder.setLayout(itemsToCopyTableHolderLayout);
         itemsToCopyTableHolderLayout.setHorizontalGroup(
             itemsToCopyTableHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 714, Short.MAX_VALUE)
+            .addGap(0, 849, Short.MAX_VALUE)
         );
         itemsToCopyTableHolderLayout.setVerticalGroup(
             itemsToCopyTableHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 245, Short.MAX_VALUE)
+            .addGap(0, 306, Short.MAX_VALUE)
         );
 
         invoiceItemsTableHolder.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("invoiceItemsTableHolder.border.title"))); // NOI18N
@@ -150,51 +144,44 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         invoiceItemsTableHolder.setLayout(invoiceItemsTableHolderLayout);
         invoiceItemsTableHolderLayout.setHorizontalGroup(
             invoiceItemsTableHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 714, Short.MAX_VALUE)
+            .addGap(0, 849, Short.MAX_VALUE)
         );
         invoiceItemsTableHolderLayout.setVerticalGroup(
             invoiceItemsTableHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 242, Short.MAX_VALUE)
+            .addGap(0, 305, Short.MAX_VALUE)
         );
+
+        salesOffersCheckField.setText(resourceMap.getString("salesOffersCheckField.text")); // NOI18N
+        salesOffersCheckField.setName("salesOffersCheckField"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(245, 245, 245)
-                        .addComponent(copySelectedButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(copyAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(showAllRadioField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(showPendingRadioField, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(invoicesCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(proformaInvoicesCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(salesOffersCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(documentField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(655, Short.MAX_VALUE)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(invoiceItemsTableHolder, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(itemsToCopyTableHolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(itemsToCopyTableHolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(proformaInvoicesCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(salesOffersCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(documentField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(373, 373, 373)
+                        .addComponent(copySelectedButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(790, Short.MAX_VALUE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -203,24 +190,16 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(invoicesCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(salesOffersCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(proformaInvoicesCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(showPendingRadioField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showAllRadioField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(proformaInvoicesCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salesOffersCheckField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(documentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(itemsToCopyTableHolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(copySelectedButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(copyAllButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(copySelectedButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
                 .addComponent(invoiceItemsTableHolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,24 +210,18 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBRadioButton showPendingRadioField;
-    private com.cosmos.swingb.JBRadioButton showAllRadioField;
     private com.cosmos.swingb.JBButton closeButton;
-    private com.cosmos.swingb.JBButton copyAllButton;
     private com.cosmos.swingb.JBButton copySelectedButton;
     private com.cosmos.acacia.gui.AcaciaComboBox documentField;
     private com.cosmos.acacia.gui.TableHolderPanel invoiceItemsTableHolder;
-    private com.cosmos.swingb.JBCheckBox invoicesCheckField;
     private com.cosmos.acacia.gui.TableHolderPanel itemsToCopyTableHolder;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel4;
-    private com.cosmos.swingb.JBLabel jBLabel5;
     private com.cosmos.swingb.JBCheckBox proformaInvoicesCheckField;
     private com.cosmos.swingb.JBCheckBox salesOffersCheckField;
     // End of variables declaration//GEN-END:variables
     
     private CopyItemsListPanel copyItemsListPanel;
-    private ButtonGroup documentStatusButtonGroup;
     
     boolean pendingRadioSelected = true;
     
@@ -257,51 +230,27 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         
         setDialogResponse(DialogResponse.CANCEL);
         
-        documentStatusButtonGroup = new ButtonGroup();
-        documentStatusButtonGroup.add(showPendingRadioField);
-        documentStatusButtonGroup.add(showAllRadioField);
-        documentStatusButtonGroup.setSelected(showPendingRadioField.getModel(), true);
-        ActionListener updateDocumentsListListener = new ActionListener() {
+        proformaInvoicesCheckField.setSelected(true);
+        salesOffersCheckField.setSelected(true);
+        
+        ActionListener updateTemplateDocsListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateTemplateDocumentsList();
             }
         };
-        invoicesCheckField.setSelected(true);
-        proformaInvoicesCheckField.setSelected(true);
-        salesOffersCheckField.setSelected(true);
         
-        showAllRadioField.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if ( !pendingRadioSelected ) //already selected, so ignore
-                    return;
-                updateTemplateDocumentsList();
-                pendingRadioSelected = false;
-            }
-        });
-        showPendingRadioField.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if ( pendingRadioSelected ) //already selected, so ignore
-                    return;
-                updateTemplateDocumentsList();
-                pendingRadioSelected = true;
-            }
-        });
-        
-        invoicesCheckField.addActionListener(updateDocumentsListListener);
-        proformaInvoicesCheckField.addActionListener(updateDocumentsListListener);
-        salesOffersCheckField.addActionListener(updateDocumentsListListener);
+        //salesOffersCheckField.addActionListener(updateTemplateDocsListener);//TODO when sale offers are ready
+        proformaInvoicesCheckField.addActionListener(updateTemplateDocsListener);
         
         updateTemplateDocumentsList();
         
         documentField.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if ( e.getItem() instanceof DataObjectBean )
+                if ( ItemEvent.SELECTED == e.getStateChange() && e.getItem() instanceof DataObjectBean )
                     onTemplateDocumentSelected((DataObjectBean)e.getItem());
-                else
+                else if ( ItemEvent.DESELECTED==e.getStateChange() )
                     onTemplateDocumentSelected(null);
             }
         });
@@ -329,21 +278,14 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
                 onCopySelectedButton();
             }
         });
-        
-        copyAllButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onCopyAllButton();
-            }
-        });
-        
-        pendingRadioSelected = showPendingRadioField.isSelected();
     }
+    
+    
 
     protected void updateTemplateDocumentsList() {
-        templateDocuments = getTemplateDocuments(showPendingRadioField.isSelected(), 
-            invoicesCheckField.isSelected(), proformaInvoicesCheckField.isSelected(), salesOffersCheckField.isSelected());
+        templateDocuments = getTemplateDocuments(true, proformaInvoicesCheckField.isSelected(), salesOffersCheckField.isSelected());
         
+        //and then bind again
         documentField.bind(new BindingGroup(), templateDocuments, this, 
             new PropertyDetails("selectedDocument", "Selected Document", Object.class.getName()),
             new ObjectToStringConverter() {
@@ -356,10 +298,13 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
 
     protected void onTemplateDocumentSelected(Object document) {
         List<?> items = null;
-        if ( document==null )
+        if ( document==null ){
             items = new ArrayList<Object>();
+            copySelectedButton.setEnabled(false);
+        }
         else{
             items = getFormSession().getDocumentItems((DataObjectBean)document);
+            copySelectedButton.setEnabled(true);
         }
         copyItemsListPanel.refreshList(items);
     }
@@ -370,7 +315,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
             Invoice invoice = (Invoice) templateDocument;
             result = invoice.getInvoiceNumber()==null?"":(invoice.getInvoiceNumber()+"-") +
                     invoice.getRecipientName();
-            if ( invoice.getProformaInvoice() ) 
+            if ( Boolean.TRUE.equals(invoice.getProformaInvoice()) ) 
                 result+=" ("+getResourceMap().getString("documentType.proforma")+")";
             else
                 result+=" ("+getResourceMap().getString("documentType.invoice")+")";
@@ -386,13 +331,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         return result;
     }
 
-    protected void onCopyAllButton() {
-        List<?> selectedItems = copyItemsListPanel.getDataTable().getData();
-        copyItems(selectedItems);
-    }
-    
     private List<InvoiceItemLink> allItemsLinks = null;  
-
 
     @SuppressWarnings("unchecked")
     protected void copyItems(List<?> selectedItems){
@@ -416,29 +355,6 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
                 iterator.remove();
             }
         }
-        
-// boolean alreadyAdded = false;
-//        Set<BigInteger> alreadyAddedIds = new HashSet<BigInteger>();
-//        for (Object item : selectedItems) {
-//            alreadyAddedIds.add(((DataObjectBean)item).getId());
-//        }
-//        //now check if some of the selected items are already added
-//        for (InvoiceItemLink itemLink : allItemsLinks) {
-//            if ( alreadyAddedIds.contains(itemLink.getTemplateItemId()) ){
-//                alreadyAdded = true;
-//            }else{
-//                //remove the ones that are still not added
-//                alreadyAddedIds.remove(itemLink.getTemplateItemId());
-//            }
-//        }
-//        //remove the already added items from selected items list, so they won't be copied
-//        for (Iterator iterator = selectedItems.iterator(); iterator.hasNext();) {
-//            Object item = (Object) iterator.next();
-//            BigInteger selectedItemId = ((DataObjectBean)item).getId();
-//            if ( alreadyAddedIds.contains(selectedItemId) ){
-//                iterator.remove();
-//            }
-//        }
         
         try{
             if ( alreadyAddedPresent ){
@@ -470,23 +386,27 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
      */
     @SuppressWarnings("unchecked")
     protected void onCopySelectedButton() {
-        List<?> selectedItems = copyItemsListPanel.getDataTable().getSelectedRowObjects();
+        List<?> selectedItems = copyItemsListPanel.getDataTable().getData();
         copyItems(selectedItems);
+        updateTemplateDocumentsList();
     }
     
     private InvoiceListRemote invoiceListRemote = getBean(InvoiceListRemote.class);
 
     private void addItems(List<?> items) {
-        //List<InvoiceIatem> newItems = new ArrayList<InvoiceItem>();
         List<InvoiceItemLink> itemLinks = new ArrayList<InvoiceItemLink>();
         for (Object item : items) {
+            if ( !( item instanceof DataObjectBean ) ){
+                throw new IllegalStateException("A document item should be DataObjectBean!");
+            }
             InvoiceItem clonedItem = getClonedItemForItem(item);
             InvoiceItemLink invoiceItemLink = 
-                new InvoiceItemLink(((DataObjectBean)item).getId(), clonedItem);
+                new InvoiceItemLink(((DataObjectBean)item).getId(),
+                    ((DataObjectBean)item).getParentId(),
+                    clonedItem);
             BigDecimal itemQuantity = getItemQuantity(item); 
             //add only the needed quantity (the quantity that is still not shipped)
             clonedItem.setOrderedQuantity(itemQuantity);
-            //newItems.add(clonedItem);
             itemLinks.add(invoiceItemLink);
         }
         
@@ -507,7 +427,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     private InvoiceItem getClonedItemForItem(Object documentItem) {
         @SuppressWarnings("unused")
         List<InvoiceItem> currentItems = invoiceItemsListPanel.getDataTable().getData();
-        InvoiceItem item = null;
+        InvoiceItem item = null; //currently - always create new item
         Product documentItemProduct = getProductForItem(documentItem);
 //        for (InvoiceItem currentItem : currentItems) {
 //            Product product = currentItem.getProduct();
@@ -587,18 +507,10 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     }
     return false;
     }
-
+    
     @SuppressWarnings("unchecked")
-    private List<?> getTemplateDocuments(boolean onlyPending, 
-        boolean includeInvoices, boolean includeProformas, boolean includeSalesOffers ) {
-        templateDocuments = getFormSession().getTemplateDocuments(onlyPending, includeInvoices, includeProformas, includeSalesOffers);
-        //scan and remove the current document
-        for (Iterator iterator = templateDocuments.iterator(); iterator.hasNext();) {
-            DataObjectBean documentBean = (DataObjectBean) iterator.next();
-            //if the document is actually the current invoice - remove it
-            if ( documentBean.getId().equals(getParentDataObjectId()))
-                iterator.remove();
-        }
+    private List<?> getTemplateDocuments(boolean includeInvoices, boolean includeProformas, boolean includeSalesOffers ) {
+        templateDocuments = getFormSession().getTemplateDocuments(invoice, includeInvoices, includeProformas);
         
         return templateDocuments;
     }

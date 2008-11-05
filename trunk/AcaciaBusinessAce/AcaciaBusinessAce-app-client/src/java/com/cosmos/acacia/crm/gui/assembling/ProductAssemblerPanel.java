@@ -391,7 +391,13 @@ public class ProductAssemblerPanel
         ComplexProduct complexProduct = (ComplexProduct)getSelectedValue();
         try
         {
-            getFormSession().saveComplexProduct(complexProduct);
+            //After the save/update the actual instance will be returned, so make sure we are 
+            //using the updated one.
+            complexProduct = getFormSession().saveComplexProduct(complexProduct);
+            setSelectedValue(complexProduct);
+            //Don't forget to tell our client that we are confirming (selecting) the current
+            //complex product
+            setDialogResponse(DialogResponse.SELECT);
             close();
         }
         catch(Exception ex)

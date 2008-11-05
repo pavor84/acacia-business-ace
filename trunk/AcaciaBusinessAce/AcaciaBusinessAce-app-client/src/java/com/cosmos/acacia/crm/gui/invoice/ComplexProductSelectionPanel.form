@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="messageLabel" alignment="0" pref="379" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="productButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="schemaButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="100" max="32767" attributes="0"/>
+                      <Component id="cancelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="messageLabel" pref="66" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="cancelButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="productButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="schemaButton" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.swingb.JBLabel" name="messageLabel">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="text" type="java.lang.String" resourceKey="messageLabel.text"/>
+        <Property name="name" type="java.lang.String" value="messageLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="cancelButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.invoice.ComplexProductSelectionPanel" id="cancelAction" methodName="cancelAction"/>
+        </Property>
+        <Property name="text" type="java.lang.String" resourceKey="cancelButton.text"/>
+        <Property name="name" type="java.lang.String" value="cancelButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="productButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.invoice.ComplexProductSelectionPanel" id="productSelectionAction" methodName="productSelectionAction"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="productButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="schemaButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="com.cosmos.acacia.crm.gui.invoice.ComplexProductSelectionPanel" id="schemaSelectionAction" methodName="schemaSelectionAction"/>
+        </Property>
+        <Property name="text" type="java.lang.String" resourceKey="schemaButton.text"/>
+        <Property name="name" type="java.lang.String" value="schemaButton" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

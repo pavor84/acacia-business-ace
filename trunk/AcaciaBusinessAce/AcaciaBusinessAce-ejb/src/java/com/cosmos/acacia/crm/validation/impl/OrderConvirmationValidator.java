@@ -23,15 +23,16 @@ public class OrderConvirmationValidator implements OrderConfirmationValidatorLoc
         
         Date from = entity.getShipDateFrom();
         Date to = entity.getShipDateTo();
-        if ( from!=null && to==null )
-            ve.addMessage("shipDateTo", "OrderConfirmation.err.requiredToDate");
-        else if ( from==null && to!=null )
-            ve.addMessage("shipDateFrom", "OrderConfirmation.err.requiredFromDate");
+//        if ( from!=null && to==null )
+//            ve.addMessage("shipDateTo", "OrderConfirmation.err.requiredToDate");
+//        else if ( from==null && to!=null )
+//            ve.addMessage("shipDateFrom", "OrderConfirmation.err.requiredFromDate");
         
         if ( from!=null && to!=null && to.before(from)){
             ve.addMessage("shipDateTo", "OrderConfirmation.err.datesNotSequent");
-        }else if ( from==null && to==null )
-            ve.addMessage("shipDateTo", "OrderConfirmation.err.requiredDates");
+        }
+//        else if ( from==null && to==null )
+//            ve.addMessage("shipDateTo", "OrderConfirmation.err.requiredDates");
         
         //unique product 
 //        Query q = em.createNamedQuery("OrderConfirmationItem.findForOrderAndProduct");

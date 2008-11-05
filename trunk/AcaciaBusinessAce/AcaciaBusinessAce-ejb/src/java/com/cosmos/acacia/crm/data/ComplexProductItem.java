@@ -43,8 +43,8 @@ import javax.persistence.Table;
                 name = "ComplexProductItem.findItemsCountByComplexProductAndDeleted",
                 query = "select count(*) from ComplexProductItem t" +
                         " where t.complexProduct = :complexProduct" +
-                        " and t.dataObject.deleted = :deleted" +
-                        " order by t.orderPosition"
+                        " and t.dataObject.deleted = :deleted"
+                        //" order by t.orderPosition"// edit: no order-by for not-grouped column
             )
     })
 public class ComplexProductItem

@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +34,7 @@ import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.Currency;
+import com.cosmos.acacia.crm.enums.DeliveryStatus;
 import com.cosmos.acacia.crm.enums.DeliveryType;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
@@ -87,6 +87,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         entityProperties.removePropertyDetails("documentDeliveryMethod");
         entityProperties.removePropertyDetails("transportationMethod");
         entityProperties.removePropertyDetails("discountAmount");
+        entityProperties.removePropertyDetails("discountPercent");
         entityProperties.removePropertyDetails("exciseDutyValue");
         entityProperties.removePropertyDetails("paymentTerms");
         entityProperties.removePropertyDetails("singlePayAmount");
@@ -99,6 +100,8 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         entityProperties.removePropertyDetails("shipDateTo");
         entityProperties.removePropertyDetails("notes");
         entityProperties.removePropertyDetails("vatConditionNotes");
+        entityProperties.removePropertyDetails("completionDate");
+        entityProperties.removePropertyDetails("deliveryStatus");
         
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
@@ -155,8 +158,8 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         c.setPaymentType(PaymentType.Cash.getDbResource());
         c.setPaymentDueDate(new Date());
         c.setStatus(InvoiceStatus.Open.getDbResource());
-        c.setInvoiceDate(new Date());
         c.setProformaInvoice(Boolean.FALSE);
+        c.setDeliveryStatus(DeliveryStatus.NotDelivered.getDbResource());
         
         return c;
     }
@@ -198,19 +201,60 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         return i;
     }
     
-    public void deleteInvoiceItem(InvoiceItem item) {
-        List<InvoiceItemLink> invoiceItemLinks = getInvoiceItemLinks(item);
-        for (InvoiceItemLink invoiceItemLink : invoiceItemLinks) {
-            em.remove(invoiceItemLink);
+    @Override
+    public List<InvoiceItem> deleteInvoiceItem(InvoiceItem item) {
+        List<InvoiceItem> copiedItems = getCopiedItemsFromTheSameDocument(item);
+        //handle the case where this item is copied
+        if ( copiedItems!=null && !copiedItems.isEmpty() ){
+            List<InvoiceItemLink> links = getInvoiceItemLinks(copiedItems);
+            //make sure we remove every link just once
+            Set<InvoiceItemLink> setOfLinks = new HashSet<InvoiceItemLink>(links);
+            for (InvoiceItemLink invoiceItemLink : setOfLinks) {
+                em.remove(invoiceItemLink);
+            }
+            for (InvoiceItem copiedItem : copiedItems )
+                esm.remove(em, copiedItem);
+            return copiedItems;
         }
-        esm.remove(em, item);
+        //if this is a normal simple item
+        else{
+            List<InvoiceItemLink> invoiceItemLinks = getInvoiceItemLinks(item);
+            for (InvoiceItemLink invoiceItemLink : invoiceItemLinks) {
+                em.remove(invoiceItemLink);
+            }
+            esm.remove(em, item);
+            List<InvoiceItem> result = new ArrayList<InvoiceItem>();
+            result.add(item);
+            return result;
+        }
     }
     
+    /**
+     * Returns all links for the given items. 
+     * @param copiedItems
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private List<InvoiceItemLink> getInvoiceItemLinks(List<InvoiceItem> items) {
+        Query q = em.createNamedQuery("InvoiceItemLink.getInvoicesItemLinksForItems");
+        q.setParameter("items",items);
+        List<InvoiceItemLink> links = q.getResultList();
+        return links;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<InvoiceItem> getCopiedItemsFromTheSameDocument(InvoiceItem item) {
+        Query q = em.createNamedQuery("Invoice.getCopiedItemsFromTheSameDocument");
+        q.setParameter("item",item);
+        
+        return q.getResultList();
+    }
+
     @SuppressWarnings("unchecked")
     public List<InvoiceItemLink> getInvoiceItemLinks(InvoiceItem item) {
         Query q = null;
         
-        q = em.createNamedQuery("Invoice.getInvoicesItemLinks");
+        q = em.createNamedQuery("InvoiceItemLink.getInvoicesItemLinks");
         q.setParameter("invoiceItem",item);
         
         return q.getResultList();
@@ -221,6 +265,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         entityProperties.removePropertyDetails("productDescription");
         entityProperties.removePropertyDetails("notes");
         entityProperties.removePropertyDetails("discountAmount");
+        entityProperties.removePropertyDetails("discountPercent");
         entityProperties.removePropertyDetails("shipDateFrom");
         entityProperties.removePropertyDetails("shipDateTo");
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
@@ -363,12 +408,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     @Override
     public Invoice sendInvoice(Invoice entity) {
-        if ( InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) ){
-            setInvoiceNumber(entity);
-            entity.setStatus(InvoiceStatus.Sent.getDbResource());
-        }else if ( InvoiceStatus.Published.equals(entity.getStatus().getEnumValue()) ){
-            entity.setStatus(InvoiceStatus.Sent.getDbResource());
-        }
         
         Person person = acaciaSession.getPerson();
         entity.setSender(person);
@@ -408,16 +447,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public Invoice publishInvoice(Invoice entity) {
-        if ( !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) )
-            throw new IllegalArgumentException("The invoice should be OPEN in order to be PUBLISHED!");
-        
-        setInvoiceNumber(entity);
-        entity.setStatus(InvoiceStatus.Published.getDbResource());
-        return saveInvoice(entity);
-    }
-
-    @Override
     public void saveInvoiceItems(List<InvoiceItem> newItems) {
         if ( newItems==null )
             throw new IllegalArgumentException("newItems can't be null!");
@@ -444,39 +473,104 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         throw new IllegalArgumentException("Cannot get items! Document not supported: "+document);
     }
 
+    @Override
+    public Invoice cancel(Invoice entity) {
+        boolean proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
+
+        if (proforma){
+            if ( InvoiceStatus.WaitForPayment.equals(entity.getStatus().getEnumValue()) ){}//ok
+            else
+                throw new IllegalArgumentException("The proforma invoice should be in WAIT_FOR_PAYMENT state in order to be cancelled!");
+        }else{
+            if ( InvoiceStatus.Paid.equals(entity.getStatus().getEnumValue()) ){}//ok
+            else
+                throw new IllegalArgumentException("The invoice should be COMPLETED in order to cancelled!");
+        }
+        
+        entity.setStatus(InvoiceStatus.Cancelled.getDbResource());
+        return saveInvoice(entity);
+    }
+
+    @Override
+    public Invoice confirm(Invoice entity) {
+        boolean proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
+
+        if (proforma){
+            if ( InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) ||
+                InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue())){}//ok
+            else
+                throw new IllegalArgumentException("The proforma invoice should be OPEN or REOPEN in order to confirmed!");
+        }else{
+            if ( InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) ){}//ok
+            else
+                throw new IllegalArgumentException("The invoice should be OPEN in order to be confirmed!");
+        }
+        
+        //the document date is the date that it was confirmed as valid document
+        entity.setInvoiceDate(new Date());
+        //the number of the document is generated at confirmation
+        setInvoiceNumber(entity);
+        entity.setStatus(InvoiceStatus.WaitForPayment.getDbResource());
+        
+//        entity.setStatus(InvoiceStatus.Paid.getDbResource());
+        
+        return saveInvoice(entity);
+    }
+
+    @Override
+    public Invoice reopen(Invoice entity) {
+        boolean proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
+
+        if (proforma){
+            if ( InvoiceStatus.WaitForPayment.equals(entity.getStatus().getEnumValue()) ||
+                InvoiceStatus.Cancelled.equals(entity.getStatus().getEnumValue())){}//ok
+            else
+                throw new IllegalArgumentException("The proforma invoice should be CANCELLED or WAIT_FOR_PAYMENT in order to be reopen!");
+        }else{
+            throw new IllegalArgumentException("Invoices can not be reopen!");
+        }
+        
+        entity.setStatus(InvoiceStatus.Reopen.getDbResource());
+        
+        return saveInvoice(entity);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public List<?> getTemplateDocuments(Boolean onlyPending, Boolean includeInvoices,
-        Boolean includeProformas, Boolean includeSalesOffers) {
-        if ( includeInvoices==false && includeProformas==false )
+    public List<?> getTemplateDocuments(Invoice forDocument, Boolean includeInvoices, Boolean includeProformas) {
+        boolean proform = Boolean.TRUE.equals(forDocument.getProformaInvoice());
+        
+        if ( proform ){
+            //TODO when Sales Offers are ready - supply the implementation here.
             return new ArrayList<Object>();
-        
-        Query q = null;
-        
-        if ( onlyPending ){
-            q = em.createNamedQuery("Invoice.getPendingTemplateInvoices");
-            q.setParameter("finalizedStatus", InvoiceStatus.Finalized.getDbResource());
-            q.setParameter("openStatus", InvoiceStatus.Open.getDbResource());
         }else{
-            q = em.createNamedQuery("Invoice.getAllTemplateInvoices");
-            q.setParameter("openStatus", InvoiceStatus.Open.getDbResource());
+            //TEMPORARY - fix when Sales Offers are implemented TODO
+            if ( !includeProformas )
+                return new ArrayList<Object>();
+            Query q = em.createNamedQuery("Invoice.getTemplatesForInvoice");
+            q.setParameter("proformaInvoice", Boolean.TRUE);
+            q.setParameter("recipient", forDocument.getRecipient());
+            q.setParameter("paid", InvoiceStatus.Paid.getDbResource());
+            List<?> templates = q.getResultList();
+            return templates;
         }
-        q.setParameter("branch", acaciaSession.getBranch());
+    }
+
+    @Override
+    public Boolean isTemplateItem(InvoiceItem item) {
+        List<InvoiceItemLink> links = getInvoiceItemLinks(item);
+        return !links.isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Invoice> getDueDocuments(BusinessPartner recipient) {
+        Query q = em.createNamedQuery("Invoice.getDueInvoicesForRecipient");
+        q.setParameter("recipient", recipient);
+        q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+        q.setParameter("proformaInvoice", Boolean.FALSE);
         
-        List<Invoice> invoices = new ArrayList<Invoice>(q.getResultList());
-        
-        for (Iterator iterator = invoices.iterator(); iterator.hasNext();) {
-            Invoice invoice = (Invoice) iterator.next();
-            //remove proformas if not needed
-            if ( invoice.getProformaInvoice() && !includeProformas ){
-                iterator.remove();
-            }
-            //remove invoices if not needed
-            if ( !Boolean.TRUE.equals(invoice.getProformaInvoice()) && !includeInvoices ){
-                iterator.remove();
-            }
-        }
-        
-        return invoices;
+        List<Invoice> result = q.getResultList();
+        return result;
     }
 }

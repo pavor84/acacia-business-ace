@@ -31,7 +31,7 @@ public class ProductValidatorBean implements ProductValidatorLocal {
             ve.addMessage("productName", "Product.err.nameRequired");
         
         //unique name 
-        Query getByName = em.createNamedQuery("Product.findByProductName");
+        Query getByName = em.createNamedQuery("SimpleProduct.findByProductName");
         getByName.setParameter("productName", entity.getProductName());
         if ( !checkUnique(getByName.getResultList(), entity))
             ve.addMessage("productName", "Product.err.nameInUse");
@@ -41,7 +41,7 @@ public class ProductValidatorBean implements ProductValidatorLocal {
             ve.addMessage("productCode", "Product.err.codeRequired");
         
         //unique code 
-        Query getByCode = em.createNamedQuery("Product.findByProductCode");
+        Query getByCode = em.createNamedQuery("SimpleProduct.findByProductCode");
         getByCode.setParameter("productCode", entity.getProductCode());
         if ( !checkUnique(getByCode.getResultList(), entity))
             ve.addMessage("productCode", "Product.err.codeInUse");

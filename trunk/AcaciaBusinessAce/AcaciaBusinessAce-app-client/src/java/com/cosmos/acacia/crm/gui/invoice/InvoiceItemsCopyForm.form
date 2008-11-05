@@ -18,48 +18,37 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="245" max="-2" attributes="0"/>
-                      <Component id="copySelectedButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="copyAllButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jBLabel1" alignment="0" min="-2" pref="137" max="-2" attributes="0"/>
-                          <Component id="jBLabel4" alignment="0" min="-2" pref="69" max="-2" attributes="0"/>
-                          <Component id="jBLabel5" alignment="0" min="-2" pref="69" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="1">
-                              <Component id="showAllRadioField" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="showPendingRadioField" pref="548" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="invoicesCheckField" min="-2" pref="99" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="proformaInvoicesCheckField" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="salesOffersCheckField" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="documentField" alignment="0" min="-2" pref="314" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="655" max="32767" attributes="0"/>
-                      <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="invoiceItemsTableHolder" alignment="1" max="32767" attributes="0"/>
                           <Component id="itemsToCopyTableHolder" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jBLabel4" min="-2" pref="69" max="-2" attributes="0"/>
+                                  <Component id="jBLabel1" alignment="0" min="-2" pref="137" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="proformaInvoicesCheckField" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="salesOffersCheckField" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="documentField" alignment="0" min="-2" pref="314" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="373" max="-2" attributes="0"/>
+                      <Component id="copySelectedButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="790" max="32767" attributes="0"/>
+                      <Component id="closeButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -72,33 +61,23 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jBLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="invoicesCheckField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="salesOffersCheckField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="proformaInvoicesCheckField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="salesOffersCheckField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="showPendingRadioField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="showAllRadioField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jBLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jBLabel1" alignment="3" min="-2" pref="14" max="-2" attributes="1"/>
                   <Component id="documentField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="itemsToCopyTableHolder" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="copySelectedButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="copyAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="copySelectedButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Component id="invoiceItemsTableHolder" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -116,12 +95,6 @@
         <Property name="name" type="java.lang.String" value="copySelectedButton" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBButton" name="copyAllButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="copyAllButton.text"/>
-        <Property name="name" type="java.lang.String" value="copyAllButton" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBButton" name="closeButton">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="closeButton.icon"/>
@@ -129,22 +102,10 @@
         <Property name="name" type="java.lang.String" value="closeButton" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBCheckBox" name="invoicesCheckField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="invoicesCheckField.text"/>
-        <Property name="name" type="java.lang.String" value="invoicesCheckField" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBCheckBox" name="proformaInvoicesCheckField">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="proformaInvoicesCheckField.text"/>
         <Property name="name" type="java.lang.String" value="proformaInvoicesCheckField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBCheckBox" name="salesOffersCheckField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="salesOffersCheckField.text"/>
-        <Property name="name" type="java.lang.String" value="salesOffersCheckField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel4">
@@ -159,24 +120,6 @@
           <StringArray count="0"/>
         </Property>
         <Property name="name" type="java.lang.String" value="documentField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBRadioButton" name="showPendingRadioField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="showPendingRadioField.text"/>
-        <Property name="name" type="java.lang.String" value="showPendingRadioField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBRadioButton" name="showAllRadioField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="showAllRadioField.text"/>
-        <Property name="name" type="java.lang.String" value="showAllRadioField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel5">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel5.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
       </Properties>
     </Component>
     <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsToCopyTableHolder">
@@ -194,12 +137,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="714" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="849" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="245" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="306" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -208,7 +151,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Invoice Items">
+            <TitledBorder title="Document Items">
               <Property name="titleX" resourceKey="invoiceItemsTableHolder.border.title"/>
             </TitledBorder>
           </Border>
@@ -219,15 +162,21 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="714" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="849" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="242" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="305" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="salesOffersCheckField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="salesOffersCheckField.text"/>
+        <Property name="name" type="java.lang.String" value="salesOffersCheckField" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

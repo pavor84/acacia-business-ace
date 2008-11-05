@@ -14,6 +14,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -102,7 +103,12 @@ public class InvoiceListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canDelete(Object rowObject) {
-        return isInBranch((Invoice) rowObject);
+        Invoice i = (Invoice) rowObject;
+        InvoiceStatus status = (InvoiceStatus) i.getStatus().getEnumValue();
+        if ( isInBranch(i) 
+                && (InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status)) )
+            return true;
+        return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
