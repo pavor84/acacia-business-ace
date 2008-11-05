@@ -3,13 +3,20 @@ package com.cosmos.acacia.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJBException;
@@ -19,7 +26,16 @@ import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+
 import org.apache.log4j.Logger;
+import org.jdesktop.application.Action;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
@@ -28,7 +44,9 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import com.cosmos.acacia.crm.reports.CombinedDataSourceObject;
 import com.cosmos.acacia.crm.reports.Report;
+import com.cosmos.acacia.crm.reports.ReportsUtil;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.JBPanel;
@@ -346,5 +364,131 @@ public abstract class AcaciaPanel
      */
     protected Set<Report> getReports() {
         return new LinkedHashSet<Report>();
+    }
+
+    protected final Report determineReport() {
+        Report report = getReport();
+
+        if (report == null && getReports().size() > 0) {
+            String[] reportNames = new String[getReports().size()];
+            String[] reportOptions = new String[getReports().size()];
+            Report[] reports = new Report[getReports().size()];
+            int i = 0;
+            for (Report cReport : getReports()) {
+                reportOptions[i] = cReport.getLocalizationKey();
+                reports[i] = cReport;
+                i++;
+            }
+            int reportChoice = JOptionPane.showOptionDialog(this,
+                    getResourceMap().getString("choose.report"),
+                    getResourceMap().getString("choose.report"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    reportOptions,
+                    reportOptions[0]);
+
+            report = reports[reportChoice];
+        }
+
+        return report;
+    }
+
+    protected final JasperReport loadReport(Report report) {
+        if (report == null)
+            return null;
+
+        String reportName = report.getReportName();
+
+        try {
+            String resourceName = "/reports/" + reportName + ".jasper";
+            log.info("BaseEntityPanel.print().resourceName: " + resourceName);
+            InputStream is = this.getClass().getResourceAsStream(resourceName);
+            log.info("BaseEntityPanel.print().resourceInputStream: " + is);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
+
+            return jasperReport;
+        } catch (JRException ex) {
+            handleException(ex);
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected final JRDataSource getJasperDataSource(List entities,
+            List<Collection> subreports1, List<Collection> subreports2) {
+
+        if ((subreports1 != null && entities.size() != subreports1.size())
+                || (subreports2 != null && entities.size() != subreports2.size()))
+            throw new RuntimeException("All passed collections must have the same size");
+
+        Iterator<Collection> subreport1Iterator = null;
+        if (subreports1 != null)
+            subreport1Iterator = subreports1.iterator();
+
+        Iterator<Collection> subreport2Iterator = null;
+        if (subreports2 != null)
+            subreport2Iterator = subreports2.iterator();
+
+        List<CombinedDataSourceObject> dataList =
+            new ArrayList<CombinedDataSourceObject>(entities.size());
+
+        for (Object entity : entities) {
+            Collection subreport1 = null;
+            if (subreport1Iterator != null)
+                subreport1 = subreport1Iterator.next();
+
+            Collection subreport2 = null;
+            if (subreport2Iterator != null)
+                subreport2 = subreport2Iterator.next();
+
+            CombinedDataSourceObject cdso = new CombinedDataSourceObject();
+            cdso.setEntity(entity);
+            cdso.setSubreport1(subreport1);
+            cdso.setSubreport2(subreport2);
+
+            dataList.add(cdso);
+        }
+        return new JRBeanCollectionDataSource(dataList);
+    }
+
+    /**
+     * Triggers the printing process
+     */
+    @Action
+    @SuppressWarnings("unchecked")
+    protected final void print() {
+        try {
+            Report report = determineReport();
+            JasperReport jasperReport = loadReport(report);
+
+            Map<String, Object> params = new HashMap<String, Object>();
+            if (report.getAutoSubreport1Class() != null) {
+                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport1Class());
+                JasperReport subreport1 = JasperCompileManager.compileReport(design);
+                params.put("SUBREPORT1", subreport1);
+            }
+            if (report.getAutoSubreport2Class() != null) {
+                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport2Class());
+                JasperReport subreport2 = JasperCompileManager.compileReport(design);
+                params.put("SUBREPORT2", subreport2);
+            }
+
+            JRDataSource ds = getJasperDataSource(getEntities(),
+                report.getSubreports1Data(), report.getSubreports2Data());
+
+
+            ReportsUtil.print(jasperReport, ds, this, getResourceMap(), params);
+        } catch (Exception ex) {
+            handleException(ex);
+        }
+    }
+
+    /**
+     * Override this to specify listing behaviour for reporting
+     * @return
+     */
+    protected List getEntities() {
+        return new ArrayList();
     }
 }

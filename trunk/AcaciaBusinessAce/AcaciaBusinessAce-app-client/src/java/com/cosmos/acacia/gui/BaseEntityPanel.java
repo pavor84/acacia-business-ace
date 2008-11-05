@@ -5,14 +5,12 @@ import java.awt.TextComponent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,10 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
@@ -415,62 +411,10 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return editable;
     }
 
-    /**
-     * Triggers the printing process
-     */
-    @Action
     @SuppressWarnings("unchecked")
-    protected final void print() {
-        Report report = getReport();
-
-        if (report == null && getReports().size() > 0) {
-            String[] reportNames = new String[getReports().size()];
-            String[] reportOptions = new String[getReports().size()];
-            Report[] reports = new Report[getReports().size()];
-            int i = 0;
-            for (Report cReport : getReports()) {
-                reportOptions[i] = cReport.getKey();
-                reports[i] = cReport;
-                i++;
-            }
-            int reportChoice = JOptionPane.showOptionDialog(this,
-                    getResourceMap().getString("choose.report"),
-                    getResourceMap().getString("choose.report"),
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    reportOptions,
-                    reportOptions[0]);
-
-            report = reports[reportChoice];
-        }
-        if (report == null)
-            throw new RuntimeException("No report name specified");
-
-        String reportName = report.getReportName();
-
-        try {
-            String resourceName = "/reports/" + reportName + ".jasper";
-            log.info("BaseEntityPanel.print().resourceName: " + resourceName);
-            InputStream is = this.getClass().getResourceAsStream(resourceName);
-            log.info("BaseEntityPanel.print().resourceInputStream: " + is);
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
-            log.info("BaseEntityPanel.print().jasperReport: " + jasperReport);
-            //JasperCompileManager.compile***
-
-            List list = new ArrayList(1);
-            CombinedDataSourceObject obj = new CombinedDataSourceObject();
-            obj.setEntity(getEntity());
-            obj.setSubreport1(report.getSubreport1());
-            obj.setSubreport2(report.getSubreport2());
-            list.add(obj);
-
-            JRDataSource ds = new JRBeanCollectionDataSource(list);
-
-            ReportsUtil.print(jasperReport, ds, this, getResourceMap());
-
-        } catch (JRException e) {
-          e.printStackTrace();
-        }
+    protected List getEntities() {
+        List entities = new ArrayList(1);
+        entities.add(getEntity());
+        return entities;
     }
 }

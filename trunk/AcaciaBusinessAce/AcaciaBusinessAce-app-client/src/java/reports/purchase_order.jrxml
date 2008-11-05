@@ -8,17 +8,17 @@
 		 orientation="Portrait"
 		 pageWidth="595"
 		 pageHeight="842"
-		 columnWidth="535"
+		 columnWidth="555"
 		 columnSpacing="0"
-		 leftMargin="30"
-		 rightMargin="30"
+		 leftMargin="20"
+		 rightMargin="20"
 		 topMargin="20"
 		 bottomMargin="20"
 		 whenNoDataType="NoPages"
 		 isTitleNewPage="false"
 		 isSummaryNewPage="false"
 		 resourceBundle="reports/purchase_order">
-	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.scriptlethandling" value="0" />
 	<property name="ireport.encoding" value="UTF-8" />
 	<import value="java.util.*" />
 	<import value="net.sf.jasperreports.engine.*" />
@@ -28,6 +28,7 @@
 		<defaultValueExpression ><![CDATA["C:\\NetBeansProjects\\AcaciaBusinessAce\\AcaciaBusinessAce-app-client\\src\\java\\reports\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="REPORTS_DIR" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SUBREPORT1" isForPrompting="false" class="net.sf.jasperreports.engine.JasperReport"/>
 
 	<field name="entity.orderNumber" class="java.math.BigInteger"/>
 	<field name="entity.supplierOrderNumber" class="java.math.BigInteger"/>
@@ -65,7 +66,7 @@
 			<band height="346"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="12"
 						width="108"
 						height="18"
@@ -78,9 +79,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="12"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-2"/>
 					<box></box>
@@ -91,7 +92,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="36"
 						width="108"
 						height="18"
@@ -104,9 +105,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="36"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-4"/>
 					<box></box>
@@ -117,9 +118,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="60"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-5"/>
 					<box></box>
@@ -130,7 +131,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="60"
 						width="108"
 						height="18"
@@ -143,9 +144,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="12"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-7"/>
 					<box></box>
@@ -156,7 +157,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="12"
 						width="108"
 						height="18"
@@ -169,7 +170,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="60"
 						width="108"
 						height="18"
@@ -182,9 +183,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="60"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-10"/>
 					<box></box>
@@ -195,7 +196,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="106"
 						width="108"
 						height="18"
@@ -208,9 +209,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="154"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-12"/>
 					<box></box>
@@ -221,7 +222,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="130"
 						width="108"
 						height="18"
@@ -234,7 +235,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="154"
 						width="108"
 						height="18"
@@ -247,9 +248,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="130"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-15"/>
 					<box></box>
@@ -260,9 +261,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="106"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-16"/>
 					<box></box>
@@ -273,9 +274,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="119"
+						x="108"
 						y="178"
-						width="137"
+						width="167"
 						height="18"
 						key="textField-17"/>
 					<box></box>
@@ -286,20 +287,20 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="11"
+						x="0"
 						y="178"
 						width="108"
 						height="18"
 						key="textField-18"/>
 					<box></box>
 					<textElement>
-						<font/>
+						<font size="10"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{lastDeliveryTime}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="106"
 						width="108"
 						height="18"
@@ -312,9 +313,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="178"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-20"/>
 					<box></box>
@@ -325,7 +326,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="130"
 						width="108"
 						height="18"
@@ -338,7 +339,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="178"
 						width="108"
 						height="18"
@@ -351,9 +352,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="130"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-23"/>
 					<box></box>
@@ -364,9 +365,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="106"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-24"/>
 					<box></box>
@@ -377,9 +378,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="202"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-25"/>
 					<box></box>
@@ -390,7 +391,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="202"
 						width="108"
 						height="18"
@@ -403,7 +404,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="154"
 						width="108"
 						height="18"
@@ -416,9 +417,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="387"
+						x="407"
 						y="154"
-						width="137"
+						width="148"
 						height="18"
 						key="textField-28"/>
 					<box></box>
@@ -431,11 +432,11 @@
 					<reportElement
 						x="0"
 						y="246"
-						width="524"
+						width="555"
 						height="88"
 						key="subreport-1"/>
 					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($F{subreport1})]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA[$P{REPORTS_DIR} + "/purchase_order_items.jasper"]]></subreportExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{SUBREPORT1}]]></subreportExpression>
 				</subreport>
 			</band>
 		</detail>
