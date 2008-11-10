@@ -526,7 +526,7 @@ public class AssemblingSchemasPanel
                 "${categoryCode}, ${categoryName}",
                 UpdateStrategy.READ_WRITE);
             categoryComboList.addItemListener(this);
-            //categoryBindingGroup.bind();
+            categoryBindingGroup.bind();
 
             addTablePanelListener(new AssemblingSchemasTableListener());
             refreshDataTable(entityProps);

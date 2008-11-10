@@ -353,7 +353,7 @@ public class AssemblingSchemaItemPanel
             listPanel,
             entity,
             propDetails,
-            "${messageCode}, ${messageText}",
+            "${messageCode} (${selectionText}/${inputText})",
             UpdateStrategy.READ_WRITE);
         messageComboList.addItemListener(new MessageItemListener());
 
