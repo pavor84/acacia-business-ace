@@ -301,11 +301,11 @@ public class AssemblingMessage
         this.messageId = messageId;
     }
 
-    public AssemblingMessage(BigInteger messageId, String messageCode, String messageText)
+    public AssemblingMessage(BigInteger messageId, String messageCode, String selectionText)
     {
         this.messageId = messageId;
         this.messageCode = messageCode;
-        this.selectionText = messageText;
+        this.selectionText = selectionText;
     }
 
     public BigInteger getMessageId()
