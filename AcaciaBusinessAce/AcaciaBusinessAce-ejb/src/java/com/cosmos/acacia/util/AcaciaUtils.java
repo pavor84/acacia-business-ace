@@ -5,11 +5,6 @@
 
 package com.cosmos.acacia.util;
 
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
-import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
-import com.cosmos.acacia.crm.enums.DataType;
-import com.cosmos.acacia.crm.validation.ValidationException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,8 +13,16 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
 import javax.swing.text.MaskFormatter;
+
 import org.apache.log4j.Logger;
+
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
+import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
+import com.cosmos.acacia.crm.enums.DataType;
+import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**
  *
@@ -205,7 +208,9 @@ public class AcaciaUtils
     {
         if(decimalFormat == null)
         {
-            decimalFormat = new DecimalFormat("#,##0.00");
+            decimalFormat = DecimalFormat.getNumberInstance(Locale.US);
+            ((DecimalFormat)decimalFormat).applyPattern("0.00");
+            decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
         }
 
         return decimalFormat;
@@ -326,7 +331,7 @@ public class AcaciaUtils
     {
         if(currencyFormat == null)
         {
-            currencyFormat = NumberFormat.getCurrencyInstance();
+            currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
         }
 
         return currencyFormat;

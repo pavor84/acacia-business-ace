@@ -745,21 +745,21 @@
                               <Component id="jBLabel40" alignment="0" min="-2" pref="105" max="-2" attributes="2"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="paymentTypeField" alignment="0" pref="164" max="32767" attributes="2"/>
-                              <Component id="singlePayAmountField" alignment="0" pref="164" max="32767" attributes="2"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="singlePayAmountField" pref="164" max="32767" attributes="0"/>
+                              <Component id="paymentTypeField" alignment="1" pref="164" max="32767" attributes="2"/>
                           </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jBLabel41" alignment="1" pref="105" max="32767" attributes="2"/>
                               <Component id="jBLabel37" alignment="1" pref="105" max="32767" attributes="2"/>
                           </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="paymentsCountField" alignment="0" pref="175" max="32767" attributes="2"/>
+                              <Component id="paymentsCountField" pref="175" max="32767" attributes="0"/>
                               <Component id="paymentTermsField" alignment="0" pref="175" max="32767" attributes="2"/>
                           </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jBLabel38" min="-2" pref="93" max="-2" attributes="2"/>
@@ -769,10 +769,10 @@
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="daysBetweenPaymentsField" pref="182" max="32767" attributes="0"/>
                               <Component id="paymentDueField" alignment="1" pref="182" max="32767" attributes="2"/>
-                              <Component id="daysBetweenPaymentsField" alignment="1" pref="182" max="32767" attributes="2"/>
                           </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -790,11 +790,11 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jBLabel40" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="singlePayAmountField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="paymentsCountField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="daysBetweenPaymentsField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jBLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jBLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="singlePayAmountField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="daysBetweenPaymentsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="paymentsCountField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="7" max="32767" attributes="0"/>
                       </Group>
@@ -841,20 +841,10 @@
                     <Property name="name" type="java.lang.String" value="jBLabel38" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="singlePayAmountField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="singlePayAmountField" noResource="true"/>
-                  </Properties>
-                </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel40">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="jBLabel40.text"/>
                     <Property name="name" type="java.lang.String" value="jBLabel40" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="paymentsCountField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="paymentsCountField" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel41">
@@ -863,15 +853,28 @@
                     <Property name="name" type="java.lang.String" value="jBLabel41" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="daysBetweenPaymentsField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="daysBetweenPaymentsField" noResource="true"/>
-                  </Properties>
-                </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel42">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="jBLabel42.text"/>
                     <Property name="name" type="java.lang.String" value="jBLabel42" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="singlePayAmountField">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="singlePayAmountField.text"/>
+                    <Property name="name" type="java.lang.String" value="singlePayAmountField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="paymentsCountField">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="paymentsCountField.text"/>
+                    <Property name="name" type="java.lang.String" value="paymentsCountField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="daysBetweenPaymentsField">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="daysBetweenPaymentsField.text"/>
+                    <Property name="name" type="java.lang.String" value="daysBetweenPaymentsField" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -898,9 +901,9 @@
                                       <Component id="jBLabel26" alignment="0" pref="126" max="32767" attributes="2"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="currencyField" pref="288" max="32767" attributes="2"/>
-                                      <Component id="invoiceSubValueField" alignment="0" pref="288" max="32767" attributes="1"/>
+                                      <Component id="invoiceSubValueField" alignment="0" pref="288" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
@@ -925,25 +928,25 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="vatValueField" alignment="1" pref="131" max="32767" attributes="2"/>
-                                      <Component id="exciseDutyValueField" alignment="1" pref="131" max="32767" attributes="2"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="vatPercentField" pref="118" max="32767" attributes="2"/>
+                                      <Component id="excisePercentField" alignment="0" pref="118" max="32767" attributes="2"/>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="vatPercentField" max="32767" attributes="3"/>
-                                      <Component id="exciseDutyPercentField" alignment="0" pref="145" max="32767" attributes="3"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jBLabel39" min="-2" max="-2" attributes="0"/>
                                       <Component id="jBLabel33" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jBLabel39" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="exciseValueField" pref="160" max="32767" attributes="0"/>
+                                      <Component id="vatValueField" alignment="0" pref="160" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="transportPriceField" pref="297" max="32767" attributes="1"/>
-                              <Component id="totalValueField" pref="297" max="32767" attributes="1"/>
+                              <Component id="transportPriceField" alignment="1" pref="297" max="32767" attributes="0"/>
+                              <Component id="totalValueField" alignment="1" pref="297" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -956,9 +959,9 @@
                                       <Component id="jBLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="currencyField" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jBLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel39" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="vatValueField" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="vatPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jBLabel39" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -982,8 +985,8 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jBLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jBLabel33" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="exciseDutyValueField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="exciseDutyPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="excisePercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="exciseValueField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1016,12 +1019,6 @@
                     <Property name="name" type="java.lang.String" value="jBLabel25" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="invoiceSubValueField">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="name" type="java.lang.String" value="invoiceSubValueField" noResource="true"/>
-                  </Properties>
-                </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel26">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="jBLabel26.text"/>
@@ -1032,12 +1029,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="jBLabel27.text"/>
                     <Property name="name" type="java.lang.String" value="jBLabel27" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="vatValueField">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="name" type="java.lang.String" value="vatValueField" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel28">
@@ -1052,37 +1043,11 @@
                     <Property name="name" type="java.lang.String" value="jBLabel30" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="transportPriceField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="transportPriceField" noResource="true"/>
-                  </Properties>
-                </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel31">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="jBLabel31.text"/>
                     <Property name="font" type="java.awt.Font" resourceKey="jBLabel31.font"/>
                     <Property name="name" type="java.lang.String" value="jBLabel31" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="totalValueField">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="name" type="java.lang.String" value="totalValueField" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="vatPercentField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="vatPercentField" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="exciseDutyValueField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="exciseDutyValueField" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.JBTextField" name="exciseDutyPercentField">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="exciseDutyPercentField" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="com.cosmos.swingb.JBLabel" name="jBLabel33">
@@ -1134,6 +1099,50 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="invoiceSubValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="text" type="java.lang.String" resourceKey="invoiceSubValueField.text"/>
+                    <Property name="name" type="java.lang.String" value="invoiceSubValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="transportPriceField">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="transportPriceField.text"/>
+                    <Property name="name" type="java.lang.String" value="transportPriceField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="totalValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="text" type="java.lang.String" resourceKey="totalValueField.text"/>
+                    <Property name="name" type="java.lang.String" value="totalValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="vatPercentField">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="vatPercentField.text"/>
+                    <Property name="name" type="java.lang.String" value="vatPercentField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="vatValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="text" type="java.lang.String" resourceKey="vatValueField.text"/>
+                    <Property name="name" type="java.lang.String" value="vatValueField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="excisePercentField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="excisePercentField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="exciseValueField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="exciseValueField" noResource="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsTableHolderPanel">

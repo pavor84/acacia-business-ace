@@ -58,13 +58,12 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane3" alignment="1" pref="394" max="32767" attributes="2"/>
                           <Component id="warehouseForShipField" alignment="1" pref="394" max="32767" attributes="2"/>
-                          <Group type="102" attributes="0">
-                              <Component id="unitPriceField" min="-2" pref="185" max="-2" attributes="2"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="unitPriceField" pref="196" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="forUnitsLabel" pref="205" max="32767" attributes="0"/>
+                              <Component id="forUnitsLabel" pref="194" max="32767" attributes="0"/>
                           </Group>
                           <Component id="shipDateToField" alignment="1" pref="394" max="32767" attributes="0"/>
-                          <Component id="shippedQtyField" alignment="1" pref="394" max="32767" attributes="2"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="productOrSchemaTextField" pref="237" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -74,18 +73,19 @@
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Component id="productDetailsButton" pref="77" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="orderedQtyField" alignment="0" pref="394" max="32767" attributes="2"/>
                           <Component id="jScrollPane2" alignment="1" pref="394" max="32767" attributes="2"/>
-                          <Component id="returnedQtyField" alignment="1" pref="394" max="32767" attributes="2"/>
-                          <Component id="extendedPriceField" alignment="1" pref="394" max="32767" attributes="2"/>
-                          <Group type="102" alignment="1" attributes="0">
+                          <Component id="measureUnitField" alignment="1" pref="394" max="32767" attributes="1"/>
+                          <Component id="orderedQtyField" alignment="1" pref="394" max="32767" attributes="0"/>
+                          <Component id="shippedQtyField" alignment="1" pref="394" max="32767" attributes="0"/>
+                          <Component id="returnedQtyField" alignment="1" pref="394" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="extendedPriceField" alignment="1" pref="394" max="32767" attributes="0"/>
                                   <Component id="shipWeekField" alignment="1" pref="394" max="32767" attributes="2"/>
                                   <Component id="shipDateFromField" alignment="1" pref="394" max="32767" attributes="2"/>
                               </Group>
                           </Group>
-                          <Component id="measureUnitField" alignment="0" min="-2" pref="394" max="-2" attributes="1"/>
                       </Group>
                   </Group>
               </Group>
@@ -98,10 +98,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                      <Component id="jBLabel1" alignment="1" pref="25" max="32767" attributes="1"/>
-                      <Component id="productOrSchemaTextField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jBLabel1" alignment="1" pref="25" max="32767" attributes="1"/>
+                  <Component id="productOrSchemaTextField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="selectProductOrSchemaButton" alignment="1" pref="25" max="32767" attributes="1"/>
                   <Component id="clearProductButton" alignment="1" pref="25" max="32767" attributes="1"/>
                   <Component id="productDetailsButton" alignment="1" max="32767" attributes="1"/>
@@ -118,8 +116,8 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="orderedQtyField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="orderedQtyField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -133,8 +131,8 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="forUnitsLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="jBLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="forUnitsLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="unitPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -201,27 +199,10 @@
         <Property name="name" type="java.lang.String" value="jBLabel3" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="orderedQtyField">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="orderedQtyField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="shippedQtyField">
-      <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="shippedQtyField" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel4">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="jBLabel4.text"/>
         <Property name="name" type="java.lang.String" value="jBLabel4" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="returnedQtyField">
-      <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="returnedQtyField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel5">
@@ -234,17 +215,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="jBLabel6.text"/>
         <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="unitPriceField">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="unitPriceField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="extendedPriceField">
-      <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="extendedPriceField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel8">
@@ -389,6 +359,40 @@
           <Insets value="[2, 4, 2, 4]"/>
         </Property>
         <Property name="name" type="java.lang.String" value="selectProductOrSchemaButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="orderedQtyField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="orderedQtyField.text"/>
+        <Property name="name" type="java.lang.String" value="orderedQtyField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="shippedQtyField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" resourceKey="shippedQtyField.text"/>
+        <Property name="name" type="java.lang.String" value="shippedQtyField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="returnedQtyField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" resourceKey="returnedQtyField.text"/>
+        <Property name="name" type="java.lang.String" value="returnedQtyField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="unitPriceField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" resourceKey="unitPriceField.text"/>
+        <Property name="name" type="java.lang.String" value="unitPriceField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="extendedPriceField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" resourceKey="extendedPriceField.text"/>
+        <Property name="name" type="java.lang.String" value="extendedPriceField" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

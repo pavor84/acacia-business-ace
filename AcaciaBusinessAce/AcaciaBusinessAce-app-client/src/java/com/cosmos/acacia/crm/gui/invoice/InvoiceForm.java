@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.invoice;
 
-import static com.cosmos.acacia.util.AcaciaUtils.formatMoney;
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
@@ -30,6 +31,7 @@ import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.beansbinding.Validator;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 
@@ -48,7 +50,9 @@ import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.listeners.TableModificationListener;
@@ -137,6 +141,10 @@ public class InvoiceForm extends BaseEntityPanel {
                 onDueDocuments();
             }
         });
+        recipientDueField.setHorizontalAlignment(JTextField.TRAILING);
+        
+        vatValueField.setFormat(getDecimalFormat());
+        exciseValueField.setFormat(getDecimalFormat());
     }
 
     protected void onDueDocuments() {
@@ -215,27 +223,20 @@ public class InvoiceForm extends BaseEntityPanel {
         paymentTermsField = new com.cosmos.acacia.gui.AcaciaComboBox();
         paymentDueField = new com.cosmos.swingb.JBDatePicker();
         jBLabel38 = new com.cosmos.swingb.JBLabel();
-        singlePayAmountField = new com.cosmos.swingb.JBTextField();
         jBLabel40 = new com.cosmos.swingb.JBLabel();
-        paymentsCountField = new com.cosmos.swingb.JBTextField();
         jBLabel41 = new com.cosmos.swingb.JBLabel();
-        daysBetweenPaymentsField = new com.cosmos.swingb.JBTextField();
         jBLabel42 = new com.cosmos.swingb.JBLabel();
+        singlePayAmountField = new com.cosmos.swingb.JBFormattedTextField();
+        paymentsCountField = new com.cosmos.swingb.JBFormattedTextField();
+        daysBetweenPaymentsField = new com.cosmos.swingb.JBFormattedTextField();
         jBPanel8 = new com.cosmos.swingb.JBPanel();
         currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel25 = new com.cosmos.swingb.JBLabel();
-        invoiceSubValueField = new com.cosmos.swingb.JBTextField();
         jBLabel26 = new com.cosmos.swingb.JBLabel();
         jBLabel27 = new com.cosmos.swingb.JBLabel();
-        vatValueField = new com.cosmos.swingb.JBTextField();
         jBLabel28 = new com.cosmos.swingb.JBLabel();
         jBLabel30 = new com.cosmos.swingb.JBLabel();
-        transportPriceField = new com.cosmos.swingb.JBTextField();
         jBLabel31 = new com.cosmos.swingb.JBLabel();
-        totalValueField = new com.cosmos.swingb.JBTextField();
-        vatPercentField = new com.cosmos.swingb.JBTextField();
-        exciseDutyValueField = new com.cosmos.swingb.JBTextField();
-        exciseDutyPercentField = new com.cosmos.swingb.JBTextField();
         jBLabel33 = new com.cosmos.swingb.JBLabel();
         vatConditionField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel34 = new com.cosmos.swingb.JBLabel();
@@ -243,6 +244,13 @@ public class InvoiceForm extends BaseEntityPanel {
         jBLabel43 = new com.cosmos.swingb.JBLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         vatConditionNotesField = new com.cosmos.swingb.JBTextPane();
+        invoiceSubValueField = new com.cosmos.swingb.JBFormattedTextField();
+        transportPriceField = new com.cosmos.swingb.JBFormattedTextField();
+        totalValueField = new com.cosmos.swingb.JBFormattedTextField();
+        vatPercentField = new com.cosmos.swingb.JBFormattedTextField();
+        vatValueField = new com.cosmos.swingb.JBFormattedTextField();
+        excisePercentField = new com.cosmos.swingb.JBFormattedTextField();
+        exciseValueField = new com.cosmos.swingb.JBFormattedTextField();
         itemsTableHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
 
@@ -640,20 +648,23 @@ public class InvoiceForm extends BaseEntityPanel {
         jBLabel38.setText(resourceMap.getString("jBLabel38.text")); // NOI18N
         jBLabel38.setName("jBLabel38"); // NOI18N
 
-        singlePayAmountField.setName("singlePayAmountField"); // NOI18N
-
         jBLabel40.setText(resourceMap.getString("jBLabel40.text")); // NOI18N
         jBLabel40.setName("jBLabel40"); // NOI18N
-
-        paymentsCountField.setName("paymentsCountField"); // NOI18N
 
         jBLabel41.setText(resourceMap.getString("jBLabel41.text")); // NOI18N
         jBLabel41.setName("jBLabel41"); // NOI18N
 
-        daysBetweenPaymentsField.setName("daysBetweenPaymentsField"); // NOI18N
-
         jBLabel42.setText(resourceMap.getString("jBLabel42.text")); // NOI18N
         jBLabel42.setName("jBLabel42"); // NOI18N
+
+        singlePayAmountField.setText(resourceMap.getString("singlePayAmountField.text")); // NOI18N
+        singlePayAmountField.setName("singlePayAmountField"); // NOI18N
+
+        paymentsCountField.setText(resourceMap.getString("paymentsCountField.text")); // NOI18N
+        paymentsCountField.setName("paymentsCountField"); // NOI18N
+
+        daysBetweenPaymentsField.setText(resourceMap.getString("daysBetweenPaymentsField.text")); // NOI18N
+        daysBetweenPaymentsField.setName("daysBetweenPaymentsField"); // NOI18N
 
         javax.swing.GroupLayout jBPanel6Layout = new javax.swing.GroupLayout(jBPanel6);
         jBPanel6.setLayout(jBPanel6Layout);
@@ -665,9 +676,9 @@ public class InvoiceForm extends BaseEntityPanel {
                     .addComponent(jBLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(paymentTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                    .addComponent(singlePayAmountField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
+                .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(singlePayAmountField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                    .addComponent(paymentTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jBLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
@@ -684,8 +695,8 @@ public class InvoiceForm extends BaseEntityPanel {
                     .addComponent(jBLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(paymentDueField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                    .addComponent(daysBetweenPaymentsField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                    .addComponent(daysBetweenPaymentsField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                    .addComponent(paymentDueField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel6Layout.setVerticalGroup(
@@ -701,11 +712,11 @@ public class InvoiceForm extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(singlePayAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(paymentsCountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(daysBetweenPaymentsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(singlePayAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(daysBetweenPaymentsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paymentsCountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
@@ -717,17 +728,11 @@ public class InvoiceForm extends BaseEntityPanel {
         jBLabel25.setText(resourceMap.getString("jBLabel25.text")); // NOI18N
         jBLabel25.setName("jBLabel25"); // NOI18N
 
-        invoiceSubValueField.setEditable(false);
-        invoiceSubValueField.setName("invoiceSubValueField"); // NOI18N
-
         jBLabel26.setText(resourceMap.getString("jBLabel26.text")); // NOI18N
         jBLabel26.setName("jBLabel26"); // NOI18N
 
         jBLabel27.setText(resourceMap.getString("jBLabel27.text")); // NOI18N
         jBLabel27.setName("jBLabel27"); // NOI18N
-
-        vatValueField.setEditable(false);
-        vatValueField.setName("vatValueField"); // NOI18N
 
         jBLabel28.setText(resourceMap.getString("jBLabel28.text")); // NOI18N
         jBLabel28.setName("jBLabel28"); // NOI18N
@@ -735,20 +740,9 @@ public class InvoiceForm extends BaseEntityPanel {
         jBLabel30.setText(resourceMap.getString("jBLabel30.text")); // NOI18N
         jBLabel30.setName("jBLabel30"); // NOI18N
 
-        transportPriceField.setName("transportPriceField"); // NOI18N
-
         jBLabel31.setText(resourceMap.getString("jBLabel31.text")); // NOI18N
         jBLabel31.setFont(resourceMap.getFont("jBLabel31.font")); // NOI18N
         jBLabel31.setName("jBLabel31"); // NOI18N
-
-        totalValueField.setEditable(false);
-        totalValueField.setName("totalValueField"); // NOI18N
-
-        vatPercentField.setName("vatPercentField"); // NOI18N
-
-        exciseDutyValueField.setName("exciseDutyValueField"); // NOI18N
-
-        exciseDutyPercentField.setName("exciseDutyPercentField"); // NOI18N
 
         jBLabel33.setText(resourceMap.getString("jBLabel33.text")); // NOI18N
         jBLabel33.setName("jBLabel33"); // NOI18N
@@ -769,6 +763,29 @@ public class InvoiceForm extends BaseEntityPanel {
         vatConditionNotesField.setName("vatConditionNotesField"); // NOI18N
         jScrollPane3.setViewportView(vatConditionNotesField);
 
+        invoiceSubValueField.setEditable(false);
+        invoiceSubValueField.setText(resourceMap.getString("invoiceSubValueField.text")); // NOI18N
+        invoiceSubValueField.setName("invoiceSubValueField"); // NOI18N
+
+        transportPriceField.setText(resourceMap.getString("transportPriceField.text")); // NOI18N
+        transportPriceField.setName("transportPriceField"); // NOI18N
+
+        totalValueField.setEditable(false);
+        totalValueField.setText(resourceMap.getString("totalValueField.text")); // NOI18N
+        totalValueField.setName("totalValueField"); // NOI18N
+
+        vatPercentField.setText(resourceMap.getString("vatPercentField.text")); // NOI18N
+        vatPercentField.setName("vatPercentField"); // NOI18N
+
+        vatValueField.setEditable(false);
+        vatValueField.setText(resourceMap.getString("vatValueField.text")); // NOI18N
+        vatValueField.setName("vatValueField"); // NOI18N
+
+        excisePercentField.setName("excisePercentField"); // NOI18N
+
+        exciseValueField.setEditable(false);
+        exciseValueField.setName("exciseValueField"); // NOI18N
+
         javax.swing.GroupLayout jBPanel8Layout = new javax.swing.GroupLayout(jBPanel8);
         jBPanel8.setLayout(jBPanel8Layout);
         jBPanel8Layout.setHorizontalGroup(
@@ -781,9 +798,9 @@ public class InvoiceForm extends BaseEntityPanel {
                             .addComponent(jBLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                             .addComponent(jBLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(currencyField, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                            .addComponent(invoiceSubValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)))
+                            .addComponent(invoiceSubValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)))
                     .addGroup(jBPanel8Layout.createSequentialGroup()
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
@@ -801,19 +818,19 @@ public class InvoiceForm extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel8Layout.createSequentialGroup()
-                        .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(vatValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                            .addComponent(exciseDutyValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+                        .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(vatPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                            .addComponent(excisePercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(vatPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(exciseDutyPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                        .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(transportPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                    .addComponent(totalValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                            .addComponent(exciseValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(vatValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
+                    .addComponent(transportPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                    .addComponent(totalValueField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel8Layout.setVerticalGroup(
@@ -825,9 +842,9 @@ public class InvoiceForm extends BaseEntityPanel {
                             .addComponent(jBLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(currencyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(vatValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(vatPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(vatPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -845,8 +862,8 @@ public class InvoiceForm extends BaseEntityPanel {
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(exciseDutyValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(exciseDutyPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(excisePercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(exciseValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -952,7 +969,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBDatePicker createdAtField;
     private com.cosmos.swingb.JBTextField createdByField;
     private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
-    private com.cosmos.swingb.JBTextField daysBetweenPaymentsField;
+    private com.cosmos.swingb.JBFormattedTextField daysBetweenPaymentsField;
     private com.cosmos.acacia.gui.AcaciaComboBox deliveryStatusField;
     private com.cosmos.acacia.gui.AcaciaComboBox deliveryTypeField;
     private com.cosmos.swingb.JBDatePicker documentDateField;
@@ -960,10 +977,10 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.acacia.gui.AcaciaComboBox documentTypeField;
     private com.cosmos.swingb.JBButton dueDocumentsButton;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
-    private com.cosmos.swingb.JBTextField exciseDutyPercentField;
-    private com.cosmos.swingb.JBTextField exciseDutyValueField;
+    private com.cosmos.swingb.JBFormattedTextField excisePercentField;
+    private com.cosmos.swingb.JBFormattedTextField exciseValueField;
     private com.cosmos.swingb.JBTextField invoiceNumberField;
-    private com.cosmos.swingb.JBTextField invoiceSubValueField;
+    private com.cosmos.swingb.JBFormattedTextField invoiceSubValueField;
     private com.cosmos.acacia.gui.TableHolderPanel itemsTableHolderPanel;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
@@ -1017,7 +1034,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBDatePicker paymentDueField;
     private com.cosmos.acacia.gui.AcaciaComboBox paymentTermsField;
     private com.cosmos.acacia.gui.AcaciaComboBox paymentTypeField;
-    private com.cosmos.swingb.JBTextField paymentsCountField;
+    private com.cosmos.swingb.JBFormattedTextField paymentsCountField;
     private com.cosmos.acacia.gui.AcaciaComboBox recipientContactField;
     private com.cosmos.swingb.JBTextField recipientDueField;
     private com.cosmos.acacia.gui.AcaciaComboList recipientField;
@@ -1027,15 +1044,15 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBDatePicker shipDateToField;
     private com.cosmos.swingb.JBTextField shipWeekField;
     private com.cosmos.acacia.gui.AcaciaComboList shippingAgentField;
-    private com.cosmos.swingb.JBTextField singlePayAmountField;
+    private com.cosmos.swingb.JBFormattedTextField singlePayAmountField;
     private com.cosmos.acacia.gui.AcaciaComboBox statusField;
-    private com.cosmos.swingb.JBTextField totalValueField;
+    private com.cosmos.swingb.JBFormattedTextField totalValueField;
     private com.cosmos.acacia.gui.AcaciaComboBox transportMethodField;
-    private com.cosmos.swingb.JBTextField transportPriceField;
+    private com.cosmos.swingb.JBFormattedTextField transportPriceField;
     private com.cosmos.acacia.gui.AcaciaComboBox vatConditionField;
     private com.cosmos.swingb.JBTextPane vatConditionNotesField;
-    private com.cosmos.swingb.JBTextField vatPercentField;
-    private com.cosmos.swingb.JBTextField vatValueField;
+    private com.cosmos.swingb.JBFormattedTextField vatPercentField;
+    private com.cosmos.swingb.JBFormattedTextField vatValueField;
     // End of variables declaration//GEN-END:variables
 
     @SuppressWarnings("unchecked")
@@ -1094,7 +1111,7 @@ public class InvoiceForm extends BaseEntityPanel {
             bindGroup = new BindingGroup();
 
         bindComponents(bindGroup, entProps);
-
+        
         // if the invoice is in OPEN or PUBLISH status, show button for further
         // actions
 //        if (InvoiceStatus.Open.equals(entity.getStatus().getEnumValue())
@@ -1280,14 +1297,39 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // payment due date
-        paymentDueField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentDueDate"));
+        Binding paymentDueBinding = paymentDueField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentDueDate"));
+        paymentDueBinding.setValidator(new BaseValidator() {
+            @Override
+            public Result validate(Object value) {
+                if ( value==null )
+                    return null;
+                
+                InvoiceStatus status = (InvoiceStatus) entity.getStatus().getEnumValue();
+                if ( InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status) ){}//ok,
+                //in the case the the document is not modifiable - all values are valid
+                else{
+                    return null;
+                }
+                
+                if ( ! (value instanceof Date) ){
+                    return new Validator.Result("err_invalid_due_payment", getResourceMap().getString("err_invalid_due_payment"));
+                }else{
+                    Date now = new Date();
+                    now.setTime(now.getTime()-1000*60*60*24);//substract one day
+                    if ( now.after((Date)value) )
+                        return new Validator.Result("err_due_payment_old", getResourceMap().getString("err_due_payment_old"));
+                }
+                
+                return null;
+            };
+        });
 
         // variable for re-use
         Binding amountsBinding = null;
 
         // invoice sub value
         amountsBinding = invoiceSubValueField.bind(bindGroup, entity,
-            entProps.getPropertyDetails("invoiceSubValue"));
+            entProps.getPropertyDetails("invoiceSubValue"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1299,10 +1341,11 @@ public class InvoiceForm extends BaseEntityPanel {
 //                        updateDiscountPercent(binding.isContentValid());
 //                    else
 //                        updateDiscountAmount(binding.isContentValid());
-                    if (calculatedExciseIsPercent)
-                        updateExciseDutyPercent(binding.isContentValid());
-                    else
-                        updateExciseDutyValue(binding.isContentValid());
+                    //if (calculatedExciseIsPercent)
+                    //    updateExciseDutyPercent(binding.isContentValid());
+                    //else
+                    // updateExciseDutyValue(binding.isContentValid());
+                    updateExciseAmount(binding.isContentValid());
                     updateTotalAmount(binding.isContentValid());
                     updateVatAmount(binding.isContentValid());
                     updatingAmounts = false;
@@ -1311,7 +1354,7 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // vat
-        amountsBinding = vatPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("vat"));
+        amountsBinding = vatPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("vat"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @SuppressWarnings("unchecked")
             @Override
@@ -1320,7 +1363,18 @@ public class InvoiceForm extends BaseEntityPanel {
                 updateTotalAmount(binding.isContentValid());
             }
         });
-
+        
+        // excise
+        amountsBinding = excisePercentField.bind(bindGroup, entity, entProps.getPropertyDetails("exciseDutyPercent"), getDecimalFormat());
+        amountsBinding.addBindingListener(new AbstractBindingListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                updateExciseAmount(binding.isContentValid());
+                updateTotalAmount(binding.isContentValid());
+            }
+        });
+        
         // discount value
 //        amountsBinding = discountValueField.bind(bindGroup, entity,
 //            entProps.getPropertyDetails("discountAmount"));
@@ -1357,43 +1411,43 @@ public class InvoiceForm extends BaseEntityPanel {
 //        });
 
         // excise duty value
-        amountsBinding = exciseDutyValueField.bind(bindGroup, entity,
-            entProps.getPropertyDetails("exciseDutyValue"));
-        amountsBinding.addBindingListener(new AbstractBindingListener() {
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                if (updatingAmounts)
-                    return;
-                else {
-                    updatingAmounts = true;
-                    updateExciseDutyPercent(binding.isContentValid());
-                    updateTotalAmount(binding.isContentValid());
-                    updatingAmounts = false;
-                }
-            }
-        });
+//        amountsBinding = exciseDutyValueField.bind(bindGroup, entity,
+//            entProps.getPropertyDetails("exciseDutyValue"), getDecimalFormat());
+//        amountsBinding.addBindingListener(new AbstractBindingListener() {
+//            @Override
+//            public void targetChanged(Binding binding, PropertyStateEvent event) {
+//                if (updatingAmounts)
+//                    return;
+//                else {
+//                    updatingAmounts = true;
+//                    updateExciseDutyPercent(binding.isContentValid());
+//                    updateTotalAmount(binding.isContentValid());
+//                    updatingAmounts = false;
+//                }
+//            }
+//        });
 
         // excise duty percent
-        amountsBinding = exciseDutyPercentField.bind(bindGroup, entity,
-            entProps.getPropertyDetails("exciseDutyPercent"));
-        amountsBinding.addBindingListener(new AbstractBindingListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                if (updatingAmounts)
-                    return;
-                else {
-                    updatingAmounts = true;
-                    updateExciseDutyValue(binding.isContentValid());
-                    updateTotalAmount(binding.isContentValid());
-                    updatingAmounts = false;
-                }
-            }
-        });
+//        amountsBinding = exciseDutyPercentField.bind(bindGroup, entity,
+//            entProps.getPropertyDetails("exciseDutyPercent"), getDecimalFormat());
+//        amountsBinding.addBindingListener(new AbstractBindingListener() {
+//            @SuppressWarnings("unchecked")
+//            @Override
+//            public void targetChanged(Binding binding, PropertyStateEvent event) {
+//                if (updatingAmounts)
+//                    return;
+//                else {
+//                    updatingAmounts = true;
+//                    updateExciseDutyValue(binding.isContentValid());
+//                    updateTotalAmount(binding.isContentValid());
+//                    updatingAmounts = false;
+//                }
+//            }
+//        });
 
         // transport price
         amountsBinding = transportPriceField.bind(bindGroup, entity,
-            entProps.getPropertyDetails("transportationPrice"));
+            entProps.getPropertyDetails("transportationPrice"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1402,14 +1456,14 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // single pay amount
-        singlePayAmountField.bind(bindGroup, entity, entProps.getPropertyDetails("singlePayAmount"));
+        singlePayAmountField.bind(bindGroup, entity, entProps.getPropertyDetails("singlePayAmount"), getDecimalFormat());
 
         // payments count
-        paymentsCountField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentsCount"));
+        paymentsCountField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentsCount"), getDecimalFormat());
 
         // payments count
         daysBetweenPaymentsField.bind(bindGroup, entity,
-            entProps.getPropertyDetails("daysBetweenPayments"));
+            entProps.getPropertyDetails("daysBetweenPayments"), getDecimalFormat());
 
         // ship week
         shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"))
@@ -1439,7 +1493,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 });
 
         // total value
-        totalValueField.bind(bindGroup, entity, entProps.getPropertyDetails("totalValue"));
+        totalValueField.bind(bindGroup, entity, entProps.getPropertyDetails("totalValue"), getDecimalFormat());
         totalValueField.setEditable(true);
 
         // notes
@@ -1462,7 +1516,12 @@ public class InvoiceForm extends BaseEntityPanel {
             else
                 updateVatPercent(null);
         }
+        //refresh again the fields, because otherwise something
+        //goes wrong with the formating
+        refreshFormattedFields();
+        
         updateVatAmount(true);
+        updateExciseAmount(true);
         updatePaymentFields();
         
         boolean readonlyState = !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
@@ -1475,6 +1534,14 @@ public class InvoiceForm extends BaseEntityPanel {
         updateFormButtons();
         updateItemsTableButtons(readonlyState);
         onItemsTableChange();
+    }
+
+    private void refreshFormattedFields() {
+        invoiceSubValueField.setValue(entity.getInvoiceSubValue());
+        vatPercentField.setValue(entity.getVat());
+        excisePercentField.setValue(entity.getExciseDutyPercent());
+        transportPriceField.setValue(entity.getTransportationPrice());
+        totalValueField.setValue(entity.getTotalValue());
     }
 
     private void updateItemsTableButtons(boolean readonlyState) {
@@ -1648,17 +1715,38 @@ public class InvoiceForm extends BaseEntityPanel {
                 BigDecimal vatPercentValue = vat.divide(new BigDecimal(100), MathContext.DECIMAL32);
                 BigDecimal vatValue = vatPercentValue.multiply(invSubValue);
                 if (BigDecimal.ZERO.compareTo(vatValue) == 0) {
-                    vatValueField.setText("0");
+                    vatValueField.setValue(new BigDecimal("0"));
                 } else {
-                    vatValueField.setText(formatMoney(vatValue));
+                    vatValueField.setValue(vatValue);
                 }
             } catch (Exception e) {
 
             }
         } else {
-            vatValueField.setText("0");
+            vatValueField.setValue(new BigDecimal("0"));
         }
     }
+    
+    protected void updateExciseAmount(boolean contentValid) {
+        if (contentValid) {
+            try {
+                BigDecimal invSubValue = new BigDecimal(invoiceSubValueField.getText());
+                BigDecimal excise = new BigDecimal(excisePercentField.getText());
+                BigDecimal excisePercentValue = excise.divide(new BigDecimal(100), MathContext.DECIMAL32);
+                BigDecimal esciseValue = excisePercentValue.multiply(invSubValue);
+                if (BigDecimal.ZERO.compareTo(esciseValue) == 0) {
+                    exciseValueField.setValue(new BigDecimal("0"));
+                } else {
+                    exciseValueField.setValue(esciseValue);
+                }
+            } catch (Exception e) {
+
+            }
+        } else {
+            exciseValueField.setValue(new BigDecimal("0"));
+        }
+    }
+
 
     private List<DbResource> getDeliveryTypes() {
         if (deliveryTypes == null)
@@ -1765,9 +1853,9 @@ public class InvoiceForm extends BaseEntityPanel {
     @SuppressWarnings("unchecked")
     private void updateVatPercent(Enum invoiceTypeEnumValue) {
         if (InvoiceType.SimpleInvoice.equals(invoiceTypeEnumValue)) {
-            vatPercentField.setText("0");
+            vatPercentField.setValue(new BigDecimal("0"));
         } else {
-            vatPercentField.setText("20");
+            vatPercentField.setValue(new BigDecimal("20"));
         }
     }
 
@@ -1776,8 +1864,8 @@ public class InvoiceForm extends BaseEntityPanel {
     }
 
     boolean updatingAmounts = false;
-    boolean calculatedDiscountIsPercent = false;
-    boolean calculatedExciseIsPercent = false;
+    // boolean calculatedDiscountIsPercent = false;
+    // boolean calculatedExciseIsPercent = false;
     // boolean autoUpdatingInvoiceSubValue = false;
 
     private List<DbResource> documentTypes;
@@ -1840,41 +1928,41 @@ public class InvoiceForm extends BaseEntityPanel {
 //        }
 //    }
 
-    protected void updateExciseDutyPercent(boolean contentValid) {
-        if (!contentValid || "".equals(exciseDutyValueField.getText())) {
-            exciseDutyPercentField.setText("");
-            return;
-        }
+//    protected void updateExciseDutyPercent(boolean contentValid) {
+//        if (!contentValid || "".equals(exciseDutyValueField.getText())) {
+//            exciseDutyPercentField.setValue(null);
+//            return;
+//        }
+//
+//        try {
+//            calculatedExciseIsPercent = true;
+//            BigDecimal invoiceSubValue = new BigDecimal(invoiceSubValueField.getText());
+//            BigDecimal discountAmount = new BigDecimal(exciseDutyValueField.getText());
+//            BigDecimal result = discountAmount.divide(invoiceSubValue, new MathContext(10))
+//                    .multiply(new BigDecimal(100));
+//            exciseDutyPercentField.setValue(result);
+//        } catch (Exception e) {
+//            exciseDutyPercentField.setValue(null);
+//        }
+//    }
 
-        try {
-            calculatedExciseIsPercent = true;
-            BigDecimal invoiceSubValue = new BigDecimal(invoiceSubValueField.getText());
-            BigDecimal discountAmount = new BigDecimal(exciseDutyValueField.getText());
-            BigDecimal result = discountAmount.divide(invoiceSubValue, new MathContext(10))
-                    .multiply(new BigDecimal(100));
-            exciseDutyPercentField.setText(formatMoney(result));
-        } catch (Exception e) {
-            exciseDutyPercentField.setText("");
-        }
-    }
-
-    protected void updateExciseDutyValue(boolean contentValid) {
-        if (!contentValid || "".equals(exciseDutyPercentField.getText())) {
-            exciseDutyValueField.setText("");
-            return;
-        }
-
-        try {
-            calculatedExciseIsPercent = false;
-            BigDecimal invoiceSubValue = new BigDecimal(invoiceSubValueField.getText());
-            BigDecimal discountPercent = new BigDecimal(exciseDutyPercentField.getText());
-            BigDecimal result = discountPercent.divide(new BigDecimal(100), new MathContext(10))
-                    .multiply(invoiceSubValue);
-            exciseDutyValueField.setText(formatMoney(result));
-        } catch (Exception e) {
-            exciseDutyValueField.setText("");
-        }
-    }
+//    protected void updateExciseDutyValue(boolean contentValid) {
+//        if (!contentValid || "".equals(exciseDutyPercentField.getText())) {
+//            exciseDutyValueField.setValue(null);
+//            return;
+//        }
+//
+//        try {
+//            calculatedExciseIsPercent = false;
+//            BigDecimal invoiceSubValue = new BigDecimal(invoiceSubValueField.getText());
+//            BigDecimal discountPercent = new BigDecimal(exciseDutyPercentField.getText());
+//            BigDecimal result = discountPercent.divide(new BigDecimal(100), new MathContext(10))
+//                    .multiply(invoiceSubValue);
+//            exciseDutyValueField.setValue(result);
+//        } catch (Exception e) {
+//            exciseDutyValueField.setValue(null);
+//        }
+//    }
 
     protected void updateTotalAmount(boolean contentValid) {
         if (contentValid && allAmountsValid()) {
@@ -1887,19 +1975,19 @@ public class InvoiceForm extends BaseEntityPanel {
                 BigDecimal vatAmount = total.multiply(vatValue);
                 total = total.add(vatAmount);
                 // add excise duty
-                BigDecimal exciseDutyValue = new BigDecimal(exciseDutyValueField.getText());
+                BigDecimal exciseDutyValue = new BigDecimal(exciseValueField.getText());
                 total = total.add(exciseDutyValue);
                 // subtract discount
 //                total = total.subtract(new BigDecimal(discountValueField.getText()));
                 // add transport price
                 total = total.add(new BigDecimal(transportPriceField.getText()));
-                totalValueField.setText(formatMoney(total));
+                totalValueField.setValue(total);
             } catch (Exception e) {
-                log.warn(e.getMessage());
-                totalValueField.setText("");
+                e.printStackTrace();
+                totalValueField.setValue(null);
             }
         } else {
-            totalValueField.setText("");
+            totalValueField.setValue(null);
         }
     }
 
@@ -1907,7 +1995,7 @@ public class InvoiceForm extends BaseEntityPanel {
         if ("".equals(invoiceSubValueField.getText()) || "".equals(vatPercentField.getText())
 //                || "".equals(discountValueField.getText())
                 || "".equals(transportPriceField.getText())
-                || "".equals(exciseDutyValueField.getText()))
+                || "".equals(exciseValueField.getText()))
             return false;
         return true;
     }
@@ -2004,7 +2092,7 @@ public class InvoiceForm extends BaseEntityPanel {
         if ( recipientDueDocuments.isEmpty() ){
             recipientDueField.setText("");
         }else{
-            BigDecimal currentDue = BigDecimal.ZERO;
+            BigDecimal currentDue = new BigDecimal(0);
             for (Invoice invoice : recipientDueDocuments) {
                 //if the current document is DEBIT note, decrease the due
                 if ( InvoiceType.CretidNoteInvoice.equals(invoice.getDeliveryType().getEnumValue()) )
@@ -2013,7 +2101,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 else
                     currentDue = currentDue.add(invoice.getTotalValue());
             }
-            recipientDueField.setText(formatMoney(currentDue));
+            recipientDueField.setText(AcaciaUtils.getDecimalFormat().format(currentDue));
         }
         
         dueDocumentsButton.setEnabled(!recipientDueDocuments.isEmpty());
@@ -2046,7 +2134,7 @@ public class InvoiceForm extends BaseEntityPanel {
             sum = sum.add(item.getExtendedPrice());
         }
         // autoUpdatingInvoiceSubValue = true;
-        invoiceSubValueField.setText(formatMoney(sum));
+        invoiceSubValueField.setValue(sum);
         // autoUpdatingInvoiceSubValue = false;
     }
 

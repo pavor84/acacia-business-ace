@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.invoice;
 
-import static com.cosmos.acacia.util.AcaciaUtils.formatMoney;
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,6 +46,7 @@ import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -85,14 +86,9 @@ public class InvoiceItemForm extends BaseEntityPanel {
         measureUnitField = new com.cosmos.swingb.JBComboBox();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
-        orderedQtyField = new com.cosmos.swingb.JBTextField();
-        shippedQtyField = new com.cosmos.swingb.JBTextField();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
-        returnedQtyField = new com.cosmos.swingb.JBTextField();
         jBLabel5 = new com.cosmos.swingb.JBLabel();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
-        unitPriceField = new com.cosmos.swingb.JBTextField();
-        extendedPriceField = new com.cosmos.swingb.JBTextField();
         jBLabel8 = new com.cosmos.swingb.JBLabel();
         jBLabel7 = new com.cosmos.swingb.JBLabel();
         jBLabel9 = new com.cosmos.swingb.JBLabel();
@@ -114,6 +110,11 @@ public class InvoiceItemForm extends BaseEntityPanel {
         productOrSchemaTextField = new com.cosmos.swingb.JBTextField();
         clearProductButton = new com.cosmos.swingb.JBButton();
         selectProductOrSchemaButton = new com.cosmos.swingb.JBButton();
+        orderedQtyField = new com.cosmos.swingb.JBFormattedTextField();
+        shippedQtyField = new com.cosmos.swingb.JBFormattedTextField();
+        returnedQtyField = new com.cosmos.swingb.JBFormattedTextField();
+        unitPriceField = new com.cosmos.swingb.JBFormattedTextField();
+        extendedPriceField = new com.cosmos.swingb.JBFormattedTextField();
 
         setName("Form"); // NOI18N
 
@@ -129,27 +130,14 @@ public class InvoiceItemForm extends BaseEntityPanel {
         jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
         jBLabel3.setName("jBLabel3"); // NOI18N
 
-        orderedQtyField.setName("orderedQtyField"); // NOI18N
-
-        shippedQtyField.setEditable(false);
-        shippedQtyField.setName("shippedQtyField"); // NOI18N
-
         jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
         jBLabel4.setName("jBLabel4"); // NOI18N
-
-        returnedQtyField.setEditable(false);
-        returnedQtyField.setName("returnedQtyField"); // NOI18N
 
         jBLabel5.setText(resourceMap.getString("jBLabel5.text")); // NOI18N
         jBLabel5.setName("jBLabel5"); // NOI18N
 
         jBLabel6.setText(resourceMap.getString("jBLabel6.text")); // NOI18N
         jBLabel6.setName("jBLabel6"); // NOI18N
-
-        unitPriceField.setName("unitPriceField"); // NOI18N
-
-        extendedPriceField.setEditable(false);
-        extendedPriceField.setName("extendedPriceField"); // NOI18N
 
         jBLabel8.setText(resourceMap.getString("jBLabel8.text")); // NOI18N
         jBLabel8.setName("jBLabel8"); // NOI18N
@@ -213,6 +201,25 @@ public class InvoiceItemForm extends BaseEntityPanel {
         selectProductOrSchemaButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         selectProductOrSchemaButton.setName("selectProductOrSchemaButton"); // NOI18N
 
+        orderedQtyField.setText(resourceMap.getString("orderedQtyField.text")); // NOI18N
+        orderedQtyField.setName("orderedQtyField"); // NOI18N
+
+        shippedQtyField.setEditable(false);
+        shippedQtyField.setText(resourceMap.getString("shippedQtyField.text")); // NOI18N
+        shippedQtyField.setName("shippedQtyField"); // NOI18N
+
+        returnedQtyField.setEditable(false);
+        returnedQtyField.setText(resourceMap.getString("returnedQtyField.text")); // NOI18N
+        returnedQtyField.setName("returnedQtyField"); // NOI18N
+
+        unitPriceField.setEditable(false);
+        unitPriceField.setText(resourceMap.getString("unitPriceField.text")); // NOI18N
+        unitPriceField.setName("unitPriceField"); // NOI18N
+
+        extendedPriceField.setEditable(false);
+        extendedPriceField.setText(resourceMap.getString("extendedPriceField.text")); // NOI18N
+        extendedPriceField.setName("extendedPriceField"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -250,12 +257,11 @@ public class InvoiceItemForm extends BaseEntityPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                             .addComponent(warehouseForShipField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(unitPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(unitPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(forUnitsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+                                .addComponent(forUnitsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
                             .addComponent(shipDateToField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-                            .addComponent(shippedQtyField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -264,16 +270,17 @@ public class InvoiceItemForm extends BaseEntityPanel {
                                 .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(productDetailsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
-                            .addComponent(orderedQtyField, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(measureUnitField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(orderedQtyField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(shippedQtyField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                             .addComponent(returnedQtyField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-                            .addComponent(extendedPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, 0)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(extendedPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                                     .addComponent(shipWeekField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-                                    .addComponent(shipDateFromField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)))
-                            .addComponent(measureUnitField, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(shipDateFromField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -281,9 +288,8 @@ public class InvoiceItemForm extends BaseEntityPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                        .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(productOrSchemaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(selectProductOrSchemaButton, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                     .addComponent(clearProductButton, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                     .addComponent(productDetailsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -297,8 +303,8 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     .addComponent(measureUnitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(orderedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -309,8 +315,8 @@ public class InvoiceItemForm extends BaseEntityPanel {
                     .addComponent(returnedQtyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(forUnitsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forUnitsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unitPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -346,7 +352,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBButton clearProductButton;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
-    private com.cosmos.swingb.JBTextField extendedPriceField;
+    private com.cosmos.swingb.JBFormattedTextField extendedPriceField;
     private com.cosmos.swingb.JBLabel forUnitsLabel;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
@@ -365,17 +371,17 @@ public class InvoiceItemForm extends BaseEntityPanel {
     private javax.swing.JScrollPane jScrollPane3;
     private com.cosmos.swingb.JBComboBox measureUnitField;
     private com.cosmos.swingb.JBTextPane notesField;
-    private com.cosmos.swingb.JBTextField orderedQtyField;
+    private com.cosmos.swingb.JBFormattedTextField orderedQtyField;
     private com.cosmos.swingb.JBTextPane productDescriptionField;
     private com.cosmos.swingb.JBButton productDetailsButton;
     private com.cosmos.swingb.JBTextField productOrSchemaTextField;
-    private com.cosmos.swingb.JBTextField returnedQtyField;
+    private com.cosmos.swingb.JBFormattedTextField returnedQtyField;
     private com.cosmos.swingb.JBButton selectProductOrSchemaButton;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
     private com.cosmos.swingb.JBTextField shipWeekField;
-    private com.cosmos.swingb.JBTextField shippedQtyField;
-    private com.cosmos.swingb.JBTextField unitPriceField;
+    private com.cosmos.swingb.JBFormattedTextField shippedQtyField;
+    private com.cosmos.swingb.JBFormattedTextField unitPriceField;
     private com.cosmos.acacia.gui.AcaciaComboList warehouseForShipField;
     // End of variables declaration//GEN-END:variables
 
@@ -447,7 +453,8 @@ public class InvoiceItemForm extends BaseEntityPanel {
         bindMeasureUnitField(new ArrayList());
         
         //ordered quantity
-        Binding orderedQtyBinding = orderedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"));
+        Binding orderedQtyBinding = orderedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), AcaciaUtils.getDecimalFormat());
+        
         orderedQtyBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -456,13 +463,13 @@ public class InvoiceItemForm extends BaseEntityPanel {
         });
         
         //shipped quantity
-        shippedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("shippedQuantity"));
+        shippedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("shippedQuantity"), getDecimalFormat());
         
         //returned quantity
-        returnedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("returnedQuantity"));
-
+        returnedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("returnedQuantity"), getDecimalFormat());
+        
         //unit price
-        Binding unitPriceBinding = unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"));
+        Binding unitPriceBinding = unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
         unitPriceBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -471,7 +478,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         });
         
         //extended price
-        extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"));
+        extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
         
         //variable for re-use
 //        Binding amountsBinding = null;
@@ -682,9 +689,9 @@ public class InvoiceItemForm extends BaseEntityPanel {
             salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(p);
         //write the field if price is ok
         if ( salePrice!=null ){
-            unitPriceField.setText(formatMoney(salePrice));
+            unitPriceField.setValue(salePrice);
         }else{
-            unitPriceField.setText("");
+            unitPriceField.setValue(null);
         }
         
         updateUnitLabel();
@@ -856,7 +863,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
 
     protected void updateExtendedPrice(boolean contentValid) {
         if ( !contentValid){
-            extendedPriceField.setText("");
+            extendedPriceField.setValue(null);
             return;
         }
         
@@ -867,9 +874,9 @@ public class InvoiceItemForm extends BaseEntityPanel {
             BigDecimal qtyLong = new BigDecimal(qty);
             BigDecimal pricedPackagesQuantity = getPricedPackagesQuantity(qtyLong);
             BigDecimal result = pricedPackagesQuantity.multiply(priceLong, MathContext.DECIMAL64);
-            extendedPriceField.setText(formatMoney(result));
+            extendedPriceField.setValue(result);
         }catch (NumberFormatException e) {
-            extendedPriceField.setText("");
+            extendedPriceField.setValue(null);
         }
     }
 
