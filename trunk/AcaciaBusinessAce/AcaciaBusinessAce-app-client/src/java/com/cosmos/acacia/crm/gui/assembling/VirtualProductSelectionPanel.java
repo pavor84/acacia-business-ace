@@ -7,6 +7,7 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -15,6 +16,7 @@ import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import javax.ejb.EJB;
 import org.jdesktop.application.Action;
 
@@ -123,7 +125,9 @@ public class VirtualProductSelectionPanel
     @Action
     public void productSelectionAction()
     {
-        ProductsListPanel productsPanel = new ProductsListPanel(null);
+        BigInteger organizationId =
+                LocalSession.instance().getOrganization().getId();
+        ProductsListPanel productsPanel = new ProductsListPanel(organizationId);
         DialogResponse response = productsPanel.showDialog(this);
         setDialogResponse(response);
         if(DialogResponse.SELECT.equals(response))
