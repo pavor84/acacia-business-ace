@@ -406,7 +406,7 @@ public class AssemblingBean
             AssemblingCategory assemblingCategory,
             Boolean applicable)
     {
-        System.out.println("getAssemblingSchemas(assemblingCategory=" + assemblingCategory +
+        logger.info("getAssemblingSchemas(assemblingCategory=" + assemblingCategory +
                 ", applicable=" + applicable + ")");
         Query q;
         if(assemblingCategory != null)
@@ -457,6 +457,7 @@ public class AssemblingBean
     @Override
     public List<VirtualProduct> getVirtualProducts()
     {
+        logger.info("AssemblingBean.getVirtualProducts()");
         Organization organization = acaciaSessionLocal.getOrganization();
         BigInteger parentId;
         if(organization == null || (parentId = organization.getId()) == null)
@@ -471,6 +472,7 @@ public class AssemblingBean
 
     private void synchronizeRealProducts(BigInteger parentId)
     {
+        logger.info("AssemblingBean.synchronizeRealProducts(" + parentId + ")");
         Query q = em.createNamedQuery("RealProduct.findNewSimpleProducts");
         q.setParameter("parentId", parentId);
         List<SimpleProduct> newSP = q.getResultList();
@@ -513,6 +515,7 @@ public class AssemblingBean
     @Override
     public RealProduct getRealProduct(SimpleProduct simpleProduct)
     {
+        logger.info("AssemblingBean.getRealProduct(" + simpleProduct + ")");
         Query q = em.createNamedQuery("RealProduct.findBySimpleProduct");
         q.setParameter("parentId", simpleProduct.getParentId());
         q.setParameter("simpleProduct", simpleProduct);
