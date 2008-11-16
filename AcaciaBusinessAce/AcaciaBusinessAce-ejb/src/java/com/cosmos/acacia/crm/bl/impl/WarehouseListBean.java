@@ -174,9 +174,15 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
     }
 
     @Override
-    public WarehouseProduct newWarehouseProduct(BigInteger parentId) {
+    public WarehouseProduct newWarehouseProduct(BigInteger parentId, Warehouse warehouse) {
         WarehouseProduct wp = new WarehouseProduct();
         wp.setParentId(parentId);
+        wp.setQuantityInStock(BigDecimal.ZERO);
+        wp.setOrderedQuantity(BigDecimal.ZERO);
+        wp.setSoldQuantity(BigDecimal.ZERO);
+        wp.setQuantityDue(BigDecimal.ZERO);
+        wp.setReservedQuantity(BigDecimal.ZERO);
+        wp.setWarehouse(warehouse);
         return wp;
     }
 

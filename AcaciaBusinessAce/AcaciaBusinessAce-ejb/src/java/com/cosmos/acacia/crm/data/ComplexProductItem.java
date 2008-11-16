@@ -65,6 +65,9 @@ public class ComplexProductItem
     @Property(title="Quantity", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal quantity;
+    
+    @Column(name = "dueQuantity")
+    private BigDecimal dueQuantity;
 
     @Column(name = "unit_price", nullable = false)
     @Property(title="Unit Price", propertyValidator=@PropertyValidator(
@@ -259,6 +262,14 @@ public class ComplexProductItem
     @Override
     public String getInfo() {
         return getComplexProduct().getProductName();
+    }
+
+    public BigDecimal getDueQuantity() {
+        return dueQuantity;
+    }
+
+    public void setDueQuantity(BigDecimal dueQuantity) {
+        this.dueQuantity = dueQuantity;
     }
     
 }

@@ -273,4 +273,11 @@ public interface InvoiceListRemote {
      * @return
      */
     List<Invoice> getDueDocuments(BusinessPartner recipient);
+
+    /**
+     * Returns the invoices that can be cancelled by a credit note
+     * @param invoice - should be of type credit note
+     * @return
+     */
+    List<?> getInvoicesToCancel(Invoice invoice);
 }

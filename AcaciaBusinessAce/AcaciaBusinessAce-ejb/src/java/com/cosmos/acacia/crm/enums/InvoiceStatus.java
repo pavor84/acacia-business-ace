@@ -15,9 +15,7 @@ public enum InvoiceStatus implements DatabaseResource {
     WaitForPayment("Wait For Payment", "The documents awaits for payment"),
     Reopen("Reopen", "The document was reopen for modification"),
     Cancelled("Cancelled", "The document was cancelled"),
-    Paid("Paid", "The document was confirmed and payments were received."),
-    PartlyDelivered("Partly Delivered", "Invoice is partly delivered."),
-    Delivered("Delivered", "Invoice is received from recipient.");
+    Paid("Paid", "The document was confirmed and payments were received.");
 
     private InvoiceStatus(String name, String description) {
         this.name = name;

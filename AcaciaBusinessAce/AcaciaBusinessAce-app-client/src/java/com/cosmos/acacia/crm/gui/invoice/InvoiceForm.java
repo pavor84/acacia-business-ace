@@ -2095,8 +2095,8 @@ public class InvoiceForm extends BaseEntityPanel {
             BigDecimal currentDue = new BigDecimal(0);
             for (Invoice invoice : recipientDueDocuments) {
                 //if the current document is DEBIT note, decrease the due
-                if ( InvoiceType.CretidNoteInvoice.equals(invoice.getDeliveryType().getEnumValue()) )
-                    currentDue.subtract(invoice.getTotalValue());
+                if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue()) )
+                    currentDue = currentDue.subtract(invoice.getTotalValue());
                 //otherwise increase the due amount
                 else
                     currentDue = currentDue.add(invoice.getTotalValue());
@@ -2158,6 +2158,7 @@ public class InvoiceForm extends BaseEntityPanel {
     public void setReadonly() {
         super.setReadonly();
         shippingAgentField.setEnabled(false);
+        recipientField.setEnabled(false);
     }
 
     protected void onActionButton() {

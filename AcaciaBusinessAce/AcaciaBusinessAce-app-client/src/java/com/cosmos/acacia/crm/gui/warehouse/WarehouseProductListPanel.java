@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.gui.warehouse;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -199,13 +198,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object newRow() {
-        WarehouseProduct wp = getFormSession().newWarehouseProduct(getParentDataObjectId());
-        wp.setQuantityInStock(BigDecimal.ZERO);
-        wp.setOrderedQuantity(BigDecimal.ZERO);
-        wp.setSoldQuantity(BigDecimal.ZERO);
-        wp.setQuantityDue(BigDecimal.ZERO);
-        wp.setReservedQuantity(BigDecimal.ZERO);
-        wp.setWarehouse(warehouse);
+        WarehouseProduct wp = getFormSession().newWarehouseProduct(getParentDataObjectId(), warehouse);
         return onEditEntity(wp, false);
     }
 

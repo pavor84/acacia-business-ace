@@ -74,6 +74,23 @@ import com.cosmos.acacia.annotation.ValidationType;
                 		"and not exists (from InvoiceItemLink itemLink where itemLink.templateDocumentId = i.invoiceId)"
             ),
         /**
+         * Get all cancel-able invoices for a given recipient. 
+         * Parameters: 
+         * - proformaInvoice - required. Supply Boolean.TRUE as value
+         * - recipient - required - the recipient
+         * - simpleInvoice - required. Value of InvoiceType.SimpleInvoice.getDbResource()
+         * - vatInvoice - required. Value of InvoiceType.VatInvoice.getDbResource()
+         * - waitingForPayment - required. Value of InvoiceStatus.WaitForPayment.getDbResource()
+         */
+        @NamedQuery
+            (
+                name = "Invoice.getInvoiceToCancel",
+                query = "select i from Invoice i where i.proformaInvoice = :proformaInvoice " +
+                        "and i.recipient = :recipient " +
+                        "and i.status = :waitingForPayment " +
+                        "and (i.invoiceType = :simpleInvoice or i.invoiceType = :vatInvoice) "
+            ),
+        /**
          * Parameters: 
          *  - branch - not null
          *  - proformaInvoice - true or false, not null
@@ -206,8 +223,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @ManyToOne
     private BusinessPartner shippingAgent;
 
-    @Property(title="Transport Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Property(title="Transport Price")
     @Column(name = "transport_price", precision=20, scale=4)
     private BigDecimal transportationPrice;
 
@@ -216,8 +232,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @ManyToOne
     private DbResource currency;
 
-    @Property(title="Invoice Sub Value", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Property(title="Invoice Sub Value", propertyValidator=@PropertyValidator(required=true))
     @Column(name = "invoice_sub_value", nullable = false, precision=20, scale=4)
     private BigDecimal invoiceSubValue;
 
@@ -236,8 +251,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Column(name = "discount_percent", precision=20, scale=4)
     private BigDecimal discountPercent;
     
-    @Property(title="Total Value", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d, required=true))
+    @Property(title="Total Value", propertyValidator=@PropertyValidator(required=true))
     @Column(name = "total_value", nullable = false, precision=20, scale=4)
     private BigDecimal totalValue;
 
