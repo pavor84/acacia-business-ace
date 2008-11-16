@@ -89,6 +89,9 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Column(name = "returned_quantity", precision=20, scale=4)
     @Property(title="Returned quantiry", readOnly=true)
     private BigDecimal returnedQuantity;
+    
+    @Column(name = "dueQuantity")
+    private BigDecimal dueQuantity;
 
     @Column(name = "unit_price", nullable = false, precision=20, scale=4)
     @Property(title="Unit price", editable=false)
@@ -336,5 +339,13 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
+    }
+
+    public BigDecimal getDueQuantity() {
+        return dueQuantity;
+    }
+
+    public void setDueQuantity(BigDecimal dueQuantity) {
+        this.dueQuantity = dueQuantity;
     }
 }

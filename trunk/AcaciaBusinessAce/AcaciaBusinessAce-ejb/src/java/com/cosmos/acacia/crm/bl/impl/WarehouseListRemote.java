@@ -77,10 +77,10 @@ public interface WarehouseListRemote {
 
     /**
      * Create empty entity which is not persisted.
-     * @param parentId 
+     * @param parentId - the organization
      * @return not null
      */
-    WarehouseProduct newWarehouseProduct(BigInteger parentId);
+    WarehouseProduct newWarehouseProduct(BigInteger parentId, Warehouse warehouse);
 
     /**
      * Try to save a given warehouse product. If the entity is invalid,

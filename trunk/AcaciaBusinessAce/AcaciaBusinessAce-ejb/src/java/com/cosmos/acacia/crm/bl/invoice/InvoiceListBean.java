@@ -17,12 +17,15 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.bl.assembling.AssemblingLocal;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -30,6 +33,7 @@ import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.InvoiceItemLink;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
@@ -72,6 +76,9 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     
     @EJB
     private WarehouseListLocal warehouseListLocal;
+    
+    @EJB
+    private AssemblingLocal assemblingLocal;
     
     public EntityProperties getListingEntityProperties() {
         
@@ -436,7 +443,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
                 throw new IllegalStateException("No warehouse index set for warehouse: "
                     +warehouse.getAddress().getAddressName()+". This is needed to generate document numbers!");
             }
-            
+           
             result = new BigInteger(""+warehouse.getIndex());
             result = result.multiply(WarehouseListLocal.DOCUMENT_INDEX_MULTIPLICATOR);
         }else{
@@ -451,7 +458,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         if ( newItems==null )
             throw new IllegalArgumentException("newItems can't be null!");
         for (InvoiceItem item : newItems) {
-            //InvoiceItem.validate(item);//TODO validate
             esm.persist(em, item);
         }
         em.flush();
@@ -504,6 +510,13 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
             if ( InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) ){}//ok
             else
                 throw new IllegalArgumentException("The invoice should be OPEN in order to be confirmed!");
+            
+            boolean reserve = true;
+            //if credit note - we will restore the quantities instead of reserving them
+            if ( InvoiceType.CretidNoteInvoice.equals(entity.getInvoiceType().getEnumValue()))
+                reserve = false;
+            
+            updateWarehouseQuantities(entity, reserve);
         }
         
         //the document date is the date that it was confirmed as valid document
@@ -512,9 +525,193 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         setInvoiceNumber(entity);
         entity.setStatus(InvoiceStatus.WaitForPayment.getDbResource());
         
-//        entity.setStatus(InvoiceStatus.Paid.getDbResource());
-        
         return saveInvoice(entity);
+    }
+
+    /**
+     * The method updates the {@link WarehouseProduct} quantities for the given confirmed invoice.
+     * @param entity
+     * @param reserve - reserve or restored the quantities
+     */
+    private void updateWarehouseQuantities(Invoice entity, boolean reserve) {
+        List<InvoiceItem> items = getInvoiceItems(entity.getInvoiceId());
+        Address userBranch = acaciaSession.getBranch();
+        Warehouse userWarehouse = warehouseListLocal.getWarehouseForAddress(userBranch);
+        for (InvoiceItem invoiceItem : items) {
+            Product product = invoiceItem.getProduct();
+            Warehouse warehouse = invoiceItem.getWarehouse();
+            if ( warehouse==null )
+                warehouse = userWarehouse;
+            BigDecimal itemQuantity = transformQuantity(
+                invoiceItem.getOrderedQuantity(), invoiceItem.getMeasureUnit(), product.getMeasureUnit());
+            reserveProductQuantity(product, warehouse, itemQuantity, null, reserve, invoiceItem);
+        }
+    }
+
+    /**
+     * Get the quantity in the target unit.
+     * For example for source = 2000 gram, and target unit kg, the result is 2 (kg).
+     * @param sourceQuantity
+     * @param sourceMeasureUnit
+     * @param targetMeasureUnit
+     * @return
+     */
+    private BigDecimal transformQuantity(BigDecimal sourceQuantity, DbResource sourceMeasureUnit,
+                                         DbResource targetMeasureUnit) {
+        if ( targetMeasureUnit==null )
+            return sourceQuantity;
+        
+        MeasurementUnit sourceUnit = (MeasurementUnit) sourceMeasureUnit.getEnumValue();
+        MeasurementUnit targetUnit = (MeasurementUnit) targetMeasureUnit.getEnumValue();
+
+        BigDecimal targetUnitValue = targetUnit.getCgsUnitValue();
+        
+        BigDecimal sourceUnitValue = sourceUnit.getCgsUnitValue();
+        
+        BigDecimal multiplier = sourceUnitValue.divide(targetUnitValue);
+        
+        BigDecimal result = sourceQuantity.multiply(multiplier);
+        return result;
+    }
+
+    /**
+     * Recursively reserves the quantity for every simple product.
+     * @param warehouse 
+     * @param reserve 
+     * @param complexProduct
+     */
+    private void reserveProductQuantity(Product product, Warehouse warehouse, BigDecimal itemQuantity, BigDecimal quantity, boolean reserve, Object item) {
+        if ( product instanceof ComplexProduct ){
+            ComplexProduct complexProduct = (ComplexProduct) product;
+            
+            List<ComplexProductItem> cItems = complexProduct.getComplexProductItems();
+            if ( cItems==null ){
+                cItems = assemblingLocal.getComplexProductItems(complexProduct);
+            }
+            if ( cItems!=null ){
+                for (ComplexProductItem cItem : cItems) {
+                    reserveProductQuantity(cItem.getProduct(), warehouse, itemQuantity, cItem.getQuantity(), reserve, cItem);
+                }
+            }
+        }else if ( product instanceof SimpleProduct ){
+            if ( reserve )
+                reserveSimpleProductQuantity((SimpleProduct)product, warehouse, itemQuantity, quantity, item);
+            else
+                restoreSimpleProductQuantity((SimpleProduct)product, warehouse, itemQuantity, quantity, item);
+        }
+    }
+
+    /**
+     * Restores previously reserved quantities.
+     * The method does the opposite of {@link #reserveSimpleProductQuantity(SimpleProduct, Warehouse, BigDecimal, BigDecimal)}
+     * @param product
+     * @param warehouse
+     * @param itemQuantity
+     * @param pQuantity
+     */
+    private void restoreSimpleProductQuantity(SimpleProduct product, Warehouse warehouse,
+                                              BigDecimal itemQuantity, BigDecimal pQuantity, Object item) {
+        WarehouseProduct wp = getWarehouseProduct(product);
+        if ( wp==null ){
+            wp = createWarehouseProduct(product, warehouse);
+        }
+        
+        BigDecimal quantity = itemQuantity;
+        if ( pQuantity!=null )
+            quantity = pQuantity.multiply(itemQuantity);
+        
+        BigDecimal soldQuantityToUse = quantity;
+        wp.setSoldQuantity(wp.getSoldQuantity().subtract(soldQuantityToUse));
+        
+        BigDecimal dueQuantityToUse = null;
+        if ( item instanceof InvoiceItem ){
+            InvoiceItem invoiceItem = (InvoiceItem) item;
+            if ( invoiceItem.getDueQuantity()!=null ){
+                dueQuantityToUse = invoiceItem.getDueQuantity();
+            }
+        }else if ( item instanceof ComplexProductItem ){
+            ComplexProductItem complexProductItem = (ComplexProductItem) item;
+            if ( complexProductItem.getDueQuantity()!=null )
+                dueQuantityToUse = complexProductItem.getDueQuantity();
+        }
+        
+        if ( dueQuantityToUse!=null ){
+            wp.setQuantityDue(wp.getQuantityDue().subtract(dueQuantityToUse));
+        }
+        
+        warehouseListLocal.saveWarehouseProduct(wp);
+    }
+
+    /**
+     * Actually reserves the quantity for the given product at the given warehouse.
+     * @param product
+     * @param warehouse
+     * @param itemQuantity - since this product is actually related to a document item, this is
+     * the quantity specified for the whole item (which may consist of multiple simple products)
+     * @param pQuantity - this is the actual quantity for this specific simple product
+     */
+    private void reserveSimpleProductQuantity(SimpleProduct product, Warehouse warehouse, BigDecimal itemQuantity, BigDecimal pQuantity, Object item) {
+        WarehouseProduct wp = getWarehouseProduct(product);
+        if ( wp==null ){
+            wp = createWarehouseProduct(product, warehouse);
+        }
+        
+        BigDecimal quantity = itemQuantity;
+        if ( pQuantity!=null )
+            quantity = pQuantity.multiply(itemQuantity);
+        
+        BigDecimal soldQuantityToUse = quantity;
+        BigDecimal dueQuantityToUse = null;
+        
+        if ( wp.getFreeQuantity().compareTo(quantity)<0 ){
+            //if negative free quantity - set all as 'due'
+            if ( wp.getFreeQuantity().compareTo(BigDecimal.ZERO)<0 )
+                dueQuantityToUse = quantity;
+            //otherwise, get the available free quantity
+            else
+                dueQuantityToUse = quantity.subtract(wp.getFreeQuantity());
+        }
+        
+        BigDecimal updatedSoldQty = wp.getSoldQuantity().add(soldQuantityToUse);
+        wp.setSoldQuantity(updatedSoldQty);
+        
+        if ( dueQuantityToUse!=null ){
+            BigDecimal updatedDueQuantity = wp.getQuantityDue().add(dueQuantityToUse);
+            wp.setQuantityDue(updatedDueQuantity);
+            //update the item
+            if ( item instanceof InvoiceItem ){
+                InvoiceItem invoiceItem = (InvoiceItem) item;
+                if ( invoiceItem.getDueQuantity()==null )
+                    invoiceItem.setDueQuantity(BigDecimal.ZERO);
+                invoiceItem.setDueQuantity(invoiceItem.getDueQuantity().add(dueQuantityToUse));
+                saveInvoiceItem(invoiceItem);
+            }else if ( item instanceof ComplexProductItem ){
+                ComplexProductItem complexProductItem = (ComplexProductItem) item;
+                if ( complexProductItem.getDueQuantity()==null )
+                    complexProductItem.setDueQuantity(BigDecimal.ZERO);
+                complexProductItem.setDueQuantity(complexProductItem.getDueQuantity().add(dueQuantityToUse));
+                saveComplexProductItem(complexProductItem);
+            }
+        }
+        
+        warehouseListLocal.saveWarehouseProduct(wp);
+    }
+
+    private void saveComplexProductItem(ComplexProductItem complexProductItem) {
+        esm.persist(em, complexProductItem);
+    }
+
+    /**
+     * Creates new warehouse product instance.
+     * @param product
+     * @param warehouse
+     * @return
+     */
+    private WarehouseProduct createWarehouseProduct(SimpleProduct product, Warehouse warehouse) {
+        WarehouseProduct wp = warehouseListLocal.newWarehouseProduct(warehouse.getParentId(), warehouse);
+        wp.setProduct(product);
+        warehouseListLocal.saveWarehouseProduct(wp);
+        return wp;
     }
 
     @Override
@@ -573,4 +770,37 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         List<Invoice> result = q.getResultList();
         return result;
     }
+
+    @Override
+    public List<?> getInvoicesToCancel(Invoice invoice) {
+        if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue())){
+            //ok
+        }else{
+            throw new IllegalArgumentException("Only credits notes can cancel invoices!");
+        }
+        
+        Query q = em.createNamedQuery("Invoice.getInvoiceToCancel");
+        q.setParameter("recipient", invoice.getRecipient());
+        q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+        q.setParameter("proformaInvoice", Boolean.FALSE);
+        q.setParameter("simpleInvoice", InvoiceType.SimpleInvoice.getDbResource());
+        q.setParameter("vatInvoice", InvoiceType.VatInvoice.getDbResource());
+        
+        return q.getResultList();
+    }
+    
+//    public static void main(String[] args) {
+//        MeasurementUnit targetUnit = MeasurementUnit.Kilogram;
+//        MeasurementUnit sourceUnit = MeasurementUnit.Gram;
+//        BigDecimal sourceQuantity = new BigDecimal("300");
+//        
+//        BigDecimal targetUnitValue = targetUnit.getCgsUnitValue();
+//        
+//        BigDecimal sourceUnitValue = sourceUnit.getCgsUnitValue();
+//        
+//        BigDecimal multiplier = sourceUnitValue.divide(targetUnitValue);
+//        
+//        BigDecimal result = sourceQuantity.multiply(multiplier);
+//        System.out.println(result);
+//    }
 }

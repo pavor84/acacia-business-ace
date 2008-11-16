@@ -33,6 +33,7 @@ import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.InvoiceItemLink;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.gui.purchaseorders.CopyItemsListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -230,8 +231,16 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         
         setDialogResponse(DialogResponse.CANCEL);
         
-        proformaInvoicesCheckField.setSelected(true);
-        salesOffersCheckField.setSelected(true);
+        //if credit note - show only the invoices
+        if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue())){
+            proformaInvoicesCheckField.setSelected(false);
+            salesOffersCheckField.setSelected(false);    
+            proformaInvoicesCheckField.setEnabled(false);
+            salesOffersCheckField.setEnabled(false);
+        }else{
+            proformaInvoicesCheckField.setSelected(true);
+            salesOffersCheckField.setSelected(true);
+        }
         
         ActionListener updateTemplateDocsListener = new ActionListener() {
             @Override
@@ -283,7 +292,12 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     
 
     protected void updateTemplateDocumentsList() {
-        templateDocuments = getTemplateDocuments(true, proformaInvoicesCheckField.isSelected(), salesOffersCheckField.isSelected());
+        //if credit not - show only the invoices
+        if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue())){
+            templateDocuments = getFormSession().getInvoicesToCancel(invoice);
+        }else{
+            templateDocuments = getTemplateDocuments(true, proformaInvoicesCheckField.isSelected(), salesOffersCheckField.isSelected());
+        }
         
         //and then bind again
         documentField.bind(new BindingGroup(), templateDocuments, this, 
@@ -453,6 +467,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
             item.setDiscountPercent((BigDecimal) getItemProperty(documentItem, "discountPercent"));
             item.setExtendedPrice((BigDecimal) getItemProperty(documentItem, "extendedPrice"));
             item.setUnitPrice((BigDecimal) getItemProperty(documentItem, "unitPrice"));
+            item.setDueQuantity((BigDecimal) getItemProperty(documentItem, "dueQuantity"));
             
             //get the sale price from product and warehouse product
 //            BigDecimal salePrice = null;
