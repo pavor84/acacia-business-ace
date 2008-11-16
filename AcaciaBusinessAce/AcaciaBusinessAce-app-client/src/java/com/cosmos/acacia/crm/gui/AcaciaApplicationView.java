@@ -58,6 +58,7 @@ import com.cosmos.acacia.crm.gui.contactbook.PersonPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
+import com.cosmos.acacia.crm.gui.deliverycertificates.DeliveryCertificatesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
