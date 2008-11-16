@@ -21,6 +21,18 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "delivery_certificate_serial_numbers")
+@NamedQueries({ 
+    @NamedQuery
+    ( 
+        /**
+         * Get all delivery certificates for a given warehouse 
+         * Parameters:
+         * - warehouse - an warehouse
+         */
+        name = "DeliveryCertificateSerialNumber.findForCertificateItem",
+        query = "select dcsn from DeliveryCertificateSerialNumber dcsn where dcsn.deliveryCertificateItem.certificateItemId=:parentId"
+    )
+})
 public class DeliveryCertificateSerialNumber implements Serializable {
 
     private static final long serialVersionUID = 1L;

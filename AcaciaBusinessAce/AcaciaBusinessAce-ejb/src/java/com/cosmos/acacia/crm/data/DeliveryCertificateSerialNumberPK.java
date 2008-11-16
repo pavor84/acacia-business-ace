@@ -10,6 +10,8 @@ import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.cosmos.acacia.annotation.Property;
+
 /**
  *
  * @author Miro
@@ -21,6 +23,7 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
     private BigInteger certificateItemId;
 
     @Column(name = "serial_number", nullable = false)
+    @Property(title = "Serial Number")
     private String serialNumber;
 
     public DeliveryCertificateSerialNumberPK() {
