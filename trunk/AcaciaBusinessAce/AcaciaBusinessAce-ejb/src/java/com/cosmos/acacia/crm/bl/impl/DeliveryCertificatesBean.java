@@ -31,6 +31,8 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
 import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumberPK;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Warehouse;
@@ -85,6 +87,12 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         return entityProperties;
     }
     
+    public EntityProperties getDeliveryCertificateSerialNumberListEntityProperties(){
+    	EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificateSerialNumberPK.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+    
     /**
      * 
      * @param parentId - warehouse id
@@ -121,6 +129,14 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     }
     
     @Override
+    public List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(BigInteger parentId){
+    	Query q1 = em.createNamedQuery("DeliveryCertificateSerialNumber.findForCertificateItem");
+        q1.setParameter("parentId", parentId);
+         
+    	return (List<DeliveryCertificateSerialNumber>)q1.getResultList();
+    }
+    
+    @Override
     public DeliveryCertificate newDeliveryCertificate(BigInteger parentId) {
         DeliveryCertificate ds = new DeliveryCertificate();
         ds.setParentId(parentId);
@@ -150,7 +166,13 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         return ds;
     }
 
-    
+    public DeliveryCertificateSerialNumber newDeliveryCertificateSerialNumber(BigInteger parentId){
+    	DeliveryCertificateSerialNumber dcsn = new DeliveryCertificateSerialNumber();
+    	DeliveryCertificateSerialNumberPK pk = new DeliveryCertificateSerialNumberPK();
+    	pk.setCertificateItemId(parentId);
+    	dcsn.setDeliveryCertificateSerialNumberPK(pk);
+    	return dcsn;
+    }
     
     @Override
     public List<DbResource> getReasons() {
