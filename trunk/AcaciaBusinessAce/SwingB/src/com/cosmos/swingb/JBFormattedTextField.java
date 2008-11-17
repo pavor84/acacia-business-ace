@@ -54,6 +54,7 @@ public class JBFormattedTextField
     }
     
     private void init() {
+        setFocusLostBehavior(JBFormattedTextField.PERSIST);
         setHorizontalAlignment(JBFormattedTextField.TRAILING);
     }
 

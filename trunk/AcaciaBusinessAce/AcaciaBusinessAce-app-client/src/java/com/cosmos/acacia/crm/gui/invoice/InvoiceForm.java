@@ -1983,7 +1983,6 @@ public class InvoiceForm extends BaseEntityPanel {
                 total = total.add(new BigDecimal(transportPriceField.getText()));
                 totalValueField.setValue(total);
             } catch (Exception e) {
-                e.printStackTrace();
                 totalValueField.setValue(null);
             }
         } else {
