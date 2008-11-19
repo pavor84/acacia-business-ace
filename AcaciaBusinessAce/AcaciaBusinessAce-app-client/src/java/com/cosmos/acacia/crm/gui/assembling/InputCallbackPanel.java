@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.io.Serializable;
 import java.text.Format;
 import java.util.Date;
+import javax.swing.JFormattedTextField;
 import javax.swing.border.TitledBorder;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
@@ -189,6 +190,7 @@ public class InputCallbackPanel
             else
                 valueTextField = new JBFormattedTextField();
             valueTextField.setName("valueTextField"); // NOI18N
+            valueTextField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
         }
 
         return valueTextField;
