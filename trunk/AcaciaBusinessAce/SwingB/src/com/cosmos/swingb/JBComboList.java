@@ -107,7 +107,7 @@ public class JBComboList
         unselectButton.setVerticalTextPosition(SwingConstants.CENTER);
         unselectButton.setName("unselectButton"); // NOI18N
         unselectButton.setPreferredSize(new Dimension(25, 25));
-        unselectButton.setEnabled(false);
+        setEnabledUnselectButton(false);
 
         lookupButton.setAction(getApplicationActionMap().get("lookupButtonAction")); // NOI18N
         lookupButton.setAlignmentX(0.5F);
@@ -187,7 +187,10 @@ public class JBComboList
     {
         public void itemStateChanged(ItemEvent event)
         {
-            unselectButton.setEnabled(comboBox.getSelectedItem() != null);
+            if(isEnabled())
+                setEnabledUnselectButton(comboBox.getSelectedItem() != null);
+            else
+                setEnabledUnselectButton(false);
         }
     }
 
@@ -287,12 +290,24 @@ public class JBComboList
         return editable;
     }
 
+    protected void setEnabledUnselectButton(boolean enabled)
+    {
+        if(comboBox.getSelectedItem() == null)
+        {
+            unselectButton.setEnabled(false);
+        }
+        else
+        {
+            unselectButton.setEnabled(enabled);
+        }
+    }
+
     @Override
     public void setEnabled(boolean enabled)
     {
         super.setEnabled(enabled);
         comboBox.setEnabled(enabled);
-        unselectButton.setEnabled(enabled && comboBox.getSelectedItem() != null);
+        setEnabledUnselectButton(enabled);
         lookupButton.setEnabled(enabled);
     }
 
@@ -300,7 +315,8 @@ public class JBComboList
     {
         this.editable = editable;
         comboBox.setEditable(editable);
-        setEnabled(editable);
+        setEnabledUnselectButton(editable);
+        lookupButton.setEnabled(editable);
 
         if(selectableListDialog != null)
         {
