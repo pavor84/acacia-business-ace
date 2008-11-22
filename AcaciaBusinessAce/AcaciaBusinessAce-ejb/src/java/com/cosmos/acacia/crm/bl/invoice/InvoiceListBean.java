@@ -49,6 +49,7 @@ import com.cosmos.acacia.crm.enums.PaymentType;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 
 /**
  * Created	:	10.09.2008
@@ -275,12 +276,18 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         entityProperties.removePropertyDetails("discountPercent");
         entityProperties.removePropertyDetails("shipDateFrom");
         entityProperties.removePropertyDetails("shipDateTo");
+        
+        PropertyDetails productCode = new PropertyDetails("product.codeFormatted", "Code", SimpleProduct.class.getName());
+        productCode.setCustomDisplay("${product.codeFormatted}");
+        productCode.setOrderPosition(25);
+        productCode.setVisible(true);
+        entityProperties.addPropertyDetails(productCode);
+        
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
 
     @SuppressWarnings("unchecked")
-    
     public List<InvoiceItem> getInvoiceItems(BigInteger parentDataObjectId) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
@@ -298,7 +305,15 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         InvoiceItem item = new InvoiceItem();
         item.setParentId(parentDataObjectId);
         item.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
+        Invoice invoice = em.find(Invoice.class, parentDataObjectId);
+        Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(invoice.getBranch());
+        item.setWarehouse(warehouse);
         return item;
+    }
+    
+    public Warehouse getInvoiceWarehouse(BigInteger invoiceId){
+        Invoice invoice = em.find(Invoice.class, invoiceId);
+        return warehouseListLocal.getWarehouseForAddress(invoice.getBranch());
     }
     
     public InvoiceItem saveInvoiceItem(InvoiceItem item) {

@@ -5,17 +5,16 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
-import com.cosmos.beansbinding.converters.ResourceConverter;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
+
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -23,16 +22,22 @@ import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.Property;
+import org.jdesktop.beansbinding.PropertyHelper;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JTableBinding;
-import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.table.TableColumnExt;
+
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.converters.ResourceConverter;
 
 /**
  *
@@ -248,15 +253,39 @@ public class JBTable
 
         return null;
     }
+    
+    public JTableBinding bind(
+                              BindingGroup bindingGroup,
+                              List data,
+                              EntityProperties entityProperties) {
+        return bind(bindingGroup, data, entityProperties, false);
+    }
 
     public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
-            EntityProperties entityProperties) {
+            EntityProperties entityProperties, boolean showIndexColumn) {
         AutoBinding.UpdateStrategy updateStrategy = entityProperties.getUpdateStrategy();
         if(updateStrategy == null)
             updateStrategy = AutoBinding.UpdateStrategy.READ;
-        return bind(bindingGroup, data, entityProperties, updateStrategy);
+        return bind(bindingGroup, data, entityProperties, updateStrategy, showIndexColumn);
+    }
+    
+    /**
+     * You may need to bind to JTable without having to use EntityProperties.
+     * Use this method in this case.
+     * @param bindingGroup
+     * @param data
+     * @param propertyDetails
+     * @param updateStrategy
+     * @return
+     */
+    public JTableBinding bind(
+            BindingGroup bindingGroup,
+            List data,
+            Collection<PropertyDetails> propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy) {
+        return bind(bindingGroup, data, propertyDetails, updateStrategy, false);
     }
 
     /**
@@ -272,7 +301,7 @@ public class JBTable
             BindingGroup bindingGroup,
             List data,
             Collection<PropertyDetails> propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy) {
+            AutoBinding.UpdateStrategy updateStrategy, boolean showIndexColumn) {
         updateStrategy = UpdateStrategy.READ;
         if(!(data instanceof ObservableList))
             observableData = ObservableCollections.observableList(data);
@@ -280,17 +309,27 @@ public class JBTable
             observableData = (ObservableList)data;
 
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, observableData, this);
-        createColumnsBinding(tableBinding, propertyDetails);
+        createColumnsBinding(tableBinding, propertyDetails, showIndexColumn);
         tableBinding.bind();
+        
+        //pack the index column
+        if ( showIndexColumn )
+            packColumn(0, 6);
 
         bindingGroup.addBinding(tableBinding);
 
         return tableBinding;
     }
-
+    
     public JTableBinding bind(BindingGroup bindingGroup, List data,
                               EntityProperties entityProperties,
                               AutoBinding.UpdateStrategy updateStrategy) {
+        return bind(bindingGroup, data, entityProperties, updateStrategy, false);
+    }
+
+    public JTableBinding bind(BindingGroup bindingGroup, List data,
+                              EntityProperties entityProperties,
+                              AutoBinding.UpdateStrategy updateStrategy, boolean showIndexColumn) {
         updateStrategy = UpdateStrategy.READ;
         if (!(data instanceof ObservableList))
             observableData = ObservableCollections.observableList(data);
@@ -300,10 +339,14 @@ public class JBTable
 
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy,
             observableData, this);
-        createColumnsBinding(tableBinding, entityProperties);
-
+        createColumnsBinding(tableBinding, entityProperties, showIndexColumn);
+        
         tableBinding.bind();
-
+        
+        //pack the index column
+        if ( showIndexColumn )
+            packColumn(0, 6);
+        
         bindingGroup.addBinding(tableBinding);
 
         return tableBinding;
@@ -312,20 +355,69 @@ public class JBTable
 
     protected void createColumnsBinding(
             JTableBinding tableBinding,
-            EntityProperties entityProperties)
+            EntityProperties entityProperties, boolean showIndexColumn)
     {
-        createColumnsBinding(tableBinding, entityProperties.getValues());
+        createColumnsBinding(tableBinding, entityProperties.getValues(), showIndexColumn);
     }
 
     protected void createColumnsBinding(
             JTableBinding tableBinding,
-            Collection<PropertyDetails> properties)
+            Collection<PropertyDetails> properties, boolean showIndexColumn)
     {
+        if ( showIndexColumn )
+            createIndexColumnBinding(tableBinding);
         for(PropertyDetails property : properties)
         {
             if(!property.isHiden())
                 createColumnBinding(tableBinding, property);
         }
+    }
+
+    /**
+     * Creates binding for row number column at the table.
+     * Adds the new column binding to the table binding and returns it.
+     * @param tableBinding
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    protected ColumnBinding createIndexColumnBinding(JTableBinding tableBinding) {
+        Property indexProperty = new PropertyHelper() {
+            @Override
+            public void setValue(Object arg0, Object arg1) {
+            }
+        
+            @Override
+            public boolean isWriteable(Object arg0) {
+                return false;
+            }
+        
+            @Override
+            public boolean isReadable(Object arg0) {
+                return true;
+            }
+        
+            @Override
+            public Class getWriteType(Object arg0) {
+                return String.class;
+            }
+        
+            @Override
+            public Object getValue(Object item) {
+                try{
+                    return ""+(observableData.indexOf(item)+1);
+                }catch ( Exception e ){
+                    return "#";    
+                }
+            }
+        };
+        
+        ColumnBinding indexBinding = tableBinding.addColumnBinding(0, indexProperty);
+        indexBinding.setColumnName("#");
+        indexBinding.setColumnClass(String.class);
+        indexBinding.setEditable(false);
+        indexBinding.setVisible(true);
+        
+        return indexBinding;
     }
 
     //TODO

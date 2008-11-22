@@ -65,21 +65,29 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
         setSpecialButtonBehavior(true);
 
         entityProps = getFormSession().getItemsListEntityProperties();
+        
+        //addColumn(25, "product.codeFormatted", "Product dCode", "${product.codeFormatted}", entityProps);
 
         refreshDataTable(entityProps);
         
         setVisible(Button.Select, false);
     }
-
+    
     protected void refreshDataTable(EntityProperties entityProps) {
         if (bindGroup != null)
             bindGroup.unbind();
 
         bindGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        table.bind(bindGroup, getItems(), entityProps);
-
+        table.bind(bindGroup, getItems(), entityProps, true);
+        
         bindGroup.bind();
+        
+        //hide by default - some of the columns
+        table.getColumnExt("Shipped quantity").setVisible(false);
+        table.getColumnExt("Returned quantity").setVisible(false);
+        table.getColumnExt("Ship Week").setVisible(false);
+        table.getColumnExt("Warehouse").setVisible(false);
         table.setEditable(false);
     }
 
@@ -150,7 +158,10 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
     protected Object modifyRow(Object rowObject) {
 
         if (rowObject != null && isEditable()) {
-            InvoiceItemForm formPanel = new InvoiceItemForm((InvoiceItem) rowObject);
+            InvoiceItem item = ((InvoiceItem)rowObject);
+            if ( item.getWarehouse()==null )
+                item.setWarehouse(getFormSession().getInvoiceWarehouse(invoice.getInvoiceId()));
+            InvoiceItemForm formPanel = new InvoiceItemForm(item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return formPanel.getSelectedValue();

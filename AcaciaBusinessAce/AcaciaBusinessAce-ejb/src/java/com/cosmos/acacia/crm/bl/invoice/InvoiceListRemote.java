@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.InvoiceItemLink;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -280,4 +281,11 @@ public interface InvoiceListRemote {
      * @return
      */
     List<?> getInvoicesToCancel(Invoice invoice);
+    
+    /**
+     * Retrieve the warehouse of the invoice
+     * @param invoiceId
+     * @return
+     */
+    Warehouse getInvoiceWarehouse(BigInteger invoiceId);
 }

@@ -62,6 +62,8 @@ public class InvoiceListPanel extends AbstractTablePanel {
             setTitle(getResourceMap().getString("Form.title.proform"));
         
         refreshDataTable(entityProps);
+        
+        setVisible(AbstractTablePanel.Button.Classify, false);
     }
     
     protected InvoiceListRemote getFormSession() {
