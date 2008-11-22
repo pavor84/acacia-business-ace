@@ -500,17 +500,20 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     protected Object onChooseAddress() {
+
         AddressListPanel listPanel = new AddressListPanel(organization.getId());
         listPanel.setInternal(organization.isOwn());
+
+        addNestedFormListener(listPanel);
 
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             Address result = (Address) listPanel.getSelectedRowObject();
             branchesTable.refreshAction();
             return result;
-        } else {
-            return null;
         }
+        branchesTable.refreshAction();
+        return null;
     }
 
     protected OrganizationsListRemote getFormSession()
