@@ -42,17 +42,17 @@ import javax.persistence.TemporalType;
             (
                 name = "InvoiceItem.findForParentAndDeleted",
                 query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
-                        "and i.dataObject.deleted = :deleted"
+                        "and i.dataObject.deleted = :deleted order by i.invoiceItemId"
             ),
         @NamedQuery
             (
                 name = "InvoiceItem.findByParentDataObjectAndDeleted",
-                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId and i.dataObject.deleted = :deleted"
+                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId and i.dataObject.deleted = :deleted order by i.invoiceItemId"
             ),
         @NamedQuery
             (
                 name = "InvoiceItem.findByParentDataObjectIsNullAndDeleted",
-                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted"
+                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted order by i.invoiceItemId"
             )
     })
 public class InvoiceItem extends DataObjectBean implements Serializable {
@@ -70,7 +70,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    @Property(title="Product", customDisplay="${product.productName}", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Product Name", customDisplay="${product.productName}", propertyValidator=@PropertyValidator(required=true))
     private Product product;
 
     @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
@@ -87,7 +87,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     private BigDecimal shippedQuantity;
 
     @Column(name = "returned_quantity", precision=20, scale=4)
-    @Property(title="Returned quantiry", readOnly=true)
+    @Property(title="Returned quantity", readOnly=true)
     private BigDecimal returnedQuantity;
     
     @Column(name = "dueQuantity")
@@ -127,7 +127,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id")
     @ManyToOne
-    @Property(title="Warehouse", customDisplay="${warehouse.address.addressName}")
+    @Property(title="Warehouse", customDisplay="${warehouse.address.addressName}", propertyValidator=@PropertyValidator(required=true) )
     private Warehouse warehouse;
     
     @Column(name = "notes")

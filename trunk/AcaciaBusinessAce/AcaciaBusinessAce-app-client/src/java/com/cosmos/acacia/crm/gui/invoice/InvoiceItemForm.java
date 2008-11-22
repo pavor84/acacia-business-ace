@@ -542,7 +542,6 @@ public class InvoiceItemForm extends BaseEntityPanel {
         
         //warehouse
         PropertyDetails pd = entProps.getPropertyDetails("warehouse");
-        pd.setRequired(true);
         WarehouseListPanel warehouseListPanel = new WarehouseListPanel(getOrganizationDataObjectId());
         warehouseForShipField.bind(
             bindGroup, 
@@ -665,7 +664,18 @@ public class InvoiceItemForm extends BaseEntityPanel {
             entity.setProduct(null);
         }
         else{
-            productOrSchemaTextField.setText(p.getProductName());
+            String productDisplay = p.getProductName();
+            if ( p instanceof SimpleProduct ){
+                SimpleProduct sp = (SimpleProduct) p;
+                if  ( sp.getCodeFormatted()!=null && !"".equals(sp.getCodeFormatted().trim()) &&
+                        !sp.getCodeFormatted().equals(sp.getProductName()) )
+                    productDisplay += " ("+sp.getCodeFormatted()+")";
+            }else{
+                if ( p.getProductCode()!=null && !"".equals(p.getProductCode().trim()) &&
+                        !p.getProductCode().equals(p.getProductName()))
+                    productDisplay += " ("+p.getProductCode()+")";
+            }
+            productOrSchemaTextField.setText(productDisplay);
             entity.setProduct(p);
         }
         

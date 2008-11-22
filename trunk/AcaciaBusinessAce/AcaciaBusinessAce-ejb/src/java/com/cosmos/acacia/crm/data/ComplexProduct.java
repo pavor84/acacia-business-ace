@@ -85,6 +85,13 @@ public class ComplexProduct
         firePropertyChange("productCode", this.productCode, productCode);
         this.productCode = productCode;
     }
+    
+    public String getCodeFormatted(){
+        if ( getProductCode()!=null )
+            return getProductCode();
+        else
+            return "";
+    }
 
     @Override
     public String getProductName()
