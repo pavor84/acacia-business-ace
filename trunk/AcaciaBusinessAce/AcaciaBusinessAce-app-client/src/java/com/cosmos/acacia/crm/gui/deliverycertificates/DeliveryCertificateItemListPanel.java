@@ -14,8 +14,11 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.gui.invoice.InvoiceItemForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
@@ -128,12 +131,12 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	
 	@Override
     public boolean canModify(Object rowObject) {
-        return true;
+        return getButton(Button.Special).isEnabled();
     }
 
 	@Override
     public boolean canDelete(Object rowObject) {
-        return false;
+        return true;
     }
 	
 	@Override
@@ -171,4 +174,15 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 		return null;
 	}
 	
+	@Override
+    protected void viewRow(Object rowObject) {
+		DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm((DeliveryCertificateItem) rowObject);
+        formPanel.setReadonly();
+        formPanel.showDialog(this);
+    }
+	
+	@Override
+	public void setReadonly(){
+		getButton(Button.Special).setEnabled(false);
+	}
 }
