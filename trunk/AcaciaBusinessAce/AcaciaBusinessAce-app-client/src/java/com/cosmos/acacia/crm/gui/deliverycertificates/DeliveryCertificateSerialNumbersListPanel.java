@@ -6,20 +6,28 @@
 
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 
+import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
+import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumberPK;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 
 /**
  *
@@ -37,14 +45,15 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
     
     private EntityProperties entityProps;
     private BindingGroup bidingGroup;
+    private List<DeliveryCertificateSerialNumber> serialNumbers;
     
     /**
      * Creates new form DeliveryCertificateSerialNumbers
      * @param parentDataObjectId - ID of a DeliveryCertificateItem
      */
-    public DeliveryCertificateSerialNumbersListPanel(BigInteger parentDataObjectId) {
-        super(parentDataObjectId);
-        this.setVisibleButtons(8);
+    public DeliveryCertificateSerialNumbersListPanel(BigInteger deliveryCertificateItemId) {
+    	super(deliveryCertificateItemId);
+        this.setVisibleButtons(8 + 32 + 256);
     }
 
     @SuppressWarnings("unchecked")
@@ -53,7 +62,6 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
         super.initData();
         
         entityProps = getFormSession().getDeliveryCertificateSerialNumberListEntityProperties();
-        
         refreshDataTable(entityProps);
           
     }
@@ -67,15 +75,37 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
         bidingGroup = new BindingGroup();
         AcaciaTable deliveryCertTable = getDataTable();
         
-        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, getDeliveryCertificateItemSerialNumbers(), entProps, UpdateStrategy.READ);
-        tableBinding.setEditable(false);
-                
+        this.serialNumbers = getDeliveryCertificateItemSerialNumbers();	
+        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, true);
+        tableBinding.setEditable(true);
+        deliveryCertTable.setEditable(true);
+        
+        
         bidingGroup.bind();
 
     }
     
     private List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers() {
-        return getFormSession().getDeliveryCertificateItemSerialNumbers(this.getParentDataObjectId());
+    	
+    	DeliveryCertificateItem item = (DeliveryCertificateItem) getFormSession().getDeliveryCertificateItemById(this.getParentDataObjectId());
+    	int quantity = item.getQuantity().toBigInteger().intValue();
+    	
+    	List<DeliveryCertificateSerialNumber> list = getFormSession().getDeliveryCertificateItemSerialNumbers(this.getParentDataObjectId());
+    	if(quantity > list.size()){
+    		for(int i = quantity - list.size(); i > 0; i--){
+    			DeliveryCertificateSerialNumber serialNumber = new DeliveryCertificateSerialNumber();
+    			list.add(serialNumber);
+    		}
+    	}
+    	return list;
+    }
+    
+    @Override
+	@Action
+    public void specialAction(){
+    	serialNumbers = getDataTable().getData();
+    	setDialogResponse(DialogResponse.SAVE);
+    	close();
     }
         
     @Override
@@ -123,5 +153,9 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
     private Object onEditEntity(DeliveryCertificateSerialNumber dcsn) {
     	throw new UnsupportedOperationException("Not supported yet.");
     }
+
+	public List getSerialNumbers() {
+		return serialNumbers;
+	}
 
 }

@@ -6,10 +6,17 @@
 
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
+import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.gui.invoice.ComplexProductDetailsPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -27,6 +34,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
     private BindingGroup bindGroup;
     private DeliveryCertificatesRemote formSession;
     private EntityProperties entProps;
+    private Product product;
     
     public DeliveryCertificateItemForm(DeliveryCertificateItem entity) {
         super(entity.getCertificateItemId());
@@ -49,10 +57,27 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
     	productTextField.setText(entity.getProduct().getProductName());
     	productTextField.setEditable(false);
     	
+    	product = entity.getProduct();
+    	if(product instanceof SimpleProduct){
+    		detailButton.setEnabled(false);
+    	}
+    	
+    	detailButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComplexProductDetails();
+            }
+        });
+    	
     	quantityTextField.bind(bindGroup, entity, entProps.getPropertyDetails("quantity"));
     	bindGroup.bind();
     }
-
+    
+    protected void onComplexProductDetails() {
+        ComplexProductDetailsPanel detailsPanel = new ComplexProductDetailsPanel((ComplexProduct)product);
+        detailsPanel.showDialog(this);
+    }
+    
     @Override
     public BindingGroup getBindingGroup() {
         return bindGroup;

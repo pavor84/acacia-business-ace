@@ -9,14 +9,20 @@ package com.cosmos.acacia.crm.gui.deliverycertificates;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.swing.JOptionPane;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
@@ -31,7 +37,10 @@ import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.predicates.ValidDeliveryCertificateAssignmentPredicate;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
@@ -79,12 +88,14 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         this.entity = ds;
         this.assignment = ds.getDocumentAssignment();
         init();
+        if(DeliveryCertificateStatus.Delivered.equals(ds.getStatus().getEnumValue())){
+           	this.setReadonly();
+        }
     }
     
      /** Creates new form DeliveryCertificatePanel */
     public DeliveryCertificatePanel(DeliveryCertificate ds) {
         this(ds, null);
-        //init();
     }
     
     @Override
@@ -93,6 +104,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         initComponents();
         initComponentsCustom();
         super.init();
+        
     }
 
     private void initComponentsCustom() {
@@ -156,7 +168,31 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         //Base Properties Panel
         numberTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateNumber"));
         creationDatePicker.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateDate"));
-        reasonComboBox.bind(bindGroup, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
+        Binding binding1 = reasonComboBox.bind(bindGroup, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
+//        reasonComboBox.addItemListener(new ItemListener(){
+//			@Override
+//			public void itemStateChanged(ItemEvent item) {
+//				if(item.getItem() instanceof DbResource){
+//					DbResource reason = (DbResource)item.getItem();
+//					if(!DeliveryCertificateReason.Invoice.equals(reason.getEnumValue())){
+//						JOptionPane.showMessageDialog(DeliveryCertificatePanel.this, "Not implemented, yet");
+//						return;
+//					}
+//				}
+//			}
+//        });
+        binding1.addBindingListener(new AbstractBindingListener() {
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                if (event.getNewValue() instanceof DbResource){
+                	if(!DeliveryCertificateReason.Invoice.equals(((DbResource)event.getNewValue()).getEnumValue())){
+						JOptionPane.showMessageDialog(DeliveryCertificatePanel.this, "Not implemented, yet. Right! You here WELL");
+						return;
+					}
+                } 
+            }
+        });
+        
         documentsAcaciaLookup.bind(
             new AcaciaLookupProvider(){
                 @Override
@@ -262,57 +298,70 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     //TODO: Based on reason selected, we have to display different list of documents.
     //For now display only InvoicesList, because other documents are not implemented.
     protected String onChooseAssignment() {
-        InvoiceListPanel listPanel = new InvoiceListPanel(entity.getCreatorOrganization().getId(), false);
         
-        listPanel.setVisibleSelectButtons(true);
-        DialogResponse dResponse = listPanel.showDialog(this);
-        
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            Invoice selectedDocument = (Invoice) listPanel.getSelectedRowObject();
-             
-            assignment.setDocumentId(selectedDocument.getId());
-            assignment.setDocumentNumber(String.valueOf(selectedDocument.getInvoiceNumber()));
-            
-            entity.setRecipient(selectedDocument.getRecipient());
-            entity.setRecipientBranch(selectedDocument.getBranch());
-            entity.setRecipientContact(selectedDocument.getRecipientContact());
-            
-            List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(selectedDocument.getInvoiceId());
-            if(invoiceItems != null){
-            	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
-            	for(InvoiceItem invoiceItem : invoiceItems){
-            		DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
-            		deliveryCertificateItems.add(dci);
-            	}
-            	itemsTablePanel.refreshList(deliveryCertificateItems);
-            }
-            
-            //populate the components with new values.
-            bindGroup.removeBinding(recipientNameBinding);
-            recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
-            recipientNameBinding.bind();
-            bindGroup.removeBinding(recipientBranchNameBinding);
-            recipientBranchNameBinding = recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
-            recipientBranchNameBinding.bind();
-            bindGroup.removeBinding(recipientContactNameBinding);
-            recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
-                new AcaciaLookupProvider(){
-                    @Override
-                    public Object showSelectionControl(){
-                        return onChooseRecipientContactPerson();
-                    }
-                },  
-                bindGroup,
-                entity,        
-                entityProps.getPropertyDetails("recipientContact"),
-                "${contact.displayName}",
-                UpdateStrategy.READ_WRITE);
-            recipientContactNameBinding.bind();
-            
-            return assignment.getDocumentNumber();
-        } else {
-            return null;
-        }
+    	//the organization
+    	if(DeliveryCertificateReason.Invoice.equals(entity.getDeliveryCertificateReason().getEnumValue())){
+    		
+	    	BigInteger invoicesParentId = entity.getCreatorOrganization().getId();
+	    	List<Invoice> invoices = getInvoicesSession().listInvoices(invoicesParentId, false);
+	    	CollectionUtils.filter(invoices, new ValidDeliveryCertificateAssignmentPredicate());
+	
+	    	InvoiceListPanel listPanel = new InvoiceListPanel(invoicesParentId, invoices, false);
+	        
+	        listPanel.setVisibleSelectButtons(true);
+	        DialogResponse dResponse = listPanel.showDialog(this);
+	        
+	        if ( DialogResponse.SELECT.equals(dResponse) ){
+	            Invoice selectedDocument = (Invoice) listPanel.getSelectedRowObject();
+	             
+	            assignment.setDocumentId(selectedDocument.getId());
+	            assignment.setDocumentNumber(String.valueOf(selectedDocument.getInvoiceNumber()));
+	            
+	            entity.setRecipient(selectedDocument.getRecipient());
+	            entity.setRecipientBranch(selectedDocument.getBranch());
+	            entity.setRecipientContact(selectedDocument.getRecipientContact());
+	            
+	            List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(selectedDocument.getInvoiceId());
+	            if(invoiceItems != null){
+	            	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
+	            	for(InvoiceItem invoiceItem : invoiceItems){
+	            		DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
+	            		deliveryCertificateItems.add(dci);
+	            	}
+	            	itemsTablePanel.refreshList(deliveryCertificateItems);
+	            }
+	            
+	            //populate the components with new values.
+	            bindGroup.removeBinding(recipientNameBinding);
+	            recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
+	            recipientNameBinding.bind();
+	            bindGroup.removeBinding(recipientBranchNameBinding);
+	            recipientBranchNameBinding = recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
+	            recipientBranchNameBinding.bind();
+	            bindGroup.removeBinding(recipientContactNameBinding);
+	            recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
+	                new AcaciaLookupProvider(){
+	                    @Override
+	                    public Object showSelectionControl(){
+	                        return onChooseRecipientContactPerson();
+	                    }
+	                },  
+	                bindGroup,
+	                entity,        
+	                entityProps.getPropertyDetails("recipientContact"),
+	                "${contact.displayName}",
+	                UpdateStrategy.READ_WRITE);
+	            recipientContactNameBinding.bind();
+	            
+	            return assignment.getDocumentNumber();
+	        } else {
+	            return null;
+	        }
+    	}
+    	else{
+    		JOptionPane.showMessageDialog(this, "Not implemented, yet. The only reason document can be an invoice.");
+    		return null;
+    	}
     }
  
     protected Object onChooseForwarder() {
