@@ -13,6 +13,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -92,17 +93,29 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	@Override
 	@Action
     public void specialAction(){
-		DeliveryCertificateItem item = (DeliveryCertificateItem)getDataTable().getSelectedRowObject();
-		BigDecimal quantity = item.getQuantity();
 		try{
+			DeliveryCertificateItem item = (DeliveryCertificateItem)getDataTable().getSelectedRowObject();
+			BigDecimal quantity = item.getQuantity();
+			
+			//keep the index of the selected item
+			int index = getDataTable().getSelectedRow();
+			
+			//if the quantity is not integer, an exception will be thrown. Some products do not have serial numbers 
 			quantity.intValueExact();
-			DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(item.getCertificateItemId());
-			DialogResponse response = panel.showDialog(this);
-			if(DialogResponse.SAVE.equals(response)){
-				List serialNumbers = panel.getSerialNumbers();
-				if(serialNumbers != null){
-					int i = serialNumbers.size();
-					System.out.println("SIZE: " + i );
+			
+			if(canNestedOperationProceed()){
+				//ID of the delivery certificate
+				BigInteger deliveryCertificateId = getParentDataObjectId();
+				
+				if(item.getCertificateItemId() == null){
+					//new certificate is just created and get the fully instantiated certificate item (with ID etc)
+					item = getFormSession().getDeliveryCertificateItems(deliveryCertificateId).get(index);
+				}
+				
+				DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(item.getCertificateItemId());
+				DialogResponse response = panel.showDialog(this);
+				if(DialogResponse.SAVE.equals(response)){
+					List<DeliveryCertificateSerialNumber> serialNumbers = panel.getSerialNumbers();
 				}
 			}
 		}
@@ -131,8 +144,15 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	@Override
 	protected Object modifyRow(Object rowObject) {
 		
-		if (rowObject != null) {
-            DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm((DeliveryCertificateItem) rowObject);
+		//selected index from the list of delivery certificate items
+		int index = getDataTable().getSelectedRow();
+		if (rowObject != null && canNestedOperationProceed()) {
+			DeliveryCertificateItem item = (DeliveryCertificateItem) rowObject;
+			if(item.getCertificateItemId() == null){
+				//new certificate is just created and get the fully instantiated certificate item (with ID etc)
+				item = getFormSession().getDeliveryCertificateItems(getParentDataObjectId()).get(index);
+			}
+            DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm(item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return formPanel.getSelectedValue();

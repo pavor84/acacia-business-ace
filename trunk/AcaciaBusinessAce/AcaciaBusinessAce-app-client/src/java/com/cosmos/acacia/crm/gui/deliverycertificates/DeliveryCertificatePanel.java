@@ -51,6 +51,7 @@ import com.cosmos.acacia.gui.AcaciaLookup;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
@@ -114,10 +115,12 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         itemsTablePanel.setSpecialButtonBehavior(false);
         itemsTablePanel.setSpecialCaption("deliveryCertificateItemsAction.Action.text");
         
-        //Adding the nested table listener to ensure that purchase order is saved before adding
+        //Adding the nested table listener to ensure that the delivery certificate is saved before adding
         //items to it. 
         addNestedFormListener(itemsTablePanel);
         itemsTableHolderPanel.add(itemsTablePanel);
+        
+        entityFormButtonPanel1.setEnabled(Button.Custom, true);
     }
     
     @Override

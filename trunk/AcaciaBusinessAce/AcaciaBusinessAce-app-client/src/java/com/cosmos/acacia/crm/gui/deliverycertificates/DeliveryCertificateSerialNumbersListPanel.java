@@ -87,16 +87,8 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
     
     private List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers() {
     	
-    	DeliveryCertificateItem item = (DeliveryCertificateItem) getFormSession().getDeliveryCertificateItemById(this.getParentDataObjectId());
-    	int quantity = item.getQuantity().toBigInteger().intValue();
-    	
-    	List<DeliveryCertificateSerialNumber> list = getFormSession().getDeliveryCertificateItemSerialNumbers(this.getParentDataObjectId());
-    	if(quantity > list.size()){
-    		for(int i = quantity - list.size(); i > 0; i--){
-    			DeliveryCertificateSerialNumber serialNumber = new DeliveryCertificateSerialNumber();
-    			list.add(serialNumber);
-    		}
-    	}
+    	BigInteger certificateItemId = this.getParentDataObjectId();
+    	List<DeliveryCertificateSerialNumber> list = getFormSession().getDeliveryCertificateItemSerialNumbers(certificateItemId);
     	return list;
     }
     
@@ -145,16 +137,10 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
 
     @Override
     protected Object newRow() {
-        DeliveryCertificateSerialNumber dcsn = getFormSession().newDeliveryCertificateSerialNumber(null);
-        return onEditEntity(dcsn);
-       
-    }
-
-    private Object onEditEntity(DeliveryCertificateSerialNumber dcsn) {
     	throw new UnsupportedOperationException("Not supported yet.");
     }
 
-	public List getSerialNumbers() {
+	public List<DeliveryCertificateSerialNumber> getSerialNumbers() {
 		return serialNumbers;
 	}
 
