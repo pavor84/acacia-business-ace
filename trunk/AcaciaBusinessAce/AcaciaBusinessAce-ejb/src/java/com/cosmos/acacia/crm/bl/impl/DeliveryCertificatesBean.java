@@ -105,7 +105,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         q.setParameter("parentId", parentId);
         List<DeliveryCertificate> result = q.getResultList();
         
-        //initialate the DelivetyCertificateAssignments
+        //initialize the DelivetyCertificateAssignments
         for (DeliveryCertificate deliveryCertificate : result) {
             Query assignmentQuery = em.createNamedQuery("DeliveryCertificateAssignment.findByDeliveryCertificate");
             assignmentQuery.setParameter("deliveryCertificateId", deliveryCertificate.getDeliveryCertificateId());
@@ -141,8 +141,26 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     public List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(BigInteger parentId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateSerialNumber.findForCertificateItem");
         q1.setParameter("parentId", parentId);
-         
-    	return (List<DeliveryCertificateSerialNumber>)q1.getResultList();
+        
+        DeliveryCertificateItem item = this.getDeliveryCertificateItemById(parentId);
+        List<DeliveryCertificateSerialNumber> serialNumbersList = (List<DeliveryCertificateSerialNumber>)q1.getResultList(); 
+        int quantity = item.getQuantity().toBigInteger().intValue();
+    	
+    	if(quantity > serialNumbersList.size()){
+			//construct primary key
+			DeliveryCertificateSerialNumberPK serialNumberPK = new DeliveryCertificateSerialNumberPK();
+			serialNumberPK.setCertificateItemId(parentId);
+			
+			//construct serial number
+			DeliveryCertificateSerialNumber serialNumber = new DeliveryCertificateSerialNumber();
+			serialNumber.setDeliveryCertificateSerialNumberPK(serialNumberPK);
+			serialNumber.setDeliveryCertificateItem(item);
+			serialNumber.setSerialNumber("Enter Serial Number");
+			serialNumbersList.add(serialNumber);
+		
+    	}
+        
+    	return serialNumbersList;
     }
     
     @Override
