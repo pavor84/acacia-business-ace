@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getIntegerFormat;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -69,7 +71,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
             }
         });
     	
-    	quantityTextField.bind(bindGroup, entity, entProps.getPropertyDetails("quantity"));
+    	quantityFormattedTextField.bind(bindGroup, entity, entProps.getPropertyDetails("quantity"), getIntegerFormat());
     	bindGroup.bind();
     }
     
@@ -126,9 +128,9 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
         jBPanel1 = new com.cosmos.swingb.JBPanel();
         productLabel = new com.cosmos.swingb.JBLabel();
         quantityLabel = new com.cosmos.swingb.JBLabel();
-        quantityTextField = new com.cosmos.swingb.JBTextField();
         productTextField = new com.cosmos.swingb.JBTextField();
         detailButton = new com.cosmos.swingb.JBButton();
+        quantityFormattedTextField = new com.cosmos.swingb.JBFormattedTextField();
 
         setName("Form"); // NOI18N
 
@@ -143,14 +145,14 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
         quantityLabel.setText(resourceMap.getString("quantityLabel.text")); // NOI18N
         quantityLabel.setName("quantityLabel"); // NOI18N
 
-        quantityTextField.setText(resourceMap.getString("quantityTextField.text")); // NOI18N
-        quantityTextField.setName("quantityTextField"); // NOI18N
-
         productTextField.setText(resourceMap.getString("productTextField.text")); // NOI18N
         productTextField.setName("productTextField"); // NOI18N
 
         detailButton.setText(resourceMap.getString("detailButton.text")); // NOI18N
         detailButton.setName("detailButton"); // NOI18N
+
+        quantityFormattedTextField.setText(resourceMap.getString("quantityFormattedTextField.text")); // NOI18N
+        quantityFormattedTextField.setName("quantityFormattedTextField"); // NOI18N
 
         javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
         jBPanel1.setLayout(jBPanel1Layout);
@@ -163,11 +165,11 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
                     .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel1Layout.createSequentialGroup()
+                    .addGroup(jBPanel1Layout.createSequentialGroup()
                         .addComponent(productTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(detailButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(detailButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(quantityFormattedTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel1Layout.setVerticalGroup(
@@ -181,7 +183,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(quantityFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -214,8 +216,8 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBPanel jBPanel1;
     private com.cosmos.swingb.JBLabel productLabel;
     private com.cosmos.swingb.JBTextField productTextField;
+    private com.cosmos.swingb.JBFormattedTextField quantityFormattedTextField;
     private com.cosmos.swingb.JBLabel quantityLabel;
-    private com.cosmos.swingb.JBTextField quantityTextField;
     // End of variables declaration//GEN-END:variables
 
 }
