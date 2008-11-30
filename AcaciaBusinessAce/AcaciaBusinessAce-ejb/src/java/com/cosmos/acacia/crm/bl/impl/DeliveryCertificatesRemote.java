@@ -70,6 +70,13 @@ public interface DeliveryCertificatesRemote {
     List<DeliveryCertificateItem> getDeliveryCertificateItems(BigInteger parentId);
 
     /**
+     * 
+     * @param itemId
+     * @return
+     */
+    DeliveryCertificateItem getDeliveryCertificateItemById(BigInteger itemId);
+    
+    /**
      * Get Serial Numbers for a specified Delivery Certificate Item 
      * @param parentId - identifier of a DeliveryCertificateItem
      * @return
@@ -94,7 +101,15 @@ public interface DeliveryCertificatesRemote {
 
     List<DbResource> getDeliveryTypes();
 
+    /**
+     * This method just persist the DeliveryCertificate object. No products are delivered yet.
+     */
     DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items);
+    
+    /**
+     * This method persist the DeliveryCertificate and the products from warehouses are delivered. The certificate becomes in readonly mode.
+     */
+    DeliveryCertificate deliverDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items);
     
     int deleteDeliveryCertificate(DeliveryCertificate deliveryCertificate);
     
