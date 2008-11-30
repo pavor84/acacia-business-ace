@@ -38,6 +38,7 @@ import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -88,7 +89,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     }
     
     public EntityProperties getDeliveryCertificateSerialNumberListEntityProperties(){
-    	EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificateSerialNumberPK.class);
+    	EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificateSerialNumber.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
@@ -129,6 +130,14 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     }
     
     @Override
+    public DeliveryCertificateItem getDeliveryCertificateItemById(BigInteger itemId){
+    	Query q1 = em.createNamedQuery("DeliveryCertificateItem.findById");
+        q1.setParameter("itemId", itemId);
+         
+    	return (DeliveryCertificateItem)q1.getSingleResult();
+    }
+    
+    @Override
     public List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(BigInteger parentId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateSerialNumber.findForCertificateItem");
         q1.setParameter("parentId", parentId);
@@ -142,6 +151,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         ds.setParentId(parentId);
         
         //default values
+        ds.setStatus(DeliveryCertificateStatus.Draft.getDbResource());
         ds.setDeliveryCertificateReason(DeliveryCertificateReason.Invoice.getDbResource());
         ds.setDeliveryCertificateMethodType(DeliveryCertificateMethodType.InPlace.getDbResource());
         
@@ -195,6 +205,17 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         	item.setParentId(deliveryCertificate.getId());
         	esm.persist(em, item);
         }
+        
+        return deliveryCertificate; 
+    }
+    
+    public DeliveryCertificate deliverDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items) {
+
+    	Date now = new Date();
+    	deliveryCertificate.setStatus(DeliveryCertificateStatus.Delivered.getDbResource());
+    	deliveryCertificate.setDeliveryCertificateDate(now);
+    	deliveryCertificate.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
+    	this.saveDeliveryCertificate(deliveryCertificate, assignment, items);
         
         return deliveryCertificate; 
     }

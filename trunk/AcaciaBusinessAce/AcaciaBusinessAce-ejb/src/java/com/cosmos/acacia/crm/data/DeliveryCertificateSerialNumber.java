@@ -7,6 +7,8 @@ package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -14,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
 
 /**
  *
@@ -43,7 +47,10 @@ public class DeliveryCertificateSerialNumber implements Serializable {
     @JoinColumn(name = "certificate_item_id", referencedColumnName = "certificate_item_id", insertable = false, updatable = false)
     @ManyToOne
     private DeliveryCertificateItem deliveryCertificateItem;
-
+    
+    @Column(name = "serial_number", insertable = false, updatable = false)
+    @Property(title = "Serial Number", editable = true)
+    private String serialNumber;
 
     public DeliveryCertificateSerialNumber() {
     }
@@ -70,6 +77,14 @@ public class DeliveryCertificateSerialNumber implements Serializable {
 
     public void setDeliveryCertificateItem(DeliveryCertificateItem deliveryCertificateItem) {
         this.deliveryCertificateItem = deliveryCertificateItem;
+    }
+    
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     @Override

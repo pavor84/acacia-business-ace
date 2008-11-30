@@ -23,7 +23,6 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
     private BigInteger certificateItemId;
 
     @Column(name = "serial_number", nullable = false)
-    @Property(title = "Serial Number")
     private String serialNumber;
 
     public DeliveryCertificateSerialNumberPK() {

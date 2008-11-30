@@ -26,6 +26,7 @@ import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.acacia.crm.enums.DeliveryStatus;
 import com.cosmos.acacia.crm.enums.DeliveryType;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
@@ -78,6 +79,7 @@ public class DatabaseResourceBean
             getDbResources(DataType.class);
             getDbResources(DeliveryCertificateMethodType.class);
             getDbResources(DeliveryCertificateReason.class);
+            getDbResources(DeliveryCertificateStatus.class);
             getDbResources(InvoiceType.class);
             getDbResources(DocumentDeliveryMethod.class);
             getDbResources(TransportationMethod.class);

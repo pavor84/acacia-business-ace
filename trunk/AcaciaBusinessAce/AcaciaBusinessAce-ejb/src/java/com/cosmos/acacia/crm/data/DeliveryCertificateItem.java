@@ -39,6 +39,11 @@ import com.cosmos.acacia.annotation.Property;
          */
         name = "DeliveryCertificateItem.findForCertificate",
         query = "select dci from DeliveryCertificateItem dci where dci.parentId=:parentId and dci.dataObject.deleted = false"
+    ),
+    @NamedQuery
+    (
+    	name = "DeliveryCertificateItem.findById",
+    	query = "select dci from DeliveryCertificateItem dci where dci.certificateItemId=:itemId and dci.dataObject.deleted = false"
     )
 })
 public class DeliveryCertificateItem extends DataObjectBean implements Serializable {

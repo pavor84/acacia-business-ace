@@ -63,6 +63,11 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Column(name = "warehouse_name", nullable = false)
     private String warehouseName;
 
+    @JoinColumn(name = "delivery_cert_status_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Status")
+    private DbResource status;
+    
     @Column(name = "delivery_certificate_number")
     @Property(title="Serial Number", editable=false, propertyValidator=@PropertyValidator(required=false))
     private BigInteger deliveryCertificateNumber;
@@ -419,6 +424,14 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         this.recipientBranchName = recipientBranchName;
     }
     
+    public DbResource getStatus() {
+		return status;
+	}
+
+	public void setStatus(DbResource status) {
+		this.status = status;
+	}
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -463,9 +476,13 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     public void initialize(){
         
         Date now = new Date();
-        this.setDeliveryCertificateDate(now);
+        //this.setDeliveryCertificateDate(now);
         this.setCreationTime(now);
-        this.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
+        //this.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
+        
+        if(this.getCreationTime() == null){
+        	this.setCreationTime(new Date());
+        }
         
         if(this.deliveryCertificateMethodType.getEnumValue().equals(DeliveryCertificateMethodType.InPlace)){
             this.setForwarder(null);
@@ -475,4 +492,5 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
             this.setForwarderName(null);
         }
     }
+	
 }
