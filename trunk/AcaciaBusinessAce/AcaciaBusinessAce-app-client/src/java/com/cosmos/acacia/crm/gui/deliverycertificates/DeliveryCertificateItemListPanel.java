@@ -131,7 +131,7 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	
 	@Override
     public boolean canModify(Object rowObject) {
-        return getButton(Button.Special).isEnabled();
+        return getButton(Button.Special).isVisible();
     }
 
 	@Override
@@ -183,6 +183,6 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	
 	@Override
 	public void setReadonly(){
-		getButton(Button.Special).setEnabled(false);
+		getButton(Button.Special).setVisible(false);
 	}
 }
