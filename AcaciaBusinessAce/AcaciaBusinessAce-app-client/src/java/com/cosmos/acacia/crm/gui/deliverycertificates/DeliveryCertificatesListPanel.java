@@ -7,20 +7,22 @@ package com.cosmos.acacia.crm.gui.deliverycertificates;
 
 //import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesListRemote;
 
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.ejb.EJB;
+
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.swingbinding.JTableBinding;
+
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
+import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -130,7 +132,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canDelete(Object rowObject) {
-        return true;
+        return DeliveryCertificateStatus.Draft.equals(((DeliveryCertificate)rowObject).getStatus().getEnumValue());
     }
     
        

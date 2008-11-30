@@ -1,10 +1,12 @@
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -55,7 +57,7 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 
         bindGroup = new BindingGroup();
         table = getDataTable();
-        table.bind(bindGroup, getItems(), entityProps);
+        table.bind(bindGroup, getItems(), entityProps, true);
 
         bindGroup.bind();
         table.setEditable(false);
@@ -67,11 +69,14 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
     }
 	
 	protected List<DeliveryCertificateItem> getItems() {
-        if ( items==null ){
-            if ( getParentDataObjectId()!=null )
-                return getFormSession().getDeliveryCertificateItems(getParentDataObjectId());
-            else
-                return new ArrayList<DeliveryCertificateItem>();
+        if ( items ==null ){
+            if ( getParentDataObjectId()!=null ){
+            	List<DeliveryCertificateItem> l = getFormSession().getDeliveryCertificateItems(getParentDataObjectId());
+            	return l;
+            }
+            else{
+            	return new ArrayList<DeliveryCertificateItem>();
+            }
         }
         return items;
     }
@@ -87,12 +92,25 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	@Override
 	@Action
     public void specialAction(){
-		
-		BigInteger itemId = new BigInteger("1226172991548");
+		DeliveryCertificateItem item = (DeliveryCertificateItem)getDataTable().getSelectedRowObject();
+		BigDecimal quantity = item.getQuantity();
+		try{
+			quantity.intValueExact();
+			DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(item.getCertificateItemId());
+			DialogResponse response = panel.showDialog(this);
+			if(DialogResponse.SAVE.equals(response)){
+				List serialNumbers = panel.getSerialNumbers();
+				if(serialNumbers != null){
+					int i = serialNumbers.size();
+					System.out.println("SIZE: " + i );
+				}
+			}
+		}
+		catch(ArithmeticException e){
+			//the exception is thrown when quantity has a nonzero fractional part, or will not fit in an int.
+			JOptionPane.showMessageDialog(this, "The selected product do not have serial numbers.");
+		}
 
-		DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(itemId);
-		DialogResponse response = panel.showDialog(this);
-		
     }
 	
 	@Override
