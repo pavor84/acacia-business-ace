@@ -19,6 +19,7 @@ import javax.ejb.EJB;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -54,6 +55,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBButton;
 
 /**
  *
@@ -79,6 +81,8 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     
     private Address forwarderBranch;
     private EntityProperties entityProps;
+    JBButton deliverButton = null;
+    
     private BindingGroup bindGroup;
     private Binding recipientNameBinding;
     private Binding recipientBranchNameBinding;
@@ -89,9 +93,6 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         this.entity = ds;
         this.assignment = ds.getDocumentAssignment();
         init();
-        if(DeliveryCertificateStatus.Delivered.equals(ds.getStatus().getEnumValue())){
-           	this.setReadonly();
-        }
     }
     
      /** Creates new form DeliveryCertificatePanel */
@@ -105,11 +106,11 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         initComponents();
         initComponentsCustom();
         super.init();
-        
     }
 
     private void initComponentsCustom() {
-        // Using an AbstractTablePanel implementation
+    	
+    	// Using an AbstractTablePanel implementation
         itemsTablePanel = new DeliveryCertificateItemListPanel(entity.getDeliveryCertificateId());
         itemsTablePanel.setVisible(AbstractTablePanel.Button.SpecialModify);
         itemsTablePanel.setSpecialButtonBehavior(false);
@@ -120,7 +121,11 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         addNestedFormListener(itemsTablePanel);
         itemsTableHolderPanel.add(itemsTablePanel);
         
-        entityFormButtonPanel1.setEnabled(Button.Custom, true);
+        deliverButton = new JBButton();
+        deliverButton.setAction(getContext().getActionMap(this).get("deliver"));
+        deliverButton.setText(getResourceMap().getString("deliver.text"));
+        entityFormButtonPanel1.addButton(deliverButton);
+        
     }
     
     @Override
@@ -164,7 +169,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             entity = getFormSession().newDeliveryCertificate(getParentDataObjectId());
             assignment = getFormSession().newDeliveryCertificateAssignment();
         }
-         
+        
         entityProps = getFormSession().getDeliveryCertificateEntityProperties();
         EntityProperties assignmentProps = getFormSession().getDeliveryCertificateAssignmentEntityProperties(); 
         
@@ -277,6 +282,10 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             entityProps.getPropertyDetails("forwarderContact"),
             "${displayName}",
             UpdateStrategy.READ_WRITE);
+       
+	   	if(DeliveryCertificateStatus.Delivered.equals(entity.getStatus().getEnumValue())){
+	       	this.setReadonly();
+	    }
            
         bindGroup.bind();
          
@@ -409,6 +418,25 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         } else {
             return null;
         }
+    }
+    
+    @Action
+    public void deliver(){
+    	List<DeliveryCertificateItem> items = new ArrayList<DeliveryCertificateItem>(itemsTablePanel.getListData());
+    	
+    	setDialogResponse(DialogResponse.SAVE);
+        entity = getFormSession().deliverDeliveryCertificate(entity, assignment, items);
+        setSelectedValue(entity);
+    	
+        close();
+    }
+    
+    @Override
+    public void setReadonly(){
+    	super.setReadonly();
+    	this.itemsTablePanel.setReadonly();
+    	this.deliverButton.setEnabled(false);
+    	this.deliverButton.setVisible(false);
     }
     
     protected DeliveryCertificatesRemote getFormSession(){

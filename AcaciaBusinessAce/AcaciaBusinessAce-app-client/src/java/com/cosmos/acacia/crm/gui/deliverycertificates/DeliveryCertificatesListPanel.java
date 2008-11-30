@@ -5,13 +5,12 @@
 
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
-//import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesListRemote;
-
 import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
 
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -30,7 +29,12 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class DeliveryCertificatesListPanel extends AbstractTablePanel {
 
-    @EJB
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3326774856355545325L;
+
+	@EJB
     private DeliveryCertificatesRemote formSession;
     
     private EntityProperties entityProps;
@@ -57,7 +61,8 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
         entityProps = getFormSession().getDeliveryCertificateListEntityProperties();
         
         refreshDataTable(entityProps);
-          
+        
+        setVisible(AbstractTablePanel.Button.Classify, false);
     }
     
     @SuppressWarnings("unchecked")
@@ -105,19 +110,8 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         DeliveryCertificate ds = getFormSession().newDeliveryCertificate(getParentDataObjectId());
-        return onEditEntity(ds);
+        return showDetailForm(ds, true);
        
-    }
-
-    private Object onEditEntity(DeliveryCertificate ds) {
-        DeliveryCertificatePanel editPanel = new DeliveryCertificatePanel(ds);
-        DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
-        }
-
-        return null;
     }
 
     @Override
@@ -127,7 +121,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canModify(Object rowObject) {
-        return true;
+    	return DeliveryCertificateStatus.Draft.equals(((DeliveryCertificate)rowObject).getStatus().getEnumValue());
     }
 
     @Override
@@ -135,8 +129,20 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
         return DeliveryCertificateStatus.Draft.equals(((DeliveryCertificate)rowObject).getStatus().getEnumValue());
     }
     
-       
-  
+    @SuppressWarnings("unchecked")
+    @Override
+    public Task refreshAction() {
+        Task t = super.refreshAction();
+        refreshDataTable(entityProps);
+        return t;
+    }
+    
+    @Override
+    protected void viewRow(Object rowObject) {
+        DeliveryCertificate ds = (DeliveryCertificate)rowObject;
+        showDetailForm(ds, false);
+    }
+    
     protected DeliveryCertificatesRemote getFormSession()
     {
         if(formSession == null)
@@ -156,5 +162,24 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel {
 
         return deliveryCertificates;
     }
+    
+    private Object showDetailForm(DeliveryCertificate certificate, boolean editable) {
+        DeliveryCertificatePanel editPanel = new DeliveryCertificatePanel(certificate);
+        DialogResponse response = editPanel.showDialog(this);
+        
+        if ( !editable )
+        {
+            editPanel.setReadonly();
+        }
+        
+        if(DialogResponse.SAVE.equals(response))
+        {
+            return editPanel.getSelectedValue();
+        }
+
+        return null;
+    }
+
+
     
 }
