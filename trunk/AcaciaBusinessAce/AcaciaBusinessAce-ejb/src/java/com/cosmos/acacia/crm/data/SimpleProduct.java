@@ -435,8 +435,13 @@ public class SimpleProduct
     public String getCodeFormatted(){
         
         PatternMaskFormat f = getPatternMaskFormat();
-        if ( f==null && getProductCode()!=null )
-            return getProductCode();
+        if ( f==null ){
+            if ( getProductCode()!=null )
+                return getProductCode();
+            else
+                return "";
+        }
+            
         if ( f.getFormat()==null )
             return "";
         if ( getProductCode()==null )
