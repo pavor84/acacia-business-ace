@@ -16,12 +16,13 @@ import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;
+import com.cosmos.swingb.SelectableListDialog;
 
 /**
  *
  * @author  Petar Milev
  */
-public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> {
+public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> implements SelectableListDialog{
 
     private ProductCategoryListPanel categoryListPanel;
 
@@ -33,8 +34,42 @@ public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> {
     public ProductCategoriesTreePanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
+    
+    @Override
+    public Object getSelectedRowObject() {
+        return categoryListPanel.getSelectedRowObject();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List getListData()
+    {
+        return categoryListPanel.getDataTable().getData();
+    }
+    
+    @Override
+    public void setVisibleSelectButtons(boolean visible)
+    {
+        categoryListPanel.setVisibleSelectButtons(visible);
+    }
 
+    @Override
+    public void setSelectedRowObject(Object selectedRowObject) {
+        categoryListPanel.setSelectedRowObject(selectedRowObject);
+    }
+    
+    @Override
+    public void setEditable(boolean editable)
+    {
+        categoryListPanel.setEditable(editable);
+    }
 
+    @Override
+    public boolean isEditable()
+    {
+        return categoryListPanel.isEditable();
+    }
+    
     /**
      * Tries to update the model by calling the business logic.
      * On fail - shows error message to the user, and returns null.

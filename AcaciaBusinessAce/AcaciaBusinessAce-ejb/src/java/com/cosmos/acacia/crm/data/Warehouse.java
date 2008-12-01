@@ -102,10 +102,10 @@ public class Warehouse extends DataObjectBean implements Serializable {
     @ManyToOne
     private Address address;
     
-    @Property(title="Person in charge", customDisplay="${warehouseman.firstName} ${warehouseman.lastName}", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Person in charge", customDisplay="${warehouseman.contact.firstName} ${warehouseman.contact.lastName}", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "warehouseman_id")
     @ManyToOne
-    private Person warehouseman;
+    private ContactPerson warehouseman;
     
     @Property(title="Description")
     @Column(name = "description")
@@ -147,12 +147,8 @@ public class Warehouse extends DataObjectBean implements Serializable {
         this.parentId = parentId;
     }
 
-    public Person getWarehouseman() {
+    public ContactPerson getWarehouseman() {
         return warehouseman;
-    }
-
-    public void setWarehouseman(Person warehouseman) {
-        this.warehouseman = warehouseman;
     }
 
     public String getDescription() {
@@ -225,5 +221,9 @@ public class Warehouse extends DataObjectBean implements Serializable {
 
     public void setIndex(Long index) {
         this.index = index;
+    }
+
+    public void setWarehouseman(ContactPerson warehouseman) {
+        this.warehouseman = warehouseman;
     }
 }

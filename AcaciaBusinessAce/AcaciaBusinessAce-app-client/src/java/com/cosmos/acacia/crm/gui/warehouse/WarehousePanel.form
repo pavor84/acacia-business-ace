@@ -26,19 +26,19 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jBLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBLabel1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jBLabel2" pref="141" max="32767" attributes="2"/>
+                          <Component id="jBLabel1" alignment="0" pref="141" max="32767" attributes="2"/>
+                          <Component id="jBLabel3" alignment="0" pref="141" max="32767" attributes="2"/>
                       </Group>
-                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane1" pref="315" max="32767" attributes="2"/>
-                          <Component id="warehousemanField" min="0" pref="0" max="32767" attributes="1"/>
-                          <Component id="branchField" alignment="1" pref="315" max="32767" attributes="2"/>
+                          <Component id="branchField" alignment="0" pref="315" max="32767" attributes="0"/>
+                          <Component id="warehousemanField" alignment="0" pref="315" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="entityFormButtonPanel1" alignment="0" pref="460" max="32767" attributes="0"/>
@@ -55,17 +55,17 @@
                   <Component id="jBLabel1" max="32767" attributes="1"/>
                   <Component id="branchField" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jBLabel2" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jBLabel2" max="32767" attributes="1"/>
                   <Component id="warehousemanField" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jScrollPane1" pref="132" max="32767" attributes="0"/>
                   <Component id="jBLabel3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="133" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -79,20 +79,10 @@
         <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="branchField">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="branchField" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel2">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="jBLabel2.text"/>
         <Property name="name" type="java.lang.String" value="jBLabel2" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="warehousemanField">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="warehousemanField" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel3">
@@ -121,6 +111,16 @@
     <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel1">
       <Properties>
         <Property name="name" type="java.lang.String" value="entityFormButtonPanel1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="branchField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="branchField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="warehousemanField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="warehousemanField" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -6,23 +6,21 @@
 
 package com.cosmos.acacia.crm.gui.warehouse;
 
-import javax.ejb.EJB;
-import javax.swing.JOptionPane;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import org.jdesktop.beansbinding.AbstractBindingListener;
+import javax.ejb.EJB;
+
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
-import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -37,7 +35,7 @@ public class WarehousePanel extends BaseEntityPanel {
 
     @EJB
     private WarehouseListRemote formSession;
-
+    
     private Warehouse entity;
 
     private EntityProperties entProps;
@@ -71,13 +69,13 @@ public class WarehousePanel extends BaseEntityPanel {
     private void initComponents() {
 
         jBLabel1 = new com.cosmos.swingb.JBLabel();
-        branchField = new com.cosmos.acacia.gui.AcaciaLookup();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
-        warehousemanField = new com.cosmos.acacia.gui.AcaciaLookup();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionField = new com.cosmos.swingb.JBTextPane();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        branchField = new com.cosmos.acacia.gui.AcaciaComboList();
+        warehousemanField = new com.cosmos.acacia.gui.AcaciaComboList();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(WarehousePanel.class);
         setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("Form.border.title"))); // NOI18N
@@ -86,12 +84,8 @@ public class WarehousePanel extends BaseEntityPanel {
         jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
         jBLabel1.setName("jBLabel1"); // NOI18N
 
-        branchField.setName("branchField"); // NOI18N
-
         jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
         jBLabel2.setName("jBLabel2"); // NOI18N
-
-        warehousemanField.setName("warehousemanField"); // NOI18N
 
         jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
         jBLabel3.setName("jBLabel3"); // NOI18N
@@ -103,6 +97,10 @@ public class WarehousePanel extends BaseEntityPanel {
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
 
+        branchField.setName("branchField"); // NOI18N
+
+        warehousemanField.setName("warehousemanField"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,14 +110,14 @@ public class WarehousePanel extends BaseEntityPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(61, 61, 61)
+                            .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                            .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                            .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                            .addComponent(warehousemanField, 0, 0, Short.MAX_VALUE)
-                            .addComponent(branchField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)))
+                            .addComponent(branchField, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                            .addComponent(warehousemanField, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)))
                     .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -136,9 +134,9 @@ public class WarehousePanel extends BaseEntityPanel {
                     .addComponent(warehousemanField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -177,93 +175,60 @@ public class WarehousePanel extends BaseEntityPanel {
 
         //branch address
         propDetails = entProps.getPropertyDetails("address");
-        branchFieldBinding = branchField.bind(new AcaciaLookupProvider() {
-
+        AddressListPanel addressListPanel = new AddressListPanel(getOrganizationDataObjectId());
+        addressListPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
+        branchField.bind(
+            bindGroup, 
+            addressListPanel,
+            entity,
+            propDetails,
+            "${addressName}",
+            UpdateStrategy.READ_WRITE);
+        branchField.addItemListener(new ItemListener() {
             @Override
-            public Object showSelectionControl() {
-                return onChooseBranch();
+            public void itemStateChanged(ItemEvent e) {
+                bindWarehouseManField(entity.getAddress());
             }
-
-        }, bindGroup,
-        entity,
-        propDetails,
-        "${addressName}",
-        UpdateStrategy.READ_WRITE);
-        branchFieldBinding.addBindingListener(new AbstractBindingListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                warehousemanField.clearSelectedValue();
-            }
-        });
-
-        //warehouseman
-        propDetails = entProps.getPropertyDetails("warehouseman");
-        warehousemanField.bind(new AcaciaLookupProvider() {
-
-            @Override
-            public Object showSelectionControl() {
-                return onChooseWarehouseman();
-            }
-
-        }, bindGroup,
-        entity,
-        propDetails,
-        "${firstName} ${lastName}",
-        UpdateStrategy.READ_WRITE);
-
+        },true);
+        
+        //warehouse-man
+        bindWarehouseManField(entity.getAddress());
+//        propDetails = entProps.getPropertyDetails("warehouseman");
+//        BusinessPartnersListPanel employeeListPanel = BusinessPartnersListPanel.createEmployeesPanel(getOrganizationDataObjectId());
+//        warehousemanField.bind(bindGroup, employeeListPanel, entity, propDetails,
+//            "${firstName} ${lastName}", UpdateStrategy.READ_WRITE);
+        
         //description
         descriptionField.bind(bindGroup, entity, "description");
 
         bindGroup.bind();
     }
-
-    protected Object onChooseWarehouseman() {
-        //nothing to select if there is no branch selected
-        if ( !branchFieldBinding.isContentValid() ){
-            JOptionPane.showMessageDialog(this,
-                getResourceMap().getString("WarehousePanel.selectBranch"),
-                getResourceMap().getString("WarehousePanel.selectBranchTitle"),
-                JOptionPane.WARNING_MESSAGE);
-            return null;
-        //if there is selected branch - show the contact persons of it
-        }else{
-            DataObject dataObject = entity.getAddress().getDataObject();
-            ContactPersonsListPanel listPanel = new ContactPersonsListPanel(dataObject.getDataObjectId());
-            listPanel.setTitle(getResourceMap().getString("ContactPersonsListPanel.title"));
-
-//            List<Person> warehouseMen = getFormSession().getWarehouseMenForBranch(dataObject);
-//            PersonsListPanel listPanel = new PersonsListPanel(null, warehouseMen);
-//            listPanel.setVisibleButtons(ButtonVisibility.Close.getVisibilityIndex() |
-//                ButtonVisibility.Close.getVisibilityIndex() |
-//                ButtonVisibility.Unselect.getVisibilityIndex() );
-
-            DialogResponse dResponse = listPanel.showDialog(this);
-            if ( DialogResponse.SELECT.equals(dResponse) ){
-                ContactPerson contactPerson = (ContactPerson) listPanel.getSelectedRowObject();
-                if ( contactPerson!=null )
-                    return contactPerson.getContact();
-                else
-                    return null;
-            }else{
-                return null;
-            }
+    
+    @SuppressWarnings("unchecked")
+    Binding warehouseManBinding = null;
+    
+    protected void bindWarehouseManField(Address address) {
+        
+        ContactPersonsListPanel listPanel = null;
+        if ( address!=null ){
+            listPanel = new ContactPersonsListPanel(address.getAddressId());
         }
-    }
+        else{
+            listPanel = new ContactPersonsListPanel(null);
+        }
+        
+        if ( bindGroup.getBindings().contains(warehouseManBinding) )
+            bindGroup.removeBinding(warehouseManBinding);
+        
+        warehouseManBinding = warehousemanField.bind(bindGroup, listPanel, entity, entProps.getPropertyDetails("warehouseman"),
+            "${contact.firstName} ${contact.lastName}", UpdateStrategy.READ_WRITE);
+        warehouseManBinding.bind();
 
-    protected Object onChooseBranch() {
-        AddressListPanel listPanel = new AddressListPanel(getOrganizationDataObjectId());
-        listPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
-        Address oldBranch = entity.getAddress();
-        DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            Object result = listPanel.getSelectedRowObject();
-            if ( result == null || !result.equals(oldBranch) ){
-                warehousemanField.clearSelectedValue();
-            }
-            return result;
-        }else{
-            return null;
+        // auto select if one choice is available
+        if (warehousemanField.getData().size() == 1) {
+            warehousemanField.setSelectedItem(warehousemanField.getData().get(0));
+        } else {
+            warehousemanField.setSelectedItem(null);
         }
     }
 
@@ -275,17 +240,13 @@ public class WarehousePanel extends BaseEntityPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.acacia.gui.AcaciaLookup branchField;
+    private com.cosmos.acacia.gui.AcaciaComboList branchField;
     private com.cosmos.swingb.JBTextPane descriptionField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBLabel jBLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.cosmos.acacia.gui.AcaciaLookup warehousemanField;
+    private com.cosmos.acacia.gui.AcaciaComboList warehousemanField;
     // End of variables declaration//GEN-END:variables
-
-    @SuppressWarnings("unchecked")
-    private Binding branchFieldBinding;
-
 }

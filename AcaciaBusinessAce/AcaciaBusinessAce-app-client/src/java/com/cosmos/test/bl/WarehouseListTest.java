@@ -12,8 +12,8 @@ import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListBean;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -89,9 +89,10 @@ public class WarehouseListTest extends BaseTest{
             throw new UncompleteUnitTestException("Not available branches to select from for branchParent= dataobject.id"+branchParent.getDataObjectId());
 
         Address branch = addresses.get(TestUtils.nextInteger(addresses.size()));
-        Person p = null;
+        
+        ContactPerson p = null;
         for (Address address : addresses) {
-            List<Person> persons = formSession.getWarehouseMenForBranch(address.getDataObject().getDataObjectId());
+            List<ContactPerson> persons = addressListSession.getContactPersons(address.getAddressId());
             if ( persons.size()>0 ){
                 p  = persons.get(TestUtils.nextInteger(persons.size()));
             }
