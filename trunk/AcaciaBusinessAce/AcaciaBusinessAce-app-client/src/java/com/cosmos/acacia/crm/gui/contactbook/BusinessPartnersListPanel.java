@@ -220,4 +220,24 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     public static BusinessPartnersListPanel createShippingAgentPanel(BigInteger parentDataObjectId) {
         return createPartnerPanel("shippingAgent", parentDataObjectId);
     }
+
+    /**
+     * Factory method - returns {@link BusinessPartnersListPanel} with applied classifier for 
+     * producers ('producer')
+     * @param parentDataObjectId
+     * @return
+     */
+    public static BusinessPartnersListPanel createProducersPanel(BigInteger parentDataObjectId) {
+        return createPartnerPanel("producer", parentDataObjectId);
+    }
+
+    /**
+     * Factory method - returns {@link BusinessPartnersListPanel} with applied classifier for 
+     * employees ('employee')
+     * @param parentDataObjectId
+     * @return
+     */
+    public static BusinessPartnersListPanel createEmployeesPanel(BigInteger parentDataObjectId) {
+        return createPartnerPanel("employee", parentDataObjectId);
+    }
 }

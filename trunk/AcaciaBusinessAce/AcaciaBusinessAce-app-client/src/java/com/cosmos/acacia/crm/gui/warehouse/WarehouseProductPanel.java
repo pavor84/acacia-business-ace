@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui.warehouse;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -23,7 +25,6 @@ import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
-import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -67,8 +68,6 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        productField = new com.cosmos.acacia.gui.AcaciaLookup();
-        warehouseField = new com.cosmos.acacia.gui.AcaciaLookup();
         jBPanel1 = new com.cosmos.swingb.JBPanel();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
         qtyInStockField = new com.cosmos.swingb.JBTextField();
@@ -104,12 +103,10 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         jBLabel1 = new com.cosmos.swingb.JBLabel();
         salesPriceField = new com.cosmos.swingb.JBTextField();
         jBLabel11 = new com.cosmos.swingb.JBLabel();
+        productField = new com.cosmos.acacia.gui.AcaciaComboList();
+        warehouseField = new com.cosmos.acacia.gui.AcaciaComboList();
 
         setName("Form"); // NOI18N
-
-        productField.setName("productField"); // NOI18N
-
-        warehouseField.setName("warehouseField"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(WarehouseProductPanel.class);
         jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel1.border.title"))); // NOI18N
@@ -334,7 +331,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -358,6 +355,10 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         jBLabel11.setText(resourceMap.getString("jBLabel11.text")); // NOI18N
         jBLabel11.setName("jBLabel11"); // NOI18N
 
+        productField.setName("productField"); // NOI18N
+
+        warehouseField.setName("warehouseField"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -369,21 +370,13 @@ public class WarehouseProductPanel extends BaseEntityPanel {
                     .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(productField, 0, 345, Short.MAX_VALUE))
+                                .addComponent(productField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
                             .addComponent(jBPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jBPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(4, 4, 4)
-                                    .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(warehouseField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -392,7 +385,15 @@ public class WarehouseProductPanel extends BaseEntityPanel {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(salesPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                                        .addComponent(deliveryTimeField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))))
+                                        .addComponent(deliveryTimeField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(warehouseField, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))
+                                        .addComponent(jBPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -402,11 +403,15 @@ public class WarehouseProductPanel extends BaseEntityPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(productField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(warehouseField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(productField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(warehouseField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -469,44 +474,23 @@ public class WarehouseProductPanel extends BaseEntityPanel {
 
         //product field
         propDetails = entProps.getPropertyDetails("product");
-        Binding productBinding = productField.bind(new AcaciaLookupProvider() {
-
+        ProductsListPanel productListPanel = new ProductsListPanel(getOrganizationDataObjectId());
+        productField.bind(bindGroup, productListPanel, entity, propDetails,
+            "${productName}", UpdateStrategy.READ_WRITE);
+        productField.addItemListener(new ItemListener() {
+        
             @Override
-            public Object showSelectionControl() {
-                return onChooseProduct();
+            public void itemStateChanged(ItemEvent e) {
+                updateProductQuantities();
             }
-
-        }, bindGroup,
-        entity,
-        propDetails,
-        "${productName}",
-        UpdateStrategy.READ_WRITE);
-        productBinding.addBindingListener(new AbstractBindingListener() {
-            @Override
-            public void bindingBecameBound(Binding binding) {
-                updateProductQuantities(binding);
-            }
-            @SuppressWarnings("unchecked")
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                updateProductQuantities(binding);
-            }
-        });
-
+        
+        }, true);
+        
         //warehouse
         propDetails = entProps.getPropertyDetails("warehouse");
-        warehouseField.bind(new AcaciaLookupProvider() {
-
-            @Override
-            public Object showSelectionControl() {
-                return onChooseWarehous();
-            }
-
-        }, bindGroup,
-        entity,
-        propDetails,
-        "${address.addressName}",
-        UpdateStrategy.READ_WRITE);
+        WarehouseListPanel warehouseListPanel = new WarehouseListPanel(getOrganizationDataObjectId());
+        warehouseField.bind(bindGroup, warehouseListPanel, entity, propDetails,
+            "${address.addressName}", UpdateStrategy.READ_WRITE);
 
         //quantityInStock
         qtyInStockField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityInStock"))
@@ -551,14 +535,14 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         //notes
         notesField.bind(bindGroup, entity, "notes");
 
-        warehouseField.setEditable(false);
+        warehouseField.setEnabled(false);
         qtyInStockField.setEditable(false);
 
         bindGroup.bind();
     }
 
     @SuppressWarnings("unchecked")
-    protected void updateProductQuantities(Binding binding) {
+    protected void updateProductQuantities() {
         SimpleProduct product = entity.getProduct();
 
         maxFromProductField.setText("-");
@@ -567,7 +551,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
 
         ObjectToStringConverter toString = new AcaciaToStringConverter();
 
-        if ( product!=null && binding.isContentValid() ){
+        if ( product!=null ){
             BigDecimal maxQty = product.getMaximumQuantity();
             if ( maxQty!=null ){
                 maxFromProductField.setText(toString.getPreferredStringForItem(maxQty));
@@ -583,16 +567,6 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         }
     }
 
-    protected Object onChooseProduct() {
-        ProductsListPanel listPanel = new ProductsListPanel(getParentDataObjectId());
-        DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            return listPanel.getSelectedRowObject();
-        }else{
-            return null;
-        }
-    }
-
     private class FreeQuantityChangeListener extends AbstractBindingListener{
         @SuppressWarnings("unchecked")
         @Override
@@ -604,17 +578,6 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
             updateFreeQuantityField(binding.isContentValid());
-        }
-    }
-
-
-    protected Object onChooseWarehous() {
-        WarehouseListPanel listPanel = new WarehouseListPanel(null);
-        DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
-            return listPanel.getSelectedRowObject();
-        }else{
-            return null;
         }
     }
 
@@ -672,7 +635,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel minFromProductField;
     private com.cosmos.swingb.JBTextField minQtyField;
     private com.cosmos.swingb.JBTextPane notesField;
-    private com.cosmos.acacia.gui.AcaciaLookup productField;
+    private com.cosmos.acacia.gui.AcaciaComboList productField;
     private com.cosmos.swingb.JBTextField qtyDueField;
     private com.cosmos.swingb.JBTextField qtyFreeField;
     private com.cosmos.swingb.JBTextField qtyInStockField;
@@ -680,7 +643,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField qtyReservedField;
     private com.cosmos.swingb.JBTextField qtySoldField;
     private com.cosmos.swingb.JBTextField salesPriceField;
-    private com.cosmos.acacia.gui.AcaciaLookup warehouseField;
+    private com.cosmos.acacia.gui.AcaciaComboList warehouseField;
     // End of variables declaration//GEN-END:variables
 
     private WarehouseProductPricingPanel pricingPanel;

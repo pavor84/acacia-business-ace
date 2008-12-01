@@ -18,67 +18,57 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="dimensionPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pricesPanel" alignment="1" max="32767" attributes="2"/>
-                  <Component id="quantitiesOnStockPanel" alignment="1" max="32767" attributes="2"/>
-                  <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="descriptionPanel" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="productNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="productCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="productCategoryLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="productColorLabel1" pref="197" max="32767" attributes="0"/>
+                          <Component id="productCategoryLabel1" pref="197" max="32767" attributes="0"/>
+                          <Component id="productNameLabel" alignment="0" pref="197" max="32767" attributes="0"/>
+                          <Component id="productCodeLabel" alignment="1" pref="197" max="32767" attributes="0"/>
+                          <Component id="productColorLabel" alignment="0" pref="197" max="32767" attributes="0"/>
+                          <Component id="productCategoryLabel" alignment="0" pref="197" max="32767" attributes="0"/>
+                          <Component id="quantityPerPackageLabel" alignment="0" min="-2" pref="158" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="productCodeTextField" pref="486" max="32767" attributes="0"/>
-                              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                              <Component id="measureUnitLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="measureUnitComboBox" min="-2" pref="148" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="1">
+                              <Component id="productCodeTextField" min="-2" pref="438" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="measureUnitLabel" pref="66" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="measureUnitComboBox" pref="172" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="productNameTextField" alignment="0" pref="690" max="32767" attributes="2"/>
+                          <Component id="categoryField" alignment="0" pref="690" max="32767" attributes="2"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="purchasedProductCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Component id="salableProductCheckBox" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="obsoleteProductCheckBox" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="categoryField" alignment="0" pref="722" max="32767" attributes="0"/>
-                          <Component id="productNameTextField" alignment="1" pref="722" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="producerField" alignment="0" pref="436" max="32767" attributes="1"/>
+                                  <Component id="quantityPerPackageTextField" alignment="0" pref="436" max="32767" attributes="1"/>
+                                  <Component id="productColorComboBox" alignment="0" pref="436" max="32767" attributes="1"/>
+                                  <Component id="codeFormatField" alignment="0" pref="436" max="32767" attributes="1"/>
+                              </Group>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Component id="codePreviewLabel" pref="68" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="codePreviewField" pref="172" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="productColorLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="patternMaskFormatLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="patternMaskField" pref="414" max="32767" attributes="1"/>
-                          <Component id="productColorComboBox" alignment="1" pref="414" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="codePreviewLabel" pref="125" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="codePreviewField" min="-2" pref="160" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="quantityPerPackageLabel" min="-2" pref="158" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="quantityPerPackageTextField" pref="213" max="32767" attributes="0"/>
-                      <EmptySpace min="455" pref="455" max="455" attributes="0"/>
-                  </Group>
+                  <Component id="pricesPanel" alignment="1" max="32767" attributes="2"/>
+                  <Component id="quantitiesOnStockPanel" alignment="1" max="32767" attributes="2"/>
                   <Component id="dimensionPanel1" alignment="1" max="32767" attributes="0"/>
-                  <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="producerLabel" min="-2" pref="120" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="producerField" min="-2" pref="414" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="buttonPanel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="dimensionPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="buttonPanel" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -86,11 +76,11 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="productNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="productNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -99,28 +89,30 @@
                   <Component id="measureUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="measureUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="categoryField" min="-2" max="-2" attributes="0"/>
                   <Component id="productCategoryLabel" min="-2" pref="22" max="-2" attributes="1"/>
-                  <Component id="categoryField" alignment="1" min="-2" max="-2" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="productCategoryLabel1" alignment="3" min="-2" pref="22" max="-2" attributes="1"/>
+                          <Component id="codePreviewField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="codePreviewLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="purchasedProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="salableProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="obsoleteProductCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="patternMaskFormatLabel" min="-2" pref="22" max="-2" attributes="1"/>
-                          <Component id="patternMaskField" min="-2" max="-2" attributes="1"/>
-                      </Group>
-                  </Group>
-                  <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                      <Component id="codePreviewField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="codePreviewLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="codeFormatField" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -128,29 +120,29 @@
                   <Component id="productColorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="productColorComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="quantitiesOnStockPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="pricesPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="quantityPerPackageTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="quantityPerPackageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="quantityPerPackageTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="dimensionPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="productColorLabel1" pref="25" max="32767" attributes="1"/>
+                  <Component id="producerField" alignment="1" min="-2" max="-2" attributes="1"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="quantitiesOnStockPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="pricesPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="dimensionPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="producerLabel" min="-2" pref="22" max="-2" attributes="1"/>
-                  <Component id="producerField" min="-2" max="-2" attributes="1"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="dimensionPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="descriptionPanel" max="32767" attributes="0"/>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -198,7 +190,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="552" max="32767" attributes="0"/>
+                  <EmptySpace pref="701" max="32767" attributes="0"/>
                   <Component id="saveButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="closeButton" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -241,14 +233,9 @@
     </Container>
     <Component class="com.cosmos.swingb.JBLabel" name="measureUnitLabel">
       <Properties>
+        <Property name="horizontalAlignment" type="int" value="11"/>
         <Property name="text" type="java.lang.String" resourceKey="measureUnitLabel.text"/>
         <Property name="name" type="java.lang.String" value="measureUnitLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="patternMaskFormatLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="patternMaskFormatLabel.text"/>
-        <Property name="name" type="java.lang.String" value="patternMaskFormatLabel" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBCheckBox" name="purchasedProductCheckBox">
@@ -297,17 +284,17 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="minQuantityLabel" min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="minQuantityLabel" pref="70" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="minQuantityTextField" pref="164" max="32767" attributes="0"/>
+                  <Component id="minQuantityTextField" pref="187" max="32767" attributes="0"/>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Component id="defaultQuantityLabel" min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="defaultQuantityLabel" pref="70" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="defaultQuantityTextField" pref="166" max="32767" attributes="0"/>
+                  <Component id="defaultQuantityTextField" pref="187" max="32767" attributes="0"/>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Component id="maxQuantityLabel" min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="maxQuantityLabel" pref="70" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="maxQuantityTextField" pref="210" max="32767" attributes="0"/>
+                  <Component id="maxQuantityTextField" pref="227" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="1"/>
               </Group>
           </Group>
@@ -387,17 +374,17 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="purchasePriceLabel" min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="purchasePriceLabel" pref="70" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="purchasePriceTextField" pref="164" max="32767" attributes="0"/>
+                  <Component id="purchasePriceTextField" pref="186" max="32767" attributes="0"/>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Component id="salesPriceLabel" min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="salesPriceLabel" pref="70" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="salesPriceTextField" pref="166" max="32767" attributes="0"/>
+                  <Component id="salesPriceTextField" pref="187" max="32767" attributes="0"/>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Component id="listPriceLabel" min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="listPriceLabel" pref="70" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="listPriceTextField" pref="210" max="32767" attributes="0"/>
+                  <Component id="listPriceTextField" pref="228" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="1"/>
               </Group>
           </Group>
@@ -490,19 +477,19 @@
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="dimensionUnitLabel" min="-2" pref="70" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionUnitComboBox" pref="156" max="32767" attributes="0"/>
+                  <Component id="dimensionUnitComboBox" pref="148" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionWidthLabel" pref="76" max="32767" attributes="0"/>
+                  <Component id="dimensionWidthLabel" pref="97" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionWidthTextField" pref="106" max="32767" attributes="0"/>
+                  <Component id="dimensionWidthTextField" pref="103" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionLengthLabel" pref="75" max="32767" attributes="0"/>
+                  <Component id="dimensionLengthLabel" pref="101" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionLengthTextField" pref="106" max="32767" attributes="0"/>
+                  <Component id="dimensionLengthTextField" pref="103" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionHeightLabel" pref="68" max="32767" attributes="0"/>
+                  <Component id="dimensionHeightLabel" pref="99" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="dimensionHeightTextField" pref="113" max="32767" attributes="0"/>
+                  <Component id="dimensionHeightTextField" pref="110" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -579,12 +566,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="com.cosmos.swingb.JBLabel" name="producerLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="producerLabel.text"/>
-        <Property name="name" type="java.lang.String" value="producerLabel" noResource="true"/>
-      </Properties>
-    </Component>
     <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -602,7 +583,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="descriptionScrollPane" pref="798" max="32767" attributes="0"/>
+                  <Component id="descriptionScrollPane" pref="859" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="1"/>
               </Group>
           </Group>
@@ -610,7 +591,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="descriptionScrollPane" pref="61" max="32767" attributes="0"/>
+                  <Component id="descriptionScrollPane" pref="90" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="1"/>
               </Group>
           </Group>
@@ -636,11 +617,6 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="patternMaskField">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="patternMaskField" noResource="true"/>
-      </Properties>
-    </Component>
     <Container class="com.cosmos.swingb.JBPanel" name="dimensionPanel1">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -656,17 +632,17 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="weightUnitLabel" pref="140" max="32767" attributes="0"/>
+                  <Component id="weightUnitLabel" pref="71" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="weightUnitComboBox" pref="122" max="32767" attributes="0"/>
+                  <Component id="weightUnitComboBox" pref="183" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                  <Component id="weightLabel" pref="81" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="weightTextField" pref="188" max="32767" attributes="0"/>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Component id="weightLabel" pref="118" max="32767" attributes="0"/>
+                  <Component id="deliveryTimeLabel" pref="69" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="weightTextField" pref="119" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                  <Component id="deliveryTimeLabel" pref="146" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="deliveryTimeTextField" pref="105" max="32767" attributes="0"/>
+                  <Component id="deliveryTimeTextField" pref="227" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -675,12 +651,12 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="weightUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="weightUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="weightLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="weightTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="weightLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="deliveryTimeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="deliveryTimeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="weightUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -742,14 +718,31 @@
         <Property name="name" type="java.lang.String" value="codePreviewLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="categoryField">
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="categoryField">
       <Properties>
         <Property name="name" type="java.lang.String" value="categoryField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="producerField">
+    <Component class="com.cosmos.swingb.JBLabel" name="productCategoryLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="productCategoryLabel1.text"/>
+        <Property name="name" type="java.lang.String" value="productCategoryLabel1" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="codeFormatField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="codeFormatField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="producerField">
       <Properties>
         <Property name="name" type="java.lang.String" value="producerField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="productColorLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="productColorLabel1.text"/>
+        <Property name="name" type="java.lang.String" value="productColorLabel1" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
