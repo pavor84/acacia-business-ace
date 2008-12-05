@@ -332,7 +332,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="invoiceSubValueField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="invoiceSubValueField">
           <Properties>
             <Property name="name" type="java.lang.String" value="invoiceSubValueField" noResource="true"/>
           </Properties>
@@ -349,12 +349,12 @@
             <Property name="name" type="java.lang.String" value="jBLabel8" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="vatPercentField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="vatPercentField">
           <Properties>
             <Property name="name" type="java.lang.String" value="vatPercentField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="discountAmountField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="discountAmountField">
           <Properties>
             <Property name="name" type="java.lang.String" value="discountAmountField" noResource="true"/>
           </Properties>
@@ -371,7 +371,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel10" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="discountPercentField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="discountPercentField">
           <Properties>
             <Property name="name" type="java.lang.String" value="discountPercentField" noResource="true"/>
           </Properties>
@@ -382,7 +382,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel11" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="transportPriceField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="transportPriceField">
           <Properties>
             <Property name="name" type="java.lang.String" value="transportPriceField" noResource="true"/>
           </Properties>
@@ -394,7 +394,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel12" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="totalValueField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="totalValueField">
           <Properties>
             <Property name="name" type="java.lang.String" value="totalValueField" noResource="true"/>
           </Properties>
@@ -547,7 +547,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel14" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="shipWeekField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="shipWeekField">
           <Properties>
             <Property name="name" type="java.lang.String" value="shipWeekField" noResource="true"/>
           </Properties>

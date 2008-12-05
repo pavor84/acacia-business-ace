@@ -55,7 +55,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.cosmos.swingb.JBTextField" name="quantityField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="quantityField">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="quantityField.text"/>
         <Property name="name" type="java.lang.String" value="quantityField" noResource="true"/>

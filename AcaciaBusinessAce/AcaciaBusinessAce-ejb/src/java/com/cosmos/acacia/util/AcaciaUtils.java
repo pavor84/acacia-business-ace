@@ -221,6 +221,7 @@ public class AcaciaUtils
         if(integerFormat == null)
         {
             integerFormat = NumberFormat.getIntegerInstance();
+            integerFormat.setGroupingUsed(false);
         }
 
         return integerFormat;

@@ -275,11 +275,9 @@ public class OrdersMatchingForm extends AcaciaPanel {
     }
 
     private void autoSelectOrderItem() {
-        PurchaseOrder order = (PurchaseOrder) purchaseOrderField.getSelectedItem();
-        //if no selected order - nothing to do here
-        if ( order==null )
+        if ( !(purchaseOrderField.getSelectedItem() instanceof PurchaseOrder) )
             return;
-
+        
         List<PurchaseOrderItem> orderItems = orderItemsListPanel.getItems();
 
         OrderConfirmationItem confirmationItem = (OrderConfirmationItem) confirmationItemsListPanel.getDataTable().getSelectedRowObject();
@@ -408,7 +406,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
                     return;
                 onPurchaseOrderChanged((PurchaseOrder)e.getItem());
             }
-        });
+        }, true);
 
         updateMatchItemButtons();
         updateAutoMatchButton();

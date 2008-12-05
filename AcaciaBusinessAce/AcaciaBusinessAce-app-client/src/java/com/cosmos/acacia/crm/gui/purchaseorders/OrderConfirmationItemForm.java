@@ -6,10 +6,13 @@
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
+import static com.cosmos.acacia.util.AcaciaUtils.getIntegerFormat;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -69,11 +72,11 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         measureUnitField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
-        confirmedQuantityField = new com.cosmos.swingb.JBTextField();
-        unitPriceField = new com.cosmos.swingb.JBTextField();
+        confirmedQuantityField = new com.cosmos.swingb.JBFormattedTextField();
+        unitPriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
         jBLabel8 = new com.cosmos.swingb.JBLabel();
-        extendedPriceField = new com.cosmos.swingb.JBTextField();
+        extendedPriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel9 = new com.cosmos.swingb.JBLabel();
         shipDateFromField = new com.cosmos.swingb.JBDatePicker();
         shipDateToField = new com.cosmos.swingb.JBDatePicker();
@@ -84,7 +87,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         formButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
-        shipWeekField = new com.cosmos.swingb.JBTextField();
+        shipWeekField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel5 = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
@@ -247,9 +250,9 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBTextField confirmedQuantityField;
+    private com.cosmos.swingb.JBFormattedTextField confirmedQuantityField;
     private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
-    private com.cosmos.swingb.JBTextField extendedPriceField;
+    private com.cosmos.swingb.JBFormattedTextField extendedPriceField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel formButtonPanel;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
@@ -267,8 +270,8 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
     private com.cosmos.acacia.gui.AcaciaComboList productField;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
-    private com.cosmos.swingb.JBTextField shipWeekField;
-    private com.cosmos.swingb.JBTextField unitPriceField;
+    private com.cosmos.swingb.JBFormattedTextField shipWeekField;
+    private com.cosmos.swingb.JBFormattedTextField unitPriceField;
     // End of variables declaration//GEN-END:variables
 
     private BindingGroup bindGroup;
@@ -352,7 +355,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         measureUnitField.bind(bindGroup, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
         
         //confirmed quantity
-        Binding confirmedQtyBinding = confirmedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("confirmedQuantity"));
+        Binding confirmedQtyBinding = confirmedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("confirmedQuantity"), getDecimalFormat());
         confirmedQtyBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -364,7 +367,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
         
         //unit price
-        Binding unitPriceBinding = unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"));
+        Binding unitPriceBinding = unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
         unitPriceBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -373,10 +376,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         });
         
         //extended price
-        extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"));
+        extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
         
         //ship week
-        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"))
+        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"), getIntegerFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -418,7 +421,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         updatingShipDates = true;
         
         if ( !contentValid ){
-            shipWeekField.setText("");
+            shipWeekField.setValue(null);
         }else{
 
             Date dateToUse = null;
@@ -442,12 +445,13 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             }
             
             if ( dateToUse==null ){
-                shipWeekField.setText("");
+                shipWeekField.setValue(null);
             }else{
                 Calendar c = Calendar.getInstance();
                 c.setTime(dateToUse);
                 Integer week = c.get(Calendar.WEEK_OF_YEAR);
-                shipWeekField.setText(""+week);
+                BigInteger bigWeek = new BigInteger(week.toString());
+                shipWeekField.setValue(bigWeek);
             }
             
             if ( event ){
@@ -492,7 +496,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
 
     protected void updateExtendedPrice(boolean contentValid) {
         if ( !contentValid){
-            extendedPriceField.setText("");
+            extendedPriceField.setValue(null);
             return;
         }
         
@@ -502,9 +506,9 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             BigDecimal priceLong = new BigDecimal(price);
             BigDecimal qtyLong = new BigDecimal(qty);
             BigDecimal result = qtyLong.multiply(priceLong);
-            result.setScale(4, RoundingMode.HALF_DOWN);
-            extendedPriceField.setText(""+(result));
+            extendedPriceField.setValue(result);
         }catch (Exception e) {
+            extendedPriceField.setValue(null);
         }
     }
 
