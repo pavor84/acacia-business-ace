@@ -95,7 +95,7 @@
             <Property name="name" type="java.lang.String" value="Purchase Price" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="jBTextField1">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="jBTextField1">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jBTextField1.text"/>
             <Property name="name" type="java.lang.String" value="jBTextField1" noResource="true"/>
@@ -107,7 +107,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel2" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="jBTextField2">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="jBTextField2">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jBTextField2.text"/>
             <Property name="name" type="java.lang.String" value="jBTextField2" noResource="true"/>

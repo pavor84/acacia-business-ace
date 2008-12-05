@@ -217,7 +217,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel3" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="qtyInStockField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="qtyInStockField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" resourceKey="qtyInStockField.text"/>
@@ -233,7 +233,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="qtyFreeField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="qtyFreeField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" resourceKey="qtyFreeField.text"/>
@@ -246,7 +246,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="qtyOrderedField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="qtyOrderedField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" resourceKey="qtyOrderedField.text"/>
@@ -259,7 +259,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel7" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="qtyReservedField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="qtyReservedField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" resourceKey="qtyReservedField.text"/>
@@ -272,7 +272,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel8" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="qtySoldField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="qtySoldField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" resourceKey="qtySoldField.text"/>
@@ -285,7 +285,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel13" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="qtyDueField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="qtyDueField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" resourceKey="qtyDueField.text"/>
@@ -369,7 +369,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel4" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="minQtyField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="minQtyField">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="minQtyField.text"/>
             <Property name="name" type="java.lang.String" value="minQtyField" noResource="true"/>
@@ -381,7 +381,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel9" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="maxQtyField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="maxQtyField">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="maxQtyField.text"/>
             <Property name="name" type="java.lang.String" value="maxQtyField" noResource="true"/>
@@ -393,7 +393,7 @@
             <Property name="name" type="java.lang.String" value="jBLabel10" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="defaultQtyField">
+        <Component class="com.cosmos.swingb.JBFormattedTextField" name="defaultQtyField">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="defaultQtyField.text"/>
             <Property name="name" type="java.lang.String" value="defaultQtyField" noResource="true"/>
@@ -432,7 +432,7 @@
         <Property name="name" type="java.lang.String" value="jBLabel14" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="deliveryTimeField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="deliveryTimeField">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="deliveryTimeField.text"/>
         <Property name="name" type="java.lang.String" value="deliveryTimeField" noResource="true"/>
@@ -516,7 +516,7 @@
         <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="salesPriceField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="salesPriceField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" resourceKey="salesPriceField.text"/>
