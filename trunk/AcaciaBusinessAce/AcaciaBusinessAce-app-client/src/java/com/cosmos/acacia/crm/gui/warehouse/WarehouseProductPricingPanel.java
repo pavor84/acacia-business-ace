@@ -9,8 +9,8 @@ package com.cosmos.acacia.crm.gui.warehouse;
 import org.jdesktop.application.Action;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.swingb.JBFormattedTextField;
 import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTextField;
 
 /**
  *
@@ -39,9 +39,9 @@ public class WarehouseProductPricingPanel extends JBPanel {
 
         jBPanel1 = new com.cosmos.swingb.JBPanel();
         jBLabel1 = new com.cosmos.swingb.JBLabel();
-        jBTextField1 = new com.cosmos.swingb.JBTextField();
+        jBTextField1 = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
-        jBTextField2 = new com.cosmos.swingb.JBTextField();
+        jBTextField2 = new com.cosmos.swingb.JBFormattedTextField();
         jBButton1 = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
@@ -126,14 +126,14 @@ public class WarehouseProductPricingPanel extends JBPanel {
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBPanel jBPanel1;
-    private com.cosmos.swingb.JBTextField jBTextField1;
-    private com.cosmos.swingb.JBTextField jBTextField2;
+    private com.cosmos.swingb.JBFormattedTextField jBTextField1;
+    private com.cosmos.swingb.JBFormattedTextField jBTextField2;
     // End of variables declaration//GEN-END:variables
-    public JBTextField getPurchasePriceField() {
+    public JBFormattedTextField getPurchasePriceField() {
         return jBTextField1;
     }
 
-    public JBTextField getSalePriceField() {
+    public JBFormattedTextField getSalePriceField() {
         return jBTextField2;
     }
 

@@ -6,6 +6,9 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
+import static com.cosmos.acacia.util.AcaciaUtils.getIntegerFormat;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigInteger;
@@ -48,6 +51,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
+import com.cosmos.swingb.JBFormattedTextField;
 import com.cosmos.swingb.JBTextField;
 
 /**
@@ -100,26 +104,26 @@ public class ProductPanel extends AcaciaPanel {
         productColorLabel = new com.cosmos.swingb.JBLabel();
         productColorComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         quantitiesOnStockPanel = new com.cosmos.swingb.JBPanel();
-        maxQuantityTextField = new com.cosmos.swingb.JBTextField();
+        maxQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
         maxQuantityLabel = new com.cosmos.swingb.JBLabel();
-        defaultQuantityTextField = new com.cosmos.swingb.JBTextField();
+        defaultQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
         defaultQuantityLabel = new com.cosmos.swingb.JBLabel();
-        minQuantityTextField = new com.cosmos.swingb.JBTextField();
+        minQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
         minQuantityLabel = new com.cosmos.swingb.JBLabel();
         pricesPanel = new com.cosmos.swingb.JBPanel();
-        listPriceTextField = new com.cosmos.swingb.JBTextField();
+        listPriceTextField = new com.cosmos.swingb.JBFormattedTextField();
         listPriceLabel = new com.cosmos.swingb.JBLabel();
-        salesPriceTextField = new com.cosmos.swingb.JBTextField();
+        salesPriceTextField = new com.cosmos.swingb.JBFormattedTextField();
         salesPriceLabel = new com.cosmos.swingb.JBLabel();
-        purchasePriceTextField = new com.cosmos.swingb.JBTextField();
+        purchasePriceTextField = new com.cosmos.swingb.JBFormattedTextField();
         purchasePriceLabel = new com.cosmos.swingb.JBLabel();
-        quantityPerPackageTextField = new com.cosmos.swingb.JBTextField();
+        quantityPerPackageTextField = new com.cosmos.swingb.JBFormattedTextField();
         quantityPerPackageLabel = new com.cosmos.swingb.JBLabel();
         dimensionPanel = new com.cosmos.swingb.JBPanel();
         dimensionUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        dimensionHeightTextField = new com.cosmos.swingb.JBTextField();
-        dimensionLengthTextField = new com.cosmos.swingb.JBTextField();
-        dimensionWidthTextField = new com.cosmos.swingb.JBTextField();
+        dimensionHeightTextField = new com.cosmos.swingb.JBFormattedTextField();
+        dimensionLengthTextField = new com.cosmos.swingb.JBFormattedTextField();
+        dimensionWidthTextField = new com.cosmos.swingb.JBFormattedTextField();
         dimensionUnitLabel = new com.cosmos.swingb.JBLabel();
         dimensionWidthLabel = new com.cosmos.swingb.JBLabel();
         dimensionLengthLabel = new com.cosmos.swingb.JBLabel();
@@ -131,9 +135,9 @@ public class ProductPanel extends AcaciaPanel {
         weightUnitLabel = new com.cosmos.swingb.JBLabel();
         weightUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         weightLabel = new com.cosmos.swingb.JBLabel();
-        weightTextField = new com.cosmos.swingb.JBTextField();
+        weightTextField = new com.cosmos.swingb.JBFormattedTextField();
         deliveryTimeLabel = new com.cosmos.swingb.JBLabel();
-        deliveryTimeTextField = new com.cosmos.swingb.JBTextField();
+        deliveryTimeTextField = new com.cosmos.swingb.JBFormattedTextField();
         codePreviewField = new com.cosmos.swingb.JBTextField();
         codePreviewLabel = new com.cosmos.swingb.JBLabel();
         categoryField = new com.cosmos.acacia.gui.AcaciaComboList();
@@ -175,7 +179,7 @@ public class ProductPanel extends AcaciaPanel {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(701, Short.MAX_VALUE)
+                .addContainerGap(660, Short.MAX_VALUE)
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -244,29 +248,29 @@ public class ProductPanel extends AcaciaPanel {
             quantitiesOnStockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(quantitiesOnStockPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(minQuantityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(minQuantityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(minQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(defaultQuantityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(minQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(defaultQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(maxQuantityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(defaultQuantityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(maxQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addComponent(defaultQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(maxQuantityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(maxQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                 .addContainerGap())
         );
         quantitiesOnStockPanelLayout.setVerticalGroup(
             quantitiesOnStockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(quantitiesOnStockPanelLayout.createSequentialGroup()
                 .addGroup(quantitiesOnStockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(minQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(maxQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(minQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(defaultQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(minQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(defaultQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(maxQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(maxQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(defaultQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(maxQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -302,15 +306,15 @@ public class ProductPanel extends AcaciaPanel {
                 .addContainerGap()
                 .addComponent(purchasePriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(purchasePriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addComponent(purchasePriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(salesPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(salesPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(salesPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(salesPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(listPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(listPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(listPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addComponent(listPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pricesPanelLayout.setVerticalGroup(
@@ -369,19 +373,19 @@ public class ProductPanel extends AcaciaPanel {
                 .addContainerGap()
                 .addComponent(dimensionUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                .addComponent(dimensionUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionWidthLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                .addComponent(dimensionWidthLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionWidthTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addComponent(dimensionWidthTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionLengthLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                .addComponent(dimensionLengthLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionLengthTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addComponent(dimensionLengthTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionHeightLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                .addComponent(dimensionHeightLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionHeightTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                .addComponent(dimensionHeightTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
                 .addContainerGap())
         );
         dimensionPanelLayout.setVerticalGroup(
@@ -413,7 +417,7 @@ public class ProductPanel extends AcaciaPanel {
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(descriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(descriptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 859, Short.MAX_VALUE)
+                .addComponent(descriptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionPanelLayout.setVerticalGroup(
@@ -458,11 +462,11 @@ public class ProductPanel extends AcaciaPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(weightLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(weightTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addComponent(weightTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(deliveryTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                .addComponent(deliveryTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deliveryTimeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addComponent(deliveryTimeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                 .addContainerGap())
         );
         dimensionPanel1Layout.setVerticalGroup(
@@ -508,12 +512,12 @@ public class ProductPanel extends AcaciaPanel {
                     .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productColorLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                            .addComponent(productCategoryLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                            .addComponent(productNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                            .addComponent(productCodeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                            .addComponent(productColorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                            .addComponent(productCategoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                            .addComponent(productColorLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                            .addComponent(productCategoryLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                            .addComponent(productNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                            .addComponent(productCodeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                            .addComponent(productColorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                            .addComponent(productCategoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                             .addComponent(quantityPerPackageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -522,9 +526,9 @@ public class ProductPanel extends AcaciaPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(measureUnitLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
-                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
-                            .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+                                .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
+                            .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(purchasedProductCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(16, 16, 16)
@@ -540,12 +544,12 @@ public class ProductPanel extends AcaciaPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(codePreviewLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(codePreviewField, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))))
-                    .addComponent(pricesPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(quantitiesOnStockPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dimensionPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dimensionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(codePreviewField, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))))
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pricesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(quantitiesOnStockPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dimensionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dimensionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -618,30 +622,30 @@ public class ProductPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBTextField codePreviewField;
     private com.cosmos.swingb.JBLabel codePreviewLabel;
     private com.cosmos.swingb.JBLabel defaultQuantityLabel;
-    private com.cosmos.swingb.JBTextField defaultQuantityTextField;
+    private com.cosmos.swingb.JBFormattedTextField defaultQuantityTextField;
     private com.cosmos.swingb.JBLabel deliveryTimeLabel;
-    private com.cosmos.swingb.JBTextField deliveryTimeTextField;
+    private com.cosmos.swingb.JBFormattedTextField deliveryTimeTextField;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private javax.swing.JScrollPane descriptionScrollPane;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.swingb.JBLabel dimensionHeightLabel;
-    private com.cosmos.swingb.JBTextField dimensionHeightTextField;
+    private com.cosmos.swingb.JBFormattedTextField dimensionHeightTextField;
     private com.cosmos.swingb.JBLabel dimensionLengthLabel;
-    private com.cosmos.swingb.JBTextField dimensionLengthTextField;
+    private com.cosmos.swingb.JBFormattedTextField dimensionLengthTextField;
     private com.cosmos.swingb.JBPanel dimensionPanel;
     private com.cosmos.swingb.JBPanel dimensionPanel1;
     private com.cosmos.acacia.gui.AcaciaComboBox dimensionUnitComboBox;
     private com.cosmos.swingb.JBLabel dimensionUnitLabel;
     private com.cosmos.swingb.JBLabel dimensionWidthLabel;
-    private com.cosmos.swingb.JBTextField dimensionWidthTextField;
+    private com.cosmos.swingb.JBFormattedTextField dimensionWidthTextField;
     private com.cosmos.swingb.JBLabel listPriceLabel;
-    private com.cosmos.swingb.JBTextField listPriceTextField;
+    private com.cosmos.swingb.JBFormattedTextField listPriceTextField;
     private com.cosmos.swingb.JBLabel maxQuantityLabel;
-    private com.cosmos.swingb.JBTextField maxQuantityTextField;
+    private com.cosmos.swingb.JBFormattedTextField maxQuantityTextField;
     private com.cosmos.acacia.gui.AcaciaComboBox measureUnitComboBox;
     private com.cosmos.swingb.JBLabel measureUnitLabel;
     private com.cosmos.swingb.JBLabel minQuantityLabel;
-    private com.cosmos.swingb.JBTextField minQuantityTextField;
+    private com.cosmos.swingb.JBFormattedTextField minQuantityTextField;
     private com.cosmos.swingb.JBCheckBox obsoleteProductCheckBox;
     private com.cosmos.swingb.JBPanel pricesPanel;
     private com.cosmos.acacia.gui.AcaciaComboList producerField;
@@ -655,17 +659,17 @@ public class ProductPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBLabel productNameLabel;
     private com.cosmos.swingb.JBTextField productNameTextField;
     private com.cosmos.swingb.JBLabel purchasePriceLabel;
-    private com.cosmos.swingb.JBTextField purchasePriceTextField;
+    private com.cosmos.swingb.JBFormattedTextField purchasePriceTextField;
     private com.cosmos.swingb.JBCheckBox purchasedProductCheckBox;
     private com.cosmos.swingb.JBPanel quantitiesOnStockPanel;
     private com.cosmos.swingb.JBLabel quantityPerPackageLabel;
-    private com.cosmos.swingb.JBTextField quantityPerPackageTextField;
+    private com.cosmos.swingb.JBFormattedTextField quantityPerPackageTextField;
     private com.cosmos.swingb.JBCheckBox salableProductCheckBox;
     private com.cosmos.swingb.JBLabel salesPriceLabel;
-    private com.cosmos.swingb.JBTextField salesPriceTextField;
+    private com.cosmos.swingb.JBFormattedTextField salesPriceTextField;
     private com.cosmos.swingb.JBButton saveButton;
     private com.cosmos.swingb.JBLabel weightLabel;
-    private com.cosmos.swingb.JBTextField weightTextField;
+    private com.cosmos.swingb.JBFormattedTextField weightTextField;
     private com.cosmos.acacia.gui.AcaciaComboBox weightUnitComboBox;
     private com.cosmos.swingb.JBLabel weightUnitLabel;
     // End of variables declaration//GEN-END:variables
@@ -768,33 +772,33 @@ public class ProductPanel extends AcaciaPanel {
             propDetails = entityProps.getPropertyDetails("productColor");
             productColorComboBox.bind(productBindingGroup, getProductColors(), product, propDetails);
 
-            minQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("minimumQuantity"));
-            maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"));
-            defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"));
+            minQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("minimumQuantity"), getDecimalFormat());
+            maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
+            defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
 
-            purchasePriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("purchasePrice"));
-            salesPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"));
-            listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"));
+            purchasePriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
+            salesPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"), getDecimalFormat());
+            listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"), getDecimalFormat());
 
-            quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"));
+            quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"), getIntegerFormat());
 
             dimensionUnitComboBox.bind(
                     productBindingGroup,
                     getMeasureUnits(MeasurementUnit.Category.Volume),
                     product,
                     entityProps.getPropertyDetails("dimensionUnit"));
-            dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionWidth"));
-            dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionLength"));
-            dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionHeight"));
+            dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionWidth"), getDecimalFormat());
+            dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionLength"), getDecimalFormat());
+            dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionHeight"), getDecimalFormat());
 
             weightUnitComboBox.bind(
                     productBindingGroup,
                     getMeasureUnits(MeasurementUnit.Category.MassWeight),
                     product,
                     entityProps.getPropertyDetails("weightUnit"));
-            weightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("weight"));
+            weightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("weight"), getDecimalFormat());
 
-            deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"));
+            deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"), getIntegerFormat());
 
             propDetails = entityProps.getPropertyDetails("producer");
             
@@ -946,6 +950,10 @@ public class ProductPanel extends AcaciaPanel {
                 JBTextField textField = (JBTextField)binding.getTargetObject();
                 if ( errorProperties.contains(textField.getPropertyName()) )
                     textField.setStyleInvalid("");//temporary code, TODO fix
+            }else if ( binding.getTargetObject() instanceof JBFormattedTextField){
+                JBFormattedTextField textField = (JBFormattedTextField)binding.getTargetObject();
+                if ( errorProperties.contains(textField.getPropertyName()) )
+                    textField.setStyleInvalid("");
             }else if ( binding.getTargetObject() instanceof JBComboBox){
                 JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
                 if ( errorProperties.contains(comboBox.getPropertyName()) )

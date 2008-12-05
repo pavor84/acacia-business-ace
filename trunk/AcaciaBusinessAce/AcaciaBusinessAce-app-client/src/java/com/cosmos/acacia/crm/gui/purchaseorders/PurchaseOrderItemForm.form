@@ -148,12 +148,12 @@
         <Property name="name" type="java.lang.String" value="jBLabel3" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="orderedQuantityField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="orderedQuantityField">
       <Properties>
         <Property name="name" type="java.lang.String" value="orderedQuantityField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="confirmedQuantityField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="confirmedQuantityField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="confirmedQuantityField" noResource="true"/>
@@ -171,7 +171,7 @@
         <Property name="name" type="java.lang.String" value="jBLabel5" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="deliveredQuantityField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="deliveredQuantityField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="deliveredQuantityField" noResource="true"/>
@@ -183,7 +183,7 @@
         <Property name="name" type="java.lang.String" value="jBLabel6" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="purchasePriceField">
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="purchasePriceField">
       <Properties>
         <Property name="name" type="java.lang.String" value="purchasePriceField" noResource="true"/>
       </Properties>

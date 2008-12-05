@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
@@ -64,13 +66,13 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
         measureUnitField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
-        orderedQuantityField = new com.cosmos.swingb.JBTextField();
-        confirmedQuantityField = new com.cosmos.swingb.JBTextField();
+        orderedQuantityField = new com.cosmos.swingb.JBFormattedTextField();
+        confirmedQuantityField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
         jBLabel5 = new com.cosmos.swingb.JBLabel();
-        deliveredQuantityField = new com.cosmos.swingb.JBTextField();
+        deliveredQuantityField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
-        purchasePriceField = new com.cosmos.swingb.JBTextField();
+        purchasePriceField = new com.cosmos.swingb.JBFormattedTextField();
         currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel7 = new com.cosmos.swingb.JBLabel();
         jBLabel8 = new com.cosmos.swingb.JBLabel();
@@ -232,9 +234,9 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBTextField confirmedQuantityField;
+    private com.cosmos.swingb.JBFormattedTextField confirmedQuantityField;
     private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
-    private com.cosmos.swingb.JBTextField deliveredQuantityField;
+    private com.cosmos.swingb.JBFormattedTextField deliveredQuantityField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel formButtonPanel;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
@@ -249,9 +251,9 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.acacia.gui.AcaciaComboBox measureUnitField;
     private com.cosmos.swingb.JBTextPane notesField;
-    private com.cosmos.swingb.JBTextField orderedQuantityField;
+    private com.cosmos.swingb.JBFormattedTextField orderedQuantityField;
     private com.cosmos.acacia.gui.AcaciaComboList productField;
-    private com.cosmos.swingb.JBTextField purchasePriceField;
+    private com.cosmos.swingb.JBFormattedTextField purchasePriceField;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
     // End of variables declaration//GEN-END:variables
@@ -317,22 +319,22 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
         productField.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                onSelectProduct();
+                onSelectProduct(e.getItem());
             }
-        });
+        }, true);
         
         measureUnitField.bind(bindGroup, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
         //ordered quantity
-        orderedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"));
+        orderedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
         
         //confirmed quantity
-        confirmedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("confirmedQuantity"));
+        confirmedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("confirmedQuantity"), getDecimalFormat());
         
         //delivered quantity
-        deliveredQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveredQuantity"));
+        deliveredQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveredQuantity"), getDecimalFormat());
         
         //purchase price
-        purchasePriceField.bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"));
+        purchasePriceField.bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
         
         //currency
         currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
@@ -354,14 +356,14 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
     }
 
     @SuppressWarnings("unchecked")
-    protected void onSelectProduct() {
-        SimpleProduct product = entity.getProduct();
-        
-        DbResource measureMentUnit = null;
-        BigDecimal defaultQty = null;
-        BigDecimal purchasePrice = null;
-        
-        if ( product!=null ){
+    protected void onSelectProduct(Object item) {
+        if ( item instanceof SimpleProduct){
+            SimpleProduct product = entity.getProduct();
+            
+            DbResource measureMentUnit = null;
+            BigDecimal defaultQty = null;
+            BigDecimal purchasePrice = null;
+            
             WarehouseProduct warehouseProduct = getFormSession().getWarehouseProduct(product);
             
             measureMentUnit = product.getMeasureUnit();
@@ -376,9 +378,12 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
             
             measureUnitField.setSelectedItem(measureMentUnit);
             if ( defaultQty!=null && (orderedQuantityField.getText()==null || orderedQuantityField.getText().equals("")))
-                orderedQuantityField.setText(defaultQty.toString());
+                orderedQuantityField.setValue(defaultQty);
             if ( purchasePrice!=null &&(purchasePriceField.getText()==null || purchasePriceField.getText().equals("")))
-                purchasePriceField.setText(purchasePrice.toString());
+                purchasePriceField.setValue(purchasePrice);
+        }else{
+            orderedQuantityField.setValue(null);
+            purchasePriceField.setValue(null);
         }
     }
     

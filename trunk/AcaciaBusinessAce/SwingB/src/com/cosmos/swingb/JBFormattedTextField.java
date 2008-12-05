@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 import javax.swing.JFormattedTextField;
@@ -19,14 +20,13 @@ import javax.swing.text.InternationalFormatter;
 import javax.swing.text.NumberFormatter;
 
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Validator;
 
@@ -60,9 +60,9 @@ public class JBFormattedTextField
 
     private Application application;
     private ApplicationContext applicationContext;
-    private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
 
+    @SuppressWarnings("unchecked")
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
@@ -91,6 +91,7 @@ public class JBFormattedTextField
      * @param format - can be null
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
@@ -157,6 +158,7 @@ public class JBFormattedTextField
         return resourceMap;
     }
 
+    @SuppressWarnings("unchecked")
     private Binding bind(
             BindingGroup bindingGroup,
             Object beanEntity,
@@ -166,12 +168,86 @@ public class JBFormattedTextField
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
-        ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
-        BeanProperty beanProperty = BeanProperty.create("text");
-        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
+        final ELProperty sourceProperty = ELProperty.create("${" + propertyName + "}");
+        ELProperty targetProperty = ELProperty.create("${text}");
+        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, sourceProperty, this, targetProperty);
+        
+        //if format is available - use it to convert, so the text is updated properly.
+        //if we don't do this explicitly, the binding will occur after formatting and the values won't be properly displayed
+        if ( getFormat()!=null ){
+            binding.setConverter(new Converter() {
+                //the result is value type (usually from String, but may be other)
+                @Override
+                public Object convertReverse(Object value) {
+                    if ( value==null )
+                        return null;
+                    //assure that we are going to convert from string, 
+                    //otherwise the default converter or binder may fail
+                    String stringValue = value.toString();
+                    try {
+                        //try to have the formatter parse it (this is needed, because the converter is not that smart)
+                        Object parsed = getFormat().parseObject(stringValue);
+                        //now we have a properly parsed object, 
+                        //but again we need its string representation for the default converter.
+                        if ( parsed!=null )
+                            stringValue = parsed.toString();
+                    } catch (ParseException e) {
+                        //if the parsing fails - ignore, the converter will try also
+                    }
+                    Class<?> sourceType = noPrimitiveType(sourceProperty.getWriteType(JBFormattedTextField.this.beanEntity));
+                    //at last the default converter will make the recognized value, suitable for the source property
+                    return sourceType.cast( 
+                        com.cosmos.swingb.convertion.Converter.defaultConvert(stringValue, sourceType));
+                }
+    
+                //the result is presentation type (usually String)
+                @Override
+                public Object convertForward(Object value) {
+                    if ( value==null )
+                        return "";
+                    return getFormat().format(value);
+                }
+            });
+        }
         bindingGroup.addBinding(binding);
 
         return binding;
+    }
+    
+    private final Class<?> noPrimitiveType(Class<?> type) {
+        if (!type.isPrimitive()) {
+            return type;
+        }
+
+        if (type == Byte.TYPE) {
+            return Byte.class;
+        } else if (type == Short.TYPE) {
+            return Short.class;
+        } else if (type == Integer.TYPE) {
+            return Integer.class;
+        } else if (type == Long.TYPE) {
+            return Long.class;
+        } else if (type == Boolean.TYPE) {
+            return Boolean.class;
+        } else if (type == Character.TYPE) {
+            return Character.class;
+        } else if (type == Float.TYPE) {
+            return Float.class;
+        } else if (type == Double.TYPE) {
+            return Double.class;
+        }
+
+        throw new IllegalArgumentException("Primitive not recognized!");
+    }
+    
+    @Override
+    public void setValue(Object value) {
+        super.setValue(value);
+    }
+    
+    @Override
+    public void setText(String t) {
+        super.setText(t);
     }
 
     public String getPropertyName() {
@@ -234,7 +310,7 @@ public class JBFormattedTextField
         }
         return new DefaultFormatterFactory(new DefaultFormatter());
     }
-
+    
     public Format getFormat() {
         return format;
     }

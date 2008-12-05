@@ -6,6 +6,9 @@
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
+import static com.cosmos.acacia.util.AcaciaUtils.getIntegerFormat;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -13,7 +16,6 @@ import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -140,18 +142,18 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         jBPanel2 = new com.cosmos.swingb.JBPanel();
         currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
-        invoiceSubValueField = new com.cosmos.swingb.JBTextField();
+        invoiceSubValueField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel7 = new com.cosmos.swingb.JBLabel();
         jBLabel8 = new com.cosmos.swingb.JBLabel();
-        vatPercentField = new com.cosmos.swingb.JBTextField();
-        discountAmountField = new com.cosmos.swingb.JBTextField();
+        vatPercentField = new com.cosmos.swingb.JBFormattedTextField();
+        discountAmountField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel9 = new com.cosmos.swingb.JBLabel();
         jBLabel10 = new com.cosmos.swingb.JBLabel();
-        discountPercentField = new com.cosmos.swingb.JBTextField();
+        discountPercentField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel11 = new com.cosmos.swingb.JBLabel();
-        transportPriceField = new com.cosmos.swingb.JBTextField();
+        transportPriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel12 = new com.cosmos.swingb.JBLabel();
-        totalValueField = new com.cosmos.swingb.JBTextField();
+        totalValueField = new com.cosmos.swingb.JBFormattedTextField();
         sumItemsButton = new com.cosmos.swingb.JBButton();
         tableHolderPanel1 = new com.cosmos.acacia.gui.TableHolderPanel();
         jBPanel3 = new com.cosmos.swingb.JBPanel();
@@ -160,7 +162,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         formButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         jBPanel4 = new com.cosmos.swingb.JBPanel();
         jBLabel14 = new com.cosmos.swingb.JBLabel();
-        shipWeekField = new com.cosmos.swingb.JBTextField();
+        shipWeekField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel15 = new com.cosmos.swingb.JBLabel();
         jBLabel16 = new com.cosmos.swingb.JBLabel();
         shipDateFromField = new com.cosmos.swingb.JBDatePicker();
@@ -504,13 +506,13 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBTextField branchField;
     private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
-    private com.cosmos.swingb.JBTextField discountAmountField;
-    private com.cosmos.swingb.JBTextField discountPercentField;
+    private com.cosmos.swingb.JBFormattedTextField discountAmountField;
+    private com.cosmos.swingb.JBFormattedTextField discountPercentField;
     private com.cosmos.swingb.JBDatePicker documentDateField;
     private com.cosmos.swingb.JBTextField documentNumberField;
     private com.cosmos.acacia.gui.AcaciaComboBox documentTypeField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel formButtonPanel;
-    private com.cosmos.swingb.JBTextField invoiceSubValueField;
+    private com.cosmos.swingb.JBFormattedTextField invoiceSubValueField;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
     private com.cosmos.swingb.JBLabel jBLabel11;
@@ -535,14 +537,14 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextPane notesField;
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
-    private com.cosmos.swingb.JBTextField shipWeekField;
+    private com.cosmos.swingb.JBFormattedTextField shipWeekField;
     private com.cosmos.swingb.JBButton sumItemsButton;
     private com.cosmos.acacia.gui.AcaciaComboBox supplierContactField;
     private com.cosmos.acacia.gui.AcaciaComboList supplierField;
     private com.cosmos.acacia.gui.TableHolderPanel tableHolderPanel1;
-    private com.cosmos.swingb.JBTextField totalValueField;
-    private com.cosmos.swingb.JBTextField transportPriceField;
-    private com.cosmos.swingb.JBTextField vatPercentField;
+    private com.cosmos.swingb.JBFormattedTextField totalValueField;
+    private com.cosmos.swingb.JBFormattedTextField transportPriceField;
+    private com.cosmos.swingb.JBFormattedTextField vatPercentField;
     // End of variables declaration//GEN-END:variables
     
     @SuppressWarnings("unchecked")
@@ -656,7 +658,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         Binding amountsBinding = null;
         
         //invoice sub value
-        amountsBinding = invoiceSubValueField.bind(bindGroup, entity, entProps.getPropertyDetails("invoiceSubValue"));
+        amountsBinding = invoiceSubValueField.bind(bindGroup, entity, entProps.getPropertyDetails("invoiceSubValue"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -678,7 +680,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //vat 
-        amountsBinding = vatPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("vat"));
+        amountsBinding = vatPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("vat"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -687,7 +689,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //discount value 
-        amountsBinding = discountAmountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"));
+        amountsBinding = discountAmountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -703,7 +705,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //discount percent
-        amountsBinding = discountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
+        amountsBinding = discountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -719,7 +721,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //transport price
-        amountsBinding = transportPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("transportationPrice"));
+        amountsBinding = transportPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("transportationPrice"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -728,11 +730,11 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //total value
-        totalValueField.bind(bindGroup, entity, entProps.getPropertyDetails("totalValue"));
+        totalValueField.bind(bindGroup, entity, entProps.getPropertyDetails("totalValue"), getDecimalFormat());
         totalValueField.setEditable(true);
         
         //ship week
-        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"))
+        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"), getIntegerFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -772,7 +774,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         updatingShipDates = true;
         
         if ( !contentValid ){
-            shipWeekField.setText("");
+            shipWeekField.setValue(null);
         }else{
 
             Date dateToUse = null;
@@ -796,12 +798,13 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             }
             
             if ( dateToUse==null ){
-                shipWeekField.setText("");
+                shipWeekField.setValue(null);
             }else{
                 Calendar c = Calendar.getInstance();
                 c.setTime(dateToUse);
                 Integer week = c.get(Calendar.WEEK_OF_YEAR);
-                shipWeekField.setText(""+week);
+                BigInteger bigWeek = new BigInteger(week.toString());
+                shipWeekField.setValue(bigWeek);
             }
             
             if ( event ){
@@ -846,9 +849,9 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     
     protected void onDocumentTypeChanged(DbResource newValue) {
         if ( OrderConfirmationType.SimpleInvoice.equals(newValue.getEnumValue()) ){
-            vatPercentField.setText("0");
+            vatPercentField.setValue(new BigDecimal("0"));
         }else{
-            vatPercentField.setText("20");
+            vatPercentField.setValue(new BigDecimal("20"));
         }
     }
 
@@ -885,11 +888,11 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     
     protected void updateDiscountPercent(boolean contentValid) {
         if ( !contentValid ){
-            discountPercentField.setText("");
+            discountPercentField.setValue(null);
             return;
         }
         if ( "".equals(discountAmountField.getText()) ){
-            discountPercentField.setText("");
+            discountPercentField.setValue(null);
             return;
         }
         
@@ -898,20 +901,19 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             BigDecimal invoiceSubValue = new BigDecimal(invoiceSubValueField.getText());  
             BigDecimal discountAmount = new BigDecimal(discountAmountField.getText());
             BigDecimal result = discountAmount.divide(invoiceSubValue, new MathContext(10)).multiply(new BigDecimal(100));
-            result.setScale(4, RoundingMode.HALF_UP);
-            discountPercentField.setText(""+result.toPlainString());
+            discountPercentField.setValue(result);
         }catch (Exception e){
-            discountPercentField.setText("");
+            discountPercentField.setValue(null);
         }
     }
 
     protected void updateDiscountAmount(boolean contentValid) {
         if ( !contentValid ){
-            discountAmountField.setText("");
+            discountAmountField.setValue(null);
             return;
         }
         if ( "".equals(discountPercentField.getText()) ){
-            discountAmountField.setText("");
+            discountAmountField.setValue(null);
             return;
         }
         
@@ -920,10 +922,9 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             BigDecimal invoiceSubValue = new BigDecimal(invoiceSubValueField.getText());  
             BigDecimal discountPercent = new BigDecimal(discountPercentField.getText());
             BigDecimal result = discountPercent.divide(new BigDecimal(100), new MathContext(10)).multiply(invoiceSubValue);
-            result.setScale(4, RoundingMode.HALF_EVEN);
-            discountAmountField.setText(""+result);
+            discountAmountField.setValue(result);
         }catch (Exception e){
-            discountAmountField.setText("");
+            discountAmountField.setValue(null);
         }
     }
 
@@ -938,14 +939,13 @@ public class OrderConfirmationForm extends BaseEntityPanel {
                 total = total.add(vatAmount);
                 total = total.subtract(new BigDecimal(discountAmountField.getText()));
                 total = total.add(new BigDecimal(transportPriceField.getText()));
-                total.setScale(4, RoundingMode.HALF_EVEN); 
-                totalValueField.setText(""+total.toPlainString());
+                totalValueField.setValue(total);
             }catch (Exception e){
                 log.warn(e.getMessage());
-                totalValueField.setText("");
+                totalValueField.setValue(null);
             }
         }else{
-            totalValueField.setText("");
+            totalValueField.setValue(null);
         } 
     }
 
@@ -1022,10 +1022,9 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         for (OrderConfirmationItem orderConfirmationItem : items) {
             sum = sum.add(orderConfirmationItem.getExtendedPrice());
         }
-        sum.setScale(4, RoundingMode.HALF_EVEN);
         
         //autoUpdatingInvoiceSubValue = true;
-        invoiceSubValueField.setText(""+sum);
+        invoiceSubValueField.setValue(sum);
         //autoUpdatingInvoiceSubValue = false;
         
         userEnteredInvoiceValue = false;

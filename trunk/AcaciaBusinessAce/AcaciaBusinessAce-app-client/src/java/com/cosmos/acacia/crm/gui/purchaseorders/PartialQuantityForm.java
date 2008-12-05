@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
@@ -18,6 +19,7 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
 import com.cosmos.swingb.DialogResponse;
@@ -52,7 +54,7 @@ public class PartialQuantityForm extends AcaciaPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        quantityField = new com.cosmos.swingb.JBTextField();
+        quantityField = new com.cosmos.swingb.JBFormattedTextField();
         confirmLabel = new com.cosmos.swingb.JBLabel();
         cancelButton = new com.cosmos.swingb.JBButton();
         confirmButton = new com.cosmos.swingb.JBButton();
@@ -113,7 +115,7 @@ public class PartialQuantityForm extends AcaciaPanel {
     private com.cosmos.swingb.JBButton cancelButton;
     private com.cosmos.swingb.JBButton confirmButton;
     private com.cosmos.swingb.JBLabel confirmLabel;
-    private com.cosmos.swingb.JBTextField quantityField;
+    private com.cosmos.swingb.JBFormattedTextField quantityField;
     // End of variables declaration//GEN-END:variables
     @Override
     protected void initData() {
@@ -131,8 +133,10 @@ public class PartialQuantityForm extends AcaciaPanel {
         });
         confirmButton.setEnabled(false);
         
+        BigDecimal from = new BigDecimal("0");
+        BigDecimal to = maxQuantityToMatch;
         confirmLabel.setText(getResourceMap().getString("confirmLabel.text") +
-            " (0 - " + maxQuantityToMatch.toString()+"):");
+            " ("+formatNumber(from, AcaciaUtils.getDecimalFormat())+" - " + formatNumber(to, AcaciaUtils.getDecimalFormat())+"):");
         
         BindingGroup group = new BindingGroup();
         PropertyDetails pd = new PropertyDetails("quantity", "Quantity", BigDecimal.class.getName());
@@ -147,7 +151,7 @@ public class PartialQuantityForm extends AcaciaPanel {
         validator.setMaxValue(maxQuantityToMatch.doubleValue());
         validator.setRequired(true);
         pd.setValidator(validator);
-        quantityField.bind(group, this, pd, UpdateStrategy.READ_WRITE);
+        quantityField.bind(group, this, pd, UpdateStrategy.READ_WRITE, AcaciaUtils.getDecimalFormat());
         
         group.bind();
         
@@ -160,6 +164,14 @@ public class PartialQuantityForm extends AcaciaPanel {
             }
         });
         
+    }
+
+    private String formatNumber(BigDecimal value, NumberFormat format) {
+        try{
+            return format.format(value);
+        }catch ( Exception e ){
+            return "";
+        }
     }
 
     protected void onConfirm() {

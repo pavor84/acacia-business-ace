@@ -6,12 +6,16 @@
 
 package com.cosmos.acacia.crm.gui.warehouse;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.Format;
 
 import javax.ejb.EJB;
+import javax.swing.SwingConstants;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -19,16 +23,15 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
-import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -70,30 +73,30 @@ public class WarehouseProductPanel extends BaseEntityPanel {
 
         jBPanel1 = new com.cosmos.swingb.JBPanel();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
-        qtyInStockField = new com.cosmos.swingb.JBTextField();
+        qtyInStockField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel5 = new com.cosmos.swingb.JBLabel();
-        qtyFreeField = new com.cosmos.swingb.JBTextField();
+        qtyFreeField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
-        qtyOrderedField = new com.cosmos.swingb.JBTextField();
+        qtyOrderedField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel7 = new com.cosmos.swingb.JBLabel();
-        qtyReservedField = new com.cosmos.swingb.JBTextField();
+        qtyReservedField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel8 = new com.cosmos.swingb.JBLabel();
-        qtySoldField = new com.cosmos.swingb.JBTextField();
+        qtySoldField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel13 = new com.cosmos.swingb.JBLabel();
-        qtyDueField = new com.cosmos.swingb.JBTextField();
+        qtyDueField = new com.cosmos.swingb.JBFormattedTextField();
         jBPanel2 = new com.cosmos.swingb.JBPanel();
         jBLabel4 = new com.cosmos.swingb.JBLabel();
-        minQtyField = new com.cosmos.swingb.JBTextField();
+        minQtyField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel9 = new com.cosmos.swingb.JBLabel();
-        maxQtyField = new com.cosmos.swingb.JBTextField();
+        maxQtyField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel10 = new com.cosmos.swingb.JBLabel();
-        defaultQtyField = new com.cosmos.swingb.JBTextField();
+        defaultQtyField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel15 = new com.cosmos.swingb.JBLabel();
         minFromProductField = new com.cosmos.swingb.JBLabel();
         maxFromProductField = new com.cosmos.swingb.JBLabel();
         defaultFromProductField = new com.cosmos.swingb.JBLabel();
         jBLabel14 = new com.cosmos.swingb.JBLabel();
-        deliveryTimeField = new com.cosmos.swingb.JBTextField();
+        deliveryTimeField = new com.cosmos.swingb.JBFormattedTextField();
         jBPanel4 = new com.cosmos.swingb.JBPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         notesField = new com.cosmos.swingb.JBTextPane();
@@ -101,7 +104,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         jBButton1 = new com.cosmos.swingb.JBButton();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         jBLabel1 = new com.cosmos.swingb.JBLabel();
-        salesPriceField = new com.cosmos.swingb.JBTextField();
+        salesPriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel11 = new com.cosmos.swingb.JBLabel();
         productField = new com.cosmos.acacia.gui.AcaciaComboList();
         warehouseField = new com.cosmos.acacia.gui.AcaciaComboList();
@@ -493,34 +496,34 @@ public class WarehouseProductPanel extends BaseEntityPanel {
             "${address.addressName}", UpdateStrategy.READ_WRITE);
 
         //quantityInStock
-        qtyInStockField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityInStock"))
+        qtyInStockField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityInStock"), getDecimalFormat())
             .addBindingListener(new FreeQuantityChangeListener());
         //orderedQuantity
-        qtyOrderedField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"));
+        qtyOrderedField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
         //reservedQuantity
-        qtyReservedField.bind(bindGroup, entity, entProps.getPropertyDetails("reservedQuantity"))
+        qtyReservedField.bind(bindGroup, entity, entProps.getPropertyDetails("reservedQuantity"), getDecimalFormat())
             .addBindingListener(new FreeQuantityChangeListener());
         //soldQuantity
-        qtySoldField.bind(bindGroup, entity, entProps.getPropertyDetails("soldQuantity"))
+        qtySoldField.bind(bindGroup, entity, entProps.getPropertyDetails("soldQuantity"), getDecimalFormat())
             .addBindingListener(new FreeQuantityChangeListener());
         //quantityDue
-        qtyDueField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityDue"));
+        qtyDueField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityDue"), getDecimalFormat());
 
         //minimumQuantity
-        minQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("minimumQuantity"));
+        minQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("minimumQuantity"), getDecimalFormat());
         //maximumQuantity
-        maxQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("maximumQuantity"));
+        maxQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
         //defaultQuantity
-        defaultQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("defaultQuantity"));
+        defaultQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
         //sale price in current form
-        final Binding salesPriceFieldBinding = salesPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
+        final Binding salesPriceFieldBinding = salesPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"), getDecimalFormat());
         salesPriceField.setEditable(false);
 
         pricingPanel = new WarehouseProductPricingPanel();
         //purchase price
-        pricingPanel.getPurchasePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"));
+        pricingPanel.getPurchasePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
         //sale price
-        Binding pricingPanelSalesBinding = pricingPanel.getSalePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"));
+        Binding pricingPanelSalesBinding = pricingPanel.getSalePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"), getDecimalFormat());
         pricingPanelSalesBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -530,13 +533,17 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         });
 
         //delivery time
-        deliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveryTime"));
+        deliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveryTime"), AcaciaUtils.getIntegerFormat());
 
         //notes
         notesField.bind(bindGroup, entity, "notes");
 
         warehouseField.setEnabled(false);
         qtyInStockField.setEditable(false);
+        
+        maxFromProductField.setHorizontalAlignment(SwingConstants.TRAILING);
+        minFromProductField.setHorizontalAlignment(SwingConstants.TRAILING);
+        defaultFromProductField.setHorizontalAlignment(SwingConstants.TRAILING);
 
         bindGroup.bind();
     }
@@ -549,21 +556,27 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         minFromProductField.setText("-");
         defaultFromProductField.setText("-");
 
-        ObjectToStringConverter toString = new AcaciaToStringConverter();
-
         if ( product!=null ){
             BigDecimal maxQty = product.getMaximumQuantity();
             if ( maxQty!=null ){
-                maxFromProductField.setText(toString.getPreferredStringForItem(maxQty));
+                maxFromProductField.setText(formatValue(maxQty, getDecimalFormat()));
             }
             BigDecimal minQty = product.getMinimumQuantity();
             if ( minQty!=null ){
-                minFromProductField.setText(toString.getPreferredStringForItem(minQty));
+                minFromProductField.setText(formatValue(minQty, getDecimalFormat()));
             }
             BigDecimal defaultQty = product.getDefaultQuantity();
             if ( defaultQty!=null ){
-                defaultFromProductField.setText(toString.getPreferredStringForItem(defaultQty));
+                defaultFromProductField.setText(formatValue(defaultQty, getDecimalFormat()));
             }
+        }
+    }
+
+    private String formatValue(BigDecimal value, Format format) {
+        try{
+            return format.format(value);
+        }catch ( Exception e ){
+            return "";
         }
     }
 
@@ -585,10 +598,8 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         if ( !contentValid ){
             qtyFreeField.setText("");
         }else{
-            ObjectToStringConverter ots = new AcaciaToStringConverter();
             BigDecimal freeQty = entity.getFreeQuantity();
-            String display = ots.getPreferredStringForItem(freeQty);
-            qtyFreeField.setText(display);
+            qtyFreeField.setText(formatValue(freeQty, getDecimalFormat()));
         }
     }
 
@@ -608,8 +619,8 @@ public class WarehouseProductPanel extends BaseEntityPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBLabel defaultFromProductField;
-    private com.cosmos.swingb.JBTextField defaultQtyField;
-    private com.cosmos.swingb.JBTextField deliveryTimeField;
+    private com.cosmos.swingb.JBFormattedTextField defaultQtyField;
+    private com.cosmos.swingb.JBFormattedTextField deliveryTimeField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBButton jBButton1;
     private com.cosmos.swingb.JBLabel jBLabel1;
@@ -631,18 +642,18 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBPanel jBPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.swingb.JBLabel maxFromProductField;
-    private com.cosmos.swingb.JBTextField maxQtyField;
+    private com.cosmos.swingb.JBFormattedTextField maxQtyField;
     private com.cosmos.swingb.JBLabel minFromProductField;
-    private com.cosmos.swingb.JBTextField minQtyField;
+    private com.cosmos.swingb.JBFormattedTextField minQtyField;
     private com.cosmos.swingb.JBTextPane notesField;
     private com.cosmos.acacia.gui.AcaciaComboList productField;
-    private com.cosmos.swingb.JBTextField qtyDueField;
-    private com.cosmos.swingb.JBTextField qtyFreeField;
-    private com.cosmos.swingb.JBTextField qtyInStockField;
-    private com.cosmos.swingb.JBTextField qtyOrderedField;
-    private com.cosmos.swingb.JBTextField qtyReservedField;
-    private com.cosmos.swingb.JBTextField qtySoldField;
-    private com.cosmos.swingb.JBTextField salesPriceField;
+    private com.cosmos.swingb.JBFormattedTextField qtyDueField;
+    private com.cosmos.swingb.JBFormattedTextField qtyFreeField;
+    private com.cosmos.swingb.JBFormattedTextField qtyInStockField;
+    private com.cosmos.swingb.JBFormattedTextField qtyOrderedField;
+    private com.cosmos.swingb.JBFormattedTextField qtyReservedField;
+    private com.cosmos.swingb.JBFormattedTextField qtySoldField;
+    private com.cosmos.swingb.JBFormattedTextField salesPriceField;
     private com.cosmos.acacia.gui.AcaciaComboList warehouseField;
     // End of variables declaration//GEN-END:variables
 
