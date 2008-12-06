@@ -21,12 +21,7 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -35,9 +30,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.reports.CombinedDataSourceObject;
-import com.cosmos.acacia.crm.reports.Report;
-import com.cosmos.acacia.crm.reports.ReportsUtil;
+import com.cosmos.acacia.crm.reports.DocumentUtil;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
@@ -412,6 +405,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     protected List getEntities() {
         List entities = new ArrayList(1);
         entities.add(getEntity());

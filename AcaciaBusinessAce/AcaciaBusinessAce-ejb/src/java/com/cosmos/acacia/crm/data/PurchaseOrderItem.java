@@ -112,7 +112,7 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
     private Date shipDateTo;
 
     @Column(name = "notes")
-    @Property(title="Notes", exportable=false)
+    @Property(title="Notes")
     private String notes;
 
     @JoinColumn(name = "order_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)

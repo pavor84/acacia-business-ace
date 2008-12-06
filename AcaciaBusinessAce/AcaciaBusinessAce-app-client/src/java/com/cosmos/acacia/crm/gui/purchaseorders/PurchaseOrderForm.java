@@ -826,7 +826,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
     @Override
     protected Report getReport() {
-        Report report = new Report("purchase_order", itemsTablePanel.getItems(), null);
+        Report report = new Report("purchase_order", itemsTablePanel.getItems());
         report.setAutoSubreport1Class(PurchaseOrderItem.class);
         return report;
     }
