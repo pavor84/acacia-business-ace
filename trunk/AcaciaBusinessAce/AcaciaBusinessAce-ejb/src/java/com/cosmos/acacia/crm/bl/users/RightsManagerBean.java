@@ -347,7 +347,8 @@ public class RightsManagerBean
 
     @Override
     public void setSpecialRights(Set<UserRight> rights) {
-        session.setSpecialPermissions(rights);
+        if (session != null)
+            session.setSpecialPermissions(rights);
     }
 
     @Override

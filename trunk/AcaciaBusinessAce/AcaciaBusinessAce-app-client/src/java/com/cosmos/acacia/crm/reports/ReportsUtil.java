@@ -1,8 +1,10 @@
 package com.cosmos.acacia.crm.reports;
 
 import java.awt.Component;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRLine;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -29,6 +32,7 @@ import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignLine;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.FontKey;
@@ -46,6 +50,7 @@ import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.resource.BeanResource;
+import com.lowagie.text.pdf.BaseFont;
 
 @SuppressWarnings("unchecked")
 public class ReportsUtil {
@@ -60,6 +65,17 @@ public class ReportsUtil {
 
     protected static final String SUBREPORT_DIR = "reports/";
 
+    protected static String pdfFontPath;
+    static {
+        try {
+            pdfFontPath = new File(ReportsUtil.class.getResource("/reports/fonts/times.ttf").toURI())
+            .getAbsolutePath().replace("times.ttf", "");
+        } catch (URISyntaxException ex) {
+            log.error(ex);
+        }
+    }
+
+
     public static void print(JasperReport jasperReport,
             JRDataSource ds,
             Component uiComponent,
@@ -68,8 +84,18 @@ public class ReportsUtil {
     {
         try {
             Map params = new HashMap();
+
             params.put("REPORTS_DIR", "reports");
             params.putAll(paramsMap);
+
+            JRStyle[] styles = jasperReport.getStyles();
+            for (JRStyle style : styles) {
+                if (style.getName().equals("acaciaReportStyle"))
+                    style.setPdfFontName(pdfFontPath + "times.ttf");
+
+                if (style.getName().equals("acaciaReportBoldStyle"))
+                    style.setPdfFontName(pdfFontPath + "timesbd.ttf");
+            }
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     jasperReport, params, ds);
@@ -103,16 +129,24 @@ public class ReportsUtil {
 
                         JRPdfExporter exporter = new JRPdfExporter();
 
-//                        Map fontMap = new HashMap();
-//
-//                        fontMap.put(new FontKey("Helvetica", false, false),
-//                         new PdfFont("Helvetica", "Identity-H", false));
-//
-//                        log.info("SIZE : " + ((Map) exporter.getParameter(JRExporterParameter.FONT_MAP)).size());
-                        exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+                        Map fontMap = new HashMap();
+
+                        fontMap.put(new FontKey("times-utf", false, false),
+                                new PdfFont(pdfFontPath + "times.ttf", BaseFont.IDENTITY_H, true));
+
+                        fontMap.put(new FontKey("times-utf-b", true, false),
+                                new PdfFont(pdfFontPath + "timesbd.ttf", BaseFont.IDENTITY_H, true));
+
+                        fontMap.put(new FontKey("times-utf-i", false, true),
+                                new PdfFont(pdfFontPath + "timesi.ttf", BaseFont.IDENTITY_H, true));
+
+                        fontMap.put(new FontKey("times-utf-bi", true, true),
+                                new PdfFont(pdfFontPath + "timesbi.ttf", BaseFont.IDENTITY_H, true));
+
+                        //exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
                         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
                         exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, filename);
-//                        exporter.setParameter(JRExporterParameter.FONT_MAP, fontMap);
+                        exporter.setParameter(JRExporterParameter.FONT_MAP, fontMap);
                         exporter.exportReport();
 
                     }
@@ -176,6 +210,23 @@ public class ReportsUtil {
 
         // Initialization
         JasperDesign design = new JasperDesign();
+
+        // Addint styles
+        JRDesignStyle defaultStyle = new JRDesignStyle();
+        defaultStyle.setName("acaciaReportStyle");
+        defaultStyle.setPdfFontName(pdfFontPath + "times.ttf");
+        defaultStyle.setPdfEncoding(BaseFont.IDENTITY_H);
+        defaultStyle.setPdfEmbedded(true);
+        design.addStyle(defaultStyle);
+
+        JRDesignStyle boldStyle = new JRDesignStyle();
+        boldStyle.setName("acaciaReportBoldStyle");
+        boldStyle.setPdfFontName(pdfFontPath + "timesbd.ttf");
+        boldStyle.setPdfEncoding(BaseFont.IDENTITY_H);
+        boldStyle.setPdfEmbedded(true);
+        boldStyle.setBold(true);
+        design.addStyle(boldStyle);
+
         int columnCount = entityProps.getValues().size();
 
         design.setName(reportName);
@@ -260,7 +311,7 @@ public class ReportsUtil {
             expr.setValueClass(String.class);
             expr.setText("$R{" + pd.getPropertyName() + "}");
             caption.setExpression(expr);
-            caption.setBold(true);
+            caption.setStyleNameReference("acaciaReportBoldStyle");
             int columnWidth = reportWidth * pd.getReportColumnWidth() / 100;
             columnWidths.add(columnWidth);
 
@@ -344,6 +395,7 @@ public class ReportsUtil {
             element.setHeight(details.getHeight() - 1);
             element.setKey("textField-" + (i+1));
             element.setWidth(columnWidths.get(i));
+            element.setStyleNameReference("acaciaReportStyle");
 
             //If last element, add the width lost due to integer division
             int diff = 0;
@@ -445,11 +497,14 @@ public class ReportsUtil {
 
     public static String formatPercent(Number number) {
         if (number == null)
-            number = BigDecimal.ZERO;
+            number = BigInteger.ZERO;
 
-        return AcaciaUtils.getPercentFormat().format(number,
-                new StringBuffer(),
-                new FieldPosition(0)).toString();
+        if (number instanceof BigDecimal)
+            number = ((BigDecimal) number).toBigInteger();
+
+        //String value = AcaciaUtils.getPercentFormat().format(number.doubleValue());
+
+        return number.toString() + "%";
     }
 
     public static String formatDate(Date date) {
