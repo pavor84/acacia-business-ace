@@ -54,5 +54,11 @@ public @interface Property
      /**
       * Specified wheter the field is exportable (in reports)
       */
-     boolean exportable() default true;
+     boolean exportable() default false;
+
+     /**
+      * Specifies the width (in percentage) of the column in reports
+      * Default (0) means the width will be determined dynamically
+      */
+     byte reportColumnWidth() default 0;
 }

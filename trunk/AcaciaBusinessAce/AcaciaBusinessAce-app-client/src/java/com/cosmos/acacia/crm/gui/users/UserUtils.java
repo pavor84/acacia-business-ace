@@ -10,15 +10,11 @@ import com.cosmos.acacia.crm.bl.users.UsersRemote;
 
 public class UserUtils {
 
-    protected static Logger log = Logger.getLogger(UserUtils.class);
-    protected static Locale locale;
+    private static Logger log = Logger.getLogger(UserUtils.class);
+    private static Locale locale;
 
     public static void updateUserLocale(UsersRemote bean) {
         bean.setLocale(locale);
-    }
-
-    public static void setLocale(Locale locale) {
-        UserUtils.locale = locale;
     }
 
     public static String getHash(String password) {

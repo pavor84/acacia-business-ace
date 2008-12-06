@@ -80,6 +80,24 @@ public class Report {
         subreports1Data.add(subreport1);
         subreports2Data.add(subreport2);
     }
+
+
+    public Report(String reportName, Collection subreport1) {
+        super();
+        this.reportName = reportName;
+        subreports1Data = new ArrayList<Collection>(1);
+        subreports1Data.add(subreport1);
+        subreports2Data = new ArrayList<Collection>(1);
+        subreports2Data.add(null);
+    }
+
+    public Report(String reportName) {
+        super();
+        this.reportName = reportName;
+        subreports1Data = new ArrayList<Collection>();
+        subreports2Data = new ArrayList<Collection>();
+    }
+
     public String getReportName() {
         return reportName;
     }

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 public class CombinedDataSourceObject {
     private Object entity;
+    private Object header;
     private Collection subreport1;
     private Collection subreport2;
 
@@ -24,5 +25,11 @@ public class CombinedDataSourceObject {
     }
     public void setSubreport2(Collection subreport2) {
         this.subreport2 = subreport2;
+    }
+    public Object getHeader() {
+        return header;
+    }
+    public void setHeader(Object header) {
+        this.header = header;
     }
 }

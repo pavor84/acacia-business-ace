@@ -32,6 +32,7 @@ public class PropertyDetails
     private Validator validator;
     private ResourceDisplay resourceDisplayInTable;
     private boolean exportable;
+    private byte reportColumnWidth;
 
     /**
      * @see #getCustomDislay()
@@ -268,4 +269,22 @@ public class PropertyDetails
     public void setExportable(boolean exportable) {
         this.exportable = exportable;
     }
+
+    /**
+     * Gets the width (in percents) of the column in reports
+     * @return reportColumnWidth
+     */
+    public byte getReportColumnWidth() {
+        return reportColumnWidth;
+    }
+
+    /**
+     * Sets the width (in percents) of the column in reports
+     * @param reportColumnWidth
+     */
+    public void setReportColumnWidth(byte reportColumnWidth) {
+        this.reportColumnWidth = reportColumnWidth;
+    }
+
+
 }

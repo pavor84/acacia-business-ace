@@ -25,6 +25,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -240,7 +241,7 @@ public class LoginForm extends AcaciaPanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED && e.getItem() != null)
-                    UserUtils.setLocale(new Locale((String) e.getItem()));
+                    AcaciaUtils.setLocale(new Locale((String) e.getItem()));
             }
         });
 

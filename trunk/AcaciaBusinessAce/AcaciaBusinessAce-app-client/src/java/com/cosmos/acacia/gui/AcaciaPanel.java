@@ -416,7 +416,7 @@ public abstract class AcaciaPanel
 
     @SuppressWarnings("unchecked")
     protected final JRDataSource getJasperDataSource(List entities,
-            List<Collection> subreports1, List<Collection> subreports2) {
+            List<Collection> subreports1, List<Collection> subreports2, Object headerEntity) {
 
         if ((subreports1 != null && entities.size() != subreports1.size())
                 || (subreports2 != null && entities.size() != subreports2.size()))
@@ -444,6 +444,7 @@ public abstract class AcaciaPanel
 
             CombinedDataSourceObject cdso = new CombinedDataSourceObject();
             cdso.setEntity(entity);
+            cdso.setHeader(headerEntity);
             cdso.setSubreport1(subreport1);
             cdso.setSubreport2(subreport2);
 
@@ -464,18 +465,18 @@ public abstract class AcaciaPanel
 
             Map<String, Object> params = new HashMap<String, Object>();
             if (report.getAutoSubreport1Class() != null) {
-                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport1Class());
+                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport1Class(), true);
                 JasperReport subreport1 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT1", subreport1);
             }
             if (report.getAutoSubreport2Class() != null) {
-                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport2Class());
+                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport2Class(), true);
                 JasperReport subreport2 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT2", subreport2);
             }
 
             JRDataSource ds = getJasperDataSource(getEntities(),
-                report.getSubreports1Data(), report.getSubreports2Data());
+                report.getSubreports1Data(), report.getSubreports2Data(), getReportHeader());
 
 
             ReportsUtil.print(jasperReport, ds, this, getResourceMap(), params);
@@ -490,5 +491,15 @@ public abstract class AcaciaPanel
      */
     protected List getEntities() {
         return new ArrayList();
+    }
+
+    /**
+     * Override this to specify a header entity for reports;
+     * that is the entity used for header/footer data of each page
+     *
+     * @return
+     */
+    protected Object getReportHeader() {
+        return null;
     }
 }

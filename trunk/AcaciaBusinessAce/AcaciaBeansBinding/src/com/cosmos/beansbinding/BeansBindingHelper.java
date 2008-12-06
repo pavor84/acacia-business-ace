@@ -155,6 +155,7 @@ public class BeansBindingHelper {
             pd.setHiden(property.hidden());
             pd.setResourceDisplayInTable(property.resourceDisplayInTable());
             pd.setExportable(property.exportable());
+            pd.setReportColumnWidth(property.reportColumnWidth());
 
             if ( !Property.NULL.equals(property.customDisplay()) )
                 pd.setCustomDisplay(property.customDisplay());

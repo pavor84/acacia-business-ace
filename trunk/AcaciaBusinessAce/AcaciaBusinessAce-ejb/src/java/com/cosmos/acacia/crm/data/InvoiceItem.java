@@ -34,7 +34,7 @@ import javax.persistence.TemporalType;
 @NamedQueries(
     {
         /**
-         * Parameters: 
+         * Parameters:
          *  - parentDataObjectId - not null, the parent object id
          *  - deleted - not null - true/false
          */
@@ -70,12 +70,14 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    @Property(title="Product Name", customDisplay="${product.productName}", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Product Name", customDisplay="${product.productName}",
+            exportable=true, reportColumnWidth=45,
+            propertyValidator=@PropertyValidator(required=true))
     private Product product;
 
     @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Measure Unit")
+    @Property(title="Measure Unit", exportable=true, reportColumnWidth=5)
     private DbResource measureUnit;
 
     @Column(name = "ordered_quantity", nullable = false, precision=20, scale=4)
@@ -83,29 +85,29 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     private BigDecimal orderedQuantity;
 
     @Column(name = "shipped_quantity", precision=20, scale=4)
-    @Property(title="Shipped quantity", readOnly=true)
+    @Property(title="Shipped quantity", readOnly=true, exportable=true, reportColumnWidth=10)
     private BigDecimal shippedQuantity;
 
     @Column(name = "returned_quantity", precision=20, scale=4)
     @Property(title="Returned quantity", readOnly=true)
     private BigDecimal returnedQuantity;
-    
+
     @Column(name = "dueQuantity")
     private BigDecimal dueQuantity;
 
     @Column(name = "unit_price", nullable = false, precision=20, scale=4)
-    @Property(title="Unit price", editable=false)
+    @Property(title="Unit price", editable=false, exportable=true, reportColumnWidth=15)
     private BigDecimal unitPrice;
 
     @Column(name = "extended_price", nullable = false, precision=20, scale=4)
-    @Property(title="Extended price", readOnly=true)
+    @Property(title="Extended price", readOnly=true, exportable=true, reportColumnWidth=25)
     private BigDecimal extendedPrice;
-    
+
     @Property(title="Discount", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "discount_amount", precision=20, scale=4)
     private BigDecimal discountAmount;
-    
+
     @Property(title="Discount %", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
     @Column(name = "discount_percent", precision=20, scale=4)
@@ -114,12 +116,12 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))
     @Column(name = "ship_week")
     private Integer shipWeek;
-    
+
     @Property(title="Ship Date From")
     @Column(name = "ship_date_from")
     @Temporal(TemporalType.DATE)
     private Date shipDateFrom;
-    
+
     @Property(title="Ship Date To")
     @Column(name = "ship_date_to")
     @Temporal(TemporalType.DATE)
@@ -129,15 +131,15 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @ManyToOne
     @Property(title="Warehouse", customDisplay="${warehouse.address.addressName}", propertyValidator=@PropertyValidator(required=true) )
     private Warehouse warehouse;
-    
+
     @Column(name = "notes")
     @Property(title="Notes")
     private String notes;
-    
+
     @Column(name = "product_description")
     @Property(title="Product Description")
     private String productDescription;
-    
+
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -284,7 +286,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     public String getInfo() {
         return getInvoiceItemId().toString();
     }
-    
+
     public Date getShipDateFrom() {
         return shipDateFrom;
     }
