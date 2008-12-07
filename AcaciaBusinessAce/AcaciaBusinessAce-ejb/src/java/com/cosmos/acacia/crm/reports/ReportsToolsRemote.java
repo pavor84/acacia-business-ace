@@ -7,7 +7,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 @Remote
-public interface ReportsUtilRemote {
+public interface ReportsToolsRemote {
 
     JasperReport loadReport(Report report);
     JasperDesign createTableReport(
