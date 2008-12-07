@@ -17,8 +17,7 @@ public class BulgarianNumberNamesMoneyAlgorithm extends BaseBulgarianNumberNames
 
     private GramaticalGender numberGender = GramaticalGender.MASCULINE;
 
-    public BulgarianNumberNamesMoneyAlgorithm(Enum<Currency> currency) {
-        ResourceMap r = NumberNamesUtils.getResourceMap();
+    public BulgarianNumberNamesMoneyAlgorithm(Enum<Currency> currency, ResourceMap r) {
         String currencyEnumName = currency.name();
         currencyName = r.getString(currencyEnumName + ".name");
         currencySingleName = r.getString(currencyEnumName + ".singleName");
