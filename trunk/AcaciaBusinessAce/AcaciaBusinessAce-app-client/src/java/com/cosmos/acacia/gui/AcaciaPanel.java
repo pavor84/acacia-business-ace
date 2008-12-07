@@ -40,8 +40,8 @@ import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
 import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
 import com.cosmos.acacia.crm.bl.reports.Report;
-import com.cosmos.acacia.crm.bl.reports.ReportsUtil;
-import com.cosmos.acacia.crm.bl.reports.ReportsUtilRemote;
+import com.cosmos.acacia.crm.bl.reports.ReportsTools;
+import com.cosmos.acacia.crm.bl.reports.ReportsToolsRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -440,7 +440,7 @@ public abstract class AcaciaPanel
     @SuppressWarnings("unchecked")
     protected final void print() {
         try {
-            ReportsUtilRemote reportsUtil = getBean(ReportsUtilRemote.class, false);
+            ReportsToolsRemote reportsUtil = getBean(ReportsToolsRemote.class, false);
 
             Report report = determineReport();
             JasperReport jasperReport = reportsUtil.loadReport(report);
@@ -464,12 +464,12 @@ public abstract class AcaciaPanel
             int choice = chooseReportType(exportTypes);
             if (choice != JOptionPane.CANCEL_OPTION) {
                 String targetPath = chooseTargetPath();
-                String filename = targetPath + ReportsUtil.FS + jasperReport.getName();
+                String filename = targetPath + ReportsTools.FS + jasperReport.getName();
 
-                boolean success = ReportsUtil.print(jasperReport, ds, params, filename, choice);
+                boolean success = ReportsTools.print(jasperReport, ds, params, filename, choice);
 
                 String message = exportTypes[choice];
-                if (choice != ReportsUtil.TYPE_PRINTER)
+                if (choice != ReportsTools.TYPE_PRINTER)
                     message += ": " + filename;
 
                 if (success) {
@@ -486,10 +486,10 @@ public abstract class AcaciaPanel
     private String[] getExportTypes() {
         ResourceMap resourceMap = getResourceMap();
         String[] exportTypes = new String[4];
-        exportTypes[ReportsUtil.TYPE_PRINTER] = resourceMap.getString("export.printer");
-        exportTypes[ReportsUtil.TYPE_PDF] = resourceMap.getString("export.pdf");
-        exportTypes[ReportsUtil.TYPE_HTML] = resourceMap.getString("export.html");
-        exportTypes[ReportsUtil.TYPE_XML] = resourceMap.getString("export.xml");
+        exportTypes[ReportsTools.TYPE_PRINTER] = resourceMap.getString("export.printer");
+        exportTypes[ReportsTools.TYPE_PDF] = resourceMap.getString("export.pdf");
+        exportTypes[ReportsTools.TYPE_HTML] = resourceMap.getString("export.html");
+        exportTypes[ReportsTools.TYPE_XML] = resourceMap.getString("export.xml");
 
         return exportTypes;
     }

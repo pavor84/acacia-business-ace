@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -33,13 +32,10 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignLine;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.FontKey;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.PdfFont;
-import net.sf.jasperreports.engine.fill.JRFloatIncrementerFactory;
-import net.sf.jasperreports.engine.fill.JRIntegerIncrementerFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
@@ -53,11 +49,11 @@ import com.lowagie.text.pdf.BaseFont;
 
 @SuppressWarnings("unchecked")
 @Stateless
-public class ReportsUtil implements ReportsUtilRemote, ReportsUtilLocal {
+public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
 
     private static final int ID_COLUMN_WIDTH = 5;
 
-    protected static Logger log = Logger.getLogger(ReportsUtil.class);
+    protected static Logger log = Logger.getLogger(ReportsTools.class);
 
     public static final String FS = System.getProperty("file.separator");
     public static final int TYPE_PRINTER = 0;
@@ -70,7 +66,7 @@ public class ReportsUtil implements ReportsUtilRemote, ReportsUtilLocal {
     protected static String pdfFontPath;
     static {
         try {
-            pdfFontPath = new File(ReportsUtil.class.getResource("/reports/fonts/times.ttf").toURI())
+            pdfFontPath = new File(ReportsTools.class.getResource("/reports/fonts/times.ttf").toURI())
             .getAbsolutePath().replace("times.ttf", "");
         } catch (URISyntaxException ex) {
             log.error(ex);
@@ -257,16 +253,19 @@ public class ReportsUtil implements ReportsUtilRemote, ReportsUtilLocal {
         details.setHeight(15);
         List<Integer> columnWidths = new ArrayList<Integer>(entityProps.getValues().size());
 
-        JRDesignLine firstLine = new JRDesignLine();
-        firstLine.setHeight(columnHeader.getHeight());
-        firstLine.setWidth(0); // vertical
-        firstLine.setDirection(JRLine.DIRECTION_BOTTOM_UP);
-        firstLine.setX(0);
-        columnHeader.addElement(firstLine);
+        if (!isSubreport) {
+            JRDesignLine firstLine = new JRDesignLine();
+            firstLine.setHeight(columnHeader.getHeight());
+            firstLine.setWidth(0); // vertical
+            firstLine.setDirection(JRLine.DIRECTION_BOTTOM_UP);
+            firstLine.setX(0);
+            columnHeader.addElement(firstLine);
+        }
         int nextX = 1;
         int i = 0;
         PropertyDetails pd = null;
         Iterator<PropertyDetails> propertyDetailsIterator = entityProps.getValues().iterator();
+        boolean isIdColumn = true;
         // First iteration is for the ID column
         while (pd != null || propertyDetailsIterator.hasNext()) {
             JRDesignExpression expr = new JRDesignExpression();
@@ -297,14 +296,12 @@ public class ReportsUtil implements ReportsUtilRemote, ReportsUtilLocal {
                 caption.setWidth(caption.getWidth() + diff);
             }
 
-            if (pd != null)
-                i ++;
-
             if (pd == null && !isSubreport) {
                 if (propertyDetailsIterator.hasNext())
                     pd = propertyDetailsIterator.next();
                 continue;
             }
+
             if (propertyDetailsIterator.hasNext())
                 pd = propertyDetailsIterator.next();
             else
@@ -320,32 +317,43 @@ public class ReportsUtil implements ReportsUtilRemote, ReportsUtilLocal {
             line.setX(nextX + diff);
             line.setY(0);
             nextX ++;
-            columnHeader.addElement(line);
+
+            if (!isIdColumn)
+                i ++;
+
+            isIdColumn = false;
+
+            if ((!isIdColumn && i < columnCount) || !isSubreport)
+                columnHeader.addElement(line);
         }
 
-        JRDesignLine topLine = new JRDesignLine();
-        topLine.setWidth(reportWidthWithLines);
-        topLine.setHeight(0);
-        topLine.setDirection(JRLine.DIRECTION_BOTTOM_UP); // is it needed?
-        topLine.setX(0);
-        topLine.setY(0);
-        columnHeader.addElement(topLine);
+        if (!isSubreport) {
+            JRDesignLine topLine = new JRDesignLine();
+            topLine.setWidth(reportWidthWithLines);
+            topLine.setHeight(0);
+            topLine.setDirection(JRLine.DIRECTION_BOTTOM_UP); // is it needed?
+            topLine.setX(0);
+            topLine.setY(0);
+            columnHeader.addElement(topLine);
+        }
 
         design.setColumnHeader(columnHeader);
         i = 0;
 
-        JRDesignLine firstDetailsLine = new JRDesignLine();
-        firstDetailsLine.setHeight(details.getHeight());
-        firstDetailsLine.setWidth(1); // vertical
-        firstDetailsLine.setDirection(JRLine.DIRECTION_BOTTOM_UP);
-        firstDetailsLine.setStretchType(JRDesignLine.STRETCH_TYPE_RELATIVE_TO_TALLEST_OBJECT);
-        firstDetailsLine.setX(0);
-        details.addElement(firstDetailsLine);
+        if (!isSubreport) {
+            JRDesignLine firstDetailsLine = new JRDesignLine();
+            firstDetailsLine.setHeight(details.getHeight());
+            firstDetailsLine.setWidth(1); // vertical
+            firstDetailsLine.setDirection(JRLine.DIRECTION_BOTTOM_UP);
+            firstDetailsLine.setStretchType(JRDesignLine.STRETCH_TYPE_RELATIVE_TO_TALLEST_OBJECT);
+            firstDetailsLine.setX(0);
+            details.addElement(firstDetailsLine);
+        }
         nextX = 1;
 
         Iterator<JRField> fieldIterator = design.getFieldsList().iterator();
         JRField field = null;
-        boolean isIdColumn = true;
+        isIdColumn = true;
 
         //first iteration is for the ID column
         while (field != null || fieldIterator.hasNext()) {
@@ -411,17 +419,20 @@ public class ReportsUtil implements ReportsUtilRemote, ReportsUtilLocal {
             line.setX(nextX + diff);
             line.setY(0);
             nextX ++;
-            details.addElement(line);
 
             if (!isIdColumn)
                 i++;
+
+            isIdColumn = false;
+
+            if ((!isIdColumn && i < columnCount) || !isSubreport)
+                details.addElement(line);
 
             if (fieldIterator.hasNext())
                 field = fieldIterator.next();
             else
                 field = null;
 
-            isIdColumn = false;
         }
 
         JRDesignLine detailsTopLine = new JRDesignLine();
