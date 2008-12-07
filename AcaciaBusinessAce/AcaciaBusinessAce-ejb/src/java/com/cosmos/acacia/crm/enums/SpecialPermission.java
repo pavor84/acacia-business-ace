@@ -17,6 +17,41 @@ public enum SpecialPermission implements DatabaseResource {
     OrganizationAdministrator(Category.Miscellaneous),
     BranchAdministrator(Category.Miscellaneous),
 
+    // Contacts
+    Contact(Category.Contacts),
+    Organization(Category.Contacts),
+    Person(Category.Contacts),
+
+    // Core Records
+    // Account - Organization
+    // Contact - Personal Contact
+    Lead(Category.CoreRecords),
+    Opportunity(Category.CoreRecords),
+    Activity(Category.CoreRecords),
+    Note(Category.CoreRecords),
+    EmailTemplate(Category.CoreRecords),
+    Announcement(Category.CoreRecords),
+    Subject(Category.CoreRecords),
+    Queue(Category.CoreRecords),
+    SavedView(Category.CoreRecords),
+    Report(Category.CoreRecords),
+    DuplicateDetectionRule(Category.CoreRecords),
+    DataImport(Category.CoreRecords),
+    DataExport(Category.CoreRecords),
+    DataMap(Category.CoreRecords),
+    OpportunityRelationship(Category.CoreRecords),
+    RelationshipRole(Category.CoreRecords),
+    CustomerRelationship(Category.CoreRecords),
+    PublishEmailTemplate(Category.CoreRecords),
+    AddReportingServicesReports(Category.CoreRecords),
+    PublishReports(Category.CoreRecords),
+    PublishDuplicateDetectionRules(Category.CoreRecords),
+
+    // Marketing
+    MarketingList(Category.Marketing),
+    Campaign(Category.Sales),
+    CreateQuickCampaign(Category.Sales),
+
     // Sales
     Product(Category.Sales),
     ProductPricing(Category.Sales),
@@ -29,11 +64,72 @@ public enum SpecialPermission implements DatabaseResource {
     OverrideQuotePricing(Category.Sales),
     OverrideOrderPricing(Category.Sales),
     OverrideInvoicePricing(Category.Sales),
+
+    // Service
+    Article(Category.Service),
+    ArticleTemplate(Category.Service),
+    Case(Category.Service),
+    Contract(Category.Service),
+    ContractTemplate(Category.Service),
+    PublishArticles(Category.Service),
+
+    // Business Management
+    OrganizationSettings(Category.BusinessManagement),
+    BusinessUnit(Category.BusinessManagement),
+    User(Category.BusinessManagement),
+    UserSettings(Category.BusinessManagement),
+    Team(Category.BusinessManagement),
+    Role(Category.BusinessManagement),
+    License(Category.BusinessManagement),
+    Currency(Category.BusinessManagement),
+    AssignRole(Category.BusinessManagement),
+    AssignTerritoryToUser(Category.BusinessManagement),
+    BulkEdit(Category.BusinessManagement),
+    GoMobile(Category.BusinessManagement),
+    Print(Category.BusinessManagement),
+    Export(Category.BusinessManagement),
+    Merge(Category.BusinessManagement),
+    GoOffline(Category.BusinessManagement),
+    AddressBook(Category.BusinessManagement),
+    UpdateBusinessClosures(Category.BusinessManagement),
+    SendEmailAsAnotherUser(Category.BusinessManagement),
+    LanguageSettings(Category.BusinessManagement),
+    SendInvitation(Category.BusinessManagement),
+
+    // Service Management
+    Calendar(Category.ServiceManagement),
+    MyWorkHours(Category.ServiceManagement),
+    Service(Category.ServiceManagement),
+    FacilityEquipment(Category.ServiceManagement),
+    Site(Category.ServiceManagement),
+    SearchAvailability(Category.ServiceManagement),
+    BrowseAvailability(Category.ServiceManagement),
+
+    // Customization
+    Entity(Category.Customization),
+    EntityAttribute(Category.Customization),
+    EntityOperation(Category.Customization),
+    EntityNotification(Category.Customization),
+    Relationship(Category.Customization),
+    Form(Category.Customization),
+    View(Category.Customization),
+    Workflow(Category.Customization),
+    SystemJob(Category.Customization),
+    // ISV - Independent Software Vendor. A company (or organization) that
+    // builds and sells products (as opposed to a Systems Integrator (SI)
+    // who implements products)
+    ISVExtensions(Category.Customization),
+    ExecuteWorkflowJob(Category.Customization),
+    ExportCustomization(Category.Customization),
+    ImportCustomization(Category.Customization),
+    PublishCustomization(Category.Customization),
+
     ;
 
     public enum Category
     {
         CoreRecords,
+        Contacts,
         Marketing,
         Sales,
         Service,
