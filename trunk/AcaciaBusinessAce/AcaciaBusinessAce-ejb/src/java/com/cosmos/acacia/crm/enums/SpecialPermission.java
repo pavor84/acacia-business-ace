@@ -19,7 +19,7 @@ public enum SpecialPermission implements DatabaseResource {
 
     // Sales
     Product(Category.Sales),
-    Pricing(Category.Sales),
+    ProductPricing(Category.Sales),
     Competitor(Category.Sales),
     SalesLiterature(Category.Sales),
     Quote(Category.Sales),
