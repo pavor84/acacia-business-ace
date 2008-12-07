@@ -12,13 +12,51 @@ import java.util.List;
  */
 public enum SpecialPermission implements DatabaseResource {
 
-    CanViewDataFromAllBranches,
-    SystemAdministrator,
-    OrganizationAdministrator,
-    BranchAdministrator,
+    CanViewDataFromAllBranches(Category.Miscellaneous),
+    SystemAdministrator(Category.Miscellaneous),
+    OrganizationAdministrator(Category.Miscellaneous),
+    BranchAdministrator(Category.Miscellaneous),
+
+    // Sales
+    Product(Category.Sales),
+    Pricing(Category.Sales),
+    Competitor(Category.Sales),
+    SalesLiterature(Category.Sales),
+    Quote(Category.Sales),
+    Order(Category.Sales),
+    Invoice(Category.Sales),
+    Territory(Category.Sales),
+    OverrideQuotePricing(Category.Sales),
+    OverrideOrderPricing(Category.Sales),
+    OverrideInvoicePricing(Category.Sales),
     ;
 
+    public enum Category
+    {
+        CoreRecords,
+        Marketing,
+        Sales,
+        Service,
+        BusinessManagement,
+        ServiceManagement,
+        Customization,
+        CustomEntities,
+        Miscellaneous,
+        ;
+    };
+
+    private SpecialPermission(Category category)
+    {
+        this.category = category;
+    }
+
+    private Category category;
     private DbResource dbResource;
+
+    public Category getCategory()
+    {
+        return category;
+    }
 
     @Override
     public DbResource getDbResource() {
