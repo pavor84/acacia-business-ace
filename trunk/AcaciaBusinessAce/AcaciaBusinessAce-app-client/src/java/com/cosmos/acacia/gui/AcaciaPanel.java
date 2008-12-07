@@ -3,7 +3,6 @@ package com.cosmos.acacia.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
-import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -22,31 +21,32 @@ import java.util.Set;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
+import com.cosmos.acacia.crm.bl.reports.Report;
+import com.cosmos.acacia.crm.bl.reports.ReportsUtil;
+import com.cosmos.acacia.crm.bl.reports.ReportsUtilRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
-import com.cosmos.acacia.crm.reports.CombinedDataSourceObject;
-import com.cosmos.acacia.crm.reports.Report;
-import com.cosmos.acacia.crm.reports.ReportsUtil;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.swingb.JBPanel;
@@ -394,26 +394,6 @@ public abstract class AcaciaPanel
         return report;
     }
 
-    protected final JasperReport loadReport(Report report) {
-        if (report == null)
-            return null;
-
-        String reportName = report.getReportName();
-
-        try {
-            String resourceName = "/reports/" + reportName + ".jasper";
-            log.info("BaseEntityPanel.print().resourceName: " + resourceName);
-            InputStream is = this.getClass().getResourceAsStream(resourceName);
-            log.info("BaseEntityPanel.print().resourceInputStream: " + is);
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
-
-            return jasperReport;
-        } catch (JRException ex) {
-            handleException(ex);
-            return null;
-        }
-    }
-
     @SuppressWarnings("unchecked")
     protected final JRDataSource getJasperDataSource(List entities,
             List<Collection> subreports1, List<Collection> subreports2, Object headerEntity) {
@@ -460,17 +440,19 @@ public abstract class AcaciaPanel
     @SuppressWarnings("unchecked")
     protected final void print() {
         try {
+            ReportsUtilRemote reportsUtil = getBean(ReportsUtilRemote.class, false);
+
             Report report = determineReport();
-            JasperReport jasperReport = loadReport(report);
+            JasperReport jasperReport = reportsUtil.loadReport(report);
 
             Map<String, Object> params = new HashMap<String, Object>();
             if (report.getAutoSubreport1Class() != null) {
-                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport1Class(), true);
+                JasperDesign design = reportsUtil.createTableReport(report.getAutoSubreport1Class(), true);
                 JasperReport subreport1 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT1", subreport1);
             }
             if (report.getAutoSubreport2Class() != null) {
-                JasperDesign design = ReportsUtil.createTableReport(report.getAutoSubreport2Class(), true);
+                JasperDesign design = reportsUtil.createTableReport(report.getAutoSubreport2Class(), true);
                 JasperReport subreport2 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT2", subreport2);
             }
@@ -478,13 +460,63 @@ public abstract class AcaciaPanel
             JRDataSource ds = getJasperDataSource(getEntities(),
                 report.getSubreports1Data(), report.getSubreports2Data(), getReportHeader());
 
+            String[] exportTypes = getExportTypes();
+            int choice = chooseReportType(exportTypes);
+            if (choice != JOptionPane.CANCEL_OPTION) {
+                String targetPath = chooseTargetPath();
+                String filename = targetPath + ReportsUtil.FS + jasperReport.getName();
 
-            ReportsUtil.print(jasperReport, ds, this, getResourceMap(), params);
+                boolean success = ReportsUtil.print(jasperReport, ds, params, filename, choice);
+
+                String message = exportTypes[choice];
+                if (choice != ReportsUtil.TYPE_PRINTER)
+                    message += ": " + filename;
+
+                if (success) {
+                    JOptionPane.showMessageDialog(this,
+                        getResourceMap().getString("export.successful") +
+                        " " + message);
+                }
+            }
         } catch (Exception ex) {
             handleException(ex);
         }
     }
 
+    private String[] getExportTypes() {
+        ResourceMap resourceMap = getResourceMap();
+        String[] exportTypes = new String[4];
+        exportTypes[ReportsUtil.TYPE_PRINTER] = resourceMap.getString("export.printer");
+        exportTypes[ReportsUtil.TYPE_PDF] = resourceMap.getString("export.pdf");
+        exportTypes[ReportsUtil.TYPE_HTML] = resourceMap.getString("export.html");
+        exportTypes[ReportsUtil.TYPE_XML] = resourceMap.getString("export.xml");
+
+        return exportTypes;
+    }
+
+    private int chooseReportType(String[] exportTypes) {
+        ResourceMap resourceMap = getResourceMap();
+        int choice = JOptionPane.showOptionDialog(this,
+                    resourceMap.getString("choose.export.type"),
+                    resourceMap.getString("choose.export.type"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    exportTypes,
+                    exportTypes[0]);
+
+        return choice;
+    }
+
+    private String chooseTargetPath() {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int fChoice = fc.showOpenDialog(this);
+        if (fChoice == JFileChooser.APPROVE_OPTION) {
+            return fc.getSelectedFile().getAbsolutePath();
+        }
+        return null;
+    }
     /**
      * Override this to specify listing behaviour for reporting
      * @return

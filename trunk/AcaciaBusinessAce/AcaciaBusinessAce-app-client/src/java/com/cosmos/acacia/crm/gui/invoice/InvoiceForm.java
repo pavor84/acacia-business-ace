@@ -37,6 +37,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
+import com.cosmos.acacia.crm.bl.reports.DocumentUtil;
+import com.cosmos.acacia.crm.bl.reports.DocumentUtilRemote;
+import com.cosmos.acacia.crm.bl.reports.PrintableDocumentHeader;
+import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -46,15 +50,13 @@ import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.enums.PaymentTerm;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
-import com.cosmos.acacia.crm.reports.DocumentUtil;
-import com.cosmos.acacia.crm.reports.PrintableDocumentHeader;
-import com.cosmos.acacia.crm.reports.Report;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.acacia.util.AcaciaUtils;
+import com.cosmos.acacia.util.ResourceMapUtil;
 import com.cosmos.acacia.util.numbers.NumberNamesAlgorithm;
 import com.cosmos.acacia.util.numbers.NumberNamesAlgorithmFactory;
 import com.cosmos.acacia.util.numbers.NumberNamesAlgorithmType;
@@ -2212,14 +2214,18 @@ public class InvoiceForm extends BaseEntityPanel {
 
     @Override
     protected Object getReportHeader() {
-        PrintableDocumentHeader header = DocumentUtil.createDocumentHeaderExecutorPart(entity.getBranch());
-        header = DocumentUtil.createDocumentHeaderRecipientPart(entity.getRecipient(), entity.getBranch(), entity.getRecipientContact(), header);
+
+        DocumentUtilRemote docUtil = getBean(DocumentUtilRemote.class, false);
+
+        PrintableDocumentHeader header = docUtil.createDocumentHeaderExecutorPart(entity.getBranch());
+        header = docUtil.createDocumentHeaderRecipientPart(entity.getRecipient(), entity.getBranch(), entity.getRecipientContact(), header);
         try {
             NumberNamesAlgorithm algorithm =
                 NumberNamesAlgorithmFactory.getNumberNamesAlgorithm(
                         new Locale("bg"), //AcaciaUtils.getLocale(),
                         NumberNamesAlgorithmType.MONEY,
-                        entity.getCurrency().getEnumValue());
+                        entity.getCurrency().getEnumValue(),
+                        ResourceMapUtil.getResourceMap());
             header.setTotalPriceInWords(algorithm.getNumberName(entity.getTotalValue()));
         } catch (UnsupportedNumberAlgorithmException ex) {
             log.error(ex);
