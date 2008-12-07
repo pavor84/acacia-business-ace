@@ -81,11 +81,11 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     private DbResource measureUnit;
 
     @Column(name = "ordered_quantity", nullable = false, precision=20, scale=4)
-    @Property(title="Ordered quantiry")
+    @Property(title="Ordered quantiry", exportable=true, reportColumnWidth=10)
     private BigDecimal orderedQuantity;
 
     @Column(name = "shipped_quantity", precision=20, scale=4)
-    @Property(title="Shipped quantity", readOnly=true, exportable=true, reportColumnWidth=10)
+    @Property(title="Shipped quantity", readOnly=true)
     private BigDecimal shippedQuantity;
 
     @Column(name = "returned_quantity", precision=20, scale=4)
@@ -100,7 +100,7 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     private BigDecimal unitPrice;
 
     @Column(name = "extended_price", nullable = false, precision=20, scale=4)
-    @Property(title="Extended price", readOnly=true, exportable=true, reportColumnWidth=25)
+    @Property(title="Extended price", readOnly=true, exportable=true, reportColumnWidth=20)
     private BigDecimal extendedPrice;
 
     @Property(title="Discount", propertyValidator=@PropertyValidator(

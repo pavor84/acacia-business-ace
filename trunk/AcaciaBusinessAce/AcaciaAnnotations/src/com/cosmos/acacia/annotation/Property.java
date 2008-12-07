@@ -58,7 +58,7 @@ public @interface Property
 
      /**
       * Specifies the width (in percentage) of the column in reports
-      * Default (0) means the width will be determined dynamically
+      * Remember to drop 5% if a front id column is to be added
       */
      byte reportColumnWidth() default 0;
 }
