@@ -85,6 +85,11 @@
 	<field name="header.recipientPassport.passportNumber" class="java.lang.String"/>
 	<field name="header.recipientPassport.issueDate" class="java.util.Date"/>
 	<field name="header.recipientPassport.issuer.organizationName" class="java.lang.String"/>
+	<field name="entity.vatCondition" class="com.cosmos.acacia.crm.data.DbResource"/>
+	<field name="entity.vatConditionNotes" class="java.lang.String"/>
+	<field name="entity.shippingAgent.displayName" class="java.lang.String"/>
+	<field name="entity.transportationMethod" class="com.cosmos.acacia.crm.data.DbResource"/>
+	<field name="entity.deliveryType" class="com.cosmos.acacia.crm.data.DbResource"/>
 
 		<background>
 			<band height="4"  isSplitAllowed="true" >
@@ -103,23 +108,35 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="352"  isSplitAllowed="true" >
-				<rectangle>
+			<band height="556"  isSplitAllowed="true" >
+				<rectangle radius="5" >
 					<reportElement
+						style="acaciaReportStyle"
 						x="0"
-						y="212"
+						y="305"
 						width="555"
-						height="133"
-						key="rectangle-2"
+						height="114"
+						key="rectangle-3"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<rectangle radius="5" >
+					<reportElement
+						x="0"
+						y="174"
+						width="555"
+						height="122"
+						key="rectangle-2"
+						stretchType="RelativeToBandHeight"
+						positionType="Float"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
 				</rectangle>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
 						x="50"
-						y="322"
-						width="115"
+						y="362"
+						width="132"
 						height="14"
 						key="textField-82"
 						positionType="Float"/>
@@ -133,7 +150,7 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="1"
-						y="322"
+						y="362"
 						width="49"
 						height="14"
 						key="textField-81"
@@ -148,7 +165,7 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="1"
-						y="307"
+						y="347"
 						width="49"
 						height="14"
 						key="textField-79"
@@ -163,8 +180,8 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="50"
-						y="307"
-						width="115"
+						y="347"
+						width="132"
 						height="14"
 						key="textField-80"
 						positionType="Float"/>
@@ -178,8 +195,8 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="50"
-						y="292"
-						width="115"
+						y="332"
+						width="132"
 						height="14"
 						key="textField-78"
 						positionType="Float"/>
@@ -193,7 +210,7 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="1"
-						y="292"
+						y="332"
 						width="49"
 						height="14"
 						key="textField-77"
@@ -208,9 +225,9 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="1"
-						y="272"
-						width="163"
-						height="18"
+						y="317"
+						width="180"
+						height="14"
 						key="textField-74"
 						positionType="Float"/>
 					<box></box>
@@ -222,10 +239,10 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="1"
-						y="260"
-						width="163"
-						height="12"
+						x="3"
+						y="306"
+						width="176"
+						height="11"
 						key="textField-73"
 						positionType="Float"/>
 					<box></box>
@@ -237,9 +254,9 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="1"
-						y="245"
-						width="70"
+						x="2"
+						y="277"
+						width="67"
 						height="14"
 						key="textField-71"
 						positionType="Float"/>
@@ -253,8 +270,8 @@
 					<reportElement
 						style="acaciaReportStyle"
 						x="71"
-						y="245"
-						width="258"
+						y="277"
+						width="286"
 						height="14"
 						key="textField-72"
 						positionType="Float"/>
@@ -267,10 +284,10 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="167"
-						y="260"
-						width="162"
-						height="12"
+						x="182"
+						y="306"
+						width="175"
+						height="11"
 						key="textField-75"
 						positionType="Float"/>
 					<box></box>
@@ -282,10 +299,10 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="167"
-						y="272"
-						width="162"
-						height="18"
+						x="182"
+						y="317"
+						width="175"
+						height="14"
 						key="textField-76"
 						positionType="Float"/>
 					<box></box>
@@ -297,7 +314,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportBoldStyle"
-						x="333"
+						x="361"
 						y="276"
 						width="81"
 						height="15"
@@ -312,9 +329,9 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportBoldStyle"
-						x="416"
+						x="444"
 						y="276"
-						width="138"
+						width="110"
 						height="15"
 						key="textField-69"
 						positionType="Float"/>
@@ -327,9 +344,9 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="415"
+						x="443"
 						y="245"
-						width="139"
+						width="111"
 						height="15"
 						key="textField-63"
 						positionType="Float"/>
@@ -342,9 +359,9 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="415"
+						x="443"
 						y="260"
-						width="139"
+						width="111"
 						height="15"
 						key="textField-65"
 						positionType="Float"/>
@@ -357,7 +374,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="333"
+						x="361"
 						y="260"
 						width="81"
 						height="15"
@@ -367,12 +384,12 @@
 					<textElement textAlignment="Right">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{discount}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{discount} + " (" + ReportsUtil.formatPercent($F{entity.discountPercent}) + "):"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="333"
+						x="361"
 						y="244"
 						width="81"
 						height="15"
@@ -387,7 +404,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="333"
+						x="361"
 						y="229"
 						width="81"
 						height="15"
@@ -397,14 +414,14 @@
 					<textElement textAlignment="Right">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{excise} + "(" + ReportsUtil.formatPercent($F{entity.exciseDutyPercent}) + "):"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{excise} + " (" + ReportsUtil.formatPercent($F{entity.exciseDutyPercent}) + "):"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="416"
+						x="444"
 						y="229"
-						width="138"
+						width="110"
 						height="15"
 						key="textField-61"
 						positionType="Float"/>
@@ -417,9 +434,9 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="415"
+						x="443"
 						y="213"
-						width="139"
+						width="111"
 						height="15"
 						key="textField-59"
 						positionType="Float"/>
@@ -432,7 +449,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="333"
+						x="361"
 						y="213"
 						width="81"
 						height="15"
@@ -449,7 +466,7 @@
 						style="acaciaReportStyle"
 						x="51"
 						y="213"
-						width="279"
+						width="306"
 						height="26"
 						key="textField-83"
 						positionType="Float"/>
@@ -474,12 +491,12 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$R{inWords} + ":"]]></textFieldExpression>
 				</textField>
-				<rectangle radius="0" >
+				<rectangle radius="5" >
 					<reportElement
 						x="0"
 						y="0"
 						width="555"
-						height="158"
+						height="166"
 						key="rectangle-1"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
@@ -543,43 +560,15 @@
 					<reportElement
 						style="acaciaReportBoldStyle"
 						x="226"
-						y="125"
-						width="103"
-						height="13"
-						key="textField-57"/>
-					<box></box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{place} + ": " + $F{entity.branch.city.cityName}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						style="acaciaReportBoldStyle"
-						x="226"
-						y="111"
-						width="103"
-						height="13"
-						key="textField-56"/>
-					<box></box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{date} + ": " + $F{entity.invoiceDate}.toLocaleString()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						style="acaciaReportBoldStyle"
-						x="226"
 						y="97"
-						width="103"
+						width="33"
 						height="13"
 						key="textField-55"/>
 					<box></box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{no} + ": " + $F{entity.invoiceNumber}.toString()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{no} + ":"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -761,7 +750,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{header.executorAddress}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{address} + ": " + $F{header.executorAddress}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -775,7 +764,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{header.recipientAddress}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{address} + ": " + $F{header.recipientAddress}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -824,7 +813,7 @@
 						style="acaciaReportStyle"
 						x="331"
 						y="2"
-						width="85"
+						width="84"
 						height="14"
 						key="textField-41"/>
 					<box></box>
@@ -864,9 +853,9 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportStyle"
-						x="2"
+						x="5"
 						y="2"
-						width="85"
+						width="81"
 						height="14"
 						key="textField-28"/>
 					<box></box>
@@ -934,53 +923,53 @@
 				<line direction="TopDown">
 					<reportElement
 						x="225"
-						y="1"
+						y="0"
 						width="0"
-						height="137"
+						height="138"
 						key="line-3"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="1"
+						x="0"
 						y="43"
-						width="554"
+						width="555"
 						height="0"
 						key="line-4"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="1"
+						x="0"
 						y="81"
-						width="224"
+						width="225"
 						height="0"
 						key="line-5"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="1"
+						x="0"
 						y="96"
-						width="554"
+						width="555"
 						height="0"
 						key="line-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="1"
+						x="0"
 						y="110"
-						width="554"
+						width="555"
 						height="0"
 						key="line-7"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="1"
+						x="0"
 						y="124"
-						width="554"
+						width="555"
 						height="0"
 						key="line-9"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -1006,9 +995,9 @@
 				<line direction="TopDown">
 					<reportElement
 						x="416"
-						y="1"
+						y="0"
 						width="0"
-						height="15"
+						height="16"
 						key="line-13"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
@@ -1024,37 +1013,37 @@
 				<line direction="TopDown">
 					<reportElement
 						x="330"
-						y="1"
+						y="0"
 						width="0"
-						height="137"
+						height="138"
 						key="line-20"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="414"
+						x="442"
 						y="212"
 						width="0"
-						height="133"
+						height="84"
 						key="line-21"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="331"
-						y="212"
+						x="359"
+						y="305"
 						width="0"
-						height="133"
+						height="114"
 						key="line-22"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="331"
+						x="359"
 						y="228"
-						width="224"
+						width="196"
 						height="0"
 						key="line-23"
 						positionType="Float"/>
@@ -1072,9 +1061,9 @@
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="0"
+						x="359"
 						y="259"
-						width="555"
+						width="196"
 						height="0"
 						key="line-25"
 						positionType="Float"/>
@@ -1082,9 +1071,9 @@
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="331"
+						x="1"
 						y="275"
-						width="224"
+						width="554"
 						height="0"
 						key="line-26"
 						positionType="Float"/>
@@ -1092,10 +1081,10 @@
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="165"
-						y="260"
+						x="181"
+						y="305"
 						width="0"
-						height="85"
+						height="114"
 						key="line-27"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -1103,18 +1092,8 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="291"
-						width="555"
-						height="0"
-						key="line-28"
-						positionType="Float"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="0"
-						y="306"
-						width="165"
+						y="346"
+						width="181"
 						height="0"
 						key="line-29"
 						positionType="Float"/>
@@ -1123,8 +1102,8 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="321"
-						width="165"
+						y="361"
+						width="181"
 						height="0"
 						key="line-30"
 						positionType="Float"/>
@@ -1133,13 +1112,725 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="336"
-						width="165"
+						y="376"
+						width="360"
 						height="0"
 						key="line-31"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="374"
+						y="305"
+						width="0"
+						height="67"
+						key="line-32"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="436"
+						y="305"
+						width="0"
+						height="67"
+						key="line-33"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="494"
+						y="305"
+						width="0"
+						height="67"
+						key="line-34"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="0"
+						y="331"
+						width="555"
+						height="0"
+						key="line-35"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="377"
+						y="307"
+						width="56"
+						height="11"
+						key="textField-85"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{credit}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="439"
+						y="307"
+						width="52"
+						height="11"
+						key="textField-86"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{debit}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="359"
+						y="318"
+						width="196"
+						height="0"
+						key="line-36"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="405"
+						y="319"
+						width="0"
+						height="54"
+						key="line-37"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="376"
+						y="319"
+						width="28"
+						height="11"
+						key="textField-87"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{account}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="409"
+						y="319"
+						width="26"
+						height="11"
+						key="textField-88"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{anal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="438"
+						y="319"
+						width="26"
+						height="11"
+						key="textField-89"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{account}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="465"
+						y="319"
+						width="0"
+						height="54"
+						key="line-38"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="466"
+						y="319"
+						width="27"
+						height="11"
+						key="textField-90"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{anal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="496"
+						y="319"
+						width="58"
+						height="11"
+						key="textField-91"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{sum1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="acaciaReportStyle"
+						x="363"
+						y="319"
+						width="9"
+						height="11"
+						key="staticText-1"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[#]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="359"
+						y="344"
+						width="196"
+						height="0"
+						key="line-39"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="359"
+						y="358"
+						width="196"
+						height="0"
+						key="line-40"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="359"
+						y="372"
+						width="196"
+						height="0"
+						key="line-41"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="361"
+						y="373"
+						width="56"
+						height="12"
+						key="textField-92"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{articleNo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="427"
+						y="373"
+						width="45"
+						height="12"
+						key="textField-93"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{date}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="472"
+						y="373"
+						width="0"
+						height="46"
+						key="line-42"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="475"
+						y="373"
+						width="69"
+						height="12"
+						key="textField-94"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{accountant}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="478"
+						y="408"
+						width="69"
+						height="9"
+						key="textField-95"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{signature}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="182"
+						y="400"
+						width="70"
+						height="17"
+						key="textField-96"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{signature}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="259"
+						y="379"
+						width="70"
+						height="17"
+						key="textField-97"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{stamp}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="0"
+						y="400"
+						width="181"
+						height="0"
+						key="line-43"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="5"
+						y="401"
+						width="70"
+						height="17"
+						key="textField-98"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{signature}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="2"
+						y="245"
+						width="61"
+						height="14"
+						key="textField-99"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{vatCondition} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="99"
+						y="245"
+						width="41"
+						height="14"
+						key="textField-100"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{notes} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="3"
+						y="260"
+						width="96"
+						height="14"
+						key="textField-101"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.getEnumText($F{entity.vatCondition})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="140"
+						y="245"
+						width="217"
+						height="29"
+						key="textField-102"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.vatConditionNotes}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="358"
+						y="212"
+						width="0"
+						height="84"
+						key="line-44"
+						positionType="Float"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportBoldStyle"
+						x="259"
+						y="97"
+						width="71"
+						height="13"
+						key="textField-103"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.invoiceNumber}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportBoldStyle"
+						x="259"
+						y="111"
+						width="71"
+						height="13"
+						key="textField-104"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.formatDate($F{entity.invoiceDate})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportBoldStyle"
+						x="226"
+						y="111"
+						width="33"
+						height="13"
+						key="textField-105"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{date} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportBoldStyle"
+						x="259"
+						y="125"
+						width="71"
+						height="13"
+						key="textField-106"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.branch.city.cityName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportBoldStyle"
+						x="226"
+						y="125"
+						width="33"
+						height="13"
+						key="textField-107"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{place} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="289"
+						y="151"
+						width="83"
+						height="13"
+						key="textField-108"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.shippingAgent.displayName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="374"
+						y="151"
+						width="84"
+						height="13"
+						key="textField-109"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.getEnumText($F{entity.transportationMethod})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="460"
+						y="151"
+						width="92"
+						height="13"
+						key="textField-110"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.getEnumText($F{entity.deliveryType})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="289"
+						y="140"
+						width="83"
+						height="11"
+						key="textField-111"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{shippingAgent}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="374"
+						y="140"
+						width="84"
+						height="11"
+						key="textField-112"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{transportationMethod}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="460"
+						y="140"
+						width="92"
+						height="11"
+						key="textField-113"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{deliveryType}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="458"
+						y="139"
+						width="0"
+						height="27"
+						key="line-45"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="372"
+						y="139"
+						width="0"
+						height="27"
+						key="line-46"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						style="acaciaReportStyle"
+						x="287"
+						y="139"
+						width="0"
+						height="27"
+						key="line-47"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="3"
+						y="140"
+						width="146"
+						height="11"
+						key="textField-114"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{invoiceNotification}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="155"
+						y="140"
+						width="131"
+						height="11"
+						key="textField-115"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{notificationReason}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="5"
+						y="151"
+						width="33"
+						height="13"
+						key="textField-116"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{no} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="81"
+						y="151"
+						width="33"
+						height="13"
+						key="textField-117"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{date} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="1"
+						y="377"
+						width="70"
+						height="11"
+						key="textField-118"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{warrantOfAttorney}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="1"
+						y="388"
+						width="35"
+						height="11"
+						key="textField-119"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{no}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="acaciaReportStyle"
+						x="71"
+						y="389"
+						width="22"
+						height="11"
+						key="staticText-2"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<text><![CDATA[/]]></text>
+				</staticText>
 			</band>
 		</detail>
 		<columnFooter>
