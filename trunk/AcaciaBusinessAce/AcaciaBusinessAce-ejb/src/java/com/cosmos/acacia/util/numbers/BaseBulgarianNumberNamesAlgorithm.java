@@ -52,14 +52,14 @@ public abstract class BaseBulgarianNumberNamesAlgorithm implements NumberNamesAl
             number = "хиляда" + (thousandsAndCondition ? AND : " ") + number;
         } else if (tho > 1) {
             String prefixNumber = getStringToHundeds(tho);
-            number =  prefixNumber + " хиляди" + (thousandsAndCondition ? AND : " ") + number;
+            number =  prefixNumber + " хиляди" + (thousandsAndCondition ? AND : ", ") + number; // Irrelevant comma added
         }
 
         boolean millionsAndCondition = tho == 0 || (hun == 0 && dec == 0 && unit == 0);
         if (mil == 1) {
             number = "един милион" + (millionsAndCondition ? AND : " ") + number;
         } else if (mil > 1){
-            number = getStringToHundeds(mil) + " милиона" + (millionsAndCondition ? AND : " ") + number;
+            number = getStringToHundeds(mil) + " милиона" + (millionsAndCondition ? AND : ", ") + number; // Irrelevant comma added
         }
 
 
