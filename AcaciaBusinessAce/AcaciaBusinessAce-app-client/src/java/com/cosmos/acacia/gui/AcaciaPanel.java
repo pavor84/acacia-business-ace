@@ -462,20 +462,22 @@ public abstract class AcaciaPanel
 
             String[] exportTypes = getExportTypes();
             int choice = chooseReportType(exportTypes);
-            if (choice != JOptionPane.CANCEL_OPTION) {
+            if (choice != JOptionPane.CLOSED_OPTION) {
                 String targetPath = chooseTargetPath();
-                String filename = targetPath + ReportsTools.FS + jasperReport.getName();
+                if (targetPath != null) {
+                    String filename = targetPath + ReportsTools.FS + jasperReport.getName();
 
-                boolean success = ReportsTools.print(jasperReport, ds, params, filename, choice);
+                    boolean success = ReportsTools.print(jasperReport, ds, params, filename, choice);
 
-                String message = exportTypes[choice];
-                if (choice != ReportsTools.TYPE_PRINTER)
-                    message += ": " + filename;
+                    String message = exportTypes[choice];
+                    if (choice != ReportsTools.TYPE_PRINTER)
+                        message += ": " + filename;
 
-                if (success) {
-                    JOptionPane.showMessageDialog(this,
-                        getResourceMap().getString("export.successful") +
-                        " " + message);
+                    if (success) {
+                        JOptionPane.showMessageDialog(this,
+                            getResourceMap().getString("export.successful") +
+                            " " + message);
+                    }
                 }
             }
         } catch (Exception ex) {
