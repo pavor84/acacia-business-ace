@@ -78,6 +78,12 @@ public enum AccessLevel
      * and shared with users who are assigned to any business unit subordinate
      * to your business unit - regardless of how deep in the organizational
      * structure the user’s business unit appears.
+     *
+     *         Parent Business Unit
+     *               |      |
+     *         +-----+      +-------------+--------------+------+
+     *         |                          |              |      |
+     * User Business Unit       Client Business Units   ...    ...
      */
     ParentChildBusinessUnit,
 
