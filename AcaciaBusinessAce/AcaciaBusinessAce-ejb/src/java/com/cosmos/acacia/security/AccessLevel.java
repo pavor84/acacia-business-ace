@@ -79,7 +79,7 @@ public enum AccessLevel
      * to your business unit - regardless of how deep in the organizational
      * structure the user’s business unit appears.
      *
-     *         Parent Business Unit
+     *        Parent Business Unit
      *               |      |
      *         +-----+      +-------------+--------------+------+
      *         |                          |              |      |
