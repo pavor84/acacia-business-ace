@@ -83,7 +83,7 @@ public enum AccessLevel
      *               |      |
      *         +-----+      +-------------+--------------+------+
      *         |                          |              |      |
-     * User Business Unit       Client Business Units   ...    ...
+     * User Business Unit     Children Business Units   ...    ...
      */
     ParentChildBusinessUnit,
 
