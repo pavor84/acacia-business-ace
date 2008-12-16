@@ -465,7 +465,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         String title = resource.getString("saveAction.Action.error.title");
 
         String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
-        String category = ProductPanel.class.getName() + ": saveAction.";
+        String category = DeliveryCertificatePanel.class.getName() + ": saveAction.";
         Level errorLevel = Level.WARNING;
 
         Map<String, String> state = new HashMap<String, String>();

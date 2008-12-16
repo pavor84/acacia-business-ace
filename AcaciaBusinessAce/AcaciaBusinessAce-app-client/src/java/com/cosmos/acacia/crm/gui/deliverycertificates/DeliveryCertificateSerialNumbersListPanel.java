@@ -7,22 +7,30 @@
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
 import javax.ejb.EJB;
 
-import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.gui.ProductPanel;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBErrorPane;
 
 /**
  *
@@ -48,7 +56,7 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
      */
     public DeliveryCertificateSerialNumbersListPanel(BigInteger deliveryCertificateItemId) {
     	super(deliveryCertificateItemId);
-        this.setVisibleButtons(8 + 32 + 256);
+        this.setVisibleButtons(8 + 32);
     }
 
     @SuppressWarnings("unchecked")
@@ -71,13 +79,57 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
         AcaciaTable deliveryCertTable = getDataTable();
         
         this.serialNumbers = getDeliveryCertificateItemSerialNumbers();	
-        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, false);
+        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, true);
         tableBinding.setEditable(true);
         deliveryCertTable.setEditable(true);
         
+        tableBinding.addBindingListener(new AbstractBindingListener(){
+        	@SuppressWarnings("unchecked")
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+        		String serialNumber = (String)event.getNewValue();
+        		System.out.println("Saving Serial Number: " + serialNumber);
+        		DeliveryCertificateSerialNumber entity = (DeliveryCertificateSerialNumber)binding.getSourceObject();
+        		entity.setSerialNumber(serialNumber);
+        		save(entity);
+            }
+        });
         
         bidingGroup.bind();
 
+    }
+    
+    private void save(DeliveryCertificateSerialNumber entity){
+    	try{
+    		getFormSession().saveDeliveryCertificateItemSerialNumber(entity);
+    	}
+    	catch(ValidationException e){
+    		ValidationException ve = extractValidationException(e);
+            if ( ve!=null ){
+                String message = getValidationErrorsMessage(ve);
+                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
+            }else{
+                e.printStackTrace();
+                // TODO: Log that error
+                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", e.getMessage());
+                JBErrorPane.showDialog(this, createSaveErrorInfo(basicMessage, e));
+            }
+    	}
+    }
+    
+    private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("saveAction.Action.error.title");
+
+        String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
+        String category = DeliveryCertificateSerialNumbersListPanel.class.getName() + ": saveAction.";
+        Level errorLevel = Level.WARNING;
+
+        Map<String, String> state = new HashMap<String, String>();
+        //state.put("serialNumber", String.valueOf(entity.));
+        
+        ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
+        return errorInfo;
     }
     
     private List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers() {
@@ -86,17 +138,6 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
     	List<DeliveryCertificateSerialNumber> list = getFormSession().getDeliveryCertificateItemSerialNumbers(certificateItemId);
     	return list;
     }
-    
-    @Override
-	@Action
-	@SuppressWarnings("unchecked")
-    public void specialAction(){
-		this.serialNumbers = new ArrayList<DeliveryCertificateSerialNumber>(getDataTable().getData());
-    	getFormSession().saveDeliveryCertificateItemSerialNumbers(serialNumbers);
-    	
-    	setDialogResponse(DialogResponse.SAVE);
-    	close();
-	}
         
     @Override
     public boolean canCreate() {
