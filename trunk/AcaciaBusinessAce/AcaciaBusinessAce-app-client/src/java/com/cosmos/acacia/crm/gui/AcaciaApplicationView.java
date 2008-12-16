@@ -70,6 +70,7 @@ import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.crm.gui.users.UsersListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
+import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.settings.GeneralSettings;
@@ -312,6 +313,13 @@ public class AcaciaApplicationView extends FrameView {
     public void warehouseListAction(){
         WarehouseListPanel listPanel = new WarehouseListPanel(getParentId());
         listPanel.showFrame();
+    }
+    
+    @Action
+    public void myWarehouseAction(){
+        Warehouse warehouse = warehouseBean.getWarehouseForAddress(getSession().getBranch());
+        WarehouseProductListPanel warehouseProductList = new WarehouseProductListPanel(getParentId(), warehouse);
+        warehouseProductList.showFrame();
     }
 
     @Action
@@ -867,6 +875,13 @@ public class AcaciaApplicationView extends FrameView {
         warehousesMenu.setName("warehousesMenu"); // NOI18N
         warehousesMenu.setText(resourceMap.getString("warehousesMenu.text")); // NOI18N
         warehousesMenu.setMnemonic('W');
+        
+        JBMenuItem myWarehouseItem = new JBMenuItem();
+        myWarehouseItem.setAction(actionMap.get("myWarehouseAction"));
+        String myWarehouseName = getSession().getBranch().getAddressName();
+        myWarehouseItem.setText(myWarehouseName);
+        warehousesMenu.add(myWarehouseItem);
+        warehousesMenu.addSeparator();
 
         warehousesItem.setAction(actionMap.get("warehouseListAction")); // NOI18N
         warehousesMenu.add(warehousesItem);

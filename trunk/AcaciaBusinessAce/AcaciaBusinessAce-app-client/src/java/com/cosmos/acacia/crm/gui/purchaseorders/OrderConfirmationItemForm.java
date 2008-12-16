@@ -349,7 +349,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             public void itemStateChanged(ItemEvent e) {
                 onSelectProduct();
             }
-        });
+        }, true);
         
         //measure unit 
         measureUnitField.bind(bindGroup, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));

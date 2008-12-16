@@ -31,6 +31,7 @@ import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.Currency;
+import com.cosmos.acacia.crm.enums.DeliveryStatus;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
@@ -132,6 +133,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         order.setDocumentDeliveryMethod(DocumentDeliveryMethod.Courier.getDbResource());
         order.setStatus(PurchaseOrderStatus.Open.getDbResource());
         order.setParentId(parentDataObjectId);
+        order.setDeliveryStatus(DeliveryStatus.NotDelivered.getDbResource());
         
         return order;
     }

@@ -257,12 +257,12 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         documentField.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if ( ItemEvent.SELECTED == e.getStateChange() && e.getItem() instanceof DataObjectBean )
+                if ( e.getItem() instanceof DataObjectBean )
                     onTemplateDocumentSelected((DataObjectBean)e.getItem());
-                else if ( ItemEvent.DESELECTED==e.getStateChange() )
+                else
                     onTemplateDocumentSelected(null);
             }
-        });
+        }, true);
         
         copyItemsListPanel = new CopyItemsListPanel(null);
         copyItemsListPanel.setVisibleButtons(0);

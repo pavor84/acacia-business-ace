@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.ProductColor;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -45,6 +46,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private ProductValidatorLocal productValidator;
     @EJB
     private ProductCategoryValidatorLocal productCategoryValidator;
+    @EJB
+    private EnumResourceLocal enumResourceLocal;
 
     @SuppressWarnings("unchecked")
     public List<SimpleProduct> getProducts(BigInteger parentId)
@@ -79,29 +82,28 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         q.setParameter("deleted", false);
         return new ArrayList<ProductCategory>(q.getResultList());
     }
+    
+    public EntityProperties getProductListingEntityProperties()
+    {
+        EntityProperties entityProperties = esm.getEntityProperties(SimpleProduct.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        entityProperties.removePropertyDetails("purchasePrice");
+        entityProperties.removePropertyDetails("salePrice");
+        entityProperties.removePropertyDetails("listPrice");
+        entityProperties.removePropertyDetails("discountPercent");
+        entityProperties.removePropertyDetails("dutyPercent");
+        entityProperties.removePropertyDetails("transportPrice");
+        entityProperties.removePropertyDetails("costPrice");
+        entityProperties.removePropertyDetails("profitValue");
+        
+        return entityProperties;
+    }
 
     public EntityProperties getProductEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(SimpleProduct.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        // TODO: Check which columns to be shown, visible, editable, etc.
-        // depending of User Roles, Current Object, etc.
-        /*for(Object key : entityProperties.getKeys().toArray())
-        {
-            if(!("productName".equals(key) || "productId".equals(key)))
-            {
-                PropertyDetails property = entityProperties.getPropertyDetails((String)key);
-                boolean isBoolean = boolean.class.getName().equals(property.getPropertyClassName());
-                if(!isBoolean)
-                    isBoolean = Boolean.class.getName().equals(property.getPropertyClassName());
-                isBoolean = false;
-                if(isBoolean || counter++ >= stop)
-                    entityProperties.removePropertyDetails((String)key);
-                else
-                    System.out.println("Property Name: " + key);
-            }
-        }*/
-
+        
         return entityProperties;
     }
 
@@ -109,9 +111,15 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         SimpleProduct product = new SimpleProduct();
         product.setParentId(parentId);
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
-        product.setPurchasePrice(BigDecimal.valueOf(100.00));
-        product.setSalePrice(BigDecimal.valueOf(100.00));
-        product.setListPrice(BigDecimal.valueOf(100.00));
+        product.setPurchasePrice(BigDecimal.valueOf(0));
+        product.setSalePrice(BigDecimal.valueOf(0));
+        product.setListPrice(BigDecimal.valueOf(0));
+        product.setCurrency(Currency.Leva.getDbResource());
+        product.setDiscountPercent(new BigDecimal("0"));
+        product.setTransportPrice(new BigDecimal("0"));
+        product.setDutyPercent(new BigDecimal("0"));
+        product.setProfitValue(new BigDecimal("0"));
+        product.setCostPrice(new BigDecimal("0"));
         
         return product;
     }

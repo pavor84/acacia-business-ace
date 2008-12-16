@@ -124,6 +124,10 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource status;
+    
+    @Property(title="Delivery Status", readOnly=true)
+    @ManyToOne
+    private DbResource deliveryStatus;
 
     @Property(title="Delivery Method", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
@@ -432,6 +436,14 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     public void setSupplierOrderNumber(BigInteger supplierOrderNumber) {
         this.supplierOrderNumber = supplierOrderNumber;
+    }
+
+    public DbResource getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(DbResource deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
 }

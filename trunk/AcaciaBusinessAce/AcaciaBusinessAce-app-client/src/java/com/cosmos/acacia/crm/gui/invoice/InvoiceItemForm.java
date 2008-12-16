@@ -568,9 +568,9 @@ public class InvoiceItemForm extends BaseEntityPanel {
         
         calculateShipWeek(true, true, false);
         updateUnitLabel();
-        updateExtendedPrice(true);
         product = entity.getProduct();
         onSelectProduct();
+        updateExtendedPrice(true);
     }
     
     protected void onComplexProductDetails() {
@@ -601,7 +601,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
             public void itemStateChanged(ItemEvent e) {
                 updateExtendedPrice(measureUnitField.getSelectedItem() instanceof DbResource);
             }
-        });
+        }, true);
     }
 
     @SuppressWarnings("unchecked")

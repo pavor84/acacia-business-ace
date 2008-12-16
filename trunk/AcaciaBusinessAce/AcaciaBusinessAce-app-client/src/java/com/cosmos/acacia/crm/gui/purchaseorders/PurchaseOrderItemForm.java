@@ -397,4 +397,10 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
             productListRemote = getBean(ProductsListRemote.class);
         return productListRemote;
     }
+    
+    @Override
+    public void setReadonly() {
+        super.setReadonly();
+        productField.setEditable(false);
+    }
 }

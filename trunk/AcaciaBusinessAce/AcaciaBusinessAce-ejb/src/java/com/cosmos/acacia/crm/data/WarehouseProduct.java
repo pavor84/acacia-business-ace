@@ -148,6 +148,10 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "delivery_time")
     private Integer deliveryTime;
+    
+    @Property(title="Ordered Delivery Time", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    private Integer orderedDeliveryTime;
 
     @Column(name = "notes")
     @Property(title="Notes")
@@ -395,5 +399,13 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     @Override
     public void setId(BigInteger id) {
         this.id = id;
+    }
+
+    public Integer getOrderedDeliveryTime() {
+        return orderedDeliveryTime;
+    }
+
+    public void setOrderedDeliveryTime(Integer orderedDeliveryTime) {
+        this.orderedDeliveryTime = orderedDeliveryTime;
     }
 }

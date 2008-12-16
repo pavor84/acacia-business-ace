@@ -108,7 +108,7 @@ public class JBFormattedTextField
             return null;
         }
 
-        bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
@@ -242,7 +242,13 @@ public class JBFormattedTextField
     
     @Override
     public void setValue(Object value) {
-        super.setValue(value);
+        //forward to setText, because the converter should be engaged
+        if ( value==null )
+            setText("");
+        else if ( getFormat()!=null )
+            setText(getFormat().format(value));
+        else
+            setText(value.toString());
     }
     
     @Override
@@ -318,5 +324,38 @@ public class JBFormattedTextField
     public void setFormat(Format format) {
         this.format = format;
         setFormatterFactory(getDefaultFormatterFactory(format));
+    }
+    
+    @Override
+    public Object getValue() {
+//        Object value = null;
+//        if ( getFormat()!=null ){
+//            try {
+//                value = getFormat().parseObject(getText());
+//            } catch (ParseException e) {
+//            }
+//        }else{
+//            value = super.getValue();
+//        }
+//        
+//        return value;
+        Object value = null;
+        if ( getFormat()!=null ){
+            try {
+                value = getFormat().parseObject(getText());
+            } catch (ParseException e) {
+            }
+        }else{
+            
+            value = super.getValue(); 
+            //if the text is not null, but the value is, try to have the value from it
+            if ( value==null && getText()!=null && !getText().trim().equals("") && getFormat()!=null ){
+                try {
+                    value = getFormat().parseObject(getText());
+                } catch (ParseException e) {
+                }
+            }
+        }
+        return value;
     }
 }

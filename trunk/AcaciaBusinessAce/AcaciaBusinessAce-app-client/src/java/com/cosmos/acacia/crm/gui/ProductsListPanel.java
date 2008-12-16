@@ -17,10 +17,13 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -33,6 +36,10 @@ import com.cosmos.swingb.DialogResponse;
 public class ProductsListPanel
     extends AbstractTablePanel
 {
+    
+    private RightsManagerRemote rightsManager =
+        AcaciaPanel.getBean(RightsManagerRemote.class, false);
+    
     @EJB
     private ProductsListRemote formSession;
 
@@ -51,7 +58,7 @@ public class ProductsListPanel
     protected void initData() {
         super.initData();
 
-        entityProps = getFormSession().getProductEntityProperties();
+        entityProps = getFormSession().getProductListingEntityProperties();
 
         List<PropertyDetails> propertyDetails =
             new ArrayList<PropertyDetails>(entityProps.getValues());
@@ -133,17 +140,22 @@ public class ProductsListPanel
 
     public boolean canCreate()
     {
-        return true;
+        return rightsManager.isAllowed(SpecialPermission.Product);
     }
 
     public boolean canModify(Object rowObject)
     {
-        return true;
+        return rightsManager.isAllowed(SpecialPermission.Product);
     }
 
     public boolean canDelete(Object rowObject)
     {
-        return true;
+        return rightsManager.isAllowed(SpecialPermission.Product);
+    }
+    
+    @Override
+    public boolean canView(Object rowObject) {
+        return rightsManager.isAllowed(SpecialPermission.Product);
     }
 
 

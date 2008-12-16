@@ -264,7 +264,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
             public void itemStateChanged(ItemEvent e) {
                 onOrderConfirmationChanged((OrderConfirmation)e.getItem());
             }
-        });
+        }, true);
 
         closeButton.addActionListener(new ActionListener() {
             @Override

@@ -15,8 +15,6 @@ public enum PurchaseOrderStatus implements DatabaseResource {
     Sent("Sent", "The purchase order is sent, no changes are permitted."),
     Confirmed("Confirmed", "The purchase order is totally confirmed by the supplier."),
     PartlyConfirmed("Partly Confirmed", "The purchase order is partly confirmed by the supplier."),
-    PartlyDelivered("Partly Delivered", "The purchase order is partly delivered."),
-    Delivered("Delivered", "The purchase order is delivered."),
     Rejected("Rejected", "The purchase order is rejected by the supplier."),
     Canceled("Canceled", "The purchase order is cancelled by it's author.")
     ;
