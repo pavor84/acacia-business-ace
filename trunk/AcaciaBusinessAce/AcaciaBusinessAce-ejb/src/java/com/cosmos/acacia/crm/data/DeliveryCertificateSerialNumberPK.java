@@ -70,6 +70,7 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
         if ((this.serialNumber == null && other.serialNumber != null) || (this.serialNumber != null && !this.serialNumber.equals(other.serialNumber))) {
             return false;
         }
+        
         return true;
     }
 

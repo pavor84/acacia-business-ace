@@ -7,8 +7,8 @@ package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -19,13 +19,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
+import org.apache.commons.collections.CollectionUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.bl.invoice.InvoiceListLocal;
+import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.DeliveryCertificate;
@@ -35,10 +35,17 @@ import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
 import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumberPK;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.Warehouse;
+import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.predicates.InvoiceItemShippedPredicate;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
+import com.cosmos.acacia.crm.enums.DeliveryStatus;
+import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateItemValidatorLocal;
+import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -58,6 +65,18 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     
     @EJB
     private AcaciaSessionLocal session;
+    
+    @EJB
+    private InvoiceListLocal invoicesBean;
+    
+    @EJB
+    private DeliveryCertificateValidatorLocal beanValidator;
+    
+    @EJB
+    private DeliveryCertificateItemValidatorLocal deliveryCertificateItemValidator;
+    
+    @EJB
+    private WarehouseListLocal warehouseListBean;
     
     public EntityProperties getDeliveryCertificateEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificate.class);
@@ -100,6 +119,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
      * @return
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<DeliveryCertificate> getDeliveryCertificates(BigInteger parentId) {
         Query q = em.createNamedQuery("DeliveryCertificate.findByWarehouse");
         q.setParameter("parentId", parentId);
@@ -122,6 +142,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<DeliveryCertificateItem> getDeliveryCertificateItems(BigInteger parentId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateItem.findForCertificate");
         q1.setParameter("parentId", parentId);
@@ -138,6 +159,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(BigInteger parentId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateSerialNumber.findForCertificateItem");
         q1.setParameter("parentId", parentId);
@@ -146,19 +168,23 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         List<DeliveryCertificateSerialNumber> serialNumbersList = (List<DeliveryCertificateSerialNumber>)q1.getResultList(); 
         int quantity = item.getQuantity().toBigInteger().intValue();
     	
+        DeliveryCertificateSerialNumberPK serialNumberPK;
+        
     	if(quantity > serialNumbersList.size()){
-			//construct primary key
-			DeliveryCertificateSerialNumberPK serialNumberPK = new DeliveryCertificateSerialNumberPK();
-			serialNumberPK.setCertificateItemId(parentId);
-			
-			//construct serial number
-			DeliveryCertificateSerialNumber serialNumber = new DeliveryCertificateSerialNumber();
-			serialNumber.setDeliveryCertificateSerialNumberPK(serialNumberPK);
-			serialNumber.setDeliveryCertificateItem(item);
-			serialNumber.setSerialNumber("Enter Serial Number");
-			serialNumbersList.add(serialNumber);
-		
-    	}
+    		int savedSerialNumersCount = serialNumbersList.size();
+    		for(int i = 0; i < quantity - savedSerialNumersCount; i++){
+	    		//construct primary key
+				serialNumberPK = new DeliveryCertificateSerialNumberPK();
+				serialNumberPK.setCertificateItemId(parentId);
+				
+				//construct serial number
+				DeliveryCertificateSerialNumber serialNumber = new DeliveryCertificateSerialNumber();
+				serialNumber.setDeliveryCertificateSerialNumberPK(serialNumberPK);
+				serialNumber.setDeliveryCertificateItem(item);
+				serialNumber.setSerialNumber("");
+				serialNumbersList.add(serialNumber);
+    		}
+		}
         
     	return serialNumbersList;
     }
@@ -227,15 +253,82 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         return deliveryCertificate; 
     }
     
+    @Override
+    public DeliveryCertificateItem saveDeliveryCertificateItem(DeliveryCertificateItem item) {
+    	
+    	deliveryCertificateItemValidator.validate(item);
+    	esm.persist(em, item);
+        return item; 
+    }
+    
+    @SuppressWarnings("unchecked")
     public DeliveryCertificate deliverDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items) {
-
+    	
+    	beanValidator.validate(deliveryCertificate, assignment, items);
+    	
+    	//set properties specific only for delivered protocols
     	Date now = new Date();
     	deliveryCertificate.setStatus(DeliveryCertificateStatus.Delivered.getDbResource());
     	deliveryCertificate.setDeliveryCertificateDate(now);
     	deliveryCertificate.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
-    	this.saveDeliveryCertificate(deliveryCertificate, assignment, items);
-        
-        return deliveryCertificate; 
+    	
+    	BigInteger assignmentId = assignment.getDocumentId(); 
+    	Invoice invoice = invoicesBean.getInvoiceById(assignmentId);
+    	List<InvoiceItem> invoiceItems = invoicesBean.getInvoiceItems(invoice.getInvoiceId());
+    	
+    	//we have ensure enough quantities with validation
+		for(DeliveryCertificateItem dcItem : items){
+			InvoiceItem iItem = invoicesBean.getInvoiceItemById(dcItem.getReferenceItemId());
+			this.updateQuantities(dcItem.getProduct(), dcItem.getQuantity(), iItem, invoice);
+		}
+		
+		//check if we have shipped everything
+		Collection<InvoiceItem> shippedItems = CollectionUtils.select(invoiceItems, new InvoiceItemShippedPredicate());
+		if(shippedItems.size() == invoiceItems.size()){
+			log.info("All qunatities are delivered for the invoice!");
+			invoice.setDeliveryStatus(DeliveryStatus.Delivered.getDbResource());
+		}else{
+			log.info("Not all qunatities are delivered for the invoice!");
+			invoice.setDeliveryStatus(DeliveryStatus.PartlyDelivered.getDbResource());
+		}
+		
+		//we might have been updated the delivery status
+		invoicesBean.saveInvoice(invoice);
+		
+		//persist the certificate
+		deliveryCertificate = saveDeliveryCertificate(deliveryCertificate, assignment, items);
+		
+    	return deliveryCertificate; 
+    }
+  
+    /** Recursive
+     * This method updates all necessary quantities for a Product to be shipped  
+     */
+    private void updateQuantities(Product product, BigDecimal quantityToDeliver, InvoiceItem iItem, Invoice invoice){
+    	
+    	//updating the InvoiceItem 
+    	BigDecimal shipedQuantity = (iItem.getShippedQuantity() != null) ? iItem.getShippedQuantity() : BigDecimal.ZERO;
+    	iItem.setShippedQuantity(shipedQuantity.add(quantityToDeliver));
+		invoicesBean.saveInvoiceItem(iItem);
+		
+    	if(product instanceof SimpleProduct){
+	    	WarehouseProduct wp = invoicesBean.getWarehouseProduct(invoice.getBranch(), (SimpleProduct)product);
+			
+			//decrease warehouse quantities
+			wp.setSoldQuantity(wp.getSoldQuantity().subtract(quantityToDeliver));
+			wp.setQuantityInStock(wp.getQuantityInStock().subtract(quantityToDeliver));
+			warehouseListBean.saveWarehouseProduct(wp);
+		}
+    	else{
+    		List<ComplexProductItem> items = ((ComplexProduct)product).getComplexProductItems();
+            if(items != null && items.size() > 0)
+            {
+                for(ComplexProductItem item : items)
+                {
+                	updateQuantities(item.getProduct(), quantityToDeliver, iItem, invoice);
+                }
+            }
+    	}
     }
     
     @Override
@@ -247,6 +340,10 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     	
     	List<DeliveryCertificateItem> items = getDeliveryCertificateItems(deliveryCertificate.getDeliveryCertificateId());
     	for(DeliveryCertificateItem item : items){
+    		List<DeliveryCertificateSerialNumber> serialNumbers = getDeliveryCertificateItemSerialNumbers(item.getCertificateItemId());
+    		for(DeliveryCertificateSerialNumber sn : serialNumbers){
+    			esm.remove(em, sn);
+    		}
     		esm.remove(em, item);
     	}
     	
@@ -288,13 +385,28 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     	if(source instanceof InvoiceItem){
     		InvoiceItem invoiceItem = ((InvoiceItem)source);
     		dci.setProduct(invoiceItem.getProduct());
-    		dci.setQuantity(invoiceItem.getOrderedQuantity());
+    		BigDecimal shippedQuantity = invoiceItem.getShippedQuantity() != null ? invoiceItem.getShippedQuantity() : BigDecimal.ZERO;
+    		dci.setQuantity(invoiceItem.getOrderedQuantity().subtract(shippedQuantity));
     		dci.setMeasureUnit(invoiceItem.getMeasureUnit());
+    		dci.setReferenceItemId(invoiceItem.getId());
     	}else{
     		throw new IllegalArgumentException("Certificate Item cannot be created from " + source.getDataObject().getDataObjectType());
     	}
     	
     	return dci;
+    }
+    
+    public void saveDeliveryCertificateItemSerialNumbers(List<DeliveryCertificateSerialNumber> serialNumbers){
+    	for(DeliveryCertificateSerialNumber sn : serialNumbers){
+    		//check if we have created empty Serial Number to display the table with needed amount of serial number.
+    		if("".equals(sn.getSerialNumber()) == false){
+    			esm.persist(em, sn);
+    		}
+    	}
+    }
+    
+    public int deleteDeliveryCertificateItemSerialNumber(DeliveryCertificateSerialNumber serialNumber){
+		return esm.remove(em, serialNumber);
     }
     
     // Add business logic below. (Right-click in editor and choose

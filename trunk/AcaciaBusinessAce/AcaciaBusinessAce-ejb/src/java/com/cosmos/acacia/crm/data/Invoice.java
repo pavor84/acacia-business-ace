@@ -122,7 +122,12 @@ import com.cosmos.acacia.annotation.ValidationType;
             (
                 name = "Invoice.findByParentDataObjectIsNullAndDeleted",
                 query = "select i from Invoice i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted"
-            )      
+            ),
+        @NamedQuery
+        (
+            name = "Invoice.findById",
+            query = "select i from Invoice i where i.dataObject.dataObjectId = :invoiceId"
+        )  
     })
 public class Invoice extends DataObjectBean implements Serializable {
 
