@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.security;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 /**
  * Access Level for a specific priviledge and record type determines which
  * records you can perform that action upon based upon the location of each
@@ -101,4 +104,6 @@ public enum AccessLevel
     System,
     ;
 
+    public static final Set<AccessLevel> PropertyLevels =
+            EnumSet.of(Client, User, BusinessUnit, Organization);
 }
