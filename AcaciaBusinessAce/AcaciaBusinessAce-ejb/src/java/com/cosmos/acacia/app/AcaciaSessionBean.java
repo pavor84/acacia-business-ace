@@ -23,9 +23,9 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
-import com.cosmos.acacia.crm.data.properties.DbPropertySublevel;
+import com.cosmos.acacia.security.AccessLevel;
+import com.cosmos.acacia.util.AcaciaPropertiesImpl;
 import java.util.concurrent.locks.ReentrantLock;
-import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 
 /**
@@ -178,72 +178,35 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         SessionRegistry.getSession().setValue(key, value);
     }
 
-    private int getSublevelId(int levelId, String sublevelName)
-    {
-        Query q = em.createNamedQuery("DbPropertySublevel.findByLevelIdAndSublevelName");
-        q.setParameter("levelId", levelId);
-        q.setParameter("sublevelName", sublevelName);
-        try
-        {
-            return (Integer)q.getSingleResult();
-        }
-        catch(NoResultException ex) {}
-
-        sublevelLock.lock();
-        try
-        {
-            int sublevelId;
-            q = em.createNamedQuery("DbPropertySublevel.maxSublevelIdByLevelId");
-            q.setParameter("levelId", levelId);
-            try
-            {
-                sublevelId = levelId + (Integer)q.getSingleResult();
-            }
-            catch(NoResultException ex)
-            {
-                sublevelId = levelId;
-            }
-
-            DbPropertySublevel propertySublevel = new DbPropertySublevel(levelId, sublevelName);
-            propertySublevel.setSublevelId(++sublevelId);
-            em.persist(propertySublevel);
-            return sublevelId;
-        }
-        finally
-        {
-            sublevelLock.unlock();
-        }
-    }
-
     private BigInteger getRelatedObjectId(
             BusinessPartner client,
-            AcaciaProperties.Level level)
+            AccessLevel level)
     {
         switch(level)
         {
             case System:
-            case SystemAdministrator:
+            case ParentChildOrganization:
                 // ToDo: Put some real object because of FK constraint
                 return BigInteger.ZERO;
 
             case Organization:
-            case OrganizationAdministrator:
                 return getOrganization().getId();
 
-            case Branch:
-            case BranchAdministrator:
+            case ParentChildBusinessUnit:
+            case BusinessUnit:
                 return getBranch().getId();
 
             case User:
                 return getUser().getUserId();
 
             case Client:
+            case ClientContact:
                 if(client == null)
                     return null;
-
                 return client.getPartnerId();
 
-            case Current:
+            case Session:
+            case None:
                 return null;
 
             default:
@@ -252,78 +215,62 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     @Override
-    public AcaciaProperties getProperties(
-            BusinessPartner client,
-            AcaciaProperties.Level baseLevel,
-            String sublevelName)
-    {
-        Integer sublevelId;
-        if(baseLevel != null && sublevelName != null && (sublevelName = sublevelName.trim()).length() > 0)
-        {
-            sublevelId = getSublevelId(baseLevel.getPriority(), sublevelName);
-        }
-        else
-        {
-            return null;
-        }
-
-        BigInteger relatedObjectId;
-        Query q = em.createNamedQuery("DbProperty.findByLevelIdAndRelatedObjectId");
-
-        if((relatedObjectId = getRelatedObjectId(client, baseLevel)) == null)
-            return null;
-
-        q.setParameter("levelId", sublevelId);
-        q.setParameter("relatedObjectId", relatedObjectId);
-        List<DbProperty> dbProperties = q.getResultList();
-
-        return new AcaciaProperties(sublevelId, sublevelName,
-                relatedObjectId, dbProperties);
-    }
-
-    @Override
     public AcaciaProperties getProperties(BusinessPartner client)
     {
-        AcaciaProperties properties =
-                (AcaciaProperties)get(SessionContext.ACACIA_PROPERTIES);
+        AcaciaPropertiesImpl properties =
+                (AcaciaPropertiesImpl)get(SessionContext.ACACIA_PROPERTIES);
         if(properties == null)
         {
-            properties = new AcaciaProperties();
+            properties = new AcaciaPropertiesImpl(AccessLevel.Session, BigInteger.ZERO);
             put(SessionContext.ACACIA_PROPERTIES, properties);
         }
-        else
-        {
-            properties.removeAllLevels();
-        }
 
-        int levelId;
-        BigInteger relatedObjectId;
-        Query q = em.createNamedQuery("DbProperty.findByLevelIdAndRelatedObjectId");
-
-        for(AcaciaProperties.Level level : AcaciaProperties.Level.values())
+        AcaciaPropertiesImpl mainProperties = properties;
+        Query q = em.createNamedQuery("DbProperty.findByLevelAndRelatedObjectId");
+        for(AccessLevel accessLevel : AccessLevel.PropertyLevels)
         {
-            levelId = level.getPriority();
-            if((relatedObjectId = getRelatedObjectId(client, level)) == null)
+            BigInteger relatedObjectId = getRelatedObjectId(client, accessLevel);
+            if(relatedObjectId == null)
                 continue;
-
-            q.setParameter("levelId", levelId);
+            q.setParameter("accessLevel", accessLevel.name());
             q.setParameter("relatedObjectId", relatedObjectId);
             List<DbProperty> dbProperties = q.getResultList();
-            properties.putProperties(level, relatedObjectId, dbProperties);
+            AcaciaPropertiesImpl props = new AcaciaPropertiesImpl(accessLevel, relatedObjectId, dbProperties);
+            mainProperties.setParentProperties(props);
+            mainProperties = props;
         }
 
         return properties;
     }
 
     @Override
-    public AcaciaProperties getProperties()
-    {
-        return getProperties(null);
-    }
-
-    @Override
     public void saveProperties(AcaciaProperties properties)
     {
-        properties.save(em);
+        AcaciaPropertiesImpl props = (AcaciaPropertiesImpl)properties;
+        while(props != null)
+        {
+            if(AccessLevel.PropertyLevels.contains(props.getAccessLevel()) && props.isChanged())
+            {
+                AccessLevel accessLevel = props.getAccessLevel();
+                BigInteger relatedObjectId = props.getRelatedObjectId();
+                Query q = em.createNamedQuery("DbProperty.removeByLevelAndRelatedObjectIdAndPropertyKeys");
+                q.setParameter("accessLevel", accessLevel.name());
+                q.setParameter("relatedObjectId", relatedObjectId);
+                q.setParameter("propertyKeys", props.getDeletedItems());
+                q.executeUpdate();
+
+                DbProperty property;
+                for(String key : props.getNewItems())
+                {
+                    property = new DbProperty(accessLevel.name(), relatedObjectId, key);
+                    property.setPropertyValue(props.getProperty(key));
+                    em.persist(property);
+                }
+            }
+            props = (AcaciaPropertiesImpl)props.getParentProperties();
+        }
+
+        ((AcaciaPropertiesImpl)properties).setParentProperties(null);
+        put(SessionContext.ACACIA_PROPERTIES, properties);
     }
 }

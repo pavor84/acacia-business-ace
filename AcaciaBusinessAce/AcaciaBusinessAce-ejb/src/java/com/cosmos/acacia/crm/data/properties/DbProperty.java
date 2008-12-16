@@ -29,19 +29,19 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @NamedQueries(
     {
         @NamedQuery(
-            name = "DbProperty.findByLevelIdAndRelatedObjectId",
+            name = "DbProperty.findByLevelAndRelatedObjectId",
             query = "SELECT d FROM DbProperty d" +
                 " WHERE" +
-                " d.dbPropertyPK.levelId = :levelId" +
+                " d.dbPropertyPK.accessLevel = :accessLevel" +
                 " AND" +
                 " d.dbPropertyPK.relatedObjectId = :relatedObjectId"/*,
             hints=@QueryHint(name="org.hibernate.cacheable", value="true")*/
             ),
         @NamedQuery(
-            name = "DbProperty.findByLevelIdAndRelatedObjectIdAndPropertyKey",
+            name = "DbProperty.findByLevelAndRelatedObjectIdAndPropertyKey",
             query = "SELECT d FROM DbProperty d" +
                 " WHERE" +
-                " d.dbPropertyPK.levelId = :levelId" +
+                " d.dbPropertyPK.accessLevel = :accessLevel" +
                 " AND" +
                 " d.dbPropertyPK.relatedObjectId = :relatedObjectId" +
                 " AND" +
@@ -49,10 +49,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
             hints=@QueryHint(name="org.hibernate.cacheable", value="true")*/
             ),
         @NamedQuery(
-            name = "DbProperty.removeByLevelIdAndRelatedObjectIdAndPropertyKeys",
+            name = "DbProperty.removeByLevelAndRelatedObjectIdAndPropertyKeys",
             query = "DELETE FROM DbProperty d" +
                 " WHERE" +
-                " d.dbPropertyPK.levelId = :levelId" +
+                " d.dbPropertyPK.accessLevel = :accessLevel" +
                 " AND" +
                 " d.dbPropertyPK.relatedObjectId = :relatedObjectId" +
                 " AND" +
@@ -88,9 +88,9 @@ public class DbProperty
         this.dbPropertyPK = dbPropertyPK;
     }
 
-    public DbProperty(int levelId, BigInteger relatedObjectId, String propertyKey)
+    public DbProperty(String accessLevel, BigInteger relatedObjectId, String propertyKey)
     {
-        this.dbPropertyPK = new DbPropertyPK(levelId, relatedObjectId, propertyKey);
+        this.dbPropertyPK = new DbPropertyPK(accessLevel, relatedObjectId, propertyKey);
     }
 
     public DbPropertyPK getDbPropertyPK()

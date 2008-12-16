@@ -22,7 +22,7 @@ public class AssemblingParameter
 
     @Property(
         title="Message",
-        customDisplay="${assemblingMessage.messageCode}: ${assemblingMessage.messageText}?",
+        customDisplay="${assemblingMessage.messageCode}",
         editable=false, readOnly=true,
         propertyValidator=@PropertyValidator(required=true))
     private AssemblingMessage assemblingMessage;
@@ -33,8 +33,11 @@ public class AssemblingParameter
     @Property(title="Data Type", editable=false, readOnly=true, visible=false, hidden=true)
     private DataType dataType;
 
-    @Property(title="Value Source", editable=false, readOnly=true)
-    private Object valuesSource;
+    @Property(
+        title="Value Source",
+        customDisplay="${valuesSource.accessLevel}",
+        editable=false, readOnly=true)
+    private AssemblingProperty valuesSource;
 
 
     public AssemblingMessage getAssemblingMessage()
@@ -67,12 +70,12 @@ public class AssemblingParameter
         this.value = value;
     }
 
-    public Object getValuesSource()
+    public AssemblingProperty getValuesSource()
     {
         return valuesSource;
     }
 
-    public void setValuesSource(Object valuesSource)
+    public void setValuesSource(AssemblingProperty valuesSource)
     {
         this.valuesSource = valuesSource;
     }

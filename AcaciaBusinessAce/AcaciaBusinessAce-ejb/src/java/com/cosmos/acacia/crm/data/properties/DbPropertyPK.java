@@ -20,8 +20,8 @@ public class DbPropertyPK
     implements Serializable
 {
     @Basic(optional = false)
-    @Column(name = "level_id", nullable = false)
-    private int levelId;
+    @Column(name = "access_level", nullable = false)
+    private String accessLevel;
 
     @Basic(optional = false)
     @Column(name = "related_object_id", nullable = false)
@@ -35,21 +35,21 @@ public class DbPropertyPK
     {
     }
 
-    public DbPropertyPK(int levelId, BigInteger relatedObjectId, String propertyKey)
+    public DbPropertyPK(String accessLevel, BigInteger relatedObjectId, String propertyKey)
     {
-        this.levelId = levelId;
+        this.accessLevel = accessLevel;
         this.relatedObjectId = relatedObjectId;
         this.propertyKey = propertyKey;
     }
 
-    public int getLevelId()
+    public String getAccessLevel()
     {
-        return levelId;
+        return accessLevel;
     }
 
-    public void setLevelId(int levelId)
+    public void setAccessLevel(String accessLevel)
     {
-        this.levelId = levelId;
+        this.accessLevel = accessLevel;
     }
 
     public BigInteger getRelatedObjectId()
@@ -76,7 +76,7 @@ public class DbPropertyPK
     public int hashCode()
     {
         int hash = 0;
-        hash += (int) levelId;
+        hash += (accessLevel != null ? accessLevel.hashCode() : 0);
         hash += (relatedObjectId != null ? relatedObjectId.hashCode() : 0);
         hash += (propertyKey != null ? propertyKey.hashCode() : 0);
         return hash;
@@ -91,7 +91,8 @@ public class DbPropertyPK
         }
 
         DbPropertyPK other = (DbPropertyPK) object;
-        if(this.levelId != other.levelId)
+        if(this.accessLevel == null || other.accessLevel == null ||
+           !this.accessLevel.equals(other.accessLevel))
         {
             return false;
         }
@@ -114,7 +115,7 @@ public class DbPropertyPK
     @Override
     public String toString()
     {
-        return "com.cosmos.acacia.crm.data.properties.DbPropertyPK[levelId=" + levelId + ", relatedObjectId=" + relatedObjectId + ", propertyKey=" + propertyKey + "]";
+        return "com.cosmos.acacia.crm.data.properties.DbPropertyPK[accessLevel=" + accessLevel + ", relatedObjectId=" + relatedObjectId + ", propertyKey=" + propertyKey + "]";
     }
 
 }
