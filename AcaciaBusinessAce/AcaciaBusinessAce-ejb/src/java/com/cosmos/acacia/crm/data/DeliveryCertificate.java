@@ -43,6 +43,11 @@ import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
          */
         name = "DeliveryCertificate.findByWarehouse",
         query = "select ds from DeliveryCertificate ds where ds.warehouse.warehouseId=:parentId and ds.dataObject.deleted = false"
+    ),
+    @NamedQuery
+    (
+    	name = "DeliveryCertificate.findByIdAndDeleted",
+    	query = "select ds from DeliveryCertificate ds where ds.deliveryCertificateId=:deliveryCertificateId and ds.dataObject.deleted = :deleted"
     )
 })
 public class DeliveryCertificate extends DataObjectBean implements Serializable {
