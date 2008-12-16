@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PassportsListLocal;
 import com.cosmos.acacia.crm.data.Address;
@@ -28,9 +27,6 @@ public class DocumentUtil implements DocumentUtilLocal, DocumentUtilRemote {
     private AcaciaSessionLocal session;
 
     @EJB
-    private AddressesListLocal addressSession;
-
-    @EJB
     private PassportsListLocal passportsSession;
 
     public PrintableDocumentHeader createDocumentHeaderExecutorPart(Address branch) {
@@ -50,6 +46,9 @@ public class DocumentUtil implements DocumentUtilLocal, DocumentUtilRemote {
         if (address != null)
             header.setExecutorAddress(address.getPostalAddress());
 
+        if (header.getExecutorAddress() == null)
+            header.setExecutorAddress("");
+
         BankDetail executorBankDetail = getBankDetail(branch);
         if (executorBankDetail == null)
             executorBankDetail = getBankDetail(organization.getRegistrationAddress());
@@ -58,20 +57,22 @@ public class DocumentUtil implements DocumentUtilLocal, DocumentUtilRemote {
             executorBankDetail = getBankDetail(organization.getAdministrationAddress());
 
 
-        header.setExecutorBank(executorBankDetail.getBank().getOrganizationName());
+        if (executorBankDetail != null) {
+            header.setExecutorBank(executorBankDetail.getBank().getOrganizationName());
 
-        //Getting the "bank account"
-        String bankAccountString = executorBankDetail.getIban();
-        if (bankAccountString == null || bankAccountString.length() == 0)
-            bankAccountString = executorBankDetail.getBankAccount();
+            //Getting the "bank account"
+            String bankAccountString = executorBankDetail.getIban();
+            if (bankAccountString == null || bankAccountString.length() == 0)
+                bankAccountString = executorBankDetail.getBankAccount();
 
-        header.setExecutorBankAccount(bankAccountString);
+            header.setExecutorBankAccount(bankAccountString);
 
-        String bankCode = executorBankDetail.getBic();
-        if (bankCode == null || bankCode.length() > 0)
-            bankCode = executorBankDetail.getSwiftCode();
+            String bankCode = executorBankDetail.getBic();
+            if (bankCode == null || bankCode.length() > 0)
+                bankCode = executorBankDetail.getSwiftCode();
 
-        header.setExecutorBankCode(bankCode);
+            header.setExecutorBankCode(bankCode);
+        }
 
         header.setExecutorUniqueIdentifier(organization.getUniqueIdentifierCode());
         header.setExecutorMOL(null); //TODO get the MOL
@@ -111,26 +112,29 @@ public class DocumentUtil implements DocumentUtilLocal, DocumentUtilRemote {
                 header.setRecipientAddress(branch.getPostalAddress());
         }
 
+        if (header.getRecipientAddress() == null)
+            header.setRecipientAddress("");
 
         BankDetail recipientBankDetail = getBankDetail(branch);
         if (recipientBankDetail == null)
             recipientBankDetail = getBankDetail(address);
 
+        if (recipientBankDetail != null) {
+            header.setRecipientBank(recipientBankDetail.getBank().getOrganizationName());
 
-        header.setRecipientBank(recipientBankDetail.getBank().getOrganizationName());
+            //Getting the "bank account"
+            String bankAccountString = recipientBankDetail.getIban();
+            if (bankAccountString == null || bankAccountString.length() == 0)
+                bankAccountString = recipientBankDetail.getBankAccount();
 
-        //Getting the "bank account"
-        String bankAccountString = recipientBankDetail.getIban();
-        if (bankAccountString == null || bankAccountString.length() == 0)
-            bankAccountString = recipientBankDetail.getBankAccount();
+            header.setRecipientBankAccount(bankAccountString);
 
-        header.setRecipientBankAccount(bankAccountString);
+            String bankCode = recipientBankDetail.getBic();
+            if (bankCode == null || bankCode.length() > 0)
+                bankCode = recipientBankDetail.getSwiftCode();
 
-        String bankCode = recipientBankDetail.getBic();
-        if (bankCode == null || bankCode.length() > 0)
-            bankCode = recipientBankDetail.getSwiftCode();
-
-        header.setRecipientBankCode(bankCode);
+            header.setRecipientBankCode(bankCode);
+        }
 
         if (org != null) {
             header.setRecipientUniqueIdentifier(org.getUniqueIdentifierCode());
@@ -157,6 +161,9 @@ public class DocumentUtil implements DocumentUtilLocal, DocumentUtilRemote {
     }
 
     public BankDetail getBankDetail(Address branch) {
+        if (branch == null)
+            return null;
+
         BankDetail bankDetail = null;
         List<BankDetail> bankDetailsList =
                 bankSession.getBankDetails(branch.getAddressId());

@@ -50,6 +50,7 @@
 	</parameter>
 	<parameter name="REPORTS_DIR" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="SUBREPORT1" isForPrompting="false" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="TYPE" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="subreport1" class="java.util.Collection"/>
 	<field name="header.recipientUniqueIdentifier" class="java.lang.String"/>
@@ -90,6 +91,7 @@
 	<field name="entity.shippingAgent.displayName" class="java.lang.String"/>
 	<field name="entity.transportationMethod" class="com.cosmos.acacia.crm.data.DbResource"/>
 	<field name="entity.deliveryType" class="com.cosmos.acacia.crm.data.DbResource"/>
+	<field name="entity.currency" class="com.cosmos.acacia.crm.data.DbResource"/>
 
 		<background>
 			<band height="4"  isSplitAllowed="true" >
@@ -256,7 +258,7 @@
 						style="acaciaReportStyle"
 						x="2"
 						y="277"
-						width="67"
+						width="69"
 						height="14"
 						key="textField-71"
 						positionType="Float"/>
@@ -271,7 +273,7 @@
 						style="acaciaReportStyle"
 						x="71"
 						y="277"
-						width="286"
+						width="140"
 						height="14"
 						key="textField-72"
 						positionType="Float"/>
@@ -526,7 +528,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{header.recipientBankCode}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{header.executorBankCode}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1831,6 +1833,51 @@
 					</textElement>
 				<text><![CDATA[/]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="214"
+						y="277"
+						width="56"
+						height="14"
+						key="textField-120"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{currency} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="270"
+						y="277"
+						width="87"
+						height="14"
+						key="textField-121"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.getEnumText($F{entity.currency})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportBoldStyle"
+						x="389"
+						y="421"
+						width="159"
+						height="22"
+						key="textField-122"
+						positionType="Float"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["***" + $P{TYPE} + "***"]]></textFieldExpression>
+				</textField>
 			</band>
 		</detail>
 		<columnFooter>

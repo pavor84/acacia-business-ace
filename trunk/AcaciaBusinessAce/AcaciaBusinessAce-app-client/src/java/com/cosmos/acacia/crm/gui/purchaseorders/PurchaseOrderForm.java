@@ -13,7 +13,9 @@ import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -24,7 +26,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
+import com.cosmos.acacia.crm.bl.reports.DocumentUtilRemote;
+import com.cosmos.acacia.crm.bl.reports.PrintableDocumentHeader;
 import com.cosmos.acacia.crm.bl.reports.Report;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -36,6 +41,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
+import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -652,16 +658,16 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        
+
         if ( entProps==null )
             entProps = getFormSession().getDetailEntityProperties();
 
         if ( bindGroup==null )
             bindGroup = new BindingGroup();
-        
+
         bindComponents(bindGroup, entProps);
     }
-    
+
     @SuppressWarnings("unchecked")
     /**
      * Binds all components to the specified group and entity properties.
@@ -772,31 +778,31 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         bindGroup.bind();
     }
-    
+
     /**
-     * Binds again all bindings where the source object is the entity. 
+     * Binds again all bindings where the source object is the entity.
      * @param updatedEntity
      */
     @SuppressWarnings("unchecked")
     private void refreshForm(PurchaseOrder updatedEntity) {
         //un-bind the group
-        
+
         bindGroup.unbind();
         for (Binding binding : bindGroup.getBindings()) {
             bindGroup.removeBinding(binding);
         }
         bindGroup = new BindingGroup();
-        
+
         this.entity = updatedEntity;
-        
+
         bindComponents(bindGroup, entProps);
-        
+
         //since we just swap the old entity with a new, updated one, - notify the calling windows,
         //by setting the dialog response
         setDialogResponse(DialogResponse.SAVE);
         setModifiedResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        
+
     }
 
     protected void onInsertFromDocument() {
@@ -886,9 +892,36 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     }
 
     @Override
-    protected Report getReport() {
+    protected Set<Report> getReports() {
+        Set<Report> reports = new HashSet<Report>();
+
         Report report = new Report("purchase_order", itemsTablePanel.getItems());
         report.setAutoSubreport1Class(PurchaseOrderItem.class);
-        return report;
+        report.setLocalizationKey("all.quantities.report");
+        reports.add(report);
+
+        Report report2 = new Report("purchase_order", itemsTablePanel.getItems());
+        report2.setLocalizationKey("ordered.quantity.only.report");
+        report2.setAutoSubreport1Class(PurchaseOrderItem.class);
+        EntityProperties reportEntityProps = BeansBindingHelper
+            .createEntityProperties(PurchaseOrderItem.class, true);
+        reportEntityProps.removePropertyDetails("deliveredQuantity");
+        reportEntityProps.removePropertyDetails("confirmedQuantity");
+        reportEntityProps.getPropertyDetails("orderedQuantity").setReportColumnWidth((byte) 24);
+        report2.setAutoSubreport1Properties(reportEntityProps);
+        reports.add(report2);
+
+        return reports;
+    }
+
+    @Override
+    protected Object getReportHeader() {
+
+        DocumentUtilRemote docUtil = getBean(DocumentUtilRemote.class, false);
+
+        PrintableDocumentHeader header = docUtil.createDocumentHeaderExecutorPart(LocalSession.instance().getBranch());
+        header = docUtil.createDocumentHeaderRecipientPart(entity.getSupplier(), entity.getBranch(), entity.getSupplierContact(), header);
+
+        return header;
     }
 }

@@ -52,6 +52,7 @@ import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
 
@@ -299,12 +300,12 @@ public abstract class AcaciaPanel
     public static AcaciaSessionRemote getAcaciaSession() {
         return LocalSession.instance();
     }
-    
+
     private EnumResourceRemote enumResourceRemote = getBean(EnumResourceRemote.class);
-    
+
     private Map<Class<? extends DatabaseResource>, List<DbResource>> enumResourcesCache =
         new HashMap<Class<? extends DatabaseResource>, List<DbResource>>();
-    
+
     public List<DbResource> getEnumResources(Class<? extends DatabaseResource> enumClass) {
         List<DbResource> result = enumResourcesCache.get(enumClass);
         if ( result==null ){
@@ -392,7 +393,7 @@ public abstract class AcaciaPanel
             Report[] reports = new Report[getReports().size()];
             int i = 0;
             for (Report cReport : getReports()) {
-                reportOptions[i] = cReport.getLocalizationKey();
+                reportOptions[i] = getResourceMap().getString(cReport.getLocalizationKey());
                 reports[i] = cReport;
                 i++;
             }
@@ -464,14 +465,25 @@ public abstract class AcaciaPanel
 
             Map<String, Object> params = new HashMap<String, Object>();
             if (report.getAutoSubreport1Class() != null) {
-                JasperDesign design = reportsUtil.createTableReport(report.getAutoSubreport1Class(), true);
+                EntityProperties entityProps = report.getAutoSubreport1Properties();
+                JasperDesign design = reportsUtil
+                    .createTableReport(report.getAutoSubreport1Class(), entityProps, true);
+
                 JasperReport subreport1 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT1", subreport1);
             }
+
             if (report.getAutoSubreport2Class() != null) {
-                JasperDesign design = reportsUtil.createTableReport(report.getAutoSubreport2Class(), true);
+                EntityProperties entityProps2 = report.getAutoSubreport2Properties();
+                JasperDesign design = reportsUtil
+                    .createTableReport(report.getAutoSubreport2Class(), entityProps2, true);
                 JasperReport subreport2 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT2", subreport2);
+            }
+
+            //Adding additional parameters
+            for (String key : report.getParameters().keySet()) {
+                params.put(key, report.getParameters().get(key));
             }
 
             JRDataSource ds = getJasperDataSource(getEntities(),
@@ -480,7 +492,10 @@ public abstract class AcaciaPanel
             String[] exportTypes = getExportTypes();
             int choice = chooseReportType(exportTypes);
             if (choice != JOptionPane.CLOSED_OPTION) {
-                String targetPath = chooseTargetPath();
+                String targetPath = "";
+                if (choice != ReportsTools.TYPE_PRINTER)
+                    targetPath = chooseTargetPath();
+
                 if (targetPath != null) {
                     String filename = targetPath + ReportsTools.FS + jasperReport.getName();
 
