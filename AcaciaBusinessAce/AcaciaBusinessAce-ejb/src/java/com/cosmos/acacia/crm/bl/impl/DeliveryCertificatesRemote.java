@@ -119,5 +119,5 @@ public interface DeliveryCertificatesRemote {
     
     DeliveryCertificateItem newDeliveryCertificateItem(DataObjectBean source);
     
-    void saveDeliveryCertificateItemSerialNumbers(List<DeliveryCertificateSerialNumber> serialNumbers);
+    DeliveryCertificateSerialNumber saveDeliveryCertificateItemSerialNumber(DeliveryCertificateSerialNumber serialNumber);
 }
