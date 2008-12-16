@@ -5,7 +5,11 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigInteger;
+
 import javax.ejb.Local;
+
+import com.cosmos.acacia.crm.data.DeliveryCertificate;
 
 /**
  *
@@ -14,5 +18,11 @@ import javax.ejb.Local;
 @Local
 public interface DeliveryCertificatesLocal extends DeliveryCertificatesRemote {
 
-    
+	/**
+	 * Get the entity by its ID
+	 * @param deliveryCertificateId
+	 * @return
+	 */
+	DeliveryCertificate getDeliveryCertificateById(BigInteger deliveryCertificateId);
+	
 }

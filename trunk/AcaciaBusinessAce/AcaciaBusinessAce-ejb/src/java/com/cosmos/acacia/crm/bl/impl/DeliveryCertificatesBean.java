@@ -45,6 +45,7 @@ import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.acacia.crm.enums.DeliveryStatus;
 import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateItemValidatorLocal;
+import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateSerialNumberValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -76,7 +77,12 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     private DeliveryCertificateItemValidatorLocal deliveryCertificateItemValidator;
     
     @EJB
+    private DeliveryCertificateSerialNumberValidatorLocal serialNumberValidator;
+    
+    @EJB
     private WarehouseListLocal warehouseListBean;
+    
+    private static final String EMPTY_SERIAL_NUMBER_PREFIX = "enter serial number ";
     
     public EntityProperties getDeliveryCertificateEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificate.class);
@@ -140,6 +146,21 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         
         return result;
     }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public DeliveryCertificate getDeliveryCertificateById(BigInteger deliveryCertificateId) {
+    	Query q = em.createNamedQuery("DeliveryCertificate.findByIdAndDeleted");
+        q.setParameter("deliveryCertificateId", deliveryCertificateId);
+        q.setParameter("deleted", false);
+        List<DeliveryCertificate> result = q.getResultList();
+        if(result.size() > 0){
+        	return result.get(0);
+        }else{
+        	log.warning("The delivery certificate with ID=" + deliveryCertificateId + " ,was not found!");
+        	return null;
+        }
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -181,7 +202,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
 				DeliveryCertificateSerialNumber serialNumber = new DeliveryCertificateSerialNumber();
 				serialNumber.setDeliveryCertificateSerialNumberPK(serialNumberPK);
 				serialNumber.setDeliveryCertificateItem(item);
-				serialNumber.setSerialNumber("");
+				serialNumber.setSerialNumber("enter serial number " + (savedSerialNumersCount + i + 1));
 				serialNumbersList.add(serialNumber);
     		}
 		}
@@ -396,13 +417,18 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     	return dci;
     }
     
-    public void saveDeliveryCertificateItemSerialNumbers(List<DeliveryCertificateSerialNumber> serialNumbers){
-    	for(DeliveryCertificateSerialNumber sn : serialNumbers){
-    		//check if we have created empty Serial Number to display the table with needed amount of serial number.
-    		if("".equals(sn.getSerialNumber()) == false){
-    			esm.persist(em, sn);
-    		}
-    	}
+    public DeliveryCertificateSerialNumber saveDeliveryCertificateItemSerialNumber(DeliveryCertificateSerialNumber entity){
+		
+    	//TODO: This check could be removed if we the panel with serial numbers contains only saved Serial Numbers and every new Serial Number to be added via footer row (created dynamically)
+    	if(entity.getSerialNumber().startsWith(EMPTY_SERIAL_NUMBER_PREFIX)){
+			//do not persists empty serial numbers
+			return entity;
+		}
+		
+		serialNumberValidator.validate(entity);
+		
+		esm.persist(em, entity);
+		return entity;
     }
     
     public int deleteDeliveryCertificateItemSerialNumber(DeliveryCertificateSerialNumber serialNumber){
