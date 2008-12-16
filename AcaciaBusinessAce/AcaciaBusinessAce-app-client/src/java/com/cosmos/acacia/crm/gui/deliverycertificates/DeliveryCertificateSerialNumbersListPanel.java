@@ -6,14 +6,11 @@
 
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.swing.JOptionPane;
-import javax.swing.table.TableColumn;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -21,9 +18,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumberPK;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -76,7 +71,7 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
         AcaciaTable deliveryCertTable = getDataTable();
         
         this.serialNumbers = getDeliveryCertificateItemSerialNumbers();	
-        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, true);
+        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, false);
         tableBinding.setEditable(true);
         deliveryCertTable.setEditable(true);
         
@@ -94,11 +89,14 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
     
     @Override
 	@Action
+	@SuppressWarnings("unchecked")
     public void specialAction(){
-    	serialNumbers = getDataTable().getData();
+		this.serialNumbers = new ArrayList<DeliveryCertificateSerialNumber>(getDataTable().getData());
+    	getFormSession().saveDeliveryCertificateItemSerialNumbers(serialNumbers);
+    	
     	setDialogResponse(DialogResponse.SAVE);
     	close();
-    }
+	}
         
     @Override
     public boolean canCreate() {
@@ -127,21 +125,22 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
     
     @Override
     protected boolean deleteRow(Object rowObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(rowObject != null){
+    		getFormSession().deleteDeliveryCertificateItemSerialNumber((DeliveryCertificateSerialNumber)rowObject);
+    		return true;
+        }else{
+        	return false;
+        }
     }
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     protected Object newRow() {
-    	throw new UnsupportedOperationException("Not supported yet.");
+    	throw new UnsupportedOperationException("Not supported.");
     }
-
-	public List<DeliveryCertificateSerialNumber> getSerialNumbers() {
-		return serialNumbers;
-	}
 
 }

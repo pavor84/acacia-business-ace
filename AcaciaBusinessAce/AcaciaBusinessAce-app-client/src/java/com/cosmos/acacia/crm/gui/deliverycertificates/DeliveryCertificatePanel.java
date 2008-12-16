@@ -9,22 +9,25 @@ package com.cosmos.acacia.crm.gui.deliverycertificates;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
 import javax.ejb.EJB;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
@@ -42,20 +45,22 @@ import com.cosmos.acacia.crm.data.predicates.ValidDeliveryCertificateAssignmentP
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
+import com.cosmos.acacia.crm.gui.ProductPanel;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaLookup;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
-import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
+import com.cosmos.swingb.JBErrorPane;
 
 /**
  *
@@ -82,6 +87,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     private Address forwarderBranch;
     private EntityProperties entityProps;
     JBButton deliverButton = null;
+    JBButton refreshButton = null;
     
     private BindingGroup bindGroup;
     private Binding recipientNameBinding;
@@ -123,12 +129,18 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         
         deliverButton = new JBButton();
         deliverButton.setAction(getContext().getActionMap(this).get("deliver"));
-        deliverButton.setText(getResourceMap().getString("deliver.text"));
+        deliverButton.setText(getResourceMap().getString("deliver.button.text"));
         entityFormButtonPanel1.addButton(deliverButton);
         
+        refreshButton = new JBButton();
+        refreshButton.setAction(getContext().getActionMap(this).get("refresh"));
+        refreshButton.setText(getResourceMap().getString("refresh.button.text"));
+        refreshButton.setEnabled(false);
+        entityFormButtonPanel1.addButton(refreshButton);
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public void performSave(boolean closeAfter) {
     	
     	//Wrap the ListData that is from ObservableList type to one (ArrayList) that can be marshalled.
@@ -231,7 +243,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
             entity,        
             entityProps.getPropertyDetails("recipientContact"),
             UpdateStrategy.READ_WRITE);
-        
+                
         //Delivery Type Panel
         deliveryTypeComboBox.bind(bindGroup, getFormSession().getDeliveryTypes(), entity, entityProps.getPropertyDetails("deliveryCertificateMethodType"));
         deliveryTypeComboBox.addActionListener(new ActionListener(){
@@ -333,15 +345,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	            entity.setRecipientBranch(selectedDocument.getBranch());
 	            entity.setRecipientContact(selectedDocument.getRecipientContact());
 	            
-	            List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(selectedDocument.getInvoiceId());
-	            if(invoiceItems != null){
-	            	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
-	            	for(InvoiceItem invoiceItem : invoiceItems){
-	            		DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
-	            		deliveryCertificateItems.add(dci);
-	            	}
-	            	itemsTablePanel.refreshList(deliveryCertificateItems);
-	            }
+	            bindDeliveryCertificateItems(selectedDocument.getInvoiceId());
 	            
 	            //populate the components with new values.
 	            bindGroup.removeBinding(recipientNameBinding);
@@ -376,6 +380,18 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     	}
     }
  
+    protected void bindDeliveryCertificateItems(BigInteger invoiceId){
+    	 List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(invoiceId);
+         if(invoiceItems != null){
+         	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
+         	for(InvoiceItem invoiceItem : invoiceItems){
+         		DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
+         		deliveryCertificateItems.add(dci);
+         	}
+         	itemsTablePanel.refreshList(deliveryCertificateItems);
+         }
+    }
+    
     protected Object onChooseForwarder() {
 
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
@@ -422,13 +438,48 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     
     @Action
     public void deliver(){
-    	List<DeliveryCertificateItem> items = new ArrayList<DeliveryCertificateItem>(itemsTablePanel.getListData());
+    	try{
+	    	List<DeliveryCertificateItem> items = new ArrayList<DeliveryCertificateItem>(itemsTablePanel.getListData());
+	    	setDialogResponse(DialogResponse.SAVE);
+	        
+	    	entity = getFormSession().deliverDeliveryCertificate(entity, assignment, items);
+	        setSelectedValue(entity);
+	    	close();
+    	}catch(Exception ex){
+    		ValidationException ve = extractValidationException(ex);
+            if ( ve!=null ){
+                String message = getValidationErrorsMessage(ve);
+                refreshButton.setEnabled(true);
+                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
+            }else{
+                ex.printStackTrace();
+                // TODO: Log that error
+                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
+                JBErrorPane.showDialog(this, createSaveErrorInfo(basicMessage, ex));
+            }
+    	}
+    }
+    
+    private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("saveAction.Action.error.title");
+
+        String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
+        String category = ProductPanel.class.getName() + ": saveAction.";
+        Level errorLevel = Level.WARNING;
+
+        Map<String, String> state = new HashMap<String, String>();
+        state.put("deliveryCertificateId", String.valueOf(entity.getDeliveryCertificateId()));
+        
+        ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
+        return errorInfo;
+    }
+    
+    @Action
+    public void refresh(){
     	
-    	setDialogResponse(DialogResponse.SAVE);
-        entity = getFormSession().deliverDeliveryCertificate(entity, assignment, items);
-        setSelectedValue(entity);
+    	bindDeliveryCertificateItems(entity.getDocumentAssignment().getDocumentId());
     	
-        close();
     }
     
     @Override

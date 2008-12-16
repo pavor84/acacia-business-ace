@@ -10,19 +10,27 @@ import static com.cosmos.acacia.util.AcaciaUtils.getIntegerFormat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.gui.ProductPanel;
 import com.cosmos.acacia.crm.gui.invoice.ComplexProductDetailsPanel;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBErrorPane;
 
 /**
  *
@@ -97,14 +105,43 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        setDialogResponse(DialogResponse.SAVE);
-        setSelectedValue(entity);
-        if (closeAfter) {
-            close();
-        } else {
-            bindGroup.unbind();
-            initData();
-        }
+        try{
+	    	getFormSession().saveDeliveryCertificateItem(entity);
+	        setDialogResponse(DialogResponse.SAVE);
+	        setSelectedValue(entity);
+	        if (closeAfter) {
+	            close();
+	        } else {
+	            bindGroup.unbind();
+	            initData();
+	        }
+        }catch(Exception ex){
+    		ValidationException ve = extractValidationException(ex);
+            if ( ve!=null ){
+                String message = getValidationErrorsMessage(ve);
+                JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
+            }else{
+                ex.printStackTrace();
+                // TODO: Log that error
+                String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
+                JBErrorPane.showDialog(this, createSaveErrorInfo(basicMessage, ex));
+            }
+    	}
+    }
+    
+    private ErrorInfo createSaveErrorInfo(String basicMessage, Exception ex) {
+        ResourceMap resource = getResourceMap();
+        String title = resource.getString("saveAction.Action.error.title");
+
+        String detailedMessage = resource.getString("saveAction.Action.error.detailedMessage");
+        String category = ProductPanel.class.getName() + ": saveAction.";
+        Level errorLevel = Level.WARNING;
+
+        Map<String, String> state = new HashMap<String, String>();
+        state.put("deliveryCertificateItemId", String.valueOf(entity.getCertificateItemId()));
+        
+        ErrorInfo errorInfo = new ErrorInfo(title, basicMessage, detailedMessage, category, ex, errorLevel, state);
+        return errorInfo;
     }
     
     protected DeliveryCertificatesRemote getFormSession(){
