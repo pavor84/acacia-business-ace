@@ -84,7 +84,10 @@ public class DeliveryCertificateSerialNumber implements Serializable {
     }
 
     public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+        if(deliveryCertificateSerialNumberPK != null){
+        	deliveryCertificateSerialNumberPK.setSerialNumber(serialNumber);
+        }
+    	this.serialNumber = serialNumber;
     }
 
     @Override

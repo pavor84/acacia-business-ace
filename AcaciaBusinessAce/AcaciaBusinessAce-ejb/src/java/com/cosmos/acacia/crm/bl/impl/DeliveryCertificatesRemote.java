@@ -90,13 +90,11 @@ public interface DeliveryCertificatesRemote {
      */
     DeliveryCertificate newDeliveryCertificate(BigInteger parentId);
     
-    /**
-     * Create a fresh new instance of a DeliveryCertificate. Some of the properties are initialized.
-     * @param parentId - identifier of a DeliveryCertificateItem 
-     * @return new Entity object
-     */
+    
     DeliveryCertificateSerialNumber newDeliveryCertificateSerialNumber(BigInteger parentId);
 
+    int deleteDeliveryCertificateItemSerialNumber(DeliveryCertificateSerialNumber serialNumber);
+    
     List<DbResource> getReasons();
 
     List<DbResource> getDeliveryTypes();
@@ -105,6 +103,8 @@ public interface DeliveryCertificatesRemote {
      * This method just persist the DeliveryCertificate object. No products are delivered yet.
      */
     DeliveryCertificate saveDeliveryCertificate(DeliveryCertificate deliveryCertificate, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items);
+    
+    DeliveryCertificateItem saveDeliveryCertificateItem(DeliveryCertificateItem item);
     
     /**
      * This method persist the DeliveryCertificate and the products from warehouses are delivered. The certificate becomes in readonly mode.
@@ -119,5 +119,5 @@ public interface DeliveryCertificatesRemote {
     
     DeliveryCertificateItem newDeliveryCertificateItem(DataObjectBean source);
     
-    
+    void saveDeliveryCertificateItemSerialNumbers(List<DeliveryCertificateSerialNumber> serialNumbers);
 }

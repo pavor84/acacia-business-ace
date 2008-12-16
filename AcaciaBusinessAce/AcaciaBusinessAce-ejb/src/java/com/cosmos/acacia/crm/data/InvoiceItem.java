@@ -53,7 +53,12 @@ import javax.persistence.TemporalType;
             (
                 name = "InvoiceItem.findByParentDataObjectIsNullAndDeleted",
                 query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted order by i.invoiceItemId"
-            )
+            ),
+        @NamedQuery
+        	(
+        		name = "InvoiceItem.findByIdAndDeleted",
+        		query = "select i from InvoiceItem i where i.dataObject.deleted = :deleted and i.invoiceItemId = :invoiceItemId"
+        	)
     })
 public class InvoiceItem extends DataObjectBean implements Serializable {
 

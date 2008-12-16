@@ -336,7 +336,24 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
         
         return result;
     }
-
+    
+    public WarehouseProduct getWarehouseProduct(Warehouse warehouse, BigInteger productId) {
+        if ( warehouse==null)
+            throw new IllegalArgumentException("Please supply not null warehouse!");
+        
+        Query q = em.createNamedQuery("WarehouseProduct.findForWarehouseAndProductId");
+        q.setParameter("warehouse", warehouse);
+        q.setParameter("product_id", productId);
+        
+        List<WarehouseProduct> result = q.getResultList();
+        if(result != null && result.size() > 0){
+        	return result.get(0);
+        }else{
+        	return null;
+        }
+        
+    }
+    
     @Override
     public EntityProperties getWarehouseProductTableProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(WarehouseProduct.class);

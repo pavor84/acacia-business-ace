@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -71,6 +72,13 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
     @Property(title="Quantity")
     private BigDecimal quantity;
 
+    @Column(name = "reference_item_id")
+    @Property(title="Reference Item", visible = false)
+    private BigInteger referenceItemId;
+    
+    //@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="deliveryCertificateItem")
+    //private List<DeliveryCertificateSerialNumber> serialNumbers; 
+    
     @JoinColumn(name = "certificate_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -131,6 +139,14 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
         this.measureUnit = measureUnit;
     }
 
+//    public List<DeliveryCertificateSerialNumber> getSerialNumbers() {
+//		return serialNumbers;
+//	}
+//    
+//    public void setSerialNumbers(List<DeliveryCertificateSerialNumber> list) {
+//		this.serialNumbers = list;
+//	}
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -171,4 +187,12 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
 		setCertificateItemId(id);
 	}
 
+	public BigInteger getReferenceItemId() {
+		return referenceItemId;
+	}
+
+	public void setReferenceItemId(BigInteger referenceItemId) {
+		this.referenceItemId = referenceItemId;
+	}
+	
 }

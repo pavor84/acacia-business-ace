@@ -12,7 +12,7 @@ import javax.ejb.Local;
  * @author daniel
  */
 @Local
-public interface DeliveryCertificatesLocal {
+public interface DeliveryCertificatesLocal extends DeliveryCertificatesRemote {
 
     
 }

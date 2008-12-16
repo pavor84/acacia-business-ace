@@ -326,8 +326,27 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     @SuppressWarnings("unchecked")
     public WarehouseProduct getWarehouseProduct(SimpleProduct product) {
         Address branch = acaciaSession.getBranch();
-        if ( branch==null )
-            throw new IllegalArgumentException("Branch of logged user required!");
+//        if ( branch==null )
+//            throw new IllegalArgumentException("Branch of logged user required!");
+//        if ( product==null )
+//            throw new IllegalArgumentException("Product parameter missing!");
+//        
+//        Query q = em.createNamedQuery("WarehouseProduct.findByProductAndBranch");
+//        q.setParameter("branch", branch);
+//        q.setParameter("product", product);
+//        
+//        List result = q.getResultList();
+//        if ( result.isEmpty() )
+//            return null;
+//        else
+//            return (WarehouseProduct) q.getResultList().get(0);
+        return getWarehouseProduct(branch, product);
+    }
+
+    @SuppressWarnings("unchecked")
+    public WarehouseProduct getWarehouseProduct(Address branch, SimpleProduct product) {
+        if ( branch ==null )
+            throw new IllegalArgumentException("Branch required!");
         if ( product==null )
             throw new IllegalArgumentException("Product parameter missing!");
         
@@ -341,7 +360,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         else
             return (WarehouseProduct) q.getResultList().get(0);
     }
-
     
     public EntityProperties getItemDetailEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(InvoiceItem.class);
@@ -802,6 +820,30 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         q.setParameter("vatInvoice", InvoiceType.VatInvoice.getDbResource());
         
         return q.getResultList();
+    }
+    
+    public Invoice getInvoiceById(BigInteger invoiceId){
+    	Query q = em.createNamedQuery("Invoice.findById");
+    	q.setParameter("invoiceId", invoiceId);
+    	List<Invoice> result = q.getResultList();
+    	if(result.isEmpty()){
+    		return null;
+    	}else{
+    		return result.get(0);
+    	}
+    }
+    
+    public InvoiceItem getInvoiceItemById(BigInteger invoiceItemId){
+    	
+    	Query q = em.createNamedQuery("InvoiceItem.findByIdAndDeleted");
+    	q.setParameter("invoiceItemId", invoiceItemId);
+    	q.setParameter("deleted", false);
+    	List<InvoiceItem> result = q.getResultList();
+    	if(result.isEmpty()){
+    		return null;
+    	}else{
+    		return result.get(0);
+    	}
     }
     
 //    public static void main(String[] args) {
