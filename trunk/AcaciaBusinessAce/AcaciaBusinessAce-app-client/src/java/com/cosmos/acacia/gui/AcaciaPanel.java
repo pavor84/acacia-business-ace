@@ -216,12 +216,20 @@ public abstract class AcaciaPanel
         msg.append("\n\n");
         int i = 1;
         for (ValidationMessage validationMessage : ve.getMessages()) {
-            String currentMsg = null;
-            if ( validationMessage.getArguments()!=null )
-                currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
-            else
-                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
-
+//            String currentMsg = null;
+//            if ( validationMessage.getArguments()!=null )
+//                currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
+//            else
+//                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
+        	String currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
+            if ( validationMessage.getArguments()!=null ){
+               Object[] params = validationMessage.getArguments();
+               for(int index = 0; index < params.length; index ++){
+            	   currentMsg = currentMsg.replace("{"+index+"}", params[index].toString());
+               }
+            }
+               
+        	
             msg.append(i).append(": ").append(currentMsg).append("\n\n");
             i++;
         }
