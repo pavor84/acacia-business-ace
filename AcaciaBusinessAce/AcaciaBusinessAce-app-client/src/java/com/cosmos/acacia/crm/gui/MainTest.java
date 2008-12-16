@@ -12,7 +12,6 @@ import com.cosmos.test.bl.ProductCategoriesTest;
 import com.cosmos.test.bl.ProductsListTest;
 import com.cosmos.test.bl.PurchaseOrderListTest;
 import com.cosmos.test.bl.WarehouseListTest;
-import com.cosmos.test.bl.assembling.AcaciaPropertiesTest;
 import com.cosmos.test.bl.assembling.ProductAssemblerTest;
 import com.cosmos.test.bl.contactbook.ContactBookTest;
 import com.cosmos.test.bl.users.UsersTest;
@@ -40,7 +39,6 @@ public class MainTest {
            PurchaseOrderListTest.class.getName(),
            OrderConfirmationListTest.class.getName(),
            BusinessPartnerListTest.class.getName(),
-           AcaciaPropertiesTest.class.getName(),
            ProductAssemblerTest.class.getName(),
         };
         tests = new String[] {ProductAssemblerTest.class.getName()};

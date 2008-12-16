@@ -10,11 +10,14 @@ import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.assembling.ProductAssemblerEvent;
 import com.cosmos.acacia.crm.assembling.ProductAssemblerListener;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingParameter;
+import com.cosmos.acacia.crm.data.assembling.AssemblingProperty;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -24,6 +27,7 @@ import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaTreeTable;
+import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaProperties;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
@@ -183,7 +187,8 @@ public class ProductAssemblerPanel
 
     private List<String> columnIdentifiers;
 
-    private AcaciaProperties parameters;
+    private AcaciaProperties acaciaProperties;
+    private BusinessPartner client;
 
     @Override
     protected void initData()
@@ -298,6 +303,7 @@ public class ProductAssemblerPanel
         AssemblingSchema schema,
         Map<AssemblingMessage, AssemblingParameter> parametersMap)
     {
+        AcaciaProperties properties = getAcaciaProperties();
         for(AssemblingSchemaItem schemaItem : getSchemaItems(schema))
         {
             initParameters(schemaItem, parametersMap);
@@ -306,16 +312,68 @@ public class ProductAssemblerPanel
             if(message == null)
                 continue;
 
-            Object value = schemaItem.getDefaultValue();
             AssemblingParameter parameter = new AssemblingParameter();
+
+            AssemblingProperty property = getAssemblingProperty(schema, message);
+            Serializable value;
+            if(property.containsKey())
+            {
+                value = property.getPropertyValue();
+            }
+            else
+            {
+                value = schemaItem.getDefaultValue();
+                property.setPropertyValue(value);
+            }
             parameter.setAssemblingMessage(message);
             DbResource dbResource = schemaItem.getDataType();
             DataType dataType = (DataType)dbResource.getEnumValue();
             parameter.setDataType(dataType);
             parameter.setValue(value);
-//parameter.setValuesSource();
+            parameter.setValuesSource(property);
             parametersMap.put(message, parameter);
         }
+    }
+
+    private AssemblingProperty getAssemblingProperty(
+            AssemblingSchema schema,
+            AssemblingMessage message)
+    {
+        String categoryCode = schema.getAssemblingCategory().getCategoryCode();
+        String schemaCode = schema.getSchemaCode();
+        String messageCode = message.getMessageCode();
+        AcaciaProperties properties = getAcaciaProperties();
+
+        String key = categoryCode + "." + schemaCode + "." + messageCode;
+        if(properties.containsKey(key))
+        {
+            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
+            return new AssemblingProperty(properties, accessLevel, key);
+        }
+
+        key = categoryCode + "." + messageCode;
+        if(properties.containsKey(key))
+        {
+            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
+            return new AssemblingProperty(properties, accessLevel, key);
+        }
+
+        key = schemaCode + "." + messageCode;
+        if(properties.containsKey(key))
+        {
+            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
+            return new AssemblingProperty(properties, accessLevel, key);
+        }
+
+        key = messageCode;
+        if(properties.containsKey(key))
+        {
+            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
+            return new AssemblingProperty(properties, accessLevel, key);
+        }
+
+        key = categoryCode + "." + schemaCode + "." + messageCode;
+        return new AssemblingProperty(properties, properties.getAccessLevel(), key);
     }
 
     private void initParameters(
@@ -397,6 +455,7 @@ public class ProductAssemblerPanel
             setSelectedValue(complexProduct);
             //Don't forget to tell our client that we are confirming (selecting) the current
             //complex product
+            LocalSession.instance().saveProperties(getAcaciaProperties());
             setDialogResponse(DialogResponse.SELECT);
             close();
         }
@@ -416,6 +475,16 @@ public class ProductAssemblerPanel
     @Action
     public void sourceAction()
     {
+    }
+
+    public AcaciaProperties getAcaciaProperties()
+    {
+        if(acaciaProperties == null)
+        {
+            acaciaProperties = LocalSession.instance().getProperties(getClient());
+        }
+
+        return acaciaProperties;
     }
 
     //private AcaciaProperties getParameters()
@@ -456,7 +525,8 @@ public class ProductAssemblerPanel
 
         try
         {
-            ComplexProduct product = assembler.assemble(getParameters());
+            //ComplexProduct product = assembler.assemble(getParameters());
+            ComplexProduct product = assembler.assemble(getAcaciaProperties());
             logger.info("Product: " + product.toString(true));
             setSelectedValue(product);
             okButton.setEnabled(true);
@@ -471,6 +541,16 @@ public class ProductAssemblerPanel
             assembler.removeProductAssemblerListener(listener);
         }
         requestFocus();
+    }
+
+    public BusinessPartner getClient()
+    {
+        return client;
+    }
+
+    public void setClient(BusinessPartner client)
+    {
+        this.client = client;
     }
 
     public AssemblingSchema getAssemblingSchema()
@@ -582,4 +662,5 @@ public class ProductAssemblerPanel
             }
         }
     }
+
 }
