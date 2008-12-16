@@ -13,21 +13,13 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
-import com.cosmos.acacia.crm.data.InvoiceItem;
-import com.cosmos.acacia.crm.gui.invoice.InvoiceItemForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
 public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 	
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4986063572371186468L;
 
 	@EJB
@@ -116,10 +108,7 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 				}
 				
 				DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(item.getCertificateItemId());
-				DialogResponse response = panel.showDialog(this);
-				if(DialogResponse.SAVE.equals(response)){
-					List<DeliveryCertificateSerialNumber> serialNumbers = panel.getSerialNumbers();
-				}
+				panel.showDialog(this);
 			}
 		}
 		catch(ArithmeticException e){
@@ -154,6 +143,7 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
 			if(item.getCertificateItemId() == null){
 				//new certificate is just created and get the fully instantiated certificate item (with ID etc)
 				item = getFormSession().getDeliveryCertificateItems(getParentDataObjectId()).get(index);
+				item.setParentId(getParentDataObjectId());
 			}
             DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm(item);
             DialogResponse response = formPanel.showDialog(this);
