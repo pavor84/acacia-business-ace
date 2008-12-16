@@ -21,6 +21,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
@@ -68,31 +69,35 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
     @Column(name = "parent_id")
     private BigInteger parentId;
 
-    @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")
+    @Property(title="Product", propertyValidator=@PropertyValidator(required=true),
+            customDisplay="${product.productName}", exportable=true, reportColumnWidth=35)
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
     private SimpleProduct product;
 
-    @Property(title="Measure Unit", propertyValidator=@PropertyValidator(required=true))
+    @Property(title="Measure Unit", propertyValidator=@PropertyValidator(required=true),
+            exportable=true, reportColumnWidth=5)
     @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource measureUnit;
 
     @Property(title="Ordered Qty", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d, required=true))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d, required=true),
+        exportable=true, reportColumnWidth=8)
     @Column(name = "ordered_quantity", nullable = false)
     private BigDecimal orderedQuantity;
 
-    @Property(title="Confirmed Qty", editable=false)
+    @Property(title="Confirmed Qty", editable=false, exportable=true, reportColumnWidth=8)
     @Column(name = "confirmed_quantity")
     private BigDecimal confirmedQuantity;
 
-    @Property(title="Delivered Qty", editable=false)
+    @Property(title="Delivered Qty", editable=false, exportable=true, reportColumnWidth=8)
     @Column(name = "delivered_quantity")
     private BigDecimal deliveredQuantity;
 
     @Property(title="Purchase Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d),
+        exportable=true, reportColumnWidth=15)
     @Column(name = "purchase_price")
     private BigDecimal purchasePrice;
 
@@ -114,6 +119,10 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
     @Column(name = "notes")
     @Property(title="Notes")
     private String notes;
+
+    @Transient
+    @Property(title="Total", exportable=true, reportColumnWidth=16)
+    private BigDecimal total;
 
     @JoinColumn(name = "order_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -280,5 +289,14 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
         if ( confirmed==null )
             confirmed = new BigDecimal(0);
         return getOrderedQuantity().subtract(confirmed);
+    }
+
+    /**
+     * This is a synthetic method. Calculates and returns the total price
+     * The value is exactly: orderedQuantity * purchasePrice
+     * @return
+     */
+    public BigDecimal getTotal() {
+        return orderedQuantity.multiply(purchasePrice);
     }
 }

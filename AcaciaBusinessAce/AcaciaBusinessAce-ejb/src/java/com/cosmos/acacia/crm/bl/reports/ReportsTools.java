@@ -86,12 +86,14 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
             params.putAll(paramsMap);
 
             JRStyle[] styles = jasperReport.getStyles();
-            for (JRStyle style : styles) {
-                if (style.getName().equals("acaciaReportStyle"))
-                    style.setPdfFontName(pdfFontPath + "times.ttf");
+            if (styles != null) {
+                for (JRStyle style : styles) {
+                    if (style.getName().equals("acaciaReportStyle"))
+                        style.setPdfFontName(pdfFontPath + "times.ttf");
 
-                if (style.getName().equals("acaciaReportBoldStyle"))
-                    style.setPdfFontName(pdfFontPath + "timesbd.ttf");
+                    if (style.getName().equals("acaciaReportBoldStyle"))
+                        style.setPdfFontName(pdfFontPath + "timesbd.ttf");
+                }
             }
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(
@@ -152,11 +154,11 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         }
     }
 
-    public JasperDesign createTableReport(Class entityClass) throws JRException {
-        return createTableReport(entityClass, false);
+    public JasperDesign createTableReport(Class entityClass, EntityProperties entityProps) throws JRException {
+        return createTableReport(entityClass, entityProps, false);
     }
 
-    public JasperDesign createTableReport(Class entityClass, Boolean isSubreport) throws JRException {
+    public JasperDesign createTableReport(Class entityClass, EntityProperties entityProps, Boolean isSubreport) throws JRException {
         String underscoreSeparatedName = "";
         String className = entityClass.getSimpleName();
         String prefix = "";
@@ -170,14 +172,15 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
             prefix = "_";
         }
         underscoreSeparatedName = pluralize(underscoreSeparatedName);
-        return createTableReport(entityClass, underscoreSeparatedName, isSubreport);
+
+        if (entityProps == null)
+            entityProps = BeansBindingHelper.createEntityProperties(entityClass, true);
+
+        return createTableReport(entityProps, underscoreSeparatedName, isSubreport);
     }
 
-    public JasperDesign createTableReport(Class entityClass,
+    public JasperDesign createTableReport(EntityProperties entityProps,
             String reportName, Boolean isSubreport) throws JRException {
-
-        EntityProperties entityProps =
-            BeansBindingHelper.createEntityProperties(entityClass, true);
 
         if (entityProps.getKeys().size() == 0)
             return null;
@@ -537,5 +540,11 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
             log.error("Loading error: ", ex);
             return null;
         }
+    }
+
+    @Override
+    public JasperDesign createTableReport(Class entityClass, Boolean isSubreport)
+            throws JRException {
+        return createTableReport(entityClass, null, isSubreport);
     }
 }

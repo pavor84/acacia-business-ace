@@ -3,7 +3,11 @@ package com.cosmos.acacia.crm.bl.reports;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.cosmos.beansbinding.EntityProperties;
 
 @SuppressWarnings("unchecked")
 public class Report implements Serializable {
@@ -51,6 +55,20 @@ public class Report implements Serializable {
      */
     private Class autoSubreport2Class;
 
+
+    /**
+     * The EntityProperties on the basis of which an automatic
+     * table subreport (first) will be generated
+     */
+    private EntityProperties autoSubreport1Properties;
+
+    /**
+     * The EntityProperties on the basis of which an automatic
+     * table subreport (second) will be generated
+     */
+    private EntityProperties autoSubreport2Properties;
+
+
     /**
      * The key for the name of the report shown in front of the user,
      *  in case he has to choose from more than one reports
@@ -62,6 +80,9 @@ public class Report implements Serializable {
      * table report will be generated
      */
     private Class reportClass;
+
+
+    private Map<String, Object> parameters = new HashMap<String, Object>();
 
     public Report() {
 
@@ -169,5 +190,31 @@ public class Report implements Serializable {
 
     public void setReportClass(Class reportClass) {
         this.reportClass = reportClass;
+    }
+
+    public EntityProperties getAutoSubreport1Properties() {
+        return autoSubreport1Properties;
+    }
+
+    public void setAutoSubreport1Properties(
+            EntityProperties autoSubreport1Properties) {
+        this.autoSubreport1Properties = autoSubreport1Properties;
+    }
+
+    public EntityProperties getAutoSubreport2Properties() {
+        return autoSubreport2Properties;
+    }
+
+    public void setAutoSubreport2Properties(
+            EntityProperties autoSubreport2Properties) {
+        this.autoSubreport2Properties = autoSubreport2Properties;
+    }
+
+    public Map<String, Object> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
     }
 }
