@@ -129,12 +129,12 @@ public class SimpleProduct
     private BigDecimal defaultQuantity;
 
     @Column(name = "purchase_price", nullable = false)
-    @Property(title="Purchase Price", propertyValidator=@PropertyValidator(
+    @Property(title="Purchase Price", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal purchasePrice;
 
     @Column(name = "sale_price", nullable = false)
-    @Property(title="Sales Price", propertyValidator=@PropertyValidator(
+    @Property(title="Sales Price", editable=false, propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal salePrice;
 
@@ -142,7 +142,32 @@ public class SimpleProduct
     @Property(title="List Price", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal listPrice;
-
+    
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
+    @Column(name = "discount_percent", precision=20, scale=4)
+    private BigDecimal discountPercent;
+    
+    @Property(title="Duty %", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
+    @Column(name = "duty_percent", precision=20, scale=4)
+    private BigDecimal dutyPercent;
+    
+    @Column(name = "transport_price", nullable = false)
+    @Property(title="Transport Price", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    private BigDecimal transportPrice;
+    
+    @Column(name = "cost_price", nullable = false)
+    @Property(title="Cost Price", editable=false, propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    private BigDecimal costPrice;
+    
+    @Column(name = "profit_value", nullable = false)
+    @Property(title="Profit Value", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    private BigDecimal profitValue;
+    
     @Column(name = "quantity_per_package", nullable = false)
     @Property(title="Qty per Package", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
@@ -192,7 +217,11 @@ public class SimpleProduct
     @Property(title="Producer")
     private BusinessPartner producer;
     
-
+    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
+    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    private DbResource currency;
+    
     public SimpleProduct() {
     }
 
@@ -533,5 +562,53 @@ public class SimpleProduct
     @Override
     public String getInfo() {
         return getProductName();
+    }
+
+    public BigDecimal getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(BigDecimal discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public BigDecimal getDutyPercent() {
+        return dutyPercent;
+    }
+
+    public void setDutyPercent(BigDecimal dutyPercent) {
+        this.dutyPercent = dutyPercent;
+    }
+
+    public BigDecimal getTransportPrice() {
+        return transportPrice;
+    }
+
+    public void setTransportPrice(BigDecimal transportPrice) {
+        this.transportPrice = transportPrice;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public BigDecimal getProfitValue() {
+        return profitValue;
+    }
+
+    public void setProfitValue(BigDecimal profitValue) {
+        this.profitValue = profitValue;
+    }
+
+    public DbResource getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(DbResource currency) {
+        this.currency = currency;
     }
 }

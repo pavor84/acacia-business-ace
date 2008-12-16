@@ -627,7 +627,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             public void itemStateChanged(ItemEvent e) {
                 onSelectSupplier();
             }
-        });
+        }, true);
         
         //if once saved - the supplier is not changeable
         if ( entity.getId()!=null && entity.getId().compareTo(new BigInteger("0"))>0 ){
@@ -649,7 +649,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
                     onDocumentTypeChanged((DbResource)e.getItem());
                 }
             }
-        });
+        }, true);
         
         //currency
         currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));

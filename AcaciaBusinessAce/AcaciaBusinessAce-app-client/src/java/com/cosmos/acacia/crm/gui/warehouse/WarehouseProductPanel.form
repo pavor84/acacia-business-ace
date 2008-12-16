@@ -18,61 +18,53 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jBPanel4" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jBPanel4" alignment="1" max="32767" attributes="0"/>
                   <Component id="entityFormButtonPanel1" alignment="1" pref="792" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="jBLabel1" pref="101" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="productField" pref="311" max="32767" attributes="0"/>
+                              <Component id="productField" pref="310" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jBPanel1" alignment="0" max="32767" attributes="2"/>
                       </Group>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jBLabel11" pref="119" max="32767" attributes="0"/>
-                                      <Component id="jBLabel14" alignment="0" pref="119" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="salesPriceField" alignment="0" pref="249" max="32767" attributes="0"/>
-                                      <Component id="deliveryTimeField" alignment="1" pref="249" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jBLabel2" pref="83" max="32767" attributes="0"/>
-                                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                                          <Component id="warehouseField" pref="283" max="32767" attributes="0"/>
-                                      </Group>
-                                      <Component id="jBPanel2" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jBLabel2" pref="84" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="warehouseField" pref="283" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
+                          <Component id="jBPanel2" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jBLabel16" alignment="0" pref="119" max="32767" attributes="0"/>
+                                  <Component id="jBLabel11" alignment="0" pref="119" max="32767" attributes="0"/>
+                                  <Component id="jBLabel14" alignment="0" pref="119" max="32767" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jBButton1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="deliveryTimeField" alignment="1" pref="248" max="32767" attributes="0"/>
+                                  <Component id="salesPriceField" alignment="0" pref="248" max="32767" attributes="0"/>
+                                  <Component id="orderedDeliveryTimeField" alignment="0" pref="248" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
+                  <Component id="jBButton1" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jBLabel2" alignment="0" min="-2" pref="25" max="-2" attributes="1"/>
                   <Group type="103" alignment="0" groupAlignment="1" attributes="0">
@@ -86,9 +78,10 @@
                       <Component id="warehouseField" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Component id="jBPanel1" alignment="0" min="-2" max="-2" attributes="1"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jBPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -97,17 +90,21 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="salesPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jBLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="orderedDeliveryTimeField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jBButton1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jBLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="salesPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Component id="jBPanel1" min="-2" max="-2" attributes="1"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jBButton1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jBPanel4" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -159,14 +156,14 @@
                       </Group>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="qtyDueField" alignment="1" pref="251" max="32767" attributes="0"/>
-                      <Component id="qtySoldField" alignment="1" pref="251" max="32767" attributes="0"/>
-                      <Component id="qtyReservedField" alignment="1" pref="251" max="32767" attributes="0"/>
-                      <Component id="qtyOrderedField" alignment="1" pref="251" max="32767" attributes="0"/>
-                      <Component id="qtyFreeField" alignment="1" pref="251" max="32767" attributes="0"/>
+                      <Component id="qtyDueField" alignment="1" pref="250" max="32767" attributes="0"/>
+                      <Component id="qtySoldField" alignment="1" pref="250" max="32767" attributes="0"/>
+                      <Component id="qtyReservedField" alignment="1" pref="250" max="32767" attributes="0"/>
+                      <Component id="qtyOrderedField" alignment="1" pref="250" max="32767" attributes="0"/>
+                      <Component id="qtyFreeField" alignment="1" pref="250" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="qtyInStockField" pref="251" max="32767" attributes="0"/>
+                          <Component id="qtyInStockField" pref="250" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -312,9 +309,9 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jBLabel9" pref="98" max="32767" attributes="0"/>
-                      <Component id="jBLabel4" pref="98" max="32767" attributes="0"/>
-                      <Component id="jBLabel10" pref="98" max="32767" attributes="0"/>
+                      <Component id="jBLabel9" pref="99" max="32767" attributes="0"/>
+                      <Component id="jBLabel4" pref="99" max="32767" attributes="0"/>
+                      <Component id="jBLabel10" pref="99" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -464,7 +461,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="72" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="120" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -526,6 +523,7 @@
     <Component class="com.cosmos.swingb.JBLabel" name="jBLabel11">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="jBLabel11.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="jBLabel11.toolTipText"/>
         <Property name="name" type="java.lang.String" value="jBLabel11" noResource="true"/>
       </Properties>
     </Component>
@@ -537,6 +535,17 @@
     <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="warehouseField">
       <Properties>
         <Property name="name" type="java.lang.String" value="warehouseField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="orderedDeliveryTimeField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="orderedDeliveryTimeField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel16">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="jBLabel16.text"/>
+        <Property name="name" type="java.lang.String" value="jBLabel16" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -128,6 +128,8 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         jBLabel10 = new com.cosmos.swingb.JBLabel();
         documentDeliveryField = new com.cosmos.acacia.gui.AcaciaComboBox();
         branchField = new com.cosmos.swingb.JBTextField();
+        jBLabel16 = new com.cosmos.swingb.JBLabel();
+        deliveryStatusField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBPanel4 = new com.cosmos.swingb.JBPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         notesField = new com.cosmos.swingb.JBTextPane();
@@ -185,8 +187,8 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                             .addComponent(jBLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(supplierContactField, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(supplierField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(supplierContactField, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(supplierField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel1Layout.createSequentialGroup()
                         .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
@@ -386,6 +388,13 @@ public class PurchaseOrderForm extends BaseEntityPanel {
             }
         });
 
+        jBLabel16.setText(resourceMap.getString("jBLabel16.text")); // NOI18N
+        jBLabel16.setName("jBLabel16"); // NOI18N
+
+        deliveryStatusField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        deliveryStatusField.setEnabled(false);
+        deliveryStatusField.setName("deliveryStatusField"); // NOI18N
+
         javax.swing.GroupLayout jBPanel3Layout = new javax.swing.GroupLayout(jBPanel3);
         jBPanel3.setLayout(jBPanel3Layout);
         jBPanel3Layout.setHorizontalGroup(
@@ -403,12 +412,18 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                     .addComponent(orderNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(branchField, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                    .addGroup(jBPanel3Layout.createSequentialGroup()
+                        .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                            .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(10, 10, 10))
+                    .addGroup(jBPanel3Layout.createSequentialGroup()
+                        .addComponent(jBLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                    .addComponent(branchField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                    .addComponent(deliveryStatusField, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel3Layout.setVerticalGroup(
@@ -422,13 +437,15 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                 .addGap(9, 9, 9)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(supplierOrderNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierOrderNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(orderStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deliveryStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -452,7 +469,7 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         jBPanel4Layout.setVerticalGroup(
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -467,7 +484,7 @@ public class PurchaseOrderForm extends BaseEntityPanel {
         );
         tableHolderPanel1Layout.setVerticalGroup(
             tableHolderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 306, Short.MAX_VALUE)
+            .addGap(0, 206, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -496,7 +513,7 @@ public class PurchaseOrderForm extends BaseEntityPanel {
                     .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableHolderPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tableHolderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -550,6 +567,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private com.cosmos.swingb.JBTextField branchField;
     private com.cosmos.swingb.JBTextField createdAtField;
     private com.cosmos.swingb.JBTextField creatorField;
+    private com.cosmos.acacia.gui.AcaciaComboBox deliveryStatusField;
     private com.cosmos.acacia.gui.AcaciaComboBox documentDeliveryField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel2;
@@ -562,6 +580,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private com.cosmos.swingb.JBLabel jBLabel13;
     private com.cosmos.swingb.JBLabel jBLabel14;
     private com.cosmos.swingb.JBLabel jBLabel15;
+    private com.cosmos.swingb.JBLabel jBLabel16;
     private com.cosmos.swingb.JBLabel jBLabel19;
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBLabel jBLabel3;
@@ -633,14 +652,24 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-
+        
         if ( entProps==null )
             entProps = getFormSession().getDetailEntityProperties();
 
         if ( bindGroup==null )
             bindGroup = new BindingGroup();
-
-        //if already persisted form - then the supplier can't be changed
+        
+        bindComponents(bindGroup, entProps);
+    }
+    
+    @SuppressWarnings("unchecked")
+    /**
+     * Binds all components to the specified group and entity properties.
+     * The group shouldn't be yet bound, or should be 'unbound'.
+     * After all components are bound, some additional calculation and initialization is performed.
+     */
+    protected void bindComponents(BindingGroup bindGroup, EntityProperties entProps) {
+      //if already persisted form - then the supplier can't be changed
         if ( entity.getOrderNumber()!=null &&  entity.getOrderNumber().compareTo(new BigInteger("0"))>0 ){
             entProps.getPropertyDetails("supplier").setReadOnly(true);
             entProps.getPropertyDetails("supplier").setEditable(false);
@@ -655,6 +684,8 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         supplierOrderNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("supplierOrderNumber"));
         //order status
         orderStatusField.bind(bindGroup, getPurchaseOrderStatuses(), entity, entProps.getPropertyDetails("status"));
+        //delivery status
+        deliveryStatusField.bind(bindGroup, new ArrayList(), entity, entProps.getPropertyDetails("deliveryStatus"));
         //branch
         branchField.bind(bindGroup, entity, entProps.getPropertyDetails("branchName"));
         //document delivery
@@ -677,7 +708,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             public void itemStateChanged(ItemEvent e) {
                 onSelectSupplier();
             }
-        });
+        }, true);
 
         if ( entity.getOrderNumber()!=null && entity.getOrderNumber().compareTo(new BigInteger("0"))>0 ){
             supplierField.setEditable(false);
@@ -733,11 +764,39 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             });
         }else{
             itemsTablePanel.setReadonly();
+            entityFormButtonPanel2.setVisible(Button.Custom, false);
+            documentDeliveryField.setEnabled(false);
 
             entProps.getPropertyDetails("supplierContact").setReadOnly(true);
         }
 
         bindGroup.bind();
+    }
+    
+    /**
+     * Binds again all bindings where the source object is the entity. 
+     * @param updatedEntity
+     */
+    @SuppressWarnings("unchecked")
+    private void refreshForm(PurchaseOrder updatedEntity) {
+        //un-bind the group
+        
+        bindGroup.unbind();
+        for (Binding binding : bindGroup.getBindings()) {
+            bindGroup.removeBinding(binding);
+        }
+        bindGroup = new BindingGroup();
+        
+        this.entity = updatedEntity;
+        
+        bindComponents(bindGroup, entProps);
+        
+        //since we just swap the old entity with a new, updated one, - notify the calling windows,
+        //by setting the dialog response
+        setDialogResponse(DialogResponse.SAVE);
+        setModifiedResponse(DialogResponse.SAVE);
+        setSelectedValue(entity);
+        
     }
 
     protected void onInsertFromDocument() {
@@ -755,14 +814,16 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
 
         if ( showConfirmationDialog(getResourceMap().getString("sendButton.confirm"))){
-            try {
-                entity = getFormSession().updateOrderStatus(entity, PurchaseOrderStatus.Sent);
-                setDialogResponse(DialogResponse.SAVE);
-                setSelectedValue(entity);
-                close();
-            } catch (Exception ex){
-                checkForValidationException(ex);
-            }
+            PurchaseOrder updatedEntity = getFormSession().updateOrderStatus(entity, PurchaseOrderStatus.Sent);
+            refreshForm(updatedEntity);
+//            try {
+//                entity = getFormSession().updateOrderStatus(entity, PurchaseOrderStatus.Sent);
+//                setDialogResponse(DialogResponse.SAVE);
+//                setSelectedValue(entity);
+//                close();
+//            } catch (Exception ex){
+//                checkForValidationException(ex);
+//            }
         }
     }
 

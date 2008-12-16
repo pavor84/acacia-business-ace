@@ -37,7 +37,6 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
-import com.cosmos.acacia.crm.bl.reports.DocumentUtil;
 import com.cosmos.acacia.crm.bl.reports.DocumentUtilRemote;
 import com.cosmos.acacia.crm.bl.reports.PrintableDocumentHeader;
 import com.cosmos.acacia.crm.bl.reports.Report;
@@ -69,13 +68,13 @@ import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
  * Created : 10.09.2008
- *
+ * 
  * @author Petar Milev
  */
 public class InvoiceForm extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(InvoiceForm.class);
-
+    
     private Invoice entity;
     //remember if the current document is proforma invoice or invoice; For easier re-use
     private boolean proforma;
@@ -110,7 +109,7 @@ public class InvoiceForm extends BaseEntityPanel {
             jBLabel26.setText(getResourceMap().getString("jBLabel26.text.proform"));
             ((TitledBorder)itemsTableHolderPanel.getBorder()).setTitle(getResourceMap().getString("itemsTableHolderPanel.border.title.proform"));
         }
-
+        
         // Using an AbstractTablePanel implementation
         itemsTablePanel = new InvoiceItemListPanel(entity.getInvoiceId(), entity);
 
@@ -130,7 +129,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 onItemsTableChange();
             }
         });
-
+        
         itemsTablePanel.addTablePanelListener(new AbstractTablePanelListener() {
             @Override
             public void tableRefreshed() {
@@ -144,7 +143,7 @@ public class InvoiceForm extends BaseEntityPanel {
         addNestedFormListener(itemsTablePanel);
 
         itemsTableHolderPanel.add(itemsTablePanel);
-
+        
         dueDocumentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,7 +151,7 @@ public class InvoiceForm extends BaseEntityPanel {
             }
         });
         recipientDueField.setHorizontalAlignment(JTextField.TRAILING);
-
+        
         vatValueField.setFormat(getDecimalFormat());
         exciseValueField.setFormat(getDecimalFormat());
     }
@@ -1121,30 +1120,8 @@ public class InvoiceForm extends BaseEntityPanel {
             bindGroup = new BindingGroup();
 
         bindComponents(bindGroup, entProps);
-
-        // if the invoice is in OPEN or PUBLISH status, show button for further
-        // actions
-//        if (InvoiceStatus.Open.equals(entity.getStatus().getEnumValue())
-//                || InvoiceStatus.WaitForPayment.equals(entity.getStatus().getEnumValue())) {
-//            //if invoice in open state - then show publish button
-//            if (InvoiceStatus.Open.equals(entity.getStatus().getEnumValue())
-//                    && !proforma)
-//                entityFormButtonPanel1.getCustomButton().setText(
-//                    getResourceMap().getString("customButton.publish.text"));
-//            //otherwise (if proforma invoice, or invoice in published state - show sent button
-//            else
-//                entityFormButtonPanel1.getCustomButton().setText(
-//                    getResourceMap().getString("customButton.send.text"));
-//            entityFormButtonPanel1.setVisible(Button.Custom, true);
-//            entityFormButtonPanel1.getCustomButton().addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    onActionButton();
-//                }
-//            });
-//        }
     }
-
+    
     @SuppressWarnings("unchecked")
     /**
      * Binds all components to the specified group and entity properties.
@@ -1195,49 +1172,8 @@ public class InvoiceForm extends BaseEntityPanel {
                         onSelectRecipient(selected);
                     }
                 }
-//                @Override
-//                public void synced(Binding binding) {
-//                    System.out.println("synced!"+binding.isContentChanged()+" "+binding.getTargetObject());
-//                }
-//
-//                @Override
-//                public void bindingBecameBound(Binding binding) {
-//                    System.out.println("bound!"+binding.isContentChanged()+" "+binding.getTargetObject());
-//                }
-//                @Override
-//                public void sourceChanged(Binding binding, PropertyStateEvent event) {
-//                    System.out.println("source changed!"+event.getValueChanged()+" "+event.getNewValue());
-//                }
-//                public void bindingBecameUnbound(Binding binding) {
-//                    System.out.println("unbound");
-//                };
-//                @Override
-//                public void sourceEdited(Binding binding) {
-//                    System.out.println("source edit!"+binding.isContentChanged()+" "+binding.getTargetObject());
-//                }
-//                @Override
-//                public void syncFailed(Binding binding, SyncFailure failure) {
-//                    System.out.println("sync fail!"+binding.isContentChanged()+" "+binding.getTargetObject());
-//                }
-//                @Override
-//                public void targetEdited(Binding binding) {
-//                    System.out.println("target edit!"+binding.isContentChanged()+" "+binding.getTargetObject());
-//                }
-
+            
             });
-//        recipientField.addItemListener(new ItemListener() {
-//            @Override
-//            public void itemStateChanged(ItemEvent e) {
-//
-//            }
-//        });
-
-//        recipientField.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                onSelectRecipient();
-//            }
-//        });
 
         // if once saved - the recipient is not changeable
         if (entity.getId() != null && entity.getId().compareTo(new BigInteger("0")) > 0) {
@@ -1264,7 +1200,7 @@ public class InvoiceForm extends BaseEntityPanel {
                     onDocumentTypeChanged((DbResource) e.getItem());
                 }
             }
-        });
+        }, true);
 
         // document delivery
         documentDeliveryField.bind(bindGroup, getDeliveryMethods(), entity,
@@ -1287,7 +1223,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
         // delivery status field
         deliveryStatusField.bind(bindGroup, new ArrayList(), entity, entProps.getPropertyDetails("deliveryStatus"));
-
+        
         // currency
         currencyField.bind(bindGroup, getCurrencies(), entity,
             entProps.getPropertyDetails("currency"));
@@ -1304,7 +1240,7 @@ public class InvoiceForm extends BaseEntityPanel {
             public void itemStateChanged(ItemEvent e) {
                 updatePaymentFields();
             }
-        });
+        }, true);
 
         // payment due date
         Binding paymentDueBinding = paymentDueField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentDueDate"));
@@ -1313,14 +1249,14 @@ public class InvoiceForm extends BaseEntityPanel {
             public Result validate(Object value) {
                 if ( value==null )
                     return null;
-
+                
                 InvoiceStatus status = (InvoiceStatus) entity.getStatus().getEnumValue();
                 if ( InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status) ){}//ok,
                 //in the case the the document is not modifiable - all values are valid
                 else{
                     return null;
                 }
-
+                
                 if ( ! (value instanceof Date) ){
                     return new Validator.Result("err_invalid_due_payment", getResourceMap().getString("err_invalid_due_payment"));
                 }else{
@@ -1329,7 +1265,7 @@ public class InvoiceForm extends BaseEntityPanel {
                     if ( now.after((Date)value) )
                         return new Validator.Result("err_due_payment_old", getResourceMap().getString("err_due_payment_old"));
                 }
-
+                
                 return null;
             };
         });
@@ -1347,7 +1283,6 @@ public class InvoiceForm extends BaseEntityPanel {
                     return;
                 else {
                     updatingAmounts = true;
-//                    if (calculatedDiscountIsPercent)
 //                        updateDiscountPercent(binding.isContentValid());
 //                    else
 //                        updateDiscountAmount(binding.isContentValid());
@@ -1373,7 +1308,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 updateTotalAmount(binding.isContentValid());
             }
         });
-
+        
         // excise
         amountsBinding = excisePercentField.bind(bindGroup, entity, entProps.getPropertyDetails("exciseDutyPercent"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
@@ -1384,7 +1319,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 updateTotalAmount(binding.isContentValid());
             }
         });
-
+        
         // discount value
 //        amountsBinding = discountValueField.bind(bindGroup, entity,
 //            entProps.getPropertyDetails("discountAmount"));
@@ -1529,17 +1464,17 @@ public class InvoiceForm extends BaseEntityPanel {
         //refresh again the fields, because otherwise something
         //goes wrong with the formating
         refreshFormattedFields();
-
+        
         updateVatAmount(true);
         updateExciseAmount(true);
         updatePaymentFields();
-
+        
         boolean readonlyState = !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
             !InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue());
         if (readonlyState)
             setReadonly();
         itemsTablePanel.setReadonly(readonlyState);
-
+        
         addTransitionButtons();
         updateFormButtons();
         updateItemsTableButtons(readonlyState);
@@ -1566,7 +1501,7 @@ public class InvoiceForm extends BaseEntityPanel {
     JBButton reopenButton = null;
     JBButton sendButton = null;
     JBButton cancelButton = null;
-
+    
     private void addTransitionButtons() {
         //just check if one of them is added, they come as a pack
         if ( confirmButton==null ){
@@ -1576,7 +1511,7 @@ public class InvoiceForm extends BaseEntityPanel {
             sendButton = addButton("button.send", "onSendButton");
         }
     }
-
+    
     /**
      * Sets up the needed buttons for the possible state transitions of the document.
      * Should be called after {@link #addTransitionButtons()}
@@ -1588,7 +1523,7 @@ public class InvoiceForm extends BaseEntityPanel {
         reopenButton.setVisible(false);
         sendButton.setVisible(false);
         cancelButton.setVisible(false);
-
+        
         //State operations buttons
         Enum status = entity.getStatus().getEnumValue();
         //for proforma invoice
@@ -1606,10 +1541,10 @@ public class InvoiceForm extends BaseEntityPanel {
             if ( InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status) )
                 confirmButton.setVisible(true);
         }
-
+        
         //send button is always there
         sendButton.setVisible(true);
-
+        
         getButtonPanel().getButton(Button.Save).setVisible(InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status));
         getButtonPanel().getButton(Button.Problems).setVisible(InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status));
         //make sure the buttons are properly activated according to the binding state
@@ -1625,49 +1560,31 @@ public class InvoiceForm extends BaseEntityPanel {
     }
 
     /**
-     * Binds again all bindings where the source object is the entity.
+     * Binds again all bindings where the source object is the entity. 
      * @param updatedEntity
      */
     @SuppressWarnings("unchecked")
     private void refreshForm(Invoice updatedEntity) {
         //un-bind the group
-
+        
         bindGroup.unbind();
         for (Binding binding : bindGroup.getBindings()) {
             bindGroup.removeBinding(binding);
         }
         bindGroup = new BindingGroup();
-
+        
         this.entity = updatedEntity;
-
+        
         bindComponents(bindGroup, entProps);
-
-//        for (Binding binding : bindGroup.getBindings()) {
-//            if ( entity == binding.getSourceObject() ){
-//                if ( binding.isBound() ){
-//                    binding.unbind();
-//                    binding.setSourceObject(updatedEntity);
-//                    binding.bind();
-//                }
-//            }
-//        }
-//        this.entity = updatedEntity;
-//
-//        if (!InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
-//                !InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue())) {
-//            setReadonly();
-//        }
-//
-//        updatePossibleTransitions();
-
+        
         //since we just swap the old entity with a new, updated one, - notify the calling windows,
         //by setting the dialog response
         setDialogResponse(DialogResponse.SAVE);
         setModifiedResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-
+        
     }
-
+    
     @Action
     public void onSendButton(){
         if ( confirmTransition("button.send.confirm")){
@@ -1683,7 +1600,7 @@ public class InvoiceForm extends BaseEntityPanel {
             refreshForm(updatedEntity);
         }
     }
-
+    
     @Action
     public void onCancelButton(){
         if ( showConfirmationDialog(getResourceMap().getString("button.cancel.confirm")) ){
@@ -1691,7 +1608,7 @@ public class InvoiceForm extends BaseEntityPanel {
             refreshForm(updatedEntity);
         }
     }
-
+    
     @Action
     public void onReopenButton(){
         if ( showConfirmationDialog(getResourceMap().getString("button.reopen.confirm"))){
@@ -1699,7 +1616,7 @@ public class InvoiceForm extends BaseEntityPanel {
             refreshForm(updatedEntity);
         }
     }
-
+    
     /**
      * Like {@link #showConfirmationDialog(String)}, but first checks if there are any items present
      * in the document and if not, shows message and stops the operation.
@@ -1713,7 +1630,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 "message.cannotprocessempty.title"), JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
-
+        
         return showConfirmationDialog(getResourceMap().getString(messageKey));
     }
 
@@ -1736,7 +1653,7 @@ public class InvoiceForm extends BaseEntityPanel {
             vatValueField.setValue(new BigDecimal("0"));
         }
     }
-
+    
     protected void updateExciseAmount(boolean contentValid) {
         if (contentValid) {
             try {
@@ -1824,7 +1741,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
         updatingShipDates = false;
     }
-
+    
     protected void calculateShipDates(boolean contentValid) {
         if (updatingShipDates)
             return;
@@ -2062,17 +1979,17 @@ public class InvoiceForm extends BaseEntityPanel {
 
         return result;
     }
-
+    
     private List<Invoice> recipientDueDocuments = null;
 
     protected void onSelectRecipient(BusinessPartner recipient) {
-
+        
         List<ContactPerson> recipientContacts = null;
         if ( recipient!=null )
             recipientContacts = getRecipientContacts(recipient);
         else
             recipientContacts = new ArrayList<ContactPerson>();
-
+        
         if ( bindGroup.getBindings().contains(recipientContactBinding) )
             bindGroup.removeBinding(recipientContactBinding);
         recipientContactBinding = recipientContactField.bind(bindGroup, recipientContacts,
@@ -2085,10 +2002,10 @@ public class InvoiceForm extends BaseEntityPanel {
         } else {
             recipientContactField.setSelectedIndex(-1);
         }
-
+        
         updateRecipientDueFields(recipient);
     }
-
+    
     private void updateRecipientDueFields(BusinessPartner recipient) {
         //get recipient's due documents
         if ( recipient!=null )
@@ -2096,7 +2013,7 @@ public class InvoiceForm extends BaseEntityPanel {
         else{
             recipientDueDocuments = new ArrayList<Invoice>();
         }
-
+        
         //update the due field
         if ( recipientDueDocuments.isEmpty() ){
             recipientDueField.setText("");
@@ -2112,7 +2029,7 @@ public class InvoiceForm extends BaseEntityPanel {
             }
             recipientDueField.setText(AcaciaUtils.getDecimalFormat().format(currentDue));
         }
-
+        
         dueDocumentsButton.setEnabled(!recipientDueDocuments.isEmpty());
     }
 
@@ -2169,43 +2086,7 @@ public class InvoiceForm extends BaseEntityPanel {
         shippingAgentField.setEnabled(false);
         recipientField.setEnabled(false);
     }
-
-    protected void onActionButton() {
-        // if already set up dialog response, then something is wrong, just
-        // ignore
-        if (DialogResponse.SAVE.equals(this.getDialogResponse())) {
-            return;
-        }
-
-        boolean published = InvoiceStatus.WaitForPayment.equals(entity.getStatus().getEnumValue());
-
-        if (itemsTablePanel.getListData() == null || itemsTablePanel.getListData().isEmpty()) {
-            JOptionPane.showMessageDialog(this.getParent(), getResourceMap().getString(
-                "message.cannotpublishempty"), getResourceMap().getString(
-                "message.cannotpublishempty.title"), JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        String confirmationMesssage = getResourceMap().getString("publishButton.confirm");
-        if (published || proforma)
-            confirmationMesssage = getResourceMap().getString("sendButton.confirm");
-
-        if (showConfirmationDialog(confirmationMesssage)) {
-            try {
-                if ( published || proforma )
-                    entity = getFormSession().sendInvoice(entity);
-                else
-//                    entity = getFormSession().publishInvoice(entity);
-
-                setDialogResponse(DialogResponse.SAVE);
-                setSelectedValue(entity);
-                close();
-            } catch (Exception ex) {
-                checkForValidationException(ex);
-            }
-        }
-    }
-
-    @Override
+    
     protected Report getReport() {
         Report report = new Report("invoice", itemsTablePanel.getItems());
         report.setAutoSubreport1Class(InvoiceItem.class);

@@ -337,7 +337,7 @@ public class AcaciaUtils
 
         return currencyFormat;
     }
-
+    
     public static Locale getLocale()
     {
         if(locale == null)
@@ -352,5 +352,4 @@ public class AcaciaUtils
     {
         AcaciaUtils.locale = locale;
     }
-
 }

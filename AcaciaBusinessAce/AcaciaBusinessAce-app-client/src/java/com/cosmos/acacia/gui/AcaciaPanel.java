@@ -38,6 +38,7 @@ import org.jdesktop.application.ResourceMap;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.bl.impl.EnumResourceRemote;
 import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
 import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.bl.reports.ReportsTools;
@@ -46,6 +47,8 @@ import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
@@ -296,6 +299,20 @@ public abstract class AcaciaPanel
     public static AcaciaSessionRemote getAcaciaSession() {
         return LocalSession.instance();
     }
+    
+    private EnumResourceRemote enumResourceRemote = getBean(EnumResourceRemote.class);
+    
+    private Map<Class<? extends DatabaseResource>, List<DbResource>> enumResourcesCache =
+        new HashMap<Class<? extends DatabaseResource>, List<DbResource>>();
+    
+    public List<DbResource> getEnumResources(Class<? extends DatabaseResource> enumClass) {
+        List<DbResource> result = enumResourcesCache.get(enumClass);
+        if ( result==null ){
+            result = getEnumResourceRemote().getEnumResources(enumClass);
+            enumResourcesCache.put(enumClass, result);
+        }
+        return result;
+    }
 
     @Override
     protected void handleException(String message, Throwable ex)
@@ -535,5 +552,9 @@ public abstract class AcaciaPanel
      */
     protected Object getReportHeader() {
         return null;
+    }
+
+    public EnumResourceRemote getEnumResourceRemote() {
+        return enumResourceRemote;
     }
 }

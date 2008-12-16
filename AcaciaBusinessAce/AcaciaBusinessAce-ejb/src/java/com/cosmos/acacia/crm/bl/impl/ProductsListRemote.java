@@ -30,6 +30,8 @@ public interface ProductsListRemote {
     List<ProductCategory> getProductsCategories(DataObject parent);
 
     EntityProperties getProductEntityProperties();
+    
+    EntityProperties getProductListingEntityProperties();
 
     SimpleProduct newProduct(BigInteger bigInteger);
 
