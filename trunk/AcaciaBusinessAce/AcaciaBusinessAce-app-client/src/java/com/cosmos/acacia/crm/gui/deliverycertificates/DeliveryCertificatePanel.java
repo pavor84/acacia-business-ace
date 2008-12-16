@@ -478,8 +478,23 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     @Action
     public void refresh(){
     	
-    	bindDeliveryCertificateItems(entity.getDocumentAssignment().getDocumentId());
+    	if(entity.getDeliveryCertificateId() == null){
+    		return;
+    	}
     	
+    	List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(entity.getDocumentAssignment().getDocumentId());
+        if(deliveryCertificateItems == null){
+        	deliveryCertificateItems = getFormSession().getDeliveryCertificateItems(entity.getDeliveryCertificateId());
+        }
+    	for(DeliveryCertificateItem item : deliveryCertificateItems){
+        	for(InvoiceItem invoiceItem : invoiceItems){
+        		if(invoiceItem.getInvoiceItemId().equals(item.getReferenceItemId())){
+        			DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
+        			item.setQuantity(dci.getQuantity());
+        		}
+        	}
+        }
+        itemsTablePanel.refreshList(deliveryCertificateItems);
     }
     
     @Override
