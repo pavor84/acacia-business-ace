@@ -63,7 +63,9 @@ import com.cosmos.acacia.util.numbers.NumberNamesAlgorithmFactory;
 import com.cosmos.acacia.util.numbers.NumberNamesAlgorithmType;
 import com.cosmos.acacia.util.numbers.UnsupportedNumberAlgorithmException;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.BaseValidator;
+import com.cosmos.beansbinding.validation.RequiredValidator;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.listeners.TableModificationListener;
@@ -131,6 +133,8 @@ public class InvoiceForm extends BaseEntityPanel {
                 onItemsTableChange();
             }
         });
+        
+        additionalDetailsPanel.setVisible(proforma);
 
         itemsTablePanel.addTablePanelListener(new AbstractTablePanelListener() {
             @Override
@@ -226,6 +230,14 @@ public class InvoiceForm extends BaseEntityPanel {
         jBPanel4 = new com.cosmos.swingb.JBPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         notesField = new com.cosmos.swingb.JBTextPane();
+        additionalDetailsPanel = new com.cosmos.swingb.JBPanel();
+        jBLabel35 = new com.cosmos.swingb.JBLabel();
+        validToField = new com.cosmos.swingb.JBDatePicker();
+        jBLabel44 = new com.cosmos.swingb.JBLabel();
+        jBLabel45 = new com.cosmos.swingb.JBLabel();
+        attendeeField = new com.cosmos.acacia.gui.AcaciaComboBox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        additionalTermsField = new com.cosmos.swingb.JBTextPane();
         jBPanel5 = new com.cosmos.swingb.JBPanel();
         jBPanel6 = new com.cosmos.swingb.JBPanel();
         paymentTypeField = new com.cosmos.acacia.gui.AcaciaComboBox();
@@ -383,61 +395,61 @@ public class InvoiceForm extends BaseEntityPanel {
                 .addContainerGap()
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                        .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(branchField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
+                        .addComponent(branchField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
                     .addGroup(jBPanel2Layout.createSequentialGroup()
                         .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jBLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jBLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jBLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jBLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jBLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
+                            .addComponent(jBLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(jBLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(jBLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(jBLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(jBLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                            .addComponent(jBLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sentAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                            .addComponent(createdAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                            .addComponent(documentDateField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                            .addComponent(invoiceNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                            .addComponent(createdByField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                            .addComponent(sentByField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))))
+                            .addComponent(sentAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                            .addComponent(createdAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                            .addComponent(documentDateField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                            .addComponent(invoiceNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                            .addComponent(createdByField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                            .addComponent(sentByField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))))
                 .addGap(10, 10, 10)
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jBPanel2Layout.createSequentialGroup()
                             .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jBLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(jBLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                                .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                                .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                                 .addGroup(jBPanel2Layout.createSequentialGroup()
-                                    .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                    .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel2Layout.createSequentialGroup()
                                     .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jBLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                        .addComponent(jBLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+                                        .addComponent(jBLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                                        .addComponent(jBLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                             .addGap(5, 5, 5))
                         .addGroup(jBPanel2Layout.createSequentialGroup()
-                            .addComponent(jBLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                            .addComponent(jBLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                     .addGroup(jBPanel2Layout.createSequentialGroup()
                         .addComponent(jBLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(completedAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                    .addComponent(deliveryStatusField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                    .addComponent(statusField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                    .addComponent(completedAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addComponent(deliveryStatusField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addComponent(statusField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel2Layout.createSequentialGroup()
-                        .addComponent(recipientDueField, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                        .addComponent(recipientDueField, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dueDocumentsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(recipientField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                    .addComponent(documentTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                    .addComponent(recipientContactField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE))
+                        .addComponent(dueDocumentsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                    .addComponent(recipientField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addComponent(documentTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addComponent(documentDeliveryField, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addComponent(recipientContactField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel2Layout.setVerticalGroup(
@@ -534,28 +546,28 @@ public class InvoiceForm extends BaseEntityPanel {
             .addGroup(jBPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                    .addComponent(jBLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                    .addComponent(jBLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                    .addComponent(jBLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(jBLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(jBLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(deliveryTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(shippingAgentField, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(transportMethodField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+                    .addComponent(deliveryTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                    .addComponent(shippingAgentField, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                    .addComponent(transportMethodField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel3Layout.createSequentialGroup()
-                        .addComponent(jBLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                        .addComponent(jBLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(shipDateFromField, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+                        .addComponent(shipDateFromField, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE))
                     .addGroup(jBPanel3Layout.createSequentialGroup()
                         .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                            .addComponent(jBLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                            .addComponent(jBLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(jBLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(shipWeekField, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                            .addComponent(shipDateToField, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))))
+                            .addComponent(shipWeekField, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                            .addComponent(shipDateToField, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jBPanel3Layout.setVerticalGroup(
@@ -603,13 +615,70 @@ public class InvoiceForm extends BaseEntityPanel {
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 874, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 886, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jBPanel4Layout.setVerticalGroup(
             jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        additionalDetailsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("additionalDetailsPanel.border.title"))); // NOI18N
+        additionalDetailsPanel.setName("additionalDetailsPanel"); // NOI18N
+
+        jBLabel35.setText(resourceMap.getString("jBLabel35.text")); // NOI18N
+        jBLabel35.setName("jBLabel35"); // NOI18N
+
+        validToField.setName("validToField"); // NOI18N
+
+        jBLabel44.setText(resourceMap.getString("jBLabel44.text")); // NOI18N
+        jBLabel44.setName("jBLabel44"); // NOI18N
+
+        jBLabel45.setText(resourceMap.getString("jBLabel45.text")); // NOI18N
+        jBLabel45.setName("jBLabel45"); // NOI18N
+
+        attendeeField.setName("attendeeField"); // NOI18N
+
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        additionalTermsField.setName("additionalTermsField"); // NOI18N
+        jScrollPane2.setViewportView(additionalTermsField);
+
+        javax.swing.GroupLayout additionalDetailsPanelLayout = new javax.swing.GroupLayout(additionalDetailsPanel);
+        additionalDetailsPanel.setLayout(additionalDetailsPanelLayout);
+        additionalDetailsPanelLayout.setHorizontalGroup(
+            additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, additionalDetailsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .addComponent(jBLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(attendeeField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                    .addComponent(validToField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jBLabel45, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        additionalDetailsPanelLayout.setVerticalGroup(
+            additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(additionalDetailsPanelLayout.createSequentialGroup()
+                .addGroup(additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(additionalDetailsPanelLayout.createSequentialGroup()
+                        .addGroup(additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(validToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(additionalDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(attendeeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -617,21 +686,24 @@ public class InvoiceForm extends BaseEntityPanel {
         jBPanel1.setLayout(jBPanel1Layout);
         jBPanel1Layout.setHorizontalGroup(
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(additionalDetailsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel1Layout.setVerticalGroup(
             jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(additionalDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -688,26 +760,26 @@ public class InvoiceForm extends BaseEntityPanel {
                     .addComponent(jBLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(singlePayAmountField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                    .addComponent(paymentTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
+                    .addComponent(singlePayAmountField, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addComponent(paymentTypeField, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                    .addComponent(jBLabel37, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
+                    .addComponent(jBLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(jBLabel37, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(paymentsCountField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                    .addComponent(paymentTermsField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
+                    .addComponent(paymentsCountField, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                    .addComponent(paymentTermsField, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBPanel6Layout.createSequentialGroup()
                         .addComponent(jBLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30))
-                    .addComponent(jBLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(daysBetweenPaymentsField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                    .addComponent(paymentDueField, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                    .addComponent(daysBetweenPaymentsField, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                    .addComponent(paymentDueField, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel6Layout.setVerticalGroup(
@@ -806,42 +878,42 @@ public class InvoiceForm extends BaseEntityPanel {
                 .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jBPanel8Layout.createSequentialGroup()
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                            .addComponent(jBLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
+                            .addComponent(jBLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                            .addComponent(jBLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(currencyField, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                            .addComponent(invoiceSubValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)))
+                            .addComponent(currencyField, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                            .addComponent(invoiceSubValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)))
                     .addGroup(jBPanel8Layout.createSequentialGroup()
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                            .addComponent(jBLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
+                            .addComponent(jBLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                            .addComponent(jBLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                            .addComponent(vatConditionField, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                            .addComponent(vatConditionField, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
                 .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                    .addComponent(jBLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                    .addComponent(jBLabel28, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                    .addComponent(jBLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                    .addComponent(jBLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                    .addComponent(jBLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                    .addComponent(jBLabel28, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                    .addComponent(jBLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel8Layout.createSequentialGroup()
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(vatPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                            .addComponent(excisePercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                            .addComponent(vatPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(excisePercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jBLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(exciseValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                            .addComponent(vatValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
-                    .addComponent(transportPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                    .addComponent(totalValueField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                            .addComponent(exciseValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                            .addComponent(vatValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)))
+                    .addComponent(transportPriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
+                    .addComponent(totalValueField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jBPanel8Layout.setVerticalGroup(
@@ -892,11 +964,11 @@ public class InvoiceForm extends BaseEntityPanel {
         itemsTableHolderPanel.setLayout(itemsTableHolderPanelLayout);
         itemsTableHolderPanelLayout.setHorizontalGroup(
             itemsTableHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 894, Short.MAX_VALUE)
+            .addGap(0, 906, Short.MAX_VALUE)
         );
         itemsTableHolderPanelLayout.setVerticalGroup(
             itemsTableHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 288, Short.MAX_VALUE)
+            .addGap(0, 322, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jBPanel5Layout = new javax.swing.GroupLayout(jBPanel5);
@@ -918,7 +990,7 @@ public class InvoiceForm extends BaseEntityPanel {
         jBPanel5Layout.setVerticalGroup(
             jBPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel5Layout.createSequentialGroup()
-                .addGap(181, 181, 181)
+                .addGap(182, 182, 182)
                 .addComponent(itemsTableHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -927,7 +999,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 .addGroup(jBPanel5Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jBPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(419, Short.MAX_VALUE)))
+                    .addContainerGap(454, Short.MAX_VALUE)))
         );
 
         jBTabbedPane1.addTab(resourceMap.getString("jBPanel5.TabConstraints.tabTitle"), jBPanel5); // NOI18N
@@ -938,13 +1010,13 @@ public class InvoiceForm extends BaseEntityPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
-            .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
+            .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 943, Short.MAX_VALUE)
+            .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
+                .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -975,6 +1047,9 @@ public class InvoiceForm extends BaseEntityPanel {
     }// GEN-LAST:event_finalizedAtFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBPanel additionalDetailsPanel;
+    private com.cosmos.swingb.JBTextPane additionalTermsField;
+    private com.cosmos.acacia.gui.AcaciaComboBox attendeeField;
     private com.cosmos.swingb.JBTextField branchField;
     private com.cosmos.swingb.JBDatePicker completedAtField;
     private com.cosmos.swingb.JBDatePicker createdAtField;
@@ -1019,6 +1094,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel32;
     private com.cosmos.swingb.JBLabel jBLabel33;
     private com.cosmos.swingb.JBLabel jBLabel34;
+    private com.cosmos.swingb.JBLabel jBLabel35;
     private com.cosmos.swingb.JBLabel jBLabel36;
     private com.cosmos.swingb.JBLabel jBLabel37;
     private com.cosmos.swingb.JBLabel jBLabel38;
@@ -1027,6 +1103,8 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel41;
     private com.cosmos.swingb.JBLabel jBLabel42;
     private com.cosmos.swingb.JBLabel jBLabel43;
+    private com.cosmos.swingb.JBLabel jBLabel44;
+    private com.cosmos.swingb.JBLabel jBLabel45;
     private com.cosmos.swingb.JBLabel jBLabel6;
     private com.cosmos.swingb.JBLabel jBLabel7;
     private com.cosmos.swingb.JBLabel jBLabel8;
@@ -1040,6 +1118,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBPanel jBPanel8;
     private com.cosmos.swingb.JBTabbedPane jBTabbedPane1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private com.cosmos.swingb.JBTextPane notesField;
     private com.cosmos.swingb.JBDatePicker paymentDueField;
@@ -1060,6 +1139,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBFormattedTextField totalValueField;
     private com.cosmos.acacia.gui.AcaciaComboBox transportMethodField;
     private com.cosmos.swingb.JBFormattedTextField transportPriceField;
+    private com.cosmos.swingb.JBDatePicker validToField;
     private com.cosmos.acacia.gui.AcaciaComboBox vatConditionField;
     private com.cosmos.swingb.JBTextPane vatConditionNotesField;
     private com.cosmos.swingb.JBFormattedTextField vatPercentField;
@@ -1068,6 +1148,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
     @SuppressWarnings("unchecked")
     JComboBoxBinding recipientContactBinding;
+    JComboBoxBinding attendeeBinding;
 
     private InvoiceItemListPanel itemsTablePanel;
 
@@ -1185,6 +1266,13 @@ public class InvoiceForm extends BaseEntityPanel {
 
         // recipient contact will be bound inside this method
         onSelectRecipient(entity.getRecipient());
+        recipientContactField.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                onRecipientContactChanged(e.getItem());
+            }
+        }, true);
+         
 
         if ( shippingAgentListPanel==null )
             shippingAgentListPanel = BusinessPartnersListPanel.createShippingAgentPanel(getParentDataObjectId());
@@ -1285,13 +1373,6 @@ public class InvoiceForm extends BaseEntityPanel {
                     return;
                 else {
                     updatingAmounts = true;
-//                        updateDiscountPercent(binding.isContentValid());
-//                    else
-//                        updateDiscountAmount(binding.isContentValid());
-                    //if (calculatedExciseIsPercent)
-                    //    updateExciseDutyPercent(binding.isContentValid());
-                    //else
-                    // updateExciseDutyValue(binding.isContentValid());
                     updateExciseAmount(binding.isContentValid());
                     updateTotalAmount(binding.isContentValid());
                     updateVatAmount(binding.isContentValid());
@@ -1321,76 +1402,6 @@ public class InvoiceForm extends BaseEntityPanel {
                 updateTotalAmount(binding.isContentValid());
             }
         });
-
-        // discount value
-//        amountsBinding = discountValueField.bind(bindGroup, entity,
-//            entProps.getPropertyDetails("discountAmount"));
-//        amountsBinding.addBindingListener(new AbstractBindingListener() {
-//            @Override
-//            public void targetChanged(Binding binding, PropertyStateEvent event) {
-//                if (updatingAmounts)
-//                    return;
-//                else {
-//                    updatingAmounts = true;
-//                    updateDiscountPercent(binding.isContentValid());
-//                    updateTotalAmount(binding.isContentValid());
-//                    updatingAmounts = false;
-//                }
-//            }
-//        });
-
-        // discount percent
-//        amountsBinding = discountPercentField.bind(bindGroup, entity,
-//            entProps.getPropertyDetails("discountPercent"));
-//        amountsBinding.addBindingListener(new AbstractBindingListener() {
-//            @SuppressWarnings("unchecked")
-//            @Override
-//            public void targetChanged(Binding binding, PropertyStateEvent event) {
-//                if (updatingAmounts)
-//                    return;
-//                else {
-//                    updatingAmounts = true;
-//                    updateDiscountAmount(binding.isContentValid());
-//                    updateTotalAmount(binding.isContentValid());
-//                    updatingAmounts = false;
-//                }
-//            }
-//        });
-
-        // excise duty value
-//        amountsBinding = exciseDutyValueField.bind(bindGroup, entity,
-//            entProps.getPropertyDetails("exciseDutyValue"), getDecimalFormat());
-//        amountsBinding.addBindingListener(new AbstractBindingListener() {
-//            @Override
-//            public void targetChanged(Binding binding, PropertyStateEvent event) {
-//                if (updatingAmounts)
-//                    return;
-//                else {
-//                    updatingAmounts = true;
-//                    updateExciseDutyPercent(binding.isContentValid());
-//                    updateTotalAmount(binding.isContentValid());
-//                    updatingAmounts = false;
-//                }
-//            }
-//        });
-
-        // excise duty percent
-//        amountsBinding = exciseDutyPercentField.bind(bindGroup, entity,
-//            entProps.getPropertyDetails("exciseDutyPercent"), getDecimalFormat());
-//        amountsBinding.addBindingListener(new AbstractBindingListener() {
-//            @SuppressWarnings("unchecked")
-//            @Override
-//            public void targetChanged(Binding binding, PropertyStateEvent event) {
-//                if (updatingAmounts)
-//                    return;
-//                else {
-//                    updatingAmounts = true;
-//                    updateExciseDutyValue(binding.isContentValid());
-//                    updateTotalAmount(binding.isContentValid());
-//                    updatingAmounts = false;
-//                }
-//            }
-//        });
 
         // transport price
         amountsBinding = transportPriceField.bind(bindGroup, entity,
@@ -1449,6 +1460,51 @@ public class InvoiceForm extends BaseEntityPanel {
         // vat condition notes
         vatConditionNotesField.bind(bindGroup, entity,
             entProps.getPropertyDetails("vatConditionNotes"));
+        
+        boolean readonlyState = !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
+        !InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue());
+        
+        //some fields only for proforma invoice
+        if ( proforma ){
+            // valid to date
+            PropertyDetails pd = entProps.getPropertyDetails("validTo");
+            pd.setRequired(true);
+            Binding validToBinding = validToField.bind(bindGroup, entity, pd);
+            if ( !readonlyState ){
+                validToBinding.setValidator(new BaseValidator() {
+                    @Override
+                    public boolean isRequired() {
+                        return true;
+                    }
+                    @Override
+                    public Result validate(Object value) {
+                        if ( value==null )
+                            return new Validator.Result("err_invalid_validto", getResourceMap().getString("err_invalid_due_payment"));
+        
+                        InvoiceStatus status = (InvoiceStatus) entity.getStatus().getEnumValue();
+                        if ( InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status) ){}//ok,
+                        //in the case the the document is not modifiable - all values are valid
+                        else{
+                            return null;
+                        }
+        
+                        if ( ! (value instanceof Date) ){
+                            return new Validator.Result("err_invalid_validto", getResourceMap().getString("err_invalid_due_payment"));
+                        }else{
+                            Date now = new Date();
+                            now.setTime(now.getTime()-1000*60*60*24);//substract one day
+                            if ( now.after((Date)value) )
+                                return new Validator.Result("err_validto_old", getResourceMap().getString("err_due_payment_old"));
+                        }
+        
+                        return null;
+                    };
+                });
+            }
+            
+            // additional terms
+            additionalTermsField.bind(bindGroup, entity, entProps.getPropertyDetails("additionalTerms"));
+        }
 
         invoiceSubValueField.setEditable(false);
         totalValueField.setEditable(false);
@@ -1471,8 +1527,6 @@ public class InvoiceForm extends BaseEntityPanel {
         updateExciseAmount(true);
         updatePaymentFields();
 
-        boolean readonlyState = !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
-            !InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue());
         if (readonlyState)
             setReadonly();
         itemsTablePanel.setReadonly(readonlyState);
@@ -1481,6 +1535,18 @@ public class InvoiceForm extends BaseEntityPanel {
         updateFormButtons();
         updateItemsTableButtons(readonlyState);
         onItemsTableChange();
+    }
+
+    protected void onRecipientContactChanged(Object item) {
+        if ( proforma ){
+            //if there is already a value - don't overwrite it
+            if ( attendeeField.getSelectedIndex()!=-1 )
+                return;
+            
+            if ( item instanceof ContactPerson ){
+                attendeeField.setSelectedItem(item);
+            }
+        }
     }
 
     private void refreshFormattedFields() {
@@ -2003,6 +2069,19 @@ public class InvoiceForm extends BaseEntityPanel {
             recipientContactField.setSelectedIndex(0);
         } else {
             recipientContactField.setSelectedIndex(-1);
+        }
+        
+        if ( proforma ){
+            if ( bindGroup.getBindings().contains(attendeeBinding) )
+                bindGroup.removeBinding(attendeeBinding);
+            PropertyDetails pd = entProps.getPropertyDetails("attendee");
+            pd.setValidator(new RequiredValidator());
+            ((RequiredValidator)pd.getValidator()).setRequired(true);
+            pd.setRequired(true);
+            attendeeBinding = attendeeField.bind(bindGroup, recipientContacts,
+                entity, pd);
+            attendeeBinding.bind();
+            attendeeField.setSelectedIndex(recipientContactField.getSelectedIndex());
         }
 
         updateRecipientDueFields(recipient);

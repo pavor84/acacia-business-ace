@@ -3,6 +3,7 @@ package com.cosmos.acacia.crm.bl.invoice;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -110,6 +111,9 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         entityProperties.removePropertyDetails("vatConditionNotes");
         entityProperties.removePropertyDetails("completionDate");
         entityProperties.removePropertyDetails("deliveryStatus");
+        entityProperties.removePropertyDetails("validTo");
+        entityProperties.removePropertyDetails("attendee");
+        entityProperties.removePropertyDetails("additionalTerms");
         
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
@@ -140,7 +144,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     
     public Invoice newInvoice(BigInteger parentDataObjectId) {
-        
         Invoice c = new Invoice();
         
         Address branch = acaciaSession.getBranch();
@@ -168,6 +171,9 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         c.setStatus(InvoiceStatus.Open.getDbResource());
         c.setProformaInvoice(Boolean.FALSE);
         c.setDeliveryStatus(DeliveryStatus.NotDelivered.getDbResource());
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MONTH, 1);
+        c.setValidTo(now.getTime());
         
         return c;
     }

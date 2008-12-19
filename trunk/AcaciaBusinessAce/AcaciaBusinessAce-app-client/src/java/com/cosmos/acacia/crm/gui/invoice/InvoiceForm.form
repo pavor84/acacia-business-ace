@@ -18,14 +18,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="entityFormButtonPanel1" alignment="0" pref="931" max="32767" attributes="0"/>
-          <Component id="jBTabbedPane1" alignment="0" pref="931" max="32767" attributes="0"/>
+          <Component id="entityFormButtonPanel1" alignment="0" pref="943" max="32767" attributes="0"/>
+          <Component id="jBTabbedPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jBTabbedPane1" pref="618" max="32767" attributes="0"/>
+              <Component id="jBTabbedPane1" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -56,11 +56,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="additionalDetailsPanel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBPanel4" alignment="1" max="32767" attributes="0"/>
                           <Component id="jBPanel2" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jBPanel4" alignment="0" max="32767" attributes="0"/>
                           <Component id="jBPanel3" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -70,13 +71,15 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jBPanel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="jBPanel2" min="-2" pref="264" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jBPanel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="additionalDetailsPanel" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jBPanel4" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -99,28 +102,28 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jBLabel6" pref="129" max="32767" attributes="0"/>
+                                  <Component id="jBLabel6" pref="131" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="branchField" pref="277" max="32767" attributes="0"/>
+                                  <Component id="branchField" pref="279" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jBLabel8" alignment="1" pref="129" max="32767" attributes="0"/>
-                                      <Component id="jBLabel7" alignment="1" pref="129" max="32767" attributes="0"/>
-                                      <Component id="jBLabel11" alignment="0" pref="129" max="32767" attributes="0"/>
-                                      <Component id="jBLabel12" alignment="0" pref="129" max="32767" attributes="0"/>
-                                      <Component id="jBLabel20" alignment="0" pref="129" max="32767" attributes="0"/>
-                                      <Component id="jBLabel21" alignment="0" pref="129" max="32767" attributes="0"/>
-                                      <Component id="jBLabel13" alignment="0" pref="129" max="32767" attributes="0"/>
+                                      <Component id="jBLabel8" alignment="1" pref="131" max="32767" attributes="0"/>
+                                      <Component id="jBLabel7" alignment="1" pref="131" max="32767" attributes="0"/>
+                                      <Component id="jBLabel11" alignment="0" pref="131" max="32767" attributes="0"/>
+                                      <Component id="jBLabel12" alignment="0" pref="131" max="32767" attributes="0"/>
+                                      <Component id="jBLabel20" alignment="0" pref="131" max="32767" attributes="0"/>
+                                      <Component id="jBLabel21" alignment="0" pref="131" max="32767" attributes="0"/>
+                                      <Component id="jBLabel13" alignment="0" pref="131" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="sentAtField" pref="277" max="32767" attributes="1"/>
-                                      <Component id="createdAtField" pref="277" max="32767" attributes="1"/>
-                                      <Component id="documentDateField" alignment="0" pref="277" max="32767" attributes="1"/>
-                                      <Component id="invoiceNumberField" alignment="0" pref="277" max="32767" attributes="1"/>
-                                      <Component id="createdByField" alignment="0" pref="277" max="32767" attributes="0"/>
-                                      <Component id="sentByField" alignment="0" pref="277" max="32767" attributes="0"/>
+                                      <Component id="sentAtField" pref="279" max="32767" attributes="1"/>
+                                      <Component id="createdAtField" pref="279" max="32767" attributes="1"/>
+                                      <Component id="documentDateField" alignment="0" pref="279" max="32767" attributes="1"/>
+                                      <Component id="invoiceNumberField" alignment="0" pref="279" max="32767" attributes="1"/>
+                                      <Component id="createdByField" alignment="0" pref="279" max="32767" attributes="0"/>
+                                      <Component id="sentByField" alignment="0" pref="279" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -129,17 +132,17 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jBLabel9" alignment="1" pref="122" max="32767" attributes="2"/>
-                                          <Component id="jBLabel10" alignment="0" pref="122" max="32767" attributes="2"/>
-                                          <Component id="jBLabel1" alignment="0" pref="122" max="32767" attributes="0"/>
+                                          <Component id="jBLabel9" alignment="1" pref="126" max="32767" attributes="2"/>
+                                          <Component id="jBLabel10" alignment="0" pref="126" max="32767" attributes="2"/>
+                                          <Component id="jBLabel1" alignment="0" pref="126" max="32767" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jBLabel14" pref="122" max="32767" attributes="2"/>
+                                              <Component id="jBLabel14" pref="126" max="32767" attributes="2"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="1" attributes="0">
                                               <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="jBLabel16" alignment="0" pref="122" max="32767" attributes="3"/>
-                                                  <Component id="jBLabel15" alignment="1" pref="122" max="32767" attributes="2"/>
+                                                  <Component id="jBLabel16" alignment="0" pref="126" max="32767" attributes="3"/>
+                                                  <Component id="jBLabel15" alignment="1" pref="126" max="32767" attributes="2"/>
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
@@ -147,7 +150,7 @@
                                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="jBLabel29" pref="123" max="32767" attributes="3"/>
+                                      <Component id="jBLabel29" pref="127" max="32767" attributes="3"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -157,18 +160,18 @@
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="completedAtField" alignment="0" pref="327" max="32767" attributes="1"/>
-                              <Component id="deliveryStatusField" alignment="1" pref="327" max="32767" attributes="0"/>
-                              <Component id="statusField" alignment="1" pref="327" max="32767" attributes="0"/>
+                              <Component id="completedAtField" alignment="0" pref="331" max="32767" attributes="1"/>
+                              <Component id="deliveryStatusField" alignment="1" pref="331" max="32767" attributes="0"/>
+                              <Component id="statusField" alignment="1" pref="331" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="recipientDueField" pref="208" max="32767" attributes="0"/>
+                                  <Component id="recipientDueField" pref="210" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="dueDocumentsButton" max="32767" attributes="0"/>
+                                  <Component id="dueDocumentsButton" pref="115" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="recipientField" alignment="1" pref="327" max="32767" attributes="0"/>
-                              <Component id="documentTypeField" alignment="0" pref="327" max="32767" attributes="0"/>
-                              <Component id="documentDeliveryField" alignment="0" pref="327" max="32767" attributes="0"/>
-                              <Component id="recipientContactField" alignment="1" pref="327" max="32767" attributes="0"/>
+                              <Component id="recipientField" alignment="1" pref="331" max="32767" attributes="0"/>
+                              <Component id="documentTypeField" alignment="0" pref="331" max="32767" attributes="0"/>
+                              <Component id="documentDeliveryField" alignment="0" pref="331" max="32767" attributes="0"/>
+                              <Component id="recipientContactField" alignment="1" pref="331" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -469,32 +472,32 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jBLabel19" pref="128" max="32767" attributes="2"/>
-                              <Component id="jBLabel17" alignment="0" pref="128" max="32767" attributes="2"/>
-                              <Component id="jBLabel18" alignment="0" pref="128" max="32767" attributes="2"/>
+                              <Component id="jBLabel19" pref="132" max="32767" attributes="2"/>
+                              <Component id="jBLabel17" alignment="0" pref="132" max="32767" attributes="2"/>
+                              <Component id="jBLabel18" alignment="0" pref="132" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="deliveryTypeField" alignment="0" pref="285" max="32767" attributes="2"/>
-                              <Component id="shippingAgentField" alignment="0" pref="285" max="32767" attributes="2"/>
-                              <Component id="transportMethodField" alignment="1" pref="285" max="32767" attributes="2"/>
+                              <Component id="deliveryTypeField" alignment="0" pref="289" max="32767" attributes="2"/>
+                              <Component id="shippingAgentField" alignment="0" pref="289" max="32767" attributes="2"/>
+                              <Component id="transportMethodField" alignment="1" pref="289" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jBLabel23" pref="118" max="32767" attributes="2"/>
+                                  <Component id="jBLabel23" pref="120" max="32767" attributes="2"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="shipDateFromField" pref="325" max="32767" attributes="0"/>
+                                  <Component id="shipDateFromField" pref="327" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jBLabel24" pref="118" max="32767" attributes="2"/>
-                                      <Component id="jBLabel32" pref="118" max="32767" attributes="2"/>
+                                      <Component id="jBLabel24" pref="120" max="32767" attributes="2"/>
+                                      <Component id="jBLabel32" pref="120" max="32767" attributes="2"/>
                                   </Group>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="shipWeekField" alignment="0" pref="325" max="32767" attributes="2"/>
-                                      <Component id="shipDateToField" alignment="0" pref="325" max="32767" attributes="0"/>
+                                      <Component id="shipWeekField" alignment="0" pref="327" max="32767" attributes="2"/>
+                                      <Component id="shipDateToField" alignment="0" pref="327" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -637,7 +640,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="874" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="886" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -645,7 +648,7 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="141" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="77" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -665,6 +668,114 @@
                     <Component class="com.cosmos.swingb.JBTextPane" name="notesField">
                       <Properties>
                         <Property name="name" type="java.lang.String" value="notesField" noResource="true"/>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+              </SubComponents>
+            </Container>
+            <Container class="com.cosmos.swingb.JBPanel" name="additionalDetailsPanel">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Additional Details">
+                      <Property name="titleX" resourceKey="additionalDetailsPanel.border.title"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="additionalDetailsPanel" noResource="true"/>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jBLabel44" pref="131" max="32767" attributes="0"/>
+                              <Component id="jBLabel35" alignment="0" pref="131" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="attendeeField" pref="282" max="32767" attributes="0"/>
+                              <Component id="validToField" alignment="0" pref="282" max="32767" attributes="2"/>
+                          </Group>
+                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                          <Component id="jBLabel45" pref="123" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" pref="324" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel35" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="validToField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jBLabel45" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jBLabel44" alignment="3" min="-2" pref="25" max="-2" attributes="1"/>
+                                      <Component id="attendeeField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="jScrollPane2" alignment="0" pref="55" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel35">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel35.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel35" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBDatePicker" name="validToField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="validToField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel44">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel44.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel44" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="jBLabel45">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="jBLabel45.text"/>
+                    <Property name="name" type="java.lang.String" value="jBLabel45" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="attendeeField">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="attendeeField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="com.cosmos.swingb.JBTextPane" name="additionalTermsField">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="additionalTermsField" noResource="true"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -708,7 +819,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="182" max="-2" attributes="0"/>
                       <Component id="itemsTableHolderPanel" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jBPanel6" min="-2" pref="81" max="-2" attributes="0"/>
@@ -718,7 +829,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jBPanel8" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="419" max="32767" attributes="0"/>
+                          <EmptySpace pref="454" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -746,18 +857,18 @@
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="singlePayAmountField" pref="164" max="32767" attributes="0"/>
-                              <Component id="paymentTypeField" alignment="1" pref="164" max="32767" attributes="2"/>
+                              <Component id="singlePayAmountField" pref="166" max="32767" attributes="0"/>
+                              <Component id="paymentTypeField" alignment="1" pref="166" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jBLabel41" alignment="1" pref="105" max="32767" attributes="2"/>
-                              <Component id="jBLabel37" alignment="1" pref="105" max="32767" attributes="2"/>
+                              <Component id="jBLabel41" alignment="1" pref="109" max="32767" attributes="2"/>
+                              <Component id="jBLabel37" alignment="1" pref="109" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="paymentsCountField" pref="175" max="32767" attributes="0"/>
-                              <Component id="paymentTermsField" alignment="0" pref="175" max="32767" attributes="2"/>
+                              <Component id="paymentsCountField" pref="177" max="32767" attributes="0"/>
+                              <Component id="paymentTermsField" alignment="0" pref="177" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -765,12 +876,12 @@
                                   <Component id="jBLabel38" min="-2" pref="93" max="-2" attributes="2"/>
                                   <EmptySpace min="30" pref="30" max="30" attributes="0"/>
                               </Group>
-                              <Component id="jBLabel42" alignment="0" max="32767" attributes="2"/>
+                              <Component id="jBLabel42" alignment="0" pref="125" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="daysBetweenPaymentsField" pref="182" max="32767" attributes="0"/>
-                              <Component id="paymentDueField" alignment="1" pref="182" max="32767" attributes="2"/>
+                              <Component id="daysBetweenPaymentsField" pref="184" max="32767" attributes="0"/>
+                              <Component id="paymentDueField" alignment="1" pref="184" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -897,40 +1008,40 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jBLabel25" alignment="0" pref="126" max="32767" attributes="2"/>
-                                      <Component id="jBLabel26" alignment="0" pref="126" max="32767" attributes="2"/>
+                                      <Component id="jBLabel25" alignment="0" pref="128" max="32767" attributes="2"/>
+                                      <Component id="jBLabel26" alignment="0" pref="128" max="32767" attributes="2"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="currencyField" pref="288" max="32767" attributes="2"/>
-                                      <Component id="invoiceSubValueField" alignment="0" pref="288" max="32767" attributes="0"/>
+                                      <Component id="currencyField" pref="290" max="32767" attributes="2"/>
+                                      <Component id="invoiceSubValueField" alignment="0" pref="290" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="jBLabel43" pref="126" max="32767" attributes="2"/>
-                                      <Component id="jBLabel34" alignment="1" pref="126" max="32767" attributes="2"/>
+                                      <Component id="jBLabel43" pref="128" max="32767" attributes="2"/>
+                                      <Component id="jBLabel34" alignment="1" pref="128" max="32767" attributes="2"/>
                                   </Group>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane3" pref="288" max="32767" attributes="1"/>
-                                      <Component id="vatConditionField" alignment="0" pref="288" max="32767" attributes="2"/>
+                                      <Component id="jScrollPane3" pref="290" max="32767" attributes="1"/>
+                                      <Component id="vatConditionField" alignment="0" pref="290" max="32767" attributes="2"/>
                                   </Group>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jBLabel31" pref="137" max="32767" attributes="2"/>
-                              <Component id="jBLabel30" pref="137" max="32767" attributes="2"/>
-                              <Component id="jBLabel28" alignment="1" pref="137" max="32767" attributes="2"/>
-                              <Component id="jBLabel27" pref="137" max="32767" attributes="2"/>
+                              <Component id="jBLabel31" pref="141" max="32767" attributes="2"/>
+                              <Component id="jBLabel30" pref="141" max="32767" attributes="2"/>
+                              <Component id="jBLabel28" alignment="1" pref="141" max="32767" attributes="2"/>
+                              <Component id="jBLabel27" pref="141" max="32767" attributes="2"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="vatPercentField" pref="118" max="32767" attributes="2"/>
-                                      <Component id="excisePercentField" alignment="0" pref="118" max="32767" attributes="2"/>
+                                      <Component id="vatPercentField" pref="120" max="32767" attributes="2"/>
+                                      <Component id="excisePercentField" alignment="0" pref="120" max="32767" attributes="2"/>
                                   </Group>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -939,12 +1050,12 @@
                                   </Group>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="exciseValueField" pref="160" max="32767" attributes="0"/>
-                                      <Component id="vatValueField" alignment="0" pref="160" max="32767" attributes="0"/>
+                                      <Component id="exciseValueField" pref="162" max="32767" attributes="0"/>
+                                      <Component id="vatValueField" alignment="0" pref="162" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="transportPriceField" alignment="1" pref="297" max="32767" attributes="0"/>
-                              <Component id="totalValueField" alignment="1" pref="297" max="32767" attributes="0"/>
+                              <Component id="transportPriceField" alignment="1" pref="301" max="32767" attributes="0"/>
+                              <Component id="totalValueField" alignment="1" pref="301" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -1160,12 +1271,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="894" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="906" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="288" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="322" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

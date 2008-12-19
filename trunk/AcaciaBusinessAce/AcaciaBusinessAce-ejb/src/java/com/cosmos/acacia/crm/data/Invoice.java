@@ -352,6 +352,20 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Column(name = "vat_condition_notes")
     @Property(title="Vat Condition Notes")
     private String vatConditionNotes;
+    
+    @Column(name = "validTo")
+    @Temporal(TemporalType.DATE)
+    @Property(title="Valid To")
+    private Date validTo;
+    
+    @Property(title="Atendee", customDisplay="${attendee.contact.displayName}")
+    @JoinColumn(name = "attendee_id")
+    @ManyToOne
+    private ContactPerson attendee;
+    
+    @Column(name = "additionalTerms")
+    @Property(title="Additional Terms")
+    private String additionalTerms;
 
     @JoinColumn(name = "invoice_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -805,5 +819,29 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     public void setDeliveryStatus(DbResource deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public Date getValidTo() {
+        return validTo;
+    }
+
+    public void setValidTo(Date validTo) {
+        this.validTo = validTo;
+    }
+
+    public ContactPerson getAttendee() {
+        return attendee;
+    }
+
+    public void setAttendee(ContactPerson attendee) {
+        this.attendee = attendee;
+    }
+
+    public String getAdditionalTerms() {
+        return additionalTerms;
+    }
+
+    public void setAdditionalTerms(String additionalTerms) {
+        this.additionalTerms = additionalTerms;
     }
 }
