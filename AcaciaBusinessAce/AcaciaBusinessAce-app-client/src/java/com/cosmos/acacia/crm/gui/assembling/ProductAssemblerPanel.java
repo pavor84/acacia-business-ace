@@ -339,40 +339,19 @@ public class ProductAssemblerPanel
             AssemblingSchema schema,
             AssemblingMessage message)
     {
-        String categoryCode = schema.getAssemblingCategory().getCategoryCode();
-        String schemaCode = schema.getSchemaCode();
-        String messageCode = message.getMessageCode();
         AcaciaProperties properties = getAcaciaProperties();
 
-        String key = categoryCode + "." + schemaCode + "." + messageCode;
-        if(properties.containsKey(key))
+        List<String> keys = getFormSession().getPropertyKeys(schema, message);
+        for(String key : keys)
         {
-            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
-            return new AssemblingProperty(properties, accessLevel, key);
+            if(properties.containsKey(key))
+            {
+                AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
+                return new AssemblingProperty(properties, accessLevel, key);
+            }
         }
 
-        key = categoryCode + "." + messageCode;
-        if(properties.containsKey(key))
-        {
-            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
-            return new AssemblingProperty(properties, accessLevel, key);
-        }
-
-        key = schemaCode + "." + messageCode;
-        if(properties.containsKey(key))
-        {
-            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
-            return new AssemblingProperty(properties, accessLevel, key);
-        }
-
-        key = messageCode;
-        if(properties.containsKey(key))
-        {
-            AccessLevel accessLevel = properties.getProperties(key).getAccessLevel();
-            return new AssemblingProperty(properties, accessLevel, key);
-        }
-
-        key = categoryCode + "." + schemaCode + "." + messageCode;
+        String key = keys.get(0);
         return new AssemblingProperty(properties, properties.getAccessLevel(), key);
     }
 
@@ -652,7 +631,8 @@ public class ProductAssemblerPanel
         public void valueChanged(ListSelectionEvent event)
         {
             AssemblingParameter parameter;
-            if((parameter = (AssemblingParameter)parametersTable.getSelectedRowObject()) != null)
+            if((parameter = (AssemblingParameter)parametersTable.getSelectedRowObject()) != null &&
+                    parameter.getValue() != null)
             {
                 sourceButton.setEnabled(true);
             }
