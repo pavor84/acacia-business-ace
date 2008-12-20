@@ -105,5 +105,5 @@ public enum AccessLevel
     ;
 
     public static final Set<AccessLevel> PropertyLevels =
-            EnumSet.of(Client, User, BusinessUnit, Organization);
+            EnumSet.of(Client, User, BusinessUnit, ParentChildBusinessUnit, Organization);
 }

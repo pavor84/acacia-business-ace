@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data.assembling;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.enums.DataType;
+import java.io.Serializable;
 
 /**
  *
@@ -67,6 +68,13 @@ public class AssemblingParameter
 
     public void setValue(Object value)
     {
+        if(valuesSource != null)
+        {
+            if(value != null)
+                valuesSource.setPropertyValue(dataType.toDataType((Serializable)value));
+            else
+                valuesSource.setPropertyValue(null);
+        }
         this.value = value;
     }
 

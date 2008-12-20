@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.assembling;
 
+import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
@@ -20,4 +21,5 @@ public interface ProductAssemblerService
         AssemblingSchema assemblingSchema);
     List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(
         AssemblingSchemaItem assemblingSchemaItem);
+    List<String> getPropertyKeys(AssemblingSchema schema, AssemblingMessage message);
 }
