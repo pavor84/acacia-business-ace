@@ -697,4 +697,21 @@ public class AssemblingBean
 
         return new ArrayList<Product>(q.getResultList());
     }
+
+    @Override
+    public List<String> getPropertyKeys(AssemblingSchema schema, AssemblingMessage message) {
+        String categoryCode = schema.getAssemblingCategory().getCategoryCode();
+        String schemaCode = schema.getSchemaCode();
+        String messageCode = message.getMessageCode();
+
+        List<String> propertyKeys = new ArrayList<String>(4);
+        propertyKeys.add(categoryCode + "." + schemaCode + "." + messageCode);
+        propertyKeys.add(categoryCode + "." + messageCode);
+        propertyKeys.add(schemaCode + "." + messageCode);
+        propertyKeys.add(messageCode);
+
+        return propertyKeys;
+    }
+
+
 }

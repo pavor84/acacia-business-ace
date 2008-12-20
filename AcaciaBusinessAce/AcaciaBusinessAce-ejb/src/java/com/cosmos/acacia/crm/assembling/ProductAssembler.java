@@ -187,9 +187,14 @@ public class ProductAssembler
         if(Algorithm.Type.RangeAlgorithms.contains(algorithmType) ||
            Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
         {
-            AssemblingMessage message = asi.getAssemblingMessage();
-            System.out.println("message: " + message);
-            return parameters.get(message.getMessageCode());
+            List<String> keys = productAssemblerService.getPropertyKeys(
+                    assemblingSchema, asi.getAssemblingMessage());
+            Object value;
+            for(String key : keys)
+            {
+                if((value = parameters.get(key)) != null)
+                    return value;
+            }
         }
 
         return null;
