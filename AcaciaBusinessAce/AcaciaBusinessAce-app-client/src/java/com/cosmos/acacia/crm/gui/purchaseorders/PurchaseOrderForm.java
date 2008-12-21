@@ -13,6 +13,7 @@ import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -658,16 +659,16 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
-        
+
         if ( entProps==null )
             entProps = getFormSession().getDetailEntityProperties();
 
         if ( bindGroup==null )
             bindGroup = new BindingGroup();
-        
+
         bindComponents(bindGroup, entProps);
     }
-    
+
     @SuppressWarnings("unchecked")
     /**
      * Binds all components to the specified group and entity properties.
@@ -778,31 +779,31 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         bindGroup.bind();
     }
-    
+
     /**
-     * Binds again all bindings where the source object is the entity. 
+     * Binds again all bindings where the source object is the entity.
      * @param updatedEntity
      */
     @SuppressWarnings("unchecked")
     private void refreshForm(PurchaseOrder updatedEntity) {
         //un-bind the group
-        
+
         bindGroup.unbind();
         for (Binding binding : bindGroup.getBindings()) {
             bindGroup.removeBinding(binding);
         }
         bindGroup = new BindingGroup();
-        
+
         this.entity = updatedEntity;
-        
+
         bindComponents(bindGroup, entProps);
-        
+
         //since we just swap the old entity with a new, updated one, - notify the calling windows,
         //by setting the dialog response
         setDialogResponse(DialogResponse.SAVE);
         setModifiedResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        
+
     }
 
     protected void onInsertFromDocument() {
@@ -895,9 +896,17 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     protected Set<Report> getReports() {
         Set<Report> reports = new HashSet<Report>();
 
+        Calendar c = Calendar.getInstance();
+
+        String exportFileName = entity.getOrderNumber() + "-" +
+            c.get(Calendar.YEAR) +
+            c.get(Calendar.MONTH) +
+            c.get(Calendar.DAY_OF_MONTH);
+
         Report report = new Report("purchase_order", itemsTablePanel.getItems());
         report.setAutoSubreport1Class(PurchaseOrderItem.class);
         report.setLocalizationKey("all.quantities.report");
+        report.setExportFileName(exportFileName);
         reports.add(report);
 
         Report report2 = new Report("purchase_order", itemsTablePanel.getItems());
@@ -909,6 +918,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         reportEntityProps.removePropertyDetails("confirmedQuantity");
         reportEntityProps.getPropertyDetails("orderedQuantity").setReportColumnWidth((byte) 24);
         report2.setAutoSubreport1Properties(reportEntityProps);
+        report.setExportFileName(exportFileName);
         reports.add(report2);
 
         return reports;
