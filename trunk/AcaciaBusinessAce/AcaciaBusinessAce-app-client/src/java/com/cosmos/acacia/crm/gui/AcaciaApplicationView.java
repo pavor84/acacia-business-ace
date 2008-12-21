@@ -115,7 +115,10 @@ public class AcaciaApplicationView extends FrameView {
 
     private AcaciaSessionRemote getSession() {
         if (acaciaSession == null)
+        {
+            AcaciaSessionRemote.class.getName();
             acaciaSession = AcaciaPanel.getBean(AcaciaSessionRemote.class);
+        }
 
         return acaciaSession;
     }

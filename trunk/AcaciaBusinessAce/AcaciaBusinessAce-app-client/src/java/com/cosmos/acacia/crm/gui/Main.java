@@ -6,6 +6,8 @@
 package com.cosmos.acacia.crm.gui;
 
 import java.util.Date;
+import com.cosmos.acacia.app.AcaciaSessionRemote;
+import javax.naming.InitialContext;
 
 
 /**
@@ -27,6 +29,19 @@ public class Main {
             "\n\t Hello World." +   
             "\n\t Current time is: " + new Date() +
             "\n*********************************");
+
+        try
+        {
+            String className = AcaciaSessionRemote.class.getName();
+            System.out.println("className: " + className);
+            InitialContext context = new InitialContext();
+            Object object = context.lookup(className);
+            System.out.println("object: " + object);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
         /*SecurityManager sm = System.getSecurityManager();
         System.out.println("sm: " + sm);
