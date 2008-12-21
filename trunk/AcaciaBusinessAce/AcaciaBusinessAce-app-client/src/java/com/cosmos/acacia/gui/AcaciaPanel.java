@@ -3,6 +3,7 @@ package com.cosmos.acacia.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -17,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.prefs.Preferences;
 
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
@@ -396,7 +398,7 @@ public abstract class AcaciaPanel
         Report report = getReport();
 
         if (report == null && getReports().size() > 0) {
-            String[] reportNames = new String[getReports().size()];
+            //String[] reportNames = new String[getReports().size()];
             String[] reportOptions = new String[getReports().size()];
             Report[] reports = new Report[getReports().size()];
             int i = 0;
@@ -505,7 +507,11 @@ public abstract class AcaciaPanel
                     targetPath = chooseTargetPath();
 
                 if (targetPath != null) {
-                    String filename = targetPath + ReportsTools.FS + jasperReport.getName();
+                    String filename = targetPath + ReportsTools.FS;
+                    if (report.getExportFileName() != null)
+                        filename += report.getExportFileName();
+                    else
+                        filename += jasperReport.getName();
 
                     boolean success = ReportsTools.print(jasperReport, ds, params, filename, choice);
 
@@ -550,12 +556,23 @@ public abstract class AcaciaPanel
         return choice;
     }
 
+    private static final String REPORT_PATH = "reportPath";
     private String chooseTargetPath() {
+        String lastPath = Preferences.systemRoot().get(
+                LocalSession.instance().getUser().getUserName() + REPORT_PATH, null);
+
         JFileChooser fc = new JFileChooser();
+        if (lastPath != null)
+            fc.setCurrentDirectory(new File(lastPath));
+
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int fChoice = fc.showOpenDialog(this);
         if (fChoice == JFileChooser.APPROVE_OPTION) {
-            return fc.getSelectedFile().getAbsolutePath();
+            String dir = fc.getSelectedFile().getAbsolutePath();
+            Preferences.systemRoot().put(
+                    LocalSession.instance().getUser().getUserName() + REPORT_PATH,
+                    dir);
+            return dir;
         }
         return null;
     }
@@ -563,6 +580,7 @@ public abstract class AcaciaPanel
      * Override this to specify listing behaviour for reporting
      * @return
      */
+    @SuppressWarnings("unchecked")
     protected List getEntities() {
         return new ArrayList();
     }

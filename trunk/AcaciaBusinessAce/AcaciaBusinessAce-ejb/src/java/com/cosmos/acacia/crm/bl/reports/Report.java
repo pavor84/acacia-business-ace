@@ -81,8 +81,16 @@ public class Report implements Serializable {
      */
     private Class reportClass;
 
-
+    /**
+     * Parameters to be passed to the reports
+     */
     private Map<String, Object> parameters = new HashMap<String, Object>();
+
+    /**
+     * The file name by which the report will be saved to the disk.
+     * If not set, the name of the report file (without jrxml) is used
+     */
+    private String exportFileName;
 
     public Report() {
 
@@ -216,5 +224,13 @@ public class Report implements Serializable {
 
     public void setParameters(Map<String, Object> parameters) {
         this.parameters = parameters;
+    }
+
+    public String getExportFileName() {
+        return exportFileName;
+    }
+
+    public void setExportFileName(String exportFileName) {
+        this.exportFileName = exportFileName;
     }
 }

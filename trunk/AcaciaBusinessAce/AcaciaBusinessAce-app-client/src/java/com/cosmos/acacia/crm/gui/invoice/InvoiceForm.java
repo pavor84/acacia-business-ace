@@ -133,7 +133,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 onItemsTableChange();
             }
         });
-        
+
         additionalDetailsPanel.setVisible(proforma);
 
         itemsTablePanel.addTablePanelListener(new AbstractTablePanelListener() {
@@ -1272,7 +1272,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 onRecipientContactChanged(e.getItem());
             }
         }, true);
-         
+
 
         if ( shippingAgentListPanel==null )
             shippingAgentListPanel = BusinessPartnersListPanel.createShippingAgentPanel(getParentDataObjectId());
@@ -1460,10 +1460,10 @@ public class InvoiceForm extends BaseEntityPanel {
         // vat condition notes
         vatConditionNotesField.bind(bindGroup, entity,
             entProps.getPropertyDetails("vatConditionNotes"));
-        
+
         boolean readonlyState = !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
         !InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue());
-        
+
         //some fields only for proforma invoice
         if ( proforma ){
             // valid to date
@@ -1480,14 +1480,14 @@ public class InvoiceForm extends BaseEntityPanel {
                     public Result validate(Object value) {
                         if ( value==null )
                             return new Validator.Result("err_invalid_validto", getResourceMap().getString("err_invalid_due_payment"));
-        
+
                         InvoiceStatus status = (InvoiceStatus) entity.getStatus().getEnumValue();
                         if ( InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status) ){}//ok,
                         //in the case the the document is not modifiable - all values are valid
                         else{
                             return null;
                         }
-        
+
                         if ( ! (value instanceof Date) ){
                             return new Validator.Result("err_invalid_validto", getResourceMap().getString("err_invalid_due_payment"));
                         }else{
@@ -1496,12 +1496,12 @@ public class InvoiceForm extends BaseEntityPanel {
                             if ( now.after((Date)value) )
                                 return new Validator.Result("err_validto_old", getResourceMap().getString("err_due_payment_old"));
                         }
-        
+
                         return null;
                     };
                 });
             }
-            
+
             // additional terms
             additionalTermsField.bind(bindGroup, entity, entProps.getPropertyDetails("additionalTerms"));
         }
@@ -1542,7 +1542,7 @@ public class InvoiceForm extends BaseEntityPanel {
             //if there is already a value - don't overwrite it
             if ( attendeeField.getSelectedIndex()!=-1 )
                 return;
-            
+
             if ( item instanceof ContactPerson ){
                 attendeeField.setSelectedItem(item);
             }
@@ -2070,7 +2070,7 @@ public class InvoiceForm extends BaseEntityPanel {
         } else {
             recipientContactField.setSelectedIndex(-1);
         }
-        
+
         if ( proforma ){
             if ( bindGroup.getBindings().contains(attendeeBinding) )
                 bindGroup.removeBinding(attendeeBinding);
@@ -2172,16 +2172,30 @@ public class InvoiceForm extends BaseEntityPanel {
     protected Set<Report> getReports() {
         Set<Report> reports = new HashSet<Report>();
 
+        Calendar c = Calendar.getInstance();
+
+        String exportFileName = "";
+        if (entity.getInvoiceNumber() != null)
+            exportFileName += entity.getInvoiceNumber() + "-";
+        else
+            exportFileName += "invoice-";
+
+        exportFileName += "" + c.get(Calendar.YEAR) +
+            c.get(Calendar.MONTH) +
+            c.get(Calendar.DAY_OF_MONTH);
+
         Report report = new Report("invoice", itemsTablePanel.getItems());
         report.setAutoSubreport1Class(InvoiceItem.class);
         report.setLocalizationKey("report.original");
         report.getParameters().put("TYPE", getResourceMap().getString("report.original"));
+        report.setExportFileName(exportFileName);
         reports.add(report);
 
         Report report2 = new Report("invoice", itemsTablePanel.getItems());
         report2.setAutoSubreport1Class(InvoiceItem.class);
         report2.setLocalizationKey("report.copy");
         report2.getParameters().put("TYPE", getResourceMap().getString("report.copy"));
+        report2.setExportFileName(exportFileName);
         reports.add(report2);
 
         return reports;
