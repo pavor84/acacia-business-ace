@@ -92,6 +92,10 @@
 	<field name="entity.transportationMethod" class="com.cosmos.acacia.crm.data.DbResource"/>
 	<field name="entity.deliveryType" class="com.cosmos.acacia.crm.data.DbResource"/>
 	<field name="entity.currency" class="com.cosmos.acacia.crm.data.DbResource"/>
+	<field name="entity.validTo" class="java.util.Date"/>
+	<field name="entity.attendee.displayName" class="java.lang.String"/>
+	<field name="entity.additionalTerms" class="java.lang.String"/>
+	<field name="entity.proformaInvoice" class="java.lang.Boolean"/>
 
 		<background>
 			<band height="4"  isSplitAllowed="true" >
@@ -110,7 +114,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="556"  isSplitAllowed="true" >
+			<band height="484"  isSplitAllowed="true" >
 				<rectangle radius="5" >
 					<reportElement
 						style="acaciaReportStyle"
@@ -1863,15 +1867,132 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.getEnumText($F{entity.currency})]]></textFieldExpression>
 				</textField>
+				<rectangle radius="5" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="0"
+						y="424"
+						width="555"
+						height="50"
+						key="rectangle-4"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="5"
+						y="428"
+						width="81"
+						height="14"
+						key="textField-123"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{validTo} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="87"
+						y="428"
+						width="140"
+						height="14"
+						key="textField-124"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ReportsUtil.formatDate($F{entity.validTo})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="259"
+						y="428"
+						width="86"
+						height="14"
+						key="textField-125"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{attendee} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="345"
+						y="428"
+						width="203"
+						height="14"
+						key="textField-126"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.attendee.displayName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="5"
+						y="444"
+						width="81"
+						height="14"
+						key="textField-127"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{additionalTerms} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="acaciaReportStyle"
+						x="87"
+						y="443"
+						width="460"
+						height="30"
+						key="textField-128"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == true)]]></printWhenExpression>
+						</reportElement>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entity.additionalTerms}]]></textFieldExpression>
+				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="acaciaReportBoldStyle"
-						x="389"
-						y="421"
+						x="391"
+						y="423"
 						width="159"
 						height="22"
 						key="textField-122"
-						positionType="Float"/>
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{entity.proformaInvoice}.booleanValue() == false)]]></printWhenExpression>
+						</reportElement>
 					<box></box>
 					<textElement textAlignment="Right">
 						<font size="12"/>

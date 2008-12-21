@@ -2191,12 +2191,15 @@ public class InvoiceForm extends BaseEntityPanel {
         report.setExportFileName(exportFileName);
         reports.add(report);
 
-        Report report2 = new Report("invoice", itemsTablePanel.getItems());
-        report2.setAutoSubreport1Class(InvoiceItem.class);
-        report2.setLocalizationKey("report.copy");
-        report2.getParameters().put("TYPE", getResourceMap().getString("report.copy"));
-        report2.setExportFileName(exportFileName);
-        reports.add(report2);
+        //If proforma - no original & copy
+        if (!entity.getProformaInvoice()) {
+            Report report2 = new Report("invoice", itemsTablePanel.getItems());
+            report2.setAutoSubreport1Class(InvoiceItem.class);
+            report2.setLocalizationKey("report.copy");
+            report2.getParameters().put("TYPE", getResourceMap().getString("report.copy"));
+            report2.setExportFileName(exportFileName);
+            reports.add(report2);
+        }
 
         return reports;
     }
