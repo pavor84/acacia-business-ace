@@ -223,15 +223,15 @@ public abstract class AcaciaPanel
 //                currentMsg = getResourceMap().getString(validationMessage.getMessageKey(), validationMessage.getArguments());
 //            else
 //                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
-        	String currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
+            String currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
             if ( validationMessage.getArguments()!=null ){
                Object[] params = validationMessage.getArguments();
                for(int index = 0; index < params.length; index ++){
-            	   currentMsg = currentMsg.replace("{"+index+"}", params[index].toString());
+                   currentMsg = currentMsg.replace("{"+index+"}", params[index].toString());
                }
             }
-               
-        	
+
+
             msg.append(i).append(": ").append(currentMsg).append("\n\n");
             i++;
         }
@@ -396,8 +396,10 @@ public abstract class AcaciaPanel
 
     protected final Report determineReport() {
         Report report = getReport();
+        if (report == null && getReports().size() == 1)
+            report = getReports().iterator().next();
 
-        if (report == null && getReports().size() > 0) {
+        if (report == null && getReports().size() > 1) {
             //String[] reportNames = new String[getReports().size()];
             String[] reportOptions = new String[getReports().size()];
             Report[] reports = new Report[getReports().size()];
