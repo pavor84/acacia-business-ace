@@ -15,7 +15,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -106,7 +105,7 @@ public class ProductPanel extends AcaciaPanel {
     protected void onProductPricing() {
         pricingPanel.showDialog(this);
     }
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -727,6 +726,10 @@ public class ProductPanel extends AcaciaPanel {
     private SimpleProduct product;
     @SuppressWarnings("unchecked")
     private Binding productCodeBinding;
+    //used for binding
+    private BigDecimal purchasePrice;
+    private BigDecimal costPrice;
+    private BigDecimal salePrice;
 
     protected void initData()
     {
@@ -742,6 +745,8 @@ public class ProductPanel extends AcaciaPanel {
         {
             product = getFormSession().newProduct(getParentDataObjectId());
         }
+        
+//        updateProductPricingProperties();
 
         BindingGroup bindingGroup = getBindingGroup();
 
@@ -761,6 +766,23 @@ public class ProductPanel extends AcaciaPanel {
         }
 
     }
+
+//    private void updateProductPricingProperties() {
+//        if ( product.getDiscount()!=null ){
+//            product.setDiscountPercent(product.getDiscount().getValue());
+//        }
+//        if ( product.getDuty()!=null ){
+//            product.setDutyPercent(product.getDuty().getValue());
+//        }
+//        if ( product.getTransport()!=null ){
+//            BigDecimal percentDec = product.getTransport().getValue().divide(new BigDecimal(100), MathContext.DECIMAL64);
+//            BigDecimal transpAmt = product.getPurchasePrice().multiply(percentDec);
+//            product.setTransportPrice(transpAmt);
+//        }
+//        if ( product.getProfit()!=null ){
+//            //product.setProfitValue(profitValue);
+//        }
+//    }
 
     protected BindingGroup getBindingGroup()
     {
@@ -821,7 +843,11 @@ public class ProductPanel extends AcaciaPanel {
             maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
             defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
             
-            pricingPanel = new ProductPricingPanel();
+            this.setPurchasePrice(product.getPurchasePrice());
+            this.setCostPrice(product.getPurchasePrice());
+            this.setSalePrice(product.getSalePrice());
+            
+            pricingPanel = new ProductPricingPanel(product);
             //list price in current form
             final Binding listPriceFieldBinding = listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"), getDecimalFormat());
             listPriceTextField.setEditable(false);
@@ -833,28 +859,26 @@ public class ProductPanel extends AcaciaPanel {
                     Object newValue = binding.getTargetProperty().getValue(pricingPanel.getListPriceField());
                     listPriceFieldBinding.getTargetProperty().setValue(listPriceTextField, newValue);
                     
-                    //extract the value - a bit complicated for now
-                    BigDecimal newNumber = null;
-                    if ( newValue!=null && !"".equals(newValue) )
-                        try {
-                            newNumber = new BigDecimal(""+pricingPanel.getListPriceField().getFormat().parseObject(newValue.toString()));
-                        } catch (ParseException e) {
-                        }
-                    //update also the percent value fields depending on this value
-                    pricingPanel.getDiscountField().valueChanged(newNumber);
-                    pricingPanel.getTransportPriceField().valueChanged(newNumber);
-                    pricingPanel.getDutyField().valueChanged(newNumber);
+                    //update discount calculation
+                    BigDecimal listPrice = null;
+                    boolean valid = binding.isContentValid() && !"".equals(event.getNewValue());
+                    if ( valid )
+                        listPrice = product.getListPrice();
+                        
+                    pricingPanel.getDiscountField().totalValueChanged(listPrice);
                     
-                    //update purchase price
-                    updatePurchaseField(binding.isContentValid());
+                    //update purchase price field
+                    pricingPanel.updatePurchasePriceField(valid);
                 }
             });
             
             //sale price in current form
-            final Binding salesPriceFieldBinding = salesPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"), getDecimalFormat());
+            final Binding salesPriceFieldBinding = salesPriceTextField.bind(productBindingGroup, this, 
+                createPricePropertyDetails("salePrice"), getDecimalFormat());
             salesPriceTextField.setEditable(false);
             //sale price in pricing panel
-            Binding pricingPanelSalesBinding = pricingPanel.getSalesPriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("salePrice"), getDecimalFormat());
+            Binding pricingPanelSalesBinding = pricingPanel.getSalesPriceField().bind(productBindingGroup, product, 
+               createPricePropertyDetails("salePrice"), getDecimalFormat());
             pricingPanelSalesBinding.addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -862,91 +886,52 @@ public class ProductPanel extends AcaciaPanel {
                     salesPriceFieldBinding.getTargetProperty().setValue(salesPriceTextField, newValue);
                 }
             });
-            updateSalesPriceField(true);
+            pricingPanel.updateSalePriceField(true);
             
             //purchase price in current form
-            final Binding purchasePriceFieldBinding = pricingPanel.getPurchasePriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
-            updatePurchaseField(true);
+            final Binding purchasePriceFieldBinding = pricingPanel.getPurchasePriceField().bind(productBindingGroup, this, 
+                createPricePropertyDetails("purchasePrice"), getDecimalFormat());
             purchasePriceFieldBinding.addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    Object newValue = binding.getTargetProperty().getValue(pricingPanel.getPurchasePriceField());
-                    
-                    //extract the value - a bit complicated for now
-                    BigDecimal newNumber = null;
-                    if ( newValue!=null && !"".equals(newValue) )
-                        try {
-                            newNumber = new BigDecimal(""+pricingPanel.getPurchasePriceField().getFormat().parseObject(newValue.toString()));
-                        } catch (ParseException e) {
-                        }
-                        
-                    pricingPanel.getTransportPriceField().valueChanged(newNumber);
-                    pricingPanel.getDutyField().valueChanged(newNumber);
-                    
-                    updateCostPriceField(binding.isContentValid());
+                    pricingPanel.onPurchasePriceUpdated(binding.isContentValid() && !"".equals(event.getNewValue()));
                 }
             });
+            pricingPanel.updatePurchasePriceField(true);
             
             //cost price in current form
-            final Binding costPriceFieldBinding = pricingPanel.getCostPriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("costPrice"), getDecimalFormat());
-            updateCostPriceField(true);
+            final Binding costPriceFieldBinding = pricingPanel.getCostPriceField().bind(productBindingGroup, this, 
+                    createPricePropertyDetails("costPrice"), getDecimalFormat());
             costPriceFieldBinding.addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    Object newValue = binding.getTargetProperty().getValue(pricingPanel.getCostPriceField());
-                    
-                    //extract the value - a bit complicated for now
-                    BigDecimal newNumber = null;
-                    if ( newValue!=null && !"".equals(newValue) )
-                        try {
-                            newNumber = new BigDecimal(""+pricingPanel.getCostPriceField().getFormat().parseObject(newValue.toString()));
-                        } catch (ParseException e) {
-                        }
-                        
-                    pricingPanel.getProfitField().valueChanged(newNumber);
-                    
-                    updateSalesPriceField(binding.isContentValid());
+                    pricingPanel.onCostPriceUpdated(binding.isContentValid() && !"".equals(event.getNewValue()));
                 }
             });
+            pricingPanel.updateCostPriceField(true);
             
             // currency
             pricingPanel.getCurrencyField().bind(productBindingGroup, getEnumResources(Currency.class), product,
                 entityProps.getPropertyDetails("currency"));
             
             // discount
-            Binding discountBinding = pricingPanel.getDiscountField().bind(productBindingGroup, product, entityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
-                true, EditType.PERCENT, product.getListPrice());
-            discountBinding.addBindingListener(new AbstractBindingListener() {
-                @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    updatePurchaseField(binding.isContentValid());
-                }
-            });
+            pricingPanel.getDiscountField().bind(productBindingGroup, product, entityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+                true, EditType.NONE, product.getListPrice());
             
             // transport
             Binding transportBinding = pricingPanel.getTransportPriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("transportPrice"), getDecimalFormat(),
-                false, EditType.BOTH, product.getPurchasePrice());
+                false, EditType.VALUE, product.getPurchasePrice());
             transportBinding.addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    updateCostPriceField(binding.isContentValid());
+                    pricingPanel.updateCostPriceField(true);
                 }
             });
             
             // duty
-            Binding dutyBinding = pricingPanel.getDutyField().bind(productBindingGroup, product, entityProps.getPropertyDetails("dutyPercent"), getDecimalFormat(),
-                true, EditType.PERCENT, product.getPurchasePrice());
-            dutyBinding.addBindingListener(new AbstractBindingListener() {
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    updateCostPriceField(binding.isContentValid());
-                }
-            });
+            pricingPanel.getDutyField().bind(productBindingGroup, product, entityProps.getPropertyDetails("dutyPercent"), getDecimalFormat(),
+                true, EditType.NONE, product.getPurchasePrice());
             
             // profit
-            Binding profitBinding = pricingPanel.getProfitField().bind(productBindingGroup, product, entityProps.getPropertyDetails("profitValue"), getDecimalFormat(),
-                false, EditType.BOTH, product.getCostPrice());
-            profitBinding.addBindingListener(new AbstractBindingListener() {
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    updateSalesPriceField(binding.isContentValid());
-                }
-            });
+            pricingPanel.getProfitField().bind(productBindingGroup, product, entityProps.getPropertyDetails("profitPercent"), getDecimalFormat(),
+                true, EditType.NONE, product.getCostPrice());
             
             quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"), getIntegerFormat());
 
@@ -982,63 +967,19 @@ public class ProductPanel extends AcaciaPanel {
             productBindingGroup.bind();
             
             //additionally update the percent/value pairs
-            pricingPanel.getDiscountField().valueChanged(product.getListPrice());
-            pricingPanel.getTransportPriceField().valueChanged(product.getPurchasePrice());
-            pricingPanel.getDutyField().valueChanged(product.getPurchasePrice());
-            pricingPanel.getProfitField().valueChanged(product.getCostPrice());
+            pricingPanel.getDiscountField().totalValueChanged(product.getListPrice());
+            pricingPanel.getTransportPriceField().totalValueChanged(product.getPurchasePrice());
+            pricingPanel.getDutyField().totalValueChanged(product.getPurchasePrice());
+            pricingPanel.getProfitField().totalValueChanged(product.getCostPrice());
         }
 
         return productBindingGroup;
     }
 
-    private void updateSalesPriceField(boolean valid) {
-        BigDecimal value = null;
-        if ( valid ){
-            try{
-                BigDecimal costPrice = new BigDecimal(""+pricingPanel.getCostPriceField().getValue());
-                BigDecimal profit = new BigDecimal(""+pricingPanel.getProfitField().getValue());
-                value = costPrice.add(profit);
-            }catch (Exception e){
-            }
-        }
-        
-        pricingPanel.getSalesPriceField().setValue(value);
-    }
-
-    private void updateCostPriceField(boolean valid) {
-        BigDecimal value = null;
-        if ( valid ){
-            try{
-                BigDecimal purchasePrice = new BigDecimal(""+pricingPanel.getPurchasePriceField().getValue());
-                BigDecimal transport = new BigDecimal(""+pricingPanel.getTransportPriceField().getValue());
-                BigDecimal duty = null;
-                try{
-                    duty = new BigDecimal(""+pricingPanel.getDutyField().getValue());
-                }catch ( Exception e){
-                    duty = new BigDecimal("0");
-                }
-                value = purchasePrice.add(transport).add(duty);
-            }catch (Exception e){
-            }
-        }
-        
-        pricingPanel.getCostPriceField().setValue(value);
-    }
-
-    private void updatePurchaseField(boolean valid) {
-        BigDecimal value = null;
-        BigDecimal listPrice = null;
-        if ( valid ){
-            try{
-                listPrice = new BigDecimal(""+pricingPanel.getListPriceField().getValue());
-                BigDecimal discount = new BigDecimal(""+pricingPanel.getDiscountField().getValue());
-                value = listPrice.subtract(discount);
-            }catch (Exception e){
-                value = listPrice;
-            }
-        }
-        
-        pricingPanel.getPurchasePriceField().setValue(value);
+    private PropertyDetails createPricePropertyDetails(String propertyName){
+        PropertyDetails pd = new PropertyDetails(propertyName, propertyName, BigDecimal.class.getName());
+        pd.setEditable(false);
+        return pd;
     }
 
     @SuppressWarnings("unchecked")
@@ -1366,5 +1307,29 @@ public class ProductPanel extends AcaciaPanel {
         formatter.setPlaceholderCharacter('_');
         System.out.println(formatter.stringToValue("123-1234"));
 
+    }
+
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
     }
 }

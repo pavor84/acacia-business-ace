@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -128,16 +129,6 @@ public class SimpleProduct
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal defaultQuantity;
 
-    @Column(name = "purchase_price", nullable = false)
-    @Property(title="Purchase Price", editable=false, propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    private BigDecimal purchasePrice;
-
-    @Column(name = "sale_price", nullable = false)
-    @Property(title="Sales Price", editable=false, propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    private BigDecimal salePrice;
-
     @Column(name = "list_price", nullable = false)
     @Property(title="List Price", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
@@ -148,25 +139,32 @@ public class SimpleProduct
     @Column(name = "discount_percent", precision=20, scale=4)
     private BigDecimal discountPercent;
     
+    @ManyToOne
+    private ProductPricingValue discountPricingValue;
+    
+    @ManyToOne
+    private ProductPricingValue dutyPricingValue;
+    
+    @ManyToOne
+    private ProductPricingValue transportPricingValue;
+    
+    @ManyToOne
+    private ProductPricingValue profitPricingValue;
+    
     @Property(title="Duty %", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
     @Column(name = "duty_percent", precision=20, scale=4)
     private BigDecimal dutyPercent;
     
-    @Column(name = "transport_price", nullable = false)
+    @Column(name = "transport_price")
     @Property(title="Transport Price", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal transportPrice;
     
-    @Column(name = "cost_price", nullable = false)
-    @Property(title="Cost Price", editable=false, propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    private BigDecimal costPrice;
-    
-    @Column(name = "profit_value", nullable = false)
-    @Property(title="Profit Value", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    private BigDecimal profitValue;
+    @Column(name = "profit_percent")
+    @Property(title="Profit Percent", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000d))
+    private BigDecimal profitPercent;
     
     @Column(name = "quantity_per_package", nullable = false)
     @Property(title="Qty per Package", propertyValidator=@PropertyValidator(
@@ -271,17 +269,6 @@ public class SimpleProduct
         this.measureUnit = measureUnit;
     }
 
-    @Override
-    public BigDecimal getSalePrice() {
-        return salePrice;
-    }
-
-    @Override
-    public void setSalePrice(BigDecimal salePrice) {
-        firePropertyChange("salePrice", this.salePrice, salePrice);
-        this.salePrice = salePrice;
-    }
-
     public boolean isPurchased() {
         return purchased;
     }
@@ -352,15 +339,6 @@ public class SimpleProduct
     public void setDefaultQuantity(BigDecimal defaultQuantity) {
         firePropertyChange("defaultQuantity", this.defaultQuantity, defaultQuantity);
         this.defaultQuantity = defaultQuantity;
-    }
-
-    public BigDecimal getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(BigDecimal purchasePrice) {
-        firePropertyChange("purchasePrice", this.purchasePrice, purchasePrice);
-        this.purchasePrice = purchasePrice;
     }
 
     public BigDecimal getListPrice() {
@@ -535,9 +513,6 @@ public class SimpleProduct
         product.setProductCode(productCode);
         //product.setCategory(BigInteger.ONE);
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
-        product.setPurchasePrice(BigDecimal.valueOf(100.20));
-        product.setSalePrice(BigDecimal.valueOf(200.00));
-        product.setListPrice(BigDecimal.valueOf(250.00));
 
         return product;
     }
@@ -588,27 +563,179 @@ public class SimpleProduct
         this.transportPrice = transportPrice;
     }
 
-    public BigDecimal getCostPrice() {
-        return costPrice;
-    }
-
-    public void setCostPrice(BigDecimal costPrice) {
-        this.costPrice = costPrice;
-    }
-
-    public BigDecimal getProfitValue() {
-        return profitValue;
-    }
-
-    public void setProfitValue(BigDecimal profitValue) {
-        this.profitValue = profitValue;
-    }
-
     public DbResource getCurrency() {
         return currency;
     }
 
     public void setCurrency(DbResource currency) {
         this.currency = currency;
+    }
+
+    /**
+     * Synthetic getter - calculates the purchase price. If some of the needed prices is not available,
+     * returns null
+     * @return
+     */
+    public BigDecimal getPurchasePrice() {
+        BigDecimal listPrice = getListPrice();
+        if ( listPrice==null )
+            return null;
+        BigDecimal discountPercent = getDiscount();
+        if ( discountPercent==null )
+            discountPercent = new BigDecimal(0);
+        BigDecimal discountPercentDec = discountPercent.divide(new BigDecimal(100), MathContext.DECIMAL64);
+        BigDecimal discountAmount = listPrice.multiply(discountPercentDec);
+        BigDecimal result = listPrice.subtract(discountAmount);
+        return result;
+    }
+    
+    /**
+     * Synthetic getter - calculates the purchase price. If some of the needed prices is not available,
+     * returns null
+     * @return
+     */
+    public BigDecimal getCostPrice() {
+        //purchase price
+        BigDecimal purchasePrice = getPurchasePrice();
+        if ( purchasePrice==null )
+            return null;
+        BigDecimal dutyPercent = getDuty();
+        //duty amount
+        BigDecimal dutyAmount = null;
+        if ( dutyPercent==null )
+            dutyAmount = new BigDecimal(0);
+        else{
+            BigDecimal dutyPercentDec = dutyPercent.divide(new BigDecimal(100), MathContext.DECIMAL64);
+            dutyAmount = purchasePrice.multiply(dutyPercentDec);
+        }
+        //transport amount
+        BigDecimal transportAmount = getTransport();
+        if ( transportAmount==null )
+            transportAmount = new BigDecimal(0);
+        
+        BigDecimal result = purchasePrice.add(dutyAmount).add(transportAmount);
+        
+        return result;
+    }
+    
+    /**
+     * Synthetic getter - calculates the sales price. If some of the needed prices is not available,
+     * returns null
+     * @return
+     */
+    public BigDecimal getSalePrice() {
+        BigDecimal costPrice = getCostPrice();
+        if ( costPrice==null )
+            return null;
+        BigDecimal profitPercent = getProfit();
+        if ( profitPercent==null )
+            profitPercent = new BigDecimal(0);
+        BigDecimal profitPercentDec = profitPercent.divide(new BigDecimal(100), MathContext.DECIMAL64);
+        BigDecimal profitDivisor = new BigDecimal(1).subtract(profitPercentDec);
+        BigDecimal result = costPrice.divide(profitDivisor, MathContext.DECIMAL64);
+        return result;
+    }
+
+    public ProductPricingValue getDiscountPricingValue() {
+        return discountPricingValue;
+    }
+
+    public void setDiscountPricingValue(ProductPricingValue discountPricingValue) {
+        this.discountPricingValue = discountPricingValue;
+    }
+
+    public ProductPricingValue getDutyPricingValue() {
+        return dutyPricingValue;
+    }
+
+    public void setDutyPricingValue(ProductPricingValue dutyPricingValue) {
+        this.dutyPricingValue = dutyPricingValue;
+    }
+
+    public ProductPricingValue getTransportPricingValue() {
+        return transportPricingValue;
+    }
+
+    public void setTransportPricingValue(ProductPricingValue transportPricingValue) {
+        this.transportPricingValue = transportPricingValue;
+    }
+
+    public ProductPricingValue getProfitPricingValue() {
+        return profitPricingValue;
+    }
+
+    public void setProfitPricingValue(ProductPricingValue profitPricingValue) {
+        this.profitPricingValue = profitPricingValue;
+    }
+    
+    /**
+     * Percent value of {@link #getListPrice()}.
+     * Synthetic getter - the value of {@link #getDiscountPricingValue()} or 
+     * {@link #getDiscountPercent()} if the former is null.
+     * @return
+     */
+    public BigDecimal getDiscount(){
+        if ( getDiscountPricingValue()==null )
+            return getDiscountPercent();
+        else
+            return getDiscountPricingValue().getValue();
+    }
+    
+    /**
+     * Percent value of {@link #getPurchasePrice()}
+     * Synthetic getter - the value of {@link #getDutyPricingValue()} or 
+     * {@link #getDutyPercent()} if the former is null.
+     * @return
+     */
+    public BigDecimal getDuty(){
+        if ( getDutyPricingValue()==null )
+            return getDutyPercent();
+        else
+            return getDutyPricingValue().getValue();
+    }
+    
+    /**
+     * Absolute value.
+     * Synthetic getter - the value of {@link #getTransportPricingValue()} as percent calculated as absolute value 
+     * over {@link #getPurchasePrice()} or 
+     * {@link #getTransportPrice()} if {@link #getTransportPricingValue()} is null.
+     * @return
+     */
+    public BigDecimal getTransport(){
+        if ( getTransportPricingValue()==null )
+            return getTransportPrice();
+        else{
+            BigDecimal transportPercentDec = getTransportPricingValue().getValue().divide(new BigDecimal(100), MathContext.DECIMAL64);
+            BigDecimal purchasePrice = getPurchasePrice();
+            if ( purchasePrice==null )
+                return null;
+            BigDecimal transportValue = purchasePrice.multiply(transportPercentDec);
+            
+            return transportValue;
+        }
+    }
+    
+    /**
+     * Percent value of {@link #getCostPrice()} inclusively.
+     */
+    public BigDecimal getProfit(){
+        if ( getProfitPricingValue()==null ){
+            return getProfitPercent();
+        }else{
+            return getProfitPricingValue().getValue();
+        }
+    }
+
+    public BigDecimal getProfitPercent() {
+        return profitPercent;
+    }
+
+    public void setProfitPercent(BigDecimal profitPercent) {
+        this.profitPercent = profitPercent;
+    }
+
+    @Override
+    public void setSalePrice(BigDecimal salePrice) {
+        //nothing to do, this property is synthetic
     }
 }

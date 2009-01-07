@@ -8,12 +8,18 @@ package com.cosmos.acacia.crm.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import com.cosmos.acacia.crm.data.ProductPricingValue;
+import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.ProductPricingValue.Type;
+import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBPanel;
 
 /**
  * 
@@ -21,29 +27,157 @@ import com.cosmos.swingb.JBPanel;
  * @author	Petar Milev
  *
  */
-public class ProductPricingPanel extends JBPanel {
+public class ProductPricingPanel extends AcaciaPanel {
 
+    private SimpleProduct product;
+    
     /** Creates new form ProductPricingPanel */
-    public ProductPricingPanel() {
+    public ProductPricingPanel(SimpleProduct product) {
+        this.product = product;
         initComponents();
         initComponentsCustom();
     }
 
     private void initComponentsCustom() {
-        discountButton.setEnabled(false);
-        transportButton.setEnabled(false);
-        dutyButton.setEnabled(false);
-        profitButton.setEnabled(false);
+        discountButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onChoosePriceValue(ProductPricingValue.Type.DISCOUNT);}});
+        transportButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onChoosePriceValue(ProductPricingValue.Type.TRANSPORT);}});
+        dutyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onChoosePriceValue(ProductPricingValue.Type.DUTY);}});
+        profitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onChoosePriceValue(ProductPricingValue.Type.PROFIT);}});
+        
+        profitField.setPercentInclusive(true);
         
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(currencyField, resourceToStringConverter);
         
+        ActionListener valueListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onValueUpdated(e);
+            }
+        };
+        
+        discountField.addActionListener(valueListener);
+        dutyField.addActionListener(valueListener);
+        transportPriceField.addActionListener(valueListener);
+        profitField.addActionListener(valueListener);
+        
         closeButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 ProductPricingPanel.this.close();
             }
         });
+    }
+
+    protected void onValueUpdated(ActionEvent e) {
+        Object value = null;
+        
+        Type type = null;
+        if ( discountField.equals(e.getSource()) ){
+            type = Type.DISCOUNT;
+            value = discountField.getValue();
+        }else if ( dutyField.equals(e.getSource())){
+            type = Type.DUTY;
+            value = dutyField.getValue();
+        }else if ( transportPriceField.equals(e.getSource())){
+            type = Type.TRANSPORT;
+            value = transportPriceField.getValue();
+        }else if ( profitField.equals(e.getSource())){
+            type = Type.PROFIT;
+            value = profitField.getValue();
+        }
+        
+        //do the work only for value clearing
+        if ( value==null )
+            onValueUpdated(null, type);
+    }
+
+    protected void onChoosePriceValue(Type type) {
+        ProductPricingValueListPanel valuesPanel = new ProductPricingValueListPanel(getOrganizationDataObjectId(), type);
+        DialogResponse resp = valuesPanel.showDialog(this);
+        if ( DialogResponse.SELECT.equals(resp)){
+            ProductPricingValue pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject();
+            onValueUpdated(pricingValue, type);
+        }
+    }
+
+    private void onValueUpdated(ProductPricingValue pricingValue, Type type) {
+        BigDecimal numberValue = null;
+        if ( pricingValue!=null ){
+            numberValue = pricingValue.getValue();
+        }
+        if ( Type.DISCOUNT.equals(type) ){
+            discountField.setPercent(numberValue);
+            product.setDiscountPricingValue(pricingValue);
+            updatePurchasePriceField(true);
+        }
+        else if ( Type.DUTY.equals(type) ){
+            dutyField.setPercent(numberValue);
+            product.setDutyPricingValue(pricingValue);
+            updateCostPriceField(true);
+        }
+        else if ( Type.TRANSPORT.equals(type)){
+            transportPriceField.setPercent(numberValue);
+            product.setTransportPricingValue(pricingValue);
+            updateCostPriceField(true);
+        }
+        else if ( Type.PROFIT.equals(type)){
+            profitField.setPercent(numberValue);
+            product.setProfitPricingValue(pricingValue);
+            updateSalePriceField(true);
+        }
+    }
+    
+    public void updateSalePriceField(boolean valid) {
+        BigDecimal salePrice = null;
+        if ( valid )
+            salePrice = product.getSalePrice();
+        
+        this.getSalesPriceField().setValue(salePrice);
+    }
+
+    public void updateCostPriceField(boolean valid) {
+        BigDecimal costPrice = null;
+        if ( valid )
+            costPrice = product.getCostPrice();
+        
+        this.getCostPriceField().setValue(costPrice);
+    }
+    
+    public void onCostPriceUpdated(boolean valid){
+        BigDecimal costPrice = null;
+        if ( valid )
+            costPrice = product.getCostPrice();
+        this.getProfitField().totalValueChanged(costPrice);
+        
+        updateSalePriceField(valid);
+    }
+
+    public void updatePurchasePriceField(boolean valid) {
+        BigDecimal purchasePrice = null;
+        if ( valid ){
+            purchasePrice = product.getPurchasePrice();
+        }
+        
+        this.getPurchasePriceField().setValue(purchasePrice);  
+    }
+    
+    public void onPurchasePriceUpdated(boolean valid) {
+        BigDecimal purchasePrice = null;
+        if ( valid )
+            purchasePrice = product.getPurchasePrice();
+        //update transport and duty calculations
+        this.getTransportPriceField().totalValueChanged(purchasePrice);
+        this.getDutyField().totalValueChanged(purchasePrice);
+        
+        //update cost price
+        updateCostPriceField(valid);
     }
 
     /** This method is called from within the constructor to
@@ -328,4 +462,7 @@ private void salesPriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//G
         return profitField;
     }
 
+    @Override
+    protected void initData() {
+    }
 }

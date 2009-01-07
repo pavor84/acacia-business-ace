@@ -1,6 +1,10 @@
 
 package com.cosmos.acacia.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.NumberFormat;
@@ -31,8 +35,14 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         /** use to set only the percent field edit-able */
         PERCENT,
         /** use to set only the value field edit-able */
-        VALUE;
+        VALUE,
+        /** neither of the fields are edit-able */
+        NONE;
     }
+
+    public static final String COMMAND_PERCENT_EDIT = "COMMAND_PERCENT_EDIT";
+
+    public static final String COMMAND_VALUE_EDIT = "COMMAND_VALUE_EDIT";
     
     /** remember which value was edited the last time */
     boolean percentLastEdited = true;
@@ -43,9 +53,42 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
     
     private BigDecimal secondValue;
     
+    private boolean percentInclusive;
+    
+    private ActionListener actionListener;
+    
     /** Creates new form AcaciaPercentValueField */
     public AcaciaPercentValueField() {
         initComponents();
+        initComponentsCustom();
+    }
+
+    private void initComponentsCustom() {
+        percentField.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent e) {
+                onKeyCommand(e);
+            }
+        });
+        
+        valueField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                onKeyCommand(e);
+            }
+        });
+    }
+
+    protected void onKeyCommand(KeyEvent e) {
+        //if both fields are not edit-able, the user will not be able to delete the values.
+        //In this case, this handler will assure this functionality.
+        if ( EditType.NONE.equals(editType)){
+            if (e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                if ( percentField.equals(e.getSource())){
+                    percentField.setValue(null);
+                }else{
+                    valueField.setValue(null);
+                }
+            }
+        }
     }
 
     /** This method is called from within the constructor to
@@ -99,7 +142,9 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
     private com.cosmos.swingb.JBFormattedTextField percentField;
     private com.cosmos.swingb.JBFormattedTextField valueField;
     // End of variables declaration//GEN-END:variables
-    
+
+    private EditType editType;
+
     /**
      * 
      * @param bindingGroup
@@ -114,6 +159,8 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
      */
     public Binding bind(BindingGroup bindingGroup, Object entity,
                      PropertyDetails propertyDetails, NumberFormat format, final boolean bindToPercent, EditType editType, Number totalValue) {
+        this.editType = editType;
+        
         JBFormattedTextField targetField = bindToPercent ? percentField : valueField;
         JBFormattedTextField secondField = bindToPercent ? valueField : percentField;
         
@@ -163,14 +210,16 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         
         if ( EditType.PERCENT.equals(editType) ){
             valueField.setEditable(false);
-        }
-        else if ( EditType.VALUE.equals(editType) ){
+        }else if ( EditType.VALUE.equals(editType) ){
             percentField.setEditable(false);
+        }else if ( EditType.NONE.equals(editType) ){
+            percentField.setEditable(false);
+            valueField.setEditable(false);
         }
         
         percentLastEdited = bindToPercent;
         
-        valueChanged(totalValue);
+        totalValueChanged(totalValue);
         
         return binding;
     }
@@ -179,7 +228,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
     /**
      * Notify this component that the total value was changed.
      */
-    public void valueChanged(Number totalValue) {
+    public void totalValueChanged(Number totalValue) {
         this.totalValue = totalValue;
         syncing = true;
         if ( percentLastEdited )
@@ -218,6 +267,8 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                 percentField.setText("");
         }
         
+        fireActionEvent(COMMAND_VALUE_EDIT);
+        
         percentLastEdited = false;//we are updating the percent, so the value must've been edited
     }
 
@@ -235,15 +286,29 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                 if ( percentField.getValue()!=null ){
                     String percentString = ""+percentField.getFormat().parseObject(percentField.getText());
                     BigDecimal percent = new BigDecimal(""+percentString);
-                    
                     BigDecimal totalValueBig = new BigDecimal(""+totalValue.toString());
+                    BigDecimal percentDec = percent.divide(new BigDecimal(100));
                     
-                    value = totalValueBig.multiply(percent).divide(new BigDecimal(100));
+                    //ultimately 20% of 100 is 20 - the total value
+                    if ( !percentInclusive ){
+                        value = totalValueBig.multiply(percentDec);
+                    //but we might want to have the percent included in the result:
+                    //20% of 120  (e.g. 20% from the result) to be the given value
+                    }else{
+                        if ( percentDec.equals(new BigDecimal(1)) ){
+                            value = new BigDecimal(0);
+                        }else{
+                            value = percentDec.multiply(totalValueBig);
+                            value = value.divide(new BigDecimal(1).subtract(percentDec), MathContext.DECIMAL64);
+                        }
+                    }
                 }
-                
-                
             }catch (Exception e){
                 value = null;
+            }
+        }else{
+            if (  percentField.getValue()!=null ){
+                value = new BigDecimal(0);
             }
         }
         
@@ -252,6 +317,8 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
             if ( value==null )
                 valueField.setText("");
         }
+        
+        fireActionEvent(COMMAND_PERCENT_EDIT);
         
         percentLastEdited = true;//we are updating the value, so the percent must've been edited
     }
@@ -266,5 +333,37 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
 
     public void setSecondValue(BigDecimal secondValue) {
         this.secondValue = secondValue;
+    }
+    
+    public void setPercent(BigDecimal percent){
+        percentField.setValue(percent);
+    }
+    
+    public void setValue(BigDecimal value){
+        valueField.setValue(value);
+    }
+
+    public boolean isPercentInclusive() {
+        return percentInclusive;
+    }
+
+    public void setPercentInclusive(boolean percentInclusive) {
+        this.percentInclusive = percentInclusive;
+    }
+    
+    /**
+     * Currently, only one listener is supported.
+     * The action events are fired on every value update. Both values are updated at the time of the event.
+     * @param listener
+     */
+    public void addActionListener(ActionListener listener){
+        this.actionListener = listener;
+    }
+    
+    protected void fireActionEvent(String command){
+        if ( actionListener!=null ){
+            ActionEvent event = new ActionEvent(this, 0, command);
+            actionListener.actionPerformed(event);
+        }
     }
 }

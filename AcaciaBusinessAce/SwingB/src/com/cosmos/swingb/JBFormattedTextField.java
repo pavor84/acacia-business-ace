@@ -358,4 +358,8 @@ public class JBFormattedTextField
         }
         return value;
     }
+
+    public Binding getBinding() {
+        return binding;
+    }
 }

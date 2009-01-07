@@ -60,6 +60,7 @@ import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.deliverycertificates.DeliveryCertificatesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
+import com.cosmos.acacia.crm.gui.pricing.PricelistListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
@@ -369,6 +370,12 @@ public class AcaciaApplicationView extends FrameView {
         productCategories.getListPanel().setVisible(Button.Select, false);
         productCategories.getListPanel().setVisible(Button.Unselect, false);
         productCategories.showFrame();
+    }
+    
+    @Action
+    public void pricelistsAction(){
+        PricelistListPanel pricelistsPanel = new PricelistListPanel(getParentId());
+        pricelistsPanel.showFrame();
     }
 
     @Action
@@ -723,6 +730,12 @@ public class AcaciaApplicationView extends FrameView {
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
+        productsMenu.add(menuItem);
+        
+        productsMenu.addSeparator();
+        
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("pricelistsAction"));
         productsMenu.add(menuItem);
 
         menuBar.add(productsMenu);
