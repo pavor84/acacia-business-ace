@@ -58,18 +58,6 @@ public class ProductValidatorBean implements ProductValidatorLocal {
         if ( entity.getMinimumQuantity()==null )
             ve.addMessage("minimumQuantity", "Product.err.minimumQuantity");
         
-        //required purchase price
-        if ( entity.getPurchasePrice()==null )
-            ve.addMessage("purchasePrice", "Product.err.purchasePrice");
-        
-        //required sale price
-        if ( entity.getSalePrice()==null )
-            ve.addMessage( "salePrice", "Product.err.salePriceRequired");
-        
-        //required list price
-        if ( entity.getListPrice()==null )
-            ve.addMessage( "listPrice", "Product.err.listPrice");
-        
         //required quantity per package
         if ( entity.getQuantityPerPackage()==0 )
             ve.addMessage("quantityPerPackage", "Product.err.quantityPerPackage");

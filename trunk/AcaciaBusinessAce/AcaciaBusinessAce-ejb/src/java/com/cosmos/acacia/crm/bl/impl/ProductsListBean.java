@@ -92,7 +92,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         entityProperties.removePropertyDetails("dutyPercent");
         entityProperties.removePropertyDetails("transportPrice");
         entityProperties.removePropertyDetails("costPrice");
-        entityProperties.removePropertyDetails("profitValue");
+        entityProperties.removePropertyDetails("profitPercent");
         
         return entityProperties;
     }

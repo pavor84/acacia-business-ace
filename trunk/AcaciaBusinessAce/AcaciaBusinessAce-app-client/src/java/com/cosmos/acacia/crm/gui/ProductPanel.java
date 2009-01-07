@@ -93,6 +93,10 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     private void initComponentsCustom() {
+        //hide list price
+        listPriceLabel.setVisible(false);
+        listPriceTextField.setVisible(false);
+        
         //pricing button
         jBButton1.addActionListener(new ActionListener() {
             @Override
@@ -843,6 +847,10 @@ public class ProductPanel extends AcaciaPanel {
             maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
             defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
             
+            product.setDiscountPercent(product.getDiscount());
+            product.setDutyPercent(product.getDuty());
+            product.setTransportPrice(product.getTransport());
+            product.setProfitPercent(product.getProfit());
             this.setPurchasePrice(product.getPurchasePrice());
             this.setCostPrice(product.getPurchasePrice());
             this.setSalePrice(product.getSalePrice());
