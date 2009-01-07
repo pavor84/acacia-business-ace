@@ -32,7 +32,6 @@
             <included-library>file.reference.log4j-1.2.11.jar</included-library>
             <included-library>file.reference.javaee.jar</included-library>
             <included-library>file.reference.swing-worker-1.1.jar</included-library>
-            <included-library>file.reference.swingx-2008_01_20.jar</included-library>
             <included-library>file.reference.appframework-1.0.3.jar</included-library>
             <included-library>file.reference.junit-4.0.jar</included-library>
             <included-library>file.reference.liquidlnf.jar</included-library>
