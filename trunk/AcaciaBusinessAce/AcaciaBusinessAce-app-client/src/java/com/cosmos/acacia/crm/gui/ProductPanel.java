@@ -43,6 +43,7 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.ProductPricingValue;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -745,9 +746,10 @@ public class ProductPanel extends AcaciaPanel {
         AutoCompleteDecorator.decorate(productColorComboBox, resourceToStringConverter);
         AutoCompleteDecorator.decorate(weightUnitComboBox, resourceToStringConverter);
 
-        if(product == null)
-        {
+        if(product == null){
             product = getFormSession().newProduct(getParentDataObjectId());
+        }else{
+            product = getFormSession().refresh(product);
         }
         
 //        updateProductPricingProperties();
@@ -770,23 +772,6 @@ public class ProductPanel extends AcaciaPanel {
         }
 
     }
-
-//    private void updateProductPricingProperties() {
-//        if ( product.getDiscount()!=null ){
-//            product.setDiscountPercent(product.getDiscount().getValue());
-//        }
-//        if ( product.getDuty()!=null ){
-//            product.setDutyPercent(product.getDuty().getValue());
-//        }
-//        if ( product.getTransport()!=null ){
-//            BigDecimal percentDec = product.getTransport().getValue().divide(new BigDecimal(100), MathContext.DECIMAL64);
-//            BigDecimal transpAmt = product.getPurchasePrice().multiply(percentDec);
-//            product.setTransportPrice(transpAmt);
-//        }
-//        if ( product.getProfit()!=null ){
-//            //product.setProfitValue(profitValue);
-//        }
-//    }
 
     protected BindingGroup getBindingGroup()
     {
@@ -852,8 +837,10 @@ public class ProductPanel extends AcaciaPanel {
             product.setTransportPrice(product.getTransport());
             product.setProfitPercent(product.getProfit());
             this.setPurchasePrice(product.getPurchasePrice());
-            this.setCostPrice(product.getPurchasePrice());
+            this.setCostPrice(product.getCostPrice());
             this.setSalePrice(product.getSalePrice());
+            
+            ProductPricingValue transportPricingValue = product.getTransportPricingValue();
             
             pricingPanel = new ProductPricingPanel(product);
             //list price in current form
@@ -974,6 +961,11 @@ public class ProductPanel extends AcaciaPanel {
 
             productBindingGroup.bind();
             
+            if ( transportPricingValue!=null ){
+                pricingPanel.getTransportPriceField().setPercent(transportPricingValue.getValue());
+                pricingPanel.getTransportPriceField().setFreezePercent(true);
+            }
+            
             //additionally update the percent/value pairs
             pricingPanel.getDiscountField().totalValueChanged(product.getListPrice());
             pricingPanel.getTransportPriceField().totalValueChanged(product.getPurchasePrice());
@@ -1037,30 +1029,6 @@ public class ProductPanel extends AcaciaPanel {
         else
             codePreviewField.setText("");
     }
-
-//    protected void updateFormatField() {
-//
-//        PatternMaskFormat f = (PatternMaskFormat) patternMaskField.getSelectedItem();
-//        if ( f==null ){
-//            patternMaskBinding.getTargetObject();
-//            patternMaskBinding.setTargetObject(f);
-//        }
-//
-//        ProductCategory category = (ProductCategory)
-//            panel.getCategoryListPanel().getSelectedRowObject();
-//        if ( category!=null ){
-//            PatternMaskFormat categoryFormat = category.getPatternMaskFormat();
-//
-//            //if the currently selected format is not set or is probably set from the
-//            //previous category selection - then replace it
-//            if ( oldFormat==null || oldFormatInheritedByOldCategory ){
-//                patternMaskBinding.setTargetObject(categoryFormat);
-//            }
-//        }else if ( oldFormatInheritedByOldCategory ){
-//            patternMaskBinding.setTargetObject(null);
-//        }
-//        return category;
-//    }
 
     protected void setSaveActionState()
     {

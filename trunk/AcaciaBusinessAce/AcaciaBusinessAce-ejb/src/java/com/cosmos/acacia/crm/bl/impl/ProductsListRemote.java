@@ -93,4 +93,6 @@ public interface ProductsListRemote {
      * @return true on success, false if the deletion fails
      */
     boolean deleteProductCategories(List<ProductCategory> categories);
+
+    SimpleProduct refresh(SimpleProduct product);
 }

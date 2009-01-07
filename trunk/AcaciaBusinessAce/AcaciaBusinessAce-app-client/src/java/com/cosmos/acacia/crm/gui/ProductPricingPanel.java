@@ -17,6 +17,7 @@ import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.ProductPricingValue.Type;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaPercentValueField;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
@@ -76,26 +77,22 @@ public class ProductPricingPanel extends AcaciaPanel {
     }
 
     protected void onValueUpdated(ActionEvent e) {
-        Object value = null;
-        
         Type type = null;
         if ( discountField.equals(e.getSource()) ){
             type = Type.DISCOUNT;
-            value = discountField.getValue();
         }else if ( dutyField.equals(e.getSource())){
             type = Type.DUTY;
-            value = dutyField.getValue();
         }else if ( transportPriceField.equals(e.getSource())){
             type = Type.TRANSPORT;
-            value = transportPriceField.getValue();
         }else if ( profitField.equals(e.getSource())){
             type = Type.PROFIT;
-            value = profitField.getValue();
         }
         
-        //do the work only for value clearing
-        if ( value==null )
+        if ( AcaciaPercentValueField.COMMAND_CLEAR.equals(e.getActionCommand())){
             onValueUpdated(null, type);
+        }else if (Type.TRANSPORT.equals(type) && AcaciaPercentValueField.COMMAND_VALUE_EDIT.equals(e.getActionCommand())){
+            product.setTransportPricingValue(null);
+        }
     }
 
     protected void onChoosePriceValue(Type type) {
@@ -104,6 +101,24 @@ public class ProductPricingPanel extends AcaciaPanel {
         if ( DialogResponse.SELECT.equals(resp)){
             ProductPricingValue pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject();
             onValueUpdated(pricingValue, type);
+        }else{
+            ProductPricingValue oldValue = null;
+            if ( Type.DISCOUNT.equals(type) )
+                oldValue = product.getDiscountPricingValue();
+            else if ( Type.DUTY.equals(type) )
+                oldValue = product.getDutyPricingValue();
+            else if ( Type.TRANSPORT.equals(type) )
+                oldValue = product.getTransportPricingValue();
+            else if ( Type.PROFIT.equals(type) )
+                oldValue = product.getProfitPricingValue();
+            for (Object ppValueObj : valuesPanel.getListData()) {
+                ProductPricingValue current = (ProductPricingValue) ppValueObj;
+                if ( current.getId().equals(oldValue.getId())){
+                    if ( !oldValue.getValue().equals(current.getValue()))
+                        onValueUpdated(current, type);
+                    break;
+                }
+            }
         }
     }
 
@@ -126,6 +141,7 @@ public class ProductPricingPanel extends AcaciaPanel {
             transportPriceField.setPercent(numberValue);
             product.setTransportPricingValue(pricingValue);
             updateCostPriceField(true);
+            transportPriceField.setFreezePercent(true);
         }
         else if ( Type.PROFIT.equals(type)){
             profitField.setPercent(numberValue);

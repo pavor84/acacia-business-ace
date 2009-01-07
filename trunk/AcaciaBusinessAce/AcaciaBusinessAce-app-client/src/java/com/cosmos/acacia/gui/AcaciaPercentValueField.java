@@ -44,10 +44,14 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
 
     public static final String COMMAND_VALUE_EDIT = "COMMAND_VALUE_EDIT";
     
+    public static final String COMMAND_CLEAR = "COMMAND_CLEAR";
+    
     /** remember which value was edited the last time */
-    boolean percentLastEdited = true;
+    boolean freezePercent = true;
     
     boolean syncing = false;
+    
+    boolean clearing = false;
     
     private Number totalValue;
     
@@ -82,11 +86,13 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         //In this case, this handler will assure this functionality.
         if ( EditType.NONE.equals(editType)){
             if (e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                clearing = true;
                 if ( percentField.equals(e.getSource())){
                     percentField.setValue(null);
                 }else{
                     valueField.setValue(null);
                 }
+                clearing = false;
             }
         }
     }
@@ -217,7 +223,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
             valueField.setEditable(false);
         }
         
-        percentLastEdited = bindToPercent;
+        freezePercent = bindToPercent;
         
         totalValueChanged(totalValue);
         
@@ -231,7 +237,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
     public void totalValueChanged(Number totalValue) {
         this.totalValue = totalValue;
         syncing = true;
-        if ( percentLastEdited )
+        if ( freezePercent )
             updateValueField(true);
         else
             updatePercentField(true);
@@ -267,9 +273,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                 percentField.setText("");
         }
         
-        fireActionEvent(COMMAND_VALUE_EDIT);
-        
-        percentLastEdited = false;//we are updating the percent, so the value must've been edited
+        fireActionEvent(clearing?COMMAND_CLEAR:COMMAND_VALUE_EDIT);
     }
 
     /**
@@ -289,11 +293,11 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                     BigDecimal totalValueBig = new BigDecimal(""+totalValue.toString());
                     BigDecimal percentDec = percent.divide(new BigDecimal(100));
                     
-                    //ultimately 20% of 100 is 20 - the total value
+                    //ultimately 20% of 55 is 11, and the result will be 66
                     if ( !percentInclusive ){
                         value = totalValueBig.multiply(percentDec);
                     //but we might want to have the percent included in the result:
-                    //20% of 120  (e.g. 20% from the result) to be the given value
+                    //20% of xxx (e.g. 20% from the result) to be 55 
                     }else{
                         if ( percentDec.equals(new BigDecimal(1)) ){
                             value = new BigDecimal(0);
@@ -318,9 +322,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                 valueField.setText("");
         }
         
-        fireActionEvent(COMMAND_PERCENT_EDIT);
-        
-        percentLastEdited = true;//we are updating the value, so the percent must've been edited
+        fireActionEvent(clearing?COMMAND_CLEAR:COMMAND_PERCENT_EDIT);
     }
 
     public Object getValue() {
@@ -365,5 +367,13 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
             ActionEvent event = new ActionEvent(this, 0, command);
             actionListener.actionPerformed(event);
         }
+    }
+
+    public boolean isFreezePercent() {
+        return freezePercent;
+    }
+
+    public void setFreezePercent(boolean freezePercent) {
+        this.freezePercent = freezePercent;
     }
 }
