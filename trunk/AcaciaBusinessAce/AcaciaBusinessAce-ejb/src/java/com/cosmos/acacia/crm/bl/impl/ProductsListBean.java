@@ -46,8 +46,6 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private ProductValidatorLocal productValidator;
     @EJB
     private ProductCategoryValidatorLocal productCategoryValidator;
-    @EJB
-    private EnumResourceLocal enumResourceLocal;
 
     @SuppressWarnings("unchecked")
     public List<SimpleProduct> getProducts(BigInteger parentId)
@@ -111,15 +109,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         SimpleProduct product = new SimpleProduct();
         product.setParentId(parentId);
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
-        product.setPurchasePrice(BigDecimal.valueOf(0));
-        product.setSalePrice(BigDecimal.valueOf(0));
         product.setListPrice(BigDecimal.valueOf(0));
         product.setCurrency(Currency.Leva.getDbResource());
-        product.setDiscountPercent(new BigDecimal("0"));
-        product.setTransportPrice(new BigDecimal("0"));
-        product.setDutyPercent(new BigDecimal("0"));
-        product.setProfitValue(new BigDecimal("0"));
-        product.setCostPrice(new BigDecimal("0"));
         
         return product;
     }

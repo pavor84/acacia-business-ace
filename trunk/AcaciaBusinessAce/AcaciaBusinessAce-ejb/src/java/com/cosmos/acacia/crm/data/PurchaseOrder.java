@@ -20,7 +20,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
@@ -125,12 +124,11 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource status;
-
-//    @Property(title="Delivery Status", readOnly=true)
-//    @ManyToOne
-    @Transient
+    
+    @Property(title="Delivery Status", readOnly=true)
+    @ManyToOne
     private DbResource deliveryStatus;
-
+ 
     @Property(title="Delivery Method", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "doc_delivery_method_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -206,6 +204,7 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @JoinColumn(name = "purchase_order_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
+
 
     public PurchaseOrder() {
     }
@@ -446,4 +445,5 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     public void setDeliveryStatus(DbResource deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
     }
+
 }

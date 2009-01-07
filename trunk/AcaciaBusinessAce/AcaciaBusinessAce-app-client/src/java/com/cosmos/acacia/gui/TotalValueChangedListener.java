@@ -15,5 +15,5 @@ package com.cosmos.acacia.gui;
  *
  */
 public interface TotalValueChangedListener {
-    void valueChanged(Number newValue);
+    void totalValueChanged(Number newValue);
 }
