@@ -211,4 +211,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         }
         return true;
     }
+
+    @Override
+    public SimpleProduct refresh(SimpleProduct product) {
+        if ( product.getId()!=null )
+            product = em.find(SimpleProduct.class, product.getId());
+        return product;
+    }
 }
