@@ -40,7 +40,6 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         EntityProperties entityProperties = esm.getEntityProperties(Pricelist.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         entityProperties.removePropertyDetails("forPeriod");
-        entityProperties.removePropertyDetails("currency");
 
         return entityProperties;
 

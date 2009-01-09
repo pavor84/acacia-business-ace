@@ -84,12 +84,11 @@ public class Pricelist extends DataObjectBean implements Serializable {
     private Date activeTo;
     
     @Property(title="Min. Turnover", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d),
-        customDisplay="${minTurnover} ${currency.enumValue.code}")
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "min_turnover", precision=20, scale=4)
     private BigDecimal minTurnover;
     
-    @Property(title="Currency")
+    @Property(title="Currency", editable=false)
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
     private DbResource currency;
