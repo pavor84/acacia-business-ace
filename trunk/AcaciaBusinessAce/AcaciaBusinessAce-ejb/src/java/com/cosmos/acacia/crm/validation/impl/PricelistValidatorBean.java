@@ -38,8 +38,8 @@ public class PricelistValidatorBean implements PricelistValidatorLocal{
             }
             
             //if active to is set - make sure it's after 'active from'
-            if ( entity.getActiveTo()!=null ){
-                if ( entity.getActiveFrom().after(entity.getActiveTo()) ){
+            if ( entity.getActiveTo()!=null && entity.getActiveFrom()!=null ){
+                if ( entity.getActiveTo().before(entity.getActiveFrom()) ){
                     ve.addMessage("activeTo", "Pricelist.err.activeToBefore");
                 }
             }
