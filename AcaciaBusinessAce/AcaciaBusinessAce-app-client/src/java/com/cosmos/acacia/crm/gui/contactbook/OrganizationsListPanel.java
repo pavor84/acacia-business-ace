@@ -18,10 +18,15 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.xhtml.XHTMLDialog;
+import com.cosmos.swingb.xhtml.XHTMLUtils;
 import java.math.BigInteger;
+import javax.swing.JOptionPane;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
 /**
@@ -189,14 +194,71 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed()) {
-            OrganizationPanel organizationPanel = new OrganizationPanel(getParentDataObjectId());
-            DialogResponse response = organizationPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
+            DialogResponse response;
+            BaseEntityPanel entityPanel;
+            switch(getNewOrganizationType()) {
+                case BasicForm:
+                    response = null;
+                    entityPanel = null;
+                    break;
+
+                case DetailedForms:
+                    entityPanel = new OrganizationPanel(getParentDataObjectId());
+                    response = entityPanel.showDialog(this);
+                    break;
+
+                default:
+                    response = null;
+                    entityPanel = null;
+                    break;
+            }
+            if(entityPanel != null && DialogResponse.SAVE.equals(response))
             {
-                return organizationPanel.getSelectedValue();
+                return entityPanel.getSelectedValue();
             }
         }
-           return null;
+
+        return null;
+    }
+
+    private enum NewOrganizationType {
+        BasicForm,
+        DetailedForms,
+        None,
+    }
+
+    private NewOrganizationType getNewOrganizationType() {
+        ResourceMap resourceMap = getResourceMap();
+        String basicButtonName = resourceMap.getString("basicButton.text");
+        String detailedButtonName = resourceMap.getString("detailedButton.text");
+        String cancelButtonName = resourceMap.getString("cancelButton.text");
+        String message1 = resourceMap.getString("newAction.Action.message1");
+        String message2 = resourceMap.getString("newAction.Action.message2");
+        String message3 = resourceMap.getString("newAction.Action.message3");
+        String title = resourceMap.getString("newAction.Action.title");
+        Object[] options = {
+            basicButtonName,
+            detailedButtonName,
+            cancelButtonName};
+
+        String message = XHTMLUtils.toString(
+                message1,
+                basicButtonName,
+                message2,
+                detailedButtonName,
+                message3);
+        int result = XHTMLDialog.showQuestionMessage(
+                null,
+                message,
+                title,
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                null, options, options[0]);
+
+        switch(result) {
+            case 0: return NewOrganizationType.BasicForm;
+            case 1: return NewOrganizationType.DetailedForms;
+            default: return NewOrganizationType.None;
+        }
     }
 
     @SuppressWarnings("unchecked")
