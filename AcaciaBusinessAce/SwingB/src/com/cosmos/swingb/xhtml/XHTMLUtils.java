@@ -7,6 +7,7 @@ package com.cosmos.swingb.xhtml;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.List;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import org.xhtmlrenderer.simple.FSScrollPane;
@@ -34,10 +35,42 @@ public class XHTMLUtils {
     public static final String XHTML_TAG_END =
                 "</xhtml>";
 
-    public static XHTMLPanel getHTMLPanel(String xhtmlSource) {
+    private static final int EXTRA_LENGTH =
+            XHTML_DOCUMENT_PREFIX.length() +
+            XHTML_TAG_BEGIN.length() +
+            XHTML_TAG_END.length();
+
+    public static String toString(String firstMessageRow, String... nextMessageRows) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstMessageRow);
+        for(String row : nextMessageRows) {
+            sb.append(row);
+        }
+
+        return sb.toString();
+    }
+
+    public static String toString(List<String> messageRows) {
+        StringBuilder sb = new StringBuilder();
+        for(String messageRow : messageRows) {
+            sb.append(messageRow);
+        }
+
+        return sb.toString();
+    }
+
+    public static XHTMLPanel getHTMLPanel(String firstMessageRow, String... nextMessageRows) {
+        return getHTMLPanel(toString(firstMessageRow, nextMessageRows));
+    }
+
+    public static XHTMLPanel getHTMLPanel(List<String> messageRows) {
+        return getHTMLPanel(toString(messageRows));
+    }
+
+    public static XHTMLPanel getHTMLPanel(String message) {
         XHTMLPanel panel = new XHTMLPanel();
         XhtmlNamespaceHandler handler = new XhtmlNamespaceHandler();
-        panel.setDocumentFromString(xhtmlSource, "", handler);
+        panel.setDocumentFromString(getFormattedXHTML(message), "", handler);
         Color backgroundColor;
         backgroundColor = UIManager.getColor("Panel.background");
         panel.setBackground(backgroundColor);
@@ -71,5 +104,19 @@ public class XHTMLUtils {
         scrollPane.setBorder(null);
 
         return scrollPane;
+    }
+
+    public static String getFormattedXHTML(String xhtmlBody) {
+        String body = xhtmlBody.trim();
+        if(body.endsWith("</xhtml>") || body.endsWith("</html>")) {
+            return body;
+        }
+
+        StringBuilder sb = new StringBuilder(body.length() + EXTRA_LENGTH);
+        sb.append(XHTML_DOCUMENT_PREFIX).append(XHTML_TAG_BEGIN);
+        sb.append(body);
+        sb.append(XHTML_TAG_END);
+
+        return sb.toString();
     }
 }
