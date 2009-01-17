@@ -22,6 +22,18 @@ public class XHTMLUtils {
     public static final int DEFAULT_WIDTH = 400;
     public static final int DEFAULT_HEIGHT = 150;
 
+    public static final String XHTML_DOCUMENT_PREFIX =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<!--<!DOCTYPE html" +
+            "    PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"" +
+            "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">-->";
+
+    public static final String XHTML_TAG_BEGIN =
+            "<xhtml xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">";
+
+    public static final String XHTML_TAG_END =
+                "</xhtml>";
+
     public static XHTMLPanel getHTMLPanel(String xhtmlSource) {
         XHTMLPanel panel = new XHTMLPanel();
         XhtmlNamespaceHandler handler = new XhtmlNamespaceHandler();
