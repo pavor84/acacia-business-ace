@@ -71,9 +71,15 @@ public class XHTMLUtils {
         XHTMLPanel panel = new XHTMLPanel();
         XhtmlNamespaceHandler handler = new XhtmlNamespaceHandler();
         panel.setDocumentFromString(getFormattedXHTML(message), "", handler);
-        Color backgroundColor;
-        backgroundColor = UIManager.getColor("Panel.background");
-        panel.setBackground(backgroundColor);
+//        Color backgroundColor;
+//        backgroundColor = UIManager.getColor("Panel.background");
+//        int red = backgroundColor.getRed();
+//        int green = backgroundColor.getGreen();
+//        int blue = backgroundColor.getBlue();
+//        backgroundColor = new Color(red, green, blue, 0);
+//        backgroundColor = new Color(255, 255, 255, 0);
+//        panel.setBackground(backgroundColor);
+        panel.setBackground(new Color(255, 255, 255, 0));
 
         return panel;
     }
