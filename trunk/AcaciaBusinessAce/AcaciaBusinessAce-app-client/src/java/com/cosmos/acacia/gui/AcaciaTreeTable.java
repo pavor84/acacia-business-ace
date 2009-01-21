@@ -21,7 +21,6 @@ public class AcaciaTreeTable
 {
     public AcaciaTreeTable()
     {
-        super(AcaciaApplication.class);
     }
 
     /*public void bindComboListCellEditor(

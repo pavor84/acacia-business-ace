@@ -21,7 +21,7 @@ import java.util.Date;
 public class ReportsUtil {
 
     public static String getEnumText(DbResource resource) {
-        return new BeanResource(AcaciaApplication.class).getShortName(resource);
+        return new BeanResource().getShortName(resource);
     }
 
     public static String format(Number number) {

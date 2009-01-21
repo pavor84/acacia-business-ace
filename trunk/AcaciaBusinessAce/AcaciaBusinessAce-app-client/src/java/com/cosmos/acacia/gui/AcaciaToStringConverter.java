@@ -24,7 +24,6 @@ public class AcaciaToStringConverter
      */
     public AcaciaToStringConverter()
     {
-        super(AcaciaApplication.class);
     }
     
     @SuppressWarnings("unchecked")
@@ -35,7 +34,6 @@ public class AcaciaToStringConverter
      * Define the string with el property
      */
     public AcaciaToStringConverter(ELProperty elProperty){
-        super(AcaciaApplication.class);
         this.property = elProperty;
     }
     
