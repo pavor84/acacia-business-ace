@@ -24,7 +24,7 @@ public class AcaciaEjbInitBean
     @EJB
     private DatabaseResourceLocal databaseResource;
 
-
+    @Override
     public void init()
     {
         logger.info("AcaciaEjbInitBean.init().databaseResource.initDatabaseResource()");

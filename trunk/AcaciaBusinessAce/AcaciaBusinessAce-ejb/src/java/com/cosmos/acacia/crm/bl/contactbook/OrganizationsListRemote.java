@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.BasicOrganization;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.beansbinding.EntityProperties;
@@ -93,4 +94,7 @@ public interface OrganizationsListRemote {
      * @return the version of the deleted organization
      */
     int deleteOrganization(Organization organization);
+
+    EntityProperties getBasicOrganizationEntityProperties();
+    Organization saveBasicOrganization(BasicOrganization basicOrganization);
 }
