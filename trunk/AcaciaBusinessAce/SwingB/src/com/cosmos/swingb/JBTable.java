@@ -59,12 +59,6 @@ public class JBTable
    
     public JBTable()
     {
-        this(Application.getInstance());
-    }
-
-    public JBTable(Class<? extends Application> applicationClass)
-    {
-        this(Application.getInstance(applicationClass));
     }
 
     public JBTable(Application application)
@@ -448,7 +442,7 @@ public class JBTable
         {
             columnClass = propertyDetails.getPropertyClass();
             columnBinding.setConverter(
-                    new ResourceConverter(getApplication().getClass(),
+                    new ResourceConverter(getApplication(),
                         propertyDetails.getResourceDisplayInTable()));
         }
         
@@ -685,6 +679,9 @@ public class JBTable
     }
 
     public Application getApplication() {
+        if(application == null)
+            application = Application.getInstance();
+
         return application;
     }
 
@@ -707,7 +704,7 @@ public class JBTable
     {
         if(beanResourceCellRenderer == null)
         {
-            beanResourceCellRenderer = new BeanTableCellRenderer(getApplication().getClass());
+            beanResourceCellRenderer = new BeanTableCellRenderer(getApplication());
         }
 
         return beanResourceCellRenderer;

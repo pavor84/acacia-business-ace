@@ -20,9 +20,9 @@ public class BeanResourceToStringConverter
 {
     private BeanResource beanResource;
 
-    public BeanResourceToStringConverter(Class<? extends Application> applicationClass)
+    public BeanResourceToStringConverter()
     {
-        beanResource = new BeanResource(applicationClass);
+        beanResource = new BeanResource();
     }
 
     public BeanResourceToStringConverter(Application application)

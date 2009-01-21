@@ -21,9 +21,14 @@ public class BeanListCellRenderer
 {
     private BeanResource beanResource;
 
-    public BeanListCellRenderer(Class<? extends Application> applicationClass)
+    public BeanListCellRenderer()
     {
-        beanResource = new BeanResource(applicationClass);
+        beanResource = new BeanResource();
+    }
+
+    public BeanListCellRenderer(Application application)
+    {
+        beanResource = new BeanResource(application);
     }
 
     @Override
