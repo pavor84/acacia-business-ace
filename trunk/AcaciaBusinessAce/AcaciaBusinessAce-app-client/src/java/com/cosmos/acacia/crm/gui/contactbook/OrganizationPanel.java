@@ -431,7 +431,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
 
-        descriptionTextPane.bind(organizationBindingGroup, organization, "description");
+        descriptionTextPane.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("description"));
 
         // Using an AbstractTablePanel implementation
         branchesTable = new AddressListPanel(organization != null ? organization.getId() : null);

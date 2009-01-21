@@ -199,7 +199,7 @@ public class WarehousePanel extends BaseEntityPanel {
 //            "${firstName} ${lastName}", UpdateStrategy.READ_WRITE);
         
         //description
-        descriptionField.bind(bindGroup, entity, "description");
+        descriptionField.bind(bindGroup, entity, entProps.getPropertyDetails("description"));
 
         bindGroup.bind();
     }

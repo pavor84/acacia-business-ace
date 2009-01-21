@@ -439,7 +439,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
             "${cityName}",
             UpdateStrategy.READ_WRITE);
 
-        descriptionTextPane.bind(personBindingGroup, person, "description");
+        descriptionTextPane.bind(personBindingGroup, person, entityProps.getPropertyDetails("description"));
 
         // Using an AbstractTablePanel implementation
         addressesTable = new AddressListPanel(person.getId());

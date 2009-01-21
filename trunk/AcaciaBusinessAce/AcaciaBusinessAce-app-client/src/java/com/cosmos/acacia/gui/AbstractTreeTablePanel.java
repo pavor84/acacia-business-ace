@@ -5,10 +5,7 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.gui.AbstractTreePanel;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.gui.AbstractTablePanel;
-import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.SelectableListDialog;
@@ -148,7 +145,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
 
     protected void initDataTable(AcaciaTable table)
     {
-        log.info("initDataTable()");
+        //log.info("initDataTable()");
         EntityProperties entityProps = getEntityProperties();
         BindingGroup bg = getBindingGroup();
 
@@ -166,7 +163,7 @@ public abstract class AbstractTreeTablePanel<E extends DataObjectBean>
 
     protected void refreshDataTable()
     {
-        log.info("refreshDataTable()");
+        //log.info("refreshDataTable()");
         List listData = getListData();
         listData.clear();
         E parent = (E)getSelectionDataObjectBean();

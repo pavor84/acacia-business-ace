@@ -9,7 +9,7 @@ package com.cosmos.acacia.gui;
 import java.awt.Component;
 import java.awt.FlowLayout;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
@@ -28,7 +28,7 @@ import com.cosmos.swingb.JBButton;
 public class EntityFormButtonPanel extends AcaciaPanel {
     private static final long serialVersionUID = 1L;
 
-    protected static Logger log = Logger.getLogger(EntityFormButtonPanel.class);
+    //protected static Logger log = Logger.getLogger(EntityFormButtonPanel.class);
 
     /** Creates new form EntityFormButtonPanel */
     public EntityFormButtonPanel() {
@@ -144,7 +144,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 parent.saveAction();
             }
         } catch (ClassCastException ex) {
-            log.info("saveAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            ex.printStackTrace();
+            //log.info("saveAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
 
@@ -154,7 +155,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         try {
             ((BaseEntityPanel) getParent()).closeAction();
         } catch (ClassCastException ex) {
-            log.info("closeAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            ex.printStackTrace();
+            //log.info("closeAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
 
@@ -164,7 +166,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         try {
             ((BaseEntityPanel) getParent()).checkFormValidity();
         } catch (ClassCastException ex) {
-            log.info("problemsAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            ex.printStackTrace();
+            //log.info("problemsAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
 
@@ -174,7 +177,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         try {
             ((BaseEntityPanel) getParent()).print();
         } catch (ClassCastException ex) {
-            log.info("printAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            ex.printStackTrace();
+            //log.info("printAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
 
@@ -198,7 +202,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 });
             }
         } catch (ClassCastException ex) {
-            log.error("initSaveStateListener: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+            ex.printStackTrace();
+            //log.error("initSaveStateListener: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
 

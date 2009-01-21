@@ -28,10 +28,10 @@
             <included-library>file.reference.iText-2.1.3.jar</included-library>
             <included-library>file.reference.jasperreports-3.0.1.jar</included-library>
             <included-library>file.reference.commons-collections-2.1.1.jar</included-library>
-            <included-library>file.reference.swingx-2008_10_12.jar</included-library>
             <included-library>file.reference.core-renderer.jar</included-library>
             <included-library>file.reference.itext-paulo-155.jar</included-library>
             <included-library>file.reference.minium.jar</included-library>
+            <included-library>file.reference.swingx-0.9.5.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>

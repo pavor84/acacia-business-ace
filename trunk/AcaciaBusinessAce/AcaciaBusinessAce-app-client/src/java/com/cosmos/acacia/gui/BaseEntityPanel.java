@@ -21,7 +21,7 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -47,7 +47,7 @@ import com.cosmos.swingb.listeners.NestedFormListener;
  */
 public abstract class BaseEntityPanel extends AcaciaPanel {
 
-    protected static Logger log = Logger.getLogger(BaseEntityPanel.class);
+    //protected static Logger log = Logger.getLogger(BaseEntityPanel.class);
 
     protected DialogResponse modifiedResponse = null;
 
@@ -233,6 +233,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                     state.put(field.getName(), String.valueOf(field.get(getEntity())));
             } catch (Exception ex) {
                 // Log?
+                ex.printStackTrace();
             }
         }
         return state;
@@ -337,7 +338,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
             String message = getValidationErrorsMessage(ve);
             JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
         } else {
-            log.error(ex);
+            //log.error(ex);
+            ex.printStackTrace();
             String basicMessage = getResourceMap().getString("saveAction.Action.error.basicMessage", ex.getMessage());
             ErrorInfo errorInfo = createSaveErrorInfo(basicMessage, ex);
             JBErrorPane.showDialog(this, errorInfo);

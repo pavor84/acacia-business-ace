@@ -379,7 +379,7 @@ public class AddressPanel extends BaseEntityPanel {
             UpdateStrategy.READ_WRITE);
 
 
-        descriptionTextPane.bind(addressBindingGroup, address, "description");
+        descriptionTextPane.bind(addressBindingGroup, address, entityProps.getPropertyDetails("description"));
 
         BigInteger dataObjectId;
         DataObject dataObject;
