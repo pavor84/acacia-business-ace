@@ -68,13 +68,7 @@ public class JBPanel
 
     public JBPanel()
     {     
-        
-        this((Application) null);
-    }
-
-    public JBPanel(Class<? extends Application> applicationClass)
-    {
-        this(Application.getInstance(applicationClass));
+        this(null);
     }
 
     public JBPanel(Application application)
