@@ -25,7 +25,6 @@ import com.cosmos.swingb.JBComboBox;
 public class AcaciaComboBox extends JBComboBox {
 
     public AcaciaComboBox() {
-        super(AcaciaApplication.class);
     }
 
     @SuppressWarnings("unchecked")
