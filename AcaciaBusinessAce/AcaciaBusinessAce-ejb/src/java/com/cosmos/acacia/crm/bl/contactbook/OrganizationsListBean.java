@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import com.cosmos.acacia.crm.data.BasicOrganization;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,14 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return entityProperties;
     }
 
+    @Override
+    public EntityProperties getBasicOrganizationEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(BasicOrganization.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+
+        return entityProperties;
+    }
+
     public Organization newOrganization(BigInteger parentId) {
         Organization org = new Organization();
         org.setParentId(parentId);
@@ -90,6 +99,11 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
         esm.persist(em, organization);
         return organization;
+    }
+
+    @Override
+    public Organization saveBasicOrganization(BasicOrganization basicOrganization) {
+        return null;
     }
 
     public int deleteOrganization(Organization organization) {
