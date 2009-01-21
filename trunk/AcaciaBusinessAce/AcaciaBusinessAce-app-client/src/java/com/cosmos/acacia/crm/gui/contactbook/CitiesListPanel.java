@@ -144,7 +144,7 @@ public class CitiesListPanel extends AbstractTablePanel {
 
     protected List<City> getCities() {
         if (country == null) {
-            return new ArrayList<City>();
+            return getFormSession().getCities();
         } else {
             return getFormSession().getCities(country);
         }
