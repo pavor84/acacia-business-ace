@@ -22,14 +22,12 @@ public class BeanResource
     private ResourceMap resourceMap;
 
 
-    public BeanResource(Class<? extends Application> applicationClass)
+    public BeanResource()
     {
-        this(applicationClass != null ? Application.getInstance(applicationClass) : null);
     }
 
     public BeanResource(Application application)
     {
-        super();
         this.application = application;
     }
 
@@ -91,6 +89,9 @@ public class BeanResource
     }
 
     public Application getApplication() {
+        if(application == null)
+            application = Application.getInstance();
+
         return application;
     }
 
