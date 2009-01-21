@@ -194,27 +194,25 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         if (canNestedOperationProceed()) {
-            DialogResponse response;
             BaseEntityPanel entityPanel;
             switch(getNewOrganizationType()) {
                 case BasicForm:
-                    response = null;
-                    entityPanel = null;
+                    entityPanel = new BasicOrganizationPanel(getParentDataObjectId());
                     break;
 
                 case DetailedForms:
                     entityPanel = new OrganizationPanel(getParentDataObjectId());
-                    response = entityPanel.showDialog(this);
                     break;
 
                 default:
-                    response = null;
                     entityPanel = null;
                     break;
             }
-            if(entityPanel != null && DialogResponse.SAVE.equals(response))
-            {
-                return entityPanel.getSelectedValue();
+            if(entityPanel != null) {
+                DialogResponse response = entityPanel.showDialog(this);
+                if(DialogResponse.SAVE.equals(response)) {
+                    return entityPanel.getSelectedValue();
+                }
             }
         }
 

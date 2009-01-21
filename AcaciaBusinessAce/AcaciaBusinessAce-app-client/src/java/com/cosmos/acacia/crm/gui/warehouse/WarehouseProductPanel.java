@@ -553,7 +553,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         orderedDeliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedDeliveryTime"), AcaciaUtils.getIntegerFormat());
 
         //notes
-        notesField.bind(bindGroup, entity, "notes");
+        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
 
         warehouseField.setEnabled(false);
         qtyInStockField.setEditable(false);

@@ -14,14 +14,23 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListRemote;
 import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
+import java.awt.BorderLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
  *
@@ -46,10 +55,14 @@ public class CitiesListPanel extends AbstractTablePanel {
     @EJB
     private LocationsListRemote formSession;
 
+    private JBPanel countryPanel;
+    private CountriesListPanel countriesListPanel;
+    private AcaciaComboList countryComboList;
     private Country country;
+    private City countryCity;
+    private BindingGroup countryBindingGroup;
+
     private BindingGroup citiesBindingGroup;
-    private List<City> cities;
-    private ContactPerson contactPerson;
 
     @Override
     protected void initData() {
@@ -59,6 +72,8 @@ public class CitiesListPanel extends AbstractTablePanel {
     }
 
     protected void postInitData() {
+        setTopComponent(getCountryPanel());
+
         citiesBindingGroup = new BindingGroup();
         AcaciaTable citiesTable = getDataTable();
         JTableBinding tableBinding = citiesTable.bind(citiesBindingGroup, getCities(), getCityEntityProperties());
@@ -68,16 +83,71 @@ public class CitiesListPanel extends AbstractTablePanel {
         citiesTable.setEditable(false);
     }
 
-    protected List<City> getCities() {
-        if(cities == null) {
-            if (country == null) {
-                cities = getFormSession().getCities();
-            } else {
-                cities = getFormSession().getCities(country);
-            }
+    protected JBPanel getCountryPanel() {
+        if(countryPanel == null) {
+            countryPanel = new JBPanel();
+            countryPanel.setLayout(new BorderLayout());
+            countryComboList = new AcaciaComboList();
+            countryComboList.setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
+            countryPanel.add(countryComboList, BorderLayout.CENTER);
+            JBLabel countryLabel = new JBLabel();
+            countryLabel.setName("country");
+            countryLabel.setText(getResourceMap().getString("countryLabel.text"));
+            countryLabel.setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
+            countryPanel.add(countryLabel, BorderLayout.WEST);
+
+            countryCity = new City();
+            countryBindingGroup = new BindingGroup();
+            PropertyDetails propDetails = new PropertyDetails(
+                    "country", "Country", Country.class.getName());
+            propDetails.setColumnName("country");
+
+            if(countriesListPanel == null)
+                countriesListPanel = new CountriesListPanel();
+            countryComboList.bind(countryBindingGroup, countriesListPanel, countryCity,
+                    propDetails, "${countryName}", UpdateStrategy.READ_WRITE);
+            countryComboList.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    onCountryChanged((Country)e.getItem());
+                }
+            }, true);
+
+            countryBindingGroup.bind();
         }
 
-        return cities;
+        return countryPanel;
+    }
+
+    protected void onCountryChanged(Country country) {
+        setCountry(country);
+    }
+
+    protected void refreshCitiesTable() {
+        AcaciaTable citiesTable = getDataTable();
+        List data = citiesTable.getData();
+        if(data != null) {
+            data.clear();
+            data.addAll(getCities());
+        }
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+        setEnabled(Button.New, country != null);
+        refreshCitiesTable();
+    }
+
+    protected List<City> getCities() {
+        if (country == null) {
+            return new ArrayList<City>();
+        } else {
+            return getFormSession().getCities(country);
+        }
     }
 
     protected EntityProperties getCityEntityProperties()
@@ -98,19 +168,10 @@ public class CitiesListPanel extends AbstractTablePanel {
         return getFormSession().deleteCity(city);
     }
 
-     public ContactPerson getContactPerson() {
-        return contactPerson;
-    }
-
-    public void setContactPerson(ContactPerson contactPerson) {
-        this.contactPerson = contactPerson;
-    }
-
     @Override
     @Action
     public void selectAction(){
         super.selectAction();
-        //
     }
 
     @Override
@@ -148,9 +209,7 @@ public class CitiesListPanel extends AbstractTablePanel {
         if (citiesBindingGroup != null)
             citiesBindingGroup.unbind();
 
-        cities = null;
-
-        postInitData();
+        refreshCitiesTable();
 
         return t;
     }

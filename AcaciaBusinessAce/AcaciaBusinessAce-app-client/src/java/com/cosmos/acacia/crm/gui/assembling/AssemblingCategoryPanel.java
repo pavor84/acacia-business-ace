@@ -199,7 +199,8 @@ public class AssemblingCategoryPanel
         categoryNameTextField.bind(bindGroup, entity, propDetails);
 
         //description
-        descriptionTextPane.bind(bindGroup, entity, "description");
+        propDetails = entProps.getPropertyDetails("description");
+        descriptionTextPane.bind(bindGroup, entity, propDetails);
 
         bindGroup.bind();
     }

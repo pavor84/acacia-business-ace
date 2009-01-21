@@ -4,6 +4,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -43,7 +44,7 @@
                   </Group>
                   <Component id="addressPanel" alignment="0" max="32767" attributes="2"/>
                   <Component id="descriptionPanel" alignment="0" max="32767" attributes="1"/>
-                  <Component id="entityFormButtonPanel" alignment="1" pref="868" max="32767" attributes="2"/>
+                  <Component id="entityFormButtonPanel" alignment="1" pref="902" max="32767" attributes="2"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -77,17 +78,17 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="14" pref="14" max="14" attributes="0"/>
               <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="686" max="32767" attributes="0"/>
+              <EmptySpace pref="690" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="14" pref="14" max="14" attributes="0"/>
               <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="686" max="32767" attributes="0"/>
+              <EmptySpace pref="690" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="15" pref="15" max="15" attributes="0"/>
               <Component id="countryLabel" min="-2" pref="12" max="-2" attributes="0"/>
-              <EmptySpace pref="687" max="32767" attributes="0"/>
+              <EmptySpace pref="693" max="32767" attributes="0"/>
           </Group>
           <Group type="102" attributes="0">
               <EmptySpace min="14" pref="14" max="14" attributes="0"/>
@@ -158,7 +159,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="832" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="866" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -210,7 +211,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane4" pref="832" max="32767" attributes="0"/>
+                  <Component id="jScrollPane4" pref="866" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -260,7 +261,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="436" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -285,7 +286,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="414" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="435" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -321,7 +322,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="852" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="890" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">

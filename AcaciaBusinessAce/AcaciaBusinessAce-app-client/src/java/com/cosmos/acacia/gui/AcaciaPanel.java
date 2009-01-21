@@ -34,7 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 
@@ -65,7 +65,7 @@ import com.cosmos.swingb.JBTable;
 public abstract class AcaciaPanel
     extends JBPanel
 {
-    protected static Logger log = Logger.getLogger(AcaciaPanel.class);
+    //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
 
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
@@ -73,7 +73,6 @@ public abstract class AcaciaPanel
 
     public AcaciaPanel()
     {
-        super(AcaciaApplication.class);
     }
 
     public AcaciaPanel(BigInteger parentDataObjectId)
@@ -90,7 +89,7 @@ public abstract class AcaciaPanel
 
     public BigInteger getParentDataObjectId()
     {
-        log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.longValue() : "null"));
+        //log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.longValue() : "null"));
         return parentDataObjectId;
     }
 
@@ -192,7 +191,7 @@ public abstract class AcaciaPanel
             else if(e instanceof EJBException)
             {
                 e = ((EJBException)e).getCausedByException();
-                log.info(e);
+                //log.info(e);
             } else
                 break;
         }
@@ -289,13 +288,14 @@ public abstract class AcaciaPanel
             try {
                 sessionFacade = InitialContext.doLookup(SessionFacadeRemote.class.getName());
             } catch (NamingException ex){
-                log.error("", ex);
+                ex.printStackTrace();
+                //log.error("", ex);
             }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            log.info("Method called: " + method.getName() + " on bean: " + bean);
+            //log.info("Method called: " + method.getName() + " on bean: " + bean);
             return sessionFacade.call(
                     bean,
                     method.getName(),
@@ -344,7 +344,7 @@ public abstract class AcaciaPanel
     }
 
     public void handleBusinessException(String message, Exception ex) {
-        log.error(message, ex);
+        //log.error(message, ex);
         ValidationException ve = extractValidationException(ex);
         if (ve != null) {
             JOptionPane.showMessageDialog(AcaciaPanel.this, getResourceMap().getString(ve.getMessage()));
@@ -357,7 +357,7 @@ public abstract class AcaciaPanel
     }
 
     public void handleValidationException(String message, Exception ex){
-        log.error(message, ex);
+        //log.error(message, ex);
         ValidationException ve = extractValidationException(ex);
         if ( ve!=null ){
             String errorMessage = getValidationErrorsMessage(ve);
