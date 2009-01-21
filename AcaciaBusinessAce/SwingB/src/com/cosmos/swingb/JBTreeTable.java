@@ -40,11 +40,6 @@ public class JBTreeTable
         this(Application.getInstance());
     }
 
-    public JBTreeTable(Class<? extends Application> applicationClass)
-    {
-        this(Application.getInstance(applicationClass));
-    }
-
     public JBTreeTable(Application application)
     {
         internalInitialization();
@@ -122,6 +117,9 @@ public class JBTreeTable
     }
 
     public Application getApplication() {
+        if(application == null)
+            application = Application.getInstance();
+
         return application;
     }
 

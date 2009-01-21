@@ -73,14 +73,14 @@ public class JBPanel
 
     public JBPanel(Application application)
     {
-        if (application == null) {
+        /*if (application == null) {
             try {
                 application = Application.getInstance();
             } catch (Throwable t) {
                 //
             }
         }
-        this.application = application;
+        this.application = application;*/
     }
 
     protected JFrame getMainFrame()
@@ -353,6 +353,9 @@ public class JBPanel
     }
 
     public Application getApplication() {
+        if(application == null)
+            application = Application.getInstance();
+
         return application;
     }
 

@@ -20,9 +20,9 @@ public class BeanTableCellRenderer
 {
     private BeanResource beanResource;
 
-    public BeanTableCellRenderer(Class<? extends Application> applicationClass)
+    public BeanTableCellRenderer(Application application)
     {
-        beanResource = new BeanResource(applicationClass);
+        beanResource = new BeanResource(application);
     }
 
     @Override

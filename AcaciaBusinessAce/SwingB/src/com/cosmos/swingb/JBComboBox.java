@@ -65,16 +65,7 @@ public class JBComboBox
     {
         super();
         setEditor(new JBComboBoxEditor());
-        Class appClass = null;
-        if (application != null)
-            appClass = application.getClass();
-
-        setRenderer(new CustomCellRenderer(appClass));
-    }
-
-    public JBComboBox(Class<? extends Application> applicationClass)
-    {
-        this(Application.getInstance(applicationClass));
+        setRenderer(new CustomCellRenderer());
     }
 
     public JBComboBox(Application application)
@@ -285,8 +276,7 @@ public class JBComboBox
 
     class CustomCellRenderer extends BeanListCellRenderer {
 
-        public CustomCellRenderer(Class appClass) {
-            super(appClass);
+        public CustomCellRenderer() {
         }
 
         @Override
