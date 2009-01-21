@@ -21,14 +21,14 @@ public class ResourceConverter extends Converter {
     
     private ResourceDisplay display = ResourceDisplay.ShortName;
     
-    public ResourceConverter(Class<? extends Application> applicationClass)
+    public ResourceConverter(Application application)
     {
-        beanResource = new BeanResource(applicationClass);
+        beanResource = new BeanResource(application);
     }
-    public ResourceConverter(Class<? extends Application> applicationClass,
+    public ResourceConverter(Application application,
            ResourceDisplay display)
     {
-        this(applicationClass);
+        this(application);
         this.display = display;
     }
     
