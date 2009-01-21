@@ -7,19 +7,19 @@
             <minimum-ant-version>1.6</minimum-ant-version>
             <web-module-libraries/>
             <web-module-additional-libraries>
-                <library files="1">
+                <library>
                     <file>${reference.AcaciaBusinessLogic.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.AcaciaBusinessAce-ejb.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.AcaciaBusinessAce-app-client.j2ee-module-car}</file>
                     <path-in-war>/</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.AcaciaBusinessAce-war.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
