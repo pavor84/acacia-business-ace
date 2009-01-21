@@ -249,6 +249,7 @@ public class JBComboList
         if(converter == null)
             converter = new BeanResourceToStringConverter(getApplication());
         AutoCompleteDecorator.decorate(comboBox, converter);
+
         this.selectableListDialog = selectableListDialog;
 
         List data = new ArrayList(selectableListDialog.getListData());
