@@ -38,6 +38,7 @@ import org.jdesktop.swingx.table.TableColumnExt;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.converters.ResourceConverter;
+import java.awt.Color;
 
 /**
  *
@@ -59,11 +60,12 @@ public class JBTable
    
     public JBTable()
     {
+        internalInitialization();
     }
 
     public JBTable(Application application)
     {
-        internalInitialization();
+        this();
         this.application = application;
     }
 
@@ -75,6 +77,7 @@ public class JBTable
         getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setHorizontalScrollEnabled(true);
         setEditable(false);
+        setShowHorizontalLines(false);
     }
 
     public void addListSelectionListener(ListSelectionListener listener)
