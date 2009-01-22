@@ -446,4 +446,26 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
         return classifier;
     }
+
+    @Override
+    public Boolean isClassifiedAs(DataObjectBean bean, Classifier classifier) {
+        try{
+            List<Classifier> classifiers = getClassifiers(bean.getDataObject());
+            return new Boolean(classifiers.contains(classifier));
+        }catch ( Exception e ){
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
+    }
+
+    @Override
+    public Boolean isClassifiedAs(DataObjectBean bean, String classifierCode) {
+        try{
+            Classifier c = getClassifier(classifierCode);
+            return isClassifiedAs(bean, c);
+        }catch ( Exception e ){
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
+    }
 }

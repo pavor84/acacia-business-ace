@@ -287,4 +287,20 @@ public interface ClassifiersRemote {
      * @return
      */
     Classifier getOrCreateSystemClassifier(String classifierKey);
+
+    /**
+     * Whether the specified bean is classified with the given classificator
+     * @param bean
+     * @param classifier
+     * @return
+     */
+    Boolean isClassifiedAs(DataObjectBean bean, Classifier classifier);
+    
+    /**
+     * Whether the specified bean is classified with the given classificator
+     * @param bean
+     * @param classifierCode
+     * @return
+     */
+    Boolean isClassifiedAs(DataObjectBean bean, String classifierCode);
 }
