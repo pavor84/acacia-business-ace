@@ -36,18 +36,10 @@ public class InvoiceListPanel extends AbstractTablePanel {
     private List<Invoice> list;
     private boolean proform;
     
-    /**
-     * @param pendingConfirmations 
-     * @param parentDataObject
-     */
     public InvoiceListPanel(BigInteger parentDataObjectId, boolean proform) {
         this ( parentDataObjectId, null, proform );
     }
     
-    /**
-     * @param pendingConfirmations 
-     * @param parentDataObject
-     */
     public InvoiceListPanel(BigInteger parentDataObjectId, List<Invoice> list, boolean proform) {
         super(parentDataObjectId);
         this.list = list;
