@@ -52,6 +52,8 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JComponent;
 
 /**
@@ -289,6 +291,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @Override
     protected void initData()
     {
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        size.width = (size.width * 2) / 3;
+        size.height = (size.height * 2) / 3;
+        setMaximumSize(size);
+
         if (!visibilitySetChanged) {
             setVisible(Button.Select, false);
             setVisible(Button.Unselect, false);

@@ -377,20 +377,6 @@ public class BasicOrganizationPanel
         propDetails = entityProps.getPropertyDetails("uniqueIdentifierCode");
         uniqueIdTextField.bind(bindingGroup, basicOrganization, propDetails);
 
-        /*cityComboList.setEnabled(false);
-        if(countriesListPanel == null)
-            countriesListPanel = new CountriesListPanel();
-        propDetails = entityProps.getPropertyDetails("country");
-        System.out.println("propDetails: " + propDetails);
-        countryComboList.bind(bindingGroup, countriesListPanel, basicOrganization,
-                propDetails, "${countryName}", UpdateStrategy.READ_WRITE);
-        countryComboList.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                onCountryChanged((Country)e.getItem());
-            }
-        }, true);*/
-
         // City
         if(citiesListPanel == null)
             citiesListPanel = new CitiesListPanel();
@@ -424,22 +410,6 @@ public class BasicOrganizationPanel
 
         bindingGroup.bind();
     }
-
-    /*private void onCountryChanged(Country country) {
-        System.out.println("countryItem: " + country);
-        citiesListPanel.setCountry(country);
-        if(country != null) {
-            cityComboList.setEnabled(true);
-            if(!country.equals(previousCountry)) {
-                basicOrganization.setCity(null);
-            }
-        } else {
-            cityComboList.setEnabled(false);
-            basicOrganization.setCity(null);
-        }
-
-        previousCountry = country;
-    }*/
 
     protected OrganizationsListRemote getFormSession()
     {

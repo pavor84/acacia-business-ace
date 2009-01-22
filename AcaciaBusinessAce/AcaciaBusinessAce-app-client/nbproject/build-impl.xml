@@ -419,7 +419,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.core-renderer.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.itext-paulo-155.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.minium.jar}" todir="${build.classes.dir}/META-INF/lib"/>
-        <copyfiles files="${file.reference.swingx-0.9.5.jar}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copyfiles files="${file.reference.swingx-2008_01_20.jar}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.AcaciaBusinessAce-ejb.dist}" manifestproperty="manifest.reference.AcaciaBusinessAce-ejb.dist" todir="${dist.ear.dir}"/>
@@ -442,9 +442,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.core-renderer.jar}" manifestproperty="manifest.file.reference.core-renderer.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.itext-paulo-155.jar}" manifestproperty="manifest.file.reference.itext-paulo-155.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.minium.jar}" manifestproperty="manifest.file.reference.minium.jar" todir="${dist.ear.dir}"/>
-        <copyfiles files="${file.reference.swingx-0.9.5.jar}" manifestproperty="manifest.file.reference.swingx-0.9.5.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.swingx-2008_01_20.jar}" manifestproperty="manifest.file.reference.swingx-2008_01_20.jar" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.AcaciaBusinessAce-ejb.dist} ${manifest.reference.AcaciaBusinessLogic.dist} ${manifest.reference.AcaciaAnnotations.jar} ${manifest.reference.AcaciaBeansBinding.jar} ${manifest.file.reference.swing-worker-1.1.jar} ${manifest.reference.SwingB.jar} ${manifest.file.reference.appframework-1.0.3.jar} ${manifest.libs.junit_4.classpath} ${manifest.file.reference.log4j-1.2.11.jar} ${manifest.file.reference.liquidlnf.jar} ${manifest.libs.absolutelayout.classpath} ${manifest.file.reference.beansbinding.jar} ${manifest.file.reference.commons-beanutils-1.8.0.jar} ${manifest.file.reference.commons-digester-1.8.jar} ${manifest.file.reference.iText-2.1.3.jar} ${manifest.file.reference.jasperreports-3.0.1.jar} ${manifest.file.reference.commons-collections-2.1.1.jar} ${manifest.file.reference.core-renderer.jar} ${manifest.file.reference.itext-paulo-155.jar} ${manifest.file.reference.minium.jar} ${manifest.file.reference.swingx-0.9.5.jar} "/>
+            <attribute name="Class-Path" value="${manifest.reference.AcaciaBusinessAce-ejb.dist} ${manifest.reference.AcaciaBusinessLogic.dist} ${manifest.reference.AcaciaAnnotations.jar} ${manifest.reference.AcaciaBeansBinding.jar} ${manifest.file.reference.swing-worker-1.1.jar} ${manifest.reference.SwingB.jar} ${manifest.file.reference.appframework-1.0.3.jar} ${manifest.libs.junit_4.classpath} ${manifest.file.reference.log4j-1.2.11.jar} ${manifest.file.reference.liquidlnf.jar} ${manifest.libs.absolutelayout.classpath} ${manifest.file.reference.beansbinding.jar} ${manifest.file.reference.commons-beanutils-1.8.0.jar} ${manifest.file.reference.commons-digester-1.8.jar} ${manifest.file.reference.iText-2.1.3.jar} ${manifest.file.reference.jasperreports-3.0.1.jar} ${manifest.file.reference.commons-collections-2.1.1.jar} ${manifest.file.reference.core-renderer.jar} ${manifest.file.reference.itext-paulo-155.jar} ${manifest.file.reference.minium.jar} ${manifest.file.reference.swingx-2008_01_20.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
