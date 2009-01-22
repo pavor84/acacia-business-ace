@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -105,11 +107,34 @@ public class JBPanel
     {
         addContextMenus();
         JBFrame frame = new JBFrame();
-        frame.setDefaultCloseOperation(JBFrame.DISPOSE_ON_CLOSE);
-        frame.setTitle(getTitle());
         frame.getContentPane().add(this);
         frame.pack();
         frame.setMinimumSize(frame.getPreferredSize());
+
+        Dimension maximumSize = getMaximumSize();
+        Dimension preferredSize = getPreferredSize();
+        maximumSize.width = Math.min(maximumSize.width, preferredSize.width);
+        maximumSize.height = Math.min(maximumSize.height, preferredSize.height);
+        if(!maximumSize.equals(preferredSize)) {
+            setPreferredSize(maximumSize);
+            setSize(maximumSize);
+            maximumSize = frame.getPreferredSize();
+            preferredSize = Toolkit.getDefaultToolkit().getScreenSize();
+            maximumSize.width = Math.min(maximumSize.width, preferredSize.width);
+            maximumSize.height = Math.min(maximumSize.height, preferredSize.height);
+
+            frame.dispose();
+            frame.getContentPane().remove(this);
+
+            frame = new JBFrame();
+            frame.getContentPane().add(this);
+            frame.setPreferredSize(maximumSize);
+            frame.pack();
+            frame.setMinimumSize(frame.getPreferredSize());
+        }
+
+        frame.setDefaultCloseOperation(JBFrame.DISPOSE_ON_CLOSE);
+        frame.setTitle(getTitle());
         frame.setLocationRelativeTo(parentComponent);
         frame.setResizable(isResizable());
         frame.addWindowListener(new WindowAdapter()
@@ -137,30 +162,45 @@ public class JBPanel
 
         Window window = getWindowAncestor(parentComponent);
         dialog = new JBDialog(window, getTitle());
-        mainContainer = dialog;
-
         Container contentPane = dialog.getContentPane();
         contentPane.removeAll();
         contentPane.add(this, BorderLayout.CENTER);
+        dialog.pack();
+        dialog.setMinimumSize(dialog.getPreferredSize());
+
+        Dimension maximumSize = getMaximumSize();
+        Dimension preferredSize = getPreferredSize();
+        maximumSize.width = Math.min(maximumSize.width, preferredSize.width);
+        maximumSize.height = Math.min(maximumSize.height, preferredSize.height);
+        if(!maximumSize.equals(preferredSize)) {
+            setPreferredSize(maximumSize);
+            setSize(maximumSize);
+            maximumSize = dialog.getPreferredSize();
+            preferredSize = Toolkit.getDefaultToolkit().getScreenSize();
+            maximumSize.width = Math.min(maximumSize.width, preferredSize.width);
+            maximumSize.height = Math.min(maximumSize.height, preferredSize.height);
+
+            dialog.dispose();
+            dialog.getContentPane().remove(this);
+            dialog = null;
+
+            dialog = new JBDialog(window, getTitle());
+            dialog.getContentPane().add(this);
+            dialog.setPreferredSize(maximumSize);
+            dialog.pack();
+            dialog.setMinimumSize(dialog.getPreferredSize());
+        }
 
         Dialog.ModalityType modality = getModalityType();
         if(modality != null)
         {
             dialog.setModalityType(modality);
         }
-
-        dialog.pack();
-        dialog.setMinimumSize(dialog.getPreferredSize());
-        dialog.setMaximumSize(getMaximumSize());
-
         dialog.setLocationRelativeTo(parentComponent);
-        //TODO: check if form is completely visible
-
+        mainContainer = dialog;
         dialog.setResizable(isResizable());
-
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         dialog.addWindowListener(new DialogWindowAdapter());
-
         dialog.setVisible(true);
         dialog.dispose();
         dialog = null;
