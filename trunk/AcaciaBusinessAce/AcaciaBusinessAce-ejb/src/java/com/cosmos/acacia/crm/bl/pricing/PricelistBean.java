@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -17,6 +18,7 @@ import com.cosmos.acacia.crm.data.PricelistItem;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.validation.impl.PricelistValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 
 /**
  * 
@@ -95,6 +97,12 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
     public EntityProperties getItemsListEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(PricelistItem.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        
+        PropertyDetails categoryColumn = new PropertyDetails("product.category.categoryName", "Category", String.class.getName());
+        categoryColumn.setOrderPosition(12);
+        
+        entityProperties.addPropertyDetails(categoryColumn);
+        
         return entityProperties;
     }
 
@@ -154,5 +162,15 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         } else {
             return result.get(0);
         }
+    }
+
+    @Override
+    public List<PricelistItem> savePricelistItems(List<PricelistItem> toSave) {
+        List<PricelistItem> result = new ArrayList<PricelistItem>();
+        for (PricelistItem pricelistItem : toSave) {
+            PricelistItem saved = savePricelistItem(pricelistItem);
+            result.add(saved);
+        }
+        return result;
     }
 }

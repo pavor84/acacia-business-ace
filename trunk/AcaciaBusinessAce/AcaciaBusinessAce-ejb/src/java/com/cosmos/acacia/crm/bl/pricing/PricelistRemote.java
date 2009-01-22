@@ -98,4 +98,10 @@ public interface PricelistRemote {
      * @return
      */
     EntityProperties getItemDetailEntityProperties();
+
+    /**
+     * Save multiple items.
+     * @param toSave
+     */
+    List<PricelistItem> savePricelistItems(List<PricelistItem> toSave);
 }
