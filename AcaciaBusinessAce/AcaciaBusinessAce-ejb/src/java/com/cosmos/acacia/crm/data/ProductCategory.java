@@ -48,6 +48,15 @@ import javax.persistence.Table;
                  */
                 name = "ProductCategory.findByNameNotDeleted",
                 query = "select p from ProductCategory p where p.categoryName like :categoryName and p.dataObject.deleted = false"
+            ),
+        /**
+         * Parameters:
+         * - parentIds: Collection<BigInteger>
+         */
+        @NamedQuery
+            (
+                name = "ProductCategory.findChildCategories",
+                query = "select p from ProductCategory p where p.dataObject.deleted = false and p.parentCategory.productCategoryId in (:parentIds)"
             )
 })
 public class ProductCategory

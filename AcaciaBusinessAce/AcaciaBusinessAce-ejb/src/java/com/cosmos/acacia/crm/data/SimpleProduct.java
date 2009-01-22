@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,7 +25,6 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.util.CodeFormatter;
-import javax.persistence.DiscriminatorValue;
 
 
 /**
@@ -63,7 +63,17 @@ import javax.persistence.DiscriminatorValue;
                  */
                 name = "SimpleProduct.findByProductCode",
                 query = "select p from SimpleProduct p where p.productCode like :productCode and p.dataObject.deleted = false"
+            ),
+        @NamedQuery
+            (
+                /**
+                 * Parameters:
+                 * - categoryIds - Collection<BigInteger>
+                 */
+                name = "SimpleProduct.findByCategories",
+                query = "select p from SimpleProduct p where p.dataObject.deleted = false and p.category.id in (:categoryIds)"
             )
+            
     })
 public class SimpleProduct
     extends Product
@@ -737,5 +747,21 @@ public class SimpleProduct
     @Override
     public void setSalePrice(BigDecimal salePrice) {
         //nothing to do, this property is synthetic
+    }
+
+    public String getProductDisplay() {
+        String codeFormatted = getCodeFormatted();
+        String name = getProductName();
+        if (codeFormatted==null)
+            codeFormatted="";
+        else
+            codeFormatted += " ";
+        if ( name==null )
+            name = "";
+        String categoryName = "";
+        if ( getCategory()!=null ){
+            categoryName = getCategory().getCategoryName();
+        }
+        return codeFormatted+" "+name+", "+categoryName;
     }
 }

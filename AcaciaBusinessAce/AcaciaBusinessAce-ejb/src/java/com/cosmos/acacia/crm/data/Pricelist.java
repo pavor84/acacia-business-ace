@@ -93,7 +93,8 @@ public class Pricelist extends DataObjectBean implements Serializable {
     @ManyToOne
     private DbResource currency;
     
-    @Property(title="Turnover Months")
+    @Property(title="Turnover Months", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=1d, maxValue=36d))
     @Column(name = "months")
     private Integer months;
     
