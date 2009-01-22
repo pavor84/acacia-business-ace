@@ -22,12 +22,10 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 
 /**
- * Created	:	28.12.2008
- * @author	Petar Milev
- *
+ * 
  */
 @Entity
-@Table(name = "pricelist_items")
+@Table(name = "customer_discount_items")
 @NamedQueries(
     {
         /**
@@ -37,33 +35,52 @@ import com.cosmos.acacia.annotation.ValidationType;
          */
         @NamedQuery
             (
-                name = "PricelistItem.findForParentAndDeleted",
-                query = "select p from PricelistItem p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
-                        "and p.dataObject.deleted = :deleted " +
-                        "order by p.product.category.categoryName asc, p.product.productName asc, p.minQuantity asc"
+                name = "CustomerDiscountItem.findForParent",
+                query = "select p from CustomerDiscountItem p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
+                        "and p.dataObject.deleted = false "
             ),
         @NamedQuery
             (
-                name = "PricelistItem.findById",
-                query = "select p from PricelistItem p where p.dataObject.dataObjectId = :pricelistItemId"
+                name = "CustomerDiscountItem.findById",
+                query = "select p from CustomerDiscountItem p where p.dataObject.dataObjectId = :id"
+            ),
+        /**
+         * Pars:
+         * - category
+         * - parentDataObjectId
+         */
+        @NamedQuery
+            (
+                name = "CustomerDiscountItem.findByCategory",
+                query = "select p from CustomerDiscountItem p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.category = :category and p.dataObject.deleted = false"
+            ) ,
+        /**
+         * Pars:
+         * - product
+         * - parentDataObjectId
+         */
+        @NamedQuery
+            (
+                name = "CustomerDiscountItem.findByProduct",
+                query = "select p from CustomerDiscountItem p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.product = :product and p.dataObject.deleted = false"
             ) 
     })
-public class PricelistItem extends DataObjectBean implements Serializable{
+public class CustomerDiscountItem extends DataObjectBean implements Serializable{
     @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable=false)
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
     private SimpleProduct product;
     
-    @Column(name="apply_client_discount")
-    @Property(title="Apply Client Discount")
-    private boolean applyClientDiscount;
+    @JoinColumn(name = "category_id", referencedColumnName = "product_category_id")
+    @ManyToOne
+    @Property(title="Category", propertyValidator=@PropertyValidator(required=true), customDisplay="${category.categoryName}")
+    private ProductCategory category;
     
-    @Property(title="Min. Quantity", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "min_quantity", precision=20, scale=4)
-    private BigDecimal minQuantity;
+    @Column(name="include_heirs")
+    @Property(title="Include Heirs")
+    private boolean includeHeirs;
     
-    @Property(title="Discount %", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
     @Column(name = "discount_percent", precision=20, scale=4)
     private BigDecimal discountPercent;
     
@@ -96,10 +113,10 @@ public class PricelistItem extends DataObjectBean implements Serializable{
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PricelistItem)) {
+        if (!(object instanceof CustomerDiscountItem)) {
             return false;
         }
-        PricelistItem other = (PricelistItem) object;
+        CustomerDiscountItem other = (CustomerDiscountItem) object;
         if ((this.itemId == null && other.itemId != null) || (this.itemId != null && !this.itemId.equals(other.itemId))) {
             return false;
         }
@@ -108,7 +125,7 @@ public class PricelistItem extends DataObjectBean implements Serializable{
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.PricelistItem[itemId=" + itemId + "]";
+        return "com.cosmos.acacia.crm.data.CustomerDiscountItem[itemId=" + itemId + "]";
     }
 
     @Override
@@ -136,14 +153,6 @@ public class PricelistItem extends DataObjectBean implements Serializable{
         setItemId(id);
     }
 
-    public BigInteger getPricelistItemId() {
-        return itemId;
-    }
-
-    public void setPricelistItemId(BigInteger itemId) {
-        this.itemId = itemId;
-    }
-
     public BigInteger getItemId() {
         return itemId;
     }
@@ -160,27 +169,27 @@ public class PricelistItem extends DataObjectBean implements Serializable{
         this.product = product;
     }
 
-    public boolean isApplyClientDiscount() {
-        return applyClientDiscount;
-    }
-
-    public void setApplyClientDiscount(boolean applyClientDiscount) {
-        this.applyClientDiscount = applyClientDiscount;
-    }
-
-    public BigDecimal getMinQuantity() {
-        return minQuantity;
-    }
-
-    public void setMinQuantity(BigDecimal minQuantity) {
-        this.minQuantity = minQuantity;
-    }
-
     public BigDecimal getDiscountPercent() {
         return discountPercent;
     }
 
     public void setDiscountPercent(BigDecimal discountPercent) {
         this.discountPercent = discountPercent;
+    }
+
+    public boolean isIncludeHeirs() {
+        return includeHeirs;
+    }
+
+    public void setIncludeHeirs(boolean includeHeirs) {
+        this.includeHeirs = includeHeirs;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 }
