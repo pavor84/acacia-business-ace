@@ -37,12 +37,12 @@ public class JBTreeTable
 
     public JBTreeTable()
     {
-        this(Application.getInstance());
+        internalInitialization();
     }
 
     public JBTreeTable(Application application)
     {
-        internalInitialization();
+        this();
         this.application = application;
     }
 
