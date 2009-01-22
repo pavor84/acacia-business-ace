@@ -95,4 +95,13 @@ public interface ProductsListRemote {
     boolean deleteProductCategories(List<ProductCategory> categories);
 
     SimpleProduct refresh(SimpleProduct product);
+
+    /**
+     * Get the products in the selected category. If 'includeHiers' - the products in the sub categories
+     * will be also shown.
+     * @param categoryId
+     * @param includeHeirs
+     * @return
+     */
+    List<SimpleProduct> getProductsForCategory(BigInteger categoryId, Boolean includeHeirs);
 }

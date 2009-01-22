@@ -8,7 +8,9 @@ package com.cosmos.acacia.crm.bl.impl;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -217,5 +219,40 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         if ( product.getId()!=null )
             product = em.find(SimpleProduct.class, product.getId());
         return product;
+    }
+
+    @Override
+    public List<SimpleProduct> getProductsForCategory(BigInteger categoryId, Boolean includeHeirs) {
+        if ( includeHeirs==null && categoryId==null )
+            throw new IllegalArgumentException("Null parameters not allowed ("+categoryId+", "+includeHeirs+")");
+        Set<BigInteger> parentIds = new HashSet<BigInteger>();
+        parentIds.add(categoryId);
+        
+        Set<BigInteger> categoriesAllIds = new HashSet<BigInteger>();
+        categoriesAllIds.add(categoryId);
+        //get all sub categories if includeHeirs
+        if (includeHeirs){
+            while ( true ){
+                Query q = em.createNamedQuery("ProductCategory.findChildCategories");
+                q.setParameter("parentIds", parentIds);
+                List<ProductCategory> categories = q.getResultList();
+                
+                parentIds = new HashSet<BigInteger>();
+                for (ProductCategory cat : categories) {
+                    parentIds.add(cat.getId());
+                    categoriesAllIds.add(cat.getId());
+                }
+                
+                if ( categories.isEmpty() )
+                    break;
+            }
+        }
+        
+        //get all products from these categories
+        Query q = em.createNamedQuery("SimpleProduct.findByCategories");
+        q.setParameter("categoryIds", categoriesAllIds);
+        
+        List<SimpleProduct> productsFromCategories = q.getResultList();
+        return productsFromCategories;
     }
 }
