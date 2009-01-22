@@ -35,10 +35,6 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
 
     private Type type;
     
-    /**
-     * @param pendingConfirmations 
-     * @param parentDataObject
-     */
     public ProductPricingValueListPanel(BigInteger parentDataObjectId, Type type) {
         super(parentDataObjectId);
         this.type = type;
