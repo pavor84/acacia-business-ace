@@ -114,10 +114,21 @@ public class JBTable
 
     public int addRow(Object bean)
     {
+        return addRow(bean,null);
+    }
+    
+    public int addRow(Object bean, Integer index)
+    {
         if(observableData == null)
             return -1;
-        observableData.add(bean);
-        return observableData.size() - 1;
+        if ( index!=null ){
+            observableData.add(index, bean);
+            return index;
+        }
+        else{
+            observableData.add(bean);
+            return observableData.size() - 1;
+        }
     }
 
     public void setRow(int rowIndex, Object bean)
@@ -130,6 +141,27 @@ public class JBTable
     {
         int rowIndex = getSelectedRow();
         setRow(rowIndex, bean);
+    }
+    
+    /**
+     * If the bean is in the table - its updated, otherwise added
+     * @param bean
+     */
+    public void addOrUpdateRow(Object bean){
+        addOrUpdateRow(bean, null);
+    }
+    
+    /**
+     * If the bean is in the table - its updated, otherwise added.
+     * @param bean
+     * @param addIdx - if added, specify the index
+     */
+    public void addOrUpdateRow(Object bean, Integer addIdx) {
+        int rowIndex = getRowIndex(bean);
+        if ( rowIndex==-1 )
+            addRow(bean, addIdx);
+        else
+            setRow(rowIndex, bean);
     }
     
     /**
