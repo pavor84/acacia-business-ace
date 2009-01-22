@@ -138,7 +138,7 @@ public class AcaciaApplicationView extends FrameView {
     public static void setLookAndFeel(){
         try {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
-            LiquidLookAndFeel.setShowTableGrids(false);
+            LiquidLookAndFeel.setShowTableGrids(true);
             LiquidLookAndFeel.setLiquidDecorations(true);
 
             //tried to change the default JFrame icon (java cup), but no luck

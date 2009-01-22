@@ -266,6 +266,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
 
     /**
+     * 
+     */
+    private boolean packAllColumns = true;
+
+    /**
      * Before applying a classifier filter, the default fetched data
      * is saved, so that it can be reverted to
      */
@@ -314,6 +319,15 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             dataTable.setSelectedRowObject(selectedRowObject);
 
         addListSelectionListener(dataTable);
+    }
+
+    @Override
+    public void invalidate() {
+        if(packAllColumns) {
+            packAllColumns = false;
+            getDataTable().packAll();
+        }
+        super.invalidate();
     }
 
     @Override
