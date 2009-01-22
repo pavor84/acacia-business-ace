@@ -320,11 +320,11 @@ public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPane
         return tree;
     }
 
-    protected JBCheckBox getShowAllHeirsCheckBox(){
+    public JBCheckBox getShowAllHeirsCheckBox(){
         return showAllHeirsCheck;
     }
 
-    protected boolean getShowAllHeirs()
+    public boolean getShowAllHeirs()
     {
         return showAllHeirsCheck.isSelected();
     }

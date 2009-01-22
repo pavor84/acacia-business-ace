@@ -600,4 +600,10 @@ public abstract class AcaciaPanel
     public EnumResourceRemote getEnumResourceRemote() {
         return enumResourceRemote;
     }
+    
+    protected void showMessageDialog(String messageKey){
+        ResourceMap resourceMap = getResourceMap();
+        String message = resourceMap.getString(messageKey);
+        JOptionPane.showMessageDialog(this, message);
+    }
 }

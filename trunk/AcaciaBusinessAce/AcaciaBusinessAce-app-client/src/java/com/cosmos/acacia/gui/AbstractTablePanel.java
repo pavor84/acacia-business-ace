@@ -745,7 +745,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
         return false;
     }
-
+    
     @SuppressWarnings("unchecked")
     @Action
     public Task refreshAction() {
