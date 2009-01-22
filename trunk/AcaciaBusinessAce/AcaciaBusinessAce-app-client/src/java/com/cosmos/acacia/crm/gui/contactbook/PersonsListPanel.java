@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -14,12 +17,17 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.CustomerDiscount;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
 
 /**
  * Panel for listing existing persons, giving CRUD options
@@ -27,12 +35,15 @@ import java.math.BigInteger;
  * @author  Bozhidar Bozhanov
  */
 public class PersonsListPanel extends AbstractTablePanel {
+    
+    private CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
 
     /** Creates new form PersonsListPanel */
     public PersonsListPanel(BigInteger parentDataObjectId)
     {
         super(parentDataObjectId);
         postInitData();
+        initComponentsCustom();
     }
 
     /** Creates new form PersonsListPanel */
@@ -41,6 +52,27 @@ public class PersonsListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
         this.staff = staff;
         postInitData();
+        initComponentsCustom();
+    }
+    
+    private void initComponentsCustom() {
+        setSpecialButtonBehavior(true);
+        getButton(Button.Special).setText(getResourceMap().getString("button.discount"));
+        getButton(Button.Special).setToolTipText(getResourceMap().getString("button.discount.tooltip"));
+        getButton(Button.Special).addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onDiscount();
+            }
+        });
+    }
+
+    protected void onDiscount() {
+        BusinessPartner selected = (BusinessPartner) getDataTable().getSelectedRowObject();
+        if ( selected==null )
+            return;
+        CustomerDiscount customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(selected);
+        CustomerDiscountForm customerDiscountForm = new CustomerDiscountForm(customerDiscount);
+        customerDiscountForm.showFrame(this);
     }
     
     @EJB
@@ -167,6 +199,15 @@ public class PersonsListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canModify(Object rowObject) {
+        if ( rowObject instanceof DataObjectBean ){
+            DataObjectBean bean = (DataObjectBean) rowObject;
+            if ( getClassifiersFormSession().isClassifiedAs(bean, "customer")){
+                setVisible(Button.Special, true);
+            }else{
+                setVisible(Button.Special, false);
+            }
+        }
+        
         return true;
     }
 

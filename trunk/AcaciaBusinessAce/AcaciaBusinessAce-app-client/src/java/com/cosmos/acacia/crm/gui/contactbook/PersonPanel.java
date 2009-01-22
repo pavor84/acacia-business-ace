@@ -22,11 +22,14 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
+import com.cosmos.acacia.crm.data.CustomerDiscount;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -34,6 +37,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBButton;
 
 /**
  * A form for adding and editing persons
@@ -43,6 +47,8 @@ import com.cosmos.swingb.DialogResponse;
 public class PersonPanel extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(PersonPanel.class);
+    
+    private CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
 
     /** Creates new form PersonPanel */
     public PersonPanel(Person person) {
@@ -61,7 +67,29 @@ public class PersonPanel extends BaseEntityPanel {
     protected void init()
     {
         initComponents();
+        initComponentsCustom();
         super.init();
+    }
+    
+    private void initComponentsCustom() {
+        if ( getClassifiersFormSession().isClassifiedAs(person, "customer")){
+            JBButton b = new JBButton();
+            b.setText(getResourceMap().getString("button.discount"));
+            b.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    onDiscount();
+                }
+            });
+            getButtonPanel().addButton(b);
+        }
+    }
+    
+    protected void onDiscount() {
+        if ( person.getId()!=null ){
+            CustomerDiscount customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(person);
+            CustomerDiscountForm customerDiscountForm = new CustomerDiscountForm(customerDiscount);
+            customerDiscountForm.showDialog(this);
+        }
     }
 
     /** This method is called from within the constructor to

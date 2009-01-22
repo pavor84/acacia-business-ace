@@ -6,9 +6,13 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.Binding;
@@ -16,18 +20,20 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.CustomerDiscount;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.listeners.TableModificationListener;
-import java.math.BigInteger;
-import javax.swing.JOptionPane;
 
 /**
  * A form for adding and editing organizations
@@ -37,6 +43,8 @@ import javax.swing.JOptionPane;
 public class OrganizationPanel extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(OrganizationPanel.class);
+    
+    private CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
 
     /** Creates new form organizationPanel */
     public OrganizationPanel(Organization organization) {
@@ -62,7 +70,29 @@ public class OrganizationPanel extends BaseEntityPanel {
     protected void init()
     {
         initComponents();
+        initComponentsCustom();
         super.init();
+    }
+
+    private void initComponentsCustom() {
+        if ( getClassifiersFormSession().isClassifiedAs(organization, "customer")){
+            JBButton b = new JBButton();
+            b.setText(getResourceMap().getString("button.discount"));
+            b.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    onDiscount();
+                }
+            });
+            getButtonPanel().addButton(b);
+        }
+    }
+
+    protected void onDiscount() {
+        if ( organization.getId()!=null ){
+            CustomerDiscount customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(organization);
+            CustomerDiscountForm customerDiscountForm = new CustomerDiscountForm(customerDiscount);
+            customerDiscountForm.showDialog(this);
+        }
     }
 
     /** This method is called from within the constructor to
