@@ -30,7 +30,7 @@ public class ProductPricingValueForm extends BaseEntityPanel {
     private ProductPricingValueRemote formSession = getBean(ProductPricingValueRemote.class);
     private EntityProperties entProps;
     
-    /** Creates new form PurchaseOrderFormDraft */
+    /** Creates new form */
     public ProductPricingValueForm(ProductPricingValue entity) {
         super(entity.getParentId());
         this.entity = entity;

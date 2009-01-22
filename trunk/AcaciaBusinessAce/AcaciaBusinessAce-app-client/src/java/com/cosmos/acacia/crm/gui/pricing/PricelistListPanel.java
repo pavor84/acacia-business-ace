@@ -38,18 +38,10 @@ public class PricelistListPanel extends AbstractTablePanel {
     private RightsManagerRemote rightsManager =
         AcaciaPanel.getBean(RightsManagerRemote.class, false);
     
-    /**
-     * @param pendingConfirmations 
-     * @param parentDataObject
-     */
     public PricelistListPanel(BigInteger parentDataObjectId) {
         this ( parentDataObjectId, null );
     }
     
-    /**
-     * @param pendingConfirmations 
-     * @param parentDataObject
-     */
     public PricelistListPanel(BigInteger parentDataObjectId, List<Pricelist> list) {
         super(parentDataObjectId);
         this.list = list;
@@ -138,8 +130,12 @@ public class PricelistListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object newRow() {
-        Pricelist o = getFormSession().newPricelist(getParentDataObjectId());
-        return showDetailForm(o, true);
+        if ( canCreate() ){
+            Pricelist o = getFormSession().newPricelist(getParentDataObjectId());
+            return showDetailForm(o, true);
+        }else{
+            return null;
+        }
     }
 
     private Object showDetailForm(Pricelist o, boolean editable) {
