@@ -4,7 +4,6 @@ import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -12,12 +11,14 @@ import com.cosmos.acacia.crm.bl.impl.EnumResourceRemote;
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.enums.Currency;
+import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.listeners.TableModificationListener;
 
 /**
  * 
@@ -38,8 +39,10 @@ public class PricelistForm extends BaseEntityPanel {
     private Integer activeToHoursValue;
     private Integer activeFromMinutesValue;
     private Integer activeToMinutesValue;
+    
+    private PricelistItemListPanel itemsTablePanel;
 
-    /** Creates new form PurchaseOrderFormDraft */
+    /** Creates new form */
     public PricelistForm(Pricelist pricelist) {
         super(pricelist.getParentId());
         this.entity = pricelist;
@@ -48,7 +51,34 @@ public class PricelistForm extends BaseEntityPanel {
 
     private void initialize() {
         initComponents();
+        initComponentsCustom();
         init();
+    }
+
+    private void initComponentsCustom() {
+        itemsTablePanel = new PricelistItemListPanel(entity);
+
+        itemsTablePanel.addTableModificationListener(new TableModificationListener() {
+            public void rowModified(Object row) {
+            }
+            public void rowDeleted(Object row) {
+            }
+            public void rowAdded(Object row) {
+            }
+        });
+
+        itemsTablePanel.addTablePanelListener(new AbstractTablePanelListener() {
+            @Override
+            public void tableRefreshed() {
+            }
+        });
+
+        // Adding the nested table listener to ensure that purchase order is
+        // saved before adding
+        // items to it.
+        addNestedFormListener(itemsTablePanel);
+
+        tableHolderPanel1.add(itemsTablePanel);
     }
 
     /** This method is called from within the constructor to
@@ -65,7 +95,6 @@ public class PricelistForm extends BaseEntityPanel {
         LabelActiveFrom = new com.cosmos.swingb.JBLabel();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        itemsPanel = new com.cosmos.swingb.JBPanel();
         forPeriodField = new com.cosmos.swingb.JBCheckBox();
         jBLabel13 = new com.cosmos.swingb.JBLabel();
         activeFromField = new com.cosmos.swingb.JBDatePicker();
@@ -80,7 +109,6 @@ public class PricelistForm extends BaseEntityPanel {
         minTurnoverField = new com.cosmos.swingb.JBFormattedTextField();
         currencyField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel11 = new com.cosmos.swingb.JBLabel();
-        monthField = new com.cosmos.acacia.gui.AcaciaComboBox();
         jBLabel9 = new com.cosmos.swingb.JBLabel();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         activeField = new com.cosmos.swingb.JBCheckBox();
@@ -88,6 +116,8 @@ public class PricelistForm extends BaseEntityPanel {
         activeToField = new com.cosmos.swingb.JBDatePicker();
         jBLabel10 = new com.cosmos.swingb.JBLabel();
         discountField = new com.cosmos.swingb.JBFormattedTextField();
+        monthsField = new com.cosmos.swingb.JBTextField();
+        tableHolderPanel1 = new com.cosmos.acacia.gui.TableHolderPanel();
 
         setName("Form"); // NOI18N
 
@@ -105,20 +135,6 @@ public class PricelistForm extends BaseEntityPanel {
         jBLabel3.setName("jBLabel3"); // NOI18N
 
         entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
-
-        itemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("itemsPanel.border.title"))); // NOI18N
-        itemsPanel.setName("itemsPanel"); // NOI18N
-
-        javax.swing.GroupLayout itemsPanelLayout = new javax.swing.GroupLayout(itemsPanel);
-        itemsPanel.setLayout(itemsPanelLayout);
-        itemsPanelLayout.setHorizontalGroup(
-            itemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 562, Short.MAX_VALUE)
-        );
-        itemsPanelLayout.setVerticalGroup(
-            itemsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 373, Short.MAX_VALUE)
-        );
 
         forPeriodField.setName("forPeriodField"); // NOI18N
 
@@ -156,9 +172,6 @@ public class PricelistForm extends BaseEntityPanel {
         jBLabel11.setText(resourceMap.getString("jBLabel11.text")); // NOI18N
         jBLabel11.setName("jBLabel11"); // NOI18N
 
-        monthField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "3", "6", "12" }));
-        monthField.setName("monthField"); // NOI18N
-
         jBLabel9.setText(resourceMap.getString("jBLabel9.text")); // NOI18N
         jBLabel9.setName("jBLabel9"); // NOI18N
 
@@ -175,8 +188,25 @@ public class PricelistForm extends BaseEntityPanel {
         jBLabel10.setText(resourceMap.getString("jBLabel10.text")); // NOI18N
         jBLabel10.setName("jBLabel10"); // NOI18N
 
-        discountField.setText(resourceMap.getString("discountField.text")); // NOI18N
         discountField.setName("discountField"); // NOI18N
+
+        monthsField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        monthsField.setText(resourceMap.getString("monthsField.text")); // NOI18N
+        monthsField.setName("monthsField"); // NOI18N
+
+        tableHolderPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("tableHolderPanel1.border.title"))); // NOI18N
+        tableHolderPanel1.setName("tableHolderPanel1"); // NOI18N
+
+        javax.swing.GroupLayout tableHolderPanel1Layout = new javax.swing.GroupLayout(tableHolderPanel1);
+        tableHolderPanel1.setLayout(tableHolderPanel1Layout);
+        tableHolderPanel1Layout.setHorizontalGroup(
+            tableHolderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 562, Short.MAX_VALUE)
+        );
+        tableHolderPanel1Layout.setVerticalGroup(
+            tableHolderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 373, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -185,7 +215,7 @@ public class PricelistForm extends BaseEntityPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(itemsPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tableHolderPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,9 +258,9 @@ public class PricelistForm extends BaseEntityPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(monthField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(monthsField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(discountField, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
                             .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))))
                 .addContainerGap())
@@ -275,8 +305,8 @@ public class PricelistForm extends BaseEntityPanel {
                     .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(currencyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(monthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(minTurnoverField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(monthsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -287,7 +317,7 @@ public class PricelistForm extends BaseEntityPanel {
                     .addComponent(activeField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(itemsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tableHolderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -308,7 +338,6 @@ public class PricelistForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBFormattedTextField discountField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBCheckBox forPeriodField;
-    private com.cosmos.swingb.JBPanel itemsPanel;
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBLabel jBLabel10;
     private com.cosmos.swingb.JBLabel jBLabel11;
@@ -322,8 +351,9 @@ public class PricelistForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel8;
     private com.cosmos.swingb.JBLabel jBLabel9;
     private com.cosmos.swingb.JBFormattedTextField minTurnoverField;
-    private com.cosmos.acacia.gui.AcaciaComboBox monthField;
+    private com.cosmos.swingb.JBTextField monthsField;
     private com.cosmos.swingb.JBTextField nameField;
+    private com.cosmos.acacia.gui.TableHolderPanel tableHolderPanel1;
     // End of variables declaration//GEN-END:variables
     @Override
     public BindingGroup getBindingGroup() {
@@ -357,6 +387,7 @@ public class PricelistForm extends BaseEntityPanel {
         }
         
         entity = formSession.savePricelist(entity);
+        itemsTablePanel.setPricelist(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
         if (closeAfter) {
@@ -433,7 +464,7 @@ public class PricelistForm extends BaseEntityPanel {
             entity, entProps.getPropertyDetails("currency"));
         
         // months
-        monthField.bind(bindGroup, Arrays.asList(new Integer[]{1, 3, 6, 12}), entity, entProps.getPropertyDetails("months"));
+        monthsField.bind(bindGroup, entity, entProps.getPropertyDetails("months"));
         
         // default discount
         discountField.bind(bindGroup, entity, entProps.getPropertyDetails("defaultDiscount"), getDecimalFormat());
