@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="applyForAllCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="messageLabel" alignment="0" pref="386" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
+                      <Component id="replaceButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="skipProductButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="addNewButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="messageLabel" min="-2" pref="53" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="replaceButton" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="skipProductButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addNewButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <Component id="applyForAllCheckbox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="11" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="com.cosmos.swingb.JBLabel" name="messageLabel">
+      <Properties>
+        <Property name="lineWrap" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="messageLabel.text"/>
+        <Property name="name" type="java.lang.String" value="messageLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="replaceButton">
+      <Properties>
+        <Property name="mnemonic" type="int" value="114"/>
+        <Property name="text" type="java.lang.String" resourceKey="replaceButton.text"/>
+        <Property name="name" type="java.lang.String" value="replaceButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="addNewButton">
+      <Properties>
+        <Property name="mnemonic" type="int" value="110"/>
+        <Property name="text" type="java.lang.String" resourceKey="addNewButton.text"/>
+        <Property name="name" type="java.lang.String" value="addNewButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBButton" name="skipProductButton">
+      <Properties>
+        <Property name="mnemonic" type="int" value="115"/>
+        <Property name="text" type="java.lang.String" resourceKey="skipProductButton.text"/>
+        <Property name="name" type="java.lang.String" value="skipProductButton" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="applyForAllCheckbox">
+      <Properties>
+        <Property name="mnemonic" type="int" value="97"/>
+        <Property name="text" type="java.lang.String" resourceKey="applyForAllCheckbox.text"/>
+        <Property name="name" type="java.lang.String" value="applyForAllCheckbox" noResource="true"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>
