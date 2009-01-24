@@ -77,5 +77,13 @@ public interface AcaciaSessionRemote {
     AcaciaProperties getProperties(BusinessPartner client);
 
     void saveProperties(AcaciaProperties properties);
+
+    boolean isAdministrator();
+
+    boolean isSystemAdministrator();
+
+    boolean isOrganizationAdministrator();
+
+    boolean isBranchAdministrator();
 }
 
