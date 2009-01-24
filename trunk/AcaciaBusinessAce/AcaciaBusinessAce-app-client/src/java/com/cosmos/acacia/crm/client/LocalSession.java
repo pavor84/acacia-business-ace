@@ -147,20 +147,24 @@ public class LocalSession implements AcaciaSessionRemote {
         return rightsManager;
     }
 
+    @Override
     public boolean isAdministrator() {
-        return getRightsManager().isAllowed(SpecialPermission.Category.Administration.getCategorizedPermissions());
+        return remoteSession.isAdministrator();
     }
 
+    @Override
     public boolean isSystemAdministrator() {
-        return getRightsManager().isAllowed(SpecialPermission.SystemAdministrator);
+        return remoteSession.isSystemAdministrator();
     }
 
+    @Override
     public boolean isOrganizationAdministrator() {
-        return getRightsManager().isAllowed(SpecialPermission.OrganizationAdministrator);
+        return remoteSession.isOrganizationAdministrator();
     }
 
+    @Override
     public boolean isBranchAdministrator() {
-        return getRightsManager().isAllowed(SpecialPermission.BranchAdministrator);
+        return remoteSession.isBranchAdministrator();
     }
 
     public DeferredListServerRemote getListServer() {
