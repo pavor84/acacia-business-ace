@@ -58,6 +58,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         descriptionPanel3 = new com.cosmos.swingb.JBPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         descriptionTextPane3 = new com.cosmos.swingb.JBTextPane();
+        systemClassifierGroupCheckBox = new com.cosmos.swingb.JBCheckBox();
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
@@ -87,7 +88,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
             descriptionPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(descriptionPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionPanel3Layout.setVerticalGroup(
@@ -97,27 +98,28 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        systemClassifierGroupCheckBox.setText(resourceMap.getString("systemClassifierGroupCheckBox.text")); // NOI18N
+        systemClassifierGroupCheckBox.setName("systemClassifierGroupCheckBox"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(codeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(codeTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(descriptionPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(descriptionPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(codeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(codeTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(systemClassifierGroupCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
 
@@ -134,7 +136,9 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
+                .addGap(12, 12, 12)
+                .addComponent(systemClassifierGroupCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,6 +156,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     private javax.swing.JScrollPane jScrollPane6;
     private com.cosmos.swingb.JBLabel nameLabel;
     private com.cosmos.swingb.JBTextField nameTextField;
+    private com.cosmos.swingb.JBCheckBox systemClassifierGroupCheckBox;
     // End of variables declaration//GEN-END:variables
 
     @EJB
@@ -166,10 +171,15 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     protected void initData() {
         setResizable(false);
 
+        boolean isNew;
+
         log.info("initData().classifierGroup: " + classifierGroup);
         if(classifierGroup == null)
         {
-            classifierGroup = getFormSession().newClassifierGroup(getOrganizationDataObjectId());
+            classifierGroup = getFormSession().newClassifierGroup();
+            isNew = true;
+        } else {
+            isNew = false;
         }
 
         classifierGroupBindingGroup = new BindingGroup();
@@ -178,8 +188,21 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
 
         codeTextField.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("classifierGroupCode"));
         nameTextField.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("classifierGroupName"));
+        systemClassifierGroupCheckBox.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("isSystemGroup"));
 
         classifierGroupBindingGroup.bind();
+
+        if(isNew)
+        {
+            if(!isAdministrator()) {
+                systemClassifierGroupCheckBox.setVisible(false);
+            }
+        } else {
+            systemClassifierGroupCheckBox.setEnabled(false);
+            if(classifierGroup.getIsSystemGroup()) {
+                codeTextField.setEnabled(false);
+            }
+        }
     }
 
 
@@ -193,7 +216,6 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     protected EntityProperties getClassifierGroupEntityProperties() {
         return getFormSession().getClassifierGroupEntityProperties();
     }
-
 
     @Override
     public BindingGroup getBindingGroup() {

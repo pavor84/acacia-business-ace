@@ -27,6 +27,7 @@ import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.swingb.DialogResponse;
+import java.util.UUID;
 
 /**
  *
@@ -326,8 +327,8 @@ public class LoginForm extends AcaciaPanel {
         }
 
         try {
-            Integer sessionid = getFormSession().login(username, password);
-            AcaciaApplication.setSessionId(sessionid);
+            UUID sessionId = getFormSession().login(username, password);
+            AcaciaApplication.setSessionId(sessionId);
 
             User user = getAcaciaSession().getUser();
 

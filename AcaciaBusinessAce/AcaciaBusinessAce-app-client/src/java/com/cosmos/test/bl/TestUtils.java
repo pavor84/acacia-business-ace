@@ -20,6 +20,7 @@ import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import java.util.UUID;
 
 /**
  * Created	:	18.04.2008
@@ -145,7 +146,7 @@ public abstract class TestUtils {
                 user = usersSession.signup(user, org, branch, person);
                 usersSession.activateUser(user, org.getId(), true);
 
-                Integer sessionId = usersSession.login(user.getUserName(), "asd".toCharArray());
+                UUID sessionId = usersSession.login(user.getUserName(), "asd".toCharArray());
                 AcaciaApplication.setSessionId(sessionId);
                 usersSession.setOrganization(org);
 

@@ -10,7 +10,6 @@ import org.jdesktop.application.Action;
 
 import com.cosmos.acacia.crm.bl.impl.BaseRemote;
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.CustomerDiscount;
 import com.cosmos.acacia.crm.data.CustomerDiscountItem;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
@@ -25,8 +24,6 @@ import com.cosmos.acacia.crm.gui.BaseItemListPanel;
  */
 public class CustomerDiscountItemListPanel extends BaseItemListPanel<CustomerDiscount, CustomerDiscountItem>{
     private boolean forProduct = false;
-    
-    private RightsManagerRemote rightsManager;
     
     public CustomerDiscountItemListPanel(CustomerDiscount parent) {
         super(parent);
@@ -93,13 +90,4 @@ public class CustomerDiscountItemListPanel extends BaseItemListPanel<CustomerDis
         return CustomerDiscountRemote.class;
     }
 
-    public RightsManagerRemote getRightsManager() {
-        if ( rightsManager==null )
-            rightsManager = getBean(RightsManagerRemote.class, false);
-        return rightsManager;
-    }
-
-    public void setRightsManager(RightsManagerRemote rightsManager) {
-        this.rightsManager = rightsManager;
-    }
 }

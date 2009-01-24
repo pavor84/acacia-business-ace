@@ -18,7 +18,6 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.data.PricelistItem;
 import com.cosmos.acacia.crm.data.ProductCategory;
@@ -27,7 +26,6 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.ProductCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
-import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
@@ -49,8 +47,6 @@ public class PricelistItemListPanel extends AbstractTablePanel {
 
     private List<PricelistItem> list;
     
-    private RightsManagerRemote rightsManager =
-        AcaciaPanel.getBean(RightsManagerRemote.class, false);
     
     public PricelistItemListPanel(Pricelist pricelist) {
         this ( pricelist, null );
@@ -79,7 +75,7 @@ public class PricelistItemListPanel extends AbstractTablePanel {
         setVisible(Button.Close, false);
         setVisible(Button.Refresh, false);
         
-        if ( !rightsManager.isAllowed(SpecialPermission.ProductPricing) )
+        if ( !getRightsManager().isAllowed(SpecialPermission.ProductPricing) )
             setReadonly();
     }
 
@@ -185,21 +181,21 @@ public class PricelistItemListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canCreate() {
-        return rightsManager.isAllowed(SpecialPermission.ProductPricing);
+        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
     public boolean canDelete(Object rowObject) {
-        return rightsManager.isAllowed(SpecialPermission.ProductPricing);
+        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
     public boolean canModify(Object rowObject) {
-        return rightsManager.isAllowed(SpecialPermission.ProductPricing);
+        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
     
     @Override

@@ -45,6 +45,7 @@ import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
 import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.bl.reports.ReportsTools;
 import com.cosmos.acacia.crm.bl.reports.ReportsToolsRemote;
+import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -66,6 +67,8 @@ public abstract class AcaciaPanel
     extends JBPanel
 {
     //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
+
+    private static RightsManagerRemote rightsManager;
 
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
@@ -605,5 +608,28 @@ public abstract class AcaciaPanel
         ResourceMap resourceMap = getResourceMap();
         String message = resourceMap.getString(messageKey);
         JOptionPane.showMessageDialog(this, message);
+    }
+
+    protected static RightsManagerRemote getRightsManager() {
+        if(rightsManager == null)
+            rightsManager = LocalSession.instance().getRightsManager();
+
+        return rightsManager;
+    }
+
+    public boolean isAdministrator() {
+        return LocalSession.instance().isAdministrator();
+    }
+
+    public boolean isSystemAdministrator() {
+        return LocalSession.instance().isSystemAdministrator();
+    }
+
+    public boolean isOrganizationAdministrator() {
+        return LocalSession.instance().isOrganizationAdministrator();
+    }
+
+    public boolean isBranchAdministrator() {
+        return LocalSession.instance().isBranchAdministrator();
     }
 }

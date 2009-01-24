@@ -40,7 +40,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.ProductPricingValue;
@@ -72,7 +71,6 @@ public class ProductPanel extends AcaciaPanel {
     
     private ProductPricingPanel pricingPanel;
     
-    private RightsManagerRemote rightsManager = AcaciaPanel.getBean(RightsManagerRemote.class, false);
 
     public ProductPanel(SimpleProduct product) {
         super(product.getParentId());
@@ -957,7 +955,7 @@ public class ProductPanel extends AcaciaPanel {
             propDetails = entityProps.getPropertyDetails("description");
             descriptionTextPane.bind(productBindingGroup, product, propDetails);
             
-            jBButton1.setEnabled(rightsManager.isAllowed(SpecialPermission.ProductPricing));
+            jBButton1.setEnabled(getRightsManager().isAllowed(SpecialPermission.ProductPricing));
 
             productBindingGroup.bind();
             

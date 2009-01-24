@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.test.bl.TestUtils;
+import java.util.UUID;
 
 
 
@@ -157,7 +158,7 @@ public class UsersTest implements Serializable {
             Assert.assertNotNull(ve);
             Assert.assertNotNull(ve.getMessage());
         }
-        Integer sessionId = formSession.login(user.getUserName(), password.toCharArray());
+        UUID sessionId = formSession.login(user.getUserName(), password.toCharArray());
         AcaciaApplication.setSessionId(sessionId);
     }
 
