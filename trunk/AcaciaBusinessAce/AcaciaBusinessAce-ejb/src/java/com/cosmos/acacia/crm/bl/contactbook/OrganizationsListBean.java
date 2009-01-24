@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.data.BasicOrganization;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ import com.cosmos.acacia.crm.bl.contactbook.validation.OrganizationValidatorLoca
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.OrganizationType;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -49,6 +52,15 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     @EJB
     private OrganizationValidatorLocal organizationValidator;
+
+    @EJB
+    private AddressesListLocal addressesManager;
+
+    @EJB
+    private PersonsListLocal personsManager;
+
+    @EJB
+    private AcaciaSessionLocal acaciaSession;
 
     @SuppressWarnings("unchecked")
     public List<Organization> getOrganizations(BigInteger parentId)
@@ -103,7 +115,36 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     @Override
     public Organization saveBasicOrganization(BasicOrganization basicOrganization) {
-        return null;
+        Organization organization = newOrganization(acaciaSession.getOrganization().getId());
+        organization.setOrganizationName(basicOrganization.getOrganizationName());
+        organization.setNickname(basicOrganization.getNickname());
+        organization.setVatNumber(basicOrganization.getVatNumber());
+        organization.setVatNumber(basicOrganization.getVatNumber());
+        organization.setUniqueIdentifierCode(basicOrganization.getUniqueIdentifierCode());
+        organization = saveOrganization(organization);
+
+        Person person = personsManager.newPerson(acaciaSession.getOrganization().getId());
+        person.setFirstName(basicOrganization.getFirstName());
+        person.setSecondName(basicOrganization.getSecondName());
+        person.setLastName(basicOrganization.getLastName());
+        person.setExtraName(basicOrganization.getExtraName());
+        person = personsManager.savePerson(person);
+
+        Address address = addressesManager.newAddress();
+        address.setAddressName("Registration");
+        address.setCity(basicOrganization.getCity());
+        address.setPostalCode(basicOrganization.getPostalCode());
+        address.setPostalAddress(basicOrganization.getPostalAddress());
+        address = addressesManager.saveAddress(address, organization.getId());
+
+        ContactPerson contactPerson = addressesManager.newContactPerson();
+        contactPerson.setContact(person);
+        contactPerson = addressesManager.saveContactPerson(contactPerson, address.getId());
+
+        organization.setRegistrationAddress(address);
+        organization = saveOrganization(organization);
+
+        return organization;
     }
 
     public int deleteOrganization(Organization organization) {

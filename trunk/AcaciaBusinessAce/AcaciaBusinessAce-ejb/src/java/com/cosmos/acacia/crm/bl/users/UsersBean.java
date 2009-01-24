@@ -40,9 +40,12 @@ import com.cosmos.acacia.callback.CallbackLocal;
 import com.cosmos.acacia.callback.CallbackTransportObject;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingLocal;
 import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
@@ -57,6 +60,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
+import java.util.UUID;
 
 /**
  * The implementation of handling users (see interface for more info)
@@ -97,6 +101,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @EJB
     private AssemblingLocal assemblingLocal;
 
+    @EJB
+    private ClassifiersLocal classifiersManager;
+
 
     /** Temporary indicator that operations are concerning password change */
     private boolean passwordChange = false;
@@ -106,7 +113,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     private static final String LOGIN = "login";
 
     @Override
-    public Integer login(String username, char[] password) {
+    public UUID login(String username, char[] password) {
         try {
             return login(username, password, LOGIN);
         } catch (ValidationException ex){
@@ -117,7 +124,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
     }
 
-    private Integer login(String username, char[] password, String loginType) {
+    private UUID login(String username, char[] password, String loginType) {
         Query loginQuery = em.createNamedQuery("User." + loginType);
         loginQuery.setParameter("username", username);
         loginQuery.setParameter("password", getHash(new String(password)));
@@ -680,6 +687,33 @@ public class UsersBean implements UsersRemote, UsersLocal {
             }
         } catch(Exception ex) {
             log.error("Error during initialization of user/organization/branch resources.", ex);
+        }
+
+        try {
+            initUserData();
+        } catch(Exception ex) {
+            log.error("Error during initialization of Classifiers resources.", ex);
+        }
+    }
+
+    private void initUserData() {
+        String systemCode = ClassifierGroup.System.getClassifierGroupCode();
+        ClassifierGroup systemClassifierGroup = null;
+        for(ClassifierGroup classifierGroup : ClassifierGroup.ConstantsMap.values()) {
+            System.out.println("classifierGroup: " + classifierGroup);
+            String code = classifierGroup.getClassifierGroupCode();
+            ClassifierGroup entity = classifiersManager.getClassifierGroup(code);
+            if(entity == null) {
+                entity = (ClassifierGroup)classifierGroup.clone();
+                entity = classifiersManager.saveClassifierGroupLocal(entity);
+            }
+
+            if(systemCode.equalsIgnoreCase(code))
+                systemClassifierGroup = entity;
+        }
+
+        for(Classifier classifier : Classifier.ConstantsMap.values()) {
+            System.out.println("classifier: " + classifier);
         }
     }
 

@@ -1,8 +1,9 @@
 package com.cosmos.acacia.app;
 
-import java.security.SecureRandom;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 /**
  * Singleton class for holding all the user sessions.
@@ -14,14 +15,12 @@ import java.util.Map;
  */
 public final class SessionRegistry {
 	
-	private static SecureRandom random = new SecureRandom();
-	
 	private static ThreadLocal<SessionContext> localSessionContext = new ThreadLocal<SessionContext>();
 
     private static SessionRegistry registry;
 
-    private Map<Integer, SessionContext> sessions = 
-    	java.util.Collections.synchronizedMap(new HashMap<Integer, SessionContext>());
+    private Map<UUID, SessionContext> sessions =
+            Collections.synchronizedMap(new TreeMap<UUID, SessionContext>());
 
     private SessionRegistry() {
         if (registry != null)
@@ -46,7 +45,7 @@ public final class SessionRegistry {
      * Access all registered sessions.
      * @return map
      */
-    Map<Integer, SessionContext> getSessions() {
+    Map<UUID, SessionContext> getSessions() {
         return sessions;
     }
 
@@ -55,7 +54,9 @@ public final class SessionRegistry {
      * @param id
      * @return session context or null
      */
-    static SessionContext getSession(Integer id) {
+    static SessionContext getSession(UUID id) {
+        if(id == null)
+            return null;
         return getInstance().getSessions().get(id);
     }
 
@@ -64,7 +65,7 @@ public final class SessionRegistry {
      * @param id
      * @param session
      */
-    static void addSession(Integer id, SessionContext session) {
+    static void addSession(UUID id, SessionContext session) {
         getInstance().getSessions().put(id, session);
     }
     
@@ -89,10 +90,10 @@ public final class SessionRegistry {
      * Creates new session and returns it's id.
      * @return Integer
      */
-    Integer createNewSession(){
-    	Integer id = random.nextInt();
+    UUID createNewSession(){
+    	UUID id = UUID.randomUUID();
     	while ( sessions.containsKey(id) ){
-    		id = random.nextInt();
+    		id = UUID.randomUUID();
     	}
     	SessionContextImpl context = new SessionContextImpl();
     	addSession(id, context);

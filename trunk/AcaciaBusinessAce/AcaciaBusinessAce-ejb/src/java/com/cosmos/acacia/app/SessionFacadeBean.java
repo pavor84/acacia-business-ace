@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.crm.security.PermissionsManagerLocal;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import java.util.UUID;
 
 @Stateless
 public class SessionFacadeBean implements SessionFacadeRemote, SessionFacadeLocal {
@@ -35,7 +36,7 @@ public class SessionFacadeBean implements SessionFacadeRemote, SessionFacadeLoca
             String methodName,
             Object[] args,
             Class[] parameterTypes,
-            Integer sessionId,
+            UUID sessionId,
             boolean checkPermissions) throws Throwable {
 
         //find the session

@@ -32,6 +32,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import javax.persistence.NoResultException;
 
 /**
  * Implementation of handling classifiers (see interface for more information)
@@ -109,6 +110,18 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
          return new ArrayList<ClassifierGroup>(q.getResultList());
     }
 
+    @Override
+    public ClassifierGroup getClassifierGroup(String classifierGroupCode) {
+        Query q = em.createNamedQuery("ClassifierGroup.getByClassifierGroupCode");
+        q.setParameter("parentId", session.getOrganization().getId());
+        q.setParameter("classifierGroupCode", classifierGroupCode);
+        try {
+            return (ClassifierGroup)q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<Classifier> getClassifiers(BigInteger parentDataObjectId,
@@ -159,13 +172,15 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @Override
     public Classifier newClassifier() {
-        return new Classifier();
+        Classifier classifier = new Classifier();
+        classifier.setParentId(session.getOrganization().getId());
+        return classifier;
     }
 
     @Override
-    public ClassifierGroup newClassifierGroup(BigInteger parentId) {
+    public ClassifierGroup newClassifierGroup() {
         ClassifierGroup group = new ClassifierGroup();
-        group.setParentId(parentId);
+        group.setParentId(session.getOrganization().getId());
         return group;
     }
 
@@ -203,6 +218,14 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     public ClassifierGroup saveClassifierGroup(ClassifierGroup classifierGroup) {
         if (classifierGroup.getIsSystemGroup())
             throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+
+        return saveClassifierGroupLocal(classifierGroup);
+    }
+
+    @Override
+    public ClassifierGroup saveClassifierGroupLocal(ClassifierGroup classifierGroup) {
+        if(classifierGroup.getParentId() == null)
+            classifierGroup.setParentId(session.getOrganization().getId());
 
         esm.persist(em, classifierGroup);
         return classifierGroup;

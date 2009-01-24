@@ -8,13 +8,17 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import java.io.Serializable;
 
 /**
  *
  * @author Miro
  */
-public class BasicOrganization {
+public class BasicOrganization implements Serializable {
 
+    /**
+     * Organization properties;
+     */
     @Property(title="Organization Name",
         propertyValidator=@PropertyValidator(
             validationType=ValidationType.LENGTH, minLength=1, maxLength=120, required=true))
@@ -31,6 +35,9 @@ public class BasicOrganization {
     @Property(title="Unique Identifier Code")
     private String uniqueIdentifierCode;
 
+    /**
+     * Address properties
+     */
     @Property(title="City", customDisplay="${city.cityName}")
     private City city;
 
@@ -60,6 +67,7 @@ public class BasicOrganization {
     @Property(title="Extra Name",
         propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String extraName;
+
 
     public City getCity() {
         return city;

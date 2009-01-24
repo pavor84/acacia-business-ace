@@ -44,6 +44,8 @@ public interface RightsManagerRemote {
      */
     boolean isAllowed(SpecialPermission specialPermission);
 
+    boolean isAllowed(Set<SpecialPermission> specialPermissions);
+
     /**
      * Checks whether the user has permission on the specified object
      *

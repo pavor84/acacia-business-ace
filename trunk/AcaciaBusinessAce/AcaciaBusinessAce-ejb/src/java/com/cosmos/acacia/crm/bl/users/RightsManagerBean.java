@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
@@ -18,6 +19,7 @@ import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.enums.UserRightType;
+import java.math.BigInteger;
 
 /**
  * The class supports both server-side and client-side invocations
@@ -73,6 +75,17 @@ public class RightsManagerBean
     @Override
     public boolean isAllowed(SpecialPermission specialPermission) {
         return isAllowed(new DataObject(), specialPermission);
+    }
+
+    @Override
+    public boolean isAllowed(Set<SpecialPermission> specialPermissions) {
+        DataObject dataObject = new DataObject();
+        for(SpecialPermission permission : specialPermissions) {
+            if(isAllowed(dataObject, permission))
+                return true;
+        }
+
+        return false;
     }
 
     @SuppressWarnings("null")
@@ -252,7 +265,7 @@ public class RightsManagerBean
         return higherPriorityRight;
     }
 
-    private Set<UserRight> fetchRights(User user, DataObject dataObject, boolean isSpecial) {
+    private Set<UserRight> fetchRights(User user, final DataObject dataObject, boolean isSpecial) {
 
         Set<UserRight> rights = isSpecial
             ? session.getSpecialPermissions() : session.getGeneralRights();
@@ -275,7 +288,8 @@ public class RightsManagerBean
 
         while (applicableRights.size() == 0 && tmpDataObject != null) {
             for (UserRight right : rights) {
-                if (right.getDataObjectType() == null) {
+                DataObjectType dot;
+                if ((dot = right.getDataObjectType()) == null) {
                     // If neighter type nor object is specified, the right
                     // is valid for all objects
                     applicableRights.add(right);
@@ -284,12 +298,14 @@ public class RightsManagerBean
                         if (right.getDataObject().equals(tmpDataObject))
                             applicableRights.add(right);
                     }
-                    else if (right.getDataObjectType().equals(tmpDataObject.getDataObjectType()))
+                    else if (dot.equals(tmpDataObject.getDataObjectType()))
                         applicableRights.add(right);
                 }
             }
-            if (tmpDataObject.getParentDataObjectId() != null)
-                tmpDataObject = em.find(DataObject.class, tmpDataObject.getParentDataObjectId());
+
+            BigInteger parentDataObjectId;
+            if ((parentDataObjectId = tmpDataObject.getParentDataObjectId()) != null)
+                tmpDataObject = em.find(DataObject.class, parentDataObjectId);
             else
                 tmpDataObject = null;
 
