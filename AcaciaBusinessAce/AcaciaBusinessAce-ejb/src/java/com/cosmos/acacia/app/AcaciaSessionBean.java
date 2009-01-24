@@ -25,6 +25,7 @@ import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
+import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import org.apache.log4j.Logger;
 
@@ -54,24 +55,24 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
     @Override
-    public Integer login(User user) {
+    public UUID login(User user) {
         //create and register session
-        Integer sessionid = registerNewSession();
+        UUID sessionId = registerNewSession();
 
         SessionRegistry.getSession().setValue(SessionContext.USER_KEY, user);
 
-        return sessionid;
+        return sessionId;
     }
 
-    private Integer registerNewSession() {
+    private UUID registerNewSession() {
         //create a session
-        Integer sessionid = SessionRegistry.getInstance().createNewSession();
+        UUID sessionId = SessionRegistry.getInstance().createNewSession();
         //acquire the instance
-        SessionContext session = SessionRegistry.getSession(sessionid);
+        SessionContext session = SessionRegistry.getSession(sessionId);
         //bind to current thread
         SessionRegistry.setLocalSession(session);
 
-        return sessionid;
+        return sessionId;
     }
 
     @Override

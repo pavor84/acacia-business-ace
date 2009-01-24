@@ -91,13 +91,15 @@ public interface ClassifiersRemote {
      */
     List<ClassifierGroup> getClassifierGroups();
 
+    ClassifierGroup getClassifierGroup(String classifierGroupCode);
+
     /**
      * Creates a new classifier group
      *
      * @return the newly created classifier group
      * @param parentId the parent (organization)
      */
-    ClassifierGroup newClassifierGroup(BigInteger parentId);
+    ClassifierGroup newClassifierGroup();
 
     /**
      * Saves a classifier group

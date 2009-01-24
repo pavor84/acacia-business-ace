@@ -8,6 +8,7 @@ import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
+import java.util.UUID;
 
 /**
  * Created	:	19.05.2008
@@ -23,7 +24,7 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * @param password
      * @return session id
      */
-    Integer login(User user);
+    UUID login(User user);
 
     /**
      * Sets the current login organization for the session.

@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.data.ClassifierGroup;
 import javax.ejb.Local;
 
 /**
@@ -15,4 +16,5 @@ import javax.ejb.Local;
 public interface ClassifiersLocal
     extends ClassifiersRemote
 {
+    ClassifierGroup saveClassifierGroupLocal(ClassifierGroup classifierGroup);
 }

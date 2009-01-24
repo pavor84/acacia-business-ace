@@ -12,6 +12,8 @@ import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigInteger;
 
+import java.util.Map;
+import java.util.TreeMap;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -37,8 +39,15 @@ import javax.persistence.Table;
             name = "ClassifierGroup.getAllNotDeleted",
             query = "select cg from ClassifierGroup cg " +
                     " where cg.dataObject.deleted = false" +
-                    " and (cg.dataObject.parentDataObjectId=:parentId" +
-                    " or cg.isSystemGroup=true or cg.classifierGroupCode='system')"
+                    "  and cg.dataObject.parentDataObjectId=:parentId"
+            ),
+        @NamedQuery
+            (
+            name = "ClassifierGroup.getByClassifierGroupCode",
+            query = "select cg from ClassifierGroup cg " +
+                    " where cg.dataObject.deleted = false" +
+                    "  and cg.dataObject.parentDataObjectId=:parentId" +
+                    "  and cg.classifierGroupCode = :classifierGroupCode"
             )
     }
 )
@@ -46,6 +55,27 @@ public class ClassifierGroup extends DataObjectBean
         implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
+
+    public static final ClassifierGroup System =
+            new ClassifierGroup();
+
+    public static final Map<String, ClassifierGroup> ConstantsMap =
+            new TreeMap<String, ClassifierGroup>();
+
+    static {
+        System.setClassifierGroupCode("System");
+        System.setClassifierGroupName("System Group");
+        System.setDescription("The System Classifier Group");
+        System.setIsSystemGroup(true);
+
+        setClassifierGroup(System);
+    }
+
+    private static final void setClassifierGroup(ClassifierGroup classifierGroup) {
+        ConstantsMap.put(classifierGroup.getClassifierGroupCode(), classifierGroup);
+    }
+
+
 
     @Id
     @Column(name = "classifier_group_id", nullable = false)
@@ -174,7 +204,8 @@ public class ClassifierGroup extends DataObjectBean
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.ClassifierGroup[classifierGroupId=" + classifierGroupId + "]";
+        return "com.cosmos.acacia.crm.data.ClassifierGroup[classifierGroupId=" + classifierGroupId +
+                ", code=" + classifierGroupCode + "]";
     }
 
     @Override

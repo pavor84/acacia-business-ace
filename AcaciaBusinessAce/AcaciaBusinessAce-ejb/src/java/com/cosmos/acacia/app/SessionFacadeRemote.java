@@ -1,5 +1,6 @@
 package com.cosmos.acacia.app;
 
+import java.util.UUID;
 import javax.ejb.Remote;
 
 @Remote
@@ -21,6 +22,6 @@ public interface SessionFacadeRemote {
             String methodName,
             Object[] args,
             Class[] parameterTypes,
-            Integer sesionId,
+            UUID sessionId,
             boolean checkPermissions) throws Throwable;
 }

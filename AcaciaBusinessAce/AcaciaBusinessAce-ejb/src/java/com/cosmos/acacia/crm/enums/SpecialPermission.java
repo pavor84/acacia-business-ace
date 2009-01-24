@@ -2,7 +2,10 @@ package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Enumeration listing all special permissions
@@ -12,10 +15,12 @@ import java.util.List;
  */
 public enum SpecialPermission implements DatabaseResource {
 
+    SystemAdministrator(Category.Administration),
+    OrganizationAdministrator(Category.Administration),
+
+    BranchAdministrator(Category.BranchAdministration),
+
     CanViewDataFromAllBranches(Category.Miscellaneous),
-    SystemAdministrator(Category.Miscellaneous),
-    OrganizationAdministrator(Category.Miscellaneous),
-    BranchAdministrator(Category.Miscellaneous),
 
     // Contacts
     Contact(Category.Contacts),
@@ -137,8 +142,29 @@ public enum SpecialPermission implements DatabaseResource {
         ServiceManagement,
         Customization,
         CustomEntities,
+        Administration,
+        BranchAdministration,
         Miscellaneous,
         ;
+
+        private Category() {
+        }
+
+        private Set<SpecialPermission> categorizedPermissions;
+
+        public Set<SpecialPermission> getCategorizedPermissions() {
+            if(categorizedPermissions == null) {
+                categorizedPermissions = new TreeSet<SpecialPermission>();
+                for(SpecialPermission permission : SpecialPermission.values()) {
+                    if(permission.getCategory().equals(this))
+                        categorizedPermissions.add(permission);
+                }
+
+                categorizedPermissions = EnumSet.copyOf(categorizedPermissions);
+            }
+
+            return categorizedPermissions;
+        }
     };
 
     private SpecialPermission(Category category)

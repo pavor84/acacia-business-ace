@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.UUID;
 
 /**
  * An EJB for handling users - registration, login, passwords
@@ -35,7 +36,7 @@ public interface UsersRemote {
      * @return the session id for the login
      * @throws ValidationException if the data is incorrect.
      */
-    Integer login (String username, char[] password);
+    UUID login (String username, char[] password);
 
     /**
      * Registers a new user. Note that the password must be already hashed
