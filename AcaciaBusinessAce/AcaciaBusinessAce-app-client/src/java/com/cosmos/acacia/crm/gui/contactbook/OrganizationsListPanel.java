@@ -7,12 +7,10 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.EJB;
 
-import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 

@@ -159,6 +159,13 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canDelete(Object rowObject) {
+        if(isSystemAdministrator())
+            return true;
+
+        ClassifierGroup classifierGroup = (ClassifierGroup)rowObject;
+        if(classifierGroup.getIsSystemGroup())
+            return false;
+
         return true;
     }
 
