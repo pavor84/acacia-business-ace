@@ -55,9 +55,9 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         nameTextField = new com.cosmos.swingb.JBTextField();
         codeLabel = new com.cosmos.swingb.JBLabel();
         nameLabel = new com.cosmos.swingb.JBLabel();
-        descriptionPanel3 = new com.cosmos.swingb.JBPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        descriptionTextPane3 = new com.cosmos.swingb.JBTextPane();
+        descriptionPanel = new com.cosmos.swingb.JBPanel();
+        jScrollPane = new javax.swing.JScrollPane();
+        descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         systemClassifierGroupCheckBox = new com.cosmos.swingb.JBCheckBox();
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
@@ -73,28 +73,28 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         nameLabel.setText(resourceMap.getString("nameLabel.text")); // NOI18N
         nameLabel.setName("nameLabel"); // NOI18N
 
-        descriptionPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
-        descriptionPanel3.setName("descriptionPanel3"); // NOI18N
+        descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
+        descriptionPanel.setName("descriptionPanel"); // NOI18N
 
-        jScrollPane6.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane6.setName("jScrollPane6"); // NOI18N
+        jScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane.setName("jScrollPane"); // NOI18N
 
-        descriptionTextPane3.setName("descriptionTextPane3"); // NOI18N
-        jScrollPane6.setViewportView(descriptionTextPane3);
+        descriptionTextPane.setName("descriptionTextPane"); // NOI18N
+        jScrollPane.setViewportView(descriptionTextPane);
 
-        javax.swing.GroupLayout descriptionPanel3Layout = new javax.swing.GroupLayout(descriptionPanel3);
-        descriptionPanel3.setLayout(descriptionPanel3Layout);
-        descriptionPanel3Layout.setHorizontalGroup(
-            descriptionPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(descriptionPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout descriptionPanelLayout = new javax.swing.GroupLayout(descriptionPanel);
+        descriptionPanel.setLayout(descriptionPanelLayout);
+        descriptionPanelLayout.setHorizontalGroup(
+            descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(descriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        descriptionPanel3Layout.setVerticalGroup(
-            descriptionPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(descriptionPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+        descriptionPanelLayout.setVerticalGroup(
+            descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(descriptionPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -110,7 +110,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(descriptionPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(codeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +139,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
                 .addGap(12, 12, 12)
                 .addComponent(systemClassifierGroupCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -150,10 +150,10 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBLabel codeLabel;
     private com.cosmos.swingb.JBTextField codeTextField;
-    private com.cosmos.swingb.JBPanel descriptionPanel3;
-    private com.cosmos.swingb.JBTextPane descriptionTextPane3;
+    private com.cosmos.swingb.JBPanel descriptionPanel;
+    private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
-    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane;
     private com.cosmos.swingb.JBLabel nameLabel;
     private com.cosmos.swingb.JBTextField nameTextField;
     private com.cosmos.swingb.JBCheckBox systemClassifierGroupCheckBox;
@@ -188,6 +188,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
 
         codeTextField.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("classifierGroupCode"));
         nameTextField.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("classifierGroupName"));
+        descriptionTextPane.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("description"));
         systemClassifierGroupCheckBox.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("isSystemGroup"));
 
         classifierGroupBindingGroup.bind();
@@ -195,7 +196,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         if(isNew)
         {
             if(!isAdministrator()) {
-                systemClassifierGroupCheckBox.setVisible(false);
+                systemClassifierGroupCheckBox.setEnabled(false);
             }
         } else {
             systemClassifierGroupCheckBox.setEnabled(false);
