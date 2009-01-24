@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -23,10 +24,12 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
+import javax.ejb.EJB;
 import org.apache.log4j.Logger;
 
 /**
@@ -51,6 +54,9 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private RightsManagerLocal rightsManager;
 
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
@@ -273,5 +279,25 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
         ((AcaciaPropertiesImpl)properties).setParentProperties(null);
         put(SessionContext.ACACIA_PROPERTIES, properties);
+    }
+
+    @Override
+    public boolean isAdministrator() {
+        return rightsManager.isAllowed(SpecialPermission.Category.Administration.getCategorizedPermissions());
+    }
+
+    @Override
+    public boolean isSystemAdministrator() {
+        return rightsManager.isAllowed(SpecialPermission.SystemAdministrator);
+    }
+
+    @Override
+    public boolean isOrganizationAdministrator() {
+        return rightsManager.isAllowed(SpecialPermission.OrganizationAdministrator);
+    }
+
+    @Override
+    public boolean isBranchAdministrator() {
+        return rightsManager.isAllowed(SpecialPermission.BranchAdministrator);
     }
 }
