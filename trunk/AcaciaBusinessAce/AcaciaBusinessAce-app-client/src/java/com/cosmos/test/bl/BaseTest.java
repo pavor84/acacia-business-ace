@@ -20,6 +20,7 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
+import java.util.UUID;
 
 /**
  * Created	:	28.07.2008
@@ -49,8 +50,8 @@ public class BaseTest {
         if ( loggedUser!=null && loggedUser.getUserName().equals(userName))
             return;
 
-        Integer sessionid = usersRemote.login(userName, password.toCharArray());
-        AcaciaApplication.setSessionId(sessionid);
+        UUID sessionId = usersRemote.login(userName, password.toCharArray());
+        AcaciaApplication.setSessionId(sessionId);
 
         User user = session.getUser();
         List<Organization> organizations = usersRemote.getOrganizationsList(user);

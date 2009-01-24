@@ -4,6 +4,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import java.util.UUID;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -16,14 +17,14 @@ public class AcaciaApplication extends SingleFrameApplication {
     /**
      * Store here the seesionid, which has application scope.
      */
-    private static Integer sessionid = null;
+    private static UUID sessionId = null;
 
-    public static Integer getSessionId(){
-        return sessionid;
+    public static UUID getSessionId(){
+        return sessionId;
     }
 
-    public static void setSessionId(Integer sid){
-        sessionid = sid;
+    public static void setSessionId(UUID sid){
+        sessionId = sid;
     }
 
     /**

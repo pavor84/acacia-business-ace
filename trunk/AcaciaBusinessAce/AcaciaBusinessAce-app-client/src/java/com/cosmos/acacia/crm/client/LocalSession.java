@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.DeferredListServerRemote;
-import com.cosmos.acacia.app.SessionContext;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -17,6 +16,7 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
@@ -145,6 +145,22 @@ public class LocalSession implements AcaciaSessionRemote {
             rightsManager = AcaciaPanel.getBean(RightsManagerRemote.class, false);
 
         return rightsManager;
+    }
+
+    public boolean isAdministrator() {
+        return getRightsManager().isAllowed(SpecialPermission.Category.Administration.getCategorizedPermissions());
+    }
+
+    public boolean isSystemAdministrator() {
+        return getRightsManager().isAllowed(SpecialPermission.SystemAdministrator);
+    }
+
+    public boolean isOrganizationAdministrator() {
+        return getRightsManager().isAllowed(SpecialPermission.OrganizationAdministrator);
+    }
+
+    public boolean isBranchAdministrator() {
+        return getRightsManager().isAllowed(SpecialPermission.BranchAdministrator);
     }
 
     public DeferredListServerRemote getListServer() {

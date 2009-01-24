@@ -4,6 +4,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -19,18 +20,21 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="entityFormButtonPanel" alignment="0" pref="364" max="32767" attributes="1"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="codeLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="codeTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
-                          <Component id="nameTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="descriptionPanel3" alignment="0" max="32767" attributes="1"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="codeLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="codeTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                              <Component id="nameTextField" linkSize="2" alignment="1" min="-2" pref="306" max="-2" attributes="0"/>
+                              <Component id="systemClassifierGroupCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
-                  <Component id="descriptionPanel3" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -49,7 +53,9 @@
                   <Component id="nameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Component id="systemClassifierGroupCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="descriptionPanel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
@@ -101,7 +107,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane6" pref="328" max="32767" attributes="0"/>
+                  <Component id="jScrollPane6" pref="320" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -136,5 +142,11 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="com.cosmos.swingb.JBCheckBox" name="systemClassifierGroupCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="systemClassifierGroupCheckBox.text"/>
+        <Property name="name" type="java.lang.String" value="systemClassifierGroupCheckBox" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

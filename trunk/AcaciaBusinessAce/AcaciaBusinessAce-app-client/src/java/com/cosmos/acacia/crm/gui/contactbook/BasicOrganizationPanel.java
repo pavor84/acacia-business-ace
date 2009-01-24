@@ -12,11 +12,12 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.BasicOrganization;
-import com.cosmos.acacia.crm.data.Country;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
 import javax.ejb.EJB;
 import org.apache.log4j.Logger;
@@ -336,6 +337,9 @@ public class BasicOrganizationPanel
 
     @Override
     public void performSave(boolean closeAfter) {
+        Organization organization = getFormSession().saveBasicOrganization(basicOrganization);
+        setDialogResponse(DialogResponse.SAVE);
+        setSelectedValue(organization);
     }
 
     @Override

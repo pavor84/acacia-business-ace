@@ -66,7 +66,7 @@ public class ClassifiersTest {
         BigInteger parentId = loginResult.getOrganization().getId();
 
         // Creating a classifier group
-        ClassifierGroup group = formSession.newClassifierGroup(parentId);
+        ClassifierGroup group = formSession.newClassifierGroup();
         group.setClassifierGroupCode(TestUtils.getRandomString(10));
         group.setClassifierGroupName(TestUtils.getRandomString(10));
         group = formSession.saveClassifierGroup(group);
