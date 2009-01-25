@@ -22,6 +22,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jBPanel2" alignment="0" pref="524" max="32767" attributes="0"/>
                   <Component id="registrationAddressPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="jBPanel1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
@@ -31,8 +32,8 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="organizationNameTextField" pref="213" max="32767" attributes="0"/>
-                          <Component id="vatNumberTextField" pref="213" max="32767" attributes="0"/>
+                          <Component id="organizationNameTextField" pref="219" max="32767" attributes="0"/>
+                          <Component id="vatNumberTextField" pref="219" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -48,7 +49,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <Component id="entityFormButtonPanel" alignment="0" pref="518" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="524" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -75,6 +76,8 @@
               <Component id="registrationAddressPanel" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jBPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jBPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -149,11 +152,11 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="postalAddressPanel" alignment="0" pref="482" max="32767" attributes="0"/>
+                      <Component id="postalAddressPanel" alignment="0" pref="488" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="cityComboList" pref="240" max="32767" attributes="0"/>
+                          <Component id="cityComboList" pref="246" max="32767" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="postalCodeLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -271,7 +274,7 @@
                       <Component id="lastNameTextField" max="32767" attributes="1"/>
                       <Component id="firstNameTextField" alignment="0" pref="153" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace pref="18" max="32767" attributes="0"/>
+                  <EmptySpace pref="24" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="secondNameLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="extraNameLabel" min="-2" max="-2" attributes="0"/>
@@ -363,5 +366,60 @@
         <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
       </Properties>
     </Component>
+    <Container class="com.cosmos.swingb.JBPanel" name="jBPanel2">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Classifiers">
+              <Property name="titleX" resourceKey="jBPanel2.border.title"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jBPanel2" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="2"/>
+      </Layout>
+      <SubComponents>
+        <Component class="com.cosmos.swingb.JBCheckBox" name="customerCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="customerCheckBox.text"/>
+            <Property name="name" type="java.lang.String" value="customerCheckBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBCheckBox" name="supplierCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="supplierCheckBox.text"/>
+            <Property name="name" type="java.lang.String" value="supplierCheckBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBCheckBox" name="producerCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="producerCheckBox.text"/>
+            <Property name="name" type="java.lang.String" value="producerCheckBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBCheckBox" name="shippingAgentCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="shippingAgentCheckBox.text"/>
+            <Property name="name" type="java.lang.String" value="shippingAgentCheckBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBCheckBox" name="courierCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="courierCheckBox.text"/>
+            <Property name="name" type="java.lang.String" value="courierCheckBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBCheckBox" name="bankCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="bankCheckBox.text"/>
+            <Property name="name" type="java.lang.String" value="bankCheckBox" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

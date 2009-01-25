@@ -90,6 +90,13 @@ public class BasicOrganizationPanel
         lastNameLabel = new com.cosmos.swingb.JBLabel();
         extraNameLabel = new com.cosmos.swingb.JBLabel();
         entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        jBPanel2 = new com.cosmos.swingb.JBPanel();
+        customerCheckBox = new com.cosmos.swingb.JBCheckBox();
+        supplierCheckBox = new com.cosmos.swingb.JBCheckBox();
+        producerCheckBox = new com.cosmos.swingb.JBCheckBox();
+        shippingAgentCheckBox = new com.cosmos.swingb.JBCheckBox();
+        courierCheckBox = new com.cosmos.swingb.JBCheckBox();
+        bankCheckBox = new com.cosmos.swingb.JBCheckBox();
 
         setName("Form"); // NOI18N
 
@@ -150,11 +157,11 @@ public class BasicOrganizationPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registrationAddressPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(registrationAddressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(postalAddressPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                    .addComponent(postalAddressPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                     .addGroup(registrationAddressPanelLayout.createSequentialGroup()
                         .addComponent(cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cityComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                        .addComponent(cityComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(postalCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -215,7 +222,7 @@ public class BasicOrganizationPanel
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lastNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(firstNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(secondNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(extraNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,6 +252,34 @@ public class BasicOrganizationPanel
 
         entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
+        jBPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel2.border.title"))); // NOI18N
+        jBPanel2.setName("jBPanel2"); // NOI18N
+        jBPanel2.setLayout(new java.awt.GridLayout(2, 0));
+
+        customerCheckBox.setText(resourceMap.getString("customerCheckBox.text")); // NOI18N
+        customerCheckBox.setName("customerCheckBox"); // NOI18N
+        jBPanel2.add(customerCheckBox);
+
+        supplierCheckBox.setText(resourceMap.getString("supplierCheckBox.text")); // NOI18N
+        supplierCheckBox.setName("supplierCheckBox"); // NOI18N
+        jBPanel2.add(supplierCheckBox);
+
+        producerCheckBox.setText(resourceMap.getString("producerCheckBox.text")); // NOI18N
+        producerCheckBox.setName("producerCheckBox"); // NOI18N
+        jBPanel2.add(producerCheckBox);
+
+        shippingAgentCheckBox.setText(resourceMap.getString("shippingAgentCheckBox.text")); // NOI18N
+        shippingAgentCheckBox.setName("shippingAgentCheckBox"); // NOI18N
+        jBPanel2.add(shippingAgentCheckBox);
+
+        courierCheckBox.setText(resourceMap.getString("courierCheckBox.text")); // NOI18N
+        courierCheckBox.setName("courierCheckBox"); // NOI18N
+        jBPanel2.add(courierCheckBox);
+
+        bankCheckBox.setText(resourceMap.getString("bankCheckBox.text")); // NOI18N
+        bankCheckBox.setName("bankCheckBox"); // NOI18N
+        jBPanel2.add(bankCheckBox);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -252,6 +287,7 @@ public class BasicOrganizationPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .addComponent(registrationAddressPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -260,8 +296,8 @@ public class BasicOrganizationPanel
                             .addComponent(vatNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(organizationNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                            .addComponent(vatNumberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
+                            .addComponent(organizationNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                            .addComponent(vatNumberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -272,7 +308,7 @@ public class BasicOrganizationPanel
                                 .addComponent(uniqueIdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(uniqueIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE))
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -295,6 +331,8 @@ public class BasicOrganizationPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -302,14 +340,18 @@ public class BasicOrganizationPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBCheckBox bankCheckBox;
     private com.cosmos.acacia.gui.AcaciaComboList cityComboList;
     private com.cosmos.swingb.JBLabel cityLabel;
+    private com.cosmos.swingb.JBCheckBox courierCheckBox;
+    private com.cosmos.swingb.JBCheckBox customerCheckBox;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.swingb.JBLabel extraNameLabel;
     private com.cosmos.swingb.JBTextField extraNameTextField;
     private com.cosmos.swingb.JBLabel firstNameLabel;
     private com.cosmos.swingb.JBTextField firstNameTextField;
     private com.cosmos.swingb.JBPanel jBPanel1;
+    private com.cosmos.swingb.JBPanel jBPanel2;
     private com.cosmos.swingb.JBLabel lastNameLabel;
     private com.cosmos.swingb.JBTextField lastNameTextField;
     private com.cosmos.swingb.JBLabel nicknameLabel;
@@ -321,9 +363,12 @@ public class BasicOrganizationPanel
     private com.cosmos.swingb.JBTextPane postalAddressTextPane;
     private com.cosmos.swingb.JBLabel postalCodeLabel;
     private com.cosmos.swingb.JBTextField postalCodeTextField;
+    private com.cosmos.swingb.JBCheckBox producerCheckBox;
     private com.cosmos.swingb.JBPanel registrationAddressPanel;
     private com.cosmos.swingb.JBLabel secondNameLabel;
     private com.cosmos.swingb.JBTextField secondNameTextField;
+    private com.cosmos.swingb.JBCheckBox shippingAgentCheckBox;
+    private com.cosmos.swingb.JBCheckBox supplierCheckBox;
     private com.cosmos.swingb.JBLabel uniqueIdLabel;
     private com.cosmos.swingb.JBTextField uniqueIdTextField;
     private com.cosmos.swingb.JBLabel vatNumberLabel;
@@ -411,6 +456,24 @@ public class BasicOrganizationPanel
         // ExtraName
         propDetails = entityProps.getPropertyDetails("extraName");
         extraNameTextField.bind(bindingGroup, basicOrganization, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("customer");
+        customerCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("supplier");
+        supplierCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("producer");
+        producerCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("shippingAgent");
+        shippingAgentCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("courier");
+        courierCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("bank");
+        bankCheckBox.bind(bindingGroup, basicOrganization, propDetails);
 
         bindingGroup.bind();
     }
