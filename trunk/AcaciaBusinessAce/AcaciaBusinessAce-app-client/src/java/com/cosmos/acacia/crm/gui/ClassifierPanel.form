@@ -4,6 +4,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -18,7 +19,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="entityFormButtonPanel" alignment="0" pref="535" max="32767" attributes="1"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="546" max="32767" attributes="1"/>
                   <Component id="descriptionPanel" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -27,7 +28,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="groupComboBox" alignment="0" pref="492" max="32767" attributes="1"/>
+                          <Component id="groupComboBox" alignment="0" pref="502" max="32767" attributes="1"/>
                           <Group type="102" attributes="0">
                               <Component id="codeTextField" min="-2" pref="169" max="-2" attributes="1"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -39,7 +40,7 @@
                   </Group>
                   <Component id="dataObjectTypesPanel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="dataObjectTypeComboBox" pref="408" max="32767" attributes="1"/>
+                      <Component id="dataObjectTypeComboBox" pref="418" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="addObjectTypeButton" min="-2" pref="121" max="-2" attributes="0"/>
                   </Group>
@@ -113,7 +114,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane6" pref="499" max="32767" attributes="0"/>
+                  <Component id="jScrollPane6" pref="510" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -194,7 +195,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="519" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="534" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">

@@ -18,6 +18,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -220,6 +221,14 @@ public class ClassifiersListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canDelete(Object rowObject) {
+        if(isSystemAdministrator())
+            return true;
+
+        Classifier classifier = (Classifier)rowObject;
+        ClassifierGroup classifierGroup = classifier.getClassifierGroup();
+        if(classifierGroup.getIsSystemGroup())
+            return false;
+
         return true;
     }
 
