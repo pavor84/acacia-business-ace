@@ -26,6 +26,7 @@ public class AcaciaPostLoadEventListener
         Object entity = event.getEntity();
         if(entity instanceof DataObjectLink)
         {
+            System.out.println("\n\t AcaciaPostLoadEventListener.onPostLoad().entity: " + entity + "\n");
             DataObjectLink doLink = (DataObjectLink)entity;
             DataObject linkedDO = doLink.getLinkedDataObject();
             String linkedObjectName = linkedDO.getDataObjectType().getDataObjectType();

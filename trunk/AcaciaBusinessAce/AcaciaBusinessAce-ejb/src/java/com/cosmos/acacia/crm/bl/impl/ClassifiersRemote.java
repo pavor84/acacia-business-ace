@@ -35,7 +35,9 @@ public interface ClassifiersRemote {
      * @param dataObjectType the data object type of the object
      * @return the list of classifiers
      */
-    List<Classifier> getClassifiers(BigInteger parentDataObjectId,
+//    List<Classifier> getClassifiers(BigInteger parentDataObjectId,
+//            DataObjectType dataObjectType);
+    List<Classifier> getClassifiers(ClassifierGroup classifierGroup,
             DataObjectType dataObjectType);
 
 
@@ -288,7 +290,7 @@ public interface ClassifiersRemote {
      * @param classiferName
      * @return
      */
-    Classifier getOrCreateSystemClassifier(String classifierKey);
+    //Classifier getOrCreateSystemClassifier(String classifierKey);
 
     /**
      * Whether the specified bean is classified with the given classificator

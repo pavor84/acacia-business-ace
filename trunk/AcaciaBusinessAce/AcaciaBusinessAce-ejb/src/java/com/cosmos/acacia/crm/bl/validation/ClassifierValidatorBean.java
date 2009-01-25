@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import javax.persistence.NoResultException;
 
 /**
  * @author	Bozhidar Bozhanov
@@ -33,8 +34,11 @@ public class ClassifierValidatorBean implements ClassifierValidatorLocal {
         q.setParameter("deleted", false);
         q.setParameter("parentId", session.getOrganization().getId());
 
-        if ( !checkUnique(q.getResultList(), entity))
+        try {
+            q.getSingleResult();
+        } catch(NoResultException ex) {
             ve.addMessage("Classifier.err.codeInUse");
+        }
 
         //if we have validation messages - throw the exception since not everything is OK
         if ( !ve.getMessages().isEmpty() )
