@@ -614,7 +614,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         supplierContactField.setModel(new DefaultComboBoxModel());
         
         //supplier
-        BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createProvidersPanel(getParentDataObjectId());
+        BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createSuppliersPanel(getParentDataObjectId());
         supplierField.bind(
             bindGroup,
             listPanel,

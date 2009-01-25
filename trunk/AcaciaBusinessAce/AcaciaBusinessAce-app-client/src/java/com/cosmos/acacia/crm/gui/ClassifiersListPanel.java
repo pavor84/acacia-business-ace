@@ -87,7 +87,8 @@ public class ClassifiersListPanel extends AbstractTablePanel {
             if (classifiedDataObject != null)
                 classifiers = getFormSession().getClassifiers(classifiedDataObject);
             else
-                classifiers = getFormSession().getClassifiers(getParentDataObjectId(), dataObjectType);
+                //classifiers = getFormSession().getClassifiers(getParentDataObjectId(), dataObjectType);
+                classifiers = getFormSession().getClassifiers(null, dataObjectType);
         }
         return classifiers;
     }

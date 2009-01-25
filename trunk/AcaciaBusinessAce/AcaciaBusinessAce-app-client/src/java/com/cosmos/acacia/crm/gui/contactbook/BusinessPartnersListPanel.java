@@ -16,7 +16,6 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
@@ -203,8 +202,10 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canModify(Object rowObject) {
-        if ( customerClassifier==null )
-            customerClassifier = getClassifiersFormSession().getOrCreateSystemClassifier("customer");
+        if ( customerClassifier==null ) {
+            //customerClassifier = getClassifiersFormSession().getOrCreateSystemClassifier("customer");
+            customerClassifier = getClassifiersFormSession().getClassifier(Classifier.Customer.getClassifierCode());
+        }
         
         if ( rowObject instanceof DataObjectBean ){
             DataObjectBean bean = (DataObjectBean) rowObject;
@@ -223,14 +224,13 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         return true;
     }
     
-    private static Classifier getOrCreateClassifier(String classifierKey){
-        ClassifiersRemote classifiersFormSession = getBean(ClassifiersRemote.class);
-        Classifier theClassifier = classifiersFormSession.getOrCreateSystemClassifier(classifierKey);
+    private static Classifier getClassifier(String classifierKey) {
+        Classifier theClassifier = getClassifiersFormSession().getClassifier(classifierKey);
         return theClassifier;
     }
     
     private static BusinessPartnersListPanel createPartnerPanel(String classiferKey, BigInteger parentDataObjectId){
-        Classifier supplierClassifier = getOrCreateClassifier(classiferKey);
+        Classifier supplierClassifier = getClassifier(classiferKey);
         BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(parentDataObjectId, supplierClassifier);
         return listPanel;
     }
@@ -241,8 +241,8 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
      * @param parentDataObjectId
      * @return
      */
-    public static BusinessPartnersListPanel createProvidersPanel(BigInteger parentDataObjectId) {
-        return createPartnerPanel("provider", parentDataObjectId);
+    public static BusinessPartnersListPanel createSuppliersPanel(BigInteger parentDataObjectId) {
+        return createPartnerPanel(Classifier.Supplier.getClassifierCode(), parentDataObjectId);
     }
     
     /**
@@ -252,7 +252,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
      * @return
      */
     public static BusinessPartnersListPanel createCustomerPanel(BigInteger parentDataObjectId) {
-        return createPartnerPanel("customer", parentDataObjectId);
+        return createPartnerPanel(Classifier.Customer.getClassifierCode(), parentDataObjectId);
     }
     
     /**
@@ -262,7 +262,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
      * @return
      */
     public static BusinessPartnersListPanel createShippingAgentPanel(BigInteger parentDataObjectId) {
-        return createPartnerPanel("shippingAgent", parentDataObjectId);
+        return createPartnerPanel(Classifier.ShippingAgent.getClassifierCode(), parentDataObjectId);
     }
 
     /**
@@ -272,7 +272,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
      * @return
      */
     public static BusinessPartnersListPanel createProducersPanel(BigInteger parentDataObjectId) {
-        return createPartnerPanel("producer", parentDataObjectId);
+        return createPartnerPanel(Classifier.Producer.getClassifierCode(), parentDataObjectId);
     }
 
     /**
@@ -282,6 +282,6 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
      * @return
      */
     public static BusinessPartnersListPanel createEmployeesPanel(BigInteger parentDataObjectId) {
-        return createPartnerPanel("employee", parentDataObjectId);
+        return createPartnerPanel(Classifier.Employee.getClassifierCode(), parentDataObjectId);
     }
 }

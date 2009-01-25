@@ -163,7 +163,7 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
         formatField.bind(bindGroup, format, entityProps.getPropertyDetails("format"));
         descriptionField.bind(bindGroup, format, entityProps.getPropertyDetails("description"));
         if ( listPanel==null )
-            listPanel = BusinessPartnersListPanel.createProvidersPanel(getParentDataObjectId());
+            listPanel = BusinessPartnersListPanel.createSuppliersPanel(getParentDataObjectId());
         ownerField.bind(bindGroup, listPanel, format, entityProps.getPropertyDetails("owner"),
             "${displayName}", UpdateStrategy.READ_WRITE);
         

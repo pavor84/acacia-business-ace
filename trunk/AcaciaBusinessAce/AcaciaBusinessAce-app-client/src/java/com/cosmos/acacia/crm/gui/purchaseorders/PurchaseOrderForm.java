@@ -702,7 +702,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         supplierContactField.setModel(new DefaultComboBoxModel());
 
         //supplier
-        BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createProvidersPanel(getParentDataObjectId());
+        BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createSuppliersPanel(getParentDataObjectId());
         supplierField.bind(
             bindGroup,
             listPanel,
