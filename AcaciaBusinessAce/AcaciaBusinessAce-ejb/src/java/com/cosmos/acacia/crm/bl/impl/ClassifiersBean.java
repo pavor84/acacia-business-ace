@@ -95,11 +95,15 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @Override
     public int deleteClassifierGroup(ClassifierGroup classifierGroup) {
-        if (!classifierGroup.getIsSystemGroup())
-            return esm.remove(em, classifierGroup);
+        if (classifierGroup.getIsSystemGroup()) {
+            if(!session.isAdministrator())
+                throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
 
-        throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+            if(ClassifierGroup.System.getClassifierGroupCode().equals(classifierGroup.getClassifierGroupCode()))
+                throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+        }
 
+        return esm.remove(em, classifierGroup);
     }
 
     @SuppressWarnings("unchecked")
@@ -124,20 +128,20 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Classifier> getClassifiers(BigInteger parentDataObjectId,
+    public List<Classifier> getClassifiers(ClassifierGroup classifierGroup, // BigInteger parentDataObjectId,
             DataObjectType dataObjectType) {
 
         List<Classifier> result = null;
 
         Query q;
-        if(parentDataObjectId != null)
+        if(classifierGroup != null)
         {
-            q = em.createNamedQuery("Classifier.findByParentDataObjectAndDeleted");
-            q.setParameter("groupId", parentDataObjectId);
+            q = em.createNamedQuery("Classifier.findByGroup");
+            q.setParameter("classifierGroup", classifierGroup);
         }
         else
         {
-            q = em.createNamedQuery("Classifier.findAllAndDeleted");
+            q = em.createNamedQuery("Classifier.findAll");
         }
         q.setParameter("parentId", session.getOrganization().getId());
 
@@ -199,25 +203,49 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         if (classifier.getClassifierGroup().getIsSystemGroup())
             throw new ValidationException("Classifier.err.systemGroupForbidden");
 
-        classifier.setParentId(groupId);
+        return saveClassifierLocal(classifier, groupId);
+    }
+
+    @Override
+    public Classifier saveClassifierLocal(Classifier classifier, BigInteger groupId) {
+        System.out.println("saveClassifierLocal(classifier=" + classifier + ", groupId=" + groupId + ")");
+        /*classifier.setParentId(groupId);
 
         if (classifier.getDataObject() == null){
             DataObject dataObject = new DataObject();
             dataObject.setParentDataObjectId(groupId);
             classifier.setDataObject(dataObject);
+        }*/
+        if(classifier.getParentId() == null) {
+            classifier.setParentId(session.getOrganization().getId());
         }
 
-        classifierValidator.validate(classifier);
+        //classifierValidator.validate(classifier);
 
+        System.out.println("classifier.getId()" + classifier.getId());
+        System.out.println("classifier.getClassifierId()" + classifier.getClassifierId());
+        System.out.println("classifier.getDataObject()" + classifier.getDataObject());
+        System.out.println("classifier.getParentId()" + classifier.getParentId());
+        System.out.println("classifier.getClassifierCode()" + classifier.getClassifierCode());
+        System.out.println("classifier.getClassifierName()" + classifier.getClassifierName());
+        System.out.println("classifier.getDescription()" + classifier.getDescription());
+        System.out.println("classifier.getClassifierGroup()" + classifier.getClassifierGroup());
+
+        try {
         esm.persist(em, classifier);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
 
         return classifier;
     }
 
     @Override
     public ClassifierGroup saveClassifierGroup(ClassifierGroup classifierGroup) {
-        if (classifierGroup.getIsSystemGroup())
-            throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+        if(classifierGroup.getIsSystemGroup()) {
+            if (!session.isAdministrator())
+                throw new ValidationException("ClassifierGroup.err.systemGroupForbidden");
+        }
 
         return saveClassifierGroupLocal(classifierGroup);
     }
@@ -359,17 +387,26 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @SuppressWarnings("unchecked")
     @Override
     public Classifier getClassifier(String code) {
+        System.out.println("getClassifier(code=" + code + ")");
         Query q = em.createNamedQuery("Classifier.findByCode");
-        q.setParameter("code", code);
+        q.setParameter("classifierCode", code);
         q.setParameter("deleted", false);
         q.setParameter("parentId", session.getOrganization().getId());
 
-        List<Classifier> result = q.getResultList();
+        /*List<Classifier> result = q.getResultList();
 
         if (result == null || result.size() == 0)
             throw new ValidationException("No classifier found with this code");
 
-        return result.get(0);
+        return result.get(0);*/
+
+        System.out.println("Will call q.getSingleResult()");
+        try {
+            return (Classifier)q.getSingleResult();
+        } catch(NoResultException ex) {
+            System.out.println("NoResultException: ...");
+            return null;
+        }
     }
 
     @Override
@@ -411,12 +448,8 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         }
     }
     
-    private ClassifierGroup getSystemGroup(){
-        for (ClassifierGroup g : getClassifierGroups()) {
-            if ( g.getIsSystemGroup() || "system".equals(g.getClassifierGroupCode()) )
-                return g;
-        }
-        return null;
+    private ClassifierGroup getSystemGroup() {
+        return getClassifierGroup(ClassifierGroup.System.getClassifierGroupCode());
     }
 
     @Override
@@ -427,7 +460,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         return entityProperties;
     }
 
-    @Override
+    /*@Override
     public Classifier getOrCreateSystemClassifier(String classifierKey) {
         Classifier result = null;
         try{
@@ -450,7 +483,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         }
         
         return result;
-    }
+    }*/
     
     @Override
     public Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId) {

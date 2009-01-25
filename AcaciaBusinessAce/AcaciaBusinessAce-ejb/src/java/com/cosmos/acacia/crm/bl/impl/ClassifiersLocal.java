@@ -5,7 +5,9 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
+import java.math.BigInteger;
 import javax.ejb.Local;
 
 /**
@@ -17,4 +19,5 @@ public interface ClassifiersLocal
     extends ClassifiersRemote
 {
     ClassifierGroup saveClassifierGroupLocal(ClassifierGroup classifierGroup);
+    Classifier saveClassifierLocal(Classifier classifier, BigInteger groupId);
 }

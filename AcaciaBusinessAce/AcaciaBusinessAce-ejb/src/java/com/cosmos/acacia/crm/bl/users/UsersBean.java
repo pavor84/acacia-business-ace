@@ -60,6 +60,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -712,8 +713,25 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 systemClassifierGroup = entity;
         }
 
-        for(Classifier classifier : Classifier.ConstantsMap.values()) {
+        Collection<Classifier>constantClassifiers = Classifier.ConstantsMap.values();
+        List<Classifier> classifiers = new ArrayList<Classifier>(constantClassifiers.size());
+        for(Classifier classifier : constantClassifiers) {
             System.out.println("classifier: " + classifier);
+            String code = classifier.getClassifierCode();
+            Classifier entity;
+            if((entity = classifiersManager.getClassifier(code)) == null) {
+                classifiers.add(classifier);
+            }
+        }
+
+        for(Classifier classifier : constantClassifiers) {
+            Classifier entity = (Classifier)classifier.clone();
+            entity.setClassifierGroup(systemClassifierGroup);
+            entity = classifiersManager.saveClassifierLocal(entity, null);
+            System.out.println("entity: " + entity);
+            System.out.println("entity.getDataObject(): " + entity.getDataObject());
+            if(true)
+                break;
         }
     }
 

@@ -34,27 +34,26 @@ import javax.persistence.Table;
     {
         @NamedQuery
              (
-                name = "Classifier.findByParentDataObjectAndDeleted",
-                query = "select c from Classifier c where c.parentId = :groupId" +
-                        " and c.dataObject.deleted = :deleted" +
-                        " and (c.classifierGroup.dataObject.parentDataObjectId = :parentId" +
-                        " or c.classifierGroup.isSystemGroup=true or c.classifierGroup.classifierGroupCode='system')"
+                name = "Classifier.findByGroup",
+                query = "select c from Classifier c" +
+                        " where c.classifierGroup = :classifierGroup" +
+                        "  and c.dataObject.deleted = :deleted" +
+                        "  and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
              ),
         @NamedQuery
              (
-                name = "Classifier.findAllAndDeleted",
-                query = "select c from Classifier c where" +
-                        " c.dataObject.deleted = :deleted" +
-                        " and (c.classifierGroup.dataObject.parentDataObjectId = :parentId" +
-                        " or c.classifierGroup.isSystemGroup=true or c.classifierGroup.classifierGroupCode='system')"
+                name = "Classifier.findAll",
+                query = "select c from Classifier c" +
+                        " where c.dataObject.deleted = :deleted" +
+                        "  and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
               ),
         @NamedQuery
             (
                 name = "Classifier.findByCode",
-                query = "select c from Classifier c where c.classifierCode = :code" +
-                        " and c.dataObject.deleted = :deleted" +
-                        " and (c.classifierGroup.dataObject.parentDataObjectId = :parentId" +
-                        " or c.classifierGroup.isSystemGroup=true or c.classifierGroup.classifierGroupCode='system')"
+                query = "select c from Classifier c" +
+                        " where c.classifierCode = :classifierCode" +
+                        "  and c.dataObject.deleted = :deleted" +
+                        "  and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
             )
     }
 )
@@ -62,317 +61,123 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
 
     private static final long serialVersionUID = 1L;
 
-    public static final Classifier Customer =
-            new Classifier();
-    public static final Classifier Supplier =
-            new Classifier();
-    public static final Classifier Producer =
-            new Classifier();
-    public static final Classifier ShippingAgent =
-            new Classifier();
-    public static final Classifier Courier =
-            new Classifier();
-    public static final Classifier Bank =
-            new Classifier();
-    public static final Classifier Police =
-            new Classifier();
-    public static final Classifier Customs =
-            new Classifier();
-    public static final Classifier Court =
-            new Classifier();
-    public static final Classifier Prosecutor =
-            new Classifier();
-    public static final Classifier Lawyer =
-            new Classifier();
-    public static final Classifier SolicitorAssociation =
-            new Classifier();
-    public static final Classifier RegistryAgency =
-            new Classifier();
-    public static final Classifier NationalRevenueAgency =
-            new Classifier();
-    public static final Classifier NationalSocialSecurityAgency =
-            new Classifier();
-    public static final Classifier PensionFund =
-            new Classifier();
-    public static final Classifier NationalHealthInsuranceFund =
-            new Classifier();
-    public static final Classifier HealthInsuranceFund =
-            new Classifier();
-    public static final Classifier Municipality =
-            new Classifier();
-    public static final Classifier ServiceProvider =
-            new Classifier();
-    public static final Classifier InternetServiceProvider =
-            new Classifier();
-    public static final Classifier ITServiceProvider =
-            new Classifier();
-    public static final Classifier InsuranceCompany =
-            new Classifier();
-    public static final Classifier InsuranceAgent =
-            new Classifier();
-    public static final Classifier Hospital =
-            new Classifier();
-    public static final Classifier Polyclinic =
-            new Classifier();
-    public static final Classifier MedicalCenter =
-            new Classifier();
-    public static final Classifier DoctorOfMedicine =
-            new Classifier();
-    public static final Classifier Dentist =
-            new Classifier();
-    public static final Classifier PrimarySchool =
-            new Classifier();
-    public static final Classifier SecondarySchool =
-            new Classifier();
-    public static final Classifier HighSchool =
-            new Classifier();
-    public static final Classifier HighTechnicalSchool =
-            new Classifier();
-    public static final Classifier LanguageSecondarySchool =
-            new Classifier();
-    public static final Classifier College =
-            new Classifier();
-    public static final Classifier University =
-            new Classifier();
-    public static final Classifier TechnicalUniversity =
-            new Classifier();
-    public static final Classifier AdvertisementAgency =
-            new Classifier();
-    public static final Classifier Entertainment =
-            new Classifier();
-    public static final Classifier Hotel =
-            new Classifier();
-    public static final Classifier HotelApartment =
-            new Classifier();
-    public static final Classifier RealEstateAgency =
-            new Classifier();
-    public static final Classifier RentACar =
-            new Classifier();
+    public static final Classifier Employee = new Classifier();
+    public static final Classifier Customer = new Classifier();
+    public static final Classifier Supplier = new Classifier();
+    public static final Classifier Producer = new Classifier();
+    public static final Classifier ShippingAgent = new Classifier();
+    public static final Classifier Courier = new Classifier();
+    public static final Classifier Bank = new Classifier();
+    public static final Classifier Police = new Classifier();
+    public static final Classifier Customs = new Classifier();
+    public static final Classifier Court = new Classifier();
+    public static final Classifier Prosecutor = new Classifier();
+    public static final Classifier Lawyer = new Classifier();
+    public static final Classifier SolicitorAssociation = new Classifier();
+    public static final Classifier RegistryAgency = new Classifier();
+    public static final Classifier NationalRevenueAgency = new Classifier();
+    public static final Classifier NationalSocialSecurityAgency = new Classifier();
+    public static final Classifier PensionFund = new Classifier();
+    public static final Classifier NationalHealthInsuranceFund = new Classifier();
+    public static final Classifier HealthInsuranceFund = new Classifier();
+    public static final Classifier Municipality = new Classifier();
+    public static final Classifier ServiceProvider = new Classifier();
+    public static final Classifier InternetServiceProvider = new Classifier();
+    public static final Classifier ITServiceProvider = new Classifier();
+    public static final Classifier InsuranceCompany = new Classifier();
+    public static final Classifier InsuranceAgent = new Classifier();
+    public static final Classifier Hospital = new Classifier();
+    public static final Classifier Polyclinic = new Classifier();
+    public static final Classifier MedicalCenter = new Classifier();
+    public static final Classifier DoctorOfMedicine = new Classifier();
+    public static final Classifier Dentist = new Classifier();
+    public static final Classifier PrimarySchool = new Classifier();
+    public static final Classifier SecondarySchool = new Classifier();
+    public static final Classifier HighSchool = new Classifier();
+    public static final Classifier HighTechnicalSchool = new Classifier();
+    public static final Classifier LanguageSecondarySchool = new Classifier();
+    public static final Classifier College = new Classifier();
+    public static final Classifier University = new Classifier();
+    public static final Classifier TechnicalUniversity = new Classifier();
+    public static final Classifier AdvertisementAgency = new Classifier();
+    public static final Classifier Entertainment = new Classifier();
+    public static final Classifier Hotel = new Classifier();
+    public static final Classifier HotelApartment = new Classifier();
+    public static final Classifier RealEstateAgency = new Classifier();
+    public static final Classifier RentACar = new Classifier();
 
     public static final Map<String, Classifier> ConstantsMap =
             new TreeMap<String, Classifier>();
 
     static {
-        Customer.setClassifierCode("Customer");
-        Customer.setClassifierName("Customer/Client classifier.");
-        Customer.setDescription("With this classifier are classified the customers.");
-
-        Supplier.setClassifierCode("Supplier");
-        Supplier.setClassifierName("Supplier");
-        Supplier.setDescription("Supplier");
-
-        Producer.setClassifierCode("Producer");
-        Producer.setClassifierName("Producer");
-        Producer.setDescription("Producer");
-
-        ShippingAgent.setClassifierCode("Shipping Agent");
-        ShippingAgent.setClassifierName("Shipping Agent");
-        ShippingAgent.setDescription("Shipping Agent");
-
-        Courier.setClassifierCode("Courier");
-        Courier.setClassifierName("Courier");
-        Courier.setDescription("Courier");
-
-        Bank.setClassifierCode("Bank");
-        Bank.setClassifierName("Bank");
-        Bank.setDescription("Bank");
-
-        Police.setClassifierCode("Police");
-        Police.setClassifierName("Police");
-        Police.setDescription("Police");
-
-        Customs.setClassifierCode("Customs");
-        Customs.setClassifierName("Customs");
-        Customs.setDescription("Customs");
-
-        Court.setClassifierCode("Court");
-        Court.setClassifierName("Court");
-        Court.setDescription("Court");
-
-        Prosecutor.setClassifierCode("Prosecutor");
-        Prosecutor.setClassifierName("Prosecutor");
-        Prosecutor.setDescription("Prosecutor");
-
-        Lawyer.setClassifierCode("Lawyer");
-        Lawyer.setClassifierName("Lawyer");
-        Lawyer.setDescription("Lawyer");
-
-        SolicitorAssociation.setClassifierCode("SolicitorAssociation");
-        SolicitorAssociation.setClassifierName("Solicitor Association");
-        SolicitorAssociation.setDescription("Solicitor Association");
-
-        RegistryAgency.setClassifierCode("RegistryAgency");
-        RegistryAgency.setClassifierName("Registry Agency");
-        RegistryAgency.setDescription("Registry Agency");
-
-        NationalRevenueAgency.setClassifierCode("NationalRevenueAgency");
-        NationalRevenueAgency.setClassifierName("National Revenue Agency");
-        NationalRevenueAgency.setDescription("National Revenue Agency");
-
-        NationalSocialSecurityAgency.setClassifierCode("NationalSocialSecurityAgency");
-        NationalSocialSecurityAgency.setClassifierName("National Social Security Agency");
-        NationalSocialSecurityAgency.setDescription("National Social Security Agency");
-
-        PensionFund.setClassifierCode("PensionFund");
-        PensionFund.setClassifierName("Pension Fund");
-        PensionFund.setDescription("Pension Fund");
-
-        NationalHealthInsuranceFund.setClassifierCode("NationalHealthInsuranceFund");
-        NationalHealthInsuranceFund.setClassifierName("National Health Insurance Fund");
-        NationalHealthInsuranceFund.setDescription("National Health Insurance Fund");
-
-        HealthInsuranceFund.setClassifierCode("HealthInsuranceFund");
-        HealthInsuranceFund.setClassifierName("Health Insurance Fund");
-        HealthInsuranceFund.setDescription("Health Insurance Fund");
-
-        Municipality.setClassifierCode("Municipality");
-        Municipality.setClassifierName("Municipality");
-        Municipality.setDescription("Municipality");
-
-        ServiceProvider.setClassifierCode("ServiceProvider");
-        ServiceProvider.setClassifierName("Service Provider");
-        ServiceProvider.setDescription("Service Provider");
-
-        InternetServiceProvider.setClassifierCode("InternetServiceProvider");
-        InternetServiceProvider.setClassifierName("Internet Service Provider");
-        InternetServiceProvider.setDescription("Internet Service Provider");
-
-        ITServiceProvider.setClassifierCode("ITServiceProvider");
-        ITServiceProvider.setClassifierName("IT Service Provider");
-        ITServiceProvider.setDescription("IT Service Provider");
-
-        InsuranceCompany.setClassifierCode("InsuranceCompany");
-        InsuranceCompany.setClassifierName("Insurance Company");
-        InsuranceCompany.setDescription("Insurance Company");
-
-        InsuranceAgent.setClassifierCode("InsuranceAgent");
-        InsuranceAgent.setClassifierName("Insurance Agent");
-        InsuranceAgent.setDescription("Insurance Agent");
-
-        Hospital.setClassifierCode("Hospital");
-        Hospital.setClassifierName("Hospital");
-        Hospital.setDescription("Hospital");
-
-        Polyclinic.setClassifierCode("Polyclinic");
-        Polyclinic.setClassifierName("Polyclinic");
-        Polyclinic.setDescription("Polyclinic");
-
-        MedicalCenter.setClassifierCode("MedicalCenter");
-        MedicalCenter.setClassifierName("Medical Center");
-        MedicalCenter.setDescription("Medical Center");
-
-        DoctorOfMedicine.setClassifierCode("DoctorOfMedicine");
-        DoctorOfMedicine.setClassifierName("Doctor of Medicine");
-        DoctorOfMedicine.setDescription("Doctor of Medicine");
-
-        Dentist.setClassifierCode("Dentist");
-        Dentist.setClassifierName("Dentist");
-        Dentist.setDescription("Dentist");
-
-        PrimarySchool.setClassifierCode("PrimarySchool");
-        PrimarySchool.setClassifierName("Primary School");
-        PrimarySchool.setDescription("Primary School");
-
-        SecondarySchool.setClassifierCode("SecondarySchool");
-        SecondarySchool.setClassifierName("Secondary School");
-        SecondarySchool.setDescription("Secondary School");
-
-        HighSchool.setClassifierCode("HighSchool");
-        HighSchool.setClassifierName("High School");
-        HighSchool.setDescription("High School");
-
-        HighTechnicalSchool.setClassifierCode("HighTechnicalSchool");
-        HighTechnicalSchool.setClassifierName("High Technical School");
-        HighTechnicalSchool.setDescription("High Technical School");
-
-        LanguageSecondarySchool.setClassifierCode("LanguageSecondarySchool");
-        LanguageSecondarySchool.setClassifierName("Language Secondary School");
-        LanguageSecondarySchool.setDescription("Language Secondary School");
-
-        College.setClassifierCode("College");
-        College.setClassifierName("College");
-        College.setDescription("College");
-
-        University.setClassifierCode("University");
-        University.setClassifierName("University");
-        University.setDescription("University");
-
-        TechnicalUniversity.setClassifierCode("TechnicalUniversity");
-        TechnicalUniversity.setClassifierName("Technical University");
-        TechnicalUniversity.setDescription("Technical University");
-
-        AdvertisementAgency.setClassifierCode("AdvertisementAgency");
-        AdvertisementAgency.setClassifierName("Advertisement Agency");
-        AdvertisementAgency.setDescription("Advertisement Agency");
-
-        Entertainment.setClassifierCode("Entertainment");
-        Entertainment.setClassifierName("Entertainment");
-        Entertainment.setDescription("Entertainment");
-
-        Hotel.setClassifierCode("Hotel");
-        Hotel.setClassifierName("Hotel");
-        Hotel.setDescription("Hotel");
-
-        HotelApartment.setClassifierCode("HotelApartment");
-        HotelApartment.setClassifierName("Hotel Apartment");
-        HotelApartment.setDescription("Hotel Apartment");
-
-        RealEstateAgency.setClassifierCode("RealEstateAgency");
-        RealEstateAgency.setClassifierName("Real Estate Agency");
-        RealEstateAgency.setDescription("Real Estate Agency");
-
-        RentACar.setClassifierCode("RentACar");
-        RentACar.setClassifierName("Rent a Car");
-        RentACar.setDescription("Rent a Car");
-
-        setClassifier(Customer);
-        setClassifier(Customer);
-        setClassifier(Supplier);
-        setClassifier(Producer);
-        setClassifier(ShippingAgent);
-        setClassifier(Courier);
-        setClassifier(Bank);
-        setClassifier(Police);
-        setClassifier(Customs);
-        setClassifier(Court);
-        setClassifier(Prosecutor);
-        setClassifier(Lawyer);
-        setClassifier(SolicitorAssociation);
-        setClassifier(RegistryAgency);
-        setClassifier(NationalRevenueAgency);
-        setClassifier(NationalSocialSecurityAgency);
-        setClassifier(PensionFund);
-        setClassifier(NationalHealthInsuranceFund);
-        setClassifier(HealthInsuranceFund);
-        setClassifier(Municipality);
-        setClassifier(ServiceProvider);
-        setClassifier(InternetServiceProvider);
-        setClassifier(ITServiceProvider);
-        setClassifier(InsuranceCompany);
-        setClassifier(InsuranceAgent);
-        setClassifier(Hospital);
-        setClassifier(Polyclinic);
-        setClassifier(MedicalCenter);
-        setClassifier(DoctorOfMedicine);
-        setClassifier(Dentist);
-        setClassifier(PrimarySchool);
-        setClassifier(SecondarySchool);
-        setClassifier(HighSchool);
-        setClassifier(HighTechnicalSchool);
-        setClassifier(LanguageSecondarySchool);
-        setClassifier(College);
-        setClassifier(University);
-        setClassifier(TechnicalUniversity);
-        setClassifier(AdvertisementAgency);
-        setClassifier(Entertainment);
-        setClassifier(Hotel);
-        setClassifier(HotelApartment);
-        setClassifier(RealEstateAgency);
-        setClassifier(RentACar);
+        setClassifier(Employee, "Employee");
+        setClassifier(Customer, "Customer", "Customer/Client classifier.", "With this classifier are classified the customers.");
+        setClassifier(Supplier, "Supplier");
+        setClassifier(Producer, "Producer");
+        setClassifier(ShippingAgent, "ShippingAgent", "Shipping Agent");
+        setClassifier(Courier, "Courier");
+        setClassifier(Bank, "Bank");
+        setClassifier(Police, "Police");
+        setClassifier(Customs, "Customs");
+        setClassifier(Court, "Court");
+        setClassifier(Prosecutor, "Prosecutor");
+        setClassifier(Lawyer, "Lawyer");
+        setClassifier(SolicitorAssociation, "SolicitorAssociation", "Solicitor Association");
+        setClassifier(RegistryAgency, "RegistryAgency", "Registry Agency");
+        setClassifier(NationalRevenueAgency, "NationalRevenueAgency", "National Revenue Agency");
+        setClassifier(NationalSocialSecurityAgency, "NationalSocialSecurityAgency", "National Social Security Agency");
+        setClassifier(PensionFund, "PensionFund", "Pension Fund");
+        setClassifier(NationalHealthInsuranceFund, "NationalHealthInsuranceFund", "National Health Insurance Fund");
+        setClassifier(HealthInsuranceFund, "HealthInsuranceFund", "Health Insurance Fund");
+        setClassifier(Municipality, "Municipality");
+        setClassifier(ServiceProvider, "ServiceProvider", "Service Provider");
+        setClassifier(InternetServiceProvider, "InternetServiceProvider", "Internet Service Provider");
+        setClassifier(ITServiceProvider, "ITServiceProvider", "IT Service Provider");
+        setClassifier(InsuranceCompany, "InsuranceCompany", "Insurance Company");
+        setClassifier(InsuranceAgent, "InsuranceAgent", "Insurance Agent");
+        setClassifier(Hospital, "Hospital");
+        setClassifier(Polyclinic, "Polyclinic");
+        setClassifier(MedicalCenter, "MedicalCenter", "Medical Center");
+        setClassifier(DoctorOfMedicine, "DoctorOfMedicine", "Doctor of Medicine");
+        setClassifier(Dentist, "Dentist");
+        setClassifier(PrimarySchool, "PrimarySchool", "Primary School");
+        setClassifier(SecondarySchool, "SecondarySchool", "Secondary School");
+        setClassifier(HighSchool, "HighSchool", "High School");
+        setClassifier(HighTechnicalSchool, "HighTechnicalSchool", "High Technical School");
+        setClassifier(LanguageSecondarySchool, "LanguageSecondarySchool", "Language Secondary School");
+        setClassifier(College, "College");
+        setClassifier(University, "University");
+        setClassifier(TechnicalUniversity, "TechnicalUniversity", "Technical University");
+        setClassifier(AdvertisementAgency, "AdvertisementAgency", "Advertisement Agency");
+        setClassifier(Entertainment, "Entertainment");
+        setClassifier(Hotel, "Hotel");
+        setClassifier(HotelApartment, "HotelApartment", "Hotel Apartment");
+        setClassifier(RealEstateAgency, "RealEstateAgency", "Real Estate Agency");
+        setClassifier(RentACar, "RentACar", "Rent a Car");
     }
 
-    private static final void setClassifier(Classifier classifier) {
-        ConstantsMap.put(classifier.getClassifierCode(), classifier);
+    private static final void setClassifier(
+            Classifier classifier,
+            String classifierCode) {
+        setClassifier(classifier, classifierCode, classifierCode);
+    }
+
+    private static final void setClassifier(
+            Classifier classifier,
+            String classifierCode,
+            String classifierName) {
+        setClassifier(classifier, classifierCode, classifierName, classifierName);
+    }
+
+    private static final void setClassifier(
+            Classifier classifier,
+            String classifierCode,
+            String classifierName,
+            String description) {
+        classifier.setClassifierCode(classifierCode);
+        classifier.setClassifierName(classifierName);
+        classifier.setDescription(description);
+        ConstantsMap.put(classifierCode, classifier);
     }
 
 
@@ -395,7 +200,10 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
         @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=128))
     private String classifierName;
 
-    @JoinColumn(name = "parent_id", referencedColumnName = "classifier_group_id", insertable=false, updatable=false, nullable=false)
+    @JoinColumn(
+        name = "classifier_group_id",
+        referencedColumnName = "classifier_group_id",
+        insertable=false, updatable=false, nullable=false)
     @ManyToOne
     @Property(title="Group", customDisplay="${classifierGroup.classifierGroupName}")
     private ClassifierGroup classifierGroup;
