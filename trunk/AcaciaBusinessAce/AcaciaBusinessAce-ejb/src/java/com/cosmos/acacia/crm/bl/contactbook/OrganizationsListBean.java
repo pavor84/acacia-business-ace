@@ -20,9 +20,11 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.OrganizationValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
@@ -61,6 +63,10 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     @EJB
     private AcaciaSessionLocal acaciaSession;
+
+    @EJB
+    private ClassifiersLocal classifiersManager;
+
 
     @SuppressWarnings("unchecked")
     public List<Organization> getOrganizations(BigInteger parentId)
@@ -143,6 +149,42 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
         organization.setRegistrationAddress(address);
         organization = saveOrganization(organization);
+
+        if(basicOrganization.isCustomer()) {
+            Classifier classifier = classifiersManager.getClassifier(
+                    Classifier.Customer.getClassifierCode());
+            classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+        }
+
+        if(basicOrganization.isSupplier()) {
+            Classifier classifier = classifiersManager.getClassifier(
+                    Classifier.Supplier.getClassifierCode());
+            classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+        }
+
+        if(basicOrganization.isProducer()) {
+            Classifier classifier = classifiersManager.getClassifier(
+                    Classifier.Producer.getClassifierCode());
+            classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+        }
+
+        if(basicOrganization.isShippingAgent()) {
+            Classifier classifier = classifiersManager.getClassifier(
+                    Classifier.ShippingAgent.getClassifierCode());
+            classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+        }
+
+        if(basicOrganization.isCourier()) {
+            Classifier classifier = classifiersManager.getClassifier(
+                    Classifier.Courier.getClassifierCode());
+            classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+        }
+
+        if(basicOrganization.isBank()) {
+            Classifier classifier = classifiersManager.getClassifier(
+                    Classifier.Bank.getClassifierCode());
+            classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+        }
 
         return organization;
     }
