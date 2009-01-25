@@ -309,7 +309,8 @@ public class DataObject implements Serializable {
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.DataObject[dataObjectId=" +
-               dataObjectId + "]";
+               dataObjectId +
+               ", parentDataObjectId=" + parentDataObjectId + "]";
     }
 
 }
