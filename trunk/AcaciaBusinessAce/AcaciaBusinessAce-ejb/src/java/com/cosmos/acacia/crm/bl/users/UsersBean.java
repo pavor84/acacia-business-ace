@@ -714,24 +714,15 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
 
         Collection<Classifier>constantClassifiers = Classifier.ConstantsMap.values();
-        List<Classifier> classifiers = new ArrayList<Classifier>(constantClassifiers.size());
         for(Classifier classifier : constantClassifiers) {
             System.out.println("classifier: " + classifier);
             String code = classifier.getClassifierCode();
             Classifier entity;
             if((entity = classifiersManager.getClassifier(code)) == null) {
-                classifiers.add(classifier);
+                entity = (Classifier)classifier.clone();
+                entity.setClassifierGroup(systemClassifierGroup);
+                entity = classifiersManager.saveClassifierLocal(entity, null);
             }
-        }
-
-        for(Classifier classifier : constantClassifiers) {
-            Classifier entity = (Classifier)classifier.clone();
-            entity.setClassifierGroup(systemClassifierGroup);
-            entity = classifiersManager.saveClassifierLocal(entity, null);
-            System.out.println("entity: " + entity);
-            System.out.println("entity.getDataObject(): " + entity.getDataObject());
-            if(true)
-                break;
         }
     }
 

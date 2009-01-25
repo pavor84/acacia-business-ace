@@ -203,8 +203,8 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     @JoinColumn(
         name = "classifier_group_id",
         referencedColumnName = "classifier_group_id",
-        insertable=false, updatable=false, nullable=false)
-    @ManyToOne
+        nullable=false)
+    @ManyToOne(optional = false)
     @Property(title="Group", customDisplay="${classifierGroup.classifierGroupName}")
     private ClassifierGroup classifierGroup;
 
@@ -313,7 +313,8 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     @Override
     public String toString() {
         return "com.cosmos.acacia.crm.data.Classifier[classifierId=" + classifierId +
-                ", code=" + classifierCode + "]";
+                ", code=" + classifierCode +
+                ", group=" + classifierGroup + "]";
     }
 
     @Override
