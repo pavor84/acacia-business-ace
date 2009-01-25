@@ -28,6 +28,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.util.Iterator;
 
 /**
  *
@@ -255,15 +256,21 @@ public class ClassifierPanel extends BaseEntityPanel {
     private BindingGroup classifierBindingGroup;
     private Classifier classifier;
     private DataObjectTypesListPanel dataObjectTypesTable;
+    private boolean isNew;
+    private boolean isSystemGroup;
 
     @Override
     protected void initData() {
         setResizable(false);
 
         log.info("initData().classifier: " + classifier);
-        if(classifier == null)
-        {
+        if(classifier == null) {
             classifier = getFormSession().newClassifier();
+            isNew = true;
+            isSystemGroup = false;
+        } else {
+            isNew = false;
+            isSystemGroup = classifier.getClassifierGroup().getIsSystemGroup();
         }
 
         if (classifierBindingGroup == null)
@@ -305,11 +312,28 @@ public class ClassifierPanel extends BaseEntityPanel {
 //            log.info("VALID: " + getBindingGroup().isContentValid());
 //            l.targetChanged(null, null);
 //        }
+
+        if(!isNew) {
+            if(isSystemGroup) {
+                codeTextField.setEnabled(false);
+                groupComboBox.setEnabled(false);
+            }
+        }
     }
 
 
     protected List<ClassifierGroup> getClassifierGroups() {
-        return getFormSession().getClassifierGroups();
+        List<ClassifierGroup> classifierGroups = getFormSession().getClassifierGroups();
+        if(!isAdministrator() && (isNew || (!isNew && !isSystemGroup))) {
+            Iterator<ClassifierGroup> iterator = classifierGroups.iterator();
+            while(iterator.hasNext()) {
+                ClassifierGroup classifierGroup = iterator.next();
+                if(classifierGroup.getIsSystemGroup())
+                    iterator.remove();
+            }
+        }
+
+        return classifierGroups;
     }
 
     protected List<DataObjectType> getDataObjectTypes() {

@@ -6,6 +6,7 @@ package com.cosmos.acacia.crm.gui;
 import org.junit.runner.JUnitCore;
 
 import com.cosmos.test.bl.BusinessPartnerListTest;
+import com.cosmos.test.bl.ClassifiersTest;
 import com.cosmos.test.bl.OrderConfirmationListTest;
 import com.cosmos.test.bl.PatternMaskListTest;
 import com.cosmos.test.bl.ProductCategoriesTest;
@@ -30,6 +31,7 @@ public class MainTest {
     public static void mainTest() {
         String[] tests = new String[] {
            //DataObjectTest.class.getName(),
+           ClassifiersTest.class.getName(),
            PatternMaskListTest.class.getName(),
            ProductsListTest.class.getName(),
            ProductCategoriesTest.class.getName(),
@@ -41,7 +43,7 @@ public class MainTest {
            BusinessPartnerListTest.class.getName(),
            ProductAssemblerTest.class.getName(),
         };
-        tests = new String[] {ProductAssemblerTest.class.getName()};
+        tests = new String[] {ClassifiersTest.class.getName()};
 
         JUnitCore.main(tests);
     }
