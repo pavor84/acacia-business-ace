@@ -93,7 +93,7 @@ public class ClassifiersTest {
         Assert.assertTrue(list != null && list.size() == 1);
 
         // Retrieve all classifiers for the group
-        List cList = formSession.getClassifiers(group.getId(), dataObject.getDataObjectType());
+        List cList = formSession.getClassifiers(group, dataObject.getDataObjectType());
         Assert.assertTrue(cList != null && cList.size() == 1);
 
         // Cleanup actions

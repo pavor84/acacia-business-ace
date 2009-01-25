@@ -291,7 +291,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private boolean closeAfterUnselect = false;
 
     @EJB
-    private ClassifiersRemote classifiersFormSession;
+    private static ClassifiersRemote classifiersFormSession;
 
     @Override
     protected void initData()
@@ -741,7 +741,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         getClassifiersFormSession().classifyDataObject(dataObject, getClassifier());
     }
 
-    protected ClassifiersRemote getClassifiersFormSession()
+    protected static ClassifiersRemote getClassifiersFormSession()
     {
         if(classifiersFormSession == null)
             classifiersFormSession = getBean(ClassifiersRemote.class);
