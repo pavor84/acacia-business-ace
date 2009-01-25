@@ -73,9 +73,11 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
                 dataObject.getDataObjectId());
 
         Query q = em.createNamedQuery("ClassifiedObject.findClassifiedObject");
-        q.setParameter("classifiedObject", co);
-        if (q.getResultList().size() == 0)
+        try {
+            q.getSingleResult();
+        } catch(NoResultException ex) {
             esm.persist(em, co);
+        }
     }
 
     @Override

@@ -701,12 +701,12 @@ public class UsersBean implements UsersRemote, UsersLocal {
         String systemCode = ClassifierGroup.System.getClassifierGroupCode();
         ClassifierGroup systemClassifierGroup = null;
         for(ClassifierGroup classifierGroup : ClassifierGroup.ConstantsMap.values()) {
-            System.out.println("classifierGroup: " + classifierGroup);
             String code = classifierGroup.getClassifierGroupCode();
             ClassifierGroup entity = classifiersManager.getClassifierGroup(code);
             if(entity == null) {
                 entity = (ClassifierGroup)classifierGroup.clone();
                 entity = classifiersManager.saveClassifierGroupLocal(entity);
+                log.info("New ClassifierGroup '" + entity + "' was added.");
             }
 
             if(systemCode.equalsIgnoreCase(code))
@@ -715,13 +715,13 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         Collection<Classifier>constantClassifiers = Classifier.ConstantsMap.values();
         for(Classifier classifier : constantClassifiers) {
-            System.out.println("classifier: " + classifier);
             String code = classifier.getClassifierCode();
             Classifier entity;
             if((entity = classifiersManager.getClassifier(code)) == null) {
                 entity = (Classifier)classifier.clone();
                 entity.setClassifierGroup(systemClassifierGroup);
                 entity = classifiersManager.saveClassifierLocal(entity, null);
+                log.info("New Classifier '" + entity + "' was added.");
             }
         }
     }

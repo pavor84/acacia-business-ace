@@ -68,6 +68,24 @@ public class BasicOrganization implements Serializable {
         propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String extraName;
 
+    @Property(title="Customer")
+    private boolean customer;
+
+    @Property(title="Supplier")
+    private boolean supplier;
+
+    @Property(title="Producer")
+    private boolean producer;
+
+    @Property(title="Shipping Agent")
+    private boolean shippingAgent;
+
+    @Property(title="Courier")
+    private boolean courier;
+
+    @Property(title="Bank")
+    private boolean bank;
+
 
     public City getCity() {
         return city;
@@ -157,4 +175,51 @@ public class BasicOrganization implements Serializable {
         this.vatNumber = vatNumber;
     }
 
+    public boolean isBank() {
+        return bank;
+    }
+
+    public void setBank(boolean bank) {
+        this.bank = bank;
+    }
+
+    public boolean isCourier() {
+        return courier;
+    }
+
+    public void setCourier(boolean courier) {
+        this.courier = courier;
+    }
+
+    public boolean isCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(boolean customer) {
+        this.customer = customer;
+    }
+
+    public boolean isProducer() {
+        return producer;
+    }
+
+    public void setProducer(boolean producer) {
+        this.producer = producer;
+    }
+
+    public boolean isShippingAgent() {
+        return shippingAgent;
+    }
+
+    public void setShippingAgent(boolean shippingAgent) {
+        this.shippingAgent = shippingAgent;
+    }
+
+    public boolean isSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(boolean supplier) {
+        this.supplier = supplier;
+    }
 }
