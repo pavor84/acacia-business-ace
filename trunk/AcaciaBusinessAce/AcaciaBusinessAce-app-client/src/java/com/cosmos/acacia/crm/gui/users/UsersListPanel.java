@@ -151,11 +151,11 @@ public class UsersListPanel extends AbstractTablePanel {
             User user = (User)rowObject;
             Organization org = getAcaciaSession().getOrganization();
             UserOrganization uo = getAdminSession().getUserOrganization(user, org);
-            UserPanel organizationPanel = new UserPanel(uo);
-            DialogResponse response = organizationPanel.showDialog(this);
+            UserPanel userPanel = new UserPanel(uo);
+            DialogResponse response = userPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return organizationPanel.getSelectedValue();
+                return userPanel.getSelectedValue();
             }
 
             if(DialogResponse.CLOSE.equals(response)) {
