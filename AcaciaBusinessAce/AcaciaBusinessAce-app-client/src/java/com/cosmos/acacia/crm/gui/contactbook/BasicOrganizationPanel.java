@@ -12,6 +12,7 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.BasicOrganization;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -38,8 +39,9 @@ public class BasicOrganizationPanel
     private static OrganizationsListRemote formSession;
 
     /** Creates new form organizationPanel */
-    public BasicOrganizationPanel(BigInteger parentDataObjectId) {
+    public BasicOrganizationPanel(BigInteger parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
+        this.classifier = classifier;
         init();
     }
 
@@ -376,6 +378,7 @@ public class BasicOrganizationPanel
     // End of variables declaration//GEN-END:variables
 
 
+    private Classifier classifier;
     private BasicOrganization basicOrganization;
     private BindingGroup bindingGroup;
     private CitiesListPanel citiesListPanel;
@@ -409,6 +412,8 @@ public class BasicOrganizationPanel
         log.info("initData().parentDataObjectId: " + getParentDataObjectId());
 
         basicOrganization = new BasicOrganization();
+
+        initClassifier();
 
         if (bindingGroup == null)
             bindingGroup = new BindingGroup();
@@ -478,6 +483,25 @@ public class BasicOrganizationPanel
         bankCheckBox.bind(bindingGroup, basicOrganization, propDetails);
 
         bindingGroup.bind();
+    }
+
+    private void initClassifier() {
+        if(classifier == null)
+            return;
+
+        String classifierCode = classifier.getClassifierCode();
+        if(classifierCode.equals(Classifier.Customer.getClassifierCode()))
+            basicOrganization.setCustomer(true);
+        else if(classifierCode.equals(Classifier.Supplier.getClassifierCode()))
+            basicOrganization.setSupplier(true);
+        else if(classifierCode.equals(Classifier.Producer.getClassifierCode()))
+            basicOrganization.setProducer(true);
+        else if(classifierCode.equals(Classifier.ShippingAgent.getClassifierCode()))
+            basicOrganization.setShippingAgent(true);
+        else if(classifierCode.equals(Classifier.Courier.getClassifierCode()))
+            basicOrganization.setCourier(true);
+        else if(classifierCode.equals(Classifier.Bank.getClassifierCode()))
+            basicOrganization.setBank(true);
     }
 
     protected OrganizationsListRemote getFormSession()

@@ -26,6 +26,7 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType;
 import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
+import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -158,11 +159,12 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
             BusinessPartnerTypeChooser partnerSelectForm = new BusinessPartnerTypeChooser();
             DialogResponse resp = partnerSelectForm.showDialog(getButton(Button.New));
             if (DialogResponse.OK.equals(resp)) {
-                BaseEntityPanel formPanel = null;
+                AcaciaPanel formPanel = null;
                 DialogResponse response = null;
                 // organization
                 if (PartnerType.ORGANIZATION.equals(partnerSelectForm.getSelectedType())) {
-                    formPanel = new OrganizationPanel(getParentDataObjectId());
+                    formPanel = new NewOrganizationDialog(
+                            getParentDataObjectId(), getClassifier());
                     response = formPanel.showDialog(this);
                 //person
                 } else {
@@ -203,7 +205,6 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     @Override
     public boolean canModify(Object rowObject) {
         if ( customerClassifier==null ) {
-            //customerClassifier = getClassifiersFormSession().getOrCreateSystemClassifier("customer");
             customerClassifier = getClassifiersFormSession().getClassifier(Classifier.Customer.getClassifierCode());
         }
         
