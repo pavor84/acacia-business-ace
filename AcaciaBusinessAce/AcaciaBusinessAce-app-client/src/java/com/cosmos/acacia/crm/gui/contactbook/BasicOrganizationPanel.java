@@ -385,6 +385,8 @@ public class BasicOrganizationPanel
         Organization organization = getFormSession().saveBasicOrganization(basicOrganization);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(organization);
+        if(closeAfter)
+            close();
     }
 
     @Override
