@@ -74,6 +74,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
         Query q = em.createNamedQuery("ClassifiedObject.findClassifiedObject");
         try {
+            q.setParameter("classifiedObject", co);
             q.getSingleResult();
         } catch(NoResultException ex) {
             esm.persist(em, co);
@@ -469,8 +470,8 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         
         return result;
     }*/
-    
-    @Override
+
+    /*@Override
     public Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId) {
 
         classifier.setParentId(parentDataObjectId);
@@ -486,7 +487,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
         esm.persist(em, classifier);
 
         return classifier;
-    }
+    }*/
 
     @Override
     public Boolean isClassifiedAs(DataObjectBean bean, Classifier classifier) {

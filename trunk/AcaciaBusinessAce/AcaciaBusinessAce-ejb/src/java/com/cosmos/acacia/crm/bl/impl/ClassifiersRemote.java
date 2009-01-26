@@ -280,8 +280,7 @@ public interface ClassifiersRemote {
      * @param parentDataObjectId
      * @return
      */
-    Classifier saveInitialClassifier(Classifier classifier,
-            BigInteger parentDataObjectId);
+    //Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId);
             
     /**
      * If a classifier with the specified key exists, it is returned.
