@@ -150,9 +150,13 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         organization.setRegistrationAddress(address);
         organization = saveOrganization(organization);
 
+        System.out.println("classifiersManager: " + classifiersManager);
         if(basicOrganization.isCustomer()) {
             Classifier classifier = classifiersManager.getClassifier(
                     Classifier.Customer.getClassifierCode());
+            System.out.println("classifier: " + classifier);
+            System.out.println("organization: " + organization);
+            System.out.println("organization.getDataObject(): " + organization.getDataObject());
             classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
         }
 
