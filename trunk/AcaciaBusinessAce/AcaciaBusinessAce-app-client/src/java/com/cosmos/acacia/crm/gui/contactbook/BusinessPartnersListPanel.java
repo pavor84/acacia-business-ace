@@ -83,7 +83,17 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
     @Override
     protected void initData() {
+        Classifier classifier = getClassifier(Classifier.Customer.getClassifierCode());
+        System.out.println("classifier: " + classifier);
+        List<BusinessPartner> businessPartners = getFormSession().getBusinessPartners(classifier);
+        System.out.println("businessPartners: " + businessPartners);
+
+        System.out.println("initData().1.getClassifier(): " + getClassifier());
+        System.out.println("initData().1.getParentDataObjectId(): " + getParentDataObjectId());
         super.initData();
+
+        System.out.println("initData().2.getClassifier(): " + getClassifier());
+        System.out.println("initData().2.getParentDataObjectId(): " + getParentDataObjectId());
 
         setVisible(Button.Select, false);
         bindGroup = new BindingGroup();
@@ -98,10 +108,13 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
         table.setEditable(false);
     }
-    
+
     protected List<BusinessPartner> getBusinessPartners() {
         if (businessPartners == null) {
+            System.out.println("getBusinessPartners().getClassifier(): " + getClassifier());
+            System.out.println("getBusinessPartners().getParentDataObjectId(): " + getParentDataObjectId());
             businessPartners = getFormSession().getBusinessPartners(getParentDataObjectId());
+            System.out.println("getBusinessPartners().businessPartners: " + businessPartners);
         }
 
         return businessPartners;
