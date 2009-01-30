@@ -49,6 +49,28 @@ import javax.persistence.PrimaryKeyJoinColumn;
              		"(b.dataObject.parentDataObjectId = :parentDataObjectId or :parentDataObjectId is null) " +
              		"and b.dataObject.deleted = :deleted " +
              		"order by b.partnerId"
+            ),
+        @NamedQuery
+            (
+             name = "BusinessPartner.findByClassifier",
+             query = "select t1" +
+                    " from BusinessPartner t1, ClassifiedObject t2" +
+                    " where" +
+                    "  t1.partnerId = t2.classifiedObjectPK.classifiedObjectId" +
+                    "  and t1.parentId = :parentId" +
+                    "  and t1.dataObject.deleted = :deleted" +
+                    "  and t2.classifiedObjectPK.classifierId = :classifierId"
+            ),
+        @NamedQuery
+            (
+             name = "BusinessPartner.getAll",
+             query = "select t1" +
+                    " from BusinessPartner t1, ClassifiedObject t2" +
+                    " where" +
+                    "  t1.partnerId = t2.classifiedObjectPK.classifiedObjectId" +
+                    "  and t1.parentId = :parentId" +
+                    "  and t1.dataObject.deleted = :deleted" +
+                    " order by t2.classifiedObjectPK.classifierId"
             )
     }
 )

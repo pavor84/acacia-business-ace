@@ -14,12 +14,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import java.util.ArrayList;
 
 /**
  * 
@@ -41,6 +45,10 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
     
     @EJB
     private PersonsListLocal personsListLocal;
+
+    @EJB
+    private AcaciaSessionLocal acaciaSession;
+
 
     @Override
     public void deleteBusinessPartner(BusinessPartner businessPartner) {
@@ -108,6 +116,22 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         q.setParameter("deleted", false);
         
         List<BusinessPartner> result = q.getResultList();
-        return result;
+        return new ArrayList<BusinessPartner>(result);
+    }
+
+    @Override
+    public List<BusinessPartner> getBusinessPartners(Classifier classifier) {
+        Query q;
+        if(classifier != null) {
+            q = em.createNamedQuery("BusinessPartner.findByClassifier");
+            q.setParameter("classifierId", classifier.getId());
+        } else {
+            q = em.createNamedQuery("BusinessPartner.getAll");
+        }
+        q.setParameter("parentId", acaciaSession.getOrganization().getId());
+        q.setParameter("deleted", false);
+        
+        List<BusinessPartner> result = q.getResultList();
+        return new ArrayList<BusinessPartner>(result);
     }
 }
