@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -23,6 +24,8 @@ public interface BusinessPartnersListRemote {
      * @return
      */
     List<BusinessPartner> getBusinessPartners(BigInteger parentDataObjectId);
+
+    List<BusinessPartner> getBusinessPartners(Classifier classifier);
 
     /**
      * Return the entity properties for showing in tables
