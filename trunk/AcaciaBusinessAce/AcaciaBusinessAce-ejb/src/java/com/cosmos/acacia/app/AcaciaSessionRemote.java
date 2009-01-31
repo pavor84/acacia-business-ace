@@ -7,6 +7,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
@@ -85,5 +86,7 @@ public interface AcaciaSessionRemote {
     boolean isOrganizationAdministrator();
 
     boolean isBranchAdministrator();
+
+    Classifier getClassifier(String classifierCode);
 }
 

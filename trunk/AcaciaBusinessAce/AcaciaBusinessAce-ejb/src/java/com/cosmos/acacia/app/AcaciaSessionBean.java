@@ -1,9 +1,11 @@
 package com.cosmos.acacia.app;
 
+import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import static com.cosmos.acacia.app.SessionContext.BRANCH_KEY;
 import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -57,6 +59,9 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @EJB
     private RightsManagerLocal rightsManager;
+
+    @EJB
+    private ClassifiersLocal classifiersManager;
 
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
@@ -299,5 +304,10 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public boolean isBranchAdministrator() {
         return rightsManager.isAllowed(SpecialPermission.BranchAdministrator);
+    }
+
+    @Override
+    public Classifier getClassifier(String classifierCode) {
+        return classifiersManager.getClassifier(classifierCode);
     }
 }
