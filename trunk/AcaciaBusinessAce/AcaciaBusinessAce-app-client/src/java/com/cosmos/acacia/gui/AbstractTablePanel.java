@@ -252,7 +252,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
 
-    private Map<Button, JButton> buttonsMap;
+    private Map<Button, JBButton> buttonsMap;
 
     private boolean editable = true;
     private boolean visibilitySetChanged = false;
@@ -475,6 +475,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return true;
     }
 
+    public boolean canSelect(Object rowObject) {
+        return true;
+    }
+
+    public boolean canSpecial(Object rowObject) {
+        return true;
+    }
 
     protected void addListSelectionListener(AcaciaTable table)
     {
@@ -493,11 +500,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     public void setEnabled(Button button, boolean enabled) {
-        ApplicationAction action = (ApplicationAction)getAction(button);
-        if(action != null)
-        {
-            action.setEnabled(enabled);
-        }
+        getButton(button).setEnabled(enabled);
     }
 
     public void setSelected(Button button, boolean enabled) {
@@ -505,6 +508,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         if(action != null)
         {
             action.setSelected(enabled);
+        } else {
+            getButtonsMap().get(button).setEnabled(enabled);
         }
     }
 
@@ -523,7 +528,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     public void setVisible(Set<Button> buttons)
     {
-        Map<Button, JButton> bm = getButtonsMap();
+        Map<Button, JBButton> bm = getButtonsMap();
         for(Button button : bm.keySet())
         {
             JButton jb = bm.get(button);
@@ -545,27 +550,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     protected JBButton getButton(Button button) {
-        switch(button)
-        {
-            case Select:
-                return selectButton;
-            case Unselect:
-                return unselectButton;
-            case New:
-                return newButton;
-            case Modify:
-                return modifyButton;
-            case Delete:
-                return deleteButton;
-            case Refresh:
-                return refreshButton;
-            case Close:
-                return closeButton;
-            case Special:
-                return specialFunctionalityButton;
-            case Filter:
-                return filterButton;
-        }
+        JBButton jButton;
+        if((jButton = getButtonsMap().get(button)) != null)
+            return jButton;
+
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
 
@@ -839,11 +827,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             EnumSet.of(Special, Modify);
     };
 
-    public Map<Button, JButton> getButtonsMap()
+    public Map<Button, JBButton> getButtonsMap()
     {
         if(buttonsMap == null)
         {
-            buttonsMap = new EnumMap<Button, JButton>(Button.class);
+            buttonsMap = new EnumMap<Button, JBButton>(Button.class);
             buttonsMap.put(Button.Select, selectButton);
             buttonsMap.put(Button.New, newButton);
             buttonsMap.put(Button.Modify, modifyButton);
@@ -949,9 +937,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                         modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
                     }
                     setEnabled(Button.Delete, canDelete(selectedObject));
-                    setEnabled(Button.Select, true);
+                    setEnabled(Button.Select, canSelect(selectedObject));
                     setEnabled(Button.Unselect, true);
-                    setEnabled(Button.Special, true);
+                    setEnabled(Button.Special, canSpecial(selectedObject));
                     setEnabled(Button.Classify, true);
                 }
                 setEnabled(Button.New, canCreate());
