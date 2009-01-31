@@ -40,6 +40,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.ProductPricingValue;
@@ -947,8 +948,9 @@ public class ProductPanel extends AcaciaPanel {
             deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"), getIntegerFormat());
 
             propDetails = entityProps.getPropertyDetails("producer");
-            
-            BusinessPartnersListPanel producterListPanel = BusinessPartnersListPanel.createProducersPanel(getParentDataObjectId());
+
+            Classifier producerClassifier = getClassifier(Classifier.Producer.getClassifierCode());
+            BusinessPartnersListPanel producterListPanel = new BusinessPartnersListPanel(producerClassifier);
             producerField.bind(productBindingGroup, producterListPanel, product, propDetails,
                 "${displayName}", UpdateStrategy.READ_WRITE);
             

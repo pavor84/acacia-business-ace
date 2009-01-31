@@ -459,7 +459,7 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void businessPartnersListAction(){
-        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(getParentId());
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel();
         listPanel.showFrame();
     }
 

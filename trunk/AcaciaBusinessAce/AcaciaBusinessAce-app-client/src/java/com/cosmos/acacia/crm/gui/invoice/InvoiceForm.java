@@ -50,7 +50,7 @@ import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.enums.PaymentTerm;
-import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanelPetar;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -1242,7 +1242,7 @@ public class InvoiceForm extends BaseEntityPanel {
         // completed at
         completedAtField.bind(bindGroup, entity, entProps.getPropertyDetails("completionDate"));
         if ( listPanel==null )
-            listPanel = BusinessPartnersListPanel.createCustomerPanel(getParentDataObjectId());
+            listPanel = BusinessPartnersListPanelPetar.createCustomerPanel(getParentDataObjectId());
         recipientField.bind(bindGroup, listPanel, entity, entProps.getPropertyDetails("recipient"),
             "${displayName}", UpdateStrategy.READ_WRITE);
         recipientField.getBinding().addBindingListener(new AbstractBindingListener() {
@@ -1275,7 +1275,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
 
         if ( shippingAgentListPanel==null )
-            shippingAgentListPanel = BusinessPartnersListPanel.createShippingAgentPanel(getParentDataObjectId());
+            shippingAgentListPanel = BusinessPartnersListPanelPetar.createShippingAgentPanel(getParentDataObjectId());
         shippingAgentField.bind(bindGroup, shippingAgentListPanel, entity,
             entProps.getPropertyDetails("shippingAgent"), "${displayName}",
             UpdateStrategy.READ_WRITE);
@@ -1873,9 +1873,9 @@ public class InvoiceForm extends BaseEntityPanel {
     private List<DbResource> deliveryTypes;
     private List<DbResource> vatConditions;
 
-    private BusinessPartnersListPanel listPanel;
+    private BusinessPartnersListPanelPetar listPanel;
 
-    private BusinessPartnersListPanel shippingAgentListPanel;
+    private BusinessPartnersListPanelPetar shippingAgentListPanel;
 
 //    protected void updateDiscountPercent(boolean contentValid) {
 //        if (!contentValid) {

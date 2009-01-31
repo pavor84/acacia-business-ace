@@ -26,7 +26,6 @@ import com.cosmos.swingb.JBPanel;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
