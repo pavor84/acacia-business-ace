@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -82,8 +81,7 @@ public class NewOrganizationDialog extends AcaciaPanel {
             if(DialogResponse.SAVE.equals(response)) {
                 Organization organization = (Organization)entityPanel.getSelectedValue();
                 if(classifier != null) {
-                    ClassifiersRemote classifiersManager = getBean(ClassifiersRemote.class);
-                    classifiersManager.classifyDataObject(organization.getDataObject(), classifier);
+                    getClassifiersManager().classifyDataObject(organization.getDataObject(), classifier);
                 }
                 setSelectedValue(organization);
                 return response;

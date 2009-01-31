@@ -75,7 +75,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     private void initComponentsCustom() {
-        if ( getClassifiersFormSession().isClassifiedAs(organization, "customer")){
+        if ( getClassifiersManager().isClassifiedAs(organization, "customer")){
             JBButton b = new JBButton();
             b.setText(getResourceMap().getString("button.discount"));
             b.addActionListener(new ActionListener() {

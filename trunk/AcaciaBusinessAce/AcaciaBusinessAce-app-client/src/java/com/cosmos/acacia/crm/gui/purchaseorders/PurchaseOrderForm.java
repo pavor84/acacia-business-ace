@@ -32,12 +32,13 @@ import com.cosmos.acacia.crm.bl.reports.PrintableDocumentHeader;
 import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
-import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanelPetar;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -702,7 +703,8 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         supplierContactField.setModel(new DefaultComboBoxModel());
 
         //supplier
-        BusinessPartnersListPanelPetar listPanel = BusinessPartnersListPanelPetar.createSuppliersPanel(getParentDataObjectId());
+        Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(classifier);
         supplierField.bind(
             bindGroup,
             listPanel,

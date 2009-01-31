@@ -227,7 +227,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     protected Object newRow() {
         if (canNestedOperationProceed()) {
             Classifier classifier =
-                    getClassifiersFormSession().getClassifier(Classifier.Customer.getClassifierCode());
+                    getClassifiersManager().getClassifier(Classifier.Customer.getClassifierCode());
             AcaciaPanel entityPanel = new NewOrganizationDialog(getParentDataObjectId(), classifier);
             DialogResponse response = entityPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response)) {
@@ -262,7 +262,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     public boolean canModify(Object rowObject) {
         if ( rowObject instanceof DataObjectBean ){
             DataObjectBean bean = (DataObjectBean) rowObject;
-            if ( getClassifiersFormSession().isClassifiedAs(bean, "customer")){
+            if (getClassifiersManager().isClassifiedAs(bean, "customer")){
                 setVisible(Button.Special, true);
             }else{
                 setVisible(Button.Special, false);

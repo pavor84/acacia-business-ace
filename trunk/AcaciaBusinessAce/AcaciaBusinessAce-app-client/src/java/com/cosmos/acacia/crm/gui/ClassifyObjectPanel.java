@@ -1,12 +1,10 @@
 package com.cosmos.acacia.crm.gui;
 
-import javax.ejb.EJB;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -161,8 +159,6 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBButton removeButton;
     // End of variables declaration//GEN-END:variables
 
-    @EJB
-    private ClassifiersRemote formSession;
 
     private DataObject dataObjectToBeClassified;
 
@@ -233,20 +229,12 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     }
 
     protected List<ClassifierGroup> getClassifierGroups() {
-        return getFormSession().getClassifierGroups();
-    }
-
-    protected ClassifiersRemote getFormSession()
-    {
-        if(formSession == null)
-            formSession = getBean(ClassifiersRemote.class);
-
-        return formSession;
+        return getClassifiersManager().getClassifierGroups();
     }
 
     protected EntityProperties getClassifiedObjectEntityProperties()
     {
-        return getFormSession().getClassifiedObjectEntityProperties();
+        return getClassifiersManager().getClassifiedObjectEntityProperties();
     }
 
 
@@ -272,7 +260,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
 
     @Action
     public void applyClassifierAction() {
-        getFormSession().classifyDataObject(
+        getClassifiersManager().classifyDataObject(
                 dataObjectToBeClassified,
                 (Classifier) classifiersTable.getDataTable().getSelectedRowObject());
         appliedClassifiersTable.refreshAction();
@@ -282,7 +270,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     @Action
     public void removeClassifierAction() {
         Classifier classifier = (Classifier) appliedClassifiersTable.getDataTable().getSelectedRowObject();
-        getFormSession().unclassifyDataObject(
+        getClassifiersManager().unclassifyDataObject(
                 dataObjectToBeClassified,
                 classifier);
         appliedClassifiersTable.refreshAction();

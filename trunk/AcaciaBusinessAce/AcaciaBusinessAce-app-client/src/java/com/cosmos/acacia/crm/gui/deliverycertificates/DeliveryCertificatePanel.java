@@ -32,6 +32,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -45,7 +46,6 @@ import com.cosmos.acacia.crm.data.predicates.ValidDeliveryCertificateAssignmentP
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateReason;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
-import com.cosmos.acacia.crm.gui.ProductPanel;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
@@ -395,7 +395,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     protected Object onChooseForwarder() {
 
         OrganizationsListPanel listPanel = new OrganizationsListPanel(null);
-        listPanel.setClassifier(getClassifiersFormSession().getClassifier("forwarder"));
+        listPanel.setClassifier(getClassifiersManager().getClassifier(Classifier.ShippingAgent.getClassifierCode()));
         
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){

@@ -201,7 +201,7 @@ public class PersonsListPanel extends AbstractTablePanel {
     public boolean canModify(Object rowObject) {
         if ( rowObject instanceof DataObjectBean ){
             DataObjectBean bean = (DataObjectBean) rowObject;
-            if ( getClassifiersFormSession().isClassifiedAs(bean, "customer")){
+            if (getClassifiersManager().isClassifiedAs(bean, "customer")){
                 setVisible(Button.Special, true);
             }else{
                 setVisible(Button.Special, false);

@@ -141,7 +141,7 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
             JTableBinding tableBinding = objectsTable.bind(
                     objectsBindingGroup,
                     getObjects(),
-                    clp.getFormSession().getClassifiedObjectBeansEntityProperties());
+                    getClassifiersManager().getClassifiedObjectBeansEntityProperties());
 
             objectsBindingGroup.bind();
 
@@ -149,7 +149,7 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
         }
 
         private List<ClassifiedObjectBean> getObjects() {
-            return clp.getFormSession().getClassifiedObjectBeans((Classifier) classifiersComboList.getSelectedItem());
+            return getClassifiersManager().getClassifiedObjectBeans((Classifier) classifiersComboList.getSelectedItem());
         }
 
         @Override

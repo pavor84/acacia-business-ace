@@ -9,7 +9,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
@@ -17,7 +16,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -44,9 +42,6 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
         this.classifier = classifier;
         postInitData();
     }
-
-    @EJB
-    private ClassifiersRemote formSession;
 
     private BindingGroup dataObjectTypesBindingGroup;
     private List<DataObjectType> dataObjectTypes;
@@ -77,7 +72,7 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     {
         if(dataObjectTypes == null)
         {
-            dataObjectTypes = shortenDataObjectTypeNames(getFormSession().getDataObjectTypes(classifier));
+            dataObjectTypes = shortenDataObjectTypeNames(getClassifiersManager().getDataObjectTypes(classifier));
         }
         return dataObjectTypes;
     }
@@ -106,19 +101,12 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
 
     protected EntityProperties getDataObjectTypeEntityProperties()
     {
-        return getFormSession().getDataObjectTypeEntityProperties();
-    }
-
-    protected ClassifiersRemote getFormSession() {
-        if(formSession == null)
-            formSession = getBean(ClassifiersRemote.class);
-
-        return formSession;
+        return getClassifiersManager().getDataObjectTypeEntityProperties();
     }
 
     protected void deleteDataObjectType(DataObjectType dataObjectType)
     {
-        getFormSession().removeDataObjectTypeConstraint(classifier, dataObjectType);
+        getClassifiersManager().removeDataObjectTypeConstraint(classifier, dataObjectType);
     }
 
     @Override

@@ -40,6 +40,7 @@ import org.jdesktop.application.ResourceMap;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.SessionFacadeRemote;
+import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.bl.impl.EnumResourceRemote;
 import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
 import com.cosmos.acacia.crm.bl.reports.Report;
@@ -59,6 +60,7 @@ import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
+import javax.ejb.EJB;
 
 /**
  *
@@ -69,7 +71,11 @@ public abstract class AcaciaPanel
 {
     //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
 
+    @EJB
     private static RightsManagerRemote rightsManager;
+
+    @EJB
+    private static ClassifiersRemote classifiersManager;
 
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
@@ -618,6 +624,13 @@ public abstract class AcaciaPanel
         return rightsManager;
     }
 
+    protected static ClassifiersRemote getClassifiersManager() {
+        if(classifiersManager == null)
+            classifiersManager = getBean(ClassifiersRemote.class);
+
+        return classifiersManager;
+    }
+
     protected static boolean isAdministrator() {
         return LocalSession.instance().isAdministrator();
     }
@@ -637,4 +650,5 @@ public abstract class AcaciaPanel
     protected static Classifier getClassifier(String classifierCode) {
         return LocalSession.instance().getClassifier(classifierCode);
     }
+
 }
