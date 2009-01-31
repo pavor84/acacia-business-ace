@@ -2058,9 +2058,9 @@ public class InvoiceForm extends BaseEntityPanel {
     protected void onSelectRecipient(BusinessPartner recipient) {
 
         List<ContactPerson> recipientContacts = null;
-        if ( recipient!=null )
+        if (recipient != null) {
             recipientContacts = getRecipientContacts(recipient);
-        else
+        } else
             recipientContacts = new ArrayList<ContactPerson>();
 
         if ( bindGroup.getBindings().contains(recipientContactBinding) )
