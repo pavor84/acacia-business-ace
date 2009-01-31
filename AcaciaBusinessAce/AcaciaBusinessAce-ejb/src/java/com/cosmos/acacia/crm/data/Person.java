@@ -227,7 +227,8 @@ public class Person extends BusinessPartner
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.Person[parentId=" + getParentId() + "]";
+        return "Person[parentId=" + getParentId() +
+                "; firstName=" + firstName + ", lastName=" + lastName + "]";
     }
 
     public String toShortText() {

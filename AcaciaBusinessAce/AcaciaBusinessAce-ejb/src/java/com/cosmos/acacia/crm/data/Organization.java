@@ -271,7 +271,8 @@ public class Organization
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.Organization[organizationId=" + getPartnerId() + "]";
+        return "Organization[organizationId=" + getPartnerId() +
+                "; name=" + organizationName + "]";
     }
 
     @Override
