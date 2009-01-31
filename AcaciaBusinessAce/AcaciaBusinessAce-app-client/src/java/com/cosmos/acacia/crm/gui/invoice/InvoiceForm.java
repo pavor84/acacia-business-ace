@@ -1242,11 +1242,11 @@ public class InvoiceForm extends BaseEntityPanel {
 
         // completed at
         completedAtField.bind(bindGroup, entity, entProps.getPropertyDetails("completionDate"));
-        if(listPanel == null) {
+        if(customerListPanel == null) {
             Classifier classifier = getClassifier(Classifier.Customer.getClassifierCode());
-            listPanel = new BusinessPartnersListPanel(classifier);
+            customerListPanel = new BusinessPartnersListPanel(classifier);
         }
-        recipientField.bind(bindGroup, listPanel, entity, entProps.getPropertyDetails("recipient"),
+        recipientField.bind(bindGroup, customerListPanel, entity, entProps.getPropertyDetails("recipient"),
             "${displayName}", UpdateStrategy.READ_WRITE);
         recipientField.getBinding().addBindingListener(new AbstractBindingListener() {
                 @Override
@@ -1878,7 +1878,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private List<DbResource> deliveryTypes;
     private List<DbResource> vatConditions;
 
-    private BusinessPartnersListPanel listPanel;
+    private BusinessPartnersListPanel customerListPanel;
 
     private BusinessPartnersListPanel shippingAgentListPanel;
 

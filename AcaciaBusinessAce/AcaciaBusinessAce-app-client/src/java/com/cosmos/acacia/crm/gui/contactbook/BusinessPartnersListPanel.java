@@ -26,6 +26,7 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -34,6 +35,8 @@ import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -44,25 +47,28 @@ import org.jdesktop.swingbinding.JTableBinding;
  */
 public class BusinessPartnersListPanel extends AbstractTablePanel {
 
+    private static final Logger LOGGER = Logger.getLogger(BusinessPartnersListPanel.class);
+
     @EJB
     private static BusinessPartnersListRemote formSession;
     @EJB
     private static CustomerDiscountRemote customerDiscountManager;
-    private Classifier partnerClassifier;
     private BindingGroup bindingGroup;
     private JBPanel topPanel;
     private AcaciaComboList comboList;
     private ClassifiersListPanel comboListPanel;
     private BindingGroup comboListBindingGroup;
     private ClassifiedObject classifiedObject;
+    private Classifier partnerClassifier;
     private Classifier customerClassifier;
+    private boolean initialized;
 
     public BusinessPartnersListPanel() {
         this(null);
     }
 
     public BusinessPartnersListPanel(Classifier partnerClassifier) {
-        this.partnerClassifier = partnerClassifier;
+        super(partnerClassifier);
     }
 
     @Override
@@ -119,8 +125,14 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
                 if (DialogResponse.SAVE.equals(response)) {
                     BusinessPartner businessPartner = (BusinessPartner) formPanel.getSelectedValue();
-                    if (partnerClassifier != null) {
-                        getClassifiersManager().classifyDataObject(businessPartner.getDataObject(), partnerClassifier);
+                    Classifier classifier;
+                    if ((classifier = getPartnerClassifier()) != null) {
+                        getClassifiersManager().classifyDataObject(businessPartner.getDataObject(), classifier);
+                    }
+
+                    Classifier mainClassifier;
+                    if((mainClassifier = (Classifier)getMainDataObject()) != null && !mainClassifier.equals(classifier)) {
+                        getClassifiersManager().classifyDataObject(businessPartner.getDataObject(), mainClassifier);
                     }
 
                     return businessPartner;
@@ -131,17 +143,33 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canSpecial(Object rowObject) {
         if (rowObject != null) {
             BusinessPartner businessPartner = (BusinessPartner)rowObject;
             if (getClassifiersManager().isClassifiedAs(businessPartner, getCustomerClassifier())) {
-                setVisible(Button.Special, true);
-            } else {
-                setVisible(Button.Special, false);
+                return true;
             }
         }
 
-        return true;
+        return false;
+    }
+
+    @Override
+    public DialogResponse showDialog(Component parentComponent) {
+        Classifier classifier;
+        if((classifier = (Classifier)getMainDataObject()) != null && !classifier.equals(getPartnerClassifier())) {
+            partnerClassifier = classifier;
+            comboList.setSelectedItem(partnerClassifier);
+        }
+
+        DialogResponse response = super.showDialog(parentComponent);
+
+        if((classifier = (Classifier)getMainDataObject()) != null && !classifier.equals(getPartnerClassifier())) {
+            partnerClassifier = classifier;
+            comboList.setSelectedItem(partnerClassifier);
+        }
+
+        return response;
     }
 
     private Classifier getCustomerClassifier() {
@@ -153,13 +181,18 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
     @Override
     protected void initData() {
+        Classifier classifier;
+        if((classifier = (Classifier)getMainDataObject()) != null && partnerClassifier == null)
+            partnerClassifier = classifier;
+
+        if ((classifier = getPartnerClassifier()) != null) {
+            setTitle(classifier.getClassifierName());
+        }
+
         super.initData();
 
-        setTopComponent(getTopPanel());
 
-        if (partnerClassifier != null) {
-            setTitle(partnerClassifier.getClassifierName());
-        }
+        setTopComponent(getTopPanel());
 
         bindingGroup = new BindingGroup();
         AcaciaTable citiesTable = getDataTable();
@@ -168,6 +201,8 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         bindingGroup.bind();
 
         initComponentsCustom();
+
+        initialized = true;
     }
 
     protected JBPanel getTopPanel() {
@@ -203,6 +238,11 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
             }, true);
 
             comboListBindingGroup.bind();
+
+            Classifier classifier;
+            if ((classifier = getPartnerClassifier()) != null) {
+                comboList.setSelectedItem(classifier);
+            }
         }
 
         return topPanel;
@@ -213,8 +253,17 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     public void setPartnerClassifier(Classifier partnerClassifier) {
+        if(!initialized)
+            return;
+
+        Classifier classifier;
+        if((classifier = (Classifier)getMainDataObject()) != null) {
+            boolean visible = classifier.equals(partnerClassifier);
+            setVisible(Button.Select, visible);
+            setVisible(Button.Unselect, visible);
+        }
+
         this.partnerClassifier = partnerClassifier;
-        setEnabled(Button.New, partnerClassifier != null);
         refreshTable();
     }
 
@@ -256,16 +305,17 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     private void initComponentsCustom() {
-        setSpecialButtonBehavior(true);
-        getButton(Button.Special).setText(getResourceMap().getString("button.discount"));
-        getButton(Button.Special).setToolTipText(getResourceMap().getString("button.discount.tooltip"));
-        getButton(Button.Special).addActionListener(new ActionListener() {
+        setSpecialButtonBehavior(false);
+        JButton button = getButton(Button.Special);
+        button.setText(getResourceMap().getString("button.discount"));
+        button.setToolTipText(getResourceMap().getString("button.discount.tooltip"));
+        setVisible(Button.Special, true);
+        setEnabled(Button.Special, false);
+    }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onDiscount();
-            }
-        });
+    @Override
+    public void specialAction() {
+        onDiscount();
     }
 
     protected void onDiscount() {
