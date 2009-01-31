@@ -69,6 +69,7 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     public static final Classifier Courier = new Classifier();
     public static final Classifier Bank = new Classifier();
     public static final Classifier Police = new Classifier();
+    public static final Classifier PassportOffice = new Classifier();
     public static final Classifier Customs = new Classifier();
     public static final Classifier Court = new Classifier();
     public static final Classifier Prosecutor = new Classifier();
@@ -111,13 +112,14 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
 
     static {
         setClassifier(Employee, "Employee");
-        setClassifier(Customer, "Customer", "Customer/Client classifier.", "With this classifier are classified the customers.");
+        setClassifier(Customer, "Customer", "Customer/Client", "With this classifier are classified the customers.");
         setClassifier(Supplier, "Supplier");
         setClassifier(Producer, "Producer");
         setClassifier(ShippingAgent, "ShippingAgent", "Shipping Agent");
         setClassifier(Courier, "Courier");
         setClassifier(Bank, "Bank");
         setClassifier(Police, "Police");
+        setClassifier(PassportOffice, "Passport Office");
         setClassifier(Customs, "Customs");
         setClassifier(Court, "Court");
         setClassifier(Prosecutor, "Prosecutor");

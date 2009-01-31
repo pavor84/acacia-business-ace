@@ -53,7 +53,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
         @NamedQuery
             (
              name = "BusinessPartner.findByClassifier",
-             query = "select t1" +
+             query = "select distinct t1" +
                     " from BusinessPartner t1, ClassifiedObject t2" +
                     " where" +
                     "  t1.partnerId = t2.classifiedObjectPK.classifiedObjectId" +
@@ -64,13 +64,11 @@ import javax.persistence.PrimaryKeyJoinColumn;
         @NamedQuery
             (
              name = "BusinessPartner.getAll",
-             query = "select t1" +
-                    " from BusinessPartner t1, ClassifiedObject t2" +
+             query = "select distinct t1" +
+                    " from BusinessPartner t1" +
                     " where" +
-                    "  t1.partnerId = t2.classifiedObjectPK.classifiedObjectId" +
-                    "  and t1.parentId = :parentId" +
-                    "  and t1.dataObject.deleted = :deleted" +
-                    " order by t2.classifiedObjectPK.classifierId"
+                    "  t1.parentId = :parentId" +
+                    "  and t1.dataObject.deleted = :deleted"
             )
     }
 )
