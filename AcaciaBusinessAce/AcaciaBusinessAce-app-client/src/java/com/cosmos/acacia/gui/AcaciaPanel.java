@@ -48,6 +48,7 @@ import com.cosmos.acacia.crm.bl.reports.ReportsToolsRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -617,19 +618,23 @@ public abstract class AcaciaPanel
         return rightsManager;
     }
 
-    public boolean isAdministrator() {
+    protected static boolean isAdministrator() {
         return LocalSession.instance().isAdministrator();
     }
 
-    public boolean isSystemAdministrator() {
+    protected static boolean isSystemAdministrator() {
         return LocalSession.instance().isSystemAdministrator();
     }
 
-    public boolean isOrganizationAdministrator() {
+    protected static boolean isOrganizationAdministrator() {
         return LocalSession.instance().isOrganizationAdministrator();
     }
 
-    public boolean isBranchAdministrator() {
+    protected static boolean isBranchAdministrator() {
         return LocalSession.instance().isBranchAdministrator();
+    }
+
+    protected static Classifier getClassifier(String classifierCode) {
+        return LocalSession.instance().getClassifier(classifierCode);
     }
 }

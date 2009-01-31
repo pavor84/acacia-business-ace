@@ -1,6 +1,7 @@
 package com.cosmos.acacia.crm.client;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -186,4 +187,8 @@ public class LocalSession implements AcaciaSessionRemote {
         remoteSession.saveProperties(properties);
     }
 
+    @Override
+    public Classifier getClassifier(String classifierCode) {
+        return remoteSession.getClassifier(classifierCode);
+    }
 }

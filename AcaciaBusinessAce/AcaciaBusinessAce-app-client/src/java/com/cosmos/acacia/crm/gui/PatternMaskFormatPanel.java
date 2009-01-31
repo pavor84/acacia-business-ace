@@ -17,6 +17,7 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.gui.ProductPanel.Button;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
@@ -162,8 +163,10 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
         nameField.bind(bindGroup, format, entityProps.getPropertyDetails("patternName"));
         formatField.bind(bindGroup, format, entityProps.getPropertyDetails("format"));
         descriptionField.bind(bindGroup, format, entityProps.getPropertyDetails("description"));
-        if ( listPanel==null )
-            listPanel = BusinessPartnersListPanel.createSuppliersPanel(getParentDataObjectId());
+        if(listPanel == null) {
+            Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
+            listPanel = new BusinessPartnersListPanel(classifier);
+        }
         ownerField.bind(bindGroup, listPanel, format, entityProps.getPropertyDetails("owner"),
             "${displayName}", UpdateStrategy.READ_WRITE);
         

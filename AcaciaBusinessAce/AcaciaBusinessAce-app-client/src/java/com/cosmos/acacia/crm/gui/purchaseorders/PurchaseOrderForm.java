@@ -37,7 +37,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
-import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanelPetar;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -702,7 +702,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         supplierContactField.setModel(new DefaultComboBoxModel());
 
         //supplier
-        BusinessPartnersListPanel listPanel = BusinessPartnersListPanel.createSuppliersPanel(getParentDataObjectId());
+        BusinessPartnersListPanelPetar listPanel = BusinessPartnersListPanelPetar.createSuppliersPanel(getParentDataObjectId());
         supplierField.bind(
             bindGroup,
             listPanel,
