@@ -34,12 +34,13 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.OrderConfirmationListRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmation;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.enums.OrderConfirmationType;
-import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanelPetar;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -614,7 +615,8 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         supplierContactField.setModel(new DefaultComboBoxModel());
         
         //supplier
-        BusinessPartnersListPanelPetar listPanel = BusinessPartnersListPanelPetar.createSuppliersPanel(getParentDataObjectId());
+        Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
+        BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(classifier);
         supplierField.bind(
             bindGroup,
             listPanel,

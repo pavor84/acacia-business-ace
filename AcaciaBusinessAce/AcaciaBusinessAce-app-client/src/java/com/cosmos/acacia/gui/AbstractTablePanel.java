@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.EJB;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -37,7 +36,6 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -290,8 +288,6 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     private boolean closeAfterUnselect = false;
 
-    @EJB
-    private static ClassifiersRemote classifiersFormSession;
 
     @Override
     protected void initData()
@@ -738,15 +734,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
         DataObject dataObject = ((DataObjectBean) object).getDataObject();
 
-        getClassifiersFormSession().classifyDataObject(dataObject, getClassifier());
-    }
-
-    protected static ClassifiersRemote getClassifiersFormSession()
-    {
-        if(classifiersFormSession == null)
-            classifiersFormSession = getBean(ClassifiersRemote.class);
-
-        return classifiersFormSession;
+        getClassifiersManager().classifyDataObject(dataObject, getClassifier());
     }
 
     protected boolean showDeleteConfirmation(String message){
@@ -1116,7 +1104,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             List<Object> data = dataTable.getData();
             List<Object> dataMirror = new LinkedList<Object>(data);
 
-            List<DataObject> dataObjects = getClassifiersFormSession().getDataObjects(classifier);
+            List<DataObject> dataObjects = getClassifiersManager().getDataObjects(classifier);
             int i = 0;
             for (Object obj : data) {
                 if (!(obj instanceof DataObjectBean))

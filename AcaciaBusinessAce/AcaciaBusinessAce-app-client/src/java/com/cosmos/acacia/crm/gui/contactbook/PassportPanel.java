@@ -14,6 +14,7 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.PassportsListRemote;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
@@ -290,7 +291,7 @@ public class PassportPanel extends BaseEntityPanel {
     protected Object onChooseIssuer() {
         OrganizationsListPanel listPanel =
                 new OrganizationsListPanel(getOrganizationDataObjectId());
-        listPanel.setClassifier(getClassifiersFormSession().getClassifier("passport_issuer"));
+        listPanel.setClassifier(getClassifier(Classifier.PassportOffice.getClassifierCode()));
 
         Organization oldIssuer = passport.getIssuer();
 

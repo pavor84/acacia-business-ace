@@ -83,11 +83,6 @@ public class BusinessPartnersListPanelPetar extends AbstractTablePanel {
 
     @Override
     protected void initData() {
-        Classifier classifier = getClassifier(Classifier.Customer.getClassifierCode());
-        System.out.println("classifier: " + classifier);
-        List<BusinessPartner> businessPartners = getFormSession().getBusinessPartners(classifier);
-        System.out.println("businessPartners: " + businessPartners);
-
         System.out.println("initData().1.getClassifier(): " + getClassifier());
         System.out.println("initData().1.getParentDataObjectId(): " + getParentDataObjectId());
         super.initData();
@@ -218,12 +213,12 @@ public class BusinessPartnersListPanelPetar extends AbstractTablePanel {
     @Override
     public boolean canModify(Object rowObject) {
         if ( customerClassifier==null ) {
-            customerClassifier = getClassifiersFormSession().getClassifier(Classifier.Customer.getClassifierCode());
+            customerClassifier = getClassifiersManager().getClassifier(Classifier.Customer.getClassifierCode());
         }
         
         if ( rowObject instanceof DataObjectBean ){
             DataObjectBean bean = (DataObjectBean) rowObject;
-            if ( getClassifiersFormSession().isClassifiedAs(bean, customerClassifier)){
+            if ( getClassifiersManager().isClassifiedAs(bean, customerClassifier)){
                 setVisible(Button.Special, true);
             }else{
                 setVisible(Button.Special, false);

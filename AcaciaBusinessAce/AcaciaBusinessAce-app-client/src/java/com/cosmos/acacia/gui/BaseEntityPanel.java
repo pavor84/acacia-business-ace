@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-import javax.ejb.EJB;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
@@ -27,7 +26,6 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -51,18 +49,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     protected DialogResponse modifiedResponse = null;
 
-    @EJB
-    private ClassifiersRemote classifiersFormSession;
-
     private boolean editable = true;
 
-    final protected ClassifiersRemote getClassifiersFormSession()
-    {
-        if(classifiersFormSession == null)
-            classifiersFormSession = getBean(ClassifiersRemote.class);
-
-        return classifiersFormSession;
-    }
 
     public BaseEntityPanel(BigInteger parentDataObjectId)
     {
@@ -248,6 +236,8 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     {
         final String dialogMessage = getResourceMap().getString("save.confirm");
         NestedFormListener listener = new NestedFormListener() {
+
+            @Override
             public boolean actionPerformed() {
                 if (getDataObject() == null)
                 {

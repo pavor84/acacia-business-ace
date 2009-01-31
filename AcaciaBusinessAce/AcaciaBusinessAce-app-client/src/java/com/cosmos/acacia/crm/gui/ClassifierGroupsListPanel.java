@@ -8,14 +8,12 @@ package com.cosmos.acacia.crm.gui;
 import java.math.BigInteger;
 import java.util.List;
 
-import javax.ejb.EJB;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -33,9 +31,6 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
     {
         super(parentDataObjectId);
     }
-
-    @EJB
-    private ClassifiersRemote formSession;
 
     private BindingGroup classifierGroupsBindingGroup;
     private List<ClassifierGroup> classifierGroups;
@@ -59,7 +54,7 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
     {
         if(classifierGroups == null)
         {
-            classifierGroups = getFormSession().getClassifierGroups();
+            classifierGroups = getClassifiersManager().getClassifierGroups();
         }
 
         return classifierGroups;
@@ -67,20 +62,12 @@ public class ClassifierGroupsListPanel extends AbstractTablePanel {
 
     protected EntityProperties getClassifierGroupEntityProperties()
     {
-        return getFormSession().getClassifierGroupEntityProperties();
-    }
-
-    protected ClassifiersRemote getFormSession()
-    {
-        if(formSession == null)
-            formSession = getBean(ClassifiersRemote.class);
-
-        return formSession;
+        return getClassifiersManager().getClassifierGroupEntityProperties();
     }
 
     protected int deleteClassifierGroup(ClassifierGroup classifierGroup)
     {
-        return getFormSession().deleteClassifierGroup(classifierGroup);
+        return getClassifiersManager().deleteClassifierGroup(classifierGroup);
     }
 
     @Override

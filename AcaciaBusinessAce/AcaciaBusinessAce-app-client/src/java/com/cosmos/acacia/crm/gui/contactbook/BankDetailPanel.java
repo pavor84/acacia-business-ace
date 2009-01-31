@@ -17,6 +17,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -328,7 +329,7 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     protected Object onChooseBank() {
         OrganizationsListPanel listPanel = new OrganizationsListPanel(getOrganizationDataObjectId(), null);
-        listPanel.setClassifier(getClassifiersFormSession().getClassifier("bank"));
+        listPanel.setClassifier(getClassifier(Classifier.Bank.getClassifierCode()));
 
         Organization oldBank = bankDetail.getBank();
 

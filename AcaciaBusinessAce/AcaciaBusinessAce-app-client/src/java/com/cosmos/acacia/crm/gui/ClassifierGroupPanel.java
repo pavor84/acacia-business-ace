@@ -1,11 +1,9 @@
 package com.cosmos.acacia.crm.gui;
 
-import javax.ejb.EJB;
 
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -159,8 +157,6 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBCheckBox systemClassifierGroupCheckBox;
     // End of variables declaration//GEN-END:variables
 
-    @EJB
-    private ClassifiersRemote formSession;
 
     private EntityProperties entityProps;
 
@@ -176,7 +172,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         log.info("initData().classifierGroup: " + classifierGroup);
         if(classifierGroup == null)
         {
-            classifierGroup = getFormSession().newClassifierGroup();
+            classifierGroup = getClassifiersManager().newClassifierGroup();
             isNew = true;
         } else {
             isNew = false;
@@ -206,16 +202,8 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         }
     }
 
-
-    protected ClassifiersRemote getFormSession() {
-        if(formSession == null)
-            formSession = getBean(ClassifiersRemote.class);
-
-        return formSession;
-    }
-
     protected EntityProperties getClassifierGroupEntityProperties() {
-        return getFormSession().getClassifierGroupEntityProperties();
+        return getClassifiersManager().getClassifierGroupEntityProperties();
     }
 
     @Override
@@ -226,7 +214,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: classifierGroup: " + classifierGroup);
-        classifierGroup = getFormSession().saveClassifierGroup(classifierGroup);
+        classifierGroup = getClassifiersManager().saveClassifierGroup(classifierGroup);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(classifierGroup);
         if (closeAfter)

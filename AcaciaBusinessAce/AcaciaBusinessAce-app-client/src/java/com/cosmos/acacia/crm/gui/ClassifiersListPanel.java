@@ -9,14 +9,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -53,9 +51,6 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         postInitData();
     }
 
-    @EJB
-    private ClassifiersRemote formSession;
-
     private BindingGroup classifiersBindingGroup;
     private List<Classifier> classifiers;
     private DataObjectType dataObjectType;
@@ -86,10 +81,10 @@ public class ClassifiersListPanel extends AbstractTablePanel {
         if(classifiers == null)
         {
             if (classifiedDataObject != null)
-                classifiers = getFormSession().getClassifiers(classifiedDataObject);
+                classifiers = getClassifiersManager().getClassifiers(classifiedDataObject);
             else
-                //classifiers = getFormSession().getClassifiers(getParentDataObjectId(), dataObjectType);
-                classifiers = getFormSession().getClassifiers(null, dataObjectType);
+                //classifiers = getClassifiersManager().getClassifiers(getParentDataObjectId(), dataObjectType);
+                classifiers = getClassifiersManager().getClassifiers(null, dataObjectType);
         }
         return classifiers;
     }
@@ -111,18 +106,11 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     protected EntityProperties getClassifierEntityProperties() {
-        return getFormSession().getClassifierEntityProperties();
-    }
-
-    public ClassifiersRemote getFormSession() {
-        if(formSession == null)
-            formSession = getBean(ClassifiersRemote.class);
-
-        return formSession;
+        return getClassifiersManager().getClassifierEntityProperties();
     }
 
     protected int deleteClassifier(Classifier classifier) {
-        return getFormSession().deleteClassifier(classifier);
+        return getClassifiersManager().deleteClassifier(classifier);
     }
 
 

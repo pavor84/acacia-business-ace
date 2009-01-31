@@ -17,7 +17,6 @@ import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -248,8 +247,6 @@ public class ClassifierPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField nameTextField;
     // End of variables declaration//GEN-END:variables
 
-    @EJB
-    private ClassifiersRemote formSession;
 
     private EntityProperties entityProps;
 
@@ -265,7 +262,7 @@ public class ClassifierPanel extends BaseEntityPanel {
 
         log.info("initData().classifier: " + classifier);
         if(classifier == null) {
-            classifier = getFormSession().newClassifier();
+            classifier = getClassifiersManager().newClassifier();
             isNew = true;
             isSystemGroup = false;
         } else {
@@ -323,7 +320,7 @@ public class ClassifierPanel extends BaseEntityPanel {
 
 
     protected List<ClassifierGroup> getClassifierGroups() {
-        List<ClassifierGroup> classifierGroups = getFormSession().getClassifierGroups();
+        List<ClassifierGroup> classifierGroups = getClassifiersManager().getClassifierGroups();
         if(!isAdministrator() && (isNew || (!isNew && !isSystemGroup))) {
             Iterator<ClassifierGroup> iterator = classifierGroups.iterator();
             while(iterator.hasNext()) {
@@ -337,7 +334,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     }
 
     protected List<DataObjectType> getDataObjectTypes() {
-        return dataObjectTypesTable.shortenDataObjectTypeNames(getFormSession().getDataObjectTypes());
+        return dataObjectTypesTable.shortenDataObjectTypeNames(getClassifiersManager().getDataObjectTypes());
     }
 
 
@@ -353,17 +350,9 @@ public class ClassifierPanel extends BaseEntityPanel {
         }
     }
 
-    protected ClassifiersRemote getFormSession()
-    {
-        if(formSession == null)
-            formSession = getBean(ClassifiersRemote.class);
-
-        return formSession;
-    }
-
     protected EntityProperties getClassifierEntityProperties()
     {
-        return getFormSession().getClassifierEntityProperties();
+        return getClassifiersManager().getClassifierEntityProperties();
     }
 
 
@@ -375,7 +364,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: classifier: " + classifier);
-        classifier = getFormSession().saveClassifier(
+        classifier = getClassifiersManager().saveClassifier(
                 classifier,
                 classifier.getClassifierGroup().getDataObject().getDataObjectId());
 
@@ -403,7 +392,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     @Action
     public void addConstraintAction() {
         if (dataObjectTypesTable.canNestedOperationProceed()) {
-            getFormSession().addDataObjectTypeConstraint(classifier, (DataObjectType) dataObjectTypeComboBox.getSelectedItem());
+            getClassifiersManager().addDataObjectTypeConstraint(classifier, (DataObjectType) dataObjectTypeComboBox.getSelectedItem());
             dataObjectTypesTable.refreshAction();
             addObjectTypeButton.setEnabled(false);
         }

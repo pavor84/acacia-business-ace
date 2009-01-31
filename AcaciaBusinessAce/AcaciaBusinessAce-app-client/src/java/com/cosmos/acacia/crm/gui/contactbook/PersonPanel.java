@@ -72,7 +72,7 @@ public class PersonPanel extends BaseEntityPanel {
     }
     
     private void initComponentsCustom() {
-        if ( getClassifiersFormSession().isClassifiedAs(person, "customer")){
+        if ( getClassifiersManager().isClassifiedAs(person, "customer")){
             JBButton b = new JBButton();
             b.setText(getResourceMap().getString("button.discount"));
             b.addActionListener(new ActionListener() {
