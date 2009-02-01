@@ -15,4 +15,11 @@ public class JBLabel
     extends JXLabel
 {
 
+    public JBLabel(String text) {
+        super(text);
+    }
+
+    public JBLabel() {
+    }
+
 }

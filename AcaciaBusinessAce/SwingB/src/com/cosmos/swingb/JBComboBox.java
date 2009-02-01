@@ -64,14 +64,18 @@ public class JBComboBox
     public JBComboBox()
     {
         super();
-        setEditor(new JBComboBoxEditor());
-        setRenderer(new CustomCellRenderer());
+        init();
     }
 
-    public JBComboBox(Application application)
+    public JBComboBox(Object[] items)
     {
-        this();
-        this.application = application;
+        super(items);
+        init();
+    }
+
+    private void init() {
+        setEditor(new JBComboBoxEditor());
+        setRenderer(new CustomCellRenderer());
     }
 
     public JComboBoxBinding bind(
