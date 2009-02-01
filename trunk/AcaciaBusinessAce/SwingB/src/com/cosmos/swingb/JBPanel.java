@@ -13,6 +13,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
@@ -70,19 +71,11 @@ public class JBPanel
 
     public JBPanel()
     {     
-        this(null);
     }
 
-    public JBPanel(Application application)
+    public JBPanel(LayoutManager layoutManager)
     {
-        /*if (application == null) {
-            try {
-                application = Application.getInstance();
-            } catch (Throwable t) {
-                //
-            }
-        }
-        this.application = application;*/
+        super(layoutManager);
     }
 
     protected JFrame getMainFrame()

@@ -38,7 +38,6 @@ import org.jdesktop.swingx.table.TableColumnExt;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.converters.ResourceConverter;
-import java.awt.Color;
 
 /**
  *
@@ -510,12 +509,7 @@ public class JBTable
             List comboBoxValues,
             PropertyDetails propertyDetails)
     {
-        Application app = getApplication();
-        JBComboBox comboBox;
-        if(app != null)
-            comboBox = new JBComboBox(app);
-        else
-            comboBox = new JBComboBox();
+        JBComboBox comboBox = new JBComboBox();
 
         comboBox.bind(bindingGroup, comboBoxValues, this, propertyDetails);
         ComboBoxCellEditor comboBoxCellEditor = new ComboBoxCellEditor(comboBox);
@@ -547,7 +541,7 @@ public class JBTable
             throw new IllegalArgumentException("Can not find table column for property name: " + propertyName);
 
         column.setCellEditor(comboBoxCellEditor);
-        if(app != null && column.getCellRenderer() == null)
+        if(column.getCellRenderer() == null)
             column.setCellRenderer(getBeanResourceCellRenderer());
     }
 
