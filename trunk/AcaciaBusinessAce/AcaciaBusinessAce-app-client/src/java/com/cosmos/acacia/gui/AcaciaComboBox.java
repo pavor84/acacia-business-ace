@@ -14,7 +14,6 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
-import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.JBComboBox;
 
