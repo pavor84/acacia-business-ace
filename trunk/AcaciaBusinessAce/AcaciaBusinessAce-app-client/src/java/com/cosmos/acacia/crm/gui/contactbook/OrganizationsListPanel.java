@@ -26,15 +26,10 @@ import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import com.cosmos.swingb.xhtml.XHTMLDialog;
-import com.cosmos.swingb.xhtml.XHTMLUtils;
 import java.math.BigInteger;
-import javax.swing.JOptionPane;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
 /**
