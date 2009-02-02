@@ -23,6 +23,7 @@ import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.LookupRecordDeletionListener;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -246,9 +247,9 @@ public class PassportPanel extends BaseEntityPanel {
         otherInfoTextField.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("additionalInfo"));
 
         PropertyDetails issueDateProperties = entityProps.getPropertyDetails("issueDate");
-        issueDateDatePicker.bind(passportBindingGroup, passport, issueDateProperties);
+        issueDateDatePicker.bind(passportBindingGroup, passport, issueDateProperties, AcaciaUtils.getShortDateFormat());
 
-        expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"));
+        expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"), AcaciaUtils.getShortDateFormat());
 
         passportTypeComboBox.bind(passportBindingGroup, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
 

@@ -43,6 +43,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -728,7 +729,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
         onSelectSupplier();
 
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        DateFormat dateFormat = AcaciaUtils.getShortDateFormat();
 
         //creator
         creatorField.bind(bindGroup, entity, entProps.getPropertyDetails("creatorName"));

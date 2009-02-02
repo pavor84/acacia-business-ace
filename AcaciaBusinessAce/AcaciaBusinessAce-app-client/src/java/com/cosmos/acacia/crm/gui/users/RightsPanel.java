@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import java.util.Date;
@@ -220,7 +221,7 @@ public class RightsPanel extends BaseEntityPanel {
         excludedCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("excluded"));
         
         expiresDatePicker.setDate(new Date());
-        expiresDatePicker.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("expires"));
+        expiresDatePicker.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("expires"), AcaciaUtils.getShortDateFormat());
         
         rightsBindingGroup.bind();
 

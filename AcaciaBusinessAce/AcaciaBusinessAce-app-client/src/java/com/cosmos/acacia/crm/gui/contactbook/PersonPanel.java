@@ -35,6 +35,7 @@ import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.settings.GeneralSettings;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
@@ -446,7 +447,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         extraNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("extraName"));
 
         personalUniqueIdTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("personalUniqueId"));
-        birthdateDatePicker.bind(personBindingGroup, person, entityProps.getPropertyDetails("birthDate"));
+        birthdateDatePicker.bind(personBindingGroup, person, entityProps.getPropertyDetails("birthDate"), AcaciaUtils.getShortDateFormat());
         birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
          birthPlaceCountryComboBox.addActionListener(new ActionListener(){
             @Override

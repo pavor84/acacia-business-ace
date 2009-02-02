@@ -30,6 +30,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
@@ -438,7 +439,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         vatNumberTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("vatNumber"));
         uniqueIdTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("uniqueIdentifierCode"));
 
-        registrationDateDatePicker.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("registrationDate"));
+        registrationDateDatePicker.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("registrationDate"), AcaciaUtils.getShortDateFormat());
 
         organizationTypeComboBox.bind(organizationBindingGroup,
                 getOrganizationTypes(),

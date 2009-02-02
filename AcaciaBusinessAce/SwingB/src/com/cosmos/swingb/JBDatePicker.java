@@ -41,19 +41,32 @@ public class JBDatePicker
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
-
     
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails)
     {
-        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, null);
+    }
+    
+    public Binding bind(BindingGroup bindingGroup,
+                        Object beanEntity,
+                        PropertyDetails propertyDetails, DateFormat dateFormat)
+    {
+        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, dateFormat);
+    }
+    
+    public Binding bind(BindingGroup bindingGroup,
+                        Object beanEntity,
+                        PropertyDetails propertyDetails,
+                        AutoBinding.UpdateStrategy updateStrategy){
+        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, null);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy)
+            AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat)
     {
         if(propertyDetails == null || propertyDetails.isHiden())
         {
@@ -62,7 +75,7 @@ public class JBDatePicker
             return null;
         }
 
-        binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy, dateFormat);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
@@ -80,10 +93,11 @@ public class JBDatePicker
      private Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName,
-            AutoBinding.UpdateStrategy updateStrategy)
+            AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat)
      {
-         
-        this.setFormats(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()));
+        if ( dateFormat==null )
+            dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+        this.setFormats(dateFormat);
 
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("date");
