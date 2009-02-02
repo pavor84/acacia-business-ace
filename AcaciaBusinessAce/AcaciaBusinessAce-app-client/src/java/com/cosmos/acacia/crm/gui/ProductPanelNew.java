@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.gui.AbstractTablePanel;
+import java.awt.BorderLayout;
 import java.text.ParseException;
 import javax.swing.text.MaskFormatter;
 
@@ -18,6 +20,7 @@ public class ProductPanelNew extends javax.swing.JPanel {
     /** Creates new form ProductPanelNew */
     public ProductPanelNew() {
         initComponents();
+        initData();
     }
 
     /** This method is called from within the constructor to
@@ -31,55 +34,56 @@ public class ProductPanelNew extends javax.swing.JPanel {
 
         productTabbedPane = new com.cosmos.swingb.JBTabbedPane();
         primaryInfoPanel = new com.cosmos.swingb.JBPanel();
-        jBTextField1 = new com.cosmos.swingb.JBTextField();
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        acaciaComboList1 = new com.cosmos.acacia.gui.AcaciaComboList();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
+        productNameTextField = new com.cosmos.swingb.JBTextField();
+        productNameLabel = new com.cosmos.swingb.JBLabel();
+        productCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        productCategoryLabel = new com.cosmos.swingb.JBLabel();
         codeFormatTextField = new com.cosmos.swingb.JBTextField();
         codeFormatLabel = new com.cosmos.swingb.JBLabel();
         productCodeTextField = new com.cosmos.swingb.JBFormattedTextField();
         productCodeLabel = new com.cosmos.swingb.JBLabel();
-        acaciaComboBox1 = new com.cosmos.acacia.gui.AcaciaComboBox();
-        jBLabel5 = new com.cosmos.swingb.JBLabel();
-        acaciaComboBox2 = new com.cosmos.acacia.gui.AcaciaComboBox();
-        jBLabel6 = new com.cosmos.swingb.JBLabel();
-        acaciaComboList2 = new com.cosmos.acacia.gui.AcaciaComboList();
-        jBLabel7 = new com.cosmos.swingb.JBLabel();
-        jBFormattedTextField2 = new com.cosmos.swingb.JBFormattedTextField();
-        jBLabel8 = new com.cosmos.swingb.JBLabel();
-        jBCheckBox1 = new com.cosmos.swingb.JBCheckBox();
-        jBCheckBox2 = new com.cosmos.swingb.JBCheckBox();
-        jBCheckBox3 = new com.cosmos.swingb.JBCheckBox();
-        jBPanel1 = new com.cosmos.swingb.JBPanel();
-        jBFormattedTextField3 = new com.cosmos.swingb.JBFormattedTextField();
-        jBFormattedTextField4 = new com.cosmos.swingb.JBFormattedTextField();
-        jBLabel9 = new com.cosmos.swingb.JBLabel();
-        jBLabel10 = new com.cosmos.swingb.JBLabel();
-        jBPanel3 = new com.cosmos.swingb.JBPanel();
-        labeledTextField1 = new com.cosmos.swingb.LabeledTextField();
-        labeledTextField2 = new com.cosmos.swingb.LabeledTextField();
-        labeledTextField3 = new com.cosmos.swingb.LabeledTextField();
+        measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        measureUnitLabel = new com.cosmos.swingb.JBLabel();
+        productColorComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        productColorLabel = new com.cosmos.swingb.JBLabel();
+        producerComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        producerLabel = new com.cosmos.swingb.JBLabel();
+        quantityPerPackageTextField = new com.cosmos.swingb.JBFormattedTextField();
+        quantityPerPackageLabel = new com.cosmos.swingb.JBLabel();
+        purchasedCheckBox = new com.cosmos.swingb.JBCheckBox();
+        salableCheckBox = new com.cosmos.swingb.JBCheckBox();
+        obsoleteCheckBox = new com.cosmos.swingb.JBCheckBox();
+        pricePanel = new com.cosmos.swingb.JBPanel();
+        pricePerQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
+        salesPriceTextField = new com.cosmos.swingb.JBFormattedTextField();
+        pricePerQuantityLabel = new com.cosmos.swingb.JBLabel();
+        salesPriceLabel = new com.cosmos.swingb.JBLabel();
+        quantitiesOnStockPanel = new com.cosmos.swingb.JBPanel();
+        minLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        defaultLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        maxLabeledTextField = new com.cosmos.swingb.LabeledTextField();
         additionalInfoPanel = new com.cosmos.swingb.JBPanel();
-        jBPanel2 = new com.cosmos.swingb.JBPanel();
-        labeledTextField4 = new com.cosmos.swingb.LabeledTextField();
-        labeledTextField5 = new com.cosmos.swingb.LabeledTextField();
-        acaciaComboBox3 = new com.cosmos.acacia.gui.AcaciaComboBox();
-        jBLabel11 = new com.cosmos.swingb.JBLabel();
-        jBPanel4 = new com.cosmos.swingb.JBPanel();
-        acaciaComboBox4 = new com.cosmos.acacia.gui.AcaciaComboBox();
-        jBLabel12 = new com.cosmos.swingb.JBLabel();
-        jBPanel5 = new com.cosmos.swingb.JBPanel();
-        labeledTextField6 = new com.cosmos.swingb.LabeledTextField();
-        labeledTextField7 = new com.cosmos.swingb.LabeledTextField();
-        labeledTextField8 = new com.cosmos.swingb.LabeledTextField();
-        labeledTextField9 = new com.cosmos.swingb.LabeledTextField();
-        jBPanel6 = new com.cosmos.swingb.JBPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jBTextPane1 = new com.cosmos.swingb.JBTextPane();
+        deliveryInfoPanel = new com.cosmos.swingb.JBPanel();
+        weightLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        deliveryTimeLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        weightUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        weightUnitLabel = new com.cosmos.swingb.JBLabel();
+        dimensionsPanel = new com.cosmos.swingb.JBPanel();
+        dimensionUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        dimensionUnitLabel = new com.cosmos.swingb.JBLabel();
+        dimensionValuesPanel = new com.cosmos.swingb.JBPanel();
+        widthLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        lengthLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        heightLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        cubageLabeledTextField = new com.cosmos.swingb.LabeledTextField();
+        descriptionPanel = new com.cosmos.swingb.JBPanel();
+        descriptionScrollPane = new javax.swing.JScrollPane();
+        descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         productPricingPanel = new com.cosmos.swingb.JBPanel();
-        jBPanel7 = new com.cosmos.swingb.JBPanel();
-        jBButton1 = new com.cosmos.swingb.JBButton();
-        jBButton2 = new com.cosmos.swingb.JBButton();
+        suppliersPanel = new com.cosmos.swingb.JBPanel();
+        buttonsPanel = new com.cosmos.swingb.JBPanel();
+        closeButton = new com.cosmos.swingb.JBButton();
+        saveButton = new com.cosmos.swingb.JBButton();
 
         setName("Form"); // NOI18N
 
@@ -87,18 +91,23 @@ public class ProductPanelNew extends javax.swing.JPanel {
 
         primaryInfoPanel.setName("primaryInfoPanel"); // NOI18N
 
-        jBTextField1.setName("jBTextField1"); // NOI18N
+        productNameTextField.setName("productNameTextField"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductPanelNew.class);
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
+        productNameLabel.setText(resourceMap.getString("productNameLabel.text")); // NOI18N
+        productNameLabel.setName("productNameLabel"); // NOI18N
 
-        acaciaComboList1.setName("acaciaComboList1"); // NOI18N
+        productCategoryComboList.setName("productCategoryComboList"); // NOI18N
 
-        jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
-        jBLabel2.setName("jBLabel2"); // NOI18N
+        productCategoryLabel.setText(resourceMap.getString("productCategoryLabel.text")); // NOI18N
+        productCategoryLabel.setName("productCategoryLabel"); // NOI18N
 
         codeFormatTextField.setName("codeFormatTextField"); // NOI18N
+        codeFormatTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codeFormatTextFieldFocusLost(evt);
+            }
+        });
 
         codeFormatLabel.setText(resourceMap.getString("codeFormatLabel.text")); // NOI18N
         codeFormatLabel.setName("codeFormatLabel"); // NOI18N
@@ -108,94 +117,94 @@ public class ProductPanelNew extends javax.swing.JPanel {
         productCodeLabel.setText(resourceMap.getString("productCodeLabel.text")); // NOI18N
         productCodeLabel.setName("productCodeLabel"); // NOI18N
 
-        acaciaComboBox1.setName("acaciaComboBox1"); // NOI18N
+        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
 
-        jBLabel5.setText(resourceMap.getString("jBLabel5.text")); // NOI18N
-        jBLabel5.setName("jBLabel5"); // NOI18N
+        measureUnitLabel.setText(resourceMap.getString("measureUnitLabel.text")); // NOI18N
+        measureUnitLabel.setName("measureUnitLabel"); // NOI18N
 
-        acaciaComboBox2.setName("acaciaComboBox2"); // NOI18N
+        productColorComboBox.setName("productColorComboBox"); // NOI18N
 
-        jBLabel6.setText(resourceMap.getString("jBLabel6.text")); // NOI18N
-        jBLabel6.setName("jBLabel6"); // NOI18N
+        productColorLabel.setText(resourceMap.getString("productColorLabel.text")); // NOI18N
+        productColorLabel.setName("productColorLabel"); // NOI18N
 
-        acaciaComboList2.setName("acaciaComboList2"); // NOI18N
+        producerComboList.setName("producerComboList"); // NOI18N
 
-        jBLabel7.setText(resourceMap.getString("jBLabel7.text")); // NOI18N
-        jBLabel7.setName("jBLabel7"); // NOI18N
+        producerLabel.setText(resourceMap.getString("producerLabel.text")); // NOI18N
+        producerLabel.setName("producerLabel"); // NOI18N
 
-        jBFormattedTextField2.setName("jBFormattedTextField2"); // NOI18N
+        quantityPerPackageTextField.setName("quantityPerPackageTextField"); // NOI18N
 
-        jBLabel8.setText(resourceMap.getString("jBLabel8.text")); // NOI18N
-        jBLabel8.setName("jBLabel8"); // NOI18N
+        quantityPerPackageLabel.setText(resourceMap.getString("quantityPerPackageLabel.text")); // NOI18N
+        quantityPerPackageLabel.setName("quantityPerPackageLabel"); // NOI18N
 
-        jBCheckBox1.setText(resourceMap.getString("jBCheckBox1.text")); // NOI18N
-        jBCheckBox1.setName("jBCheckBox1"); // NOI18N
+        purchasedCheckBox.setText(resourceMap.getString("purchasedCheckBox.text")); // NOI18N
+        purchasedCheckBox.setName("purchasedCheckBox"); // NOI18N
 
-        jBCheckBox2.setText(resourceMap.getString("jBCheckBox2.text")); // NOI18N
-        jBCheckBox2.setName("jBCheckBox2"); // NOI18N
+        salableCheckBox.setText(resourceMap.getString("salableCheckBox.text")); // NOI18N
+        salableCheckBox.setName("salableCheckBox"); // NOI18N
 
-        jBCheckBox3.setText(resourceMap.getString("jBCheckBox3.text")); // NOI18N
-        jBCheckBox3.setName("jBCheckBox3"); // NOI18N
+        obsoleteCheckBox.setText(resourceMap.getString("obsoleteCheckBox.text")); // NOI18N
+        obsoleteCheckBox.setName("obsoleteCheckBox"); // NOI18N
 
-        jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel1.border.title"))); // NOI18N
-        jBPanel1.setName("jBPanel1"); // NOI18N
+        pricePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("pricePanel.border.title"))); // NOI18N
+        pricePanel.setName("pricePanel"); // NOI18N
 
-        jBFormattedTextField3.setName("jBFormattedTextField3"); // NOI18N
+        pricePerQuantityTextField.setName("pricePerQuantityTextField"); // NOI18N
 
-        jBFormattedTextField4.setName("jBFormattedTextField4"); // NOI18N
+        salesPriceTextField.setName("salesPriceTextField"); // NOI18N
 
-        jBLabel9.setText(resourceMap.getString("jBLabel9.text")); // NOI18N
-        jBLabel9.setName("jBLabel9"); // NOI18N
+        pricePerQuantityLabel.setText(resourceMap.getString("pricePerQuantityLabel.text")); // NOI18N
+        pricePerQuantityLabel.setName("pricePerQuantityLabel"); // NOI18N
 
-        jBLabel10.setText(resourceMap.getString("jBLabel10.text")); // NOI18N
-        jBLabel10.setName("jBLabel10"); // NOI18N
+        salesPriceLabel.setText(resourceMap.getString("salesPriceLabel.text")); // NOI18N
+        salesPriceLabel.setName("salesPriceLabel"); // NOI18N
 
-        javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
-        jBPanel1.setLayout(jBPanel1Layout);
-        jBPanel1Layout.setHorizontalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pricePanelLayout = new javax.swing.GroupLayout(pricePanel);
+        pricePanel.setLayout(pricePanelLayout);
+        pricePanelLayout.setHorizontalGroup(
+            pricePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pricePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pricePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pricePerQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salesPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBFormattedTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-                    .addComponent(jBFormattedTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                .addGroup(pricePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(salesPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                    .addComponent(pricePerQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jBPanel1Layout.setVerticalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        pricePanelLayout.setVerticalGroup(
+            pricePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pricePanelLayout.createSequentialGroup()
+                .addGroup(pricePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pricePerQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pricePerQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pricePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(salesPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salesPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jBPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel3.border.title"))); // NOI18N
-        jBPanel3.setName("jBPanel3"); // NOI18N
-        jBPanel3.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+        quantitiesOnStockPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("quantitiesOnStockPanel.border.title"))); // NOI18N
+        quantitiesOnStockPanel.setName("quantitiesOnStockPanel"); // NOI18N
+        quantitiesOnStockPanel.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
-        labeledTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        labeledTextField1.setLabelText(resourceMap.getString("labeledTextField1.labelText")); // NOI18N
-        labeledTextField1.setText(resourceMap.getString("labeledTextField1.text")); // NOI18N
-        jBPanel3.add(labeledTextField1);
+        minLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        minLabeledTextField.setLabelText(resourceMap.getString("minLabeledTextField.labelText")); // NOI18N
+        minLabeledTextField.setText(resourceMap.getString("minLabeledTextField.text")); // NOI18N
+        quantitiesOnStockPanel.add(minLabeledTextField);
 
-        labeledTextField2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        labeledTextField2.setLabelText(resourceMap.getString("labeledTextField2.labelText")); // NOI18N
-        labeledTextField2.setText(resourceMap.getString("labeledTextField2.text")); // NOI18N
-        jBPanel3.add(labeledTextField2);
+        defaultLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        defaultLabeledTextField.setLabelText(resourceMap.getString("defaultLabeledTextField.labelText")); // NOI18N
+        defaultLabeledTextField.setText(resourceMap.getString("defaultLabeledTextField.text")); // NOI18N
+        quantitiesOnStockPanel.add(defaultLabeledTextField);
 
-        labeledTextField3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        labeledTextField3.setLabelText(resourceMap.getString("labeledTextField3.labelText")); // NOI18N
-        labeledTextField3.setText(resourceMap.getString("labeledTextField3.text")); // NOI18N
-        jBPanel3.add(labeledTextField3);
+        maxLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        maxLabeledTextField.setLabelText(resourceMap.getString("maxLabeledTextField.labelText")); // NOI18N
+        maxLabeledTextField.setText(resourceMap.getString("maxLabeledTextField.text")); // NOI18N
+        quantitiesOnStockPanel.add(maxLabeledTextField);
 
         javax.swing.GroupLayout primaryInfoPanelLayout = new javax.swing.GroupLayout(primaryInfoPanel);
         primaryInfoPanel.setLayout(primaryInfoPanelLayout);
@@ -204,34 +213,34 @@ public class ProductPanelNew extends javax.swing.JPanel {
             .addGroup(primaryInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pricePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                        .addComponent(jBCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(purchasedCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(salableCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(obsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(primaryInfoPanelLayout.createSequentialGroup()
                         .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(quantityPerPackageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(producerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(codeFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                            .addComponent(acaciaComboList1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(productCategoryComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                             .addComponent(codeFormatTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                             .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                            .addComponent(acaciaComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                            .addComponent(acaciaComboBox2, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                            .addComponent(acaciaComboList2, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                            .addComponent(jBFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)))
-                    .addComponent(jBPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
+                            .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(productColorComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(producerComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(quantityPerPackageTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)))
+                    .addComponent(quantitiesOnStockPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
                 .addContainerGap())
         );
         primaryInfoPanelLayout.setVerticalGroup(
@@ -239,12 +248,12 @@ public class ProductPanelNew extends javax.swing.JPanel {
             .addGroup(primaryInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(productNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(acaciaComboList1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,152 +264,152 @@ public class ProductPanelNew extends javax.swing.JPanel {
                     .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(acaciaComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(measureUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(acaciaComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(productColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jBLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(acaciaComboList2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(producerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(producerComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(quantityPerPackageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(quantityPerPackageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(purchasedCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salableCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(obsoleteCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pricePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(quantitiesOnStockPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         productTabbedPane.addTab(resourceMap.getString("primaryInfoPanel.TabConstraints.tabTitle"), primaryInfoPanel); // NOI18N
 
         additionalInfoPanel.setName("additionalInfoPanel"); // NOI18N
 
-        jBPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel2.border.title"))); // NOI18N
-        jBPanel2.setName("jBPanel2"); // NOI18N
+        deliveryInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("deliveryInfoPanel.border.title"))); // NOI18N
+        deliveryInfoPanel.setName("deliveryInfoPanel"); // NOI18N
 
-        labeledTextField4.setLabelText(resourceMap.getString("labeledTextField4.labelText")); // NOI18N
-        labeledTextField4.setName("labeledTextField4"); // NOI18N
-        labeledTextField4.setText(resourceMap.getString("labeledTextField4.text")); // NOI18N
+        weightLabeledTextField.setLabelText(resourceMap.getString("weightLabeledTextField.labelText")); // NOI18N
+        weightLabeledTextField.setName("weightLabeledTextField"); // NOI18N
+        weightLabeledTextField.setText(resourceMap.getString("weightLabeledTextField.text")); // NOI18N
 
-        labeledTextField5.setLabelText(resourceMap.getString("labeledTextField5.labelText")); // NOI18N
-        labeledTextField5.setName("labeledTextField5"); // NOI18N
-        labeledTextField5.setText(resourceMap.getString("labeledTextField5.text")); // NOI18N
+        deliveryTimeLabeledTextField.setLabelText(resourceMap.getString("deliveryTimeLabeledTextField.labelText")); // NOI18N
+        deliveryTimeLabeledTextField.setName("deliveryTimeLabeledTextField"); // NOI18N
+        deliveryTimeLabeledTextField.setText(resourceMap.getString("deliveryTimeLabeledTextField.text")); // NOI18N
 
-        acaciaComboBox3.setName("acaciaComboBox3"); // NOI18N
+        weightUnitComboBox.setName("weightUnitComboBox"); // NOI18N
 
-        jBLabel11.setText(resourceMap.getString("jBLabel11.text")); // NOI18N
-        jBLabel11.setName("jBLabel11"); // NOI18N
+        weightUnitLabel.setText(resourceMap.getString("weightUnitLabel.text")); // NOI18N
+        weightUnitLabel.setName("weightUnitLabel"); // NOI18N
 
-        javax.swing.GroupLayout jBPanel2Layout = new javax.swing.GroupLayout(jBPanel2);
-        jBPanel2.setLayout(jBPanel2Layout);
-        jBPanel2Layout.setHorizontalGroup(
-            jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout deliveryInfoPanelLayout = new javax.swing.GroupLayout(deliveryInfoPanel);
+        deliveryInfoPanel.setLayout(deliveryInfoPanelLayout);
+        deliveryInfoPanelLayout.setHorizontalGroup(
+            deliveryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(deliveryInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jBPanel2Layout.createSequentialGroup()
-                        .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(deliveryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(deliveryInfoPanelLayout.createSequentialGroup()
+                        .addComponent(weightUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(acaciaComboBox3, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                    .addGroup(jBPanel2Layout.createSequentialGroup()
-                        .addComponent(labeledTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                        .addComponent(weightUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                    .addGroup(deliveryInfoPanelLayout.createSequentialGroup()
+                        .addComponent(weightLabeledTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(labeledTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)))
+                        .addComponent(deliveryTimeLabeledTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jBPanel2Layout.setVerticalGroup(
-            jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel2Layout.createSequentialGroup()
-                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(acaciaComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        deliveryInfoPanelLayout.setVerticalGroup(
+            deliveryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(deliveryInfoPanelLayout.createSequentialGroup()
+                .addGroup(deliveryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(weightUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(weightUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labeledTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labeledTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(deliveryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(weightLabeledTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deliveryTimeLabeledTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jBPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel4.border.title"))); // NOI18N
-        jBPanel4.setName("jBPanel4"); // NOI18N
+        dimensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("dimensionsPanel.border.title"))); // NOI18N
+        dimensionsPanel.setName("dimensionsPanel"); // NOI18N
 
-        acaciaComboBox4.setName("acaciaComboBox4"); // NOI18N
+        dimensionUnitComboBox.setName("dimensionUnitComboBox"); // NOI18N
 
-        jBLabel12.setText(resourceMap.getString("jBLabel12.text")); // NOI18N
-        jBLabel12.setName("jBLabel12"); // NOI18N
+        dimensionUnitLabel.setText(resourceMap.getString("dimensionUnitLabel.text")); // NOI18N
+        dimensionUnitLabel.setName("dimensionUnitLabel"); // NOI18N
 
-        jBPanel5.setName("jBPanel5"); // NOI18N
-        jBPanel5.setLayout(new java.awt.GridLayout(2, 2));
+        dimensionValuesPanel.setName("dimensionValuesPanel"); // NOI18N
+        dimensionValuesPanel.setLayout(new java.awt.GridLayout(2, 2));
 
-        labeledTextField6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 3, 5));
-        labeledTextField6.setLabelText(resourceMap.getString("labeledTextField6.labelText")); // NOI18N
-        labeledTextField6.setName("labeledTextField6"); // NOI18N
-        labeledTextField6.setText(resourceMap.getString("labeledTextField6.text")); // NOI18N
-        jBPanel5.add(labeledTextField6);
+        widthLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 3, 5));
+        widthLabeledTextField.setLabelText(resourceMap.getString("widthLabeledTextField.labelText")); // NOI18N
+        widthLabeledTextField.setName("widthLabeledTextField"); // NOI18N
+        widthLabeledTextField.setText(resourceMap.getString("widthLabeledTextField.text")); // NOI18N
+        dimensionValuesPanel.add(widthLabeledTextField);
 
-        labeledTextField7.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 3, 0));
-        labeledTextField7.setLabelText(resourceMap.getString("labeledTextField7.labelText")); // NOI18N
-        labeledTextField7.setName("labeledTextField7"); // NOI18N
-        labeledTextField7.setText(resourceMap.getString("labeledTextField7.text")); // NOI18N
-        jBPanel5.add(labeledTextField7);
+        lengthLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 3, 0));
+        lengthLabeledTextField.setLabelText(resourceMap.getString("lengthLabeledTextField.labelText")); // NOI18N
+        lengthLabeledTextField.setName("lengthLabeledTextField"); // NOI18N
+        lengthLabeledTextField.setText(resourceMap.getString("lengthLabeledTextField.text")); // NOI18N
+        dimensionValuesPanel.add(lengthLabeledTextField);
 
-        labeledTextField8.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 0, 5));
-        labeledTextField8.setLabelText(resourceMap.getString("labeledTextField8.labelText")); // NOI18N
-        labeledTextField8.setName("labeledTextField8"); // NOI18N
-        labeledTextField8.setText(resourceMap.getString("labeledTextField8.text")); // NOI18N
-        jBPanel5.add(labeledTextField8);
+        heightLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 0, 0, 5));
+        heightLabeledTextField.setLabelText(resourceMap.getString("heightLabeledTextField.labelText")); // NOI18N
+        heightLabeledTextField.setName("heightLabeledTextField"); // NOI18N
+        heightLabeledTextField.setText(resourceMap.getString("heightLabeledTextField.text")); // NOI18N
+        dimensionValuesPanel.add(heightLabeledTextField);
 
-        labeledTextField9.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 0, 0));
-        labeledTextField9.setLabelText(resourceMap.getString("labeledTextField9.labelText")); // NOI18N
-        labeledTextField9.setName("labeledTextField9"); // NOI18N
-        labeledTextField9.setText(resourceMap.getString("labeledTextField9.text")); // NOI18N
-        jBPanel5.add(labeledTextField9);
+        cubageLabeledTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 5, 0, 0));
+        cubageLabeledTextField.setLabelText(resourceMap.getString("cubageLabeledTextField.labelText")); // NOI18N
+        cubageLabeledTextField.setName("cubageLabeledTextField"); // NOI18N
+        cubageLabeledTextField.setText(resourceMap.getString("cubageLabeledTextField.text")); // NOI18N
+        dimensionValuesPanel.add(cubageLabeledTextField);
 
-        javax.swing.GroupLayout jBPanel4Layout = new javax.swing.GroupLayout(jBPanel4);
-        jBPanel4.setLayout(jBPanel4Layout);
-        jBPanel4Layout.setHorizontalGroup(
-            jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout dimensionsPanelLayout = new javax.swing.GroupLayout(dimensionsPanel);
+        dimensionsPanel.setLayout(dimensionsPanelLayout);
+        dimensionsPanelLayout.setHorizontalGroup(
+            dimensionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dimensionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
-                    .addGroup(jBPanel4Layout.createSequentialGroup()
-                        .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(dimensionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dimensionValuesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addGroup(dimensionsPanelLayout.createSequentialGroup()
+                        .addComponent(dimensionUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(acaciaComboBox4, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)))
+                        .addComponent(dimensionUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jBPanel4Layout.setVerticalGroup(
-            jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel4Layout.createSequentialGroup()
-                .addGroup(jBPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(acaciaComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        dimensionsPanelLayout.setVerticalGroup(
+            dimensionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dimensionsPanelLayout.createSequentialGroup()
+                .addGroup(dimensionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dimensionUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dimensionUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dimensionValuesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jBPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel6.border.title"))); // NOI18N
-        jBPanel6.setName("jBPanel6"); // NOI18N
-        jBPanel6.setLayout(new java.awt.BorderLayout());
+        descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("descriptionPanel.border.title"))); // NOI18N
+        descriptionPanel.setName("descriptionPanel"); // NOI18N
+        descriptionPanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        descriptionScrollPane.setName("descriptionScrollPane"); // NOI18N
 
-        jBTextPane1.setName("jBTextPane1"); // NOI18N
-        jScrollPane1.setViewportView(jBTextPane1);
+        descriptionTextPane.setName("descriptionTextPane"); // NOI18N
+        descriptionScrollPane.setViewportView(descriptionTextPane);
 
-        jBPanel6.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        descriptionPanel.add(descriptionScrollPane, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout additionalInfoPanelLayout = new javax.swing.GroupLayout(additionalInfoPanel);
         additionalInfoPanel.setLayout(additionalInfoPanelLayout);
@@ -409,20 +418,20 @@ public class ProductPanelNew extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, additionalInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(additionalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-                    .addComponent(jBPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                    .addComponent(deliveryInfoPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dimensionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         additionalInfoPanelLayout.setVerticalGroup(
             additionalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(additionalInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deliveryInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dimensionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -438,121 +447,137 @@ public class ProductPanelNew extends javax.swing.JPanel {
         );
         productPricingPanelLayout.setVerticalGroup(
             productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 461, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         productTabbedPane.addTab(resourceMap.getString("productPricingPanel.TabConstraints.tabTitle"), productPricingPanel); // NOI18N
 
-        jBPanel7.setName("jBPanel7"); // NOI18N
+        suppliersPanel.setName("suppliersPanel"); // NOI18N
+        suppliersPanel.setLayout(new java.awt.BorderLayout());
+        productTabbedPane.addTab(resourceMap.getString("suppliersPanel.TabConstraints.tabTitle"), suppliersPanel); // NOI18N
 
-        jBButton1.setIcon(resourceMap.getIcon("jBButton1.icon")); // NOI18N
-        jBButton1.setText(resourceMap.getString("jBButton1.text")); // NOI18N
-        jBButton1.setName("jBButton1"); // NOI18N
+        buttonsPanel.setName("buttonsPanel"); // NOI18N
 
-        jBButton2.setIcon(resourceMap.getIcon("jBButton2.icon")); // NOI18N
-        jBButton2.setText(resourceMap.getString("jBButton2.text")); // NOI18N
-        jBButton2.setName("jBButton2"); // NOI18N
+        closeButton.setIcon(resourceMap.getIcon("closeButton.icon")); // NOI18N
+        closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
+        closeButton.setName("closeButton"); // NOI18N
 
-        javax.swing.GroupLayout jBPanel7Layout = new javax.swing.GroupLayout(jBPanel7);
-        jBPanel7.setLayout(jBPanel7Layout);
-        jBPanel7Layout.setHorizontalGroup(
-            jBPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBPanel7Layout.createSequentialGroup()
+        saveButton.setIcon(resourceMap.getIcon("saveButton.icon")); // NOI18N
+        saveButton.setText(resourceMap.getString("saveButton.text")); // NOI18N
+        saveButton.setName("saveButton"); // NOI18N
+
+        javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
+        buttonsPanel.setLayout(buttonsPanelLayout);
+        buttonsPanelLayout.setHorizontalGroup(
+            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
                 .addContainerGap(245, Short.MAX_VALUE)
-                .addComponent(jBButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jBPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBButton1, jBButton2});
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closeButton, saveButton});
 
-        jBPanel7Layout.setVerticalGroup(
-            jBPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel7Layout.createSequentialGroup()
+        buttonsPanelLayout.setVerticalGroup(
+            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jBPanel7Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBButton1, jBButton2});
+        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, saveButton});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(productTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
-            .addComponent(jBPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(productTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(productTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+private void codeFormatTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codeFormatTextFieldFocusLost
+// TODO add your handling code here:
+    codeFormatChanged();
+}//GEN-LAST:event_codeFormatTextFieldFocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.acacia.gui.AcaciaComboBox acaciaComboBox1;
-    private com.cosmos.acacia.gui.AcaciaComboBox acaciaComboBox2;
-    private com.cosmos.acacia.gui.AcaciaComboBox acaciaComboBox3;
-    private com.cosmos.acacia.gui.AcaciaComboBox acaciaComboBox4;
-    private com.cosmos.acacia.gui.AcaciaComboList acaciaComboList1;
-    private com.cosmos.acacia.gui.AcaciaComboList acaciaComboList2;
     private com.cosmos.swingb.JBPanel additionalInfoPanel;
+    private com.cosmos.swingb.JBPanel buttonsPanel;
+    private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBLabel codeFormatLabel;
     private com.cosmos.swingb.JBTextField codeFormatTextField;
-    private com.cosmos.swingb.JBButton jBButton1;
-    private com.cosmos.swingb.JBButton jBButton2;
-    private com.cosmos.swingb.JBCheckBox jBCheckBox1;
-    private com.cosmos.swingb.JBCheckBox jBCheckBox2;
-    private com.cosmos.swingb.JBCheckBox jBCheckBox3;
-    private com.cosmos.swingb.JBFormattedTextField jBFormattedTextField2;
-    private com.cosmos.swingb.JBFormattedTextField jBFormattedTextField3;
-    private com.cosmos.swingb.JBFormattedTextField jBFormattedTextField4;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBLabel jBLabel10;
-    private com.cosmos.swingb.JBLabel jBLabel11;
-    private com.cosmos.swingb.JBLabel jBLabel12;
-    private com.cosmos.swingb.JBLabel jBLabel2;
-    private com.cosmos.swingb.JBLabel jBLabel5;
-    private com.cosmos.swingb.JBLabel jBLabel6;
-    private com.cosmos.swingb.JBLabel jBLabel7;
-    private com.cosmos.swingb.JBLabel jBLabel8;
-    private com.cosmos.swingb.JBLabel jBLabel9;
-    private com.cosmos.swingb.JBPanel jBPanel1;
-    private com.cosmos.swingb.JBPanel jBPanel2;
-    private com.cosmos.swingb.JBPanel jBPanel3;
-    private com.cosmos.swingb.JBPanel jBPanel4;
-    private com.cosmos.swingb.JBPanel jBPanel5;
-    private com.cosmos.swingb.JBPanel jBPanel6;
-    private com.cosmos.swingb.JBPanel jBPanel7;
-    private com.cosmos.swingb.JBTextField jBTextField1;
-    private com.cosmos.swingb.JBTextPane jBTextPane1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private com.cosmos.swingb.LabeledTextField labeledTextField1;
-    private com.cosmos.swingb.LabeledTextField labeledTextField2;
-    private com.cosmos.swingb.LabeledTextField labeledTextField3;
-    private com.cosmos.swingb.LabeledTextField labeledTextField4;
-    private com.cosmos.swingb.LabeledTextField labeledTextField5;
-    private com.cosmos.swingb.LabeledTextField labeledTextField6;
-    private com.cosmos.swingb.LabeledTextField labeledTextField7;
-    private com.cosmos.swingb.LabeledTextField labeledTextField8;
-    private com.cosmos.swingb.LabeledTextField labeledTextField9;
+    private com.cosmos.swingb.LabeledTextField cubageLabeledTextField;
+    private com.cosmos.swingb.LabeledTextField defaultLabeledTextField;
+    private com.cosmos.swingb.JBPanel deliveryInfoPanel;
+    private com.cosmos.swingb.LabeledTextField deliveryTimeLabeledTextField;
+    private com.cosmos.swingb.JBPanel descriptionPanel;
+    private javax.swing.JScrollPane descriptionScrollPane;
+    private com.cosmos.swingb.JBTextPane descriptionTextPane;
+    private com.cosmos.acacia.gui.AcaciaComboBox dimensionUnitComboBox;
+    private com.cosmos.swingb.JBLabel dimensionUnitLabel;
+    private com.cosmos.swingb.JBPanel dimensionValuesPanel;
+    private com.cosmos.swingb.JBPanel dimensionsPanel;
+    private com.cosmos.swingb.LabeledTextField heightLabeledTextField;
+    private com.cosmos.swingb.LabeledTextField lengthLabeledTextField;
+    private com.cosmos.swingb.LabeledTextField maxLabeledTextField;
+    private com.cosmos.acacia.gui.AcaciaComboBox measureUnitComboBox;
+    private com.cosmos.swingb.JBLabel measureUnitLabel;
+    private com.cosmos.swingb.LabeledTextField minLabeledTextField;
+    private com.cosmos.swingb.JBCheckBox obsoleteCheckBox;
+    private com.cosmos.swingb.JBPanel pricePanel;
+    private com.cosmos.swingb.JBLabel pricePerQuantityLabel;
+    private com.cosmos.swingb.JBFormattedTextField pricePerQuantityTextField;
     private com.cosmos.swingb.JBPanel primaryInfoPanel;
+    private com.cosmos.acacia.gui.AcaciaComboList producerComboList;
+    private com.cosmos.swingb.JBLabel producerLabel;
+    private com.cosmos.acacia.gui.AcaciaComboList productCategoryComboList;
+    private com.cosmos.swingb.JBLabel productCategoryLabel;
     private com.cosmos.swingb.JBLabel productCodeLabel;
     private com.cosmos.swingb.JBFormattedTextField productCodeTextField;
+    private com.cosmos.acacia.gui.AcaciaComboBox productColorComboBox;
+    private com.cosmos.swingb.JBLabel productColorLabel;
+    private com.cosmos.swingb.JBLabel productNameLabel;
+    private com.cosmos.swingb.JBTextField productNameTextField;
     private com.cosmos.swingb.JBPanel productPricingPanel;
     private com.cosmos.swingb.JBTabbedPane productTabbedPane;
+    private com.cosmos.swingb.JBCheckBox purchasedCheckBox;
+    private com.cosmos.swingb.JBPanel quantitiesOnStockPanel;
+    private com.cosmos.swingb.JBLabel quantityPerPackageLabel;
+    private com.cosmos.swingb.JBFormattedTextField quantityPerPackageTextField;
+    private com.cosmos.swingb.JBCheckBox salableCheckBox;
+    private com.cosmos.swingb.JBLabel salesPriceLabel;
+    private com.cosmos.swingb.JBFormattedTextField salesPriceTextField;
+    private com.cosmos.swingb.JBButton saveButton;
+    private com.cosmos.swingb.JBPanel suppliersPanel;
+    private com.cosmos.swingb.LabeledTextField weightLabeledTextField;
+    private com.cosmos.acacia.gui.AcaciaComboBox weightUnitComboBox;
+    private com.cosmos.swingb.JBLabel weightUnitLabel;
+    private com.cosmos.swingb.LabeledTextField widthLabeledTextField;
     // End of variables declaration//GEN-END:variables
 
 
+    private SuppliersListPanel suppliersListPanel;
     private String lastCodeFormat;
+
+    private void initData() {
+        suppliersListPanel = new SuppliersListPanel();
+        suppliersPanel.add(suppliersListPanel, BorderLayout.CENTER);
+    }
 
     private void codeFormatChanged() {
         MaskFormatter formatter = (MaskFormatter)productCodeTextField.getFormatter();
@@ -586,4 +611,22 @@ public class ProductPanelNew extends javax.swing.JPanel {
     }
 
 
+    private class SuppliersListPanel extends AbstractTablePanel {
+
+        @Override
+        protected boolean deleteRow(Object rowObject) {
+            return false;
+        }
+
+        @Override
+        protected Object modifyRow(Object rowObject) {
+            return null;
+        }
+
+        @Override
+        protected Object newRow() {
+            return null;
+        }
+        
+    }
 }
