@@ -44,6 +44,7 @@ import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
@@ -609,7 +610,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         documentNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("documentNumber"));
         
         //doc date
-        documentDateField.bind(bindGroup, entity, entProps.getPropertyDetails("documentDate"));
+        documentDateField.bind(bindGroup, entity, entProps.getPropertyDetails("documentDate"), AcaciaUtils.getShortDateFormat());
         
         //clear explicitly any items
         supplierContactField.setModel(new DefaultComboBoxModel());
@@ -745,7 +746,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //ship date from
-        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"))
+        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -754,7 +755,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //ship date to
-        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"))
+        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {

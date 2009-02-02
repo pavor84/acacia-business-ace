@@ -57,6 +57,7 @@ import com.cosmos.acacia.gui.AcaciaLookup;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
@@ -187,7 +188,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         
         //Base Properties Panel
         numberTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateNumber"));
-        creationDatePicker.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateDate"));
+        creationDatePicker.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateDate"),AcaciaUtils.getShortDateFormat());
         Binding binding1 = reasonComboBox.bind(bindGroup, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
 //        reasonComboBox.addItemListener(new ItemListener(){
 //			@Override

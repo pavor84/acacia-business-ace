@@ -1223,7 +1223,7 @@ public class InvoiceForm extends BaseEntityPanel {
         invoiceNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("invoiceNumber"));
 
         // doc date
-        documentDateField.bind(bindGroup, entity, entProps.getPropertyDetails("invoiceDate"));
+        documentDateField.bind(bindGroup, entity, entProps.getPropertyDetails("invoiceDate"), AcaciaUtils.getShortDateFormat());
 
         // clear explicitly any items
         recipientContactField.setModel(new DefaultComboBoxModel());
@@ -1232,16 +1232,16 @@ public class InvoiceForm extends BaseEntityPanel {
         createdByField.bind(bindGroup, entity, entProps.getPropertyDetails("creatorName"));
 
         // creation time
-        createdAtField.bind(bindGroup, entity, entProps.getPropertyDetails("creationTime"));
+        createdAtField.bind(bindGroup, entity, entProps.getPropertyDetails("creationTime"), AcaciaUtils.getShortDateFormat());
 
         // sender
         sentByField.bind(bindGroup, entity, entProps.getPropertyDetails("senderName"));
 
         // sent time
-        sentAtField.bind(bindGroup, entity, entProps.getPropertyDetails("sentTime"));
+        sentAtField.bind(bindGroup, entity, entProps.getPropertyDetails("sentTime"), AcaciaUtils.getShortDateFormat());
 
         // completed at
-        completedAtField.bind(bindGroup, entity, entProps.getPropertyDetails("completionDate"));
+        completedAtField.bind(bindGroup, entity, entProps.getPropertyDetails("completionDate"), AcaciaUtils.getShortDateFormat());
         if(customerListPanel == null) {
             Classifier classifier = getClassifier(Classifier.Customer.getClassifierCode());
             customerListPanel = new BusinessPartnersListPanel(classifier);
@@ -1338,7 +1338,7 @@ public class InvoiceForm extends BaseEntityPanel {
         }, true);
 
         // payment due date
-        Binding paymentDueBinding = paymentDueField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentDueDate"));
+        Binding paymentDueBinding = paymentDueField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentDueDate"), AcaciaUtils.getShortDateFormat());
         paymentDueBinding.setValidator(new BaseValidator() {
             @Override
             public Result validate(Object value) {
@@ -1438,7 +1438,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 });
 
         // ship date from
-        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"))
+        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
                 .addBindingListener(new AbstractBindingListener() {
                     @Override
                     public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1447,7 +1447,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 });
 
         // ship date to
-        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"))
+        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
                 .addBindingListener(new AbstractBindingListener() {
                     @Override
                     public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1474,7 +1474,7 @@ public class InvoiceForm extends BaseEntityPanel {
             // valid to date
             PropertyDetails pd = entProps.getPropertyDetails("validTo");
             pd.setRequired(true);
-            Binding validToBinding = validToField.bind(bindGroup, entity, pd);
+            Binding validToBinding = validToField.bind(bindGroup, entity, pd, AcaciaUtils.getShortDateFormat());
             if ( !readonlyState ){
                 validToBinding.setValidator(new BaseValidator() {
                     @Override

@@ -6,21 +6,28 @@
 
 package com.cosmos.acacia.gui;
 
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.swingb.tree.AbstractDynamicTreeNode;
-import com.cosmos.swingb.tree.DynamicTreeModel;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Label;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
+
 import javax.swing.JComponent;
+import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.resource.TextResource;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.tree.AbstractDynamicTreeNode;
+import com.cosmos.swingb.tree.DynamicTreeModel;
 
 /**
  *
@@ -123,7 +130,7 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
                 AbstractTreePanel.this.treeValueChanged(getSelectionNode());
             }
         });
-
+        
         showAllHeirsCheckBox.addItemListener(new ItemListener()
         {
             @Override
@@ -132,6 +139,31 @@ public abstract class AbstractTreePanel<E extends DataObjectBean>
                 AbstractTreePanel.this.itemStateChanged(getSelectionNode());
             }
         });
+        
+        TreeCellRenderer customRenderer = getCellRenderer();
+        if ( customRenderer!=null ){
+            tree.setCellRenderer(customRenderer);
+        }
+    }
+    
+    private TreeCellRenderer treeCellRenderer = new DefaultTreeCellRenderer(){
+        @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
+                                                      boolean expanded, boolean leaf, int row,
+                                                      boolean hasFocus) {
+            Component result = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+            if ( value instanceof AbstractTreePanel.DynamicTreeNode ){
+                Object userObject = ((AbstractTreePanel.DynamicTreeNode)value).getUserObject();
+                if ( userObject instanceof TextResource ){
+                    setText(((TextResource)userObject).toText());
+                }
+            }
+            return result;
+        }
+    };
+    
+    protected TreeCellRenderer getCellRenderer(){
+        return treeCellRenderer;
     }
 
     protected void setComponent(JComponent component)

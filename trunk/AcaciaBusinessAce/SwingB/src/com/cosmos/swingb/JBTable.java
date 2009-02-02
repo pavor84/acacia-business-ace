@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.ListSelectionModel;
@@ -21,6 +22,7 @@ import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Property;
 import org.jdesktop.beansbinding.PropertyHelper;
@@ -35,6 +37,7 @@ import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.table.TableColumnExt;
 
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.converters.ResourceConverter;
@@ -55,8 +58,7 @@ public class JBTable
     private EntityProperties entityProperties;
 
     private BeanTableCellRenderer beanResourceCellRenderer;
-
-   
+    
     public JBTable()
     {
         internalInitialization();
@@ -481,7 +483,7 @@ public class JBTable
         }
         
         columnBinding.setColumnClass(columnClass);
-
+        
         Boolean b = propertyDetails.isEditable();
         if(b != null)
             columnBinding.setEditable(b.booleanValue());

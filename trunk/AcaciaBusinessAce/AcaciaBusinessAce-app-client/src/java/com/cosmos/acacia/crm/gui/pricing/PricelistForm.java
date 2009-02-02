@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
@@ -439,7 +440,7 @@ public class PricelistForm extends BaseEntityPanel {
         });
         
         // active from
-        activeFromField.bind(bindGroup, entity, entProps.getPropertyDetails("activeFrom"));
+        activeFromField.bind(bindGroup, entity, entProps.getPropertyDetails("activeFrom"), AcaciaUtils.getShortDateFormat());
         
         // active from hours
         activeFromHours.bind(bindGroup, this, createHoursPropertyDetails("activeFromHoursValue"));
@@ -448,7 +449,7 @@ public class PricelistForm extends BaseEntityPanel {
         activeFromMinunites.bind(bindGroup, this, createMinutesPropertyDetails("activeFromMinutesValue"));
         
         // active to
-        activeToField.bind(bindGroup, entity, entProps.getPropertyDetails("activeTo"));
+        activeToField.bind(bindGroup, entity, entProps.getPropertyDetails("activeTo"), AcaciaUtils.getShortDateFormat());
         
         // active to hours
         activeToHours.bind(bindGroup, this, createHoursPropertyDetails("activeToHoursValue"));

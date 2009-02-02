@@ -201,6 +201,7 @@ public class InputCallbackPanel
         if(valueDatePicker == null)
         {
             valueDatePicker = new JBDatePicker();
+            valueDatePicker.setFormats(AcaciaUtils.getShortDateFormat());
             valueDatePicker.setName("valueDatePicker"); // NOI18N
         }
 
