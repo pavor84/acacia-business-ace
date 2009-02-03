@@ -616,6 +616,10 @@ public abstract class AcaciaPanel
         String message = resourceMap.getString(messageKey);
         JOptionPane.showMessageDialog(this, message);
     }
+    
+    protected void showMessageBox(String message){
+        JOptionPane.showMessageDialog(this, message);
+    }
 
     protected static RightsManagerRemote getRightsManager() {
         if(rightsManager == null)

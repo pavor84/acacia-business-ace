@@ -26,10 +26,12 @@ import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.data.PricelistItem;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.pricing.ExistingProductDialog.Response;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -375,6 +377,7 @@ public class PricelistItemForm extends BaseEntityPanel {
             toSave = formSession.savePricelistItems(toSave);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValues(toSave);
+            checkForNotProfitableItems(toSave);
             close();
         }else{
             boolean duplication = checkForDuplication(entity);
@@ -382,6 +385,7 @@ public class PricelistItemForm extends BaseEntityPanel {
                 entity = formSession.savePricelistItem(entity);
                 setDialogResponse(DialogResponse.SAVE);
                 setSelectedValue(entity);
+                checkForNotProfitableItems(Arrays.asList(new PricelistItem[]{entity}));
             }else{
                 return;
             }
@@ -393,6 +397,34 @@ public class PricelistItemForm extends BaseEntityPanel {
             bindGroup.unbind();
             initData();
         }
+    }
+
+    private void checkForNotProfitableItems(List<PricelistItem> asList) {
+        StringBuilder msg = new StringBuilder();
+        msg.append(getResourceMap().getString("msg.noprofit.prefix"));
+        boolean found = false;
+        for (PricelistItem pricelistItem : asList) {
+            BigDecimal priceAfterDiscount = getPrice(pricelistItem).round(MathContext.DECIMAL64);
+            if ( priceAfterDiscount==null )
+                continue;
+            SimpleProduct product = pricelistItem.getProduct();
+            BigDecimal costPrice = product.getCostPrice().round(MathContext.DECIMAL64);
+            if ( priceAfterDiscount.compareTo(costPrice)<0 ){
+                BigDecimal loss = costPrice.subtract(priceAfterDiscount);
+                String itemMsg = getResourceMap().getString("msg.noprofit.item");
+                String currency = "";
+                if ( product.getCurrency()!=null ){
+                    currency = ((Currency)product.getCurrency().getEnumValue()).getCode();
+                }
+                itemMsg = MessageFormat.format(itemMsg, product.getProductDisplay(), AcaciaUtils.getDecimalFormat().format(loss),
+                    currency);
+                msg.append(itemMsg);
+                found = true;
+            }
+        }
+        
+        if (found)
+            showMessageBox(msg.toString());
     }
 
     private boolean checkForDuplication(PricelistItem current) {
@@ -595,7 +627,7 @@ public class PricelistItemForm extends BaseEntityPanel {
         if ( !discountField.getBinding().isContentValid() )
             priceField.setText("");
         else{
-            BigDecimal price = getPrice();
+            BigDecimal price = getPrice(entity);
             priceField.setText(getDecimalFormat().format(price));
         }
     }
@@ -619,21 +651,21 @@ public class PricelistItemForm extends BaseEntityPanel {
             salePriceField.setText((salePrice));
             
             // price
-            BigDecimal price = getPrice();
+            BigDecimal price = getPrice(entity);
             priceField.setText(getDecimalFormat().format(price));
         }
     }
 
-    private BigDecimal getPrice() {
+    private BigDecimal getPrice(PricelistItem item) {
         //sale price
-        BigDecimal salePrice = entity.getProduct().getSalePrice();
+        BigDecimal salePrice = item.getProduct().getSalePrice();
         if ( salePrice==null )
             return null;
         
         BigDecimal result = salePrice;
         
         //discount
-        BigDecimal discountPercent = entity.getDiscountPercent();
+        BigDecimal discountPercent = item.getDiscountPercent();
         if (discountPercent==null)
             discountPercent = pricelist.getDefaultDiscount();
         if ( discountPercent!=null ){
