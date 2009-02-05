@@ -167,6 +167,10 @@ public enum SpecialPermission implements DatabaseResource {
         }
     };
 
+    public static final Set<SpecialPermission> ProductPermissions =
+            EnumSet.of(Product, ProductPricing);
+
+
     private SpecialPermission(Category category)
     {
         this.category = category;
