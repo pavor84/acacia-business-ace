@@ -68,7 +68,19 @@ public class JBFormattedTextField
     private Object beanEntity;
 
     /**
-     * 
+     * @param bindingGroup
+     * @param beanEntity
+     * @param propertyDetails
+     * @return
+     */
+    public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails)
+    {
+        return bind(bindingGroup, beanEntity, propertyDetails, null);
+    }
+
+    /**
      * @param bindingGroup
      * @param beanEntity
      * @param propertyDetails
@@ -83,7 +95,6 @@ public class JBFormattedTextField
     }
 
     /**
-     * 
      * @param bindingGroup
      * @param beanEntity
      * @param propertyDetails

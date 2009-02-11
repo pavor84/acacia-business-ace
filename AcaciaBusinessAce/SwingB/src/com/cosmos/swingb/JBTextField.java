@@ -49,6 +49,23 @@ public class JBTextField
             PropertyDetails propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy)
     {
+        return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getPropertyName(), updateStrategy);
+    }
+
+    public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            String elProperyDisplay)
+    {
+        return bind(bindingGroup, beanEntity, propertyDetails, elProperyDisplay, AutoBinding.UpdateStrategy.READ_WRITE);
+    }
+
+    public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            String elProperyDisplay,
+            AutoBinding.UpdateStrategy updateStrategy)
+    {
         if(propertyDetails == null || propertyDetails.isHiden())
         {
             setEditable(false);
@@ -56,7 +73,9 @@ public class JBTextField
             return null;
         }
 
-        bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+        this.propertyName = elProperyDisplay;
+        ELProperty elProperty = ELProperty.create("${" + elProperyDisplay + "}");
+        bind(bindingGroup, beanEntity, elProperty, updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
@@ -74,13 +93,11 @@ public class JBTextField
     private Binding bind(
             BindingGroup bindingGroup,
             Object beanEntity,
-            String propertyName,
+            ELProperty elProperty,
             AutoBinding.UpdateStrategy updateStrategy)
     {
-        this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
-        ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("text");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
