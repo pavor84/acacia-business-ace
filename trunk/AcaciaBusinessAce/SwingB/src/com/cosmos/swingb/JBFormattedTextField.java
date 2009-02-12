@@ -262,11 +262,6 @@ public class JBFormattedTextField
             setText(value.toString());
     }
     
-    @Override
-    public void setText(String t) {
-        super.setText(t);
-    }
-
     public String getPropertyName() {
         return propertyName;
     }
