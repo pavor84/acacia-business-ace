@@ -35,12 +35,18 @@ public class XMaskFormatter extends MaskFormatter {
         }
 
         private MaskKey(char keyChar, boolean literal) {
+            this(keyChar, literal, !literal);
+        }
+
+        private MaskKey(char keyChar, boolean literal, boolean allowPlaceholderCharacter) {
             this.keyChar = keyChar;
             this.literal = literal;
+            this.allowPlaceholderCharacter = allowPlaceholderCharacter;
         }
 
         private char keyChar;
         private boolean literal;
+        private boolean allowPlaceholderCharacter;
 
         public char getKeyChar() {
             return keyChar;
@@ -48,6 +54,10 @@ public class XMaskFormatter extends MaskFormatter {
 
         public boolean isLiteral() {
             return literal;
+        }
+
+        public boolean isAllowPlaceholderCharacter() {
+            return allowPlaceholderCharacter;
         }
     }
 
@@ -70,6 +80,7 @@ public class XMaskFormatter extends MaskFormatter {
     }
 
     private void init() {
+        maskCharacters = EMPTY_MASK_CHARACTERS;
         setValueContainsLiteralCharacters(false);
     }
 
@@ -85,6 +96,17 @@ public class XMaskFormatter extends MaskFormatter {
 
     public void setCompleteMatch(boolean completeMatch) {
         this.completeMatch = completeMatch;
+    }
+
+    @Override
+    public String valueToString(Object value) throws ParseException {
+        String sValue = (value == null) ? "" : value.toString();
+        StringBuilder result = new StringBuilder();
+        String placeholder = getPlaceholder();
+        int[] valueCounter = { 0 };
+
+        append(result, sValue, valueCounter, placeholder, maskCharacters);
+        return result.toString();
     }
 
     @Override
@@ -384,6 +406,19 @@ public class XMaskFormatter extends MaskFormatter {
 
 
     /**
+     * Invokes <code>append</code> on the mask characters in
+     * <code>mask</code>.
+     */
+    private void append(StringBuilder result, String value, int[] index,
+                        String placeholder, MaskCharacter[] mask)
+                          throws ParseException {
+        for (int counter = 0, maxCounter = mask.length;
+             counter < maxCounter; counter++) {
+            mask[counter].append(result, value, index, placeholder);
+        }
+    }
+
+    /**
      * Interal classes used to represent the mask.
      */
     public class MaskCharacter {
@@ -412,6 +447,10 @@ public class XMaskFormatter extends MaskFormatter {
          */
         public boolean isLiteral() {
             return maskKey.isLiteral();
+        }
+
+        public boolean isAllowPlaceholderCharacter() {
+            return maskKey.isAllowPlaceholderCharacter();
         }
 
         /**
@@ -463,7 +502,7 @@ public class XMaskFormatter extends MaskFormatter {
          * Appends the necessary character in <code>formatting</code> at
          * <code>index</code> to <code>buff</code>.
          */
-        public void append(StringBuffer buff, String formatting, int[] index,
+        public void append(StringBuilder buff, String formatting, int[] index,
                 String placeholder)
                 throws ParseException {
             boolean inString = index[0] < formatting.length();
@@ -486,6 +525,9 @@ public class XMaskFormatter extends MaskFormatter {
                 }
                 index[0] = index[0] + 1;
             } else if (isValidCharacter(aChar)) {
+                buff.append(getChar(aChar));
+                index[0] = index[0] + 1;
+            } else if(getPlaceholderCharacter() == aChar && isAllowPlaceholderCharacter()) {
                 buff.append(getChar(aChar));
                 index[0] = index[0] + 1;
             } else {
@@ -648,6 +690,18 @@ public class XMaskFormatter extends MaskFormatter {
         System.out.println("formatter.valueToString(value): " + string);
 
         String value = (String)formatter.stringToValue(string);
+        System.out.println("formatter.stringToValue(string): \"" + value + "\"");
+
+        System.out.println("initialValue.equals(value): " + initialValue.equals(value));
+        System.out.flush();
+
+
+        initialValue = "123_4567890";
+        System.out.println("initialValue: \"" + initialValue + "\"");
+        string = formatter.valueToString(initialValue);
+        System.out.println("formatter.valueToString(value): " + string);
+
+        value = (String)formatter.stringToValue(string);
         System.out.println("formatter.stringToValue(string): \"" + value + "\"");
 
         System.out.println("initialValue.equals(value): " + initialValue.equals(value));

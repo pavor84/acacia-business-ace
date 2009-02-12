@@ -37,4 +37,9 @@ public class JXMaskTextField extends JFormattedTextField {
         if(value != null)
             setValue(value);
     }
+
+    public String getMask() {
+        MaskFormatter formatter = (MaskFormatter)getFormatter();
+        return formatter.getMask();
+    }
 }
