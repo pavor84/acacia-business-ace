@@ -25,6 +25,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.util.CodeFormatter;
+import javax.persistence.Transient;
 
 
 /**
@@ -181,6 +182,11 @@ public class SimpleProduct
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private int quantityPerPackage = 1;
 
+    @Column(name = "price_per_quantity", nullable = false)
+    @Property(title="Price per Qty", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    private int pricePerQuantity = 1;
+
     @JoinColumn(name = "dimension_unit_id", referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Dimension Unit")
@@ -200,6 +206,11 @@ public class SimpleProduct
     @Property(title="Dimension Height", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=99999d))
     private BigDecimal dimensionHeight;
+
+    @Transient
+    @Property(title="Cubature", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=99999d))
+    private BigDecimal dimensionCubature;
 
     @JoinColumn(name = "weight_unit_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -360,6 +371,14 @@ public class SimpleProduct
         this.listPrice = listPrice;
     }
 
+    public int getPricePerQuantity() {
+        return pricePerQuantity;
+    }
+
+    public void setPricePerQuantity(int pricePerQuantity) {
+        this.pricePerQuantity = pricePerQuantity;
+    }
+
     public int getQuantityPerPackage() {
         return quantityPerPackage;
     }
@@ -403,6 +422,17 @@ public class SimpleProduct
     public void setDimensionHeight(BigDecimal dimensionHeight) {
         firePropertyChange("dimensionHeight", this.dimensionHeight, dimensionHeight);
         this.dimensionHeight = dimensionHeight;
+    }
+
+    public BigDecimal getDimensionCubature() {
+        if(dimensionWidth == null || dimensionLength == null || dimensionHeight == null) {
+            return dimensionCubature = BigDecimal.ZERO;
+        }
+
+        return dimensionCubature = dimensionWidth.multiply(dimensionLength).multiply(dimensionHeight);
+    }
+
+    public void setDimensionCubature(BigDecimal cubature) {
     }
 
     public DbResource getWeightUnit() {
