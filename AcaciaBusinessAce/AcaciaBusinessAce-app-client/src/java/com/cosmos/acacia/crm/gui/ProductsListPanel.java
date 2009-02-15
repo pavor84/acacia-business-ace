@@ -106,11 +106,13 @@ public class ProductsListPanel
         return false;
     }
 
+    @Override
     protected Object modifyRow(Object rowObject)
     {
         if(rowObject != null)
         {
-            ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
+            //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
+            ProductPanelNew productPanel = new ProductPanelNew((SimpleProduct)rowObject);
             DialogResponse response = productPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -121,9 +123,21 @@ public class ProductsListPanel
         return null;
     }
 
+    @Override
+    protected void viewRow(Object rowObject) {
+        if(rowObject != null)
+        {
+            //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
+            ProductPanelNew productPanel = new ProductPanelNew((SimpleProduct)rowObject);
+            DialogResponse response = productPanel.showDialog(this);
+        }
+    }
+
+    @Override
     protected Object newRow()
     {
-        ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
+        //ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
+        ProductPanelNew productPanel = new ProductPanelNew(getParentDataObjectId());
         DialogResponse response = productPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
@@ -133,24 +147,28 @@ public class ProductsListPanel
         return null;
     }
 
+    @Override
     public boolean canCreate()
     {
-        return getRightsManager().isAllowed(SpecialPermission.Product);
+        return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
 
+    @Override
     public boolean canModify(Object rowObject)
     {
-        return getRightsManager().isAllowed(SpecialPermission.Product);
+        return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
 
+    @Override
     public boolean canDelete(Object rowObject)
     {
-        return getRightsManager().isAllowed(SpecialPermission.Product);
+        return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
     
     @Override
     public boolean canView(Object rowObject) {
-        return getRightsManager().isAllowed(SpecialPermission.Product);
+        //return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
+        return true;
     }
 
 
