@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -18,14 +19,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="productTabbedPane" alignment="0" pref="441" max="32767" attributes="0"/>
           <Component id="buttonsPanel" alignment="1" max="32767" attributes="0"/>
+          <Component id="productTabbedPane" alignment="0" pref="499" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="productTabbedPane" pref="509" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <Component id="productTabbedPane" pref="390" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="buttonsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -59,40 +60,64 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="pricePanel" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="purchasedCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="salableCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="obsoleteCheckBox" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="quantityPerPackageLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="producerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="productColorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="measureUnitLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="productCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="codeFormatLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="productCategoryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="productNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="productNameTextField" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="productCategoryComboList" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="codeFormatTextField" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="productCodeTextField" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="measureUnitComboBox" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="productColorComboBox" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="producerComboList" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="quantityPerPackageTextField" alignment="0" pref="281" max="32767" attributes="0"/>
+                                  <Component id="productNameTextField" alignment="0" pref="331" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Group type="102" alignment="0" attributes="1">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="productCodeFormatComboList" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="productCategoryComboList" alignment="0" max="32767" attributes="1"/>
+                                          <Group type="102" alignment="0" attributes="1">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="measureUnitComboBox" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="1">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="producerComboList" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="categoryCodeFormatLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="productCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="productColorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="quantityPerPackageLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="quantityPerPackageTextField" alignment="0" max="32767" attributes="1"/>
+                                          <Component id="productColorComboBox" max="32767" attributes="1"/>
+                                          <Component id="productCodeTextField" max="32767" attributes="1"/>
+                                          <Component id="categoryCodeFormatTextField" alignment="0" pref="63" max="32767" attributes="1"/>
+                                      </Group>
+                                  </Group>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
-                          <Component id="quantitiesOnStockPanel" alignment="1" pref="412" max="32767" attributes="0"/>
+                          <Component id="productCodeFormatLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="measureUnitLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="producerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="purchaseOptionsPanel" pref="470" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="pricePanel" pref="470" max="32767" attributes="2"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="quantitiesOnStockPanel" pref="470" max="32767" attributes="2"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -108,48 +133,41 @@
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="productCategoryLabel" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="productCategoryComboList" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="categoryCodeFormatLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="categoryCodeFormatTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="productCodeFormatLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="productCodeFormatComboList" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="productCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="productCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="codeFormatLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="codeFormatTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="productCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="productCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="measureUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="measureUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="measureUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="productColorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="productColorComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="producerLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="producerComboList" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="producerLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="producerComboList" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="quantityPerPackageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="quantityPerPackageTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="quantityPerPackageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="quantityPerPackageTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="purchasedCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="salableCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="obsoleteCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="purchaseOptionsPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="pricePanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="quantitiesOnStockPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="31" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="143" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -177,23 +195,10 @@
                 <Property name="name" type="java.lang.String" value="productCategoryLabel" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="com.cosmos.swingb.JBTextField" name="codeFormatTextField">
+            <Component class="com.cosmos.swingb.JBLabel" name="productCodeFormatLabel">
               <Properties>
-                <Property name="name" type="java.lang.String" value="codeFormatTextField" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="codeFormatTextFieldFocusLost"/>
-              </Events>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="codeFormatLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="codeFormatLabel.text"/>
-                <Property name="name" type="java.lang.String" value="codeFormatLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBFormattedTextField" name="productCodeTextField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="productCodeTextField" noResource="true"/>
+                <Property name="text" type="java.lang.String" resourceKey="productCodeFormatLabel.text"/>
+                <Property name="name" type="java.lang.String" value="productCodeFormatLabel" noResource="true"/>
               </Properties>
             </Component>
             <Component class="com.cosmos.swingb.JBLabel" name="productCodeLabel">
@@ -246,24 +251,6 @@
                 <Property name="name" type="java.lang.String" value="quantityPerPackageLabel" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="com.cosmos.swingb.JBCheckBox" name="purchasedCheckBox">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="purchasedCheckBox.text"/>
-                <Property name="name" type="java.lang.String" value="purchasedCheckBox" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBCheckBox" name="salableCheckBox">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="salableCheckBox.text"/>
-                <Property name="name" type="java.lang.String" value="salableCheckBox" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBCheckBox" name="obsoleteCheckBox">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="obsoleteCheckBox.text"/>
-                <Property name="name" type="java.lang.String" value="obsoleteCheckBox" noResource="true"/>
-              </Properties>
-            </Component>
             <Container class="com.cosmos.swingb.JBPanel" name="pricePanel">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -275,42 +262,6 @@
                 </Property>
                 <Property name="name" type="java.lang.String" value="pricePanel" noResource="true"/>
               </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="pricePerQuantityLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="salesPriceLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="salesPriceTextField" alignment="0" pref="264" max="32767" attributes="0"/>
-                              <Component id="pricePerQuantityTextField" alignment="0" pref="264" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="pricePerQuantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="pricePerQuantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="salesPriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="salesPriceTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
               <SubComponents>
                 <Component class="com.cosmos.swingb.JBFormattedTextField" name="pricePerQuantityTextField">
                   <Properties>
@@ -335,6 +286,94 @@
                   </Properties>
                 </Component>
               </SubComponents>
+              <LayoutCode>
+                <CodeStatement>
+                  <CodeExpression id="1_pricePanel">
+                    <CodeVariable name="pricePanel" type="8194" declaredType="com.cosmos.swingb.JBPanel"/>
+                    <ExpressionOrigin>
+                      <ExpressionProvider type="ComponentRef">
+                        <ComponentRef name="pricePanel"/>
+                      </ExpressionProvider>
+                    </ExpressionOrigin>
+                  </CodeExpression>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="2">
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="CodeConstructor">
+                          <CodeConstructor class="net.miginfocom.swing.MigLayout" parameterTypes=""/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="1_pricePanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="3_pricePerQuantityTextField">
+                      <CodeVariable name="pricePerQuantityTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="pricePerQuantityTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="1_pricePanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="4_salesPriceTextField">
+                      <CodeVariable name="salesPriceTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="salesPriceTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="1_pricePanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="5_pricePerQuantityLabel">
+                      <CodeVariable name="pricePerQuantityLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="pricePerQuantityLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="1_pricePanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="6_salesPriceLabel">
+                      <CodeVariable name="salesPriceLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="salesPriceLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+              </LayoutCode>
             </Container>
             <Container class="com.cosmos.swingb.JBPanel" name="quantitiesOnStockPanel">
               <Properties>
@@ -347,47 +386,281 @@
                 </Property>
                 <Property name="name" type="java.lang.String" value="quantitiesOnStockPanel" noResource="true"/>
               </Properties>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                <Property name="columns" type="int" value="0"/>
-                <Property name="horizontalGap" type="int" value="10"/>
-                <Property name="rows" type="int" value="1"/>
-              </Layout>
               <SubComponents>
-                <Component class="com.cosmos.swingb.LabeledTextField" name="minLabeledTextField">
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="minTextField">
                   <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                        <EmptyBorder bottom="5" left="5" right="5" top="5"/>
-                      </Border>
-                    </Property>
-                    <Property name="labelText" type="java.lang.String" resourceKey="minLabeledTextField.labelText"/>
-                    <Property name="text" type="java.lang.String" resourceKey="minLabeledTextField.text"/>
+                    <Property name="name" type="java.lang.String" value="minTextField" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="com.cosmos.swingb.LabeledTextField" name="defaultLabeledTextField">
+                <Component class="com.cosmos.swingb.JBLabel" name="minLabel">
                   <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                        <EmptyBorder bottom="5" left="5" right="5" top="5"/>
-                      </Border>
-                    </Property>
-                    <Property name="labelText" type="java.lang.String" resourceKey="defaultLabeledTextField.labelText"/>
-                    <Property name="text" type="java.lang.String" resourceKey="defaultLabeledTextField.text"/>
+                    <Property name="text" type="java.lang.String" resourceKey="minLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="minLabel" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="com.cosmos.swingb.LabeledTextField" name="maxLabeledTextField">
+                <Component class="com.cosmos.swingb.JBLabel" name="defaultLabel">
                   <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                        <EmptyBorder bottom="5" left="5" right="5" top="5"/>
-                      </Border>
-                    </Property>
-                    <Property name="labelText" type="java.lang.String" resourceKey="maxLabeledTextField.labelText"/>
-                    <Property name="text" type="java.lang.String" resourceKey="maxLabeledTextField.text"/>
+                    <Property name="text" type="java.lang.String" resourceKey="defaultLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="defaultLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="defaultTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="defaultTextField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="maxLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="maxLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="maxLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="maxTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="maxTextField" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
+              <LayoutCode>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel">
+                    <CodeVariable name="quantitiesOnStockPanel" type="8194" declaredType="com.cosmos.swingb.JBPanel"/>
+                    <ExpressionOrigin>
+                      <ExpressionProvider type="ComponentRef">
+                        <ComponentRef name="quantitiesOnStockPanel"/>
+                      </ExpressionProvider>
+                    </ExpressionOrigin>
+                  </CodeExpression>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="8">
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="CodeConstructor">
+                          <CodeConstructor class="net.miginfocom.swing.MigLayout" parameterTypes=""/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="9_minTextField">
+                      <CodeVariable name="minTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="minTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="10_minLabel">
+                      <CodeVariable name="minLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="minLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="11_defaultLabel">
+                      <CodeVariable name="defaultLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="defaultLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="12_defaultTextField">
+                      <CodeVariable name="defaultTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="defaultTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="13_maxLabel">
+                      <CodeVariable name="maxLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="maxLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="7_quantitiesOnStockPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="14_maxTextField">
+                      <CodeVariable name="maxTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="maxTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+              </LayoutCode>
+            </Container>
+            <Component class="com.cosmos.swingb.JBTextField" name="categoryCodeFormatTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="categoryCodeFormatTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="categoryCodeFormatLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="categoryCodeFormatLabel.text"/>
+                <Property name="name" type="java.lang.String" value="categoryCodeFormatLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="productCodeFormatComboList">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="productCodeFormatComboList" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBMaskTextField" name="productCodeTextField">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="productCodeTextField.text"/>
+                <Property name="name" type="java.lang.String" value="productCodeTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Container class="com.cosmos.swingb.JBPanel" name="purchaseOptionsPanel">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="purchaseOptionsPanel" noResource="true"/>
+              </Properties>
+              <SubComponents>
+                <Component class="com.cosmos.swingb.JBCheckBox" name="purchasedCheckBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="purchasedCheckBox.text"/>
+                    <Property name="name" type="java.lang.String" value="purchasedCheckBox" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBCheckBox" name="salableCheckBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="salableCheckBox.text"/>
+                    <Property name="name" type="java.lang.String" value="salableCheckBox" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBCheckBox" name="obsoleteCheckBox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="obsoleteCheckBox.text"/>
+                    <Property name="name" type="java.lang.String" value="obsoleteCheckBox" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+              <LayoutCode>
+                <CodeStatement>
+                  <CodeExpression id="15_purchaseOptionsPanel">
+                    <CodeVariable name="purchaseOptionsPanel" type="8194" declaredType="com.cosmos.swingb.JBPanel"/>
+                    <ExpressionOrigin>
+                      <ExpressionProvider type="ComponentRef">
+                        <ComponentRef name="purchaseOptionsPanel"/>
+                      </ExpressionProvider>
+                    </ExpressionOrigin>
+                  </CodeExpression>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="16">
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="CodeConstructor">
+                          <CodeConstructor class="net.miginfocom.swing.MigLayout" parameterTypes=""/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="15_purchaseOptionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="17_purchasedCheckBox">
+                      <CodeVariable name="purchasedCheckBox" type="8194" declaredType="com.cosmos.swingb.JBCheckBox"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="purchasedCheckBox"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="15_purchaseOptionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="18_salableCheckBox">
+                      <CodeVariable name="salableCheckBox" type="8194" declaredType="com.cosmos.swingb.JBCheckBox"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="salableCheckBox"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="15_purchaseOptionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="19_obsoleteCheckBox">
+                      <CodeVariable name="obsoleteCheckBox" type="8194" declaredType="com.cosmos.swingb.JBCheckBox"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="obsoleteCheckBox"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+              </LayoutCode>
             </Container>
           </SubComponents>
         </Container>
@@ -409,9 +682,9 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="descriptionPanel" alignment="0" pref="412" max="32767" attributes="0"/>
-                          <Component id="deliveryInfoPanel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="dimensionsPanel" alignment="1" max="32767" attributes="0"/>
+                          <Component id="descriptionPanel" alignment="0" pref="470" max="32767" attributes="0"/>
+                          <Component id="deliveryInfoPanel" alignment="0" pref="470" max="32767" attributes="0"/>
+                          <Component id="dimensionsPanel" alignment="1" pref="470" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -425,7 +698,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="dimensionsPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="descriptionPanel" pref="225" max="32767" attributes="0"/>
+                      <Component id="descriptionPanel" pref="190" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -443,60 +716,7 @@
                 </Property>
                 <Property name="name" type="java.lang.String" value="deliveryInfoPanel" noResource="true"/>
               </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="weightUnitLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="weightUnitComboBox" pref="300" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="weightLabeledTextField" pref="179" max="32767" attributes="0"/>
-                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                  <Component id="deliveryTimeLabeledTextField" pref="179" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="weightUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="weightUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="weightLabeledTextField" min="-2" max="-2" attributes="0"/>
-                              <Component id="deliveryTimeLabeledTextField" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
               <SubComponents>
-                <Component class="com.cosmos.swingb.LabeledTextField" name="weightLabeledTextField">
-                  <Properties>
-                    <Property name="labelText" type="java.lang.String" resourceKey="weightLabeledTextField.labelText"/>
-                    <Property name="name" type="java.lang.String" value="weightLabeledTextField" noResource="true"/>
-                    <Property name="text" type="java.lang.String" resourceKey="weightLabeledTextField.text"/>
-                  </Properties>
-                </Component>
-                <Component class="com.cosmos.swingb.LabeledTextField" name="deliveryTimeLabeledTextField">
-                  <Properties>
-                    <Property name="labelText" type="java.lang.String" resourceKey="deliveryTimeLabeledTextField.labelText"/>
-                    <Property name="name" type="java.lang.String" value="deliveryTimeLabeledTextField" noResource="true"/>
-                    <Property name="text" type="java.lang.String" resourceKey="deliveryTimeLabeledTextField.text"/>
-                  </Properties>
-                </Component>
                 <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="weightUnitComboBox">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="weightUnitComboBox" noResource="true"/>
@@ -508,7 +728,149 @@
                     <Property name="name" type="java.lang.String" value="weightUnitLabel" noResource="true"/>
                   </Properties>
                 </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="weightLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="weightLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="weightLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="weightTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="weightTextField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="deliveryTimeLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="deliveryTimeLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="deliveryTimeLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="deliveryTimeTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="deliveryTimeTextField" noResource="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
+              <LayoutCode>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel">
+                    <CodeVariable name="deliveryInfoPanel" type="8194" declaredType="com.cosmos.swingb.JBPanel"/>
+                    <ExpressionOrigin>
+                      <ExpressionProvider type="ComponentRef">
+                        <ComponentRef name="deliveryInfoPanel"/>
+                      </ExpressionProvider>
+                    </ExpressionOrigin>
+                  </CodeExpression>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="21">
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="CodeConstructor">
+                          <CodeConstructor class="net.miginfocom.swing.MigLayout" parameterTypes=""/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="22_weightUnitComboBox">
+                      <CodeVariable name="weightUnitComboBox" type="8194" declaredType="com.cosmos.acacia.gui.AcaciaComboBox"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="weightUnitComboBox"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="23_weightUnitLabel">
+                      <CodeVariable name="weightUnitLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="weightUnitLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="24_weightLabel">
+                      <CodeVariable name="weightLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="weightLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="25_weightTextField">
+                      <CodeVariable name="weightTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="weightTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="26_deliveryTimeLabel">
+                      <CodeVariable name="deliveryTimeLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="deliveryTimeLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="20_deliveryInfoPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="27_deliveryTimeTextField">
+                      <CodeVariable name="deliveryTimeTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="deliveryTimeTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+              </LayoutCode>
             </Container>
             <Container class="com.cosmos.swingb.JBPanel" name="dimensionsPanel">
               <Properties>
@@ -521,38 +883,6 @@
                 </Property>
                 <Property name="name" type="java.lang.String" value="dimensionsPanel" noResource="true"/>
               </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="dimensionValuesPanel" alignment="0" pref="376" max="32767" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="dimensionUnitLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="dimensionUnitComboBox" pref="268" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="dimensionUnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dimensionUnitComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="dimensionValuesPanel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
               <SubComponents>
                 <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="dimensionUnitComboBox">
                   <Properties>
@@ -565,67 +895,235 @@
                     <Property name="name" type="java.lang.String" value="dimensionUnitLabel" noResource="true"/>
                   </Properties>
                 </Component>
-                <Container class="com.cosmos.swingb.JBPanel" name="dimensionValuesPanel">
+                <Component class="com.cosmos.swingb.JBLabel" name="widthLabel">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="dimensionValuesPanel" noResource="true"/>
+                    <Property name="text" type="java.lang.String" resourceKey="widthLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="widthLabel" noResource="true"/>
                   </Properties>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="2"/>
-                    <Property name="rows" type="int" value="2"/>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="com.cosmos.swingb.LabeledTextField" name="widthLabeledTextField">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="0" right="5" top="0"/>
-                          </Border>
-                        </Property>
-                        <Property name="labelText" type="java.lang.String" resourceKey="widthLabeledTextField.labelText"/>
-                        <Property name="name" type="java.lang.String" value="widthLabeledTextField" noResource="true"/>
-                        <Property name="text" type="java.lang.String" resourceKey="widthLabeledTextField.text"/>
-                      </Properties>
-                    </Component>
-                    <Component class="com.cosmos.swingb.LabeledTextField" name="lengthLabeledTextField">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="3" left="5" right="0" top="0"/>
-                          </Border>
-                        </Property>
-                        <Property name="labelText" type="java.lang.String" resourceKey="lengthLabeledTextField.labelText"/>
-                        <Property name="name" type="java.lang.String" value="lengthLabeledTextField" noResource="true"/>
-                        <Property name="text" type="java.lang.String" resourceKey="lengthLabeledTextField.text"/>
-                      </Properties>
-                    </Component>
-                    <Component class="com.cosmos.swingb.LabeledTextField" name="heightLabeledTextField">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="0" left="0" right="5" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="labelText" type="java.lang.String" resourceKey="heightLabeledTextField.labelText"/>
-                        <Property name="name" type="java.lang.String" value="heightLabeledTextField" noResource="true"/>
-                        <Property name="text" type="java.lang.String" resourceKey="heightLabeledTextField.text"/>
-                      </Properties>
-                    </Component>
-                    <Component class="com.cosmos.swingb.LabeledTextField" name="cubageLabeledTextField">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                            <EmptyBorder bottom="0" left="5" right="0" top="3"/>
-                          </Border>
-                        </Property>
-                        <Property name="labelText" type="java.lang.String" resourceKey="cubageLabeledTextField.labelText"/>
-                        <Property name="name" type="java.lang.String" value="cubageLabeledTextField" noResource="true"/>
-                        <Property name="text" type="java.lang.String" resourceKey="cubageLabeledTextField.text"/>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                </Container>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="widthTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="widthTextField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="lengthLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="lengthLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="lengthLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="lengthTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="lengthTextField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="heightLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="heightLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="heightLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="heightTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="heightTextField" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBLabel" name="cubatureLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="cubatureLabel.text"/>
+                    <Property name="name" type="java.lang.String" value="cubatureLabel" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="com.cosmos.swingb.JBFormattedTextField" name="cubatureTextField">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="cubatureTextField" noResource="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
+              <LayoutCode>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel">
+                    <CodeVariable name="dimensionsPanel" type="8194" declaredType="com.cosmos.swingb.JBPanel"/>
+                    <ExpressionOrigin>
+                      <ExpressionProvider type="ComponentRef">
+                        <ComponentRef name="dimensionsPanel"/>
+                      </ExpressionProvider>
+                    </ExpressionOrigin>
+                  </CodeExpression>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="29">
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="CodeConstructor">
+                          <CodeConstructor class="net.miginfocom.swing.MigLayout" parameterTypes=""/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="30_dimensionUnitComboBox">
+                      <CodeVariable name="dimensionUnitComboBox" type="8194" declaredType="com.cosmos.acacia.gui.AcaciaComboBox"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="dimensionUnitComboBox"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="31_dimensionUnitLabel">
+                      <CodeVariable name="dimensionUnitLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="dimensionUnitLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="32_widthLabel">
+                      <CodeVariable name="widthLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="widthLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="33_widthTextField">
+                      <CodeVariable name="widthTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="widthTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="34_lengthLabel">
+                      <CodeVariable name="lengthLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="lengthLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="35_lengthTextField">
+                      <CodeVariable name="lengthTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="lengthTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="36_heightLabel">
+                      <CodeVariable name="heightLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="heightLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="37_heightTextField">
+                      <CodeVariable name="heightTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="heightTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="38_cubatureLabel">
+                      <CodeVariable name="cubatureLabel" type="8194" declaredType="com.cosmos.swingb.JBLabel"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="cubatureLabel"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+                <CodeStatement>
+                  <CodeExpression id="28_dimensionsPanel"/>
+                  <StatementProvider type="CodeMethod">
+                    <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+                  </StatementProvider>
+                  <Parameters>
+                    <CodeExpression id="39_cubatureTextField">
+                      <CodeVariable name="cubatureTextField" type="8194" declaredType="com.cosmos.swingb.JBFormattedTextField"/>
+                      <ExpressionOrigin>
+                        <ExpressionProvider type="ComponentRef">
+                          <ComponentRef name="cubatureTextField"/>
+                        </ExpressionProvider>
+                      </ExpressionOrigin>
+                    </CodeExpression>
+                  </Parameters>
+                </CodeStatement>
+              </LayoutCode>
             </Container>
             <Container class="com.cosmos.swingb.JBPanel" name="descriptionPanel">
               <Properties>
@@ -682,12 +1180,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="436" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="494" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="479" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="360" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -717,7 +1215,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="245" max="32767" attributes="0"/>
+                  <EmptySpace pref="303" max="32767" attributes="0"/>
                   <Component id="saveButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="closeButton" linkSize="1" min="-2" max="-2" attributes="0"/>
