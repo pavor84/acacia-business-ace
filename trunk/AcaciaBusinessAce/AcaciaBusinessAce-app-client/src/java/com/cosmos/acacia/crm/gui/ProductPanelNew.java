@@ -912,14 +912,18 @@ public class ProductPanelNew extends AcaciaPanel {
                 product,
                 propDetails);
 
+        CubatureBindingListener cubatureBindingListener = new CubatureBindingListener();
         propDetails = entityProps.getPropertyDetails("dimensionWidth");
-        widthTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        Binding binding = widthTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding.addBindingListener(cubatureBindingListener);
 
         propDetails = entityProps.getPropertyDetails("dimensionLength");
-        lengthTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding = lengthTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding.addBindingListener(cubatureBindingListener);
 
         propDetails = entityProps.getPropertyDetails("dimensionHeight");
-        heightTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding = heightTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding.addBindingListener(cubatureBindingListener);
 
         cubatureTextField.setEditable(false);
     }
@@ -1082,6 +1086,14 @@ public class ProductPanelNew extends AcaciaPanel {
         return formSession;
     }
 
+
+    private class CubatureBindingListener extends AbstractBindingListener {
+
+        @Override
+        public void targetChanged(Binding binding, PropertyStateEvent event) {
+            refreshCubature();
+        }
+    }
 
     private class SuppliersListPanel extends AbstractTablePanel {
 
