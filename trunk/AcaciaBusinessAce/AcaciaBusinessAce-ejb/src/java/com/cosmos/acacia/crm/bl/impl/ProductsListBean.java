@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private ProductValidatorLocal productValidator;
     @EJB
     private ProductCategoryValidatorLocal productCategoryValidator;
+    @EJB
+    private AcaciaSessionLocal session;
 
     @SuppressWarnings("unchecked")
     public List<SimpleProduct> getProducts(BigInteger parentId)
@@ -107,13 +110,14 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         return entityProperties;
     }
 
-    public SimpleProduct newProduct(BigInteger parentId) {
+    @Override
+    public SimpleProduct newProduct() {
         SimpleProduct product = new SimpleProduct();
-        product.setParentId(parentId);
+        product.setParentId(session.getOrganization().getId());
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         product.setListPrice(BigDecimal.valueOf(0));
         product.setCurrency(Currency.Leva.getDbResource());
-        
+
         return product;
     }
 

@@ -33,7 +33,7 @@ public interface ProductsListRemote {
     
     EntityProperties getProductListingEntityProperties();
 
-    SimpleProduct newProduct(BigInteger bigInteger);
+    SimpleProduct newProduct();
 
     SimpleProduct saveProduct(SimpleProduct product);
 
