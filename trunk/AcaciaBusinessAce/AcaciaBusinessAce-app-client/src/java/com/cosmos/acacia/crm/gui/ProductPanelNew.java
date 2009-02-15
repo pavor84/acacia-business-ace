@@ -926,6 +926,9 @@ public class ProductPanelNew extends AcaciaPanel {
         binding.addBindingListener(cubatureBindingListener);
 
         cubatureTextField.setEditable(false);
+
+        propDetails = entityProps.getPropertyDetails("description");
+        binding = descriptionTextPane.bind(productBindingGroup, product, propDetails);
     }
 
     private void initProductPricing() {
