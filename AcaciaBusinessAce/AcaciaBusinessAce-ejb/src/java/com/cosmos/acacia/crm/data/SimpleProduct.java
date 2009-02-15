@@ -426,7 +426,7 @@ public class SimpleProduct
 
     public BigDecimal getDimensionCubature() {
         if(dimensionWidth == null || dimensionLength == null || dimensionHeight == null) {
-            return dimensionCubature = BigDecimal.ZERO;
+            return dimensionCubature = null;
         }
 
         return dimensionCubature = dimensionWidth.multiply(dimensionLength).multiply(dimensionHeight);
