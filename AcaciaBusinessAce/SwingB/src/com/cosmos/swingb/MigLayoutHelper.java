@@ -5,7 +5,6 @@
 package com.cosmos.swingb;
 
 import java.awt.Component;
-import java.awt.LayoutManager;
 import java.util.Map;
 import javax.swing.JPanel;
 import net.miginfocom.layout.AC;
@@ -20,33 +19,24 @@ import net.miginfocom.swing.MigLayout;
  *
  * @author Miro
  */
-public class MigPanel extends JPanel {
+public class MigLayoutHelper {
 
+    private JPanel panel;
     private LC layoutConstraints;
     private AC columnConstraints;
     private AC rowConstraints;
 
-    public MigPanel() {
-        super(new MigLayout());
+    public MigLayoutHelper(JPanel panel) {
+        this.panel = panel;
         initMigLayout();
     }
 
-    public MigLayout getMigLayout() {
-        return (MigLayout) getLayout();
-    }
-
-    @Override
-    public void setLayout(LayoutManager layoutManager) {
-        super.setLayout(layoutManager);
-        initMigLayout();
+    public MigLayout getLayout() {
+        return (MigLayout) panel.getLayout();
     }
 
     private void initMigLayout() {
-        LayoutManager layoutManager = getLayout();
-        if(!(layoutManager instanceof MigLayout))
-            return;
-
-        MigLayout migLayout = (MigLayout) layoutManager;
+        MigLayout migLayout = getLayout();
         layoutConstraints = new LC();
         migLayout.setLayoutConstraints(layoutConstraints);
         columnConstraints = new AC();
@@ -80,11 +70,11 @@ public class MigPanel extends JPanel {
     }
 
     public Map<Component, Object> getComponentConstraintMap() {
-        return getMigLayout().getConstraintMap();
+        return getLayout().getConstraintMap();
     }
 
     public void setComponentConstraintMap(Map<Component, Object> constraintMap) {
-        getMigLayout().setConstraintMap(constraintMap);
+        getLayout().setConstraintMap(constraintMap);
     }
 
     public boolean isLayoutNoCache() {
