@@ -5,6 +5,7 @@
 package com.cosmos.swingb;
 
 import java.awt.Component;
+import java.awt.LayoutManager;
 import java.util.Map;
 import javax.swing.JPanel;
 import net.miginfocom.layout.AC;
@@ -32,7 +33,13 @@ public class MigLayoutHelper {
     }
 
     public MigLayout getLayout() {
-        return (MigLayout) panel.getLayout();
+        LayoutManager layoutManager = panel.getLayout();
+        if(!(layoutManager instanceof MigLayout)) {
+            layoutManager = new MigLayout();
+            panel.setLayout(layoutManager);
+        }
+
+        return (MigLayout) layoutManager;
     }
 
     private void initMigLayout() {
