@@ -130,7 +130,7 @@ public class ProductsListTest extends BaseTest {
     }
 
     private SimpleProduct createNew(String nameInsert, String codeInsert) throws UncompleteUnitTestException{
-        SimpleProduct result = formSession.newProduct(getOrganizationId());
+        SimpleProduct result = formSession.newProduct();
         result.setProductName(nameInsert);
         result.setProductCode(codeInsert);
 
