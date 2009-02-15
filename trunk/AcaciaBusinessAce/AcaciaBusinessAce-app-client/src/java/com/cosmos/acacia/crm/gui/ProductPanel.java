@@ -54,6 +54,7 @@ import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.AcaciaPercentValueField.EditType;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -746,7 +747,7 @@ public class ProductPanel extends AcaciaPanel {
         AutoCompleteDecorator.decorate(weightUnitComboBox, resourceToStringConverter);
 
         if(product == null){
-            product = getFormSession().newProduct(getParentDataObjectId());
+            product = getFormSession().newProduct();
         }else{
             product = getFormSession().refresh(product);
         }
@@ -827,7 +828,8 @@ public class ProductPanel extends AcaciaPanel {
             propDetails = entityProps.getPropertyDetails("productColor");
             productColorComboBox.bind(productBindingGroup, getProductColors(), product, propDetails);
 
-            minQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("minimumQuantity"), getDecimalFormat());
+            propDetails = entityProps.getPropertyDetails("minimumQuantity");
+            minQuantityTextField.bind(productBindingGroup, product, propDetails, getDecimalFormat());
             maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
             defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
             
@@ -927,7 +929,8 @@ public class ProductPanel extends AcaciaPanel {
             pricingPanel.getProfitField().bind(productBindingGroup, product, entityProps.getPropertyDetails("profitPercent"), getDecimalFormat(),
                 true, EditType.NONE, product.getCostPrice());
             
-            quantityPerPackageTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("quantityPerPackage"), getIntegerFormat());
+            quantityPerPackageTextField.bind(productBindingGroup, product,
+                    entityProps.getPropertyDetails("quantityPerPackage"), AcaciaUtils.getIntegerFormat());
 
             dimensionUnitComboBox.bind(
                     productBindingGroup,
