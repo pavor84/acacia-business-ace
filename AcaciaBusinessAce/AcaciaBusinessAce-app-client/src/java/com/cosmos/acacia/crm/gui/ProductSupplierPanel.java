@@ -12,15 +12,23 @@
 package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
+import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.List;
 import javax.ejb.EJB;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /*
@@ -69,7 +77,6 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         supplierLabel = new com.cosmos.swingb.JBLabel();
         supplierComboList = new com.cosmos.acacia.gui.AcaciaComboList();
         supplierProductCodeLabel = new com.cosmos.swingb.JBLabel();
-        supplierProductCodeTextField = new com.cosmos.swingb.JBFormattedTextField();
         supplierProductNameLabel = new com.cosmos.swingb.JBLabel();
         supplierProductNameTextField = new com.cosmos.swingb.JBTextField();
         pricePerQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
@@ -91,6 +98,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         measureUnitLabel = new com.cosmos.swingb.JBLabel();
+        supplierProductCodeTextField = new com.cosmos.swingb.JBTextField();
         simpleProductPanel = new com.cosmos.swingb.JBPanel();
         productCodeLabel = new com.cosmos.swingb.JBLabel();
         productCodeTextField = new com.cosmos.swingb.JBFormattedTextField();
@@ -111,8 +119,6 @@ public class ProductSupplierPanel extends BaseEntityPanel {
 
         supplierProductCodeLabel.setText(resourceMap.getString("supplierProductCodeLabel.text")); // NOI18N
         supplierProductCodeLabel.setName("supplierProductCodeLabel"); // NOI18N
-
-        supplierProductCodeTextField.setName("supplierProductCodeTextField"); // NOI18N
 
         supplierProductNameLabel.setText(resourceMap.getString("supplierProductNameLabel.text")); // NOI18N
         supplierProductNameLabel.setName("supplierProductNameLabel"); // NOI18N
@@ -170,6 +176,8 @@ public class ProductSupplierPanel extends BaseEntityPanel {
 
         measureUnitLabel.setText(resourceMap.getString("measureUnitLabel.text")); // NOI18N
         measureUnitLabel.setName("measureUnitLabel"); // NOI18N
+
+        supplierProductCodeTextField.setName("supplierProductCodeTextField"); // NOI18N
 
         javax.swing.GroupLayout supplierPanelLayout = new javax.swing.GroupLayout(supplierPanel);
         supplierPanel.setLayout(supplierPanelLayout);
@@ -239,9 +247,9 @@ public class ProductSupplierPanel extends BaseEntityPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(supplierProductCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(supplierProductCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(supplierProductNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(supplierProductNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierProductNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(supplierProductCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pricePerQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -341,7 +349,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel supplierLabel;
     private com.cosmos.swingb.JBPanel supplierPanel;
     private com.cosmos.swingb.JBLabel supplierProductCodeLabel;
-    private com.cosmos.swingb.JBFormattedTextField supplierProductCodeTextField;
+    private com.cosmos.swingb.JBTextField supplierProductCodeTextField;
     private com.cosmos.swingb.JBLabel supplierProductNameLabel;
     private com.cosmos.swingb.JBTextField supplierProductNameTextField;
     // End of variables declaration//GEN-END:variables
@@ -358,6 +366,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         }
 
         setPreferredSize(new Dimension(640, 400));
+        setMaximumSize(new Dimension(800, 600));
         buttonPanel = new EntityFormButtonPanel();
         buttonPanel.setVisible(EntityFormButtonPanel.Button.Print, false);
         add(buttonPanel, BorderLayout.PAGE_END);
@@ -411,7 +420,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         helper.getComponentConstraints(deliverableCheckBox).cell(0, 4).spanX(2);
         helper.getComponentConstraints(obsoleteCheckBox).cell(2, 4).spanX(2);
         // 6th row
-        helper.getComponentConstraints(descriptionPanel).cell(0, 5).spanX(6).height("100%").width("100%");
+        helper.getComponentConstraints(descriptionPanel).cell(0, 5).spanX(6);//.height("100%").width("100%");
         supplierPanel.invalidate();
 
         SimpleProduct product = productSupplier.getProduct();
@@ -423,28 +432,65 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
         EntityProperties entityProps = getEntityProperties();
 
-        
-        helper.getComponentConstraints(supplierComboList).cell(1, 0).spanX(3);
-        helper.getComponentConstraints(measureUnitComboBox).cell(5, 0);
-        helper.getComponentConstraints(supplierProductCodeTextField).cell(1, 1);
-        helper.getComponentConstraints(supplierProductNameTextField).cell(3, 1).spanX(3);
-        helper.getComponentConstraints(pricePerQuantityTextField).cell(1, 2);
-        helper.getComponentConstraints(orderPriceTextField).cell(3, 2);
-        helper.getComponentConstraints(currencyComboBox).cell(5, 2);
-        helper.getComponentConstraints(deliveryTimeTextField).cell(1, 3);
-        helper.getComponentConstraints(minOrderQuantityTextField).cell(3, 3);
-        helper.getComponentConstraints(maxOrderQuantityTextField).cell(5, 3);
-        helper.getComponentConstraints(deliverableCheckBox).cell(0, 4).spanX(2);
-        helper.getComponentConstraints(obsoleteCheckBox).cell(2, 4).spanX(2);
-        helper.getComponentConstraints(descriptionPanel).cell(0, 5).spanX(6).height("100%").width("100%");
+        PropertyDetails propDetails = entityProps.getPropertyDetails("supplier");
+        Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
+        BusinessPartnersListPanel producerListPanel = new BusinessPartnersListPanel(classifier);
+        supplierComboList.bind(bindingGroup, producerListPanel, productSupplier, propDetails,
+            "${displayName}", UpdateStrategy.READ_WRITE);
 
+        propDetails = entityProps.getPropertyDetails("measureUnit");
+        measureUnitComboBox.bind(bindingGroup, getMeasureUnits(), productSupplier, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("productCode");
+        supplierProductCodeTextField.bind(bindingGroup, productSupplier, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("productName");
+        supplierProductNameTextField.bind(bindingGroup, productSupplier, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("pricePerQuantity");
+        pricePerQuantityTextField.bind(bindingGroup, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
+
+        propDetails = entityProps.getPropertyDetails("orderPrice");
+        orderPriceTextField.bind(bindingGroup, productSupplier, propDetails, AcaciaUtils.getDecimalFormat());
+
+        propDetails = entityProps.getPropertyDetails("currency");
+        currencyComboBox.bind(bindingGroup, getCurrencies(), productSupplier, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("deliveryTime");
+        deliveryTimeTextField.bind(bindingGroup, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
+
+        propDetails = entityProps.getPropertyDetails("minOrderQuantity");
+        minOrderQuantityTextField.bind(bindingGroup, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
+
+        propDetails = entityProps.getPropertyDetails("maxOrderQuantity");
+        maxOrderQuantityTextField.bind(bindingGroup, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
+
+        propDetails = entityProps.getPropertyDetails("deliverable");
+        deliverableCheckBox.bind(bindingGroup, productSupplier, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("obsolete");
+        obsoleteCheckBox.bind(bindingGroup, productSupplier, propDetails);
+
+        propDetails = entityProps.getPropertyDetails("description");
+        descriptionTextPane.bind(bindingGroup, productSupplier, propDetails);
 
         bg.bind();
+    }
+
+    private List<DbResource> getCurrencies() {
+        return getFormSession().getCurrencies();
+    }
+
+    private List<DbResource> getMeasureUnits()
+    {
+        return getFormSession().getMeasureUnits();
     }
 
     @Override
     public void performSave(boolean closeAfter) {
         getFormSession().saveProductSupplier(productSupplier);
+        setDialogResponse(DialogResponse.SAVE);
+        setSelectedValue(productSupplier);
         if(closeAfter)
             close();
     }
