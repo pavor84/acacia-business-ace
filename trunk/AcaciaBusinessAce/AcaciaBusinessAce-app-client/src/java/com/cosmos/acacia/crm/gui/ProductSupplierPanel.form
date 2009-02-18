@@ -61,7 +61,7 @@
                           <Component id="supplierProductCodeLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="supplierProductCodeTextField" pref="146" max="32767" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Component id="supplierProductNameLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="supplierProductNameTextField" min="-2" pref="149" max="-2" attributes="0"/>
@@ -114,9 +114,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="supplierProductCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="supplierProductCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="supplierProductNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="supplierProductNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="supplierProductCodeTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -164,11 +164,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="supplierProductCodeLabel.text"/>
             <Property name="name" type="java.lang.String" value="supplierProductCodeLabel" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBFormattedTextField" name="supplierProductCodeTextField">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="supplierProductCodeTextField" noResource="true"/>
           </Properties>
         </Component>
         <Component class="com.cosmos.swingb.JBLabel" name="supplierProductNameLabel">
@@ -307,6 +302,11 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="measureUnitLabel.text"/>
             <Property name="name" type="java.lang.String" value="measureUnitLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="supplierProductCodeTextField">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="supplierProductCodeTextField" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
