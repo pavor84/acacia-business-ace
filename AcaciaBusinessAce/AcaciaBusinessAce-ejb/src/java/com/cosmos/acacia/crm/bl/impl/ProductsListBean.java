@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.data.ProductSupplier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.ProductSupplierPK;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -258,5 +260,43 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         
         List<SimpleProduct> productsFromCategories = q.getResultList();
         return productsFromCategories;
+    }
+
+    @Override
+    public EntityProperties getProductSupplierEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(ProductSupplier.class);
+        return entityProperties;
+    }
+
+    @Override
+    public ProductSupplier newProductSupplier(SimpleProduct product) {
+        ProductSupplierPK pk = new ProductSupplierPK();
+        pk.setProductId(product.getId());
+        ProductSupplier productSupplier = new ProductSupplier(pk);
+        productSupplier.setProduct(product);
+        productSupplier.setDeliverable(true);
+        productSupplier.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
+        productSupplier.setMinOrderQuantity(BigDecimal.ONE);
+        productSupplier.setPricePerQuantity(1);
+        return productSupplier;
+    }
+
+    @Override
+    public ProductSupplier saveProductSupplier(ProductSupplier productSupplier) {
+        esm.persist(em, productSupplier);
+        return productSupplier;
+    }
+
+    @Override
+    public List<ProductSupplier> getProductSuppliers(SimpleProduct product) {
+        Query q = em.createNamedQuery("ProductSupplier.findByProduct");
+        q.setParameter("product", product);
+        return new ArrayList<ProductSupplier>(q.getResultList());
+    }
+
+    @Override
+    public boolean deleteProductSupplier(ProductSupplier productSupplier) {
+        esm.remove(em, productSupplier);
+        return true;
     }
 }

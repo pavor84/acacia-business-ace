@@ -13,6 +13,7 @@ import javax.ejb.Remote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -104,4 +105,10 @@ public interface ProductsListRemote {
      * @return
      */
     List<SimpleProduct> getProductsForCategory(BigInteger categoryId, Boolean includeHeirs);
+
+    EntityProperties getProductSupplierEntityProperties();
+    ProductSupplier newProductSupplier(SimpleProduct product);
+    ProductSupplier saveProductSupplier(ProductSupplier productSupplier);
+    List<ProductSupplier> getProductSuppliers(SimpleProduct product);
+    boolean deleteProductSupplier(ProductSupplier productSupplier);
 }
