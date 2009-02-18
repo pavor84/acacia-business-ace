@@ -111,4 +111,6 @@ public interface ProductsListRemote {
     ProductSupplier saveProductSupplier(ProductSupplier productSupplier);
     List<ProductSupplier> getProductSuppliers(SimpleProduct product);
     boolean deleteProductSupplier(ProductSupplier productSupplier);
+
+    List<DbResource> getCurrencies();
 }

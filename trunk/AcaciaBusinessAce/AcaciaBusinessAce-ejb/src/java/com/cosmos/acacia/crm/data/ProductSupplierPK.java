@@ -79,6 +79,6 @@ public class ProductSupplierPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.ProductSupplierPK[productId=" + productId + ", supplierId=" + supplierId + "]";
+        return "ProductSupplierPK[productId=" + productId + ", supplierId=" + supplierId + "]";
     }
 }
