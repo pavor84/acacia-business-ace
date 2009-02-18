@@ -359,7 +359,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
     private EntityFormButtonPanel buttonPanel;
     private BindingGroup bindingGroup;
 
-    //@Override
+    @Override
     protected void initData() {
         if(productSupplier == null) {
             productSupplier = new ProductSupplier();
