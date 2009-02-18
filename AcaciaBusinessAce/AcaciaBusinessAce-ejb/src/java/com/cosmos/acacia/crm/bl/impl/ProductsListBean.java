@@ -299,4 +299,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         esm.remove(em, productSupplier);
         return true;
     }
+
+    @Override
+    public List<DbResource> getCurrencies() {
+        return Currency.getDbResources();
+    }
 }

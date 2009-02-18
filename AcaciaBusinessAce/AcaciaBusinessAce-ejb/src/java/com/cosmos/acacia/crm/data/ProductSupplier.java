@@ -39,11 +39,10 @@ public class ProductSupplier implements Serializable {
     @EmbeddedId
     protected ProductSupplierPK productSupplierPK;
 
-    @Basic(optional = false)
-    @Column(name = "product_name", nullable = false, length = 100)
-    @Property(title="Product Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=100))
-    private String productName;
+    @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplier.displayName}")
+    private BusinessPartner supplier;
 
     @Basic(optional = false)
     @Column(name = "product_code", nullable = false, length = 50)
@@ -52,24 +51,10 @@ public class ProductSupplier implements Serializable {
     private String productCode;
 
     @Basic(optional = false)
-    @Column(name = "is_deliverable", nullable = false)
-    @Property(title="Deliverable")
-    private boolean deliverable;
-
-    @Basic(optional = false)
-    @Column(name = "is_obsolete", nullable = false)
-    @Property(title="Obsolete")
-    private boolean obsolete;
-
-    @Basic(optional = false)
-    @Column(name = "min_order_quantity", nullable = false, precision = 19, scale = 4)
-    @Property(title="Min. Order Qty", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=1d))
-    private BigDecimal minOrderQuantity = BigDecimal.ONE;
-
-    @Column(name = "max_order_quantity", precision = 19, scale = 4)
-    @Property(title="Max. Order Qty")
-    private BigDecimal maxOrderQuantity;
+    @Column(name = "product_name", nullable = false, length = 100)
+    @Property(title="Product Name",
+            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=100))
+    private String productName;
 
     @Basic(optional = false)
     @Column(name = "price_per_quantity", nullable = false)
@@ -82,23 +67,43 @@ public class ProductSupplier implements Serializable {
     @Property(title="Order Price")
     private BigDecimal orderPrice;
 
+    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
+    private DbResource currency;
+
     @Column(name = "delivery_time")
     @Property(title="Delivery Time")
     private Integer deliveryTime;
 
+    @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Measure Unit")
+    private DbResource measureUnit;
+
+    @Basic(optional = false)
+    @Column(name = "min_order_quantity", nullable = false, precision = 19, scale = 4)
+    @Property(title="Min. Order Qty", propertyValidator=@PropertyValidator(
+        validationType=ValidationType.NUMBER_RANGE, minValue=1d))
+    private BigDecimal minOrderQuantity = BigDecimal.ONE;
+
+    @Column(name = "max_order_quantity", precision = 19, scale = 4)
+    @Property(title="Max. Order Qty")
+    private BigDecimal maxOrderQuantity;
+
+    @Basic(optional = false)
+    @Column(name = "is_deliverable", nullable = false)
+    @Property(title="Deliverable")
+    private boolean deliverable;
+
+    @Basic(optional = false)
+    @Column(name = "is_obsolete", nullable = false)
+    @Property(title="Obsolete")
+    private boolean obsolete;
+
     @Column(name = "description", length = 2147483647)
     @Property(title="Description")
     private String description;
-
-    @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplier.displayName}")
-    private BusinessPartner supplier;
-
-    @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
-    @ManyToOne
-    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
-    private Currency currency;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -106,11 +111,6 @@ public class ProductSupplier implements Serializable {
             reportColumnWidth=45,
             propertyValidator=@PropertyValidator(required=true))
     private SimpleProduct product;
-
-    @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id", nullable = false)
-    @ManyToOne(optional = false)
-    @Property(title="Measure Unit")
-    private DbResource measureUnit;
 
 
     public ProductSupplier() {
@@ -218,13 +218,19 @@ public class ProductSupplier implements Serializable {
 
     public void setSupplier(BusinessPartner supplier) {
         this.supplier = supplier;
+        if(productSupplierPK != null) {
+            if(supplier != null)
+                productSupplierPK.setSupplierId(supplier.getId());
+            else
+                productSupplierPK.setSupplierId(null);
+        }
     }
 
-    public Currency getCurrency() {
+    public DbResource getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(DbResource currency) {
         this.currency = currency;
     }
 
@@ -234,6 +240,12 @@ public class ProductSupplier implements Serializable {
 
     public void setProduct(SimpleProduct product) {
         this.product = product;
+        if(productSupplierPK != null) {
+            if(product != null) {
+                productSupplierPK.setProductId(product.getId());
+            } else
+                productSupplierPK.setProductId(null);
+        }
     }
 
     public DbResource getMeasureUnit() {
@@ -266,6 +278,6 @@ public class ProductSupplier implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.ProductSupplier[productSupplierPK=" + productSupplierPK + "]";
+        return "ProductSupplier[" + productSupplierPK + "]";
     }
 }
