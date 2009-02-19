@@ -127,7 +127,21 @@ import com.cosmos.acacia.annotation.ValidationType;
         (
             name = "Invoice.findById",
             query = "select i from Invoice i where i.dataObject.dataObjectId = :invoiceId"
-        )  
+        ),
+        /**
+         * Parameters:
+         * - recipient - not null
+         * - waitingForPayment - InvoiceStatus.WaitForPayment.getDbResource()
+         * - paid - InvoiceStatus.Paid.getDbResource()
+         * - proformaInvoice - not null (true or false)
+         */
+        @NamedQuery
+        (
+            name = "Invoice.getConfirmedInvoicesForRecipient",
+            query = "select i from Invoice i where i.recipient = :recipient and " +
+            		"(i.status = :waitingForPayment or i.status = :paid) and " +
+            		"i.proformaInvoice = :proformaInvoice order by i.invoiceDate desc"
+        )
     })
 public class Invoice extends DataObjectBean implements Serializable {
 

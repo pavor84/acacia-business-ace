@@ -144,6 +144,10 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Column(name = "product_description")
     @Property(title="Product Description")
     private String productDescription;
+    
+    private BigInteger pricelistId;
+    
+    private BigInteger pricelistItemId;
 
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -354,5 +358,21 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     public void setDueQuantity(BigDecimal dueQuantity) {
         this.dueQuantity = dueQuantity;
+    }
+
+    public BigInteger getPricelistId() {
+        return pricelistId;
+    }
+
+    public void setPricelistId(BigInteger pricelistId) {
+        this.pricelistId = pricelistId;
+    }
+
+    public BigInteger getPricelistItemId() {
+        return pricelistItemId;
+    }
+
+    public void setPricelistItemId(BigInteger pricelistItemId) {
+        this.pricelistItemId = pricelistItemId;
     }
 }

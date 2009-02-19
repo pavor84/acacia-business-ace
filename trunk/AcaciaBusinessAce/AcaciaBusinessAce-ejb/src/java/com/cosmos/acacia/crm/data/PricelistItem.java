@@ -6,6 +6,7 @@ package com.cosmos.acacia.crm.data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,6 +47,18 @@ import com.cosmos.acacia.annotation.ValidationType;
             (
                 name = "PricelistItem.findById",
                 query = "select p from PricelistItem p where p.dataObject.dataObjectId = :pricelistItemId"
+            ),
+        /**
+         * Parameters:
+         * - product - not null
+         * - pricelistParentId - not null the parent of the price-lists to include (usually the organization)
+         */
+        @NamedQuery
+            (
+                name = "PricelistItem.getPricelistItemsForProduct",
+                query = "select i from PricelistItem i where i.product = :product and " +
+                		"i.dataObject.parentDataObjectId in " +
+                		"(select p.id from Pricelist p where p.dataObject.parentDataObjectId = :pricelistParentId and p.active = true)"
             ) 
     })
 public class PricelistItem extends DataObjectBean implements Serializable{
@@ -182,5 +195,21 @@ public class PricelistItem extends DataObjectBean implements Serializable{
 
     public void setDiscountPercent(BigDecimal discountPercent) {
         this.discountPercent = discountPercent;
+    }
+    
+    public BigDecimal getSourcePrice(){
+        if ( product==null )
+            return null;
+        return product.getSalePrice();
+    }
+    
+    public BigDecimal getSalesPrice(){
+        BigDecimal sourcePrice = getSourcePrice();
+        if ( sourcePrice==null )
+            return null;
+        if ( getDiscountPercent()==null )
+            return sourcePrice;
+        BigDecimal percentDec = discountPercent.divide(new BigDecimal("100"), MathContext.DECIMAL64);
+        return sourcePrice.subtract(sourcePrice.multiply(percentDec));
     }
 }

@@ -61,6 +61,16 @@ import com.cosmos.acacia.annotation.ValidationType;
                 name = "Pricelist.findByNameNotDeleted",
                 query = "select p from Pricelist p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
                 "and p.dataObject.deleted = :deleted and p.name like :name"
+            ),
+        /**
+         * Parameters:
+         *  - parentDataObjectId - not null, the organization
+         */
+        @NamedQuery
+            (
+                name = "Pricelist.findGeneralPricelistForParent",
+                query = "select p from Pricelist p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
+                "and p.dataObject.deleted = false and p.generalPricelist = true"
             )  
     })
 public class Pricelist extends DataObjectBean implements Serializable {
@@ -106,6 +116,9 @@ public class Pricelist extends DataObjectBean implements Serializable {
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
     @Column(name = "default_discount", precision=20, scale=4)
     private BigDecimal defaultDiscount;
+    
+    @Property(title="General Pricelist")
+    private boolean generalPricelist;
     
     @Id
     @Column(name = "pricelist_id", nullable = false)
@@ -254,5 +267,13 @@ public class Pricelist extends DataObjectBean implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isGeneralPricelist() {
+        return generalPricelist;
+    }
+
+    public void setGeneralPricelist(boolean generalPricelist) {
+        this.generalPricelist = generalPricelist;
     }
 }
