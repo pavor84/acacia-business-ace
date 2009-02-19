@@ -40,7 +40,7 @@ public class PricelistListPanel extends AbstractTablePanel {
     
     public PricelistListPanel(BigInteger parentDataObjectId, List<Pricelist> list) {
         super(parentDataObjectId);
-        this.list = list;
+        this.setList(list);
         bindComponents();
     }
     
@@ -75,7 +75,7 @@ public class PricelistListPanel extends AbstractTablePanel {
     @SuppressWarnings("unchecked")
     private List getList() {
         if ( list==null )
-            list = getFormSession().listPricelists(getParentDataObjectId());
+            setList(getFormSession().listPricelists(getParentDataObjectId()));
         return list;
     }
 
@@ -91,6 +91,9 @@ public class PricelistListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canDelete(Object rowObject) {
+        Pricelist object = (Pricelist) rowObject;
+        if ( object.isGeneralPricelist() )
+            return false;
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
@@ -98,6 +101,9 @@ public class PricelistListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canModify(Object rowObject) {
+        Pricelist object = (Pricelist) rowObject;
+        if ( object.isGeneralPricelist() )
+            return false;
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
     
@@ -162,5 +168,14 @@ public class PricelistListPanel extends AbstractTablePanel {
     protected void viewRow(Object rowObject) {
         Pricelist o = (Pricelist) rowObject;
         showDetailForm(o, false);
+    }
+
+    public void setList(List<Pricelist> list) {
+        this.list = list;
+        if ( list!=null )
+            for (Pricelist pricelist : list) {
+                if ( pricelist.isGeneralPricelist() )
+                    pricelist.setName(getResourceMap().getString("Pricelist.generalPricelist.name"));
+            }
     }
 }

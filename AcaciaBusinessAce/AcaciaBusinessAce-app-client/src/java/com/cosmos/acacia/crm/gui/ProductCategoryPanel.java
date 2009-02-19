@@ -6,6 +6,8 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
+
 import java.math.BigInteger;
 
 import javax.ejb.EJB;
@@ -15,6 +17,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -75,6 +78,10 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         categoryField = new com.cosmos.acacia.gui.AcaciaComboList();
         patternMaskFormatField = new com.cosmos.acacia.gui.AcaciaComboList();
+        categoryDiscountField = new com.cosmos.swingb.JBFormattedTextField();
+        categoryDiscountLabel = new com.cosmos.swingb.JBLabel();
+        profitField = new com.cosmos.swingb.JBFormattedTextField();
+        profitLabel = new com.cosmos.swingb.JBLabel();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoryPanel.class);
         setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("Form.border.title"))); // NOI18N
@@ -109,6 +116,17 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
         patternMaskFormatField.setName("patternMaskFormatField"); // NOI18N
 
+        categoryDiscountField.setText(resourceMap.getString("categoryDiscountField.text")); // NOI18N
+        categoryDiscountField.setName("categoryDiscountField"); // NOI18N
+
+        categoryDiscountLabel.setText(resourceMap.getString("categoryDiscountLabel.text")); // NOI18N
+        categoryDiscountLabel.setName("categoryDiscountLabel"); // NOI18N
+
+        profitField.setName("profitField"); // NOI18N
+
+        profitLabel.setText(resourceMap.getString("profitLabel.text")); // NOI18N
+        profitLabel.setName("profitLabel"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,21 +134,27 @@ public class ProductCategoryPanel extends BaseEntityPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
+                            .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(nameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                            .addComponent(categoryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                            .addComponent(patternMaskFormatField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                            .addComponent(categoryDiscountField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                            .addComponent(profitLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(patternMaskFormatField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))))
+                            .addComponent(profitField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
+                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -149,9 +173,17 @@ public class ProductCategoryPanel extends BaseEntityPanel {
                     .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(patternMaskFormatField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -180,6 +212,17 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         
         patternMaskFormatField.bind(bindGroup, patternListPanel, entity, propDetails,
             "${patternName} (${format})", UpdateStrategy.READ_WRITE);
+        
+        //discount and profit
+        if ( getRightsManager().isAllowed(SpecialPermission.ProductPricing) ){
+            categoryDiscountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
+            profitField.bind(bindGroup, entity, entProps.getPropertyDetails("profitPercent"), getDecimalFormat());
+        }else{
+            categoryDiscountLabel.setVisible(false);
+            categoryDiscountField.setVisible(false);
+            profitLabel.setVisible(false);
+            profitField.setVisible(false);
+        }
 
         //description
         descriptionField.bind(bindGroup, entity, "description");
@@ -217,6 +260,9 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBFormattedTextField categoryDiscountField;
+    private com.cosmos.swingb.JBLabel categoryDiscountLabel;
+    private com.cosmos.swingb.JBLabel profitLabel;
     private com.cosmos.acacia.gui.AcaciaComboList categoryField;
     private com.cosmos.swingb.JBTextArea descriptionField;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
@@ -227,6 +273,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private com.cosmos.swingb.JBTextField nameField;
     private com.cosmos.acacia.gui.AcaciaComboList patternMaskFormatField;
+    private com.cosmos.swingb.JBFormattedTextField profitField;
     // End of variables declaration//GEN-END:variables
 
     @Override

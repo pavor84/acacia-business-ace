@@ -437,7 +437,7 @@ public class PricelistItemForm extends BaseEntityPanel {
             if ( included.getProduct().equals(product) &&
                     //both null or equal
                     ((included.getMinQuantity()==null&&minQuantity==null) ||
-                            (minQuantity!=null&&minQuantity.compareTo(included.getMinQuantity())==0)) ){
+                        (minQuantity!=null&&included.getMinQuantity()!=null&&minQuantity.compareTo(included.getMinQuantity())==0)) ){
                 showMessageDialog("error.existingProduct");
                 return true;
             }
@@ -517,7 +517,7 @@ public class PricelistItemForm extends BaseEntityPanel {
             if ( included.getProduct().equals(product) &&
                     //both null or equal
                     ((included.getMinQuantity()==null&&minQuantity==null) ||
-                    (minQuantity!=null&& minQuantity.compareTo(included.getMinQuantity())==0)) )
+                    (minQuantity!=null&&included.getMinQuantity()!=null&&minQuantity.compareTo(included.getMinQuantity())==0) ) )
                 return included;
         }
         return null;
