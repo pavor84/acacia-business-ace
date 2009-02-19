@@ -63,7 +63,7 @@ import com.cosmos.acacia.annotation.ValidationType;
             (
                 name = "CustomerDiscountItem.findByProduct",
                 query = "select p from CustomerDiscountItem p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.product = :product and p.dataObject.deleted = false"
-            ) 
+            )
     })
 public class CustomerDiscountItem extends DataObjectBean implements Serializable{
     @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")

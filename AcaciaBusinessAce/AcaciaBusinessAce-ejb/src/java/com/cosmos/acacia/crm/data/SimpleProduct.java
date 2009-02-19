@@ -73,8 +73,17 @@ import javax.persistence.Transient;
                  */
                 name = "SimpleProduct.findByCategories",
                 query = "select p from SimpleProduct p where p.dataObject.deleted = false and p.category.id in (:categoryIds)"
-            )
-            
+            ),
+        @NamedQuery
+        (
+            /**
+             * Parameters:
+             * - pricelistId - the price-list id, not null
+             */
+            name = "SimpleProduct.findNotIncludedProductsInPricelist",
+            query = "select p from SimpleProduct p where p.dataObject.deleted = false and " +
+            		"not exists (select i from PricelistItem i where i.dataObject.parentDataObjectId = :pricelistId and i.product=p)"
+		)
     })
 public class SimpleProduct
     extends Product
@@ -610,6 +619,23 @@ public class SimpleProduct
     public void setCurrency(DbResource currency) {
         this.currency = currency;
     }
+    
+    public BigDecimal getTotalDiscount(){
+        BigDecimal categoryDiscountPercent = null;
+        if ( getCategory()!=null )
+            categoryDiscountPercent = getCategory().getDiscountPercent();
+        BigDecimal discountPercent = getDiscount();
+        
+        BigDecimal totalDiscountPercent = null;
+        if ( categoryDiscountPercent!=null && discountPercent!=null ){
+            totalDiscountPercent = getSequentialDiscount(categoryDiscountPercent, discountPercent);
+        }else if ( categoryDiscountPercent!=null )
+            totalDiscountPercent = categoryDiscountPercent;
+        else 
+            totalDiscountPercent = discountPercent;
+        
+        return totalDiscountPercent;
+    }
 
     /**
      * Synthetic getter - calculates the purchase price. If some of the needed prices is not available,
@@ -620,13 +646,32 @@ public class SimpleProduct
         BigDecimal listPrice = getListPrice();
         if ( listPrice==null )
             return null;
-        BigDecimal discountPercent = getDiscount();
-        if ( discountPercent==null )
-            discountPercent = new BigDecimal(0);
-        BigDecimal discountPercentDec = discountPercent.divide(new BigDecimal(100), MathContext.DECIMAL64);
-        BigDecimal discountAmount = listPrice.multiply(discountPercentDec);
-        BigDecimal result = listPrice.subtract(discountAmount);
-        return result;
+        
+        BigDecimal totalDiscountPercent = getTotalDiscount();
+        if ( totalDiscountPercent==null )
+            return listPrice;
+        else{
+            return applyDiscountPercent(listPrice, totalDiscountPercent);
+        }
+    }
+    
+    private BigDecimal substractPercent(BigDecimal value, BigDecimal percent){
+        BigDecimal percentDec = percent.divide(new BigDecimal("100"), MathContext.DECIMAL64);
+        BigDecimal percentFromValue = value.multiply(percentDec);
+        return value.subtract(percentFromValue);
+    }
+    
+    private BigDecimal getSequentialDiscount(BigDecimal discountPercent1, BigDecimal discountPercent2){
+        BigDecimal d = new BigDecimal("100");
+        d = substractPercent(d, discountPercent1);
+        d = substractPercent(d, discountPercent2);
+        return new BigDecimal("100").subtract(d);
+    }
+    
+    private BigDecimal applyDiscountPercent(BigDecimal price, BigDecimal discountPercent) {
+        BigDecimal discountPercentDec = discountPercent.divide(new BigDecimal("100"), MathContext.DECIMAL64);
+        price = price.subtract(price.multiply(discountPercentDec));
+        return price;
     }
     
     /**
@@ -667,7 +712,7 @@ public class SimpleProduct
         BigDecimal costPrice = getCostPrice();
         if ( costPrice==null )
             return null;
-        BigDecimal profitPercent = getProfit();
+        BigDecimal profitPercent = getTotalProfit();
         if ( profitPercent==null )
             profitPercent = new BigDecimal(0);
         BigDecimal profitPercentDec = profitPercent.divide(new BigDecimal(100), MathContext.DECIMAL64);
@@ -793,5 +838,22 @@ public class SimpleProduct
             categoryName = getCategory().getCategoryName();
         }
         return codeFormatted+" "+name+", "+categoryName;
+    }
+
+    public BigDecimal getTotalProfit() {
+        BigDecimal categoryProfitPercent = null;
+        if ( getCategory()!=null )
+            categoryProfitPercent = getCategory().getProfitPercent();
+        BigDecimal profitPercent = getProfit();
+        
+        BigDecimal totalProfitPercent = null;
+        if ( categoryProfitPercent!=null && profitPercent!=null ){
+            totalProfitPercent = getSequentialDiscount(categoryProfitPercent, profitPercent);
+        }else if ( categoryProfitPercent!=null )
+            totalProfitPercent = categoryProfitPercent;
+        else 
+            totalProfitPercent = profitPercent;
+        
+        return totalProfitPercent;
     }
 }

@@ -10,6 +10,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,6 +82,14 @@ public class ProductCategory
     @Column(name = "description")
     @Property(title="Description")
     private String description;
+    
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
+    @Column(name = "discount_percent", precision=20, scale=4)
+    private BigDecimal discountPercent;
+    
+    @Property(title="Profit %", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000d))
+    @Column(name = "profit_percent", precision=20, scale=4)
+    private BigDecimal profitPercent;
 
     /*@JoinColumn(name = "product_category_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -230,6 +239,22 @@ public class ProductCategory
     @Override
     public String getInfo() {
         return getCategoryName();
+    }
+
+    public BigDecimal getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(BigDecimal discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public BigDecimal getProfitPercent() {
+        return profitPercent;
+    }
+
+    public void setProfitPercent(BigDecimal profitPercent) {
+        this.profitPercent = profitPercent;
     }
 
 }
