@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -23,9 +24,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jBLabel9" alignment="1" pref="119" max="32767" attributes="0"/>
+                          <Component id="categoryDiscountLabel" alignment="1" pref="119" max="32767" attributes="0"/>
                           <Component id="jBLabel2" alignment="0" pref="119" max="32767" attributes="0"/>
-                          <Component id="jBLabel1" alignment="1" pref="119" max="32767" attributes="0"/>
+                          <Component id="listPriceLabel" alignment="1" pref="119" max="32767" attributes="0"/>
                           <Component id="jBLabel10" alignment="0" pref="119" max="32767" attributes="0"/>
                           <Component id="jBLabel3" alignment="0" pref="119" max="32767" attributes="0"/>
                           <Component id="jBLabel4" alignment="0" pref="119" max="32767" attributes="0"/>
@@ -53,11 +54,11 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="additionalProfitButton" pref="125" max="32767" attributes="2"/>
-                          <Component id="transportButton" pref="125" max="32767" attributes="2"/>
-                          <Component id="dutyButton" pref="125" max="32767" attributes="2"/>
+                          <Component id="additionalProfitButton" pref="141" max="32767" attributes="2"/>
+                          <Component id="transportButton" pref="141" max="32767" attributes="2"/>
+                          <Component id="dutyButton" pref="141" max="32767" attributes="2"/>
                           <Component id="additionalDiscountButton" max="32767" attributes="2"/>
-                          <Component id="currencyField" alignment="0" pref="125" max="32767" attributes="2"/>
+                          <Component id="currencyField" alignment="0" pref="141" max="32767" attributes="2"/>
                       </Group>
                   </Group>
                   <Component id="closeButton" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -71,13 +72,13 @@
           <Group type="102" alignment="0" max="-2" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jBLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="listPriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="currencyField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="listPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jBLabel9" pref="20" max="32767" attributes="1"/>
+                  <Component id="categoryDiscountLabel" pref="20" max="32767" attributes="1"/>
                   <Component id="categoryDiscountField" min="-2" max="-2" attributes="1"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -142,10 +143,10 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
+    <Component class="com.cosmos.swingb.JBLabel" name="listPriceLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="listPriceLabel.text"/>
+        <Property name="name" type="java.lang.String" value="listPriceLabel" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.swingb.JBFormattedTextField" name="listPriceField">
@@ -299,10 +300,10 @@
         <Property name="name" type="java.lang.String" value="categoryDiscountField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel9">
+    <Component class="com.cosmos.swingb.JBLabel" name="categoryDiscountLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel9.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel9" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="categoryDiscountLabel.text"/>
+        <Property name="name" type="java.lang.String" value="categoryDiscountLabel" noResource="true"/>
       </Properties>
     </Component>
     <Component class="com.cosmos.acacia.gui.AcaciaPercentValueField" name="totalDiscountField">

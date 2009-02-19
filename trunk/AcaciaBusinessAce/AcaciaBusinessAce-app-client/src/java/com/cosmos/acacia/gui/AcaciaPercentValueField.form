@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -19,11 +20,11 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="percentField" pref="21" max="32767" attributes="0"/>
+              <Component id="percentField" pref="38" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jBLabel39" min="-2" pref="11" max="-2" attributes="0"/>
+              <Component id="percentLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="valueField" pref="57" max="32767" attributes="0"/>
+              <Component id="valueField" pref="52" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -31,19 +32,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="103" groupAlignment="3" attributes="0">
               <Component id="percentField" alignment="3" min="-2" max="-2" attributes="0"/>
-              <Component id="jBLabel39" alignment="3" min="-2" max="-2" attributes="0"/>
               <Component id="valueField" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Component id="percentLabel" alignment="3" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel39">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel39.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel39" noResource="true"/>
-      </Properties>
-    </Component>
     <Component class="com.cosmos.swingb.JBFormattedTextField" name="valueField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
@@ -54,6 +49,12 @@
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="percentField.text"/>
         <Property name="name" type="java.lang.String" value="percentField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="percentLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="percentLabel.text"/>
+        <Property name="name" type="java.lang.String" value="percentLabel" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
