@@ -6,7 +6,6 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
@@ -19,12 +18,17 @@ import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaPercentValueField;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBButton;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBFormattedTextField;
+import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -1159,10 +1163,85 @@ public class ProductPanelNew extends AcaciaPanel {
 
     private class PricingPanel extends AcaciaPanel {
 
-        private SimpleProduct product;
+        private JBButton additionalDiscountButton;
+        private AcaciaPercentValueField additionalDiscountField;
+        private JBLabel additionalDiscountLabel;
+        private JBButton additionalProfitButton;
+        private AcaciaPercentValueField additionalProfitField;
+        private JBLabel additionalProfitLabel;
+        private AcaciaPercentValueField categoryDiscountField;
+        private JBLabel categoryDiscountLabel;
+        private AcaciaPercentValueField categoryProfitField;
+        private JBLabel categoryProfitLabel;
+        private JBButton closeButton;
+        private JBFormattedTextField costPriceField;
+        private JBLabel costPriceLabel;
+        private JBComboBox currencyField;
+        private JBButton dutyButton;
+        private AcaciaPercentValueField dutyField;
+        private JBLabel dutyLabel;
+        private JBFormattedTextField listPriceField;
+        private JBLabel listPriceLabel;
+        private JBFormattedTextField purchasePriceField;
+        private JBLabel purchasePriceLabel;
+        private JBFormattedTextField salesPriceField;
+        private JBLabel salesPriceLabel;
+        private AcaciaPercentValueField totalDiscountField;
+        private JBLabel totalDiscountLabel;
+        private AcaciaPercentValueField totalProfitField;
+        private JBLabel totalProfitLabel;
+        private JBButton transportButton;
+        private AcaciaPercentValueField transportPriceField;
+        private JBLabel transportPriceLabel;
 
         public PricingPanel(SimpleProduct product) {
             super(product);
+        }
+
+        private void initComponents() {
+            listPriceLabel = new JBLabel();
+            listPriceField = new JBFormattedTextField();
+            currencyField = new JBComboBox();
+            additionalDiscountField = new AcaciaPercentValueField();
+            additionalDiscountButton = new JBButton();
+            additionalDiscountLabel = new JBLabel();
+            purchasePriceField = new JBFormattedTextField();
+            purchasePriceLabel = new JBLabel();
+            transportPriceField = new AcaciaPercentValueField();
+            transportButton = new JBButton();
+            transportPriceLabel = new JBLabel();
+            dutyField = new AcaciaPercentValueField();
+            dutyButton = new JBButton();
+            dutyLabel = new JBLabel();
+            costPriceField = new JBFormattedTextField();
+            costPriceLabel = new JBLabel();
+            additionalProfitField = new AcaciaPercentValueField();
+            additionalProfitButton = new JBButton();
+            additionalProfitLabel = new JBLabel();
+            salesPriceField = new JBFormattedTextField();
+            salesPriceLabel = new JBLabel();
+            closeButton = new JBButton();
+            categoryDiscountField = new AcaciaPercentValueField();
+            categoryDiscountLabel = new JBLabel();
+            totalDiscountField = new AcaciaPercentValueField();
+            totalDiscountLabel = new JBLabel();
+            categoryProfitField = new AcaciaPercentValueField();
+            categoryProfitLabel = new JBLabel();
+            totalProfitField = new AcaciaPercentValueField();
+            totalProfitLabel = new JBLabel();
+
+            MigLayoutHelper helper = new MigLayoutHelper(this);
+            helper.setLayoutFillX(true);
+            helper.setLayoutWrapAfter(4);
+            helper.columnGrow(100, 1, 3);
+            helper.columnSizeGroup("sg", 1, 3);
+            helper.columnFill(1, 3);
+            helper.columnGap("15", 1);
+            helper.getComponentConstraints(pricePerQuantityLabel).cell(0, 0);
+            helper.getComponentConstraints(pricePerQuantityTextField).cell(1, 0);
+            helper.getComponentConstraints(salesPriceLabel).cell(2, 0);
+            helper.getComponentConstraints(salesPriceTextField).cell(3, 0);
+            
         }
 
         @Override
