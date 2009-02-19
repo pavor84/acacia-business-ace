@@ -1,5 +1,7 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -10,6 +12,7 @@ import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.CustomerDiscount;
 import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 import com.cosmos.acacia.crm.validation.impl.CustomerDiscountItemValidatorLocal;
 
@@ -47,5 +50,24 @@ public class CustomerDiscountBean extends BaseBean<CustomerDiscount, CustomerDis
     @Override
     protected EntityValidator<CustomerDiscountItem> getItemValidator() {
         return itemValidatorLocal;
+    }
+    
+    @Override
+    public void delete(CustomerDiscount entity) {
+        if (entity == null)
+            throw new IllegalArgumentException("null: 'entity'");
+        List<CustomerDiscountItem> items = listItems(entity.getId());
+        for (CustomerDiscountItem item : items) {
+            esm.remove(em, item);
+        }
+        esm.remove(em, entity);
+    }
+
+    @Override
+    public CustomerDiscountItem getCustomerDiscountItem(CustomerDiscount customerDiscount,
+                                                        SimpleProduct product) {
+        CustomerDiscountItem result = (CustomerDiscountItem)
+            getSingleResult("CustomerDiscountItem.findByProduct", "product", product, "parentDataObjectId", customerDiscount.getId());
+        return result;
     }
 }

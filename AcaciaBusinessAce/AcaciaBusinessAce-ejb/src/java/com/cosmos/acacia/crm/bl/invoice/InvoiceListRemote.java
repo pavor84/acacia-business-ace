@@ -1,6 +1,8 @@
 package com.cosmos.acacia.crm.bl.invoice;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -288,4 +290,12 @@ public interface InvoiceListRemote {
      * @return
      */
     Warehouse getInvoiceWarehouse(BigInteger invoiceId);
+    
+    /**
+     * Get the turnover for a given recipient after a given date (which may be null)
+     * @param recipient
+     * @param startDate
+     * @return
+     */
+    BigDecimal getRecipientTurnover(BusinessPartner recipient, Date startDate);
 }

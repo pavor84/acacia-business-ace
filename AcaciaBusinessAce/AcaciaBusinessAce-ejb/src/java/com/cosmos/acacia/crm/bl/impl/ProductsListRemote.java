@@ -5,11 +5,13 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Remote;
 
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
@@ -25,7 +27,7 @@ import com.cosmos.beansbinding.EntityProperties;
  */
 @Remote
 public interface ProductsListRemote {
-
+    
     List<SimpleProduct> getProducts(BigInteger parentId);
     
     List<ProductCategory> getProductsCategories(DataObject parent);
@@ -105,8 +107,22 @@ public interface ProductsListRemote {
      * @return
      */
     List<SimpleProduct> getProductsForCategory(BigInteger categoryId, Boolean includeHeirs);
-
-    EntityProperties getProductSupplierEntityProperties();
+    
+    /**
+     * Get the product price based on all available discounts and price-lists.
+     * @param client
+     * @param quantity
+     * @param product
+     * @return
+     */
+    ProductPrice getProductPrice(BusinessPartner customer, BigDecimal quantity, SimpleProduct product);
+    
+    ProductPriceSummary getProductPriceSummary(BusinessPartner customer, SimpleProduct product);
+    
+    ProductPriceSummary getProductPriceSummary(BusinessPartner customer, BigDecimal quantity,
+                                        SimpleProduct product);
+                                        
+	EntityProperties getProductSupplierEntityProperties();
     ProductSupplier newProductSupplier(SimpleProduct product);
     ProductSupplier saveProductSupplier(ProductSupplier productSupplier);
     List<ProductSupplier> getProductSuppliers(SimpleProduct product);
