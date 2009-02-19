@@ -310,7 +310,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     public InvoiceItem newInvoiceItem(BigInteger parentDataObjectId){
         InvoiceItem item = new InvoiceItem();
         item.setParentId(parentDataObjectId);
-        item.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         Invoice invoice = em.find(Invoice.class, parentDataObjectId);
         Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(invoice.getBranch());
         item.setWarehouse(warehouse);
@@ -808,6 +807,47 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         
         List<Invoice> result = q.getResultList();
         return result;
+    }
+    
+    private List<Invoice> getConfirmedInvoices(BusinessPartner recipient, Date startDate){
+        Query q = em.createNamedQuery("Invoice.getConfirmedInvoicesForRecipient");
+        q.setParameter("recipient", recipient);
+        q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+        q.setParameter("paid", InvoiceStatus.Paid.getDbResource());
+        q.setParameter("proformaInvoice", Boolean.FALSE);
+        
+        List<Invoice> invoices = q.getResultList();
+        List<Invoice> result = new ArrayList<Invoice>();
+        for (Invoice invoice : invoices) {
+            if ( invoice.getInvoiceDate()!=null && !invoice.getInvoiceDate().before(startDate)){
+                result.add(invoice);
+            }else{
+                break;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Get the turnover for a given recipient after a given date (which may be null)
+     * @param recipient
+     * @param startDate
+     * @return
+     */
+    public BigDecimal getRecipientTurnover(BusinessPartner recipient, Date startDate){
+        List<Invoice> invoices = getConfirmedInvoices(recipient, startDate);
+        
+        BigDecimal turnover = new BigDecimal(0);
+        for (Invoice invoice : invoices) {
+            //if the current document is CREDIT note, decrease the due
+            if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue()) )
+                turnover = turnover.subtract(invoice.getTotalValue());
+            //otherwise increase the due amount
+            else
+                turnover = turnover.add(invoice.getTotalValue());
+        }
+        
+        return turnover;
     }
 
     @Override

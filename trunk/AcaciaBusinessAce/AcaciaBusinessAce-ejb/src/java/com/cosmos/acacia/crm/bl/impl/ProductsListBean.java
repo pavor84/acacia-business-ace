@@ -5,13 +5,15 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.data.ProductSupplier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -22,14 +24,26 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.bl.invoice.InvoiceListLocal;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountLocal;
+import com.cosmos.acacia.crm.bl.pricing.PricelistLocal;
+import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.CustomerDiscount;
+import com.cosmos.acacia.crm.data.CustomerDiscountItem;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Pricelist;
+import com.cosmos.acacia.crm.data.PricelistItem;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.ProductSupplierPK;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.ProductColor;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.impl.ProductCategoryValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.ProductValidatorLocal;
@@ -51,6 +65,14 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private ProductValidatorLocal productValidator;
     @EJB
     private ProductCategoryValidatorLocal productCategoryValidator;
+    @EJB
+    private PricelistLocal pricelistLocal;
+    @EJB
+    private CustomerDiscountLocal customerDiscountLocal;
+    @EJB
+    private InvoiceListLocal invoiceListLocal;
+    @EJB
+    private RightsManagerLocal rightsManagerLocal;
     @EJB
     private AcaciaSessionLocal session;
 
@@ -128,6 +150,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         productValidator.validate(product); 
            
         esm.persist(em, product);
+        
+        pricelistLocal.updateGeneralPricelist(product.getParentId());
+        
         return product; 
     }
 
@@ -153,6 +178,10 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     @Override
     public EntityProperties getProductCategoryEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(ProductCategory.class);
+        if ( !rightsManagerLocal.isAllowed(SpecialPermission.ProductPricing)){
+            entityProperties.removePropertyDetails("discountPercent");
+            entityProperties.removePropertyDetails("profitPercent");
+        }
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
@@ -261,8 +290,115 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         List<SimpleProduct> productsFromCategories = q.getResultList();
         return productsFromCategories;
     }
+    
+    public ProductPriceSummary getProductPriceSummary(BusinessPartner customer, SimpleProduct product) {
+        return getProductPriceSummary(customer, null, product);
+    }
+    
+    public ProductPriceSummary getProductPriceSummary(BusinessPartner customer, BigDecimal quantity,
+                                        SimpleProduct product) {
+        if ( customer==null )
+            throw new IllegalArgumentException("Please supply not null 'customer' parameter!");
+        if ( product==null )
+            throw new IllegalArgumentException("Please supply not null 'product' parameter!");
+        
+        if ( quantity==null )
+            quantity = new BigDecimal("1");
+        
+        //Find out the customer discount
+        CustomerDiscount customerDiscount = customerDiscountLocal.getCustomerDiscountForCustomer(customer);
+        CustomerDiscountItem customerDiscountItem = null;
+        if ( customerDiscount!=null ){
+            customerDiscountItem = customerDiscountLocal.getCustomerDiscountItem(customerDiscount, product);
+        }
+        
+        //Get the price-list items that qualify as valid for all requirements. 
+        //Later we will choose the one that offers the biggest discount 
+        List<PricelistItem> items = getValidPricelistItems(product, customer);
+        if ( items==null || items.isEmpty() ){
+            pricelistLocal.updateGeneralPricelist(session.getOrganization().getId());
+            items = getValidPricelistItems(product, customer);
+        }
+        
+        //Link every price-list item with its price-list
+        Map<PricelistItem, Pricelist> itemsMap = new HashMap<PricelistItem, Pricelist>();
+        for (PricelistItem pricelistItem : items) {
+            Pricelist pricelist = itemsMap.get(pricelistItem);
+            if ( pricelist==null ){
+                pricelist = em.getReference(Pricelist.class, pricelistItem.getDataObject().getParentDataObjectId());
+                itemsMap.put(pricelistItem, pricelist);
+            }
+        }
+        
+        ProductPriceSummary result = new ProductPriceSummary(product, customerDiscount, customerDiscountItem, itemsMap, quantity);
+        return result;
+    }
 
     @Override
+    public ProductPrice getProductPrice(BusinessPartner customer, BigDecimal quantity,
+                                        SimpleProduct product) {
+        ProductPriceSummary productPriceSummary = getProductPriceSummary(customer, quantity, product);
+        
+        BigDecimal price = productPriceSummary.getPrice();
+        ProductPrice result = new ProductPrice(product, productPriceSummary.getPriceList(), price, productPriceSummary.getPriceListItem());
+        return result;
+    }
+
+    private List<PricelistItem> getPricelistItemsForProduct(SimpleProduct product) {
+        Query q = em.createNamedQuery("PricelistItem.getPricelistItemsForProduct");
+        q.setParameter("product", product); 
+        q.setParameter("pricelistParentId", session.getOrganization().getId());
+        return q.getResultList();
+    }
+
+    private BigDecimal getCustomerTurnover(BusinessPartner customer, Integer months) {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MONTH, 0 - months);
+        Date startDate = now.getTime();
+        
+        BigDecimal result = invoiceListLocal.getRecipientTurnover(customer, startDate);
+        return result;
+    }
+    
+    private List<PricelistItem> getValidPricelistItems(SimpleProduct product, BusinessPartner customer) {
+        List<PricelistItem> items = getPricelistItemsForProduct(product);
+        List<PricelistItem> result = new ArrayList<PricelistItem>();
+        Date now = new Date();
+        for (PricelistItem item : items) {
+            Pricelist pricelist = em.getReference(Pricelist.class, item.getDataObject().getParentDataObjectId());
+            //skip if not active, or not in period
+            if ( pricelist.isActive() ){
+                if ( pricelist.isForPeriod() ){
+                    if ( pricelist.getActiveFrom()==null || !pricelist.getActiveFrom().after(now) ){
+                        //ok
+                    }else{
+                        continue;
+                    }
+                    if ( pricelist.getActiveTo()==null || !pricelist.getActiveTo().before(now )){
+                        //ok
+                    }else{
+                        continue;
+                    }
+                }else{
+                    //ok
+                }
+            }
+            
+            //skip if doesn't qualify by turnover
+            if ( pricelist.getMinTurnover()!=null ){
+                BigDecimal customerTurnover = getCustomerTurnover(customer, pricelist.getMonths());
+                if ( pricelist.getMinTurnover().compareTo(customerTurnover)>0 ){
+                    continue;
+                }
+            }
+            
+            result.add(item);
+        }
+        
+        return result;
+    }
+    
+        @Override
     public EntityProperties getProductSupplierEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(ProductSupplier.class);
         return entityProperties;
