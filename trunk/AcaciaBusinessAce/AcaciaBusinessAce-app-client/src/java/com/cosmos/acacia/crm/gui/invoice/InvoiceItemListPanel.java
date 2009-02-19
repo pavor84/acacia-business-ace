@@ -161,7 +161,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
             InvoiceItem item = ((InvoiceItem)rowObject);
             if ( item.getWarehouse()==null )
                 item.setWarehouse(getFormSession().getInvoiceWarehouse(invoice.getInvoiceId()));
-            InvoiceItemForm formPanel = new InvoiceItemForm(item);
+            InvoiceItemForm formPanel = new InvoiceItemForm(invoice, item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return formPanel.getSelectedValue();
@@ -175,7 +175,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
         if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
             InvoiceItem item = getFormSession().newInvoiceItem(getParentDataObjectId());
-            InvoiceItemForm formPanel = new InvoiceItemForm(item);
+            InvoiceItemForm formPanel = new InvoiceItemForm(invoice, item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return formPanel.getSelectedValue();
@@ -227,7 +227,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel {
     
     @Override
     protected void viewRow(Object rowObject) {
-        InvoiceItemForm formPanel = new InvoiceItemForm((InvoiceItem) rowObject);
+        InvoiceItemForm formPanel = new InvoiceItemForm(invoice, (InvoiceItem) rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);
     }

@@ -25,30 +25,38 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="entityFormButtonPanel1" alignment="0" pref="534" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jBLabel2" alignment="0" pref="130" max="32767" attributes="0"/>
-                          <Component id="jBLabel1" pref="130" max="32767" attributes="0"/>
-                          <Component id="jBLabel4" pref="130" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="jBLabel3" pref="130" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jBLabel1" alignment="0" pref="130" max="32767" attributes="0"/>
+                          <Component id="jBLabel4" alignment="0" pref="130" max="32767" attributes="0"/>
+                          <Component id="categoryDiscountLabel" alignment="0" pref="130" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="nameField" alignment="0" pref="400" max="32767" attributes="0"/>
                           <Component id="categoryField" alignment="0" pref="400" max="32767" attributes="0"/>
                           <Component id="patternMaskFormatField" alignment="0" pref="400" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" alignment="1" pref="400" max="32767" attributes="0"/>
+                          <Component id="categoryDiscountField" alignment="0" pref="400" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jBLabel3" alignment="0" pref="130" max="32767" attributes="0"/>
+                          <Component id="profitLabel" alignment="0" pref="130" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="profitField" pref="400" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="400" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="entityFormButtonPanel1" alignment="0" pref="534" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -71,11 +79,21 @@
                   <Component id="patternMaskFormatField" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jBLabel3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="120" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="categoryDiscountField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="categoryDiscountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="profitField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="profitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jScrollPane1" pref="157" max="32767" attributes="0"/>
+                  <Component id="jBLabel3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -145,6 +163,29 @@
     <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="patternMaskFormatField">
       <Properties>
         <Property name="name" type="java.lang.String" value="patternMaskFormatField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="categoryDiscountField">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="categoryDiscountField.text"/>
+        <Property name="name" type="java.lang.String" value="categoryDiscountField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="categoryDiscountLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="categoryDiscountLabel.text"/>
+        <Property name="name" type="java.lang.String" value="categoryDiscountLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBFormattedTextField" name="profitField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="profitField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="profitLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="profitLabel.text"/>
+        <Property name="name" type="java.lang.String" value="profitLabel" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -31,14 +31,15 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import com.cosmos.acacia.crm.bl.impl.ProductPriceSummary;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.ComplexProduct;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.SimpleProduct;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
@@ -60,10 +61,12 @@ import com.cosmos.swingb.DialogResponse;
 public class InvoiceItemForm extends BaseEntityPanel {
 
     private InvoiceItem entity;
+    private Invoice parent;
 
     /** Creates new form InvoiceFormDraft */
-    public InvoiceItemForm(InvoiceItem item) {
+    public InvoiceItemForm(Invoice invoice, InvoiceItem item) {
         super(item.getParentId());
+        this.parent = invoice;
         this.entity = item;
         initialize();
     }
@@ -388,7 +391,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
     private BindingGroup bindGroup;
     private InvoiceListRemote formSession;
     private EntityProperties entProps;
-    private ProductsListRemote productListRemote;
+    private ProductsListRemote productListRemote = getBean(ProductsListRemote.class);
     private boolean updatingShipDates;
     private Date lastShipDateFrom;
     private static Date lastShipDateTo;
@@ -450,7 +453,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         bindProductField( entity.getProduct() instanceof ComplexProduct );
         
         //measure unit 
-        bindMeasureUnitField(new ArrayList());
+        bindMeasureUnitField(new ArrayList(),null);
         
         //ordered quantity
         Binding orderedQtyBinding = orderedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), AcaciaUtils.getDecimalFormat());
@@ -458,7 +461,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         orderedQtyBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
-                updateExtendedPrice(binding.isContentValid());
+                updatePriceFields();
             }
         });
         
@@ -469,13 +472,14 @@ public class InvoiceItemForm extends BaseEntityPanel {
         returnedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("returnedQuantity"), getDecimalFormat());
         
         //unit price
-        Binding unitPriceBinding = unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
-        unitPriceBinding.addBindingListener(new AbstractBindingListener() {
-            @Override
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-                updateExtendedPrice(binding.isContentValid());
-            }
-        });
+//        Binding unitPriceBinding = 
+        unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
+//        unitPriceBinding.addBindingListener(new AbstractBindingListener() {
+//            @Override
+//            public void targetChanged(Binding binding, PropertyStateEvent event) {
+//                updateExtendedPrice(binding.isContentValid());
+//            }
+//        });
         
         //extended price
         extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
@@ -570,7 +574,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         updateUnitLabel();
         product = entity.getProduct();
         onSelectProduct();
-        updateExtendedPrice(true);
+        updatePriceFields();
     }
     
     protected void onComplexProductDetails() {
@@ -589,17 +593,19 @@ public class InvoiceItemForm extends BaseEntityPanel {
     @SuppressWarnings("unchecked")
     private Binding measureUnitBinding = null;
     
-    private void bindMeasureUnitField(List<DbResource> mUnits) {
+    private void bindMeasureUnitField(List<DbResource> mUnits, DbResource selectedUnit) {
         if ( measureUnitBinding!=null ){
             measureUnitBinding.unbind();
             bindGroup.removeBinding(measureUnitBinding);
         }
         measureUnitBinding = measureUnitField.bind(bindGroup, mUnits, entity, entProps.getPropertyDetails("measureUnit"));
         measureUnitBinding.bind();
+        if ( selectedUnit!=null && mUnits.contains(selectedUnit) )
+            measureUnitField.setSelectedItem(selectedUnit);
         measureUnitField.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                updateExtendedPrice(measureUnitField.getSelectedItem() instanceof DbResource);
+                updatePriceFields();
             }
         }, true);
     }
@@ -653,15 +659,33 @@ public class InvoiceItemForm extends BaseEntityPanel {
         }
     }
     
+    private ProductPriceSummary productPriceSummary = null;
+    
     protected void onSelectProduct() {
         Product p = product;
-        WarehouseProduct wp = null;
-        if ( p instanceof SimpleProduct )
-            wp = getFormSession().getWarehouseProduct((SimpleProduct) p);
+        
+        if ( p instanceof SimpleProduct && (productPriceSummary==null || productPriceSummary.getProduct()!=p) ){
+            BigDecimal qtyBig = getEnteredQuantity();
+            BigDecimal unitsCount = null;
+            if ( qtyBig!=null )
+                unitsCount = getBaseUnitsCount(qtyBig);
+            productPriceSummary = 
+                productListRemote.getProductPriceSummary(parent.getRecipient(), unitsCount, (SimpleProduct)product);
+            
+            entity.setPricelistId(productPriceSummary.getPriceList().getId());
+            entity.setPricelistItemId(productPriceSummary.getPriceListItem().getId());
+        }
+        
+//        WarehouseProduct wp = null;
+//        if ( p instanceof SimpleProduct )
+//            wp = getFormSession().getWarehouseProduct((SimpleProduct) p);
         
         if ( p==null ){
             productOrSchemaTextField.setText("");
             entity.setProduct(null);
+            entity.setPricelistId(null);
+            entity.setPricelistItemId(null);
+            productPriceSummary = null;
         }
         else{
             String productDisplay = p.getProductName();
@@ -689,6 +713,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
             }
         }
         
+        /*
         //update the unit price
         BigDecimal salePrice = null;
         //get from warehouse product first
@@ -702,7 +727,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
             unitPriceField.setValue(salePrice);
         }else{
             unitPriceField.setValue(null);
-        }
+        }*/
         
         updateUnitLabel();
         updateMeasureUnits(p);
@@ -713,6 +738,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
     private void updateMeasureUnits(Product product) {
         List<DbResource> possibleUnits = new ArrayList<DbResource>();
         DbResource unitResource = null;
+        DbResource selectedUnit = null;
         if ( product!=null )
             unitResource = product.getMeasureUnit();
         if ( unitResource!=null ){
@@ -723,9 +749,14 @@ public class InvoiceItemForm extends BaseEntityPanel {
                 if ( unitsFromCategory.contains(unitR.getEnumValue()))
                     possibleUnits.add(unitR);
             }
+            if ( entity.getMeasureUnit()==null )
+                selectedUnit = unitResource;
+            else
+                selectedUnit = entity.getMeasureUnit();
         }
         
-        bindMeasureUnitField(possibleUnits);
+        bindMeasureUnitField(possibleUnits, selectedUnit);
+        updatePriceFields();
     }
 
     private void updateUnitLabel() {
@@ -734,8 +765,8 @@ public class InvoiceItemForm extends BaseEntityPanel {
         //update the unit label
         if ( p!=null ){
             int quantityPerPackage = 1;
-            if ( p instanceof SimpleProduct )
-                quantityPerPackage = ((SimpleProduct)p).getQuantityPerPackage();
+//            if ( p instanceof SimpleProduct )
+//                quantityPerPackage = ((SimpleProduct)p).getQuantityPerPackage();
             MeasurementUnit measureUnit = null;
             DbResource unitResource = (DbResource) ELProperty.create("${measureUnit}").getValue(p);
             if ( unitResource!=null )
@@ -871,26 +902,39 @@ public class InvoiceItemForm extends BaseEntityPanel {
         updatingShipDates = false;
     }
 
-    protected void updateExtendedPrice(boolean contentValid) {
-        if ( !contentValid){
-            extendedPriceField.setValue(null);
-            return;
+    protected void updatePriceFields() {
+        BigDecimal qty = getEnteredQuantity();
+        BigDecimal unitPrice = null;
+        BigDecimal extendedPrice = null;
+        if ( productPriceSummary!=null ){
+            try{
+                if ( qty!=null ){
+                    BigDecimal unitsCount = getBaseUnitsCount(qty);
+                    unitPrice = productPriceSummary.getPrice(unitsCount);
+                    extendedPrice = unitsCount.multiply(unitPrice, MathContext.DECIMAL64);
+                }else{
+                    unitPrice = productPriceSummary.getPrice(new BigDecimal("1"));
+                    extendedPrice = null;
+                }
+            }catch (NumberFormatException e) {
+                //nothing to do
+            }
         }
         
+        unitPriceField.setValue(unitPrice);
+        extendedPriceField.setValue(extendedPrice);
+    }
+
+    private BigDecimal getEnteredQuantity() {
         try{
-            String price = unitPriceField.getText();
             String qty = orderedQtyField.getText();
-            BigDecimal priceLong = new BigDecimal(price);
-            BigDecimal qtyLong = new BigDecimal(qty);
-            BigDecimal pricedPackagesQuantity = getPricedPackagesQuantity(qtyLong);
-            BigDecimal result = pricedPackagesQuantity.multiply(priceLong, MathContext.DECIMAL64);
-            extendedPriceField.setValue(result);
+            return new BigDecimal(qty);
         }catch (NumberFormatException e) {
-            extendedPriceField.setValue(null);
+            return null;
         }
     }
 
-    private BigDecimal getPricedPackagesQuantity(BigDecimal orderedQuantity) {
+    private BigDecimal getBaseUnitsCount(BigDecimal orderedQuantity) {
         DbResource currentUnitRes = (DbResource) measureUnitField.getSelectedItem();
         DbResource originUnitRes = null;
         Product p = product;
@@ -905,45 +949,12 @@ public class InvoiceItemForm extends BaseEntityPanel {
         currentQuantity = currentQuantity.multiply(orderedQuantity);
         
         BigDecimal oneUnitQuantity = originUnit.getCgsUnitValue();
-        if ( p instanceof SimpleProduct ){
-            oneUnitQuantity = oneUnitQuantity.multiply(
-                new BigDecimal( ((SimpleProduct)p).getQuantityPerPackage()) );
-        }
         
-        BigDecimal pricePackagesForThisQuantity =
+        BigDecimal originUnitsCount =
             currentQuantity.divide(oneUnitQuantity, MathContext.DECIMAL64);
         
-        return pricePackagesForThisQuantity;
+        return originUnitsCount;
     }
-
-    /**
-     * The price in the product is given for its default measure unit.
-     * In the current form we can selected other measure unit (from the same category).
-     * @return
-     */
-//    private BigDecimal getUnitMultiplier() {
-//        DbResource unitToRes = (DbResource) measureUnitField.getSelectedItem();
-//        DbResource unitFromRes = null;
-//        Product product = (Product)productField.getSelectedItem();
-//        if ( product!=null )
-//            unitFromRes = product.getMeasureUnit();
-//        if ( unitToRes==null || unitFromRes==null )
-//            return new BigDecimal("0");
-//        MeasurementUnit unitTo = (MeasurementUnit) unitToRes.getEnumValue();
-//        MeasurementUnit unitFrom = (MeasurementUnit) unitFromRes.getEnumValue();
-//        
-//        BigDecimal to = unitTo.getCgsUnitValue();
-//        if ( product instanceof SimpleProduct ){
-//            SimpleProduct simpleProduct = (SimpleProduct) product;
-//            to = to.multiply(new BigDecimal(simpleProduct.getQuantityPerPackage()));
-//        }
-//        BigDecimal from = unitFrom.getCgsUnitValue();
-//        
-//        System.out.println(" to "+to+" from "+from);
-//        BigDecimal result = from.divide(to);
-//        
-//        return result;
-//    }
 
     private List<DbResource> measureUnits = null;
     private List<DbResource> getMeasureUnits()

@@ -40,7 +40,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     }
 
     private void initComponentsCustom() {
-        discountButton.addActionListener(new ActionListener() {
+        additionalDiscountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onChoosePriceValue(ProductPricingValue.Type.DISCOUNT);}});
         transportButton.addActionListener(new ActionListener() {
@@ -49,11 +49,13 @@ public class ProductPricingPanel extends AcaciaPanel {
         dutyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onChoosePriceValue(ProductPricingValue.Type.DUTY);}});
-        profitButton.addActionListener(new ActionListener() {
+        additionalProfitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onChoosePriceValue(ProductPricingValue.Type.PROFIT);}});
         
-        profitField.setPercentInclusive(true);
+        additionalProfitField.setPercentInclusive(true);
+        categoryProfit.setPercentInclusive(true);
+        totalProfitField.setPercentInclusive(true);
         
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(currencyField, resourceToStringConverter);
@@ -64,10 +66,10 @@ public class ProductPricingPanel extends AcaciaPanel {
             }
         };
         
-        discountField.addActionListener(valueListener);
+        additionalDiscountField.addActionListener(valueListener);
         dutyField.addActionListener(valueListener);
         transportPriceField.addActionListener(valueListener);
-        profitField.addActionListener(valueListener);
+        additionalProfitField.addActionListener(valueListener);
         
         closeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -78,13 +80,13 @@ public class ProductPricingPanel extends AcaciaPanel {
 
     protected void onValueUpdated(ActionEvent e) {
         Type type = null;
-        if ( discountField.equals(e.getSource()) ){
+        if ( additionalDiscountField.equals(e.getSource()) ){
             type = Type.DISCOUNT;
         }else if ( dutyField.equals(e.getSource())){
             type = Type.DUTY;
         }else if ( transportPriceField.equals(e.getSource())){
             type = Type.TRANSPORT;
-        }else if ( profitField.equals(e.getSource())){
+        }else if ( additionalProfitField.equals(e.getSource())){
             type = Type.PROFIT;
         }
         
@@ -128,8 +130,9 @@ public class ProductPricingPanel extends AcaciaPanel {
             numberValue = pricingValue.getValue();
         }
         if ( Type.DISCOUNT.equals(type) ){
-            discountField.setPercent(numberValue);
+            additionalDiscountField.setPercent(numberValue);
             product.setDiscountPricingValue(pricingValue);
+            updateTotalDiscountField(true);
             updatePurchasePriceField(true);
         }
         else if ( Type.DUTY.equals(type) ){
@@ -144,12 +147,22 @@ public class ProductPricingPanel extends AcaciaPanel {
             transportPriceField.setFreezePercent(true);
         }
         else if ( Type.PROFIT.equals(type)){
-            profitField.setPercent(numberValue);
+            additionalProfitField.setPercent(numberValue);
             product.setProfitPricingValue(pricingValue);
+            updateTotalProfitField(true);
             updateSalePriceField(true);
         }
     }
     
+    public void updateTotalProfitField(boolean valid) {
+        BigDecimal totalProfit = null;
+        if ( valid ){
+            totalProfit = product.getTotalProfit();
+        }
+        
+        this.getTotalProfitField().setPercent(totalProfit); 
+    }
+
     public void updateSalePriceField(boolean valid) {
         BigDecimal salePrice = null;
         if ( valid )
@@ -170,9 +183,20 @@ public class ProductPricingPanel extends AcaciaPanel {
         BigDecimal costPrice = null;
         if ( valid )
             costPrice = product.getCostPrice();
-        this.getProfitField().totalValueChanged(costPrice);
+        this.getCategoryProfitField().totalValueChanged(costPrice);
+        this.getAdditionalProfitField().totalValueChanged(costPrice);
+        this.getTotalProfitField().totalValueChanged(costPrice);
         
         updateSalePriceField(valid);
+    }
+    
+    public void updateTotalDiscountField(boolean valid) {
+        BigDecimal totalDiscount = null;
+        if ( valid ){
+            totalDiscount = product.getTotalDiscount();
+        }
+        
+        this.getTotalDiscountField().setPercent(totalDiscount);  
     }
 
     public void updatePurchasePriceField(boolean valid) {
@@ -208,8 +232,8 @@ public class ProductPricingPanel extends AcaciaPanel {
         jBLabel1 = new com.cosmos.swingb.JBLabel();
         listPriceField = new com.cosmos.swingb.JBFormattedTextField();
         currencyField = new com.cosmos.swingb.JBComboBox();
-        discountField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
-        discountButton = new com.cosmos.swingb.JBButton();
+        additionalDiscountField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
+        additionalDiscountButton = new com.cosmos.swingb.JBButton();
         jBLabel2 = new com.cosmos.swingb.JBLabel();
         purchasePriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel3 = new com.cosmos.swingb.JBLabel();
@@ -221,12 +245,20 @@ public class ProductPricingPanel extends AcaciaPanel {
         jBLabel5 = new com.cosmos.swingb.JBLabel();
         costPriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
-        profitField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
-        profitButton = new com.cosmos.swingb.JBButton();
+        additionalProfitField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
+        additionalProfitButton = new com.cosmos.swingb.JBButton();
         jBLabel7 = new com.cosmos.swingb.JBLabel();
         salesPriceField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel8 = new com.cosmos.swingb.JBLabel();
         closeButton = new com.cosmos.swingb.JBButton();
+        categoryDiscountField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
+        jBLabel9 = new com.cosmos.swingb.JBLabel();
+        totalDiscountField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
+        jBLabel10 = new com.cosmos.swingb.JBLabel();
+        categoryProfit = new com.cosmos.acacia.gui.AcaciaPercentValueField();
+        jBLabel11 = new com.cosmos.swingb.JBLabel();
+        totalProfitField = new com.cosmos.acacia.gui.AcaciaPercentValueField();
+        jBLabel12 = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -242,14 +274,19 @@ public class ProductPricingPanel extends AcaciaPanel {
             }
         });
 
-        currencyField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        currencyField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BGN" }));
         currencyField.setName("currencyField"); // NOI18N
 
-        discountField.setName("discountField"); // NOI18N
+        additionalDiscountField.setName("additionalDiscountField"); // NOI18N
 
-        discountButton.setMnemonic('D');
-        discountButton.setText(resourceMap.getString("discountButton.text")); // NOI18N
-        discountButton.setName("discountButton"); // NOI18N
+        additionalDiscountButton.setMnemonic('D');
+        additionalDiscountButton.setText(resourceMap.getString("additionalDiscountButton.text")); // NOI18N
+        additionalDiscountButton.setName("additionalDiscountButton"); // NOI18N
+        additionalDiscountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                additionalDiscountButtonActionPerformed(evt);
+            }
+        });
 
         jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
         jBLabel2.setName("jBLabel2"); // NOI18N
@@ -294,11 +331,11 @@ public class ProductPricingPanel extends AcaciaPanel {
         jBLabel6.setText(resourceMap.getString("jBLabel6.text")); // NOI18N
         jBLabel6.setName("jBLabel6"); // NOI18N
 
-        profitField.setName("profitField"); // NOI18N
+        additionalProfitField.setName("additionalProfitField"); // NOI18N
 
-        profitButton.setMnemonic('P');
-        profitButton.setText(resourceMap.getString("profitButton.text")); // NOI18N
-        profitButton.setName("profitButton"); // NOI18N
+        additionalProfitButton.setMnemonic('P');
+        additionalProfitButton.setText(resourceMap.getString("additionalProfitButton.text")); // NOI18N
+        additionalProfitButton.setName("additionalProfitButton"); // NOI18N
 
         jBLabel7.setText(resourceMap.getString("jBLabel7.text")); // NOI18N
         jBLabel7.setName("jBLabel7"); // NOI18N
@@ -318,6 +355,26 @@ public class ProductPricingPanel extends AcaciaPanel {
         closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 
+        categoryDiscountField.setName("categoryDiscountField"); // NOI18N
+
+        jBLabel9.setText(resourceMap.getString("jBLabel9.text")); // NOI18N
+        jBLabel9.setName("jBLabel9"); // NOI18N
+
+        totalDiscountField.setName("totalDiscountField"); // NOI18N
+
+        jBLabel10.setText(resourceMap.getString("jBLabel10.text")); // NOI18N
+        jBLabel10.setName("jBLabel10"); // NOI18N
+
+        categoryProfit.setName("categoryProfit"); // NOI18N
+
+        jBLabel11.setText(resourceMap.getString("jBLabel11.text")); // NOI18N
+        jBLabel11.setName("jBLabel11"); // NOI18N
+
+        totalProfitField.setName("totalProfitField"); // NOI18N
+
+        jBLabel12.setText(resourceMap.getString("jBLabel12.text")); // NOI18N
+        jBLabel12.setName("jBLabel12"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -327,31 +384,39 @@ public class ProductPricingPanel extends AcaciaPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                            .addComponent(jBLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                            .addComponent(jBLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                            .addComponent(jBLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                            .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                            .addComponent(jBLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                             .addComponent(jBLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(salesPriceField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(profitField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(costPriceField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(dutyField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(transportPriceField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(purchasePriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(discountField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                            .addComponent(listPriceField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dutyField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(transportPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(listPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(categoryDiscountField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(additionalDiscountField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(totalDiscountField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(purchasePriceField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(costPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(categoryProfit, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(additionalProfitField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(totalProfitField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(salesPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(profitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                            .addComponent(dutyButton, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                            .addComponent(transportButton, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                            .addComponent(discountButton, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                            .addComponent(currencyField, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(additionalProfitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(transportButton, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(dutyButton, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(additionalDiscountButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(currencyField, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)))
                     .addComponent(closeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -365,39 +430,55 @@ public class ProductPricingPanel extends AcaciaPanel {
                     .addComponent(listPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
-                    .addComponent(discountButton, 0, 20, Short.MAX_VALUE)
-                    .addComponent(discountField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                    .addComponent(categoryDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(additionalDiscountField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(additionalDiscountButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
+                    .addComponent(jBLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(purchasePriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(purchasePriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(transportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(transportButton, 0, 0, Short.MAX_VALUE)
                     .addComponent(transportPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(dutyButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
-                    .addComponent(dutyField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                    .addComponent(dutyField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dutyButton, 0, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(costPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(costPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(profitButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
-                    .addComponent(profitField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(categoryProfit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(additionalProfitButton, 0, 0, Short.MAX_VALUE)
+                    .addComponent(additionalProfitField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalProfitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(salesPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -417,16 +498,27 @@ private void salesPriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//G
 // TODO add your handling code here:
 }//GEN-LAST:event_salesPriceFieldActionPerformed
 
+private void additionalDiscountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_additionalDiscountButtonActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_additionalDiscountButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBButton additionalDiscountButton;
+    private com.cosmos.acacia.gui.AcaciaPercentValueField additionalDiscountField;
+    private com.cosmos.swingb.JBButton additionalProfitButton;
+    private com.cosmos.acacia.gui.AcaciaPercentValueField additionalProfitField;
+    private com.cosmos.acacia.gui.AcaciaPercentValueField categoryDiscountField;
+    private com.cosmos.acacia.gui.AcaciaPercentValueField categoryProfit;
     private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBFormattedTextField costPriceField;
     private com.cosmos.swingb.JBComboBox currencyField;
-    private com.cosmos.swingb.JBButton discountButton;
-    private com.cosmos.acacia.gui.AcaciaPercentValueField discountField;
     private com.cosmos.swingb.JBButton dutyButton;
     private com.cosmos.acacia.gui.AcaciaPercentValueField dutyField;
     private com.cosmos.swingb.JBLabel jBLabel1;
+    private com.cosmos.swingb.JBLabel jBLabel10;
+    private com.cosmos.swingb.JBLabel jBLabel11;
+    private com.cosmos.swingb.JBLabel jBLabel12;
     private com.cosmos.swingb.JBLabel jBLabel2;
     private com.cosmos.swingb.JBLabel jBLabel3;
     private com.cosmos.swingb.JBLabel jBLabel4;
@@ -434,11 +526,12 @@ private void salesPriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//G
     private com.cosmos.swingb.JBLabel jBLabel6;
     private com.cosmos.swingb.JBLabel jBLabel7;
     private com.cosmos.swingb.JBLabel jBLabel8;
+    private com.cosmos.swingb.JBLabel jBLabel9;
     private com.cosmos.swingb.JBFormattedTextField listPriceField;
-    private com.cosmos.swingb.JBButton profitButton;
-    private com.cosmos.acacia.gui.AcaciaPercentValueField profitField;
     private com.cosmos.swingb.JBFormattedTextField purchasePriceField;
     private com.cosmos.swingb.JBFormattedTextField salesPriceField;
+    private com.cosmos.acacia.gui.AcaciaPercentValueField totalDiscountField;
+    private com.cosmos.acacia.gui.AcaciaPercentValueField totalProfitField;
     private com.cosmos.swingb.JBButton transportButton;
     private com.cosmos.acacia.gui.AcaciaPercentValueField transportPriceField;
     // End of variables declaration//GEN-END:variables
@@ -466,19 +559,35 @@ private void salesPriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//G
         return costPriceField;
     }
 
-    public com.cosmos.acacia.gui.AcaciaPercentValueField getDiscountField() {
-        return discountField;
+    public com.cosmos.acacia.gui.AcaciaPercentValueField getAdditionalDiscountField() {
+        return additionalDiscountField;
     }
 
     public com.cosmos.acacia.gui.AcaciaPercentValueField getDutyField() {
         return dutyField;
     }
 
-    public com.cosmos.acacia.gui.AcaciaPercentValueField getProfitField() {
-        return profitField;
+    public com.cosmos.acacia.gui.AcaciaPercentValueField getAdditionalProfitField() {
+        return additionalProfitField;
     }
 
     @Override
     protected void initData() {
+    }
+
+    public com.cosmos.acacia.gui.AcaciaPercentValueField getCategoryDiscountField() {
+        return categoryDiscountField;
+    }
+
+    public com.cosmos.acacia.gui.AcaciaPercentValueField getTotalDiscountField() {
+        return totalDiscountField;
+    }
+
+    public com.cosmos.acacia.gui.AcaciaPercentValueField getTotalProfitField() {
+        return totalProfitField;
+    }
+    
+    public AcaciaPercentValueField getCategoryProfitField(){
+        return categoryProfit;
     }
 }

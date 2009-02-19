@@ -71,7 +71,9 @@ public class PricelistItemListPanel extends AbstractTablePanel {
                 onIncludeProducts();
             }
         });
-        setVisible(Button.Special, true);
+        boolean generalPricelist = pricelist.isGeneralPricelist();
+        setVisible(Button.Special, !generalPricelist);
+        setVisible(Button.New, !generalPricelist);
         setVisible(Button.Close, false);
         setVisible(Button.Refresh, false);
         
@@ -181,6 +183,8 @@ public class PricelistItemListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canCreate() {
+        if ( pricelist.isGeneralPricelist() )
+            return false;
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
@@ -188,6 +192,8 @@ public class PricelistItemListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canDelete(Object rowObject) {
+        if ( pricelist.isGeneralPricelist() )
+            return false;
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
@@ -195,6 +201,8 @@ public class PricelistItemListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canModify(Object rowObject) {
+        if ( pricelist.isGeneralPricelist() )
+            return false;
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
     
@@ -243,6 +251,7 @@ public class PricelistItemListPanel extends AbstractTablePanel {
     public void setReadonly(boolean readonly) {
         super.setReadonly(readonly);
         getButton(Button.Special).setVisible(!readonly);
+        getButton(Button.New).setVisible(!readonly);
     }
     
     @SuppressWarnings("unchecked")

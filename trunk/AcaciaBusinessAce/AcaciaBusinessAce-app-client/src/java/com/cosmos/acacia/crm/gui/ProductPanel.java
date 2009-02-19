@@ -73,7 +73,6 @@ public class ProductPanel extends AcaciaPanel {
     
     private ProductPricingPanel pricingPanel;
     
-
     public ProductPanel(SimpleProduct product) {
         super(product.getParentId());
         this.product = product;
@@ -732,9 +731,12 @@ public class ProductPanel extends AcaciaPanel {
     @SuppressWarnings("unchecked")
     private Binding productCodeBinding;
     //used for binding
+    private BigDecimal totalDiscount;
+    private BigDecimal totalProfit;
     private BigDecimal purchasePrice;
     private BigDecimal costPrice;
     private BigDecimal salePrice;
+    private BigDecimal categoryProfit;
 
     protected void initData()
     {
@@ -804,6 +806,12 @@ public class ProductPanel extends AcaciaPanel {
             ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
             categoryField.bind(productBindingGroup, categoryListPanel, product, propDetails,
                 "${categoryName}", UpdateStrategy.READ_WRITE);
+            categoryField.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    onProductCategoryChanged();
+                }
+            }, true);
             
             propDetails = entityProps.getPropertyDetails("purchased");
             purchasedProductCheckBox.bind(productBindingGroup, product, propDetails);
@@ -837,13 +845,18 @@ public class ProductPanel extends AcaciaPanel {
             product.setDutyPercent(product.getDuty());
             product.setTransportPrice(product.getTransport());
             product.setProfitPercent(product.getProfit());
+            this.setTotalDiscount(product.getTotalDiscount());
             this.setPurchasePrice(product.getPurchasePrice());
             this.setCostPrice(product.getCostPrice());
+            this.setTotalProfit(product.getTotalProfit());
             this.setSalePrice(product.getSalePrice());
+            if ( product.getCategory()!=null )
+                this.setCategoryProfit(product.getCategory().getProfitPercent());
             
             ProductPricingValue transportPricingValue = product.getTransportPricingValue();
             
             pricingPanel = new ProductPricingPanel(product);
+            
             //list price in current form
             final Binding listPriceFieldBinding = listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"), getDecimalFormat());
             listPriceTextField.setEditable(false);
@@ -861,9 +874,12 @@ public class ProductPanel extends AcaciaPanel {
                     if ( valid )
                         listPrice = product.getListPrice();
                         
-                    pricingPanel.getDiscountField().totalValueChanged(listPrice);
+                    pricingPanel.getCategoryDiscountField().totalValueChanged(listPrice);
+                    pricingPanel.getAdditionalDiscountField().totalValueChanged(listPrice);
+                    pricingPanel.getTotalDiscountField().totalValueChanged(listPrice);
                     
                     //update purchase price field
+                    pricingPanel.updateTotalDiscountField(valid);
                     pricingPanel.updatePurchasePriceField(valid);
                 }
             });
@@ -883,6 +899,11 @@ public class ProductPanel extends AcaciaPanel {
                 }
             });
             pricingPanel.updateSalePriceField(true);
+            
+            //total discount in current form
+            pricingPanel.getTotalDiscountField().bind(productBindingGroup, this, 
+                createPricePropertyDetails("totalDiscount"), getDecimalFormat(), true, EditType.NONE, product.getListPrice());
+            pricingPanel.updateTotalDiscountField(true);
             
             //purchase price in current form
             final Binding purchasePriceFieldBinding = pricingPanel.getPurchasePriceField().bind(productBindingGroup, this, 
@@ -908,9 +929,19 @@ public class ProductPanel extends AcaciaPanel {
             pricingPanel.getCurrencyField().bind(productBindingGroup, getEnumResources(Currency.class), product,
                 entityProps.getPropertyDetails("currency"));
             
+            if ( getRightsManager().isAllowed(SpecialPermission.ProductPricing)){
+                productCategoryEntityProps = getFormSession().getProductCategoryEntityProperties();
+                // category discount
+                pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+                    true, EditType.NONE_DELETABLE, product.getListPrice());
+                // category profit
+                pricingPanel.getCategoryProfitField().bind(productBindingGroup, this, createPricePropertyDetails("categoryProfit"),getDecimalFormat(),
+                    true, EditType.NONE, product.getCostPrice());
+            }
+            
             // discount
-            pricingPanel.getDiscountField().bind(productBindingGroup, product, entityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
-                true, EditType.NONE, product.getListPrice());
+            pricingPanel.getAdditionalDiscountField().bind(productBindingGroup, product, entityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+                true, EditType.NONE_DELETABLE, product.getListPrice());
             
             // transport
             Binding transportBinding = pricingPanel.getTransportPriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("transportPrice"), getDecimalFormat(),
@@ -923,11 +954,16 @@ public class ProductPanel extends AcaciaPanel {
             
             // duty
             pricingPanel.getDutyField().bind(productBindingGroup, product, entityProps.getPropertyDetails("dutyPercent"), getDecimalFormat(),
-                true, EditType.NONE, product.getPurchasePrice());
+                true, EditType.NONE_DELETABLE, product.getPurchasePrice());
             
             // profit
-            pricingPanel.getProfitField().bind(productBindingGroup, product, entityProps.getPropertyDetails("profitPercent"), getDecimalFormat(),
-                true, EditType.NONE, product.getCostPrice());
+            pricingPanel.getAdditionalProfitField().bind(productBindingGroup, product, entityProps.getPropertyDetails("profitPercent"), getDecimalFormat(),
+                true, EditType.NONE_DELETABLE, product.getCostPrice());
+            
+            //total profit in current form
+            pricingPanel.getTotalProfitField().bind(productBindingGroup, this, 
+                createPricePropertyDetails("totalProfit"), getDecimalFormat(), true, EditType.NONE, product.getCostPrice());
+            pricingPanel.updateTotalProfitField(true);
             
             quantityPerPackageTextField.bind(productBindingGroup, product,
                     entityProps.getPropertyDetails("quantityPerPackage"), AcaciaUtils.getIntegerFormat());
@@ -970,13 +1006,33 @@ public class ProductPanel extends AcaciaPanel {
             }
             
             //additionally update the percent/value pairs
-            pricingPanel.getDiscountField().totalValueChanged(product.getListPrice());
+            pricingPanel.getCategoryDiscountField().totalValueChanged(product.getListPrice());
+            pricingPanel.getAdditionalDiscountField().totalValueChanged(product.getListPrice());
+            pricingPanel.getTotalDiscountField().totalValueChanged(product.getListPrice());
             pricingPanel.getTransportPriceField().totalValueChanged(product.getPurchasePrice());
             pricingPanel.getDutyField().totalValueChanged(product.getPurchasePrice());
-            pricingPanel.getProfitField().totalValueChanged(product.getCostPrice());
+            pricingPanel.getCategoryProfitField().totalValueChanged(product.getCostPrice());
+            pricingPanel.getAdditionalProfitField().totalValueChanged(product.getCostPrice());
+            pricingPanel.getTotalProfitField().totalValueChanged(product.getCostPrice());
         }
 
         return productBindingGroup;
+    }
+
+    protected void onProductCategoryChanged() {
+        pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+            true, EditType.NONE, product.getListPrice());
+        if ( product.getCategory()==null )
+            categoryProfit=null;
+        else
+            categoryProfit = product.getCategory().getProfitPercent();
+        pricingPanel.getCategoryProfitField().setPercent(categoryProfit);
+        
+        pricingPanel.updateTotalDiscountField(true);
+        pricingPanel.updatePurchasePriceField(true);
+        
+        pricingPanel.updateTotalProfitField(true);
+        pricingPanel.updateSalePriceField(true);
     }
 
     private PropertyDetails createPricePropertyDetails(String propertyName){
@@ -1005,6 +1061,7 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     private List<DbResource> productColors;
+    private EntityProperties productCategoryEntityProps;
     private List<DbResource> getProductColors() {
         if ( productColors==null ){
             productColors = getFormSession().getProductColors();
@@ -1310,5 +1367,29 @@ public class ProductPanel extends AcaciaPanel {
 
     public void setSalePrice(BigDecimal salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public BigDecimal getTotalDiscount() {
+        return totalDiscount;
+    }
+
+    public void setTotalDiscount(BigDecimal totalDiscount) {
+        this.totalDiscount = totalDiscount;
+    }
+
+    public BigDecimal getTotalProfit() {
+        return totalProfit;
+    }
+
+    public void setTotalProfit(BigDecimal totalProfit) {
+        this.totalProfit = totalProfit;
+    }
+
+    public BigDecimal getCategoryProfit() {
+        return categoryProfit;
+    }
+
+    public void setCategoryProfit(BigDecimal categoryProfit) {
+        this.categoryProfit = categoryProfit;
     }
 }

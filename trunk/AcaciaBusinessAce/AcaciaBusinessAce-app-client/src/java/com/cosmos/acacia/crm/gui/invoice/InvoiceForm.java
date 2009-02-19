@@ -2106,7 +2106,7 @@ public class InvoiceForm extends BaseEntityPanel {
         }else{
             BigDecimal currentDue = new BigDecimal(0);
             for (Invoice invoice : recipientDueDocuments) {
-                //if the current document is DEBIT note, decrease the due
+                //if the current document is CREDIT note, decrease the due
                 if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue()) )
                     currentDue = currentDue.subtract(invoice.getTotalValue());
                 //otherwise increase the due amount
