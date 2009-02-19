@@ -365,8 +365,6 @@ public class ProductSupplierPanel extends BaseEntityPanel {
             productSupplier = new ProductSupplier();
         }
 
-        setPreferredSize(new Dimension(640, 400));
-        setMaximumSize(new Dimension(800, 600));
         buttonPanel = new EntityFormButtonPanel();
         buttonPanel.setVisible(EntityFormButtonPanel.Button.Print, false);
         add(buttonPanel, BorderLayout.PAGE_END);
@@ -387,6 +385,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
 
         helper = new MigLayoutHelper(supplierPanel);
         helper.setLayoutFillX(true);
+        //helper.layoutWidth("640:640:800");
         helper.setLayoutWrapAfter(6);
         helper.columnGrow(30, 1, 3, 5);
         helper.columnSizeGroup("sg", 1, 3, 5);
@@ -420,7 +419,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         helper.getComponentConstraints(deliverableCheckBox).cell(0, 4).spanX(2);
         helper.getComponentConstraints(obsoleteCheckBox).cell(2, 4).spanX(2);
         // 6th row
-        helper.getComponentConstraints(descriptionPanel).cell(0, 5).spanX(6);//.height("100%").width("100%");
+        helper.getComponentConstraints(descriptionPanel).cell(0, 5).spanX(6).height("100%").width("100%");
         supplierPanel.invalidate();
 
         SimpleProduct product = productSupplier.getProduct();
