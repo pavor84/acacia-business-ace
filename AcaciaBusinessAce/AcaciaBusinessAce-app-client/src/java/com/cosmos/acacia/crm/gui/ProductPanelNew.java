@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
+import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -100,10 +101,6 @@ public class ProductPanelNew extends AcaciaPanel {
                 productTabbedPane.removeTabAt(index);
             }
         }
-    }
-
-    protected void onProductPricing() {
-        //pricingPanel.showDialog(this);
     }
 
 
@@ -175,6 +172,7 @@ public class ProductPanelNew extends AcaciaPanel {
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         productPricingPanel = new com.cosmos.swingb.JBPanel();
+        productPricingButton = new com.cosmos.swingb.JBButton();
         suppliersPanel = new com.cosmos.swingb.JBPanel();
         buttonsPanel = new com.cosmos.swingb.JBPanel();
         closeButton = new com.cosmos.swingb.JBButton();
@@ -493,15 +491,26 @@ public class ProductPanelNew extends AcaciaPanel {
 
         productPricingPanel.setName("productPricingPanel"); // NOI18N
 
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(ProductPanelNew.class, this);
+        productPricingButton.setAction(actionMap.get("onProductPricing")); // NOI18N
+        productPricingButton.setText(resourceMap.getString("productPricingButton.text")); // NOI18N
+        productPricingButton.setName("productPricingButton"); // NOI18N
+
         javax.swing.GroupLayout productPricingPanelLayout = new javax.swing.GroupLayout(productPricingPanel);
         productPricingPanel.setLayout(productPricingPanelLayout);
         productPricingPanelLayout.setHorizontalGroup(
             productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 494, Short.MAX_VALUE)
+            .addGroup(productPricingPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(productPricingButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(365, Short.MAX_VALUE))
         );
         productPricingPanelLayout.setVerticalGroup(
             productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGroup(productPricingPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(productPricingButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(322, Short.MAX_VALUE))
         );
 
         productTabbedPane.addTab(resourceMap.getString("productPricingPanel.TabConstraints.tabTitle"), productPricingPanel); // NOI18N
@@ -610,6 +619,7 @@ public class ProductPanelNew extends AcaciaPanel {
     private com.cosmos.swingb.JBLabel productColorLabel;
     private com.cosmos.swingb.JBLabel productNameLabel;
     private com.cosmos.swingb.JBTextField productNameTextField;
+    private com.cosmos.swingb.JBButton productPricingButton;
     private com.cosmos.swingb.JBPanel productPricingPanel;
     private com.cosmos.swingb.JBTabbedPane productTabbedPane;
     private com.cosmos.swingb.JBPanel purchaseOptionsPanel;
@@ -1138,5 +1148,11 @@ public class ProductPanelNew extends AcaciaPanel {
         private List<ProductSupplier> getProductSuppliers() {
             return getFormSession().getProductSuppliers(product);
         }
+    }
+
+    @Action
+    public void onProductPricing() {
+        ProductPricingPanel panel = new ProductPricingPanel(product);
+        panel.showDialog();
     }
 }
