@@ -36,7 +36,9 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         PERCENT,
         /** use to set only the value field edit-able */
         VALUE,
-        /** neither of the fields are edit-able */
+        /** neither of the fields are edit-able, but the value can be deleted */
+        NONE_DELETABLE,
+        /** neither of the fields are edit-able and the value can't be removed */
         NONE;
     }
 
@@ -84,7 +86,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
     protected void onKeyCommand(KeyEvent e) {
         //if both fields are not edit-able, the user will not be able to delete the values.
         //In this case, this handler will assure this functionality.
-        if ( EditType.NONE.equals(editType)){
+        if ( EditType.NONE_DELETABLE.equals(editType)){
             if (e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 clearing = true;
                 if ( percentField.equals(e.getSource())){
@@ -151,6 +153,10 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
 
     private EditType editType;
 
+    private Binding binding;
+
+    private Binding secondBinding;
+
     /**
      * 
      * @param bindingGroup
@@ -165,16 +171,30 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
      */
     public Binding bind(BindingGroup bindingGroup, Object entity,
                      PropertyDetails propertyDetails, NumberFormat format, final boolean bindToPercent, EditType editType, Number totalValue) {
+        
+        boolean rebinding = binding!=null;
+        //first - un-bind if needed
+        if ( binding!=null ){
+            if ( bindingGroup.getBindings().contains(binding) ){
+                if ( binding.isBound() )
+                    binding.unbind();
+                bindingGroup.removeBinding(binding);
+            }
+            if ( bindingGroup.getBindings().contains(secondBinding) ){
+                if ( secondBinding.isBound() )
+                    secondBinding.unbind();
+                bindingGroup.removeBinding(secondBinding);
+            }
+        }
         this.editType = editType;
         
         JBFormattedTextField targetField = bindToPercent ? percentField : valueField;
         JBFormattedTextField secondField = bindToPercent ? valueField : percentField;
         
-        Binding binding = targetField.bind(bindingGroup, entity, propertyDetails, format);
+        binding = targetField.bind(bindingGroup, entity, propertyDetails, format);
         secondField.setFormat(format);
         
-        Binding secondBinding = secondField.bind(bindingGroup, this, new PropertyDetails("secondValue", "Second Value", BigDecimal.class.getName()), format);
-        
+        secondBinding = secondField.bind(bindingGroup, this, new PropertyDetails("secondValue", "Second Value", BigDecimal.class.getName()), format);
         //set up listener for value updates on the bound field
         binding.addBindingListener(new AbstractBindingListener() {
             private void update(){
@@ -218,7 +238,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
             valueField.setEditable(false);
         }else if ( EditType.VALUE.equals(editType) ){
             percentField.setEditable(false);
-        }else if ( EditType.NONE.equals(editType) ){
+        }else if ( EditType.NONE_DELETABLE.equals(editType) ||  EditType.NONE.equals(editType)){
             percentField.setEditable(false);
             valueField.setEditable(false);
         }
@@ -226,6 +246,11 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         freezePercent = bindToPercent;
         
         totalValueChanged(totalValue);
+        
+        if ( rebinding ){
+            binding.bind();
+            secondBinding.bind();
+        }
         
         return binding;
     }
