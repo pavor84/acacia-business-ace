@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
@@ -1154,5 +1155,22 @@ public class ProductPanelNew extends AcaciaPanel {
     public void onProductPricing() {
         ProductPricingPanel panel = new ProductPricingPanel(product);
         panel.showDialog();
+    }
+
+    private class PricingPanel extends AcaciaPanel {
+
+        private SimpleProduct product;
+
+        public PricingPanel(SimpleProduct product) {
+            super(product);
+        }
+
+        @Override
+        protected void initData() {
+        }
+
+        private SimpleProduct getProduct() {
+            return (SimpleProduct)getMainDataObject();
+        }
     }
 }
