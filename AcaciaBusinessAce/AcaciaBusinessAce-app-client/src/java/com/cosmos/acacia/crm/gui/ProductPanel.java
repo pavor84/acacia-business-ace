@@ -108,6 +108,7 @@ public class ProductPanel extends AcaciaPanel {
 
     protected void onProductPricing() {
         pricingPanel.showDialog(this);
+        product = getFormSession().saveProduct(product);
     }
     
     /** This method is called from within the constructor to
