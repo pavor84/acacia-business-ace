@@ -28,6 +28,8 @@ import com.cosmos.swingb.JBFormattedTextField;
  *
  */
 public class AcaciaPercentValueField extends javax.swing.JPanel implements TotalValueChangedListener{
+
+    private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
     
     public enum EditType{
         /** use to set both field edit-able */
@@ -285,7 +287,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                 
                 BigDecimal totalValueBig = new BigDecimal(""+totalValue.toString());
                 
-                percent = value.divide(totalValueBig, MathContext.DECIMAL64).multiply(new BigDecimal("100"));
+                percent = value.divide(totalValueBig, MathContext.DECIMAL64).multiply(ONE_HUNDRED);
                 
             }catch (Exception e){
                 percent = null;
@@ -316,7 +318,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
                     String percentString = ""+percentField.getFormat().parseObject(percentField.getText());
                     BigDecimal percent = new BigDecimal(""+percentString);
                     BigDecimal totalValueBig = new BigDecimal(""+totalValue.toString());
-                    BigDecimal percentDec = percent.divide(new BigDecimal(100));
+                    BigDecimal percentDec = percent.divide(ONE_HUNDRED);
                     
                     //ultimately 20% of 55 is 11, and the result will be 66
                     if ( !percentInclusive ){

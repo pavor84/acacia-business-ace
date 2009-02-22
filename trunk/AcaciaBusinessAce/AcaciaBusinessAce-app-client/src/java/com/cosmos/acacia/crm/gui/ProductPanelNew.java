@@ -14,11 +14,11 @@ import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.acacia.gui.AcaciaPercentValueField;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.util.AcaciaUtils;
@@ -35,17 +35,20 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.util.List;
 import javax.ejb.EJB;
-import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingx.JXPercentValueField;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -177,7 +180,6 @@ public class ProductPanelNew extends AcaciaPanel {
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
         productPricingPanel = new com.cosmos.swingb.JBPanel();
-        productPricingButton = new com.cosmos.swingb.JBButton();
         suppliersPanel = new com.cosmos.swingb.JBPanel();
         buttonsPanel = new com.cosmos.swingb.JBPanel();
         closeButton = new com.cosmos.swingb.JBButton();
@@ -496,26 +498,15 @@ public class ProductPanelNew extends AcaciaPanel {
 
         productPricingPanel.setName("productPricingPanel"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getActionMap(ProductPanelNew.class, this);
-        productPricingButton.setAction(actionMap.get("onProductPricing")); // NOI18N
-        productPricingButton.setText(resourceMap.getString("productPricingButton.text")); // NOI18N
-        productPricingButton.setName("productPricingButton"); // NOI18N
-
         javax.swing.GroupLayout productPricingPanelLayout = new javax.swing.GroupLayout(productPricingPanel);
         productPricingPanel.setLayout(productPricingPanelLayout);
         productPricingPanelLayout.setHorizontalGroup(
             productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(productPricingPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(productPricingButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(365, Short.MAX_VALUE))
+            .addGap(0, 494, Short.MAX_VALUE)
         );
         productPricingPanelLayout.setVerticalGroup(
             productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(productPricingPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(productPricingButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(322, Short.MAX_VALUE))
+            .addGap(0, 360, Short.MAX_VALUE)
         );
 
         productTabbedPane.addTab(resourceMap.getString("productPricingPanel.TabConstraints.tabTitle"), productPricingPanel); // NOI18N
@@ -624,7 +615,6 @@ public class ProductPanelNew extends AcaciaPanel {
     private com.cosmos.swingb.JBLabel productColorLabel;
     private com.cosmos.swingb.JBLabel productNameLabel;
     private com.cosmos.swingb.JBTextField productNameTextField;
-    private com.cosmos.swingb.JBButton productPricingButton;
     private com.cosmos.swingb.JBPanel productPricingPanel;
     private com.cosmos.swingb.JBTabbedPane productTabbedPane;
     private com.cosmos.swingb.JBPanel purchaseOptionsPanel;
@@ -698,7 +688,7 @@ public class ProductPanelNew extends AcaciaPanel {
 
             initPrimaryInfo(productBindingGroup, entityProps);
             initAdditionalInfo(productBindingGroup, entityProps);
-            initProductPricing();
+            initProductPricing(productBindingGroup, entityProps);
             initSuppliers();
 
             productBindingGroup.bind();
@@ -709,7 +699,7 @@ public class ProductPanelNew extends AcaciaPanel {
         return productBindingGroup;
     }
 
-    private void initPrimaryInfo(BindingGroup productBindingGroup, EntityProperties entityProps) {
+    private void initPrimaryInfo(BindingGroup bindingGroup, EntityProperties entityProps) {
         MigLayoutHelper helper = new MigLayoutHelper(purchaseOptionsPanel);
         helper.setLayoutFillX(true);
         helper.setLayoutWrapAfter(3);
@@ -782,11 +772,11 @@ public class ProductPanelNew extends AcaciaPanel {
 
 
         PropertyDetails propDetails = entityProps.getPropertyDetails("productName");
-        productNameTextField.bind(productBindingGroup, product, propDetails);
+        productNameTextField.bind(bindingGroup, product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("category");
         ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
-        productCategoryComboList.bind(productBindingGroup, categoryListPanel, product, propDetails,
+        productCategoryComboList.bind(bindingGroup, categoryListPanel, product, propDetails,
             "${categoryName}", UpdateStrategy.READ_WRITE);
         productCategoryComboList.addItemListener(new ItemListener() {
 
@@ -799,7 +789,7 @@ public class ProductPanelNew extends AcaciaPanel {
 
         propDetails = entityProps.getPropertyDetails("patternMaskFormat");
         PatternMaskFormatListPanel formatsListPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
-        productCodeFormatComboList.bind(productBindingGroup, formatsListPanel, product, propDetails,
+        productCodeFormatComboList.bind(bindingGroup, formatsListPanel, product, propDetails,
             "${patternName} (${format})", UpdateStrategy.READ_WRITE);
         productCodeFormatComboList.addItemListener(new ItemListener() {
 
@@ -810,50 +800,50 @@ public class ProductPanelNew extends AcaciaPanel {
         }, true);
 
         propDetails = entityProps.getPropertyDetails("productCode");
-        productCodeTextField.bind(productBindingGroup, product, propDetails);
+        productCodeTextField.bind(bindingGroup, product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("measureUnit");
-        measureUnitComboBox.bind(productBindingGroup, getMeasureUnits(), product, propDetails);
+        measureUnitComboBox.bind(bindingGroup, getMeasureUnits(), product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("productColor");
-        productColorComboBox.bind(productBindingGroup, getProductColors(), product, propDetails);
+        productColorComboBox.bind(bindingGroup, getProductColors(), product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("producer");
         Classifier producerClassifier = getClassifier(Classifier.Producer.getClassifierCode());
         BusinessPartnersListPanel producerListPanel = new BusinessPartnersListPanel(producerClassifier);
-        producerComboList.bind(productBindingGroup, producerListPanel, product, propDetails,
+        producerComboList.bind(bindingGroup, producerListPanel, product, propDetails,
             "${displayName}", UpdateStrategy.READ_WRITE);
 
         propDetails = entityProps.getPropertyDetails("quantityPerPackage");
-        quantityPerPackageTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getIntegerFormat());
+        quantityPerPackageTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getIntegerFormat());
 
         propDetails = entityProps.getPropertyDetails("purchased");
-        purchasedCheckBox.bind(productBindingGroup, product, propDetails);
+        purchasedCheckBox.bind(bindingGroup, product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("salable");
-        salableCheckBox.bind(productBindingGroup, product, propDetails);
+        salableCheckBox.bind(bindingGroup, product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("obsolete");
-        obsoleteCheckBox.bind(productBindingGroup, product, propDetails);
+        obsoleteCheckBox.bind(bindingGroup, product, propDetails);
 
         propDetails = entityProps.getPropertyDetails("pricePerQuantity");
-        pricePerQuantityTextField.bind(productBindingGroup, product, propDetails);
+        pricePerQuantityTextField.bind(bindingGroup, product, propDetails);
 
         salesPriceTextField.setEditable(false);
         propDetails = entityProps.getPropertyDetails("salePrice");
-        salesPriceTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        salesPriceTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
 
         propDetails = entityProps.getPropertyDetails("minimumQuantity");
-        minTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        minTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
 
         propDetails = entityProps.getPropertyDetails("defaultQuantity");
-        defaultTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        defaultTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
 
         propDetails = entityProps.getPropertyDetails("maximumQuantity");
-        maxTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        maxTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
     }
 
-    private void initAdditionalInfo(BindingGroup productBindingGroup, EntityProperties entityProps) {
+    private void initAdditionalInfo(BindingGroup bindingGroup, EntityProperties entityProps) {
         MigLayoutHelper helper = new MigLayoutHelper(deliveryInfoPanel);
         helper.setLayoutFillX(true);
         helper.setLayoutWrapAfter(6);
@@ -890,44 +880,48 @@ public class ProductPanelNew extends AcaciaPanel {
 
         PropertyDetails propDetails = entityProps.getPropertyDetails("weightUnit");
         weightUnitComboBox.bind(
-                productBindingGroup,
+                bindingGroup,
                 getMeasureUnits(MeasurementUnit.Category.MassWeight),
                 product,
                 propDetails);
 
         propDetails = entityProps.getPropertyDetails("weight");
-        weightTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        weightTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
 
         propDetails = entityProps.getPropertyDetails("deliveryTime");
-        deliveryTimeTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getIntegerFormat());
+        deliveryTimeTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getIntegerFormat());
 
         propDetails = entityProps.getPropertyDetails("dimensionUnit");
         dimensionUnitComboBox.bind(
-                productBindingGroup,
+                bindingGroup,
                 getMeasureUnits(MeasurementUnit.Category.Volume),
                 product,
                 propDetails);
 
         CubatureBindingListener cubatureBindingListener = new CubatureBindingListener();
         propDetails = entityProps.getPropertyDetails("dimensionWidth");
-        Binding binding = widthTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        Binding binding = widthTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
         binding.addBindingListener(cubatureBindingListener);
 
         propDetails = entityProps.getPropertyDetails("dimensionLength");
-        binding = lengthTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding = lengthTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
         binding.addBindingListener(cubatureBindingListener);
 
         propDetails = entityProps.getPropertyDetails("dimensionHeight");
-        binding = heightTextField.bind(productBindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+        binding = heightTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
         binding.addBindingListener(cubatureBindingListener);
 
         cubatureTextField.setEditable(false);
 
         propDetails = entityProps.getPropertyDetails("description");
-        binding = descriptionTextPane.bind(productBindingGroup, product, propDetails);
+        binding = descriptionTextPane.bind(bindingGroup, product, propDetails);
     }
 
-    private void initProductPricing() {
+    private void initProductPricing(BindingGroup bindingGroup, EntityProperties entityProps) {
+        productPricingPanel.setLayout(new BorderLayout());
+        //ProductPricingPanel pricingPanel = new ProductPricingPanel(product);
+        PricingPanel pricingPanel = new PricingPanel(product, bindingGroup, entityProps);
+        productPricingPanel.add(pricingPanel, BorderLayout.CENTER);
     }
 
     private void initSuppliers() {
@@ -1155,101 +1149,283 @@ public class ProductPanelNew extends AcaciaPanel {
         }
     }
 
-    @Action
-    public void onProductPricing() {
-        ProductPricingPanel panel = new ProductPricingPanel(product);
-        panel.showDialog();
+    private String getResourceString(String key) {
+        return getResourceMap().getString(key);
     }
 
     private class PricingPanel extends AcaciaPanel {
 
+        private BindingGroup bindingGroup;
+        private EntityProperties entityProps;
+        private boolean bindingInit;
+
         private JBButton additionalDiscountButton;
-        private AcaciaPercentValueField additionalDiscountField;
+        private JXPercentValueField additionalDiscountPercentField;
         private JBLabel additionalDiscountLabel;
         private JBButton additionalProfitButton;
-        private AcaciaPercentValueField additionalProfitField;
+        private JXPercentValueField additionalProfitPercentField;
         private JBLabel additionalProfitLabel;
-        private AcaciaPercentValueField categoryDiscountField;
+        private JXPercentValueField categoryDiscountPercentField;
         private JBLabel categoryDiscountLabel;
-        private AcaciaPercentValueField categoryProfitField;
+        private JXPercentValueField categoryProfitPercentField;
         private JBLabel categoryProfitLabel;
-        private JBButton closeButton;
-        private JBFormattedTextField costPriceField;
+        private JBFormattedTextField costPriceTextField;
         private JBLabel costPriceLabel;
-        private JBComboBox currencyField;
+        private JBComboBox currencyComboBox;
         private JBButton dutyButton;
-        private AcaciaPercentValueField dutyField;
+        private JXPercentValueField dutyPercentField;
         private JBLabel dutyLabel;
-        private JBFormattedTextField listPriceField;
+        private JBFormattedTextField listPriceTextField;
         private JBLabel listPriceLabel;
-        private JBFormattedTextField purchasePriceField;
+        private JBFormattedTextField purchasePriceTextField;
         private JBLabel purchasePriceLabel;
-        private JBFormattedTextField salesPriceField;
+        private JBFormattedTextField salesPriceTextField;
         private JBLabel salesPriceLabel;
-        private AcaciaPercentValueField totalDiscountField;
+        private JXPercentValueField totalDiscountPercentField;
         private JBLabel totalDiscountLabel;
-        private AcaciaPercentValueField totalProfitField;
+        private JXPercentValueField totalProfitPercentField;
         private JBLabel totalProfitLabel;
         private JBButton transportButton;
-        private AcaciaPercentValueField transportPriceField;
+        private JXPercentValueField transportPricePercentField;
         private JBLabel transportPriceLabel;
 
-        public PricingPanel(SimpleProduct product) {
+        public PricingPanel(SimpleProduct product,
+                BindingGroup bindingGroup, EntityProperties entityProps) {
             super(product);
+            this.bindingGroup = bindingGroup;
+            this.entityProps = entityProps;
+            initComponents();
+            initData();
         }
 
         private void initComponents() {
             listPriceLabel = new JBLabel();
-            listPriceField = new JBFormattedTextField();
-            currencyField = new JBComboBox();
-            additionalDiscountField = new AcaciaPercentValueField();
+            listPriceTextField = new JBFormattedTextField();
+            currencyComboBox = new JBComboBox();
+            additionalDiscountPercentField = new JXPercentValueField();
             additionalDiscountButton = new JBButton();
             additionalDiscountLabel = new JBLabel();
-            purchasePriceField = new JBFormattedTextField();
+            purchasePriceTextField = new JBFormattedTextField();
             purchasePriceLabel = new JBLabel();
-            transportPriceField = new AcaciaPercentValueField();
+            transportPricePercentField = new JXPercentValueField();
             transportButton = new JBButton();
             transportPriceLabel = new JBLabel();
-            dutyField = new AcaciaPercentValueField();
+            dutyPercentField = new JXPercentValueField();
             dutyButton = new JBButton();
             dutyLabel = new JBLabel();
-            costPriceField = new JBFormattedTextField();
+            costPriceTextField = new JBFormattedTextField();
             costPriceLabel = new JBLabel();
-            additionalProfitField = new AcaciaPercentValueField();
+            additionalProfitPercentField = new JXPercentValueField();
             additionalProfitButton = new JBButton();
             additionalProfitLabel = new JBLabel();
-            salesPriceField = new JBFormattedTextField();
+            salesPriceTextField = new JBFormattedTextField();
             salesPriceLabel = new JBLabel();
-            closeButton = new JBButton();
-            categoryDiscountField = new AcaciaPercentValueField();
+            categoryDiscountPercentField = new JXPercentValueField();
             categoryDiscountLabel = new JBLabel();
-            totalDiscountField = new AcaciaPercentValueField();
+            totalDiscountPercentField = new JXPercentValueField();
             totalDiscountLabel = new JBLabel();
-            categoryProfitField = new AcaciaPercentValueField();
+            categoryProfitPercentField = new JXPercentValueField();
             categoryProfitLabel = new JBLabel();
-            totalProfitField = new AcaciaPercentValueField();
+            totalProfitPercentField = new JXPercentValueField();
             totalProfitLabel = new JBLabel();
+
+            listPriceLabel.setText(getResourceString("listPriceLabel.text"));
+            categoryDiscountLabel.setText(getResourceString("categoryDiscountLabel.text"));
+            additionalDiscountLabel.setText(getResourceString("additionalDiscountLabel.text"));
+            additionalDiscountButton.setText(getResourceString("additionalDiscountButton.text"));
+            totalDiscountLabel.setText(getResourceString("totalDiscountLabel.text"));
+            purchasePriceLabel.setText(getResourceString("purchasePriceLabel.text"));
+            transportPriceLabel.setText(getResourceString("transportPriceLabel.text"));
+            transportButton.setText(getResourceString("transportButton.text"));
+            dutyLabel.setText(getResourceString("dutyLabel.text"));
+            dutyButton.setText(getResourceString("dutyButton.text"));
+            costPriceLabel.setText(getResourceString("costPriceLabel.text"));
+            categoryProfitLabel.setText(getResourceString("categoryProfitLabel.text"));
+            additionalProfitLabel.setText(getResourceString("additionalProfitLabel.text"));
+            additionalProfitButton.setText(getResourceString("additionalProfitButton.text"));
+            totalProfitLabel.setText(getResourceString("totalProfitLabel.text"));
+            salesPriceLabel.setText(getResourceString("salesPriceLabel.text"));
+
+            purchasePriceTextField.setEditable(false);
+            costPriceTextField.setEditable(false);
+            salesPriceTextField.setEditable(false);
+
+            AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+            AutoCompleteDecorator.decorate(currencyComboBox, resourceToStringConverter);
+
+
+            add(listPriceLabel);
+            add(listPriceTextField);
+            add(currencyComboBox);
+            add(categoryDiscountLabel);
+            add(categoryDiscountPercentField);
+            add(additionalDiscountLabel);
+            add(additionalDiscountPercentField);
+            add(additionalDiscountButton);
+            add(totalDiscountLabel);
+            add(totalDiscountPercentField);
+            add(purchasePriceLabel);
+            add(purchasePriceTextField);
+            add(transportPriceLabel);
+            add(transportPricePercentField);
+            add(transportButton);
+            add(dutyLabel);
+            add(dutyPercentField);
+            add(dutyButton);
+            add(costPriceLabel);
+            add(costPriceTextField);
+            add(categoryProfitLabel);
+            add(categoryProfitPercentField);
+            add(additionalProfitLabel);
+            add(additionalProfitPercentField);
+            add(additionalProfitButton);
+            add(totalProfitLabel);
+            add(totalProfitPercentField);
+            add(salesPriceLabel);
+            add(salesPriceTextField);
 
             MigLayoutHelper helper = new MigLayoutHelper(this);
             helper.setLayoutFillX(true);
             helper.setLayoutWrapAfter(4);
-            helper.columnGrow(100, 1, 3);
-            helper.columnSizeGroup("sg", 1, 3);
-            helper.columnFill(1, 3);
-            helper.columnGap("15", 1);
-            helper.getComponentConstraints(pricePerQuantityLabel).cell(0, 0);
-            helper.getComponentConstraints(pricePerQuantityTextField).cell(1, 0);
-            helper.getComponentConstraints(salesPriceLabel).cell(2, 0);
-            helper.getComponentConstraints(salesPriceTextField).cell(3, 0);
-            
+            helper.columnGrow(100, 1, 2);
+            helper.columnFill(1, 2, 3);
+            helper.columnGap("15", 1, 2);
+
+            int rowNumber = 0;
+            helper.getComponentConstraints(listPriceLabel).cell(0, rowNumber);
+            helper.getComponentConstraints(listPriceTextField).cell(2, rowNumber);
+            helper.getComponentConstraints(currencyComboBox).cell(3, rowNumber);
+
+            helper.getComponentConstraints(categoryDiscountLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(categoryDiscountPercentField).cell(1, rowNumber).spanX(2);
+
+            helper.getComponentConstraints(additionalDiscountLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(additionalDiscountPercentField).cell(1, rowNumber).spanX(2);
+            helper.getComponentConstraints(additionalDiscountButton).cell(3, rowNumber);
+
+            helper.getComponentConstraints(totalDiscountLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(totalDiscountPercentField).cell(1, rowNumber).spanX(2);
+
+            helper.getComponentConstraints(purchasePriceLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(purchasePriceTextField).cell(2, rowNumber);
+
+            helper.getComponentConstraints(transportPriceLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(transportPricePercentField).cell(1, rowNumber).spanX(2);
+            helper.getComponentConstraints(transportButton).cell(3, rowNumber);
+
+            helper.getComponentConstraints(dutyLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(dutyPercentField).cell(1, rowNumber).spanX(2);
+            helper.getComponentConstraints(dutyButton).cell(3, rowNumber);
+
+            helper.getComponentConstraints(costPriceLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(costPriceTextField).cell(2, rowNumber);
+
+            helper.getComponentConstraints(categoryProfitLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(categoryProfitPercentField).cell(1, rowNumber).spanX(2);
+
+            helper.getComponentConstraints(additionalProfitLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(additionalProfitPercentField).cell(1, rowNumber).spanX(2);
+            helper.getComponentConstraints(additionalProfitButton).cell(3, rowNumber);
+
+            helper.getComponentConstraints(totalProfitLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(totalProfitPercentField).cell(1, rowNumber).spanX(2);
+
+            helper.getComponentConstraints(salesPriceLabel).cell(0, ++rowNumber);
+            helper.getComponentConstraints(salesPriceTextField).cell(2, rowNumber);
+
+            invalidate();
         }
 
         @Override
         protected void initData() {
+            SimpleProduct product = getProduct();
+            NumberFormat decimalFormat = AcaciaUtils.getDecimalFormat();
+
+            ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
+            PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
+            Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails, decimalFormat);
+            binding.addBindingListener(listPriceBindingListener);
+
+            propDetails = entityProps.getPropertyDetails("currency");
+            currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
+
+            purchasePriceTextField.setFormat(decimalFormat);
+            costPriceTextField.setFormat(decimalFormat);
+            salesPriceTextField.setFormat(decimalFormat);
+
+            categoryDiscountPercentField.setEditable(false);
+            additionalDiscountPercentField.setEditable(false);
+            totalDiscountPercentField.setEditable(false);
+            transportPricePercentField.setEditable(JXPercentValueField.Editable.Value);
+            transportPricePercentField.setFreezePercent(false);
+            dutyPercentField.setEditable(false);
+            categoryProfitPercentField.setEditable(false);
+            additionalProfitPercentField.setEditable(false);
+            totalProfitPercentField.setEditable(false);
+
+            bindingGroup.addBindingListener(new AbstractBindingListener() {
+                @Override
+                public void bindingBecameBound(Binding binding) {
+                    bindingInit();
+                }
+            });
+        }
+
+        private void bindingInit() {
+            if(bindingInit)
+                return;
+
+            bindingInit = true;
+            SimpleProduct product = getProduct();
+            ProductCategory category = product.getCategory();
+            BigDecimal listPrice = product.getListPrice();
+            BigDecimal purchasePrice = product.getPurchasePrice();
+            BigDecimal costPrice = product.getCostPrice();
+            BigDecimal salesPrice = product.getSalePrice();
+
+            if(category != null) {
+                categoryDiscountPercentField.setPercent(category.getDiscountPercent());
+                categoryProfitPercentField.setPercent(category.getProfitPercent());
+            }
+            additionalDiscountPercentField.setPercent(product.getDiscountPercent());
+            totalDiscountPercentField.setPercent(product.getTotalDiscount());
+            System.out.println("product.getTransport(): " + product.getTransport());
+            System.out.println("product.getTransportPrice(): " + product.getTransportPrice());
+            System.out.println("product.getTransportPricingValue(): " + product.getTransportPricingValue());
+            //transportPricePercentField.setSecondValue(product.getTransport());
+
+            System.out.println("product.getDuty(): " + product.getDuty());
+            System.out.println("product.getDutyPercent(): " + product.getDutyPercent());
+            System.out.println("product.getDutyPricingValue(): " + product.getDutyPricingValue());
+            //dutyPercentField
+            additionalProfitPercentField.setPercent(product.getProfitPercent());
+            totalProfitPercentField.setPercent(product.getTotalProfit());
+
+            categoryDiscountPercentField.setBaseValue(listPrice);
+            additionalDiscountPercentField.setBaseValue(listPrice);
+            totalDiscountPercentField.setBaseValue(listPrice);
+//            transportPricePercentField.totalValueChanged(purchasePrice);
+//            dutyPercentField.totalValueChanged(purchasePrice);
+            categoryProfitPercentField.setBaseValue(costPrice);
+            additionalProfitPercentField.setBaseValue(costPrice);
+            totalProfitPercentField.setBaseValue(costPrice);
+
+            purchasePriceTextField.setValue(purchasePrice);
+            costPriceTextField.setValue(costPrice);
+            salesPriceTextField.setValue(salesPrice);
+
         }
 
         private SimpleProduct getProduct() {
             return (SimpleProduct)getMainDataObject();
+        }
+    }
+
+    private class ListPriceBindingListener extends AbstractBindingListener {
+
+        @Override
+        public void targetChanged(Binding binding, PropertyStateEvent event) {
+            System.out.println("event: " + event);
         }
     }
 }
