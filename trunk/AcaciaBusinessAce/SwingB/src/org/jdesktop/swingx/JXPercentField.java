@@ -27,8 +27,10 @@ public class JXPercentField extends JXNumberField {
     }
 
     public void setPercent(BigDecimal percent) {
-        BigDecimal number = new BigDecimal(getNumberValue(percent).toString()).multiply(ONE_HUNDRED, MATH_CONTEXT);
-        super.setValue(number);
+        if(percent != null)
+            super.setValue(new BigDecimal(getNumberValue(percent).toString()).multiply(ONE_HUNDRED, MATH_CONTEXT));
+        else
+            super.setValue(percent);
     }
 
     public BigDecimal getPercent() {

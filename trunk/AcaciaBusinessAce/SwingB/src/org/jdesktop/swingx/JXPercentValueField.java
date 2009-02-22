@@ -149,7 +149,7 @@ public class JXPercentValueField extends JPanel {
 
     public void setPercent(BigDecimal percent) {
         percentField.setPercent(percent);
-        computeValues();
+        computeValues(true);
     }
 
     public BigDecimal getPercent() {
@@ -158,7 +158,7 @@ public class JXPercentValueField extends JPanel {
 
     public void setPercentValue(BigDecimal percentValue) {
         percentValueField.setValue(percentValue);
-        computeValues();
+        computeValues(false);
     }
 
     public BigDecimal getPercentValue() {
@@ -175,7 +175,11 @@ public class JXPercentValueField extends JPanel {
     }
 
     protected void computeValues() {
-        if(freezePercent)
+        computeValues(freezePercent);
+    }
+
+    protected void computeValues(boolean computeByPercent) {
+        if(computeByPercent)
             onPercentTextChanged();
         else
             onPercentValueTextChanged();
