@@ -140,6 +140,13 @@ public class JXPercentValueField extends JPanel {
         }
     }
 
+    public void setEditable(boolean editable) {
+        if(editable)
+            setEditable(Editable.All);
+        else
+            setEditable(Editable.None);
+    }
+
     public void setPercent(BigDecimal percent) {
         percentField.setPercent(percent);
         computeValues();
