@@ -13,7 +13,7 @@ import java.math.BigInteger;
  */
 public class JXIntegerField extends JXNumberField {
 
-    public JXIntegerField(Object value) {
+    public JXIntegerField(BigInteger value) {
         super(value);
     }
 
