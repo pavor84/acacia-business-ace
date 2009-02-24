@@ -6,7 +6,6 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
 
 import java.math.BigInteger;
 
@@ -68,125 +67,148 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        nameField = new com.cosmos.swingb.JBTextField();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        descriptionField = new com.cosmos.swingb.JBTextArea();
-        jBLabel3 = new com.cosmos.swingb.JBLabel();
-        jBLabel4 = new com.cosmos.swingb.JBLabel();
-        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        categoryField = new com.cosmos.acacia.gui.AcaciaComboList();
-        patternMaskFormatField = new com.cosmos.acacia.gui.AcaciaComboList();
-        categoryDiscountField = new com.cosmos.swingb.JBFormattedTextField();
+        productCategoryTabbedPane = new javax.swing.JTabbedPane();
+        categoryDetailsPanel = new javax.swing.JPanel();
+        parentCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        categoryNameTextField = new com.cosmos.swingb.JBTextField();
+        patternMaskFormatComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        parentCategoryLabel = new com.cosmos.swingb.JBLabel();
+        categoryNameLabel = new com.cosmos.swingb.JBLabel();
+        patternMaskFormatLabel = new com.cosmos.swingb.JBLabel();
+        descriptionPanel = new com.cosmos.swingb.JBPanel();
+        descriptionScrollPane = new javax.swing.JScrollPane();
+        descriptionTextPane = new com.cosmos.swingb.JBTextPane();
+        categoryPricingPanel = new com.cosmos.swingb.JBPanel();
+        categoryDiscountPercentField = new com.cosmos.swingb.JBPercentField();
+        categoryProfitPercentField = new com.cosmos.swingb.JBPercentField();
         categoryDiscountLabel = new com.cosmos.swingb.JBLabel();
-        profitField = new com.cosmos.swingb.JBFormattedTextField();
-        profitLabel = new com.cosmos.swingb.JBLabel();
+        categoryProfitLabel = new com.cosmos.swingb.JBLabel();
+        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoryPanel.class);
         setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("Form.border.title"))); // NOI18N
         setName("Form"); // NOI18N
+        setLayout(new java.awt.BorderLayout());
 
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
+        productCategoryTabbedPane.setName("productCategoryTabbedPane"); // NOI18N
 
-        nameField.setText(resourceMap.getString("nameField.text")); // NOI18N
-        nameField.setName("nameField"); // NOI18N
+        categoryDetailsPanel.setName("categoryDetailsPanel"); // NOI18N
 
-        jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
-        jBLabel2.setName("jBLabel2"); // NOI18N
+        parentCategoryComboList.setName("parentCategoryComboList"); // NOI18N
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        categoryNameTextField.setName("categoryNameTextField"); // NOI18N
 
-        descriptionField.setColumns(20);
-        descriptionField.setRows(5);
-        descriptionField.setFont(resourceMap.getFont("descriptionField.font")); // NOI18N
-        descriptionField.setName("descriptionField"); // NOI18N
-        jScrollPane1.setViewportView(descriptionField);
+        patternMaskFormatComboList.setName("patternMaskFormatComboList"); // NOI18N
 
-        jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
-        jBLabel3.setName("jBLabel3"); // NOI18N
+        parentCategoryLabel.setText(resourceMap.getString("parentCategoryLabel.text")); // NOI18N
+        parentCategoryLabel.setName("parentCategoryLabel"); // NOI18N
 
-        jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
-        jBLabel4.setName("jBLabel4"); // NOI18N
+        categoryNameLabel.setText(resourceMap.getString("categoryNameLabel.text")); // NOI18N
+        categoryNameLabel.setName("categoryNameLabel"); // NOI18N
 
-        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
+        patternMaskFormatLabel.setText(resourceMap.getString("patternMaskFormatLabel.text")); // NOI18N
+        patternMaskFormatLabel.setName("patternMaskFormatLabel"); // NOI18N
 
-        categoryField.setName("categoryField"); // NOI18N
+        descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("descriptionPanel.border.title"))); // NOI18N
+        descriptionPanel.setName("descriptionPanel"); // NOI18N
+        descriptionPanel.setLayout(new java.awt.BorderLayout());
 
-        patternMaskFormatField.setName("patternMaskFormatField"); // NOI18N
+        descriptionScrollPane.setName("descriptionScrollPane"); // NOI18N
 
-        categoryDiscountField.setText(resourceMap.getString("categoryDiscountField.text")); // NOI18N
-        categoryDiscountField.setName("categoryDiscountField"); // NOI18N
+        descriptionTextPane.setName("descriptionTextPane"); // NOI18N
+        descriptionScrollPane.setViewportView(descriptionTextPane);
+
+        descriptionPanel.add(descriptionScrollPane, java.awt.BorderLayout.CENTER);
+
+        javax.swing.GroupLayout categoryDetailsPanelLayout = new javax.swing.GroupLayout(categoryDetailsPanel);
+        categoryDetailsPanel.setLayout(categoryDetailsPanelLayout);
+        categoryDetailsPanelLayout.setHorizontalGroup(
+            categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoryDetailsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, categoryDetailsPanelLayout.createSequentialGroup()
+                        .addGroup(categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(patternMaskFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(categoryNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(parentCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(parentCategoryComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(categoryNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(patternMaskFormatComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        categoryDetailsPanelLayout.setVerticalGroup(
+            categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(categoryDetailsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(parentCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(parentCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(categoryDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(patternMaskFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patternMaskFormatComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        productCategoryTabbedPane.addTab(resourceMap.getString("categoryDetailsPanel.TabConstraints.tabTitle"), categoryDetailsPanel); // NOI18N
+
+        categoryPricingPanel.setName("categoryPricingPanel"); // NOI18N
+
+        categoryDiscountPercentField.setName("categoryDiscountPercentField"); // NOI18N
+
+        categoryProfitPercentField.setName("categoryProfitPercentField"); // NOI18N
 
         categoryDiscountLabel.setText(resourceMap.getString("categoryDiscountLabel.text")); // NOI18N
         categoryDiscountLabel.setName("categoryDiscountLabel"); // NOI18N
 
-        profitField.setName("profitField"); // NOI18N
+        categoryProfitLabel.setText(resourceMap.getString("categoryProfitLabel.text")); // NOI18N
+        categoryProfitLabel.setName("categoryProfitLabel"); // NOI18N
 
-        profitLabel.setText(resourceMap.getString("profitLabel.text")); // NOI18N
-        profitLabel.setName("profitLabel"); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout categoryPricingPanelLayout = new javax.swing.GroupLayout(categoryPricingPanel);
+        categoryPricingPanel.setLayout(categoryPricingPanelLayout);
+        categoryPricingPanelLayout.setHorizontalGroup(
+            categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(categoryPricingPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(nameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(categoryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(patternMaskFormatField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(categoryDiscountField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(profitLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(profitField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE))
+                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryProfitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(categoryProfitPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                    .addComponent(categoryDiscountPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        categoryPricingPanelLayout.setVerticalGroup(
+            categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(categoryPricingPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(patternMaskFormatField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(categoryDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryDiscountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryProfitPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryProfitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(217, Short.MAX_VALUE))
         );
+
+        productCategoryTabbedPane.addTab(resourceMap.getString("categoryPricingPanel.TabConstraints.tabTitle"), categoryPricingPanel); // NOI18N
+
+        add(productCategoryTabbedPane, java.awt.BorderLayout.CENTER);
+
+        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
+        add(entityFormButtonPanel1, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
@@ -199,33 +221,33 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         //parent category
         propDetails = entProps.getPropertyDetails("parentCategory");
         ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
-        categoryField.bind(bindGroup, categoryListPanel, entity, propDetails,
+        parentCategoryComboList.bind(bindGroup, categoryListPanel, entity, propDetails,
             "${categoryName}", UpdateStrategy.READ_WRITE);
         
         //category name
         propDetails = entProps.getPropertyDetails("categoryName");
-        nameField.bind(bindGroup, entity, propDetails);
+        categoryNameTextField.bind(bindGroup, entity, propDetails);
 
         //pattern mask format
         propDetails = entProps.getPropertyDetails("patternMaskFormat");
         PatternMaskFormatListPanel patternListPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
         
-        patternMaskFormatField.bind(bindGroup, patternListPanel, entity, propDetails,
+        patternMaskFormatComboList.bind(bindGroup, patternListPanel, entity, propDetails,
             "${patternName} (${format})", UpdateStrategy.READ_WRITE);
         
         //discount and profit
         if ( getRightsManager().isAllowed(SpecialPermission.ProductPricing) ){
-            categoryDiscountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
-            profitField.bind(bindGroup, entity, entProps.getPropertyDetails("profitPercent"), getDecimalFormat());
+            categoryDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
+            categoryProfitPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("profitPercent"));
         }else{
             categoryDiscountLabel.setVisible(false);
-            categoryDiscountField.setVisible(false);
-            profitLabel.setVisible(false);
-            profitField.setVisible(false);
+            categoryDiscountPercentField.setVisible(false);
+            categoryProfitLabel.setVisible(false);
+            categoryProfitPercentField.setVisible(false);
         }
 
         //description
-        descriptionField.bind(bindGroup, entity, "description");
+        descriptionTextPane.bind(bindGroup, entity, entProps.getPropertyDetails("description"));
 
         bindGroup.bind();
     }
@@ -260,24 +282,30 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.swingb.JBFormattedTextField categoryDiscountField;
+    private javax.swing.JPanel categoryDetailsPanel;
     private com.cosmos.swingb.JBLabel categoryDiscountLabel;
-    private com.cosmos.swingb.JBLabel profitLabel;
-    private com.cosmos.acacia.gui.AcaciaComboList categoryField;
-    private com.cosmos.swingb.JBTextArea descriptionField;
+    private com.cosmos.swingb.JBPercentField categoryDiscountPercentField;
+    private com.cosmos.swingb.JBLabel categoryNameLabel;
+    private com.cosmos.swingb.JBTextField categoryNameTextField;
+    private com.cosmos.swingb.JBPanel categoryPricingPanel;
+    private com.cosmos.swingb.JBLabel categoryProfitLabel;
+    private com.cosmos.swingb.JBPercentField categoryProfitPercentField;
+    private com.cosmos.swingb.JBPanel descriptionPanel;
+    private javax.swing.JScrollPane descriptionScrollPane;
+    private com.cosmos.swingb.JBTextPane descriptionTextPane;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBLabel jBLabel2;
-    private com.cosmos.swingb.JBLabel jBLabel3;
-    private com.cosmos.swingb.JBLabel jBLabel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private com.cosmos.swingb.JBTextField nameField;
-    private com.cosmos.acacia.gui.AcaciaComboList patternMaskFormatField;
-    private com.cosmos.swingb.JBFormattedTextField profitField;
+    private com.cosmos.acacia.gui.AcaciaComboList parentCategoryComboList;
+    private com.cosmos.swingb.JBLabel parentCategoryLabel;
+    private com.cosmos.acacia.gui.AcaciaComboList patternMaskFormatComboList;
+    private com.cosmos.swingb.JBLabel patternMaskFormatLabel;
+    private javax.swing.JTabbedPane productCategoryTabbedPane;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void performSave(boolean closeAfter) {
+        System.out.println("entity.getDiscountPercent(): " + entity.getDiscountPercent());
+        System.out.println("categoryDiscountPercentField.getText(): " + categoryDiscountPercentField.getText());
+        System.out.println("categoryDiscountPercentField.getValue(): " + categoryDiscountPercentField.getValue());
         entity = getFormSession().saveProductCategory(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
