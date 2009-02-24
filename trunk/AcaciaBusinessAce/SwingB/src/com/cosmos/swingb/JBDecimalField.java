@@ -104,7 +104,7 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
     {
         this.beanEntity = beanEntity;
 
-        BeanProperty beanProperty = BeanProperty.create("text");
+        BeanProperty beanProperty = BeanProperty.create("value");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
 
