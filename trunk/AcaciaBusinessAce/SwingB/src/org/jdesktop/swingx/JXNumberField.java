@@ -32,7 +32,7 @@ public class JXNumberField extends JFormattedTextField {
     protected NumberFormatter numberFormatter;
     private DocumentHandler documentHandler;
 
-    public JXNumberField(Object value) {
+    public JXNumberField(Number value) {
         this();
         setValue(value);
     }
@@ -188,5 +188,33 @@ public class JXNumberField extends JFormattedTextField {
                 listener.textChanged(textEvent);
             }
         }
+    }
+
+    public Number getNumberValue() {
+        return (Number)getValue();
+    }
+
+    public byte getByteValue() {
+        return getNumberValue().byteValue();
+    }
+
+    public short getShortValue() {
+        return getNumberValue().shortValue();
+    }
+
+    public int getIntValue() {
+        return getNumberValue().intValue();
+    }
+
+    public long getLongValue() {
+        return getNumberValue().longValue();
+    }
+
+    public float getFloatValue() {
+        return getNumberValue().floatValue();
+    }
+
+    public double getDoubleValue() {
+        return getNumberValue().doubleValue();
     }
 }

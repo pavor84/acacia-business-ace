@@ -202,9 +202,8 @@ public class JXPercentValueField extends JPanel {
 
             try {
                 JFormattedTextField.AbstractFormatter formatter = percentField.getFormatter();
-                BigDecimal number = (BigDecimal)formatter.stringToValue(text);
-                BigDecimal percent = percentField.getPercent(number);
-                percentValueField.setValue(percent.multiply(value));
+                BigDecimal percent = (BigDecimal)formatter.stringToValue(text);
+                percentValueField.setValue(percent.multiply(value, JXNumberField.MATH_CONTEXT));
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
@@ -233,8 +232,7 @@ public class JXPercentValueField extends JPanel {
             try {
                 JFormattedTextField.AbstractFormatter formatter = percentValueField.getFormatter();
                 number = (BigDecimal)formatter.stringToValue(text);
-                percentField.setValue(number.divide(value, JXNumberField.MATH_CONTEXT)
-                        .multiply(JXNumberField.ONE_HUNDRED, JXNumberField.MATH_CONTEXT));
+                percentField.setValue(number.divide(value, JXNumberField.MATH_CONTEXT));
             } catch(Exception ex) {
                 ex.printStackTrace();
             }

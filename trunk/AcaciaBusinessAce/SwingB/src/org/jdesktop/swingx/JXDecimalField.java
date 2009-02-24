@@ -5,13 +5,15 @@
 
 package org.jdesktop.swingx;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Miro
  */
 public class JXDecimalField extends JXNumberField {
 
-    public JXDecimalField(Object value) {
+    public JXDecimalField(BigDecimal value) {
         super(value);
     }
 
