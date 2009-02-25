@@ -12,6 +12,7 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.ProductPricingValue;
 import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
@@ -1389,23 +1390,28 @@ public class ProductPanelNew extends AcaciaPanel {
             }
             additionalDiscountPercentField.setPercent(product.getDiscountPercent());
             totalDiscountPercentField.setPercent(product.getTotalDiscount());
-            System.out.println("product.getTransport(): " + product.getTransport());
-            System.out.println("product.getTransportPrice(): " + product.getTransportPrice());
-            System.out.println("product.getTransportPricingValue(): " + product.getTransportPricingValue());
-            //transportPricePercentField.setSecondValue(product.getTransport());
 
-            System.out.println("product.getDuty(): " + product.getDuty());
-            System.out.println("product.getDutyPercent(): " + product.getDutyPercent());
-            System.out.println("product.getDutyPricingValue(): " + product.getDutyPricingValue());
-            //dutyPercentField
+            ProductPricingValue ppv;
+            if ((ppv = product.getTransportPricingValue()) == null) {
+                transportPricePercentField.setPercent(product.getTransportPrice());
+            } else {
+                transportPricePercentField.setPercentValue(ppv.getValue());
+            }
+
+            if ((ppv = product.getDutyPricingValue()) == null) {
+                dutyPercentField.setPercent(product.getDutyPercent());
+            } else {
+                dutyPercentField.setPercentValue(ppv.getValue());
+            }
+
             additionalProfitPercentField.setPercent(product.getProfitPercent());
             totalProfitPercentField.setPercent(product.getTotalProfit());
 
             categoryDiscountPercentField.setBaseValue(listPrice);
             additionalDiscountPercentField.setBaseValue(listPrice);
             totalDiscountPercentField.setBaseValue(listPrice);
-//            transportPricePercentField.totalValueChanged(purchasePrice);
-//            dutyPercentField.totalValueChanged(purchasePrice);
+            transportPricePercentField.setBaseValue(purchasePrice);
+            dutyPercentField.setBaseValue(purchasePrice);
             categoryProfitPercentField.setBaseValue(costPrice);
             additionalProfitPercentField.setBaseValue(costPrice);
             totalProfitPercentField.setBaseValue(costPrice);
