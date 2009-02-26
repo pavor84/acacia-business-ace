@@ -6,7 +6,6 @@
 
 package com.cosmos.acacia.crm.gui.pricing;
 
-import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -42,11 +41,11 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
     private void initComponents() {
 
         customerField = new com.cosmos.swingb.JBTextField();
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        discountField = new com.cosmos.swingb.JBFormattedTextField();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
-        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         itemsHolderPanel = new com.cosmos.acacia.gui.TableHolderPanel();
+        discountPercentField = new com.cosmos.swingb.JBPercentField();
+        discountLabel = new com.cosmos.swingb.JBLabel();
+        customerLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
 
@@ -55,16 +54,7 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
         customerField.setText(resourceMap.getString("customerField.text")); // NOI18N
         customerField.setName("customerField"); // NOI18N
 
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
-
-        discountField.setText(resourceMap.getString("discountField.text")); // NOI18N
-        discountField.setName("discountField"); // NOI18N
-
-        jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
-        jBLabel2.setName("jBLabel2"); // NOI18N
-
-        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
+        entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
         itemsHolderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("itemsHolderPanel.border.title"))); // NOI18N
         itemsHolderPanel.setName("itemsHolderPanel"); // NOI18N
@@ -73,12 +63,20 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
         itemsHolderPanel.setLayout(itemsHolderPanelLayout);
         itemsHolderPanelLayout.setHorizontalGroup(
             itemsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 621, Short.MAX_VALUE)
         );
         itemsHolderPanelLayout.setVerticalGroup(
             itemsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGap(0, 384, Short.MAX_VALUE)
         );
+
+        discountPercentField.setName("discountPercentField"); // NOI18N
+
+        discountLabel.setText(resourceMap.getString("discountLabel.text")); // NOI18N
+        discountLabel.setName("discountLabel"); // NOI18N
+
+        customerLabel.setText(resourceMap.getString("customerLabel.text")); // NOI18N
+        customerLabel.setName("customerLabel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -90,13 +88,13 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
                     .addComponent(itemsHolderPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                            .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(customerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(discountField, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
-                            .addComponent(customerField, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE))
+                            .addComponent(customerField, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
+                            .addComponent(discountPercentField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)))
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -104,16 +102,16 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(customerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(customerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(discountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(itemsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -121,16 +119,16 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBTextField customerField;
-    private com.cosmos.swingb.JBFormattedTextField discountField;
-    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
+    private com.cosmos.swingb.JBLabel customerLabel;
+    private com.cosmos.swingb.JBLabel discountLabel;
+    private com.cosmos.swingb.JBPercentField discountPercentField;
+    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.acacia.gui.TableHolderPanel itemsHolderPanel;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBLabel jBLabel2;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
-        return entityFormButtonPanel1;
+        return entityFormButtonPanel;
     }
 
     /**
@@ -145,7 +143,7 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
         customerField.setText(entity.getCustomer().getDisplayName());
         
         // discount
-        discountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
+        discountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
         
         bindGroup.bind();
     }

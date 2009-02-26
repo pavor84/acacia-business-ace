@@ -18,10 +18,14 @@ import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
+import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
+import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
+import com.cosmos.acacia.gui.BaseEntityPanel;
+import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -32,6 +36,9 @@ import com.cosmos.swingb.JBFormattedTextField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
@@ -39,14 +46,10 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.List;
 import javax.ejb.EJB;
-import org.jdesktop.application.ApplicationAction;
-import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingx.JXPercentValueField;
@@ -56,7 +59,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *
  * @author  Miro
  */
-public class ProductPanelNew extends AcaciaPanel {
+public class ProductPanelNew extends BaseEntityPanel {
 
     @EJB
     private static ProductsListRemote formSession;
@@ -72,46 +75,17 @@ public class ProductPanelNew extends AcaciaPanel {
         init();
     }
 
-
     /** Creates new form ProductPanelNew */
     public ProductPanelNew() {
-        init();
+        this((BigInteger)null);
     }
 
-    private void init()
+    @Override
+    protected void init()
     {
         initComponents();
-        initComponentsCustom();
-        initData();
+        super.init();
     }
-
-    private void initComponentsCustom() {
-        //hide list price
-//        listPriceLabel.setVisible(false);
-//        listPriceTextField.setVisible(false);
-
-        //pricing button
-//        jBButton1.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                onProductPricing();
-//            }
-//        });
-
-        if(!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
-            int index;
-            if((index = productTabbedPane.indexOfComponent(productPricingPanel)) >= 0)
-                productTabbedPane.removeTabAt(index);
-        }
-
-        if(!getRightsManager().isAllowed(SpecialPermission.Product)) {
-            int index;
-            if((index = productTabbedPane.indexOfComponent(suppliersPanel)) >= 0) {
-                productTabbedPane.removeTabAt(index);
-            }
-        }
-    }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -122,51 +96,6 @@ public class ProductPanelNew extends AcaciaPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        productTabbedPane = new com.cosmos.swingb.JBTabbedPane();
-        primaryInfoPanel = new com.cosmos.swingb.JBPanel();
-        productNameTextField = new com.cosmos.swingb.JBTextField();
-        productNameLabel = new com.cosmos.swingb.JBLabel();
-        productCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        productCategoryLabel = new com.cosmos.swingb.JBLabel();
-        productCodeFormatLabel = new com.cosmos.swingb.JBLabel();
-        productCodeLabel = new com.cosmos.swingb.JBLabel();
-        measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        measureUnitLabel = new com.cosmos.swingb.JBLabel();
-        productColorComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        productColorLabel = new com.cosmos.swingb.JBLabel();
-        producerComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        producerLabel = new com.cosmos.swingb.JBLabel();
-        quantityPerPackageTextField = new com.cosmos.swingb.JBFormattedTextField();
-        quantityPerPackageLabel = new com.cosmos.swingb.JBLabel();
-        pricePanel = new com.cosmos.swingb.JBPanel();
-        pricePerQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
-        salesPriceTextField = new com.cosmos.swingb.JBFormattedTextField();
-        pricePerQuantityLabel = new com.cosmos.swingb.JBLabel();
-        salesPriceLabel = new com.cosmos.swingb.JBLabel();
-        quantitiesOnStockPanel = new com.cosmos.swingb.JBPanel();
-        minTextField = new com.cosmos.swingb.JBFormattedTextField();
-        minLabel = new com.cosmos.swingb.JBLabel();
-        defaultLabel = new com.cosmos.swingb.JBLabel();
-        defaultTextField = new com.cosmos.swingb.JBFormattedTextField();
-        maxLabel = new com.cosmos.swingb.JBLabel();
-        maxTextField = new com.cosmos.swingb.JBFormattedTextField();
-        categoryCodeFormatTextField = new com.cosmos.swingb.JBTextField();
-        categoryCodeFormatLabel = new com.cosmos.swingb.JBLabel();
-        productCodeFormatComboList = new com.cosmos.acacia.gui.AcaciaComboList();
-        productCodeTextField = new com.cosmos.swingb.JBMaskTextField();
-        purchaseOptionsPanel = new com.cosmos.swingb.JBPanel();
-        purchasedCheckBox = new com.cosmos.swingb.JBCheckBox();
-        salableCheckBox = new com.cosmos.swingb.JBCheckBox();
-        obsoleteCheckBox = new com.cosmos.swingb.JBCheckBox();
-        additionalInfoPanel = new com.cosmos.swingb.JBPanel();
-        deliveryInfoPanel = new com.cosmos.swingb.JBPanel();
-        weightUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
-        weightUnitLabel = new com.cosmos.swingb.JBLabel();
-        weightLabel = new com.cosmos.swingb.JBLabel();
-        weightTextField = new com.cosmos.swingb.JBFormattedTextField();
-        deliveryTimeLabel = new com.cosmos.swingb.JBLabel();
-        deliveryTimeTextField = new com.cosmos.swingb.JBFormattedTextField();
-        dimensionsPanel = new com.cosmos.swingb.JBPanel();
         dimensionUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
         dimensionUnitLabel = new com.cosmos.swingb.JBLabel();
         widthLabel = new com.cosmos.swingb.JBLabel();
@@ -177,288 +106,131 @@ public class ProductPanelNew extends AcaciaPanel {
         heightTextField = new com.cosmos.swingb.JBFormattedTextField();
         cubatureLabel = new com.cosmos.swingb.JBLabel();
         cubatureTextField = new com.cosmos.swingb.JBFormattedTextField();
+        salableCheckBox = new com.cosmos.swingb.JBCheckBox();
+        obsoleteCheckBox = new com.cosmos.swingb.JBCheckBox();
+        purchasedCheckBox = new com.cosmos.swingb.JBCheckBox();
+        deliveryTimeTextField = new com.cosmos.swingb.JBFormattedTextField();
+        deliveryTimeLabel = new com.cosmos.swingb.JBLabel();
+        weightTextField = new com.cosmos.swingb.JBFormattedTextField();
+        weightLabel = new com.cosmos.swingb.JBLabel();
+        weightUnitLabel = new com.cosmos.swingb.JBLabel();
+        weightUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        maxTextField = new com.cosmos.swingb.JBFormattedTextField();
+        maxLabel = new com.cosmos.swingb.JBLabel();
+        defaultTextField = new com.cosmos.swingb.JBFormattedTextField();
+        defaultLabel = new com.cosmos.swingb.JBLabel();
+        minLabel = new com.cosmos.swingb.JBLabel();
+        minTextField = new com.cosmos.swingb.JBFormattedTextField();
+        salesPriceLabel = new com.cosmos.swingb.JBLabel();
+        pricePerQuantityLabel = new com.cosmos.swingb.JBLabel();
+        salesPriceTextField = new com.cosmos.swingb.JBFormattedTextField();
+        pricePerQuantityTextField = new com.cosmos.swingb.JBFormattedTextField();
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
+        dimensionsPanel = new com.cosmos.swingb.JBPanel();
+        purchaseOptionsPanel = new com.cosmos.swingb.JBPanel();
+        deliveryInfoPanel = new com.cosmos.swingb.JBPanel();
+        productCodeTextField = new com.cosmos.swingb.JBMaskTextField();
+        productCodeFormatComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        categoryCodeFormatLabel = new com.cosmos.swingb.JBLabel();
+        categoryCodeFormatTextField = new com.cosmos.swingb.JBTextField();
+        quantitiesOnStockPanel = new com.cosmos.swingb.JBPanel();
+        pricePanel = new com.cosmos.swingb.JBPanel();
+        quantityPerPackageLabel = new com.cosmos.swingb.JBLabel();
+        quantityPerPackageTextField = new com.cosmos.swingb.JBFormattedTextField();
+        producerLabel = new com.cosmos.swingb.JBLabel();
+        producerComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        productColorLabel = new com.cosmos.swingb.JBLabel();
+        productColorComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        measureUnitLabel = new com.cosmos.swingb.JBLabel();
+        measureUnitComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        productCodeLabel = new com.cosmos.swingb.JBLabel();
+        productCodeFormatLabel = new com.cosmos.swingb.JBLabel();
+        productCategoryLabel = new com.cosmos.swingb.JBLabel();
+        productCategoryComboList = new com.cosmos.acacia.gui.AcaciaComboList();
+        productNameLabel = new com.cosmos.swingb.JBLabel();
+        productNameTextField = new com.cosmos.swingb.JBTextField();
+        productTabbedPane = new com.cosmos.swingb.JBTabbedPane();
+        primaryInfoPanel = new com.cosmos.swingb.JBPanel();
+        additionalInfoPanel = new com.cosmos.swingb.JBPanel();
         productPricingPanel = new com.cosmos.swingb.JBPanel();
         suppliersPanel = new com.cosmos.swingb.JBPanel();
-        buttonsPanel = new com.cosmos.swingb.JBPanel();
-        closeButton = new com.cosmos.swingb.JBButton();
-        saveButton = new com.cosmos.swingb.JBButton();
-
-        setName("Form"); // NOI18N
-
-        productTabbedPane.setName("productTabbedPane"); // NOI18N
-
-        primaryInfoPanel.setName("primaryInfoPanel"); // NOI18N
-
-        productNameTextField.setName("productNameTextField"); // NOI18N
-
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductPanelNew.class);
-        productNameLabel.setText(resourceMap.getString("productNameLabel.text")); // NOI18N
-        productNameLabel.setName("productNameLabel"); // NOI18N
-
-        productCategoryComboList.setName("productCategoryComboList"); // NOI18N
-
-        productCategoryLabel.setText(resourceMap.getString("productCategoryLabel.text")); // NOI18N
-        productCategoryLabel.setName("productCategoryLabel"); // NOI18N
-
-        productCodeFormatLabel.setText(resourceMap.getString("productCodeFormatLabel.text")); // NOI18N
-        productCodeFormatLabel.setName("productCodeFormatLabel"); // NOI18N
-
-        productCodeLabel.setText(resourceMap.getString("productCodeLabel.text")); // NOI18N
-        productCodeLabel.setName("productCodeLabel"); // NOI18N
-
-        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
-
-        measureUnitLabel.setText(resourceMap.getString("measureUnitLabel.text")); // NOI18N
-        measureUnitLabel.setName("measureUnitLabel"); // NOI18N
-
-        productColorComboBox.setName("productColorComboBox"); // NOI18N
-
-        productColorLabel.setText(resourceMap.getString("productColorLabel.text")); // NOI18N
-        productColorLabel.setName("productColorLabel"); // NOI18N
-
-        producerComboList.setName("producerComboList"); // NOI18N
-
-        producerLabel.setText(resourceMap.getString("producerLabel.text")); // NOI18N
-        producerLabel.setName("producerLabel"); // NOI18N
-
-        quantityPerPackageTextField.setName("quantityPerPackageTextField"); // NOI18N
-
-        quantityPerPackageLabel.setText(resourceMap.getString("quantityPerPackageLabel.text")); // NOI18N
-        quantityPerPackageLabel.setName("quantityPerPackageLabel"); // NOI18N
-
-        pricePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("pricePanel.border.title"))); // NOI18N
-        pricePanel.setName("pricePanel"); // NOI18N
-        pricePanel.setLayout(new net.miginfocom.swing.MigLayout());
-
-        pricePerQuantityTextField.setName("pricePerQuantityTextField"); // NOI18N
-        pricePanel.add(pricePerQuantityTextField);
-
-        salesPriceTextField.setName("salesPriceTextField"); // NOI18N
-        pricePanel.add(salesPriceTextField);
-
-        pricePerQuantityLabel.setText(resourceMap.getString("pricePerQuantityLabel.text")); // NOI18N
-        pricePerQuantityLabel.setName("pricePerQuantityLabel"); // NOI18N
-        pricePanel.add(pricePerQuantityLabel);
-
-        salesPriceLabel.setText(resourceMap.getString("salesPriceLabel.text")); // NOI18N
-        salesPriceLabel.setName("salesPriceLabel"); // NOI18N
-        pricePanel.add(salesPriceLabel);
-
-        quantitiesOnStockPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("quantitiesOnStockPanel.border.title"))); // NOI18N
-        quantitiesOnStockPanel.setName("quantitiesOnStockPanel"); // NOI18N
-        quantitiesOnStockPanel.setLayout(new net.miginfocom.swing.MigLayout());
-
-        minTextField.setName("minTextField"); // NOI18N
-        quantitiesOnStockPanel.add(minTextField);
-
-        minLabel.setText(resourceMap.getString("minLabel.text")); // NOI18N
-        minLabel.setName("minLabel"); // NOI18N
-        quantitiesOnStockPanel.add(minLabel);
-
-        defaultLabel.setText(resourceMap.getString("defaultLabel.text")); // NOI18N
-        defaultLabel.setName("defaultLabel"); // NOI18N
-        quantitiesOnStockPanel.add(defaultLabel);
-
-        defaultTextField.setName("defaultTextField"); // NOI18N
-        quantitiesOnStockPanel.add(defaultTextField);
-
-        maxLabel.setText(resourceMap.getString("maxLabel.text")); // NOI18N
-        maxLabel.setName("maxLabel"); // NOI18N
-        quantitiesOnStockPanel.add(maxLabel);
-
-        maxTextField.setName("maxTextField"); // NOI18N
-        quantitiesOnStockPanel.add(maxTextField);
-
-        categoryCodeFormatTextField.setEditable(false);
-        categoryCodeFormatTextField.setName("categoryCodeFormatTextField"); // NOI18N
-
-        categoryCodeFormatLabel.setText(resourceMap.getString("categoryCodeFormatLabel.text")); // NOI18N
-        categoryCodeFormatLabel.setName("categoryCodeFormatLabel"); // NOI18N
-
-        productCodeFormatComboList.setName("productCodeFormatComboList"); // NOI18N
-
-        productCodeTextField.setText(resourceMap.getString("productCodeTextField.text")); // NOI18N
-        productCodeTextField.setName("productCodeTextField"); // NOI18N
-
-        purchaseOptionsPanel.setName("purchaseOptionsPanel"); // NOI18N
-        purchaseOptionsPanel.setLayout(new net.miginfocom.swing.MigLayout());
-
-        purchasedCheckBox.setText(resourceMap.getString("purchasedCheckBox.text")); // NOI18N
-        purchasedCheckBox.setName("purchasedCheckBox"); // NOI18N
-        purchaseOptionsPanel.add(purchasedCheckBox);
-
-        salableCheckBox.setText(resourceMap.getString("salableCheckBox.text")); // NOI18N
-        salableCheckBox.setName("salableCheckBox"); // NOI18N
-        purchaseOptionsPanel.add(salableCheckBox);
-
-        obsoleteCheckBox.setText(resourceMap.getString("obsoleteCheckBox.text")); // NOI18N
-        obsoleteCheckBox.setName("obsoleteCheckBox"); // NOI18N
-        purchaseOptionsPanel.add(obsoleteCheckBox);
-
-        javax.swing.GroupLayout primaryInfoPanelLayout = new javax.swing.GroupLayout(primaryInfoPanel);
-        primaryInfoPanel.setLayout(primaryInfoPanelLayout);
-        primaryInfoPanelLayout.setHorizontalGroup(
-            primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                        .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(productNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36)
-                        .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
-                            .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, primaryInfoPanelLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(productCodeFormatComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(productCategoryComboList, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, primaryInfoPanelLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(measureUnitComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, primaryInfoPanelLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(producerComboList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(categoryCodeFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(productColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(quantityPerPackageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(quantityPerPackageTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(productColorComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(categoryCodeFormatTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))))
-                        .addContainerGap())
-                    .addComponent(productCodeFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(producerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, primaryInfoPanelLayout.createSequentialGroup()
-                        .addComponent(purchaseOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                        .addComponent(pricePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                        .addComponent(quantitiesOnStockPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                        .addContainerGap())))
-        );
-        primaryInfoPanelLayout.setVerticalGroup(
-            primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(primaryInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(productNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(productCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productCategoryComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(categoryCodeFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(categoryCodeFormatTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(productCodeFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productCodeFormatComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(productCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(measureUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(measureUnitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productColorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(producerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(producerComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(primaryInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(quantityPerPackageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(quantityPerPackageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(purchaseOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pricePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(quantitiesOnStockPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(143, 143, 143))
-        );
-
-        productTabbedPane.addTab(resourceMap.getString("primaryInfoPanel.TabConstraints.tabTitle"), primaryInfoPanel); // NOI18N
-
-        additionalInfoPanel.setName("additionalInfoPanel"); // NOI18N
-
-        deliveryInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("deliveryInfoPanel.border.title"))); // NOI18N
-        deliveryInfoPanel.setName("deliveryInfoPanel"); // NOI18N
-        deliveryInfoPanel.setLayout(new net.miginfocom.swing.MigLayout());
-
-        weightUnitComboBox.setName("weightUnitComboBox"); // NOI18N
-        deliveryInfoPanel.add(weightUnitComboBox);
-
-        weightUnitLabel.setText(resourceMap.getString("weightUnitLabel.text")); // NOI18N
-        weightUnitLabel.setName("weightUnitLabel"); // NOI18N
-        deliveryInfoPanel.add(weightUnitLabel);
-
-        weightLabel.setText(resourceMap.getString("weightLabel.text")); // NOI18N
-        weightLabel.setName("weightLabel"); // NOI18N
-        deliveryInfoPanel.add(weightLabel);
-
-        weightTextField.setName("weightTextField"); // NOI18N
-        deliveryInfoPanel.add(weightTextField);
-
-        deliveryTimeLabel.setText(resourceMap.getString("deliveryTimeLabel.text")); // NOI18N
-        deliveryTimeLabel.setName("deliveryTimeLabel"); // NOI18N
-        deliveryInfoPanel.add(deliveryTimeLabel);
-
-        deliveryTimeTextField.setName("deliveryTimeTextField"); // NOI18N
-        deliveryInfoPanel.add(deliveryTimeTextField);
-
-        dimensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("dimensionsPanel.border.title"))); // NOI18N
-        dimensionsPanel.setName("dimensionsPanel"); // NOI18N
-        dimensionsPanel.setLayout(new net.miginfocom.swing.MigLayout());
 
         dimensionUnitComboBox.setName("dimensionUnitComboBox"); // NOI18N
-        dimensionsPanel.add(dimensionUnitComboBox);
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductPanelNew.class);
         dimensionUnitLabel.setText(resourceMap.getString("dimensionUnitLabel.text")); // NOI18N
         dimensionUnitLabel.setName("dimensionUnitLabel"); // NOI18N
-        dimensionsPanel.add(dimensionUnitLabel);
 
         widthLabel.setText(resourceMap.getString("widthLabel.text")); // NOI18N
         widthLabel.setName("widthLabel"); // NOI18N
-        dimensionsPanel.add(widthLabel);
 
         widthTextField.setName("widthTextField"); // NOI18N
-        dimensionsPanel.add(widthTextField);
 
         lengthLabel.setText(resourceMap.getString("lengthLabel.text")); // NOI18N
         lengthLabel.setName("lengthLabel"); // NOI18N
-        dimensionsPanel.add(lengthLabel);
 
         lengthTextField.setName("lengthTextField"); // NOI18N
-        dimensionsPanel.add(lengthTextField);
 
         heightLabel.setText(resourceMap.getString("heightLabel.text")); // NOI18N
         heightLabel.setName("heightLabel"); // NOI18N
-        dimensionsPanel.add(heightLabel);
 
         heightTextField.setName("heightTextField"); // NOI18N
-        dimensionsPanel.add(heightTextField);
 
         cubatureLabel.setText(resourceMap.getString("cubatureLabel.text")); // NOI18N
         cubatureLabel.setName("cubatureLabel"); // NOI18N
-        dimensionsPanel.add(cubatureLabel);
 
         cubatureTextField.setName("cubatureTextField"); // NOI18N
-        dimensionsPanel.add(cubatureTextField);
+
+        salableCheckBox.setText(resourceMap.getString("salableCheckBox.text")); // NOI18N
+        salableCheckBox.setName("salableCheckBox"); // NOI18N
+
+        obsoleteCheckBox.setText(resourceMap.getString("obsoleteCheckBox.text")); // NOI18N
+        obsoleteCheckBox.setName("obsoleteCheckBox"); // NOI18N
+
+        purchasedCheckBox.setText(resourceMap.getString("purchasedCheckBox.text")); // NOI18N
+        purchasedCheckBox.setName("purchasedCheckBox"); // NOI18N
+
+        deliveryTimeTextField.setName("deliveryTimeTextField"); // NOI18N
+
+        deliveryTimeLabel.setText(resourceMap.getString("deliveryTimeLabel.text")); // NOI18N
+        deliveryTimeLabel.setName("deliveryTimeLabel"); // NOI18N
+
+        weightTextField.setName("weightTextField"); // NOI18N
+
+        weightLabel.setText(resourceMap.getString("weightLabel.text")); // NOI18N
+        weightLabel.setName("weightLabel"); // NOI18N
+
+        weightUnitLabel.setText(resourceMap.getString("weightUnitLabel.text")); // NOI18N
+        weightUnitLabel.setName("weightUnitLabel"); // NOI18N
+
+        weightUnitComboBox.setName("weightUnitComboBox"); // NOI18N
+
+        maxTextField.setName("maxTextField"); // NOI18N
+
+        maxLabel.setText(resourceMap.getString("maxLabel.text")); // NOI18N
+        maxLabel.setName("maxLabel"); // NOI18N
+
+        defaultTextField.setName("defaultTextField"); // NOI18N
+
+        defaultLabel.setText(resourceMap.getString("defaultLabel.text")); // NOI18N
+        defaultLabel.setName("defaultLabel"); // NOI18N
+
+        minLabel.setText(resourceMap.getString("minLabel.text")); // NOI18N
+        minLabel.setName("minLabel"); // NOI18N
+
+        minTextField.setName("minTextField"); // NOI18N
+
+        salesPriceLabel.setText(resourceMap.getString("salesPriceLabel.text")); // NOI18N
+        salesPriceLabel.setName("salesPriceLabel"); // NOI18N
+
+        pricePerQuantityLabel.setText(resourceMap.getString("pricePerQuantityLabel.text")); // NOI18N
+        pricePerQuantityLabel.setName("pricePerQuantityLabel"); // NOI18N
+
+        salesPriceTextField.setName("salesPriceTextField"); // NOI18N
+
+        pricePerQuantityTextField.setName("pricePerQuantityTextField"); // NOI18N
 
         descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("descriptionPanel.border.title"))); // NOI18N
         descriptionPanel.setName("descriptionPanel"); // NOI18N
@@ -471,111 +243,99 @@ public class ProductPanelNew extends AcaciaPanel {
 
         descriptionPanel.add(descriptionScrollPane, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout additionalInfoPanelLayout = new javax.swing.GroupLayout(additionalInfoPanel);
-        additionalInfoPanel.setLayout(additionalInfoPanelLayout);
-        additionalInfoPanelLayout.setHorizontalGroup(
-            additionalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, additionalInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(additionalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(descriptionPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                    .addComponent(deliveryInfoPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                    .addComponent(dimensionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        additionalInfoPanelLayout.setVerticalGroup(
-            additionalInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(additionalInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(deliveryInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dimensionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        dimensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("dimensionsPanel.border.title"))); // NOI18N
+        dimensionsPanel.setName("dimensionsPanel"); // NOI18N
+        dimensionsPanel.setLayout(new net.miginfocom.swing.MigLayout());
 
+        purchaseOptionsPanel.setName("purchaseOptionsPanel"); // NOI18N
+        purchaseOptionsPanel.setLayout(new net.miginfocom.swing.MigLayout());
+
+        deliveryInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("deliveryInfoPanel.border.title"))); // NOI18N
+        deliveryInfoPanel.setName("deliveryInfoPanel"); // NOI18N
+        deliveryInfoPanel.setLayout(new net.miginfocom.swing.MigLayout());
+
+        productCodeTextField.setText(resourceMap.getString("productCodeTextField.text")); // NOI18N
+        productCodeTextField.setName("productCodeTextField"); // NOI18N
+
+        productCodeFormatComboList.setName("productCodeFormatComboList"); // NOI18N
+
+        categoryCodeFormatLabel.setText(resourceMap.getString("categoryCodeFormatLabel.text")); // NOI18N
+        categoryCodeFormatLabel.setName("categoryCodeFormatLabel"); // NOI18N
+
+        categoryCodeFormatTextField.setEditable(false);
+        categoryCodeFormatTextField.setName("categoryCodeFormatTextField"); // NOI18N
+
+        quantitiesOnStockPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("quantitiesOnStockPanel.border.title"))); // NOI18N
+        quantitiesOnStockPanel.setName("quantitiesOnStockPanel"); // NOI18N
+        quantitiesOnStockPanel.setLayout(new net.miginfocom.swing.MigLayout());
+
+        pricePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("pricePanel.border.title"))); // NOI18N
+        pricePanel.setName("pricePanel"); // NOI18N
+        pricePanel.setLayout(new net.miginfocom.swing.MigLayout());
+
+        quantityPerPackageLabel.setText(resourceMap.getString("quantityPerPackageLabel.text")); // NOI18N
+        quantityPerPackageLabel.setName("quantityPerPackageLabel"); // NOI18N
+
+        quantityPerPackageTextField.setName("quantityPerPackageTextField"); // NOI18N
+
+        producerLabel.setText(resourceMap.getString("producerLabel.text")); // NOI18N
+        producerLabel.setName("producerLabel"); // NOI18N
+
+        producerComboList.setName("producerComboList"); // NOI18N
+
+        productColorLabel.setText(resourceMap.getString("productColorLabel.text")); // NOI18N
+        productColorLabel.setName("productColorLabel"); // NOI18N
+
+        productColorComboBox.setName("productColorComboBox"); // NOI18N
+
+        measureUnitLabel.setText(resourceMap.getString("measureUnitLabel.text")); // NOI18N
+        measureUnitLabel.setName("measureUnitLabel"); // NOI18N
+
+        measureUnitComboBox.setName("measureUnitComboBox"); // NOI18N
+
+        productCodeLabel.setText(resourceMap.getString("productCodeLabel.text")); // NOI18N
+        productCodeLabel.setName("productCodeLabel"); // NOI18N
+
+        productCodeFormatLabel.setText(resourceMap.getString("productCodeFormatLabel.text")); // NOI18N
+        productCodeFormatLabel.setName("productCodeFormatLabel"); // NOI18N
+
+        productCategoryLabel.setText(resourceMap.getString("productCategoryLabel.text")); // NOI18N
+        productCategoryLabel.setName("productCategoryLabel"); // NOI18N
+
+        productCategoryComboList.setName("productCategoryComboList"); // NOI18N
+
+        productNameLabel.setText(resourceMap.getString("productNameLabel.text")); // NOI18N
+        productNameLabel.setName("productNameLabel"); // NOI18N
+
+        productNameTextField.setName("productNameTextField"); // NOI18N
+
+        productTabbedPane.setName("productTabbedPane"); // NOI18N
+
+        primaryInfoPanel.setName("primaryInfoPanel"); // NOI18N
+        primaryInfoPanel.setLayout(new net.miginfocom.swing.MigLayout());
+        productTabbedPane.addTab(resourceMap.getString("primaryInfoPanel.TabConstraints.tabTitle"), primaryInfoPanel); // NOI18N
+
+        additionalInfoPanel.setName("additionalInfoPanel"); // NOI18N
+        additionalInfoPanel.setLayout(new net.miginfocom.swing.MigLayout());
         productTabbedPane.addTab(resourceMap.getString("additionalInfoPanel.TabConstraints.tabTitle"), additionalInfoPanel); // NOI18N
 
         productPricingPanel.setName("productPricingPanel"); // NOI18N
-
-        javax.swing.GroupLayout productPricingPanelLayout = new javax.swing.GroupLayout(productPricingPanel);
-        productPricingPanel.setLayout(productPricingPanelLayout);
-        productPricingPanelLayout.setHorizontalGroup(
-            productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 494, Short.MAX_VALUE)
-        );
-        productPricingPanelLayout.setVerticalGroup(
-            productPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
-        );
-
+        productPricingPanel.setLayout(new net.miginfocom.swing.MigLayout());
         productTabbedPane.addTab(resourceMap.getString("productPricingPanel.TabConstraints.tabTitle"), productPricingPanel); // NOI18N
 
         suppliersPanel.setName("suppliersPanel"); // NOI18N
         suppliersPanel.setLayout(new java.awt.BorderLayout());
         productTabbedPane.addTab(resourceMap.getString("suppliersPanel.TabConstraints.tabTitle"), suppliersPanel); // NOI18N
 
-        buttonsPanel.setName("buttonsPanel"); // NOI18N
-
-        closeButton.setIcon(resourceMap.getIcon("closeButton.icon")); // NOI18N
-        closeButton.setText(resourceMap.getString("closeButton.text")); // NOI18N
-        closeButton.setName("closeButton"); // NOI18N
-
-        saveButton.setIcon(resourceMap.getIcon("saveButton.icon")); // NOI18N
-        saveButton.setText(resourceMap.getString("saveButton.text")); // NOI18N
-        saveButton.setName("saveButton"); // NOI18N
-
-        javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
-        buttonsPanel.setLayout(buttonsPanelLayout);
-        buttonsPanelLayout.setHorizontalGroup(
-            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
-                .addContainerGap(303, Short.MAX_VALUE)
-                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {closeButton, saveButton});
-
-        buttonsPanelLayout.setVerticalGroup(
-            buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        buttonsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {closeButton, saveButton});
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(buttonsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(productTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(productTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        setName("Form"); // NOI18N
+        setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel additionalInfoPanel;
-    private com.cosmos.swingb.JBPanel buttonsPanel;
     private com.cosmos.swingb.JBLabel categoryCodeFormatLabel;
     private com.cosmos.swingb.JBTextField categoryCodeFormatTextField;
-    private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBLabel cubatureLabel;
     private com.cosmos.swingb.JBFormattedTextField cubatureTextField;
     private com.cosmos.swingb.JBLabel defaultLabel;
@@ -626,7 +386,6 @@ public class ProductPanelNew extends AcaciaPanel {
     private com.cosmos.swingb.JBCheckBox salableCheckBox;
     private com.cosmos.swingb.JBLabel salesPriceLabel;
     private com.cosmos.swingb.JBFormattedTextField salesPriceTextField;
-    private com.cosmos.swingb.JBButton saveButton;
     private com.cosmos.swingb.JBPanel suppliersPanel;
     private com.cosmos.swingb.JBLabel weightLabel;
     private com.cosmos.swingb.JBFormattedTextField weightTextField;
@@ -640,9 +399,15 @@ public class ProductPanelNew extends AcaciaPanel {
     private SimpleProduct product;
     private SuppliersListPanel suppliersListPanel;
     private BindingGroup productBindingGroup;
+    private EntityFormButtonPanel entityFormButtonPanel;
 
     @Override
     protected void initData() {
+        setPreferredSize(new Dimension(920, 480));
+
+        add(productTabbedPane, BorderLayout.CENTER);
+        add(getButtonPanel(), BorderLayout.PAGE_END);
+
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(dimensionUnitComboBox, resourceToStringConverter);
         AutoCompleteDecorator.decorate(measureUnitComboBox, resourceToStringConverter);
@@ -656,45 +421,40 @@ public class ProductPanelNew extends AcaciaPanel {
         }
 
         BindingGroup bindingGroup = getBindingGroup();
+        EntityProperties entityProps = getProductEntityProperties();
 
-        setSaveActionState();
+        initPrimaryInfo(bindingGroup, entityProps);
+        initAdditionalInfo(bindingGroup, entityProps);
 
-        if(bindingGroup != null)
-        {
-            bindingGroup.addBindingListener(new AbstractBindingListener()
-            {
-
-                @SuppressWarnings("unchecked")
-                @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    setSaveActionState();
-                }
-            });
+        if(!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+            int index;
+            if((index = productTabbedPane.indexOfComponent(productPricingPanel)) >= 0)
+                productTabbedPane.removeTabAt(index);
+        } else {
+            initProductPricing(bindingGroup, entityProps);
         }
+
+        if(!getRightsManager().isAllowed(SpecialPermission.Product)) {
+            int index;
+            if((index = productTabbedPane.indexOfComponent(suppliersPanel)) >= 0) {
+                productTabbedPane.removeTabAt(index);
+            }
+        } else {
+            initSuppliers();
+        }
+
+        bindingGroup.bind();
+
+        refreshCubature();
 
         setProductCodeMaskFormat();
     }
 
-    protected void setSaveActionState()
+    @Override
+    public BindingGroup getBindingGroup()
     {
-        setEnabled(Button.Save, productBindingGroup.isContentValid());
-    }
-
-    protected BindingGroup getBindingGroup()
-    {
-        if(productBindingGroup == null)
-        {
+        if(productBindingGroup == null) {
             productBindingGroup = new BindingGroup();
-            EntityProperties entityProps = getProductEntityProperties();
-
-            initPrimaryInfo(productBindingGroup, entityProps);
-            initAdditionalInfo(productBindingGroup, entityProps);
-            initProductPricing(productBindingGroup, entityProps);
-            initSuppliers();
-
-            productBindingGroup.bind();
-
-            refreshCubature();
         }
 
         return productBindingGroup;
@@ -708,8 +468,11 @@ public class ProductPanelNew extends AcaciaPanel {
         helper.columnSizeGroup("sg", 0, 1, 2);
         helper.columnFill(0, 1, 2);
         helper.columnGap("15", 0, 1);
+        purchaseOptionsPanel.add(purchasedCheckBox);
         helper.getComponentConstraints(purchasedCheckBox).cell(0, 0);
+        purchaseOptionsPanel.add(salableCheckBox);
         helper.getComponentConstraints(salableCheckBox).cell(1, 0);
+        purchaseOptionsPanel.add(obsoleteCheckBox);
         helper.getComponentConstraints(obsoleteCheckBox).cell(2, 0);
         purchaseOptionsPanel.invalidate();
 
@@ -720,9 +483,13 @@ public class ProductPanelNew extends AcaciaPanel {
         helper.columnSizeGroup("sg", 1, 3);
         helper.columnFill(1, 3);
         helper.columnGap("15", 1);
+        pricePanel.add(pricePerQuantityLabel);
         helper.getComponentConstraints(pricePerQuantityLabel).cell(0, 0);
+        pricePanel.add(pricePerQuantityTextField);
         helper.getComponentConstraints(pricePerQuantityTextField).cell(1, 0);
+        pricePanel.add(salesPriceLabel);
         helper.getComponentConstraints(salesPriceLabel).cell(2, 0);
+        pricePanel.add(salesPriceTextField);
         helper.getComponentConstraints(salesPriceTextField).cell(3, 0);
         pricePanel.invalidate();
 
@@ -733,11 +500,17 @@ public class ProductPanelNew extends AcaciaPanel {
         helper.columnSizeGroup("sg", 1, 3, 5);
         helper.columnFill(1, 3, 5);
         helper.columnGap("15", 1, 3);
+        quantitiesOnStockPanel.add(minLabel);
         helper.getComponentConstraints(minLabel).cell(0, 0);
+        quantitiesOnStockPanel.add(minTextField);
         helper.getComponentConstraints(minTextField).cell(1, 0);
+        quantitiesOnStockPanel.add(defaultLabel);
         helper.getComponentConstraints(defaultLabel).cell(2, 0);
+        quantitiesOnStockPanel.add(defaultTextField);
         helper.getComponentConstraints(defaultTextField).cell(3, 0);
+        quantitiesOnStockPanel.add(maxLabel);
         helper.getComponentConstraints(maxLabel).cell(4, 0);
+        quantitiesOnStockPanel.add(maxTextField);
         helper.getComponentConstraints(maxTextField).cell(5, 0);
         quantitiesOnStockPanel.invalidate();
 
@@ -748,26 +521,47 @@ public class ProductPanelNew extends AcaciaPanel {
         helper.columnSizeGroup("sg", 1, 3);
         helper.columnFill(1, 3);
         helper.columnGap("15", 1);
+        primaryInfoPanel.add(productNameLabel);
         helper.getComponentConstraints(productNameLabel).cell(0, 0);
+        primaryInfoPanel.add(productNameTextField);
         helper.getComponentConstraints(productNameTextField).cell(1, 0).spanX(3);
+        primaryInfoPanel.add(productCategoryLabel);
         helper.getComponentConstraints(productCategoryLabel).cell(0, 1);
+        primaryInfoPanel.add(productCategoryComboList);
         helper.getComponentConstraints(productCategoryComboList).cell(1, 1);
+        primaryInfoPanel.add(categoryCodeFormatLabel);
         helper.getComponentConstraints(categoryCodeFormatLabel).cell(2, 1);
+        primaryInfoPanel.add(categoryCodeFormatTextField);
         helper.getComponentConstraints(categoryCodeFormatTextField).cell(3, 1);
+        primaryInfoPanel.add(productCodeFormatLabel);
         helper.getComponentConstraints(productCodeFormatLabel).cell(0, 2);
+        primaryInfoPanel.add(productCodeFormatComboList);
         helper.getComponentConstraints(productCodeFormatComboList).cell(1, 2);
+        primaryInfoPanel.add(productCodeLabel);
         helper.getComponentConstraints(productCodeLabel).cell(2, 2);
+        primaryInfoPanel.add(productCodeTextField);
         helper.getComponentConstraints(productCodeTextField).cell(3, 2);
+        primaryInfoPanel.add(measureUnitLabel);
         helper.getComponentConstraints(measureUnitLabel).cell(0, 3);
+        primaryInfoPanel.add(measureUnitComboBox);
         helper.getComponentConstraints(measureUnitComboBox).cell(1, 3);
+        primaryInfoPanel.add(productColorLabel);
         helper.getComponentConstraints(productColorLabel).cell(2, 3);
+        primaryInfoPanel.add(productColorComboBox);
         helper.getComponentConstraints(productColorComboBox).cell(3, 3);
+        primaryInfoPanel.add(producerLabel);
         helper.getComponentConstraints(producerLabel).cell(0, 4);
+        primaryInfoPanel.add(producerComboList);
         helper.getComponentConstraints(producerComboList).cell(1, 4);
+        primaryInfoPanel.add(quantityPerPackageLabel);
         helper.getComponentConstraints(quantityPerPackageLabel).cell(2, 4);
+        primaryInfoPanel.add(quantityPerPackageTextField);
         helper.getComponentConstraints(quantityPerPackageTextField).cell(3, 4);
+        primaryInfoPanel.add(purchaseOptionsPanel);
         helper.getComponentConstraints(purchaseOptionsPanel).width("100%").cell(0, 5).spanX(4);
+        primaryInfoPanel.add(pricePanel);
         helper.getComponentConstraints(pricePanel).width("100%").cell(0, 6).spanX(4);
+        primaryInfoPanel.add(quantitiesOnStockPanel);
         helper.getComponentConstraints(quantitiesOnStockPanel).width("100%").cell(0, 7).spanX(4);
         primaryInfoPanel.invalidate();
 
@@ -852,11 +646,17 @@ public class ProductPanelNew extends AcaciaPanel {
         helper.columnSizeGroup("sg", 1, 3, 5);
         helper.columnFill(1, 3, 5);
         helper.columnGap("15", 1, 3);
+        deliveryInfoPanel.add(weightUnitLabel);
         helper.getComponentConstraints(weightUnitLabel).cell(0, 0);
+        deliveryInfoPanel.add(weightUnitComboBox);
         helper.getComponentConstraints(weightUnitComboBox).cell(1, 0);
+        deliveryInfoPanel.add(weightLabel);
         helper.getComponentConstraints(weightLabel).cell(2, 0);
+        deliveryInfoPanel.add(weightTextField);
         helper.getComponentConstraints(weightTextField).cell(3, 0);
+        deliveryInfoPanel.add(deliveryTimeLabel);
         helper.getComponentConstraints(deliveryTimeLabel).cell(4, 0);
+        deliveryInfoPanel.add(deliveryTimeTextField);
         helper.getComponentConstraints(deliveryTimeTextField).cell(5, 0);
         deliveryInfoPanel.invalidate();
 
@@ -867,17 +667,40 @@ public class ProductPanelNew extends AcaciaPanel {
         helper.columnSizeGroup("sg", 1, 3, 5);
         helper.columnFill(1, 3, 5);
         helper.columnGap("15", 1, 3);
+        dimensionsPanel.add(dimensionUnitLabel);
         helper.getComponentConstraints(dimensionUnitLabel).cell(0, 0);
+        dimensionsPanel.add(dimensionUnitComboBox);
         helper.getComponentConstraints(dimensionUnitComboBox).cell(1, 0).spanX(3);
+        dimensionsPanel.add(cubatureLabel);
         helper.getComponentConstraints(cubatureLabel).cell(4, 0);
+        dimensionsPanel.add(cubatureTextField);
         helper.getComponentConstraints(cubatureTextField).cell(5, 0);
+        dimensionsPanel.add(widthLabel);
         helper.getComponentConstraints(widthLabel).cell(0, 1);
+        dimensionsPanel.add(widthTextField);
         helper.getComponentConstraints(widthTextField).cell(1, 1);
+        dimensionsPanel.add(lengthLabel);
         helper.getComponentConstraints(lengthLabel).cell(2, 1);
+        dimensionsPanel.add(lengthTextField);
         helper.getComponentConstraints(lengthTextField).cell(3, 1);
+        dimensionsPanel.add(heightLabel);
         helper.getComponentConstraints(heightLabel).cell(4, 1);
+        dimensionsPanel.add(heightTextField);
         helper.getComponentConstraints(heightTextField).cell(5, 1);
         dimensionsPanel.invalidate();
+
+        helper = new MigLayoutHelper(additionalInfoPanel);
+        helper.setLayoutFillX(true);
+        helper.setLayoutWrapAfter(1);
+        helper.columnGrow(100, 0);
+        helper.columnFill(0);
+        additionalInfoPanel.add(deliveryInfoPanel);
+        helper.getComponentConstraints(deliveryInfoPanel).cell(0, 0);
+        additionalInfoPanel.add(dimensionsPanel);
+        helper.getComponentConstraints(dimensionsPanel).cell(0, 1);
+        additionalInfoPanel.add(descriptionPanel);
+        helper.getComponentConstraints(descriptionPanel).cell(0, 2).height("100%").width("100%");
+        additionalInfoPanel.invalidate();
 
         PropertyDetails propDetails = entityProps.getPropertyDetails("weightUnit");
         weightUnitComboBox.bind(
@@ -954,12 +777,14 @@ public class ProductPanelNew extends AcaciaPanel {
     }
 
     private void setProductCodeMaskFormat() {
+        System.out.println("setProductCodeMaskFormat()");
         PatternMaskFormat patternMaskFormat = null;
         if((patternMaskFormat = product.getPatternMaskFormat()) == null) {
             ProductCategory productCategory;
             if((productCategory = product.getCategory()) != null)
                 patternMaskFormat = productCategory.getPatternMaskFormat();
         }
+        System.out.println("patternMaskFormat: " + patternMaskFormat);
 
         String maskFormat;
         if(patternMaskFormat != null)
@@ -967,17 +792,12 @@ public class ProductPanelNew extends AcaciaPanel {
         else
             maskFormat = null;
 
+        System.out.println("maskFormat: " + maskFormat);
         try {
             productCodeTextField.setMask(maskFormat);
         } catch(Exception ex) {
             handleException("maskFormat: " + maskFormat, ex);
         }
-    }
-
-    private PropertyDetails createPricePropertyDetails(String propertyName){
-        PropertyDetails pd = new PropertyDetails(propertyName, propertyName, BigDecimal.class.getName());
-        pd.setEditable(false);
-        return pd;
     }
 
     protected EntityProperties getProductEntityProperties()
@@ -999,81 +819,32 @@ public class ProductPanelNew extends AcaciaPanel {
         return getFormSession().getProductColors();
     }
 
-    public void setEnabled(Button button, boolean enabled) {
-        ApplicationAction action = (ApplicationAction)getAction(button);
-        if(action != null)
-        {
-            action.setEnabled(enabled);
+    @Override
+    public void performSave(boolean closeAfter) {
+        try {
+            product = getFormSession().saveProduct(product);
+            setDialogResponse(DialogResponse.SAVE);
+            setSelectedValue(product);
+            if(closeAfter)
+                close();
+        } catch (Exception ex) {
+            handleException("product: " + product, ex);
         }
-    }
-
-    public void setSelected(Button button, boolean enabled) {
-        ApplicationAction action = (ApplicationAction)getAction(button);
-        if(action != null)
-        {
-            action.setSelected(enabled);
-        }
-    }
-
-    public void setVisible(Button button, boolean visible) {
-        switch(button)
-        {
-            case Save:
-                saveButton.setVisible(visible);
-                break;
-
-            case Close:
-                closeButton.setVisible(visible);
-                break;
-        }
-    }
-
-    public boolean isVisible(Button button) {
-        switch(button)
-        {
-            case Save:
-                return saveButton.isVisible();
-
-            case Close:
-                return closeButton.isVisible();
-        }
-
-        throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
-    }
-
-    public javax.swing.Action getAction(Button button)
-    {
-        ApplicationActionMap actionMap = getApplicationActionMap();
-        if(actionMap != null && button != null)
-        {
-            return actionMap.get(button.getActionName());
-        }
-
-        return null;
     }
 
     @Override
-    protected Class getResourceStopClass()
-    {
-        return AcaciaPanel.class;
+    public Object getEntity() {
+        return product;
     }
 
-    public enum Button
-    {
-        Save("saveAction"),
-        Close("closeAction");
-
-        private Button(String actionName)
-        {
-            this.actionName = actionName;
+    @Override
+    public EntityFormButtonPanel getButtonPanel() {
+        if(entityFormButtonPanel == null) {
+            entityFormButtonPanel = new EntityFormButtonPanel();
         }
 
-        private String actionName;
-
-        public String getActionName() {
-            return actionName;
-        }
-    };
+        return entityFormButtonPanel;
+    }
 
     protected ProductsListRemote getFormSession() {
         if(formSession == null)
@@ -1089,7 +860,6 @@ public class ProductPanelNew extends AcaciaPanel {
             refreshCubature();
         }
     }
-
 
     private EntityProperties getProductSuppliersEntityProperties() {
         return getFormSession().getProductSupplierEntityProperties();
@@ -1335,6 +1105,43 @@ public class ProductPanelNew extends AcaciaPanel {
             helper.getComponentConstraints(salesPriceTextField).cell(2, rowNumber);
 
             invalidate();
+
+            additionalDiscountButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent event) {
+                    ProductPricingValueListPanel valuesPanel =
+                            new ProductPricingValueListPanel(getOrganizationDataObjectId(),
+                            ProductPricingValue.Type.DISCOUNT);
+                    DialogResponse resp = valuesPanel.showDialog(ProductPanelNew.this);
+                    if (DialogResponse.SELECT.equals(resp)) {
+                        ProductPricingValue pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject();
+                        BigDecimal numberValue = null;
+                        if (pricingValue != null) {
+                            numberValue = pricingValue.getValue();
+                        }
+                        additionalDiscountPercentField.setPercent(numberValue);
+                        product.setDiscountPricingValue(pricingValue);
+//                        updateTotalDiscountField(true);
+//                        updatePurchasePriceField(true);
+                    }
+                }
+            });
+            transportButton.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent event) {
+                }
+            });
+            dutyButton.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent event) {
+                }
+            });
+            additionalProfitButton.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent event) {
+                }
+            });
         }
 
         @Override

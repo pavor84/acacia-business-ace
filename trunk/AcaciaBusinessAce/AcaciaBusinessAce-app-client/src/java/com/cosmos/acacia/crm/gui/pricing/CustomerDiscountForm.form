@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -24,16 +25,16 @@
                   <Component id="itemsHolderPanel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jBLabel1" pref="236" max="32767" attributes="0"/>
-                          <Component id="jBLabel2" alignment="0" pref="236" max="32767" attributes="0"/>
+                          <Component id="discountLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="customerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="discountField" pref="392" max="32767" attributes="2"/>
-                          <Component id="customerField" alignment="1" pref="392" max="32767" attributes="2"/>
+                          <Component id="customerField" pref="536" max="32767" attributes="2"/>
+                          <Component id="discountPercentField" alignment="0" pref="536" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="entityFormButtonPanel1" alignment="0" pref="632" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="633" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -44,18 +45,18 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jBLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="customerField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="customerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jBLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="discountField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="discountPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="discountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="itemsHolderPanel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -69,27 +70,9 @@
         <Property name="name" type="java.lang.String" value="customerField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBFormattedTextField" name="discountField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="discountField.text"/>
-        <Property name="name" type="java.lang.String" value="discountField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel2">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel2.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel2" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel1">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="entityFormButtonPanel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
       </Properties>
     </Component>
     <Container class="com.cosmos.acacia.gui.TableHolderPanel" name="itemsHolderPanel">
@@ -107,15 +90,32 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="620" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="621" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="378" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="384" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="com.cosmos.swingb.JBPercentField" name="discountPercentField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="discountPercentField" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="discountLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="discountLabel.text"/>
+        <Property name="name" type="java.lang.String" value="discountLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="com.cosmos.swingb.JBLabel" name="customerLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="customerLabel.text"/>
+        <Property name="name" type="java.lang.String" value="customerLabel" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>
