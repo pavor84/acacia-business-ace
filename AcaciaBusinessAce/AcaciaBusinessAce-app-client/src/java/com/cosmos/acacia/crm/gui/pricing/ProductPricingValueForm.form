@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -19,21 +20,22 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jBLabel1" pref="148" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="0" pref="381" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="valueNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="percentValueLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="nameField" pref="228" max="32767" attributes="1"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="percentValuePercentField" alignment="0" pref="292" max="32767" attributes="0"/>
+                          <Component id="valueNameTextField" alignment="0" pref="292" max="32767" attributes="1"/>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jBLabel2" pref="148" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="valueField" pref="228" max="32767" attributes="2"/>
-                  </Group>
-                  <Component id="entityFormButtonPanel1" alignment="0" pref="380" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -42,49 +44,48 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jBLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="valueNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="valueNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="valueField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jBLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="percentValuePercentField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="percentValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="entityFormButtonPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel1">
+    <Component class="com.cosmos.swingb.JBTextField" name="valueNameTextField">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel1.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel1" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="valueNameTextField.text"/>
+        <Property name="name" type="java.lang.String" value="valueNameTextField" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBFormattedTextField" name="valueField">
+    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="valueField.text"/>
-        <Property name="name" type="java.lang.String" value="valueField" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="jBLabel2">
+    <Component class="com.cosmos.swingb.JBLabel" name="valueNameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jBLabel2.text"/>
-        <Property name="name" type="java.lang.String" value="jBLabel2" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="valueNameLabel.text"/>
+        <Property name="name" type="java.lang.String" value="valueNameLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="nameField">
+    <Component class="com.cosmos.swingb.JBLabel" name="percentValueLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="nameField.text"/>
-        <Property name="name" type="java.lang.String" value="nameField" noResource="true"/>
+        <Property name="text" type="java.lang.String" resourceKey="percentValueLabel.text"/>
+        <Property name="name" type="java.lang.String" value="percentValueLabel" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel1">
+    <Component class="com.cosmos.swingb.JBPercentField" name="percentValuePercentField">
       <Properties>
-        <Property name="name" type="java.lang.String" value="entityFormButtonPanel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="percentValuePercentField" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -12,7 +12,6 @@ import com.cosmos.acacia.crm.bl.pricing.ProductPricingValueRemote;
 import com.cosmos.acacia.crm.data.ProductPricingValue;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
-import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
@@ -34,8 +33,9 @@ public class ProductPricingValueForm extends BaseEntityPanel {
     public ProductPricingValueForm(ProductPricingValue entity) {
         super(entity.getParentId());
         this.entity = entity;
-        if ( entity.getType()!=null )
-            setTitle(getResourceMap().getString("Form.title."+entity.getType()));
+        if (entity.getType() != null) {
+            setTitle(getResourceMap().getString("Form.title." + entity.getType()));
+        }
         initialize();
     }
     
@@ -46,8 +46,9 @@ public class ProductPricingValueForm extends BaseEntityPanel {
     }
 
     private void initComponentsCustom() {
-        if ( entity.getType()!=null )
-            jBLabel2.setText(getResourceMap().getString("value.name."+entity.getType()));
+        if (entity.getType() != null) {
+            valueNameLabel.setText(getResourceMap().getString("value.name." + entity.getType()));
+        }
     }
 
     /** This method is called from within the constructor to
@@ -59,28 +60,27 @@ public class ProductPricingValueForm extends BaseEntityPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        valueField = new com.cosmos.swingb.JBFormattedTextField();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
-        nameField = new com.cosmos.swingb.JBTextField();
-        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        valueNameTextField = new com.cosmos.swingb.JBTextField();
+        entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
+        valueNameLabel = new com.cosmos.swingb.JBLabel();
+        percentValueLabel = new com.cosmos.swingb.JBLabel();
+        percentValuePercentField = new com.cosmos.swingb.JBPercentField();
 
         setName("Form"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductPricingValueForm.class);
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
+        valueNameTextField.setText(resourceMap.getString("valueNameTextField.text")); // NOI18N
+        valueNameTextField.setName("valueNameTextField"); // NOI18N
 
-        valueField.setText(resourceMap.getString("valueField.text")); // NOI18N
-        valueField.setName("valueField"); // NOI18N
+        entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
 
-        jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
-        jBLabel2.setName("jBLabel2"); // NOI18N
+        valueNameLabel.setText(resourceMap.getString("valueNameLabel.text")); // NOI18N
+        valueNameLabel.setName("valueNameLabel"); // NOI18N
 
-        nameField.setText(resourceMap.getString("nameField.text")); // NOI18N
-        nameField.setName("nameField"); // NOI18N
+        percentValueLabel.setText(resourceMap.getString("percentValueLabel.text")); // NOI18N
+        percentValueLabel.setName("percentValueLabel"); // NOI18N
 
-        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
+        percentValuePercentField.setName("percentValuePercentField"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -89,15 +89,15 @@ public class ProductPricingValueForm extends BaseEntityPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(valueNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(percentValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(valueField, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-                    .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(percentValuePercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                            .addComponent(valueNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -105,25 +105,25 @@ public class ProductPricingValueForm extends BaseEntityPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(valueNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(valueNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(valueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(percentValuePercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(percentValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBLabel jBLabel2;
-    private com.cosmos.swingb.JBTextField nameField;
-    private com.cosmos.swingb.JBFormattedTextField valueField;
+    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
+    private com.cosmos.swingb.JBLabel percentValueLabel;
+    private com.cosmos.swingb.JBPercentField percentValuePercentField;
+    private com.cosmos.swingb.JBLabel valueNameLabel;
+    private com.cosmos.swingb.JBTextField valueNameTextField;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -133,7 +133,7 @@ public class ProductPricingValueForm extends BaseEntityPanel {
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
-        return entityFormButtonPanel1;
+        return entityFormButtonPanel;
     }
 
     @Override
@@ -175,10 +175,10 @@ public class ProductPricingValueForm extends BaseEntityPanel {
     @SuppressWarnings("deprecation")
     protected void bindComponents(BindingGroup bindGroup, EntityProperties entProps) {
         // name 
-        nameField.bind(bindGroup, entity, entProps.getPropertyDetails("name"));
+        valueNameTextField.bind(bindGroup, entity, entProps.getPropertyDetails("name"));
         
         // value
-        valueField.bind(bindGroup, entity, entProps.getPropertyDetails("value"), AcaciaUtils.getDecimalFormat());
+        percentValuePercentField.bind(bindGroup, entity, entProps.getPropertyDetails("value"));
         
         bindGroup.bind();
     }

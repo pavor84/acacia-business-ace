@@ -60,22 +60,22 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
 
         entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
         productVersionPanel = new com.cosmos.swingb.JBPanel();
-        jBLabel2 = new com.cosmos.swingb.JBLabel();
-        jBLabel4 = new com.cosmos.swingb.JBLabel();
-        jBLabel6 = new com.cosmos.swingb.JBLabel();
-        jBLabel1 = new com.cosmos.swingb.JBLabel();
-        discountProductField = new com.cosmos.swingb.JBFormattedTextField();
-        defaultDiscountLabel = new com.cosmos.swingb.JBLabel();
-        salePriceField = new com.cosmos.swingb.JBTextField();
         productField = new com.cosmos.acacia.gui.AcaciaComboList();
-        priceField = new com.cosmos.swingb.JBTextField();
+        productDiscountPercentField = new com.cosmos.swingb.JBPercentField();
+        defaultDiscountLabel = new com.cosmos.swingb.JBLabel();
+        productLabel = new com.cosmos.swingb.JBLabel();
+        salesPriceLabel = new com.cosmos.swingb.JBLabel();
+        discountLabel = new com.cosmos.swingb.JBLabel();
+        customerPriceLabel = new com.cosmos.swingb.JBLabel();
+        salesPriceDecimalField = new com.cosmos.swingb.JBDecimalField();
+        customerPriceDecimalField = new com.cosmos.swingb.JBDecimalField();
         categoryVersionPanel = new com.cosmos.swingb.JBPanel();
-        jBLabel3 = new com.cosmos.swingb.JBLabel();
-        jBLabel5 = new com.cosmos.swingb.JBLabel();
-        jBLabel9 = new com.cosmos.swingb.JBLabel();
         includeHeirs = new com.cosmos.swingb.JBCheckBox();
         categoryField = new com.cosmos.acacia.gui.AcaciaComboList();
-        discountCategoryField = new com.cosmos.swingb.JBFormattedTextField();
+        categoryLabel = new com.cosmos.swingb.JBLabel();
+        includeHeirsLabel = new com.cosmos.swingb.JBLabel();
+        categoryDiscountLabel = new com.cosmos.swingb.JBLabel();
+        categoryDiscountPercentField = new com.cosmos.swingb.JBPercentField();
 
         setName("Form"); // NOI18N
 
@@ -83,32 +83,31 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
 
         productVersionPanel.setName("productVersionPanel"); // NOI18N
 
+        productField.setName("productField"); // NOI18N
+
+        productDiscountPercentField.setName("productDiscountPercentField"); // NOI18N
+
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(CustomerDiscountItemForm.class);
-        jBLabel2.setText(resourceMap.getString("jBLabel2.text")); // NOI18N
-        jBLabel2.setName("jBLabel2"); // NOI18N
-
-        jBLabel4.setText(resourceMap.getString("jBLabel4.text")); // NOI18N
-        jBLabel4.setName("jBLabel4"); // NOI18N
-
-        jBLabel6.setText(resourceMap.getString("jBLabel6.text")); // NOI18N
-        jBLabel6.setName("jBLabel6"); // NOI18N
-
-        jBLabel1.setText(resourceMap.getString("jBLabel1.text")); // NOI18N
-        jBLabel1.setName("jBLabel1"); // NOI18N
-
-        discountProductField.setName("discountProductField"); // NOI18N
-
-        defaultDiscountLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         defaultDiscountLabel.setText(resourceMap.getString("defaultDiscountLabel.text")); // NOI18N
         defaultDiscountLabel.setName("defaultDiscountLabel"); // NOI18N
 
-        salePriceField.setEditable(false);
-        salePriceField.setName("salePriceField"); // NOI18N
+        productLabel.setText(resourceMap.getString("productLabel.text")); // NOI18N
+        productLabel.setName("productLabel"); // NOI18N
 
-        productField.setName("productField"); // NOI18N
+        salesPriceLabel.setText(resourceMap.getString("salesPriceLabel.text")); // NOI18N
+        salesPriceLabel.setName("salesPriceLabel"); // NOI18N
 
-        priceField.setEditable(false);
-        priceField.setName("priceField"); // NOI18N
+        discountLabel.setText(resourceMap.getString("discountLabel.text")); // NOI18N
+        discountLabel.setName("discountLabel"); // NOI18N
+
+        customerPriceLabel.setText(resourceMap.getString("customerPriceLabel.text")); // NOI18N
+        customerPriceLabel.setName("customerPriceLabel"); // NOI18N
+
+        salesPriceDecimalField.setEditable(false);
+        salesPriceDecimalField.setName("salesPriceDecimalField"); // NOI18N
+
+        customerPriceDecimalField.setEditable(false);
+        customerPriceDecimalField.setName("customerPriceDecimalField"); // NOI18N
 
         javax.swing.GroupLayout productVersionPanelLayout = new javax.swing.GroupLayout(productVersionPanel);
         productVersionPanel.setLayout(productVersionPanelLayout);
@@ -117,59 +116,59 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
             .addGroup(productVersionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(jBLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+                    .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salesPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customerPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(productVersionPanelLayout.createSequentialGroup()
-                        .addComponent(discountProductField, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(defaultDiscountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
-                    .addComponent(salePriceField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                    .addComponent(productField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                    .addComponent(priceField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                    .addComponent(productField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productVersionPanelLayout.createSequentialGroup()
+                        .addComponent(productDiscountPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(defaultDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(salesPriceDecimalField, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                    .addComponent(customerPriceDecimalField, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
                 .addContainerGap())
         );
         productVersionPanelLayout.setVerticalGroup(
             productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(productVersionPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(productField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(salePriceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(salesPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salesPriceDecimalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(discountProductField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productDiscountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(defaultDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(discountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(customerPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customerPriceDecimalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         categoryVersionPanel.setName("categoryVersionPanel"); // NOI18N
-
-        jBLabel3.setText(resourceMap.getString("jBLabel3.text")); // NOI18N
-        jBLabel3.setName("jBLabel3"); // NOI18N
-
-        jBLabel5.setText(resourceMap.getString("jBLabel5.text")); // NOI18N
-        jBLabel5.setName("jBLabel5"); // NOI18N
-
-        jBLabel9.setText(resourceMap.getString("jBLabel9.text")); // NOI18N
-        jBLabel9.setName("jBLabel9"); // NOI18N
 
         includeHeirs.setName("includeHeirs"); // NOI18N
 
         categoryField.setName("categoryField"); // NOI18N
 
-        discountCategoryField.setName("discountCategoryField"); // NOI18N
+        categoryLabel.setText(resourceMap.getString("categoryLabel.text")); // NOI18N
+        categoryLabel.setName("categoryLabel"); // NOI18N
+
+        includeHeirsLabel.setText(resourceMap.getString("includeHeirsLabel.text")); // NOI18N
+        includeHeirsLabel.setName("includeHeirsLabel"); // NOI18N
+
+        categoryDiscountLabel.setText(resourceMap.getString("categoryDiscountLabel.text")); // NOI18N
+        categoryDiscountLabel.setName("categoryDiscountLabel"); // NOI18N
+
+        categoryDiscountPercentField.setName("categoryDiscountPercentField"); // NOI18N
 
         javax.swing.GroupLayout categoryVersionPanelLayout = new javax.swing.GroupLayout(categoryVersionPanel);
         categoryVersionPanel.setLayout(categoryVersionPanelLayout);
@@ -178,34 +177,35 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
             .addGroup(categoryVersionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(jBLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(categoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(includeHeirsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
                 .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(includeHeirs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(categoryVersionPanelLayout.createSequentialGroup()
+                        .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoryVersionPanelLayout.createSequentialGroup()
-                        .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(discountCategoryField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                            .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGap(10, 10, 10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(categoryDiscountPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         categoryVersionPanelLayout.setVerticalGroup(
             categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(categoryVersionPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoryVersionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(categoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(includeHeirsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(includeHeirs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(categoryVersionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(discountCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryDiscountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -213,7 +213,7 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(productVersionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+            .addComponent(entityFormButtonPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
             .addComponent(categoryVersionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -230,26 +230,29 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.cosmos.swingb.JBLabel categoryDiscountLabel;
+    private com.cosmos.swingb.JBPercentField categoryDiscountPercentField;
     private com.cosmos.acacia.gui.AcaciaComboList categoryField;
+    private com.cosmos.swingb.JBLabel categoryLabel;
     private com.cosmos.swingb.JBPanel categoryVersionPanel;
+    private com.cosmos.swingb.JBDecimalField customerPriceDecimalField;
+    private com.cosmos.swingb.JBLabel customerPriceLabel;
     private com.cosmos.swingb.JBLabel defaultDiscountLabel;
-    private com.cosmos.swingb.JBFormattedTextField discountCategoryField;
-    private com.cosmos.swingb.JBFormattedTextField discountProductField;
+    private com.cosmos.swingb.JBLabel discountLabel;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.swingb.JBCheckBox includeHeirs;
-    private com.cosmos.swingb.JBLabel jBLabel1;
-    private com.cosmos.swingb.JBLabel jBLabel2;
-    private com.cosmos.swingb.JBLabel jBLabel3;
-    private com.cosmos.swingb.JBLabel jBLabel4;
-    private com.cosmos.swingb.JBLabel jBLabel5;
-    private com.cosmos.swingb.JBLabel jBLabel6;
-    private com.cosmos.swingb.JBLabel jBLabel9;
-    private com.cosmos.swingb.JBTextField priceField;
+    private com.cosmos.swingb.JBLabel includeHeirsLabel;
+    private com.cosmos.swingb.JBPercentField productDiscountPercentField;
     private com.cosmos.acacia.gui.AcaciaComboList productField;
+    private com.cosmos.swingb.JBLabel productLabel;
     private com.cosmos.swingb.JBPanel productVersionPanel;
-    private com.cosmos.swingb.JBTextField salePriceField;
-    private boolean bound;
+    private com.cosmos.swingb.JBDecimalField salesPriceDecimalField;
+    private com.cosmos.swingb.JBLabel salesPriceLabel;
     // End of variables declaration//GEN-END:variables
+
+
+    private boolean bound = false;
+
     @Override
     protected void bindComponents(BindingGroup bindGroup, EntityProperties entProps) {
         if ( forProduct ){
@@ -280,8 +283,9 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
             }
             
             // discount
-            discountProductField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
-            discountProductField.getBinding().addBindingListener(new AbstractBindingListener() {
+            Binding binding =
+                    productDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
+            binding.addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
                     onDiscount();
                 }
@@ -311,8 +315,9 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
             includeHeirs.bind(bindGroup, entity, entProps.getPropertyDetails("includeHeirs"));
             
             // discount
-            discountCategoryField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
-            discountCategoryField.getBinding().addBindingListener(new AbstractBindingListener() {
+            Binding binding =
+                    categoryDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
+            binding.addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
                     onDiscount();
                 }
@@ -335,28 +340,29 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
     }
     
     private void updatePrice() {
-        if ( !bound )
+        if (!bound) {
             return;
+        }
         
         if ( entity.getProduct()!=null ){
             // sale price
             String salePrice = "";
             if ( entity.getProduct().getSalePrice()!=null )
                 salePrice = getDecimalFormat().format(entity.getProduct().getSalePrice());
-            salePriceField.setText((salePrice));
+            salesPriceDecimalField.setText((salePrice));
         }else{
-            salePriceField.setText("");
+            salesPriceDecimalField.setText("");
         }
         
         if ( !bindGroup.isContentValid() )
-            priceField.setText("");
+            customerPriceDecimalField.setText("");
         else{
             if ( entity.getProduct()!=null ){
                 // price
                 BigDecimal price = getPrice();
-                priceField.setText(getDecimalFormat().format(price));
+                customerPriceDecimalField.setText(getDecimalFormat().format(price));
             }else{
-                priceField.setText("");
+                customerPriceDecimalField.setText("");
             }
         }
     }
@@ -397,8 +403,8 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
     protected void initComponentsCustom() {
         categoryVersionPanel.setVisible(!forProduct);
         productVersionPanel.setVisible(forProduct);
-        salePriceField.setHorizontalAlignment(JBFormattedTextField.TRAILING);
-        priceField.setHorizontalAlignment(JBFormattedTextField.TRAILING);
+        salesPriceDecimalField.setHorizontalAlignment(JBFormattedTextField.TRAILING);
+        customerPriceDecimalField.setHorizontalAlignment(JBFormattedTextField.TRAILING);
     }
     
     @Override

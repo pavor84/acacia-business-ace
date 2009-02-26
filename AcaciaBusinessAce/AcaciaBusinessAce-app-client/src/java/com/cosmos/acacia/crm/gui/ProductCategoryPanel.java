@@ -234,16 +234,14 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         
         patternMaskFormatComboList.bind(bindGroup, patternListPanel, entity, propDetails,
             "${patternName} (${format})", UpdateStrategy.READ_WRITE);
-        
-        //discount and profit
-        if ( getRightsManager().isAllowed(SpecialPermission.ProductPricing) ){
+
+        if(getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
             categoryDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
             categoryProfitPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("profitPercent"));
-        }else{
-            categoryDiscountLabel.setVisible(false);
-            categoryDiscountPercentField.setVisible(false);
-            categoryProfitLabel.setVisible(false);
-            categoryProfitPercentField.setVisible(false);
+        } else {
+            int index;
+            if((index = productCategoryTabbedPane.indexOfComponent(categoryPricingPanel)) >= 0)
+                productCategoryTabbedPane.removeTabAt(index);
         }
 
         //description
@@ -303,9 +301,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        System.out.println("entity.getDiscountPercent(): " + entity.getDiscountPercent());
-        System.out.println("categoryDiscountPercentField.getText(): " + categoryDiscountPercentField.getText());
-        System.out.println("categoryDiscountPercentField.getValue(): " + categoryDiscountPercentField.getValue());
         entity = getFormSession().saveProductCategory(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
