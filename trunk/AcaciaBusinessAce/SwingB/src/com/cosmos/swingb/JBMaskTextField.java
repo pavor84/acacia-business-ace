@@ -129,7 +129,7 @@ public class JBMaskTextField extends JXMaskTextField  implements Validatable {
         this.beanEntity = beanEntity;
 
         final ELProperty sourceProperty = ELProperty.create("${" + propertyName + "}");
-        ELProperty targetProperty = ELProperty.create("${text}");
+        ELProperty targetProperty = ELProperty.create("${value}");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, sourceProperty, this, targetProperty);
 
         bindingGroup.addBinding(binding);
