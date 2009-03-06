@@ -24,9 +24,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingx.combobox.ListComboBoxModel;
 
 import com.cosmos.acacia.crm.bl.impl.BaseRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
+import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.gui.BaseItemForm;
 import com.cosmos.acacia.crm.gui.ProductCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
@@ -40,11 +41,11 @@ import com.cosmos.swingb.JBFormattedTextField;
  * @author	Petar Milev
  *
  */
-public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, CustomerDiscountItem>{
+public class CustomerDiscountItemOldForm extends BaseItemForm<CustomerDiscountOld, CustomerDiscountItemOld>{
 
     private boolean forProduct;
     
-    public CustomerDiscountItemForm(CustomerDiscountItem entity, CustomerDiscount parent, boolean forProduct) {
+    public CustomerDiscountItemOldForm(CustomerDiscountItemOld entity, CustomerDiscountOld parent, boolean forProduct) {
         super(entity, parent);
         this.forProduct = forProduct;
         initialize();
@@ -87,7 +88,7 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
 
         productDiscountPercentField.setName("productDiscountPercentField"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(CustomerDiscountItemForm.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(CustomerDiscountItemOldForm.class);
         defaultDiscountLabel.setText(resourceMap.getString("defaultDiscountLabel.text")); // NOI18N
         defaultDiscountLabel.setName("defaultDiscountLabel"); // NOI18N
 
@@ -343,38 +344,56 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
         if (!bound) {
             return;
         }
-        
-        if ( entity.getProduct()!=null ){
+
+        SimpleProduct product = entity.getProduct();
+        if((product = entity.getProduct()) == null) {
+            salesPriceDecimalField.setValue(null);
+            customerPriceDecimalField.setValue(null);
+            return;
+        }
+
+        salesPriceDecimalField.setValue(product.getSalePrice());
+        customerPriceDecimalField.setValue(entity.getCutomerPrice());
+
+        if(true)
+            return;
+        if (entity.getProduct() != null) {
             // sale price
             String salePrice = "";
-            if ( entity.getProduct().getSalePrice()!=null )
+            if (entity.getProduct().getSalePrice() != null) {
                 salePrice = getDecimalFormat().format(entity.getProduct().getSalePrice());
+            }
             salesPriceDecimalField.setText((salePrice));
-        }else{
+        } else {
             salesPriceDecimalField.setText("");
         }
-        
-        if ( !bindGroup.isContentValid() )
+
+        if (!bindGroup.isContentValid()) {
             customerPriceDecimalField.setText("");
-        else{
-            if ( entity.getProduct()!=null ){
+        } else {
+            if (entity.getProduct() != null) {
                 // price
                 BigDecimal price = getPrice();
                 customerPriceDecimalField.setText(getDecimalFormat().format(price));
-            }else{
+            } else {
                 customerPriceDecimalField.setText("");
             }
         }
     }
     
     private void afterBind() {
-        if ( forProduct ){
+        if (forProduct) {
             // default discount
-            String defaultDiscountString = "0";
-            if ( parent.getDiscountPercent()!=null )
-                defaultDiscountString = getDecimalFormat().format(parent.getDiscountPercent());
-            defaultDiscountLabel.setText(MessageFormat.format(getResourceMap().getString("defaultDiscountLabel.text"), defaultDiscountString));
-            
+            BigDecimal parentDiscountPercent;
+            String defaultDiscountString;
+            if ((parentDiscountPercent = parent.getDiscountPercent()) != null) {
+                defaultDiscountString = productDiscountPercentField.getNumberFormat().format(parentDiscountPercent);
+            } else {
+                defaultDiscountString = "0";
+            }
+            defaultDiscountLabel.setText(MessageFormat.format(getResourceMap().getString("defaultDiscountLabel.text"),
+                    defaultDiscountString));
+
             updatePrice();
         }
     }
@@ -382,20 +401,22 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
     private BigDecimal getPrice() {
         //sale price
         BigDecimal salePrice = entity.getProduct().getSalePrice();
-        if ( salePrice==null )
+        if (salePrice == null) {
             return null;
-        
+        }
+
         BigDecimal result = salePrice;
-        
+
         //discount
         BigDecimal discountPercent = entity.getDiscountPercent();
-        if (discountPercent==null)
+        if (discountPercent == null) {
             discountPercent = parent.getDiscountPercent();
-        if ( discountPercent!=null ){
+        }
+        if (discountPercent != null) {
             BigDecimal discountPercentDec = discountPercent.divide(new BigDecimal(100), MathContext.DECIMAL64);
             result = result.subtract(result.multiply(discountPercentDec));
         }
-        
+
         return result;
     }
     
@@ -416,7 +437,7 @@ public class CustomerDiscountItemForm extends BaseItemForm<CustomerDiscount, Cus
         initComponents();
     }
     @Override
-    protected Class<? extends BaseRemote<CustomerDiscount, CustomerDiscountItem>> getFormSessionClass() {
-        return CustomerDiscountRemote.class;
+    protected Class<? extends BaseRemote<CustomerDiscountOld, CustomerDiscountItemOld>> getFormSessionClass() {
+        return CustomerDiscountOldRemote.class;
     }
 }

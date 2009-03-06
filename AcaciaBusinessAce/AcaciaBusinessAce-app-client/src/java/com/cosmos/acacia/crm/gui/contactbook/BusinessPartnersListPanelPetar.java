@@ -16,15 +16,15 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType;
-import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountOldForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -39,7 +39,7 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class BusinessPartnersListPanelPetar extends AbstractTablePanel {
     
-    private CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
+    private CustomerDiscountOldRemote customerDiscountRemote = getBean(CustomerDiscountOldRemote.class);
     
     /** Creates new form BusinessPartnersListPanel */
     public BusinessPartnersListPanelPetar(BigInteger parentDataObjectId) {
@@ -68,8 +68,8 @@ public class BusinessPartnersListPanelPetar extends AbstractTablePanel {
         BusinessPartner selected = (BusinessPartner) getDataTable().getSelectedRowObject();
         if ( selected==null )
             return;
-        CustomerDiscount customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(selected);
-        CustomerDiscountForm customerDiscountForm = new CustomerDiscountForm(customerDiscount);
+        CustomerDiscountOld customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(selected);
+        CustomerDiscountOldForm customerDiscountForm = new CustomerDiscountOldForm(customerDiscount);
         customerDiscountForm.showFrame(this);
     }
 

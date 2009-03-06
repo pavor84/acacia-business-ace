@@ -5,16 +5,17 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType;
-import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountListPanel;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountOldForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -52,7 +53,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     @EJB
     private static BusinessPartnersListRemote formSession;
     @EJB
-    private static CustomerDiscountRemote customerDiscountManager;
+    private static CustomerDiscountOldRemote customerDiscountManager;
     private BindingGroup bindingGroup;
     private JBPanel topPanel;
     private AcaciaComboList comboList;
@@ -296,9 +297,9 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    public static CustomerDiscountRemote getCustomerDiscountManager() {
+    public static CustomerDiscountOldRemote getCustomerDiscountManager() {
         if (customerDiscountManager == null) {
-            customerDiscountManager = getBean(CustomerDiscountRemote.class);
+            customerDiscountManager = getBean(CustomerDiscountOldRemote.class);
         }
 
         return customerDiscountManager;
@@ -324,8 +325,10 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
             return;
         }
 
-        CustomerDiscount customerDiscount = getCustomerDiscountManager().getCustomerDiscountForCustomer(selected);
-        CustomerDiscountForm customerDiscountForm = new CustomerDiscountForm(customerDiscount);
-        customerDiscountForm.showFrame(this);
+//        CustomerDiscountOld customerDiscount = getCustomerDiscountManager().getCustomerDiscountForCustomer(selected);
+//        CustomerDiscountOldForm customerDiscountForm = new CustomerDiscountOldForm(customerDiscount);
+//        customerDiscountForm.showFrame(this);
+        CustomerDiscountListPanel panel = new CustomerDiscountListPanel(selected);
+        panel.showDialog(this);
     }
 }

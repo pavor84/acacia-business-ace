@@ -606,6 +606,12 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="com.cosmos.swingb.JBLabel" name="currencyValueLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" resourceKey="currencyValueLabel.text"/>
+        <Property name="name" type="java.lang.String" value="currencyValueLabel" noResource="true"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>

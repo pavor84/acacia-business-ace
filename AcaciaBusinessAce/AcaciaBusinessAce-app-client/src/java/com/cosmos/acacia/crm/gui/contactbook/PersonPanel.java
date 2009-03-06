@@ -22,14 +22,14 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
 import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.data.City;
 import com.cosmos.acacia.crm.data.Country;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountForm;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountOldForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -49,7 +49,7 @@ public class PersonPanel extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(PersonPanel.class);
     
-    private CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
+    private CustomerDiscountOldRemote customerDiscountRemote = getBean(CustomerDiscountOldRemote.class);
 
     /** Creates new form PersonPanel */
     public PersonPanel(Person person) {
@@ -87,8 +87,8 @@ public class PersonPanel extends BaseEntityPanel {
     
     protected void onDiscount() {
         if ( person.getId()!=null ){
-            CustomerDiscount customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(person);
-            CustomerDiscountForm customerDiscountForm = new CustomerDiscountForm(customerDiscount);
+            CustomerDiscountOld customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(person);
+            CustomerDiscountOldForm customerDiscountForm = new CustomerDiscountOldForm(customerDiscount);
             customerDiscountForm.showDialog(this);
         }
     }
