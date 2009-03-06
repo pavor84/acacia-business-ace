@@ -10,9 +10,9 @@ package com.cosmos.acacia.crm.gui.pricing;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.BaseRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
+import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
 import com.cosmos.acacia.crm.gui.BaseForm;
 import com.cosmos.acacia.crm.gui.BaseItemListPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -25,9 +25,9 @@ import com.cosmos.beansbinding.EntityProperties;
  * @author	Petar Milev
  *
  */
-public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDiscountItem> {
+public class CustomerDiscountOldForm extends BaseForm<CustomerDiscountOld, CustomerDiscountItemOld> {
     
-    public CustomerDiscountForm(CustomerDiscount entity) {
+    public CustomerDiscountOldForm(CustomerDiscountOld entity) {
         super(entity);
     }
 
@@ -50,7 +50,7 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
         setName("Form"); // NOI18N
 
         customerField.setEditable(false);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(CustomerDiscountForm.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(CustomerDiscountOldForm.class);
         customerField.setText(resourceMap.getString("customerField.text")); // NOI18N
         customerField.setName("customerField"); // NOI18N
 
@@ -159,12 +159,12 @@ public class CustomerDiscountForm extends BaseForm<CustomerDiscount, CustomerDis
     }
 
     @Override
-    protected Class<? extends BaseRemote<CustomerDiscount, CustomerDiscountItem>> getFormSessionClass() {
-        return CustomerDiscountRemote.class;
+    protected Class<? extends BaseRemote<CustomerDiscountOld, CustomerDiscountItemOld>> getFormSessionClass() {
+        return CustomerDiscountOldRemote.class;
     }
 
     @Override
-    protected Class<? extends BaseItemListPanel<CustomerDiscount, CustomerDiscountItem>> getItemListPanelClass() {
-        return CustomerDiscountItemListPanel.class;
+    protected Class<? extends BaseItemListPanel<CustomerDiscountOld, CustomerDiscountItemOld>> getItemListPanelClass() {
+        return CustomerDiscountItemListOldPanel.class;
     }
 }

@@ -64,6 +64,7 @@
                 <isset property="have.tests"/>
             </and>
         </condition>
+        <property name="javadoc.preview" value="true"/>
         <condition property="no.javadoc.preview">
             <isfalse value="${javadoc.preview}"/>
         </condition>
@@ -75,7 +76,6 @@
             </and>
         </condition>
         <property name="javac.debug" value="true"/>
-        <property name="javadoc.preview" value="true"/>
         <available file="${meta.inf}/MANIFEST.MF" property="has.custom.manifest"/>
         <condition property="classes.dir" value="${build.ear.classes.dir}">
             <isset property="dist.ear.dir"/>
@@ -170,9 +170,15 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
+            <attribute default="/does/not/exist" name="gensrcdir"/>
             <element name="customize" optional="true"/>
             <sequential>
                 <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" includeantruntime="false" includes="@{includes}" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}">
+                    <src>
+                        <dirset dir="@{gensrcdir}" erroronmissingdir="false">
+                            <include name="*"/>
+                        </dirset>
+                    </src>
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -420,7 +426,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.itext-paulo-155.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.minium.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.swingx-2008_01_20.jar}" todir="${build.classes.dir}/META-INF/lib"/>
-        <copyfiles files="${libs.MigLayout.classpath}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copyfiles files="${file.reference.miglayout-3.6.3-swing.jar}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.AcaciaBusinessAce-ejb.dist}" manifestproperty="manifest.reference.AcaciaBusinessAce-ejb.dist" todir="${dist.ear.dir}"/>
@@ -444,9 +450,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.itext-paulo-155.jar}" manifestproperty="manifest.file.reference.itext-paulo-155.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.minium.jar}" manifestproperty="manifest.file.reference.minium.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.swingx-2008_01_20.jar}" manifestproperty="manifest.file.reference.swingx-2008_01_20.jar" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.MigLayout.classpath}" manifestproperty="manifest.libs.MigLayout.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.miglayout-3.6.3-swing.jar}" manifestproperty="manifest.file.reference.miglayout-3.6.3-swing.jar" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.AcaciaBusinessAce-ejb.dist} ${manifest.reference.AcaciaBusinessLogic.dist} ${manifest.reference.AcaciaAnnotations.jar} ${manifest.reference.AcaciaBeansBinding.jar} ${manifest.file.reference.swing-worker-1.1.jar} ${manifest.reference.SwingB.jar} ${manifest.file.reference.appframework-1.0.3.jar} ${manifest.libs.junit_4.classpath} ${manifest.file.reference.log4j-1.2.11.jar} ${manifest.file.reference.liquidlnf.jar} ${manifest.libs.absolutelayout.classpath} ${manifest.file.reference.beansbinding.jar} ${manifest.file.reference.commons-beanutils-1.8.0.jar} ${manifest.file.reference.commons-digester-1.8.jar} ${manifest.file.reference.iText-2.1.3.jar} ${manifest.file.reference.jasperreports-3.0.1.jar} ${manifest.file.reference.commons-collections-2.1.1.jar} ${manifest.file.reference.core-renderer.jar} ${manifest.file.reference.itext-paulo-155.jar} ${manifest.file.reference.minium.jar} ${manifest.file.reference.swingx-2008_01_20.jar} ${manifest.libs.MigLayout.classpath} "/>
+            <attribute name="Class-Path" value="${manifest.reference.AcaciaBusinessAce-ejb.dist} ${manifest.reference.AcaciaBusinessLogic.dist} ${manifest.reference.AcaciaAnnotations.jar} ${manifest.reference.AcaciaBeansBinding.jar} ${manifest.file.reference.swing-worker-1.1.jar} ${manifest.reference.SwingB.jar} ${manifest.file.reference.appframework-1.0.3.jar} ${manifest.libs.junit_4.classpath} ${manifest.file.reference.log4j-1.2.11.jar} ${manifest.file.reference.liquidlnf.jar} ${manifest.libs.absolutelayout.classpath} ${manifest.file.reference.beansbinding.jar} ${manifest.file.reference.commons-beanutils-1.8.0.jar} ${manifest.file.reference.commons-digester-1.8.jar} ${manifest.file.reference.iText-2.1.3.jar} ${manifest.file.reference.jasperreports-3.0.1.jar} ${manifest.file.reference.commons-collections-2.1.1.jar} ${manifest.file.reference.core-renderer.jar} ${manifest.file.reference.itext-paulo-155.jar} ${manifest.file.reference.minium.jar} ${manifest.file.reference.swingx-2008_01_20.jar} ${manifest.file.reference.miglayout-3.6.3-swing.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -458,7 +464,7 @@ exists or setup the property manually. For example like this:
         </copy>
     </target>
     <target depends="init,deps-jar,-pre-pre-compile,-pre-compile,-copy-meta-inf" if="have.sources" name="-do-compile">
-        <carproject:javac destdir="${classes.dir}"/>
+        <carproject:javac destdir="${classes.dir}" gensrcdir="${build.generated.sources.dir}"/>
         <copy todir="${classes.dir}">
             <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
@@ -474,7 +480,7 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="init,deps-jar,-pre-pre-compile" name="-do-compile-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
-        <carproject:javac excludes="" includes="${javac.includes}"/>
+        <carproject:javac excludes="" gensrcdir="${build.generated.sources.dir}" includes="${javac.includes}"/>
     </target>
     <target name="-post-compile-single">
         <!-- Empty placeholder for easier customization. -->
@@ -731,6 +737,9 @@ exists or setup the property manually. For example like this:
             </classpath>
             <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
+                <include name="**/*.java"/>
             </fileset>
         </javadoc>
     </target>

@@ -19,7 +19,6 @@ import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
-import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -29,10 +28,11 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBFormattedTextField;
+import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
@@ -43,7 +43,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.NumberFormat;
 import java.util.List;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -156,6 +155,7 @@ public class ProductPanelNew extends BaseEntityPanel {
         additionalInfoPanel = new com.cosmos.swingb.JBPanel();
         productPricingPanel = new com.cosmos.swingb.JBPanel();
         suppliersPanel = new com.cosmos.swingb.JBPanel();
+        currencyValueLabel = new com.cosmos.swingb.JBLabel();
 
         dimensionUnitComboBox.setName("dimensionUnitComboBox"); // NOI18N
 
@@ -327,6 +327,9 @@ public class ProductPanelNew extends BaseEntityPanel {
         suppliersPanel.setLayout(new java.awt.BorderLayout());
         productTabbedPane.addTab(resourceMap.getString("suppliersPanel.TabConstraints.tabTitle"), suppliersPanel); // NOI18N
 
+        currencyValueLabel.setText(resourceMap.getString("currencyValueLabel.text")); // NOI18N
+        currencyValueLabel.setName("currencyValueLabel"); // NOI18N
+
         setName("Form"); // NOI18N
         setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
@@ -338,6 +341,7 @@ public class ProductPanelNew extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField categoryCodeFormatTextField;
     private com.cosmos.swingb.JBLabel cubatureLabel;
     private com.cosmos.swingb.JBFormattedTextField cubatureTextField;
+    private com.cosmos.swingb.JBLabel currencyValueLabel;
     private com.cosmos.swingb.JBLabel defaultLabel;
     private com.cosmos.swingb.JBFormattedTextField defaultTextField;
     private com.cosmos.swingb.JBPanel deliveryInfoPanel;
@@ -478,7 +482,7 @@ public class ProductPanelNew extends BaseEntityPanel {
 
         helper = new MigLayoutHelper(pricePanel);
         helper.setLayoutFillX(true);
-        helper.setLayoutWrapAfter(4);
+        helper.setLayoutWrapAfter(5);
         helper.columnGrow(100, 1, 3);
         helper.columnSizeGroup("sg", 1, 3);
         helper.columnFill(1, 3);
@@ -491,6 +495,8 @@ public class ProductPanelNew extends BaseEntityPanel {
         helper.getComponentConstraints(salesPriceLabel).cell(2, 0);
         pricePanel.add(salesPriceTextField);
         helper.getComponentConstraints(salesPriceTextField).cell(3, 0);
+        pricePanel.add(currencyValueLabel);
+        helper.getComponentConstraints(currencyValueLabel).cell(4, 0);
         pricePanel.invalidate();
 
         helper = new MigLayoutHelper(quantitiesOnStockPanel);
@@ -627,6 +633,9 @@ public class ProductPanelNew extends BaseEntityPanel {
         salesPriceTextField.setEditable(false);
         propDetails = entityProps.getPropertyDetails("salePrice");
         salesPriceTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
+
+//        propDetails = entityProps.getPropertyDetails("currency");
+//        currencyValueLabel.bind(bindingGroup, product, propDetails, "enumValue");
 
         propDetails = entityProps.getPropertyDetails("minimumQuantity");
         minTextField.bind(bindingGroup, product, propDetails, AcaciaUtils.getDecimalFormat());
@@ -924,6 +933,16 @@ public class ProductPanelNew extends BaseEntityPanel {
         return getResourceMap().getString(key);
     }
 
+    private void onCurrencyChanged(DbResource dbResource) {
+        if(dbResource == null) {
+            currencyValueLabel.setText(getResourceString("currencyValueLabel.text"));
+            return;
+        }
+
+        TextResource textResource = (TextResource)dbResource.getEnumValue();
+        currencyValueLabel.setText(textResource.toText());
+    }
+
     private class PricingPanel extends AcaciaPanel {
 
         private BindingGroup bindingGroup;
@@ -940,17 +959,17 @@ public class ProductPanelNew extends BaseEntityPanel {
         private JBLabel categoryDiscountLabel;
         private JXPercentValueField categoryProfitPercentField;
         private JBLabel categoryProfitLabel;
-        private JBFormattedTextField costPriceTextField;
+        private JBDecimalField costPriceTextField;
         private JBLabel costPriceLabel;
         private JBComboBox currencyComboBox;
         private JBButton dutyButton;
         private JXPercentValueField dutyPercentField;
         private JBLabel dutyLabel;
-        private JBFormattedTextField listPriceTextField;
+        private JBDecimalField listPriceTextField;
         private JBLabel listPriceLabel;
-        private JBFormattedTextField purchasePriceTextField;
+        private JBDecimalField purchasePriceTextField;
         private JBLabel purchasePriceLabel;
-        private JBFormattedTextField salesPriceTextField;
+        private JBDecimalField salesPriceTextField;
         private JBLabel salesPriceLabel;
         private JXPercentValueField totalDiscountPercentField;
         private JBLabel totalDiscountLabel;
@@ -971,12 +990,12 @@ public class ProductPanelNew extends BaseEntityPanel {
 
         private void initComponents() {
             listPriceLabel = new JBLabel();
-            listPriceTextField = new JBFormattedTextField();
+            listPriceTextField = new JBDecimalField();
             currencyComboBox = new JBComboBox();
             additionalDiscountPercentField = new JXPercentValueField();
             additionalDiscountButton = new JBButton();
             additionalDiscountLabel = new JBLabel();
-            purchasePriceTextField = new JBFormattedTextField();
+            purchasePriceTextField = new JBDecimalField();
             purchasePriceLabel = new JBLabel();
             transportPricePercentField = new JXPercentValueField();
             transportButton = new JBButton();
@@ -984,12 +1003,12 @@ public class ProductPanelNew extends BaseEntityPanel {
             dutyPercentField = new JXPercentValueField();
             dutyButton = new JBButton();
             dutyLabel = new JBLabel();
-            costPriceTextField = new JBFormattedTextField();
+            costPriceTextField = new JBDecimalField();
             costPriceLabel = new JBLabel();
             additionalProfitPercentField = new JXPercentValueField();
             additionalProfitButton = new JBButton();
             additionalProfitLabel = new JBLabel();
-            salesPriceTextField = new JBFormattedTextField();
+            salesPriceTextField = new JBDecimalField();
             salesPriceLabel = new JBLabel();
             categoryDiscountPercentField = new JXPercentValueField();
             categoryDiscountLabel = new JBLabel();
@@ -1146,20 +1165,30 @@ public class ProductPanelNew extends BaseEntityPanel {
 
         @Override
         protected void initData() {
-            SimpleProduct product = getProduct();
-            NumberFormat decimalFormat = AcaciaUtils.getDecimalFormat();
+            final SimpleProduct product = getProduct();
 
             ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
             PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
-            Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails, decimalFormat);
+            Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails);
             binding.addBindingListener(listPriceBindingListener);
 
+            System.out.println("Miro 1");
             propDetails = entityProps.getPropertyDetails("currency");
-            currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
+            binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
+            binding.addBindingListener(new AbstractBindingListener() {
 
-            purchasePriceTextField.setFormat(decimalFormat);
-            costPriceTextField.setFormat(decimalFormat);
-            salesPriceTextField.setFormat(decimalFormat);
+                @Override
+                public void bindingBecameBound(Binding binding) {
+                    onCurrencyChanged(product.getCurrency());
+                }
+            });
+            currencyComboBox.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(ItemEvent event) {
+                    onCurrencyChanged((DbResource) event.getItem());
+                }
+            }, true);
 
             categoryDiscountPercentField.setEditable(false);
             additionalDiscountPercentField.setEditable(false);
