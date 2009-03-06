@@ -17,9 +17,10 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import javax.persistence.Basic;
 
 @Entity
-@Table(name = "customer_discounts")
+@Table(name = "customer_discounts_old")
 @NamedQueries(
     {
         /**
@@ -53,7 +54,8 @@ import com.cosmos.acacia.annotation.ValidationType;
 /**
  * 
  */
-public class CustomerDiscount extends DataObjectBean implements Serializable {
+public class CustomerDiscountOld extends DataObjectBean implements Serializable {
+
     @JoinColumn(name = "customer_id", referencedColumnName = "partner_id", nullable=false)
     @ManyToOne
     @Property(title="Customer",
@@ -61,43 +63,53 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
     private BusinessPartner customer;
     
     @Property(title="Discount %", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "discount_percent", precision=20, scale=4)
+    @Column(name = "discount_percent", precision=7, scale=6)
     private BigDecimal discountPercent;
     
     @Id
-    @Column(name = "discount_id", nullable = false)
-    private BigInteger discountId;
+    @Basic(optional = false)
+    @Column(name = "customer_discount_id", nullable = false)
+    private BigInteger customerDiscountId;
 
-    @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Column(name = "organization_id")
+    private BigInteger organizationId;
 
-    @JoinColumn(name = "discount_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "customer_discount_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
     
+    @Override
     public BigInteger getParentId() {
-        return parentId;
+        return getOrganizationId();
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
+        setOrganizationId(parentId);
+    }
+
+    public BigInteger getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(BigInteger organizationId) {
+        this.organizationId = organizationId;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (discountId != null ? discountId.hashCode() : 0);
-        return hash;
+        return (customerDiscountId != null ? customerDiscountId.hashCode() : 0);
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CustomerDiscount)) {
+        if (!(object instanceof CustomerDiscountOld)) {
             return false;
         }
-        CustomerDiscount other = (CustomerDiscount) object;
-        if ((this.discountId == null && other.discountId != null) || (this.discountId != null && !this.discountId.equals(other.discountId))) {
+        CustomerDiscountOld other = (CustomerDiscountOld) object;
+        if ((customerDiscountId == null && other.customerDiscountId != null) ||
+                (customerDiscountId != null && !customerDiscountId.equals(other.customerDiscountId))) {
             return false;
         }
         return true;
@@ -105,7 +117,7 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.CustomerDiscount[discountId=" + discountId + "]";
+        return "CustomerDiscount[discountId=" + customerDiscountId + "]";
     }
 
     @Override
@@ -115,7 +127,7 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
 
     @Override
     public BigInteger getId() {
-        return discountId;
+        return customerDiscountId;
     }
 
     @Override
@@ -130,15 +142,15 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
 
     @Override
     public void setId(BigInteger id) {
-        setDiscountId(id);
+        setCustomerDiscountId(id);
     }
 
-    public BigInteger getDiscountId() {
-        return discountId;
+    public BigInteger getCustomerDiscountId() {
+        return customerDiscountId;
     }
 
-    public void setDiscountId(BigInteger discountId) {
-        this.discountId = discountId;
+    public void setCustomerDiscountId(BigInteger customerDiscountId) {
+        this.customerDiscountId = customerDiscountId;
     }
 
     public BusinessPartner getCustomer() {
