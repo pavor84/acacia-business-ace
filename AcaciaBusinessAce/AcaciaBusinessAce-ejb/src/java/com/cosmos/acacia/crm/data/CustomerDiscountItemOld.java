@@ -19,13 +19,15 @@ import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.annotation.ValidationType;
+import java.math.MathContext;
+import javax.persistence.Basic;
+import javax.persistence.Transient;
 
 /**
  * 
  */
 @Entity
-@Table(name = "customer_discount_items")
+@Table(name = "customer_discount_items_old")
 @NamedQueries(
     {
         /**
@@ -65,7 +67,10 @@ import com.cosmos.acacia.annotation.ValidationType;
                 query = "select p from CustomerDiscountItem p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.product = :product and p.dataObject.deleted = false"
             )
     })
-public class CustomerDiscountItem extends DataObjectBean implements Serializable{
+public class CustomerDiscountItemOld extends DataObjectBean implements Serializable {
+
+    private static final MathContext MATH_CONTEXT = MathContext.DECIMAL64;
+
     @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
@@ -80,44 +85,86 @@ public class CustomerDiscountItem extends DataObjectBean implements Serializable
     @Property(title="Include Heirs")
     private boolean includeHeirs;
     
-    @Property(title="Discount %", propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "discount_percent", precision=20, scale=4)
+    @JoinColumn(name = "customer_discount_id", referencedColumnName = "customer_discount_id", nullable=false)
+    @ManyToOne(optional=false)
+    private CustomerDiscountOld customerDiscount;
+
+    @Property(title="Discount %", propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "discount_percent", precision = 7, scale = 6)
     private BigDecimal discountPercent;
-    
+
+    @Transient
+    @Property(title="Cutomer Price", editable=false, readOnly=true)
+    private BigDecimal cutomerPrice;
+
+    @Transient
+    private BigDecimal discount;
+
     @Id
-    @Column(name = "item_id", nullable = false)
-    private BigInteger itemId;
+    @Basic(optional = false)
+    @Column(name = "customer_discount_item_id", nullable = false, precision = 7, scale = 4, columnDefinition="numeric")
+    private BigInteger customerDiscountItemId;
 
-    @Column(name = "parent_id")
-    private BigInteger parentId;
-
-    @JoinColumn(name = "item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "customer_discount_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-    
-    public BigInteger getParentId() {
-        return parentId;
+
+    public CustomerDiscountItemOld() {
     }
 
+    public CustomerDiscountItemOld(BigInteger customerDiscountItemId) {
+        this.customerDiscountItemId = customerDiscountItemId;
+    }
+
+    public CustomerDiscountOld getCustomerDiscount() {
+        return customerDiscount;
+    }
+
+    public void setCustomerDiscount(CustomerDiscountOld customerDiscount) {
+        this.customerDiscount = customerDiscount;
+        if(customerDiscount != null) {
+            setParentId(customerDiscount.getId());
+        } else {
+            setParentId(null);
+        }
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        System.out.println("getParentId().customerDiscount: " + customerDiscount + ", dataObject: " + dataObject);
+        if(customerDiscount != null)
+            customerDiscount.getId();
+
+        if(dataObject != null)
+            dataObject.getParentDataObjectId();
+
+        return null;
+    }
+
+    @Override
     public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
+        System.out.println("setParentId(" + parentId + ").customerDiscount: " + customerDiscount + ", dataObject: " + dataObject);
+        if(dataObject == null) {
+            dataObject = new DataObject();
+        }
+
+        dataObject.setParentDataObjectId(parentId);
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (itemId != null ? itemId.hashCode() : 0);
-        return hash;
+        return customerDiscountItemId != null ? customerDiscountItemId.hashCode() : 0;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CustomerDiscountItem)) {
+        if (!(object instanceof CustomerDiscountItemOld)) {
             return false;
         }
-        CustomerDiscountItem other = (CustomerDiscountItem) object;
-        if ((this.itemId == null && other.itemId != null) || (this.itemId != null && !this.itemId.equals(other.itemId))) {
+        CustomerDiscountItemOld other = (CustomerDiscountItemOld) object;
+        if ((customerDiscountItemId == null && other.customerDiscountItemId != null) ||
+                (customerDiscountItemId != null && !customerDiscountItemId.equals(other.customerDiscountItemId))) {
             return false;
         }
         return true;
@@ -125,17 +172,18 @@ public class CustomerDiscountItem extends DataObjectBean implements Serializable
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.CustomerDiscountItem[itemId=" + itemId + "]";
+        return "CustomerDiscountItem[itemId=" + customerDiscountItemId + "]";
     }
 
     @Override
     public DataObject getDataObject() {
+        System.out.println("getDataObject(): " + dataObject);
         return dataObject;
     }
 
     @Override
     public BigInteger getId() {
-        return itemId;
+        return customerDiscountItemId;
     }
 
     @Override
@@ -145,20 +193,21 @@ public class CustomerDiscountItem extends DataObjectBean implements Serializable
 
     @Override
     public void setDataObject(DataObject dataObject) {
+        System.out.println("setDataObject(" + dataObject + ")");
         this.dataObject = dataObject;
     }
 
     @Override
     public void setId(BigInteger id) {
-        setItemId(id);
+        setCustomerDiscountItemId(id);
     }
 
-    public BigInteger getItemId() {
-        return itemId;
+    public BigInteger getCustomerDiscountItemId() {
+        return customerDiscountItemId;
     }
 
-    public void setItemId(BigInteger itemId) {
-        this.itemId = itemId;
+    public void setCustomerDiscountItemId(BigInteger customerDiscountItemId) {
+        this.customerDiscountItemId = customerDiscountItemId;
     }
 
     public SimpleProduct getProduct() {
@@ -191,5 +240,34 @@ public class CustomerDiscountItem extends DataObjectBean implements Serializable
 
     public void setCategory(ProductCategory category) {
         this.category = category;
+    }
+
+    public BigDecimal getDiscount() {
+        BigDecimal value;
+        if ((value = getDiscountPercent()) != null) {
+            return value;
+        }
+
+        return getCustomerDiscount().getDiscountPercent();
+    }
+
+    public void setDiscount(BigDecimal discount) {
+    }
+
+    public BigDecimal getCutomerPrice() {
+        BigDecimal salesPrice;
+        if ((salesPrice = getProduct().getSalePrice()) == null) {
+            return null;
+        }
+
+        BigDecimal percent;
+        if ((percent = getDiscount()) != null) {
+            return salesPrice.subtract(salesPrice.multiply(percent, MATH_CONTEXT), MATH_CONTEXT);
+        }
+
+        return salesPrice;
+    }
+
+    public void setCutomerPrice(BigDecimal cutomerPrice) {
     }
 }
