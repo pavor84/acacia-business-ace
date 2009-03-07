@@ -143,20 +143,16 @@ public class CustomerDiscountBean implements CustomerDiscountRemote, CustomerDis
     }
 
     @Override
-    public CustomerDiscountItemByCategory newCustomerDiscountItem(
-            CustomerDiscount customerDiscount, ProductCategory productCategory) {
+    public CustomerDiscountItemByCategory newCustomerDiscountItemByCategory(CustomerDiscount customerDiscount) {
         CustomerDiscountItemByCategory itemByCategory = new CustomerDiscountItemByCategory();
         itemByCategory.setCustomerDiscount(customerDiscount);
-        itemByCategory.setCategory(productCategory);
         return itemByCategory;
     }
 
     @Override
-    public CustomerDiscountItemByProduct newCustomerDiscountItem(
-            CustomerDiscount customerDiscount, Product product) {
+    public CustomerDiscountItemByProduct newCustomerDiscountItemByProduct(CustomerDiscount customerDiscount) {
         CustomerDiscountItemByProduct itemByProduct = new CustomerDiscountItemByProduct();
         itemByProduct.setCustomerDiscount(customerDiscount);
-        itemByProduct.setProduct(product);
         return itemByProduct;
     }
 

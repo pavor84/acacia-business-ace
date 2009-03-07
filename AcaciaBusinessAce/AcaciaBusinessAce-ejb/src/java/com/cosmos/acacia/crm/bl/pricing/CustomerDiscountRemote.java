@@ -83,14 +83,14 @@ public interface CustomerDiscountRemote {
      * @param customerDiscount
      * @return
      */
-    CustomerDiscountItemByCategory newCustomerDiscountItem(CustomerDiscount customerDiscount, ProductCategory productCategory);
+    CustomerDiscountItemByCategory newCustomerDiscountItemByCategory(CustomerDiscount customerDiscount);
 
     /**
      * 
      * @param customerDiscount
      * @return
      */
-    CustomerDiscountItemByProduct newCustomerDiscountItem(CustomerDiscount customerDiscount, Product product);
+    CustomerDiscountItemByProduct newCustomerDiscountItemByProduct(CustomerDiscount customerDiscount);
 
     /**
      * 
