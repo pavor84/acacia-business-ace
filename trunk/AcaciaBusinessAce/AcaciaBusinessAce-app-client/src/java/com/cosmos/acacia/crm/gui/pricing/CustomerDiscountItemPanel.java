@@ -6,24 +6,34 @@
 package com.cosmos.acacia.crm.gui.pricing;
 
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
+import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByProduct;
+import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBCheckBox;
-import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBPercentField;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
-import java.math.BigInteger;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.math.BigDecimal;
+import java.text.MessageFormat;
 import javax.ejb.EJB;
 import net.miginfocom.swing.MigLayout;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -52,7 +62,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
     private JBPanel itemPanel;
     // By Product
     private JBLabel productLabel;
-    private JBComboList productComboList;
+    private AcaciaComboList productComboList;
     private JBLabel salesPriceLabel;
     private JBDecimalField salesPriceDecimalField;
     private JBLabel discountLabel;
@@ -62,7 +72,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
     private JBDecimalField customerPriceDecimalField;
     // By Category
     private JBLabel categoryLabel;
-    private JBComboList categoryComboList;
+    private AcaciaComboList categoryComboList;
     private JBLabel categoryDiscountLabel;
     private JBPercentField categoryDiscountPercentField;
     private JBCheckBox includeHeirsCheckBox;
@@ -78,6 +88,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
             salesPriceLabel = new JBLabel(getResourceString("salesPriceLabel.text"));
             salesPriceDecimalField = new JBDecimalField();
             salesPriceDecimalField.setColumns(10);
+            salesPriceDecimalField.setEditable(false);
             discountLabel = new JBLabel(getResourceString("discountLabel.text"));
             productDiscountPercentField = new JBPercentField();
             productDiscountPercentField.setColumns(7);
@@ -85,6 +96,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
             customerPriceLabel = new JBLabel(getResourceString("customerPriceLabel.text"));
             customerPriceDecimalField = new JBDecimalField();
             customerPriceDecimalField.setColumns(10);
+            customerPriceDecimalField.setEditable(false);
 
             itemPanel.add(productLabel);
             itemPanel.add(productComboList);
@@ -97,9 +109,8 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
             itemPanel.add(customerPriceDecimalField);
 
             helper.setLayoutWrapAfter(5);
-            helper.columnGrow(100, 1, 4);
-            helper.columnSizeGroup("sg", 1, 4);
-            helper.columnFill(1, 4);
+            helper.columnGrow(100, 1);
+            helper.columnFill(1);
             helper.columnGap("15", 2);
             helper.getComponentConstraints(productLabel).cell(0, 0);
             helper.getComponentConstraints(productComboList).cell(1, 0).spanX(2);
@@ -138,6 +149,72 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
         setLayout(new BorderLayout());
         add(itemPanel, BorderLayout.CENTER);
         add(getButtonPanel(), BorderLayout.SOUTH);
+    }
+
+    @Override
+    protected void initData() {
+        BindingGroup bg = getBindingGroup();
+        if(isByProduct()) {
+            CustomerDiscountItemByProduct itemByProduct = (CustomerDiscountItemByProduct)item;
+            EntityProperties entityProps = getFormSession().getCustomerDiscountItemByProductEntityProperties();
+
+            PropertyDetails propDetails = entityProps.getPropertyDetails("product");
+            ProductsListPanel productList = new ProductsListPanel(getOrganizationDataObjectId());
+            productComboList.bind(
+                bg,
+                productList,
+                itemByProduct,
+                propDetails,
+                "${productName}");
+            productComboList.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    onProductChanged();
+                }
+            }, true);
+
+            propDetails = entityProps.getPropertyDetails("discountPercent");
+            Binding binding = productDiscountPercentField.bind(bg, itemByProduct, propDetails);
+            binding.addBindingListener(new AbstractBindingListener() {
+
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    onProductDiscountChanged();
+                }
+            });
+        } else {
+            CustomerDiscountItemByCategory itemByCategory = (CustomerDiscountItemByCategory)item;
+//            categoryComboList
+//            categoryDiscountPercentField
+//            includeHeirsCheckBox
+        }
+        bg.bind();
+    }
+
+    private void onProductChanged() {
+        CustomerDiscountItemByProduct itemByProduct = (CustomerDiscountItemByProduct)item;
+        SimpleProduct product = (SimpleProduct)itemByProduct.getProduct();
+
+        if(product != null)
+            salesPriceDecimalField.setValue(product.getSalePrice());
+
+        BigDecimal itemDiscountPercent;
+        String defaultDiscountString;
+        if ((itemDiscountPercent = itemByProduct.getDiscountPercent()) != null) {
+            defaultDiscountString = productDiscountPercentField.getNumberFormat().format(itemDiscountPercent);
+        } else {
+            defaultDiscountString = "0";
+        }
+        defaultDiscountLabel.setText(MessageFormat.format(getResourceMap().getString("defaultDiscountLabel.text"),
+                defaultDiscountString));
+
+        onProductDiscountChanged();
+    }
+
+    private void onProductDiscountChanged() {
+        CustomerDiscountItemByProduct itemByProduct = (CustomerDiscountItemByProduct)item;
+        customerPriceDecimalField.setValue(itemByProduct.getCutomerPrice());
     }
 
     private String getResourceString(String key) {
@@ -183,10 +260,6 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
         }
 
         return buttonPanel;
-    }
-
-    @Override
-    protected void initData() {
     }
 
     private CustomerDiscountRemote getFormSession()

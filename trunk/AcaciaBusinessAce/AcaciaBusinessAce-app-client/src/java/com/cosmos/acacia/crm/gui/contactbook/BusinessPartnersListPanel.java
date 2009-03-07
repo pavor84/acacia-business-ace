@@ -9,13 +9,11 @@ import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.CustomerDiscountOld;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType;
 import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountListPanel;
-import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountOldForm;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -28,8 +26,6 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigInteger;
@@ -325,9 +321,6 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
             return;
         }
 
-//        CustomerDiscountOld customerDiscount = getCustomerDiscountManager().getCustomerDiscountForCustomer(selected);
-//        CustomerDiscountOldForm customerDiscountForm = new CustomerDiscountOldForm(customerDiscount);
-//        customerDiscountForm.showFrame(this);
         CustomerDiscountListPanel panel = new CustomerDiscountListPanel(selected);
         panel.showDialog(this);
     }
