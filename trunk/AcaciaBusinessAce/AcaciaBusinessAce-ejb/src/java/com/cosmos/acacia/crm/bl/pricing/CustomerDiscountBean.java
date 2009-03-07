@@ -1,73 +1,222 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.cosmos.acacia.crm.bl.pricing;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscount;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByProduct;
+import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-
-import com.cosmos.acacia.crm.bl.impl.BaseBean;
-import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
-import com.cosmos.acacia.crm.validation.EntityValidator;
-import com.cosmos.acacia.crm.validation.impl.CustomerDiscountItemValidatorLocal;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
- * 
- * Created	:	18.01.2009
- * @author	Petar Milev
  *
+ * @author Miro
  */
 @Stateless
-public class CustomerDiscountBean extends BaseBean<CustomerDiscount, CustomerDiscountItem> implements CustomerDiscountLocal, CustomerDiscountRemote {
+public class CustomerDiscountBean implements CustomerDiscountRemote, CustomerDiscountLocal {
+
     @PersistenceContext
-    protected EntityManager em;
+    private EntityManager em;
 
     @EJB
-    protected EntityStoreManagerLocal esm;
-    
+    private AcaciaSessionLocal acaciaSession;
+
     @EJB
-    protected CustomerDiscountItemValidatorLocal itemValidatorLocal;
-    
-    @Override
-    public CustomerDiscount getCustomerDiscountForCustomer(BusinessPartner customer) {
-        CustomerDiscount result = (CustomerDiscount) 
-        getSingleResult("CustomerDiscount.getForCustomer", "customer", customer);
-        
-        if (result==null){
-            result = newEntity(customer.getParentId());
-            result.setCustomer(customer);
-            result = save(result);
-        }
-        
-        return result;
-    }
-    
-    @Override
-    protected EntityValidator<CustomerDiscountItem> getItemValidator() {
-        return itemValidatorLocal;
-    }
-    
-    @Override
-    public void delete(CustomerDiscount entity) {
-        if (entity == null)
-            throw new IllegalArgumentException("null: 'entity'");
-        List<CustomerDiscountItem> items = listItems(entity.getId());
-        for (CustomerDiscountItem item : items) {
-            esm.remove(em, item);
-        }
-        esm.remove(em, entity);
+    private EntityStoreManagerLocal esm;
+
+    public Connection getConnection() {
+//        ((org.hibernate.ejb.EntityManagerImpl)em);
+//        return em.getSession().connection();
+        System.out.println("em: " + em);
+        return null;
     }
 
     @Override
-    public CustomerDiscountItem getCustomerDiscountItem(CustomerDiscount customerDiscount,
-                                                        SimpleProduct product) {
-        CustomerDiscountItem result = (CustomerDiscountItem)
-            getSingleResult("CustomerDiscountItem.findByProduct", "product", product, "parentDataObjectId", customerDiscount.getId());
-        return result;
+    public CustomerDiscount getCustomerDiscount(BusinessPartner customer) {
+        System.out.println("getCustomerDiscount(" + customer + ")");
+        Query q = em.createNamedQuery("CustomerDiscount.findByCustomer");
+        System.out.println("q: " + q);
+        q.setParameter("customer", customer);
+        try {
+            return (CustomerDiscount)q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public CustomerDiscount newCustomerDiscount(BusinessPartner customer) {
+        CustomerDiscount customerDiscount = new CustomerDiscount();
+        customerDiscount.setOrganizationId(acaciaSession.getOrganization().getId());
+        customerDiscount.setCustomer(customer);
+        return customerDiscount;
+    }
+
+    @Override
+    public CustomerDiscount saveCustomerDiscount(CustomerDiscount customerDiscount) {
+        esm.persist(em, customerDiscount);
+        return customerDiscount;
+    }
+
+    @Override
+    public boolean deleteCustomerDiscount(CustomerDiscount customerDiscount) {
+        em.remove(customerDiscount);
+        return true;
+    }
+
+    @Override
+    public EntityProperties getCustomerDiscountEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(CustomerDiscount.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getCustomerDiscountItemEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(CustomerDiscountItem.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getCustomerDiscountItemByCategoryEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(CustomerDiscountItemByCategory.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getCustomerDiscountItemByProductEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(CustomerDiscountItemByProduct.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
+    @Override
+    public List<CustomerDiscountItem> getCustomerDiscountItems(CustomerDiscount customerDiscount) {
+        //Query q = em.createNamedQuery("CustomerDiscountItem.findByCustomerDiscount");
+        Query q = em.createNamedQuery("CustomerDiscountItem.findByParentId");
+        q.setParameter("parentDataObjectId", customerDiscount.getCustomerDiscountId());
+        return new ArrayList<CustomerDiscountItem>(q.getResultList());
+    }
+
+    @Override
+    public CustomerDiscountItemByProduct getCustomerDiscountItem(
+            CustomerDiscount customerDiscount, Product product) {
+        Query q = em.createNamedQuery("CustomerDiscountItemByProduct.findByCustomerDiscountAndProduct");
+        q.setParameter("customerDiscount", customerDiscount);
+        q.setParameter("product", product);
+        return (CustomerDiscountItemByProduct)q.getSingleResult();
+    }
+
+    @Override
+    public CustomerDiscountItemByCategory getCustomerDiscountItem(
+            CustomerDiscount customerDiscount, ProductCategory productCategory) {
+        Query q = em.createNamedQuery("CustomerDiscountItemByCategory.findByCustomerDiscountAndCategory");
+        q.setParameter("customerDiscount", customerDiscount);
+        q.setParameter("category", productCategory);
+        return (CustomerDiscountItemByCategory)q.getSingleResult();
+    }
+
+    @Override
+    public CustomerDiscountItemByCategory newCustomerDiscountItem(
+            CustomerDiscount customerDiscount, ProductCategory productCategory) {
+        CustomerDiscountItemByCategory itemByCategory = new CustomerDiscountItemByCategory();
+        itemByCategory.setCustomerDiscount(customerDiscount);
+        itemByCategory.setCategory(productCategory);
+        return itemByCategory;
+    }
+
+    @Override
+    public CustomerDiscountItemByProduct newCustomerDiscountItem(
+            CustomerDiscount customerDiscount, Product product) {
+        CustomerDiscountItemByProduct itemByProduct = new CustomerDiscountItemByProduct();
+        itemByProduct.setCustomerDiscount(customerDiscount);
+        itemByProduct.setProduct(product);
+        return itemByProduct;
+    }
+
+    @Override
+    public CustomerDiscountItem saveCustomerDiscountItem(CustomerDiscountItem customerDiscountItem) {
+        esm.persist(em, customerDiscountItem);
+        return customerDiscountItem;
+    }
+
+    @Override
+    public boolean deleteCustomerDiscountItem(CustomerDiscountItem customerDiscountItem) {
+        em.remove(customerDiscountItem);
+        return true;
+    }
+
+    public List<CustomerDiscountItem> getCustomerDiscountItemsTest(CustomerDiscount customerDiscount) {
+        Connection conn = getConnection();
+        BigDecimal customerDiscountId = new BigDecimal(customerDiscount.getCustomerDiscountId());
+        try {
+            PreparedStatement pstmt =
+                    conn.prepareStatement(CustomerDiscountItem.SQL_SELECT_CUSTOMER_DISCOUNT_ITEMS_BY_CUSTOMER_DISCOUNT);
+            pstmt.setBigDecimal(1, customerDiscountId);
+            pstmt.setBigDecimal(2, customerDiscountId);
+            ResultSet rs = pstmt.executeQuery();
+            List<CustomerDiscountItem> items = new ArrayList<CustomerDiscountItem>();
+            BigInteger itemId;
+            BigInteger id;
+            CustomerDiscountItem item;
+            CustomerDiscountItemByCategory categoryItem;
+            CustomerDiscountItemByProduct productItem;
+            while (rs.next()) {
+                itemId = rs.getBigDecimal("customer_discount_item_id").toBigInteger();
+                BigDecimal discountPercent = rs.getBigDecimal("discount_percent");
+                String discriminatorId = rs.getString("discriminator_id");
+                switch (rs.getInt("clazz_")) {
+                    case 1:
+                        item = categoryItem = new CustomerDiscountItemByCategory(itemId);
+                        id = rs.getBigDecimal("category_id").toBigInteger();
+                        categoryItem.setCategory(em.find(ProductCategory.class, id));
+                        categoryItem.setIncludeHeirs(rs.getBoolean("include_heirs"));
+                        break;
+
+                    case 2:
+                        item = productItem = new CustomerDiscountItemByProduct(itemId);
+                        id = rs.getBigDecimal("product_id").toBigInteger();
+                        productItem.setProduct(em.find(Product.class, id));
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Unknown class type.");
+                }
+                item.setDiscountPercent(discountPercent);
+                item.setDiscriminatorId(discriminatorId);
+                item.setDataObject(em.find(DataObject.class, itemId));
+                item.setCustomerDiscount(customerDiscount);
+                items.add(item);
+            }
+            return items;
+        } catch (SQLException ex) {
+            throw new PersistenceException(ex);
+        }
     }
 }
