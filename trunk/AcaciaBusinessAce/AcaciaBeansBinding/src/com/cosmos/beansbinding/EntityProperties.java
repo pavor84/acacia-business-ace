@@ -85,6 +85,22 @@ public class EntityProperties
         return Collections.EMPTY_SET;
     }
 
+    public void addEntityProperties(EntityProperties entityProperties) {
+        addBeanProperties(entityProperties.getValues());
+    }
+
+    public void addBeanProperties(Collection<PropertyDetails> beanProps) {
+        if(beanProperties == null)
+            beanProperties = new HashMap<String, PropertyDetails>();
+
+        for(PropertyDetails propDetails : beanProps) {
+            String propName = propDetails.getPropertyName();
+            if(!beanProperties.containsKey(propName)) {
+                beanProperties.put(propName, propDetails);
+            }
+        }
+    }
+
     public void setBeanProperties(Collection<PropertyDetails> beanProps) {
         int size;
         if(beanProps == null || (size = beanProps.size()) == 0)
