@@ -14,6 +14,8 @@ package com.cosmos.acacia.crm.gui.pricing;
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscount;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -21,6 +23,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPercentField;
 import com.cosmos.swingb.JBTextField;
@@ -244,31 +247,87 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
 
     private class CustomerDiscountItemListPanel extends AbstractTablePanel {
 
+        private Boolean includeProduct;
+
         public CustomerDiscountItemListPanel() {
         }
 
         @Override
         protected void initData() {
             super.initData();
+            setSpecialButtonBehavior(true);
+
+            setVisible(Button.Special, true);
             setVisible(Button.Classify, false);
             setVisible(Button.Refresh, false);
             setVisible(Button.Close, false);
             TitledBorder border = new TitledBorder(getResourceString("itemsHolderPanel.border.title"));
             setBorder(border);
+
+
+            JBButton button = getButton(Button.New);
+            button.setText(getResourceString("button.includeCategory"));
+            button.setToolTipText(getResourceString("button.includeCategory.tooltip"));
+
+            button = getButton(Button.Special);
+            button.setText(getResourceString("button.includeProduct"));
+            button.setToolTipText(getResourceString("button.includeProduct.tooltip"));
+
+            if (!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+                setReadonly();
+            }
+            CustomerDiscountListPanel.this.addNestedFormListener(this);
+        }
+
+        @Override
+        public void specialAction() {
+            if(CustomerDiscountListPanel.this.canNestedOperationProceed()) {
+                includeProduct = true;
+                super.newAction();
+            }
+        }
+
+        @Override
+        public void newAction() {
+            if(CustomerDiscountListPanel.this.canNestedOperationProceed()) {
+                includeProduct = false;
+                super.newAction();
+            }
         }
 
         @Override
         protected boolean deleteRow(Object rowObject) {
-            return false;
+            if(rowObject == null)
+                return false;
+
+            return getFormSession().deleteCustomerDiscountItem((CustomerDiscountItem)rowObject);
         }
 
         @Override
         protected Object modifyRow(Object rowObject) {
-            return null;
+            if(rowObject == null)
+                return null;
+
+            return getFormSession().saveCustomerDiscountItem((CustomerDiscountItem)rowObject);
         }
 
         @Override
         protected Object newRow() {
+            if(includeProduct == null)
+                return null;
+
+            System.out.println("newRow().includeProduct: " + includeProduct);
+            CustomerDiscountItem item;
+            if(includeProduct)
+                item = getFormSession().newCustomerDiscountItemByProduct(getCustomerDiscount());
+            else
+                item = getFormSession().newCustomerDiscountItemByCategory(getCustomerDiscount());
+            includeProduct = null;
+            CustomerDiscountItemPanel itemPanel = new CustomerDiscountItemPanel(item);
+            if(DialogResponse.SAVE.equals(itemPanel.showDialog(this))) {
+                return itemPanel.getSelectedValue();
+            }
+
             return null;
         }
     }
