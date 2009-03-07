@@ -60,6 +60,7 @@ public class CustomerDiscountItemListOldPanel extends BaseItemListPanel<Customer
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Action
+    @Override
     public void newAction() {
         if (canNestedOperationProceed()) {
             super.newAction();
