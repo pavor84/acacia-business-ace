@@ -68,7 +68,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
     private JBCheckBox includeHeirsCheckBox;
 
     private void initComponents() {
-        itemPanel = new JBPanel(new MigLayout("debug"));
+        itemPanel = new JBPanel(new MigLayout());
         MigLayoutHelper helper = new MigLayoutHelper(itemPanel);
         helper.setLayoutFillX(true);
 
