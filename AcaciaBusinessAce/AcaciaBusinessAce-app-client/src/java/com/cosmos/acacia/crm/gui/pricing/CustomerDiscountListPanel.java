@@ -18,9 +18,17 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPercentField;
+import com.cosmos.swingb.JBTextField;
+import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.ejb.EJB;
+import javax.swing.border.TitledBorder;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
@@ -57,22 +65,35 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+
         setName("Form"); // NOI18N
+
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(CustomerDiscountListPanel.class);
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(347, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(271, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 
     @EJB
@@ -86,10 +107,11 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
 
     @Override
     protected void initData() {
+        setPreferredSize(new Dimension(640, 480));
         setLayout(new BorderLayout());
-        add(getCustomerDiscountPanel(), BorderLayout.BEFORE_FIRST_LINE);
+        add(getCustomerDiscountPanel(), BorderLayout.NORTH);
         add(getCustomerDiscountItemListPanel(), BorderLayout.CENTER);
-        add(getButtonPanel(), BorderLayout.AFTER_LINE_ENDS);
+        add(getButtonPanel(), BorderLayout.SOUTH);
     }
 
     public CustomerDiscount getCustomerDiscount() {
@@ -171,12 +193,51 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
 
     private class CustomerDiscountPanel extends AcaciaPanel {
 
+        private JBLabel customerLabel;
+        private JBTextField customerTextField;
+        private JBLabel discountLabel;
+        private JBPercentField discountPercentField;
+
         public CustomerDiscountPanel() {
+            initComponents();
             initData();
+        }
+
+        private void initComponents() {
+            customerLabel = new JBLabel(getResourceString("customerLabel.text"));
+            customerTextField = new JBTextField();
+            customerTextField.setEditable(false);
+            discountLabel = new JBLabel(getResourceString("discountLabel.text"));
+            discountPercentField = new JBPercentField();
+
+            MigLayoutHelper helper = new MigLayoutHelper(this);
+
+            add(customerLabel);
+            add(customerTextField);
+            add(discountLabel);
+            add(discountPercentField);
+
+            helper.setLayoutFillX(true);
+            helper.setLayoutWrapAfter(1);
+            helper.columnGrow(100, 1);
+            helper.columnSizeGroup("sg", 1);
+            helper.columnFill(1);
+            helper.getComponentConstraints(customerLabel).cell(0, 0);
+            helper.getComponentConstraints(customerTextField).cell(1, 0);
+            helper.getComponentConstraints(discountLabel).cell(0, 1);
+            helper.getComponentConstraints(discountPercentField).cell(1, 1);
+            invalidate();
         }
 
         @Override
         protected void initData() {
+            customerTextField.setText(customer.getDisplayName());
+            BindingGroup bindingGroup = new BindingGroup();
+            CustomerDiscount discount = getCustomerDiscount();
+            EntityProperties entityProperties = getFormSession().getCustomerDiscountEntityProperties();
+            PropertyDetails propDetails = entityProperties.getPropertyDetails("discountPercent");
+            discountPercentField.bind(bindingGroup, discount, propDetails);
+            bindingGroup.bind();
         }
 
     }
@@ -184,6 +245,16 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
     private class CustomerDiscountItemListPanel extends AbstractTablePanel {
 
         public CustomerDiscountItemListPanel() {
+        }
+
+        @Override
+        protected void initData() {
+            super.initData();
+            setVisible(Button.Classify, false);
+            setVisible(Button.Refresh, false);
+            setVisible(Button.Close, false);
+            TitledBorder border = new TitledBorder(getResourceString("itemsHolderPanel.border.title"));
+            setBorder(border);
         }
 
         @Override
