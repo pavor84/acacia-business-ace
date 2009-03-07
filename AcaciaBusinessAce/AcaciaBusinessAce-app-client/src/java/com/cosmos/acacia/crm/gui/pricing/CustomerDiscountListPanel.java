@@ -18,6 +18,7 @@ import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -30,9 +31,12 @@ import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.border.TitledBorder;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
@@ -248,6 +252,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
     private class CustomerDiscountItemListPanel extends AbstractTablePanel {
 
         private Boolean includeProduct;
+        private BindingGroup bindingGroup;
 
         public CustomerDiscountItemListPanel() {
         }
@@ -277,11 +282,32 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
                 setReadonly();
             }
             CustomerDiscountListPanel.this.addNestedFormListener(this);
+
+            EntityProperties entityProps = getFormSession().getCustomerDiscountEntityProperties();
+            bindingGroup = new BindingGroup();
+            AcaciaTable table = getDataTable();
+            List<CustomerDiscountItem> items = getFormSession().getCustomerDiscountItems(getCustomerDiscount());
+            JTableBinding tableBinding = table.bind(
+                    bindingGroup,
+                    items,
+                    entityProps,
+                    UpdateStrategy.READ);
+            tableBinding.setEditable(false);
+
+            bindingGroup.bind();
+        }
+
+        @Override
+        public boolean canNestedOperationProceed() {
+            if(getCustomerDiscount().getCustomerDiscountId() == null) {
+                performSave(false);
+            }
+            return true;
         }
 
         @Override
         public void specialAction() {
-            if(CustomerDiscountListPanel.this.canNestedOperationProceed()) {
+            if(canNestedOperationProceed()) {
                 includeProduct = true;
                 super.newAction();
             }
@@ -289,7 +315,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
 
         @Override
         public void newAction() {
-            if(CustomerDiscountListPanel.this.canNestedOperationProceed()) {
+            if(canNestedOperationProceed()) {
                 includeProduct = false;
                 super.newAction();
             }
@@ -308,7 +334,12 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             if(rowObject == null)
                 return null;
 
-            return getFormSession().saveCustomerDiscountItem((CustomerDiscountItem)rowObject);
+            CustomerDiscountItemPanel itemPanel = new CustomerDiscountItemPanel((CustomerDiscountItem)rowObject);
+            if(DialogResponse.SAVE.equals(itemPanel.showDialog(this))) {
+                return itemPanel.getSelectedValue();
+            }
+
+            return null;
         }
 
         @Override
@@ -316,7 +347,6 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             if(includeProduct == null)
                 return null;
 
-            System.out.println("newRow().includeProduct: " + includeProduct);
             CustomerDiscountItem item;
             if(includeProduct)
                 item = getFormSession().newCustomerDiscountItemByProduct(getCustomerDiscount());
