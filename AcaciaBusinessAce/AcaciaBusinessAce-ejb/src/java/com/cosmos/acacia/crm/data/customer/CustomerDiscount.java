@@ -22,6 +22,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
@@ -31,7 +32,7 @@ import javax.persistence.Table;
 @Table(name = "customer_discounts"
 //    , catalog = "acacia"
 //    , schema = "public"
-//    , uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "customer_id"})}
+    , uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "customer_id"})}
 )
 @NamedQueries({
     @NamedQuery(
@@ -65,7 +66,7 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
     @OneToOne(optional = false)
     private DataObject dataObject;
 
-    @JoinColumn(name = "organization_id", referencedColumnName = "organization_id", nullable=false)
+    @Column(name = "organization_id", nullable=false, precision=18, scale=0)
     private BigInteger organizationId;
 
     public CustomerDiscount() {
