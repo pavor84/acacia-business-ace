@@ -285,7 +285,7 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
 
     public BigDecimal getCutomerPrice() {
         BigDecimal salesPrice;
-        if ((salesPrice = getProduct().getSalePrice()) == null) {
+        if((product = getProduct()) == null || (salesPrice = product.getSalePrice()) == null) {
             return null;
         }
 
