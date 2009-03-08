@@ -94,12 +94,12 @@ public class CustomerDiscountItemByProduct extends CustomerDiscountItem implemen
     }
 
     @Override
-    public Boolean isIncludeHeirs() {
-        return null;
+    public boolean isIncludeHeirs() {
+        return false;
     }
 
     @Override
-    public void setIncludeHeirs(Boolean includeHeirs) {
+    public void setIncludeHeirs(boolean includeHeirs) {
     }
 
 }

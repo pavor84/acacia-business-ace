@@ -187,8 +187,8 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
     public abstract CustomerDiscount getCustomerDiscount();
     public abstract void setCustomerDiscount(CustomerDiscount customerDiscount);
 
-    public abstract Boolean isIncludeHeirs();
-    public abstract void setIncludeHeirs(Boolean includeHeirs);
+    public abstract boolean isIncludeHeirs();
+    public abstract void setIncludeHeirs(boolean includeHeirs);
     public abstract ProductCategory getCategory();
     public abstract void setCategory(ProductCategory category);
 
