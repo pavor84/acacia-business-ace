@@ -26,6 +26,7 @@ public class PropertyDetails
     private boolean visible = true;
     private boolean hiden = false;
     private boolean required = false;
+    private boolean percent = false;
     private Object sourceUnreadableValue;
     private String columnName;
     private int orderPosition;
@@ -84,6 +85,14 @@ public class PropertyDetails
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    public boolean isPercent() {
+        return percent;
+    }
+
+    public void setPercent(boolean percent) {
+        this.percent = percent;
     }
 
     public boolean isEditable() {
@@ -193,6 +202,7 @@ public class PropertyDetails
         sb.append(", editable=").append(editable);
         sb.append(", visible=").append(visible);
         sb.append(", hiden=").append(hiden);
+        sb.append(", percent=").append(percent);
         if(sourceUnreadableValue != null)
             sb.append(", sourceUnreadableValue=").append(sourceUnreadableValue);
         if(columnName != null)
