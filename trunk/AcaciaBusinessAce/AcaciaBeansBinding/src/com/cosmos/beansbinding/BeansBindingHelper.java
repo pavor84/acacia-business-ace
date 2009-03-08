@@ -158,7 +158,7 @@ public class BeansBindingHelper {
             pd.setHiden(property.hidden());
             pd.setPercent(property.percent());
             Class<DefaultFormatter> formatterClass = property.formatter();
-            if(!DEFAULT_FORMATTER_CLASS_NAME.equals(property.formatter().getClass().getName())) {
+            if(!DEFAULT_FORMATTER_CLASS_NAME.equals(formatterClass.getName())) {
                 try {
                     pd.setFormatter(formatterClass.newInstance());
                 } catch(Exception ex) {
