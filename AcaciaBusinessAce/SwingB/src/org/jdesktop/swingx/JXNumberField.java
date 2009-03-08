@@ -30,6 +30,7 @@ public class JXNumberField extends JFormattedTextField {
     protected Class valueClass;
     protected NumberFormat numberFormat;
     protected NumberFormatter numberFormatter;
+    protected MathContext mathContext;
     private DocumentHandler documentHandler;
 
     public JXNumberField(Number value) {
@@ -43,6 +44,8 @@ public class JXNumberField extends JFormattedTextField {
 
     protected void init() {
         setFormatterFactory(new DefaultFormatterFactory(getNumberFormatter()));
+        //setHorizontalAlignment(RIGHT);
+        setHorizontalAlignment(TRAILING);
     }
 
     public void addTextListener(TextListener listener) {
@@ -86,6 +89,7 @@ public class JXNumberField extends JFormattedTextField {
     public NumberFormat getNumberFormat() {
         if (numberFormat == null) {
             numberFormat = new DecimalFormat(getPattern(), getDecimalFormatSymbols());
+            numberFormat.setRoundingMode(getMathContext().getRoundingMode());
         }
 
         return numberFormat;
@@ -119,6 +123,18 @@ public class JXNumberField extends JFormattedTextField {
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    public MathContext getMathContext() {
+        if(mathContext == null) {
+            mathContext = MATH_CONTEXT;
+        }
+
+        return mathContext;
+    }
+
+    public void setMathContext(MathContext mathContext) {
+        this.mathContext = mathContext;
     }
 
     protected Number getNumberValue(Object value) {

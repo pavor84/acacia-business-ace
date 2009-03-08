@@ -6,6 +6,7 @@
 package org.jdesktop.swingx;
 
 import java.math.BigInteger;
+import java.text.NumberFormat;
 
 /**
  *
@@ -22,6 +23,8 @@ public class JXIntegerField extends JXNumberField {
 
     @Override
     protected void init() {
+        NumberFormat format = getNumberFormat();
+        format.setParseIntegerOnly(true);
         setValueClass(BigInteger.class);
         setPattern("#,##0");
         super.init();
