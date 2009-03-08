@@ -15,7 +15,6 @@ import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByProduct;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
