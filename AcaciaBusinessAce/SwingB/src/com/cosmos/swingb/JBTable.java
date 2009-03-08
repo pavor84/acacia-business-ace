@@ -332,7 +332,8 @@ public class JBTable
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, observableData, this);
         createColumnsBinding(tableBinding, propertyDetails, showIndexColumn);
         tableBinding.bind();
-        
+        afterBindInit(propertyDetails);
+
         //pack the index column
         if ( showIndexColumn )
             packColumn(0, 6);
@@ -348,6 +349,7 @@ public class JBTable
         return bind(bindingGroup, data, entityProperties, updateStrategy, false);
     }
 
+    //
     public JTableBinding bind(BindingGroup bindingGroup, List data,
                               EntityProperties entityProperties,
                               AutoBinding.UpdateStrategy updateStrategy, boolean showIndexColumn) {
@@ -363,6 +365,7 @@ public class JBTable
         createColumnsBinding(tableBinding, entityProperties, showIndexColumn);
         
         tableBinding.bind();
+        afterBindInit(entityProperties.getValues());
         
         //pack the index column
         if ( showIndexColumn )
@@ -373,6 +376,17 @@ public class JBTable
         return tableBinding;
     }
 
+    protected void afterBindInit(Collection<PropertyDetails> propertyDetails) {
+        for(PropertyDetails pd : propertyDetails) {
+            TableColumnExt column = getColumn(pd);
+            if(column != null && column.getCellRenderer() == null) {
+                if(pd.isPercent()) {
+                    TableCellRenderer cellRenderer = getBeanResourceCellRenderer(pd);
+                    column.setCellRenderer(cellRenderer);
+                }
+            }
+        }
+    }
 
     protected void createColumnsBinding(
             JTableBinding tableBinding,
@@ -506,36 +520,14 @@ public class JBTable
 
         comboBox.bind(bindingGroup, comboBoxValues, this, propertyDetails);
         ComboBoxCellEditor comboBoxCellEditor = new ComboBoxCellEditor(comboBox);
-        TableColumnExt column;
-        String propertyName = propertyDetails.getPropertyName();
-        try
-        {
-            column = getColumnExt(propertyName);
-        }
-        catch(Exception ex)
-        {
-            column = null;
-        }
+        TableColumnExt column = getColumn(propertyDetails);
 
         if(column == null)
-        {
-            EntityProperties entityProps = getEntityProperties();
-            if(entityProps == null)
-                throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
-            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
-            if(pd != null)
-            {
-                String columnName = pd.getPropertyTitle();
-                column = getColumnExt(columnName);
-            }
-        }
-
-        if(column == null)
-            throw new IllegalArgumentException("Can not find table column for property name: " + propertyName);
+            throw new IllegalArgumentException("Can not find table column for property name: " + propertyDetails.getPropertyName());
 
         column.setCellEditor(comboBoxCellEditor);
         if(column.getCellRenderer() == null)
-            column.setCellRenderer(getBeanResourceCellRenderer());
+            column.setCellRenderer(getBeanResourceCellRenderer(propertyDetails));
     }
 
   /*      AcaciaComboBox categoryComboBox = new AcaciaComboBox();
@@ -566,39 +558,40 @@ public class JBTable
             propertyDetails,
             converter);
 
-        TableColumnExt column;
-        String propertyName = propertyDetails.getPropertyName();
-        try
-        {
-            column = getColumnExt(propertyName);
-        }
-        catch(Exception ex)
-        {
-            column = null;
-        }
-        if(column == null)
-        {
-            EntityProperties entityProps = getEntityProperties();
-            if(entityProps == null)
-                throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
-            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
-            if(pd != null)
-            {
-                String columnName = pd.getPropertyTitle();
-                column = getColumnExt(columnName);
-            }
-        }
+        TableColumnExt column = getColumn(propertyDetails);
 
         if(column == null)
-            throw new IllegalArgumentException("Can not find table column for property name: " + propertyName);
+            throw new IllegalArgumentException("Can not find table column for property name: " + propertyDetails.getPropertyName());
 
         ComboListCellEditor cellEditor = new ComboListCellEditor(comboList);
         column.setCellEditor(cellEditor);
 
         if(app != null && column.getCellRenderer() == null)
-            column.setCellRenderer(getBeanResourceCellRenderer());
+            column.setCellRenderer(getBeanResourceCellRenderer(propertyDetails));
     }
 
+    protected TableColumnExt getColumn(PropertyDetails propertyDetails) {
+        TableColumnExt column;
+        String propertyName = propertyDetails.getPropertyName();
+        try {
+            column = getColumnExt(propertyName);
+        } catch(Exception ex) {
+            column = null;
+        }
+
+        if(column == null) {
+            EntityProperties entityProps = getEntityProperties();
+            if(entityProps == null)
+                throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
+            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
+            if(pd != null) {
+                String columnName = pd.getPropertyTitle();
+                column = getColumnExt(columnName);
+            }
+        }
+
+        return column;
+    }
 
     /**
      * Changes the default cell editor to a DatePicker and binds it
@@ -625,25 +618,7 @@ public class JBTable
 
         // TODO: set Formatting of not-edited date
 
-
-        TableColumnExt column;
-        try
-        {
-            column = getColumnExt(propertyDetails.getPropertyName());
-        }
-        catch(Exception ex)
-        {
-            column = null;
-        }
-
-        if(column == null)
-        {
-            if(propertyDetails != null)
-            {
-                String columnName = propertyDetails.getPropertyTitle();
-                column = getColumnExt(columnName);
-            }
-        }
+        TableColumnExt column = getColumn(propertyDetails);
 
         if(column == null)
             throw new IllegalArgumentException("Can not find table column for property name: " + propertyDetails.getPropertyName());
@@ -651,7 +626,7 @@ public class JBTable
         column.setCellEditor(datePickerCellEditor);
 
         if(app != null && column.getCellRenderer() == null)
-            column.setCellRenderer(getBeanResourceCellRenderer());
+            column.setCellRenderer(getBeanResourceCellRenderer(propertyDetails));
     }
 
     public ApplicationContext getContext()
@@ -716,17 +691,17 @@ public class JBTable
 
         if(columnClass != null && "com.cosmos.acacia.crm.data.DbResource".equals(columnClass.getName()))
         {
-            return getBeanResourceCellRenderer();
+            return getBeanResourceCellRenderer(null);
         }
 
         return super.getDefaultRenderer(columnClass);
     }
 
-    protected TableCellRenderer getBeanResourceCellRenderer()
+    protected TableCellRenderer getBeanResourceCellRenderer(PropertyDetails propertyDetails)
     {
         if(beanResourceCellRenderer == null)
         {
-            beanResourceCellRenderer = new BeanTableCellRenderer(getApplication());
+            beanResourceCellRenderer = new BeanTableCellRenderer(propertyDetails, getApplication());
         }
 
         return beanResourceCellRenderer;
