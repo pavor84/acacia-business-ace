@@ -11,6 +11,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.swing.text.DefaultFormatter;
 
 /**
  *
@@ -27,6 +28,12 @@ public @interface Property
     boolean editable() default true;
     boolean visible() default true;
     boolean percent() default false;
+
+    /**
+     * MaskFormatter, DateFormatter, NumberFormatter (Decimal, Integer, Percent)
+     */
+    Class<DefaultFormatter> formatter() default DefaultFormatter.class;
+    String formatPattern() default NULL;
 
     /**
      * hidden means is existing as ColumnBinding. If true, then that property
