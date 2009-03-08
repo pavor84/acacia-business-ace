@@ -53,7 +53,7 @@ public class CustomerDiscountItemByCategory extends CustomerDiscountItem impleme
     @Property(title="Include Heirs")
     @Basic(optional = false)
     @Column(name = "include_heirs", nullable = false)
-    private Boolean includeHeirs = Boolean.FALSE;
+    private boolean includeHeirs;
 
     @JoinColumn(name = "customer_discount_id", referencedColumnName = "customer_discount_id", nullable = false)
     @ManyToOne(optional = false)
@@ -72,12 +72,12 @@ public class CustomerDiscountItemByCategory extends CustomerDiscountItem impleme
     }
 
     @Override
-    public Boolean isIncludeHeirs() {
+    public boolean isIncludeHeirs() {
         return includeHeirs;
     }
 
     @Override
-    public void setIncludeHeirs(Boolean includeHeirs) {
+    public void setIncludeHeirs(boolean includeHeirs) {
         this.includeHeirs = includeHeirs;
     }
 
