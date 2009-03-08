@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.validation.impl;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 
 /**
@@ -12,6 +12,6 @@ import com.cosmos.acacia.crm.validation.EntityValidator;
  *
  */
 @Local
-public interface CustomerDiscountItemValidatorLocal extends EntityValidator<CustomerDiscountItem> {
+public interface CustomerDiscountItemValidatorLocal extends EntityValidator<CustomerDiscountItemOld> {
 
 }

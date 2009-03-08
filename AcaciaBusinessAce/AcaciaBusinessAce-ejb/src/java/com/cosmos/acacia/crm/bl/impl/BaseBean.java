@@ -16,6 +16,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.Arrays;
 
 /**
  * 
@@ -186,11 +187,13 @@ public abstract class BaseBean<T extends DataObjectBean, I extends DataObjectBea
      * every even object is parameter value).
      * @return - null if not found
      */
-    protected Object getSingleResult(String queryName, Object ... parameters) {
-        try{
+    protected Object getSingleResult(String queryName, Object... parameters) {
+        System.out.println("queryName: " + queryName);
+        System.out.println("parameters: " + Arrays.asList(parameters));
+        try {
             Query q = getQuery(queryName, parameters);
             return q.getSingleResult();
-        }catch ( NoResultException e ){
+        } catch (NoResultException e) {
             return null;
         }
     }
@@ -209,6 +212,7 @@ public abstract class BaseBean<T extends DataObjectBean, I extends DataObjectBea
 
     protected Query getQuery(String queryName, Object[] parameters) {
         Query q = em.createNamedQuery(queryName);
+        System.out.println("q.toString(): " + ((org.hibernate.ejb.QueryImpl)q).getHibernateQuery().getQueryString());
         if ( parameters!=null ){
             boolean odd = true;
             Object parName = null;

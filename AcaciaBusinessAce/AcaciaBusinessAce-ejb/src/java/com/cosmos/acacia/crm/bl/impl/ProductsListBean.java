@@ -26,12 +26,12 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListLocal;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountLocal;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldLocal;
 import com.cosmos.acacia.crm.bl.pricing.PricelistLocal;
 import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
 import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.CustomerDiscount;
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
+import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Pricelist;
@@ -68,7 +68,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     @EJB
     private PricelistLocal pricelistLocal;
     @EJB
-    private CustomerDiscountLocal customerDiscountLocal;
+    private CustomerDiscountOldLocal customerDiscountLocal;
     @EJB
     private InvoiceListLocal invoiceListLocal;
     @EJB
@@ -306,8 +306,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
             quantity = new BigDecimal("1");
         
         //Find out the customer discount
-        CustomerDiscount customerDiscount = customerDiscountLocal.getCustomerDiscountForCustomer(customer);
-        CustomerDiscountItem customerDiscountItem = null;
+        CustomerDiscountOld customerDiscount = customerDiscountLocal.getCustomerDiscountForCustomer(customer);
+        CustomerDiscountItemOld customerDiscountItem = null;
         if ( customerDiscount!=null ){
             customerDiscountItem = customerDiscountLocal.getCustomerDiscountItem(customerDiscount, product);
         }
