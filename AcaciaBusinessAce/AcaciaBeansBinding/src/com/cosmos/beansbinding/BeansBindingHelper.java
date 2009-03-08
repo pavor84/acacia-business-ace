@@ -153,6 +153,7 @@ public class BeansBindingHelper {
             pd.setEditable(property.editable());
             pd.setVisible(property.visible());
             pd.setHiden(property.hidden());
+            pd.setPercent(property.percent());
             pd.setResourceDisplayInTable(property.resourceDisplayInTable());
             pd.setExportable(property.exportable());
             pd.setReportColumnWidth(property.reportColumnWidth());
