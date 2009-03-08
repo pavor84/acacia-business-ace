@@ -112,16 +112,16 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
     @Column(name = "customer_discount_item_id", nullable = false)
     protected BigInteger customerDiscountItemId;
 
-    @Property(title="Discount %")
+    @Property(title="Discount %", percent=true)
     @Basic(optional = false)
     @Column(name = "discount_percent", nullable = false, precision = 7, scale = 6)
     private BigDecimal discountPercent;
 
-    @Property(title="Product")
+    @Property(title="Product", customDisplay="${product.productName}")
     @Transient
     private Product product;
 
-    @Property(title="Category")
+    @Property(title="Category", customDisplay="${category.categoryName}")
     @Transient
     private ProductCategory category;
 
