@@ -786,14 +786,12 @@ public class ProductPanelNew extends BaseEntityPanel {
     }
 
     private void setProductCodeMaskFormat() {
-        System.out.println("setProductCodeMaskFormat()");
         PatternMaskFormat patternMaskFormat = null;
         if((patternMaskFormat = product.getPatternMaskFormat()) == null) {
             ProductCategory productCategory;
             if((productCategory = product.getCategory()) != null)
                 patternMaskFormat = productCategory.getPatternMaskFormat();
         }
-        System.out.println("patternMaskFormat: " + patternMaskFormat);
 
         String maskFormat;
         if(patternMaskFormat != null)
@@ -801,7 +799,6 @@ public class ProductPanelNew extends BaseEntityPanel {
         else
             maskFormat = null;
 
-        System.out.println("maskFormat: " + maskFormat);
         try {
             productCodeTextField.setMask(maskFormat);
         } catch(Exception ex) {
@@ -1172,7 +1169,6 @@ public class ProductPanelNew extends BaseEntityPanel {
             Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails);
             binding.addBindingListener(listPriceBindingListener);
 
-            System.out.println("Miro 1");
             propDetails = entityProps.getPropertyDetails("currency");
             binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
             binding.addBindingListener(new AbstractBindingListener() {
@@ -1267,7 +1263,7 @@ public class ProductPanelNew extends BaseEntityPanel {
 
         @Override
         public void targetChanged(Binding binding, PropertyStateEvent event) {
-            System.out.println("event: " + event);
+            System.out.println("targetChanged(" + event + ")");
         }
     }
 }
