@@ -9,8 +9,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Map;
 
-import com.cosmos.acacia.crm.data.CustomerDiscount;
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.CustomerDiscountOld;
+import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.data.PricelistItem;
 import com.cosmos.acacia.crm.data.SimpleProduct;
@@ -32,7 +32,7 @@ import com.cosmos.acacia.crm.data.SimpleProduct;
  */
 public class ProductPriceSummary extends ProductPrice {
 
-    public ProductPriceSummary(SimpleProduct product, CustomerDiscount customerDiscount, CustomerDiscountItem customerDiscountItem,
+    public ProductPriceSummary(SimpleProduct product, CustomerDiscountOld customerDiscount, CustomerDiscountItemOld customerDiscountItem,
             Map<PricelistItem, Pricelist> items, BigDecimal quantity) {
         setProduct(product);
         setQuantity(quantity);
@@ -53,8 +53,8 @@ public class ProductPriceSummary extends ProductPrice {
         return result;
     }
 
-    private CustomerDiscountItem customerDiscountItem;
-    private CustomerDiscount customerDiscount;
+    private CustomerDiscountItemOld customerDiscountItem;
+    private CustomerDiscountOld customerDiscount;
     private BigDecimal customerDiscountPercent;
     private BigDecimal discountPercent;
     private BigDecimal pricelistDiscountPercent;
@@ -171,19 +171,19 @@ public class ProductPriceSummary extends ProductPrice {
         return toMediumString(DecimalFormat.getNumberInstance());
     }
 
-    public CustomerDiscount getCustomerDiscount() {
+    public CustomerDiscountOld getCustomerDiscount() {
         return customerDiscount;
     }
 
-    public void setCustomerDiscount(CustomerDiscount customerDiscount) {
+    public void setCustomerDiscount(CustomerDiscountOld customerDiscount) {
         this.customerDiscount = customerDiscount;
     }
 
-    public CustomerDiscountItem getCustomerDiscountItem() {
+    public CustomerDiscountItemOld getCustomerDiscountItem() {
         return customerDiscountItem;
     }
 
-    public void setCustomerDiscountItem(CustomerDiscountItem customerDiscountItem) {
+    public void setCustomerDiscountItem(CustomerDiscountItemOld customerDiscountItem) {
         this.customerDiscountItem = customerDiscountItem;
     }
 

@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.crm.data.CustomerDiscountItem;
+import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationUtil;
 
@@ -20,7 +20,7 @@ public class CustomerDiscountItemValidatorBean implements CustomerDiscountItemVa
     @PersistenceContext  
     private EntityManager em;
 
-    public void validate(CustomerDiscountItem entity) throws ValidationException {
+    public void validate(CustomerDiscountItemOld entity) throws ValidationException {
         ValidationException ve = new ValidationException();
         
         if ( entity.getProduct()!=null ){

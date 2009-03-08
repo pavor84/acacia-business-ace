@@ -68,7 +68,7 @@ public class AssemblingBean
     private AssemblingSchemaItemValidatorLocal assemblingSchemaItemValidator;
     
     @EJB
-    private AcaciaSessionLocal acaciaSessionLocal;
+    private AcaciaSessionLocal acaciaSession;
 
 
     /*@Override
@@ -157,7 +157,7 @@ public class AssemblingBean
             q = em.createNamedQuery("AssemblingCategory.findByParentCategoryIsNull");
         }
         q.setParameter("deleted", false);
-        Organization organization = acaciaSessionLocal.getOrganization();
+        Organization organization = acaciaSession.getOrganization();
         q.setParameter("parentId", organization.getId());
         List<AssemblingCategory> result = new ArrayList<AssemblingCategory>(q.getResultList());
 
@@ -188,7 +188,7 @@ public class AssemblingBean
             q = em.createNamedQuery("AssemblingCategory.findChildCountByParentCategoryIsNull");
         }
         q.setParameter("deleted", false);
-        Organization organization = acaciaSessionLocal.getOrganization();
+        Organization organization = acaciaSession.getOrganization();
         q.setParameter("parentId", organization.getId());
         Long count = (Long)q.getSingleResult();
         return count.intValue();
@@ -204,7 +204,7 @@ public class AssemblingBean
     public AssemblingSchema newAssemblingSchema(AssemblingCategory assemblingCategory)
     {
         AssemblingSchema assemblingSchema = new AssemblingSchema();
-        assemblingSchema.setParentId(acaciaSessionLocal.getOrganization().getId());
+        assemblingSchema.setParentId(acaciaSession.getOrganization().getId());
         if(assemblingCategory != null)
             assemblingSchema.setAssemblingCategory(assemblingCategory);
         assemblingSchema.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
@@ -236,7 +236,7 @@ public class AssemblingBean
     {
         AssemblingCategory newObject = new AssemblingCategory();
         newObject.setParentCategory(parentCategory);
-        newObject.setParentId(acaciaSessionLocal.getOrganization().getId());
+        newObject.setParentId(acaciaSession.getOrganization().getId());
 
         return newObject;
     }
@@ -245,7 +245,7 @@ public class AssemblingBean
     public AssemblingMessage newAssemblingMessage()
     {
         AssemblingMessage newObject = new AssemblingMessage();
-        newObject.setOrganization(acaciaSessionLocal.getOrganization());
+        newObject.setOrganization(acaciaSession.getOrganization());
 
         return newObject;
     }
@@ -423,7 +423,7 @@ public class AssemblingBean
                 q = em.createNamedQuery("AssemblingSchema.findByParentIdAndApplicable");
             else
                 q = em.createNamedQuery("AssemblingSchema.findByParentId");
-            q.setParameter("parentId", acaciaSessionLocal.getOrganization().getId());
+            q.setParameter("parentId", acaciaSession.getOrganization().getId());
         }
         q.setParameter("deleted", false);
         return new ArrayList<AssemblingSchema>(q.getResultList());
@@ -458,7 +458,7 @@ public class AssemblingBean
     public List<VirtualProduct> getVirtualProducts()
     {
         logger.info("AssemblingBean.getVirtualProducts()");
-        Organization organization = acaciaSessionLocal.getOrganization();
+        Organization organization = acaciaSession.getOrganization();
         BigInteger parentId;
         if(organization == null || (parentId = organization.getId()) == null)
             return Collections.emptyList();
@@ -481,7 +481,7 @@ public class AssemblingBean
             for(SimpleProduct sp : newSP)
             {
                 RealProduct realProduct = new RealProduct(sp);
-                realProduct.setParentId(acaciaSessionLocal.getOrganization().getId());
+                realProduct.setParentId(acaciaSession.getOrganization().getId());
                 esm.persist(em, realProduct);
             }
         }
@@ -501,7 +501,7 @@ public class AssemblingBean
     @Override
     public List<AssemblingMessage> getAssemblingMessages()
     {
-        Organization organization = acaciaSessionLocal.getOrganization();
+        Organization organization = acaciaSession.getOrganization();
         logger.info("getAssemblingMessages().organization: " + organization);
         if(organization == null || organization.getId() == null)
             return Collections.emptyList();
@@ -526,7 +526,7 @@ public class AssemblingBean
         catch(NoResultException ex)
         {
             RealProduct realProduct = new RealProduct(simpleProduct);
-            realProduct.setParentId(acaciaSessionLocal.getOrganization().getId());
+            realProduct.setParentId(acaciaSession.getOrganization().getId());
             esm.persist(em, realProduct);
             return realProduct;
         }
