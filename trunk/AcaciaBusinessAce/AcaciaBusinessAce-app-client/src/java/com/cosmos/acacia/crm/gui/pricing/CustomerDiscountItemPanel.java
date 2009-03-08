@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByProduct;
+import com.cosmos.acacia.crm.gui.ProductCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -185,9 +186,17 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
             });
         } else {
             CustomerDiscountItemByCategory itemByCategory = (CustomerDiscountItemByCategory)item;
-//            categoryComboList
-//            categoryDiscountPercentField
-//            includeHeirsCheckBox
+            EntityProperties entityProps = getFormSession().getCustomerDiscountItemByCategoryEntityProperties();
+
+            PropertyDetails propDetails = entityProps.getPropertyDetails("category");
+            ProductCategoriesTreePanel categoriesPanel = new ProductCategoriesTreePanel(getOrganizationDataObjectId());
+            categoryComboList.bind(bg, categoriesPanel, itemByCategory, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("discountPercent");
+            categoryDiscountPercentField.bind(bg, itemByCategory, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("includeHeirs");
+            includeHeirsCheckBox.bind(bg, itemByCategory, propDetails);
         }
         bg.bind();
     }
@@ -201,7 +210,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
 
         BigDecimal itemDiscountPercent;
         String defaultDiscountString;
-        if ((itemDiscountPercent = itemByProduct.getDiscountPercent()) != null) {
+        if ((itemDiscountPercent = itemByProduct.getCustomerDiscount().getDiscountPercent()) != null) {
             defaultDiscountString = productDiscountPercentField.getNumberFormat().format(itemDiscountPercent);
         } else {
             defaultDiscountString = "0";

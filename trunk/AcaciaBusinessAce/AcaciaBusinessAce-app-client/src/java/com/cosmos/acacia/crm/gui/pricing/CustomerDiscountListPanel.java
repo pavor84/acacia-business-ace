@@ -283,7 +283,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             }
             CustomerDiscountListPanel.this.addNestedFormListener(this);
 
-            EntityProperties entityProps = getFormSession().getCustomerDiscountEntityProperties();
+            EntityProperties entityProps = getFormSession().getCustomerDiscountItemEntityProperties();
             bindingGroup = new BindingGroup();
             AcaciaTable table = getDataTable();
             List<CustomerDiscountItem> items = getFormSession().getCustomerDiscountItems(getCustomerDiscount());
