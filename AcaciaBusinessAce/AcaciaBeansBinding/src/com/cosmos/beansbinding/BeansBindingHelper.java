@@ -38,6 +38,7 @@ import com.cosmos.beansbinding.validation.NumericValidator;
 import com.cosmos.beansbinding.validation.RegexValidator;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
 import com.cosmos.util.ClassHelper;
+import javax.swing.text.DefaultFormatter;
 
 
 /**
@@ -45,6 +46,8 @@ import com.cosmos.util.ClassHelper;
  * @author miro
  */
 public class BeansBindingHelper {
+
+    public static final String DEFAULT_FORMATTER_CLASS_NAME = DefaultFormatter.class.getName();
 
     protected static Logger log = Logger.getLogger(BeansBindingHelper.class);
 
@@ -154,6 +157,18 @@ public class BeansBindingHelper {
             pd.setVisible(property.visible());
             pd.setHiden(property.hidden());
             pd.setPercent(property.percent());
+            Class<DefaultFormatter> formatterClass = property.formatter();
+            if(!DEFAULT_FORMATTER_CLASS_NAME.equals(property.formatter().getClass().getName())) {
+                try {
+                    pd.setFormatter(formatterClass.newInstance());
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            String value;
+            if((value = property.formatPattern()) != Property.NULL) {
+                pd.setFormatPattern(value);
+            }
             pd.setResourceDisplayInTable(property.resourceDisplayInTable());
             pd.setExportable(property.exportable());
             pd.setReportColumnWidth(property.reportColumnWidth());
@@ -267,7 +282,7 @@ public class BeansBindingHelper {
                 pd.setValidator(validator);
             }
 
-            Object value = property.sourceUnreadableValue();
+            value = property.sourceUnreadableValue();
             if(!Property.NULL.equals(value))
                 pd.setSourceUnreadableValue(value);
 
