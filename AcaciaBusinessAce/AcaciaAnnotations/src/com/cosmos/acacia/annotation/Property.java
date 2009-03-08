@@ -26,6 +26,7 @@ public @interface Property
     boolean readOnly() default false;
     boolean editable() default true;
     boolean visible() default true;
+    boolean percent() default false;
 
     /**
      * hidden means is existing as ColumnBinding. If true, then that property
