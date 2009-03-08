@@ -7,6 +7,7 @@ package com.cosmos.beansbinding;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
+import javax.swing.text.DefaultFormatter;
 import org.jdesktop.beansbinding.Validator;
 
 /**
@@ -27,6 +28,8 @@ public class PropertyDetails
     private boolean hiden = false;
     private boolean required = false;
     private boolean percent = false;
+    private DefaultFormatter formatter;
+    private String formatPattern;
     private Object sourceUnreadableValue;
     private String columnName;
     private int orderPosition;
@@ -93,6 +96,22 @@ public class PropertyDetails
 
     public void setPercent(boolean percent) {
         this.percent = percent;
+    }
+
+    public DefaultFormatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(DefaultFormatter formatter) {
+        this.formatter = formatter;
+    }
+
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public void setFormatPattern(String formatPattern) {
+        this.formatPattern = formatPattern;
     }
 
     public boolean isEditable() {
