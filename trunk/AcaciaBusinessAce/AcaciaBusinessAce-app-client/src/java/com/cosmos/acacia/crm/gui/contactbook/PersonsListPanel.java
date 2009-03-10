@@ -17,12 +17,10 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.CustomerDiscountOld;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountOldForm;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
@@ -36,8 +34,6 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class PersonsListPanel extends AbstractTablePanel {
     
-    private CustomerDiscountOldRemote customerDiscountRemote = getBean(CustomerDiscountOldRemote.class);
-
     /** Creates new form PersonsListPanel */
     public PersonsListPanel(BigInteger parentDataObjectId)
     {
@@ -68,10 +64,10 @@ public class PersonsListPanel extends AbstractTablePanel {
 
     protected void onDiscount() {
         BusinessPartner selected = (BusinessPartner) getDataTable().getSelectedRowObject();
-        if ( selected==null )
+        if (selected == null) {
             return;
-        CustomerDiscountOld customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(selected);
-        CustomerDiscountOldForm customerDiscountForm = new CustomerDiscountOldForm(customerDiscount);
+        }
+        CustomerDiscountListPanel customerDiscountForm = new CustomerDiscountListPanel(selected);
         customerDiscountForm.showFrame(this);
     }
     

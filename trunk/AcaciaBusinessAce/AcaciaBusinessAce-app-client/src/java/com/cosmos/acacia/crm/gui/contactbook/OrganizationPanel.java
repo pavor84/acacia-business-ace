@@ -20,12 +20,11 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.CustomerDiscountOld;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountOldForm;
+import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -45,7 +44,7 @@ public class OrganizationPanel extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(OrganizationPanel.class);
     
-    private CustomerDiscountOldRemote customerDiscountRemote = getBean(CustomerDiscountOldRemote.class);
+    private static CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
 
     /** Creates new form organizationPanel */
     public OrganizationPanel(Organization organization) {
@@ -89,9 +88,8 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     protected void onDiscount() {
-        if ( organization.getId()!=null ){
-            CustomerDiscountOld customerDiscount = customerDiscountRemote.getCustomerDiscountForCustomer(organization);
-            CustomerDiscountOldForm customerDiscountForm = new CustomerDiscountOldForm(customerDiscount);
+        if (organization.getId() != null) {
+            CustomerDiscountListPanel customerDiscountForm = new CustomerDiscountListPanel(organization);
             customerDiscountForm.showDialog(this);
         }
     }
