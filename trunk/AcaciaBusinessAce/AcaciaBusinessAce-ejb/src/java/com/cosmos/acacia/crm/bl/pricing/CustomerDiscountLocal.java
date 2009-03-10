@@ -12,6 +12,6 @@ import javax.ejb.Local;
  * @author Miro
  */
 @Local
-public interface CustomerDiscountLocal {
+public interface CustomerDiscountLocal extends CustomerDiscountRemote {
     
 }

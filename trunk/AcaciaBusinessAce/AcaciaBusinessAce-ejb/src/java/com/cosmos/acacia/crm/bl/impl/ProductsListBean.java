@@ -26,12 +26,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListLocal;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldLocal;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountLocal;
 import com.cosmos.acacia.crm.bl.pricing.PricelistLocal;
 import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
 import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.CustomerDiscountOld;
-import com.cosmos.acacia.crm.data.CustomerDiscountItemOld;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Pricelist;
@@ -40,6 +38,8 @@ import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.ProductSupplierPK;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscount;
+import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.enums.ProductColor;
@@ -68,7 +68,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     @EJB
     private PricelistLocal pricelistLocal;
     @EJB
-    private CustomerDiscountOldLocal customerDiscountLocal;
+    private CustomerDiscountLocal customerDiscountLocal;
     @EJB
     private InvoiceListLocal invoiceListLocal;
     @EJB
@@ -306,8 +306,8 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
             quantity = new BigDecimal("1");
         
         //Find out the customer discount
-        CustomerDiscountOld customerDiscount = customerDiscountLocal.getCustomerDiscountForCustomer(customer);
-        CustomerDiscountItemOld customerDiscountItem = null;
+        CustomerDiscount customerDiscount = customerDiscountLocal.getCustomerDiscount(customer);
+        CustomerDiscountItem customerDiscountItem = null;
         if ( customerDiscount!=null ){
             customerDiscountItem = customerDiscountLocal.getCustomerDiscountItem(customerDiscount, product);
         }
