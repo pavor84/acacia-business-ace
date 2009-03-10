@@ -5,7 +5,7 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
-import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountOldRemote;
+import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
 import com.cosmos.acacia.crm.data.Classifier;
@@ -49,7 +49,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     @EJB
     private static BusinessPartnersListRemote formSession;
     @EJB
-    private static CustomerDiscountOldRemote customerDiscountManager;
+    private static CustomerDiscountRemote customerDiscountManager;
     private BindingGroup bindingGroup;
     private JBPanel topPanel;
     private AcaciaComboList comboList;
@@ -293,9 +293,9 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    public static CustomerDiscountOldRemote getCustomerDiscountManager() {
+    public static CustomerDiscountRemote getCustomerDiscountManager() {
         if (customerDiscountManager == null) {
-            customerDiscountManager = getBean(CustomerDiscountOldRemote.class);
+            customerDiscountManager = getBean(CustomerDiscountRemote.class);
         }
 
         return customerDiscountManager;
