@@ -12,7 +12,5 @@ import javax.ejb.Local;
  * @author miro
  */
 @Local
-public interface ProductsListLocal
-    extends ProductsListRemote
-{
+public interface ProductsListLocal extends ProductsListRemote {
 }
