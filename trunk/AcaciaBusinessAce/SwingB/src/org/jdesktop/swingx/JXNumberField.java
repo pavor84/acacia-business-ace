@@ -24,7 +24,7 @@ public class JXNumberField extends JFormattedTextField {
     public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL64;
     public static final String WRONG_NUMBER_FORMAT = "The value MUST be Number instace.";
-    public static final String DEFAULT_PATTERN = "#,##0.0#";
+    public static final String DEFAULT_PATTERN = "#,##0.0#;-#,##0.0#";
     protected String pattern;
     protected DecimalFormatSymbols decimalFormatSymbols;
     protected Class valueClass;

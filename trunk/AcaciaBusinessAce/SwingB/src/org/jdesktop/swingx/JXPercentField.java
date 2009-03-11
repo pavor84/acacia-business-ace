@@ -23,7 +23,6 @@ public class JXPercentField extends JXNumberField {
 
     @Override
     protected void init() {
-        setPattern("#,##0.0####");
         DecimalFormat format = (DecimalFormat)getNumberFormat();
         format.setMultiplier(100);
         super.init();
