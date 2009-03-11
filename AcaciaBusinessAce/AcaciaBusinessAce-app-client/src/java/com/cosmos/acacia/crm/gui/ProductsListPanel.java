@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.gui.product.ProductPanel;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +113,7 @@ public class ProductsListPanel
         if(rowObject != null)
         {
             //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
-            ProductPanelNew productPanel = new ProductPanelNew((SimpleProduct)rowObject);
+            ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
             DialogResponse response = productPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
@@ -128,7 +129,7 @@ public class ProductsListPanel
         if(rowObject != null)
         {
             //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
-            ProductPanelNew productPanel = new ProductPanelNew((SimpleProduct)rowObject);
+            ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
             DialogResponse response = productPanel.showDialog(this);
         }
     }
@@ -137,7 +138,7 @@ public class ProductsListPanel
     protected Object newRow()
     {
         //ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
-        ProductPanelNew productPanel = new ProductPanelNew(getParentDataObjectId());
+        ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
         DialogResponse response = productPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
