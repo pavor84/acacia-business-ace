@@ -73,8 +73,9 @@ public class ProductPricingValue extends DataObjectBean implements Serializable{
     @Property(title="Value Name", propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.LENGTH, minLength=2, maxLength=50))
     private String name;
 
-    @Property(title="Percent Value", propertyValidator=@PropertyValidator(required=true,
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
+    @Property(title="Percent Value", percent=true,
+        propertyValidator=@PropertyValidator(required=true,
+            validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
     @Column(name = "value", precision=20, scale=4)
     private BigDecimal value;
     

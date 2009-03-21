@@ -83,13 +83,29 @@ public class ProductCategory
     @Property(title="Description")
     private String description;
     
-    @Property(title="Discount %", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "discount_percent", precision=20, scale=4)
+    @Property(title="Discount %", percent=true)
+    @Column(name = "discount_percent", precision=8, scale=6)
     private BigDecimal discountPercent;
     
-    @Property(title="Profit %", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000d))
-    @Column(name = "profit_percent", precision=20, scale=4)
+    @Property(title="Profit %", percent=true)
+    @Column(name = "profit_percent", precision=8, scale=6)
     private BigDecimal profitPercent;
+
+    @Property(title="Customs duty %", percent=true)
+    @Column(name = "customs_duty", precision=8, scale=6)
+    private BigDecimal customsDuty;
+
+    @Property(title="Excise duty %", percent=true)
+    @Column(name = "excise_duty", precision=8, scale=6)
+    private BigDecimal exciseDuty;
+
+    @Property(title="Transport %", percent=true)
+    @Column(name = "transport_percent", precision=8, scale=6)
+    private BigDecimal transportPercent;
+
+    @Property(title="Transport value")
+    @Column(name = "transport_value", precision=19, scale=4)
+    private BigDecimal transportValue;
 
     /*@JoinColumn(name = "product_category_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -134,10 +150,12 @@ public class ProductCategory
         this.productCategoryId = productCategoryId;
     }
 
+    @Override
     public BigInteger getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
@@ -147,7 +165,7 @@ public class ProductCategory
     }
 
     public void setCategoryName(String categoryName) {
-        //firePropertyChange("categoryName", this.categoryName, categoryName);
+        firePropertyChange("categoryName", this.categoryName, categoryName);
         this.categoryName = categoryName;
     }
 
@@ -156,14 +174,16 @@ public class ProductCategory
     }
 
     public void setDescription(String description) {
-        //firePropertyChange("description", this.description, description);
+        firePropertyChange("description", this.description, description);
         this.description = description;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -173,7 +193,7 @@ public class ProductCategory
     }
 
     public void setPatternMaskFormat(PatternMaskFormat patternMaskFormat) {
-        //firePropertyChange("patternMaskFormat", this.patternMaskFormat, patternMaskFormat);
+        firePropertyChange("patternMaskFormat", this.patternMaskFormat, patternMaskFormat);
         this.patternMaskFormat = patternMaskFormat;
     }
 
@@ -212,10 +232,12 @@ public class ProductCategory
         setProductCategoryId(id);
     }
 
+    @Override
     public String toShortText() {
         return null;
     }
 
+    @Override
     public String toText() {
         return getCategoryName();
     }
@@ -246,6 +268,7 @@ public class ProductCategory
     }
 
     public void setDiscountPercent(BigDecimal discountPercent) {
+        firePropertyChange("discountPercent", this.discountPercent, discountPercent);
         this.discountPercent = discountPercent;
     }
 
@@ -254,7 +277,43 @@ public class ProductCategory
     }
 
     public void setProfitPercent(BigDecimal profitPercent) {
+        firePropertyChange("profitPercent", this.profitPercent, profitPercent);
         this.profitPercent = profitPercent;
     }
 
+    public BigDecimal getCustomsDuty() {
+        return customsDuty;
+    }
+
+    public void setCustomsDuty(BigDecimal customsDuty) {
+        firePropertyChange("customsDuty", this.customsDuty, customsDuty);
+        this.customsDuty = customsDuty;
+    }
+
+    public BigDecimal getExciseDuty() {
+        return exciseDuty;
+    }
+
+    public void setExciseDuty(BigDecimal exciseDuty) {
+        firePropertyChange("exciseDuty", this.exciseDuty, exciseDuty);
+        this.exciseDuty = exciseDuty;
+    }
+
+    public BigDecimal getTransportPercent() {
+        return transportPercent;
+    }
+
+    public void setTransportPercent(BigDecimal transportPercent) {
+        firePropertyChange("transportPercent", this.transportPercent, transportPercent);
+        this.transportPercent = transportPercent;
+    }
+
+    public BigDecimal getTransportValue() {
+        return transportValue;
+    }
+
+    public void setTransportValue(BigDecimal transportValue) {
+        firePropertyChange("transportValue", this.transportValue, transportValue);
+        this.transportValue = transportValue;
+    }
 }
