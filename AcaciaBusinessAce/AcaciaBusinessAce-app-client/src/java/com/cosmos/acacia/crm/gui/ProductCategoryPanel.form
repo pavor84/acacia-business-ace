@@ -94,7 +94,7 @@
                           <Component id="patternMaskFormatComboList" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="descriptionPanel" pref="162" max="32767" attributes="0"/>
+                      <Component id="descriptionPanel" pref="217" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -174,90 +174,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="com.cosmos.swingb.JBPanel" name="categoryPricingPanel">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="categoryPricingPanel" noResource="true"/>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Category Pricing">
-                <Property name="tabTitle" type="java.lang.String" resourceKey="categoryPricingPanel.TabConstraints.tabTitle"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="categoryDiscountLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="categoryProfitLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="categoryProfitPercentField" alignment="0" pref="271" max="32767" attributes="0"/>
-                          <Component id="categoryDiscountPercentField" alignment="0" pref="271" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="categoryDiscountPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="categoryDiscountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="categoryProfitPercentField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="categoryProfitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="217" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="com.cosmos.swingb.JBPercentField" name="categoryDiscountPercentField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="categoryDiscountPercentField" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBPercentField" name="categoryProfitPercentField">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="categoryProfitPercentField" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="categoryDiscountLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="categoryDiscountLabel.text"/>
-                <Property name="name" type="java.lang.String" value="categoryDiscountLabel" noResource="true"/>
-              </Properties>
-            </Component>
-            <Component class="com.cosmos.swingb.JBLabel" name="categoryProfitLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="categoryProfitLabel.text"/>
-                <Property name="name" type="java.lang.String" value="categoryProfitLabel" noResource="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
       </SubComponents>
     </Container>
-    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel1">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="entityFormButtonPanel1" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-          <BorderConstraints direction="Last"/>
-        </Constraint>
-      </Constraints>
-    </Component>
   </SubComponents>
 </Form>
