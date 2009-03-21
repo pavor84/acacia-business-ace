@@ -971,7 +971,7 @@ public class ProductPanel extends BaseEntityPanel {
         private JBLabel listPriceLabel;
         private JBDecimalField purchasePriceTextField;
         private JBLabel purchasePriceLabel;
-        private JBDecimalField salesPriceTextField;
+        private JBDecimalField salesPriceDecimalField;
         private JBLabel salesPriceLabel;
         private JXPercentValueField totalDiscountPercentField;
         private JBLabel totalDiscountLabel;
@@ -1010,7 +1010,7 @@ public class ProductPanel extends BaseEntityPanel {
             additionalProfitPercentField = new JXPercentValueField();
             additionalProfitButton = new JBButton();
             additionalProfitLabel = new JBLabel();
-            salesPriceTextField = new JBDecimalField();
+            salesPriceDecimalField = new JBDecimalField();
             salesPriceLabel = new JBLabel();
             categoryDiscountPercentField = new JXPercentValueField();
             categoryDiscountLabel = new JBLabel();
@@ -1040,11 +1040,10 @@ public class ProductPanel extends BaseEntityPanel {
 
             purchasePriceTextField.setEditable(false);
             costPriceTextField.setEditable(false);
-            salesPriceTextField.setEditable(false);
+            salesPriceDecimalField.setEditable(false);
 
             AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
             AutoCompleteDecorator.decorate(currencyComboBox, resourceToStringConverter);
-
 
             add(listPriceLabel);
             add(listPriceTextField);
@@ -1074,7 +1073,7 @@ public class ProductPanel extends BaseEntityPanel {
             add(totalProfitLabel);
             add(totalProfitPercentField);
             add(salesPriceLabel);
-            add(salesPriceTextField);
+            add(salesPriceDecimalField);
 
             MigLayoutHelper helper = new MigLayoutHelper(this);
             helper.setLayoutFillX(true);
@@ -1123,7 +1122,7 @@ public class ProductPanel extends BaseEntityPanel {
             helper.getComponentConstraints(totalProfitPercentField).cell(1, rowNumber).spanX(2);
 
             helper.getComponentConstraints(salesPriceLabel).cell(0, ++rowNumber);
-            helper.getComponentConstraints(salesPriceTextField).cell(2, rowNumber);
+            helper.getComponentConstraints(salesPriceDecimalField).cell(2, rowNumber);
 
             invalidate();
 
@@ -1131,41 +1130,71 @@ public class ProductPanel extends BaseEntityPanel {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    ProductPricingValueListPanel valuesPanel =
-                            new ProductPricingValueListPanel(getOrganizationDataObjectId(),
-                            ProductPricingValue.Type.DISCOUNT);
-                    DialogResponse resp = valuesPanel.showDialog(ProductPanel.this);
-                    if (DialogResponse.SELECT.equals(resp)) {
-                        ProductPricingValue pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject();
-                        BigDecimal numberValue = null;
-                        if (pricingValue != null) {
-                            numberValue = pricingValue.getValue();
-                        }
-                        additionalDiscountPercentField.setPercent(numberValue);
-                        product.setDiscountPricingValue(pricingValue);
-//                        updateTotalDiscountField(true);
-//                        updatePurchasePriceField(true);
+                    ProductPricingValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.DISCOUNT)) == null) {
+                        return;
                     }
+
+                    additionalDiscountPercentField.setPercent(pricingValue.getValue());
+                    product.setDiscountPricingValue(pricingValue);
+                    refreshPrices();
                 }
             });
             transportButton.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
+                    ProductPricingValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.TRANSPORT)) == null) {
+                        return;
+                    }
+
+                    transportPricePercentField.setPercent(pricingValue.getValue());
+                    product.setTransportPricingValue(pricingValue);
+                    refreshPrices();
                 }
             });
             dutyButton.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
+                    ProductPricingValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.DUTY)) == null) {
+                        return;
+                    }
+
+                    dutyPercentField.setPercent(pricingValue.getValue());
+                    product.setDutyPricingValue(pricingValue);
+                    refreshPrices();
                 }
             });
             additionalProfitButton.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
+                    ProductPricingValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.PROFIT)) == null) {
+                        return;
+                    }
+
+                    additionalProfitPercentField.setPercent(pricingValue.getValue());
+                    product.setProfitPricingValue(pricingValue);
+                    refreshPrices();
                 }
             });
+        }
+
+        private ProductPricingValue selectPricingValue(ProductPricingValue.Type type) {
+            ProductPricingValueListPanel valuesPanel =
+                    new ProductPricingValueListPanel(getOrganizationDataObjectId(), type);
+            if (DialogResponse.SELECT.equals(valuesPanel.showDialog(ProductPanel.this))) {
+                ProductPricingValue pricingValue;
+                if((pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject()) != null) {
+                    return pricingValue;
+                }
+            }
+
+            return null;
         }
 
         @Override
@@ -1217,8 +1246,16 @@ public class ProductPanel extends BaseEntityPanel {
             if (bindingInit) {
                 return;
             }
-
             bindingInit = true;
+
+            refreshPrices();
+        }
+
+        private SimpleProduct getProduct() {
+            return (SimpleProduct) getMainDataObject();
+        }
+
+        private void refreshPrices() {
             SimpleProduct product = getProduct();
             ProductCategory category = product.getCategory();
             BigDecimal listPrice = product.getListPrice();
@@ -1260,12 +1297,7 @@ public class ProductPanel extends BaseEntityPanel {
 
             purchasePriceTextField.setValue(purchasePrice);
             costPriceTextField.setValue(costPrice);
-            salesPriceTextField.setValue(salesPrice);
-
-        }
-
-        private SimpleProduct getProduct() {
-            return (SimpleProduct) getMainDataObject();
+            salesPriceDecimalField.setValue(salesPrice);
         }
     }
 

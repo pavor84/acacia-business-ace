@@ -7,10 +7,12 @@
 package com.cosmos.acacia.crm.gui;
 
 
+import java.beans.PropertyChangeEvent;
 import java.math.BigInteger;
 
 import javax.ejb.EJB;
 
+import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
@@ -22,6 +24,20 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBDecimalField;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBPercentField;
+import com.cosmos.swingb.MigLayoutHelper;
+import java.awt.BorderLayout;
+import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
+import javax.swing.BorderFactory;
+import net.miginfocom.swing.MigLayout;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingListener;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -31,20 +47,18 @@ import com.cosmos.swingb.DialogResponse;
  *
  */
 public class ProductCategoryPanel extends BaseEntityPanel {
-    private ProductCategory entity;
 
     @EJB
-    private ProductsListRemote formSession;
+    private static ProductsListRemote formSession;
 
-    private EntityProperties entProps;
-
-    private BindingGroup bindGroup;
+    private ProductCategory productCategory;
+    private BindingGroup bindingGroup;
 
     /** Creates new form ProductCategoryPanel */
     public ProductCategoryPanel(ProductCategory category, BigInteger parentId)
     {
         super(parentId);
-        this.entity = category;
+        this.productCategory = category;
         init();
     }
 
@@ -78,12 +92,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         descriptionPanel = new com.cosmos.swingb.JBPanel();
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextPane = new com.cosmos.swingb.JBTextPane();
-        categoryPricingPanel = new com.cosmos.swingb.JBPanel();
-        categoryDiscountPercentField = new com.cosmos.swingb.JBPercentField();
-        categoryProfitPercentField = new com.cosmos.swingb.JBPercentField();
-        categoryDiscountLabel = new com.cosmos.swingb.JBLabel();
-        categoryProfitLabel = new com.cosmos.swingb.JBLabel();
-        entityFormButtonPanel1 = new com.cosmos.acacia.gui.EntityFormButtonPanel();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(ProductCategoryPanel.class);
         setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("Form.border.title"))); // NOI18N
@@ -156,98 +164,53 @@ public class ProductCategoryPanel extends BaseEntityPanel {
                     .addComponent(patternMaskFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(patternMaskFormatComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         productCategoryTabbedPane.addTab(resourceMap.getString("categoryDetailsPanel.TabConstraints.tabTitle"), categoryDetailsPanel); // NOI18N
 
-        categoryPricingPanel.setName("categoryPricingPanel"); // NOI18N
-
-        categoryDiscountPercentField.setName("categoryDiscountPercentField"); // NOI18N
-
-        categoryProfitPercentField.setName("categoryProfitPercentField"); // NOI18N
-
-        categoryDiscountLabel.setText(resourceMap.getString("categoryDiscountLabel.text")); // NOI18N
-        categoryDiscountLabel.setName("categoryDiscountLabel"); // NOI18N
-
-        categoryProfitLabel.setText(resourceMap.getString("categoryProfitLabel.text")); // NOI18N
-        categoryProfitLabel.setName("categoryProfitLabel"); // NOI18N
-
-        javax.swing.GroupLayout categoryPricingPanelLayout = new javax.swing.GroupLayout(categoryPricingPanel);
-        categoryPricingPanel.setLayout(categoryPricingPanelLayout);
-        categoryPricingPanelLayout.setHorizontalGroup(
-            categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(categoryPricingPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(categoryProfitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(categoryProfitPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                    .addComponent(categoryDiscountPercentField, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        categoryPricingPanelLayout.setVerticalGroup(
-            categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(categoryPricingPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(categoryDiscountPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(categoryDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(categoryPricingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(categoryProfitPercentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(categoryProfitLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(217, Short.MAX_VALUE))
-        );
-
-        productCategoryTabbedPane.addTab(resourceMap.getString("categoryPricingPanel.TabConstraints.tabTitle"), categoryPricingPanel); // NOI18N
-
         add(productCategoryTabbedPane, java.awt.BorderLayout.CENTER);
-
-        entityFormButtonPanel1.setName("entityFormButtonPanel1"); // NOI18N
-        add(entityFormButtonPanel1, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
     protected void initData() {
-        entProps = getFormSession().getProductCategoryEntityProperties();
+        add(getButtonPanel(), BorderLayout.PAGE_END);
+//        productCategoryTabbedPane.addTab(resourceMap.getString("categoryDetailsPanel.TabConstraints.tabTitle"), categoryDetailsPanel); // NOI18N
+//        productCategoryTabbedPane.addTab(resourceMap.getString("categoryPricingPanelOld.TabConstraints.tabTitle"), categoryPricingPanelOld); // NOI18N
+//        add(productCategoryTabbedPane, java.awt.BorderLayout.CENTER);
+
+        EntityProperties entityProps = getFormSession().getProductCategoryEntityProperties();
         PropertyDetails propDetails;
 
-        bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         //parent category
-        propDetails = entProps.getPropertyDetails("parentCategory");
+        propDetails = entityProps.getPropertyDetails("parentCategory");
         ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
-        parentCategoryComboList.bind(bindGroup, categoryListPanel, entity, propDetails,
+        parentCategoryComboList.bind(bg, categoryListPanel, productCategory, propDetails,
             "${categoryName}", UpdateStrategy.READ_WRITE);
         
         //category name
-        propDetails = entProps.getPropertyDetails("categoryName");
-        categoryNameTextField.bind(bindGroup, entity, propDetails);
+        propDetails = entityProps.getPropertyDetails("categoryName");
+        categoryNameTextField.bind(bg, productCategory, propDetails);
 
         //pattern mask format
-        propDetails = entProps.getPropertyDetails("patternMaskFormat");
+        propDetails = entityProps.getPropertyDetails("patternMaskFormat");
         PatternMaskFormatListPanel patternListPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
         
-        patternMaskFormatComboList.bind(bindGroup, patternListPanel, entity, propDetails,
+        patternMaskFormatComboList.bind(bg, patternListPanel, productCategory, propDetails,
             "${patternName} (${format})", UpdateStrategy.READ_WRITE);
 
         if(getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
-            categoryDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
-            categoryProfitPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("profitPercent"));
-        } else {
-            int index;
-            if((index = productCategoryTabbedPane.indexOfComponent(categoryPricingPanel)) >= 0)
-                productCategoryTabbedPane.removeTabAt(index);
+            productCategoryTabbedPane.addTab(getResourceString("categoryPricingPanel.TabConstraints.tabTitle"),
+                    getCategoryPricingPanel()); // NOI18N
         }
 
         //description
-        descriptionTextPane.bind(bindGroup, entity, entProps.getPropertyDetails("description"));
+        descriptionTextPane.bind(bg, productCategory, entityProps.getPropertyDetails("description"));
 
-        bindGroup.bind();
+        bg.bind();
     }
 
     @SuppressWarnings("unchecked")
@@ -281,17 +244,11 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel categoryDetailsPanel;
-    private com.cosmos.swingb.JBLabel categoryDiscountLabel;
-    private com.cosmos.swingb.JBPercentField categoryDiscountPercentField;
     private com.cosmos.swingb.JBLabel categoryNameLabel;
     private com.cosmos.swingb.JBTextField categoryNameTextField;
-    private com.cosmos.swingb.JBPanel categoryPricingPanel;
-    private com.cosmos.swingb.JBLabel categoryProfitLabel;
-    private com.cosmos.swingb.JBPercentField categoryProfitPercentField;
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private javax.swing.JScrollPane descriptionScrollPane;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
-    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
     private com.cosmos.acacia.gui.AcaciaComboList parentCategoryComboList;
     private com.cosmos.swingb.JBLabel parentCategoryLabel;
     private com.cosmos.acacia.gui.AcaciaComboList patternMaskFormatComboList;
@@ -299,28 +256,48 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private javax.swing.JTabbedPane productCategoryTabbedPane;
     // End of variables declaration//GEN-END:variables
 
+    private EntityFormButtonPanel entityFormButtonPanel;
+    private CategoryPricingPanel categoryPricingPanel;
+
     @Override
     public void performSave(boolean closeAfter) {
-        entity = getFormSession().saveProductCategory(entity);
+        productCategory = getFormSession().saveProductCategory(productCategory);
         setDialogResponse(DialogResponse.SAVE);
-        setSelectedValue(entity);
+        setSelectedValue(productCategory);
         if (closeAfter)
             close();
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
     public Object getEntity() {
-        return entity;
+        return productCategory;
     }
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
-        return entityFormButtonPanel1;
+        if(entityFormButtonPanel == null) {
+            entityFormButtonPanel = new EntityFormButtonPanel();
+            entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
+        }
+
+        return entityFormButtonPanel;
+    }
+
+    private CategoryPricingPanel getCategoryPricingPanel() {
+        if(categoryPricingPanel == null) {
+            categoryPricingPanel = new CategoryPricingPanel();
+        }
+
+        return categoryPricingPanel;
     }
 
     protected ProductsListRemote getFormSession() {
@@ -328,5 +305,200 @@ public class ProductCategoryPanel extends BaseEntityPanel {
                 formSession = getBean(ProductsListRemote.class);
 
         return formSession;
+    }
+
+    private String getResourceString(String key) {
+        return getResourceMap().getString(key);
+    }
+
+    private class CategoryDetailsPanel extends JBPanel {
+
+        public CategoryDetailsPanel() {
+            super(new MigLayout());
+        }
+
+    }
+
+    private JBDecimalField transportDecimalField;
+    private JBPercentField transportPercentField;
+
+    private class CategoryPricingPanel extends JBPanel {
+
+        private JBLabel customsDutyLabel;
+        private JBPercentField customsDutyPercentField;
+        private JBLabel discountLabel;
+        private JBPercentField discountPercentField;
+        private JBLabel exciseDutyLabel;
+        private JBPercentField exciseDutyPercentField;
+        private JBLabel profitLabel;
+        private JBPercentField profitPercentField;
+        private JBPanel transportPanel;
+        private JBLabel transportPercentLabel;
+        private JBLabel transportValueLabel;
+        private boolean syncing;
+
+        public CategoryPricingPanel() {
+            super(new MigLayout());
+            initComponents();
+            initData();
+        }
+
+        private void initComponents() {
+            discountPercentField = new JBPercentField();
+            profitPercentField = new JBPercentField();
+            discountLabel = new JBLabel();
+            profitLabel = new JBLabel();
+            customsDutyPercentField = new JBPercentField();
+            exciseDutyPercentField = new JBPercentField();
+            customsDutyLabel = new JBLabel();
+            exciseDutyLabel = new JBLabel();
+            transportPanel = new JBPanel();
+            transportPercentField = new JBPercentField();
+            transportPercentLabel = new JBLabel();
+            transportValueLabel = new JBLabel();
+            transportDecimalField = new JBDecimalField();
+
+            discountLabel.setText(getResourceString("discountLabel.text")); // NOI18N
+            discountLabel.setName("discountLabel"); // NOI18N
+
+            profitLabel.setText(getResourceString("profitLabel.text")); // NOI18N
+            profitLabel.setName("profitLabel"); // NOI18N
+
+            customsDutyLabel.setText(getResourceString("customsDutyLabel.text")); // NOI18N
+            customsDutyLabel.setName("customsDutyLabel"); // NOI18N
+
+            exciseDutyLabel.setText(getResourceString("exciseDutyLabel.text")); // NOI18N
+            exciseDutyLabel.setName("exciseDutyLabel"); // NOI18N
+
+            transportPercentLabel.setText(getResourceString("transportPercentLabel.text")); // NOI18N
+            transportPercentLabel.setName("transportPercentLabel"); // NOI18N
+
+            transportValueLabel.setText(getResourceString("transportValueLabel.text")); // NOI18N
+            transportValueLabel.setName("transportValueLabel"); // NOI18N
+
+            transportPanel.setBorder(BorderFactory.createTitledBorder(
+                    getResourceString("transportPanel.border.title"))); // NOI18N
+            transportPanel.setName("transportPanel"); // NOI18N
+
+            transportPercentField.setColumns(7);
+            transportPercentField.setName("transportPercentField"); // NOI18N
+
+            transportDecimalField.setColumns(7);
+            transportDecimalField.setName("transportDecimalField"); // NOI18N
+
+            discountPercentField.setColumns(7);
+            discountPercentField.setName("discountPercentField"); // NOI18N
+
+            profitPercentField.setColumns(7);
+            profitPercentField.setName("profitPercentField"); // NOI18N
+
+            customsDutyPercentField.setColumns(7);
+            customsDutyPercentField.setName("customsDutyPercentField"); // NOI18N
+
+            exciseDutyPercentField.setColumns(7);
+            exciseDutyPercentField.setName("exciseDutyPercentField"); // NOI18N
+
+            add(discountLabel);
+            add(discountPercentField);
+            add(profitLabel);
+            add(profitPercentField);
+            add(customsDutyLabel);
+            add(customsDutyPercentField);
+            add(exciseDutyLabel);
+            add(exciseDutyPercentField);
+            add(transportPanel);
+            transportPanel.add(transportPercentLabel);
+            transportPanel.add(transportPercentField);
+            transportPanel.add(transportValueLabel);
+            transportPanel.add(transportDecimalField);
+
+            MigLayoutHelper helper = new MigLayoutHelper(transportPanel);
+            helper.setLayoutFillX(true);
+            helper.setLayoutWrapAfter(4);
+            helper.columnGrow(100, 1, 3);
+            helper.columnSizeGroup("sg", 1, 3);
+            helper.columnFill(1, 1, 3);
+            helper.columnGap("15", 1);
+            transportPanel.invalidate();
+
+            helper = new MigLayoutHelper(this);
+            helper.setLayoutFillX(true);
+            helper.columnGrow(100, 1, 3);
+            helper.columnSizeGroup("sg", 1, 3);
+            helper.columnFill(1, 1, 3);
+            helper.columnGap("15", 1);
+            helper.getComponentConstraints(discountLabel).cell(0, 0);
+            helper.getComponentConstraints(discountPercentField).cell(1, 0);
+            helper.getComponentConstraints(profitLabel).cell(2, 0);
+            helper.getComponentConstraints(profitPercentField).cell(3, 0);
+            helper.getComponentConstraints(customsDutyLabel).cell(0, 1);
+            helper.getComponentConstraints(customsDutyPercentField).cell(1, 1);
+            helper.getComponentConstraints(exciseDutyLabel).cell(2, 1);
+            helper.getComponentConstraints(exciseDutyPercentField).cell(3, 1);
+            helper.getComponentConstraints(transportPanel).cell(0, 2).spanX().grow();
+            invalidate();
+        }
+
+        private void initData() {
+            BindingGroup bg = getBindingGroup();
+            EntityProperties entityProps = getFormSession().getProductCategoryEntityProperties();
+
+            PropertyDetails propDetails = entityProps.getPropertyDetails("discountPercent");
+            discountPercentField.bind(bg, productCategory, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("profitPercent");
+            profitPercentField.bind(bg, productCategory, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("customsDuty");
+            customsDutyPercentField.bind(bg, productCategory, propDetails);
+
+            propDetails = entityProps.getPropertyDetails("exciseDuty");
+            exciseDutyPercentField.bind(bg, productCategory, propDetails);
+
+            Binding binding;
+            propDetails = entityProps.getPropertyDetails("transportPercent");
+            binding = transportPercentField.bind(bg, productCategory, propDetails);
+            binding.addBindingListener(new AbstractBindingListener() {
+
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    System.out.println("percent.binding.isContentChanged(): " + binding.isContentChanged());
+                    Object newValue;
+                    Object oldValue;
+                    if(syncing || !binding.isContentChanged() ||
+                            (newValue = event.getNewValue()) == (oldValue = event.getOldValue()) ||
+                            newValue != null && newValue.equals(oldValue) ||
+                            oldValue != null && oldValue.equals(newValue)) {
+                        if(syncing)
+                            syncing = false;
+                        return;
+                    }
+                    syncing = true;
+                    transportDecimalField.setValue(null);
+                }
+            });
+
+            propDetails = entityProps.getPropertyDetails("transportValue");
+            binding = transportDecimalField.bind(bg, productCategory, propDetails);
+            binding.addBindingListener(new AbstractBindingListener() {
+
+                @Override
+                public void targetChanged(Binding binding, PropertyStateEvent event) {
+                    System.out.println("value.binding.isContentChanged(): " + binding.isContentChanged());
+                    Object newValue;
+                    Object oldValue;
+                    if(syncing || !binding.isContentChanged() ||
+                            (newValue = event.getNewValue()) == (oldValue = event.getOldValue()) ||
+                            newValue != null && newValue.equals(oldValue) ||
+                            oldValue != null && oldValue.equals(newValue)) {
+                        if(syncing)
+                            syncing = false;
+                        return;
+                    }
+                    syncing = true;
+                    transportPercentField.setValue(null);
+                }
+            });
+        }
     }
 }
