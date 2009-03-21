@@ -684,12 +684,11 @@ public class SimpleProduct
             return price;
         }
 
-        BigDecimal discount = percent.divide(ONE_HUNDRED, MATH_CONTEXT);
-        return price.subtract(price.multiply(discount));
+        return price.subtract(price.multiply(percent, MATH_CONTEXT), MATH_CONTEXT);
     }
 
     private BigDecimal substractPercent(BigDecimal value, BigDecimal percent){
-        return value.subtract(value.multiply(percent.divide(ONE_HUNDRED, MATH_CONTEXT)));
+        return value.subtract(value.multiply(percent, MATH_CONTEXT), MATH_CONTEXT);
     }
     
     private BigDecimal getSequentialDiscount(BigDecimal discountPercent1, BigDecimal discountPercent2) {
@@ -717,7 +716,7 @@ public class SimpleProduct
         if ((percent = getDuty()) == null) {
             duty = BigDecimal.ZERO;
         } else {
-            duty = price.multiply(percent.divide(ONE_HUNDRED, MATH_CONTEXT));
+            duty = price.multiply(percent, MATH_CONTEXT);
         }
 
         BigDecimal transport;
@@ -749,7 +748,7 @@ public class SimpleProduct
             profit = BigDecimal.ZERO;
         }
 
-        return price.divide(BigDecimal.ONE.subtract(profit.divide(ONE_HUNDRED, MATH_CONTEXT)), MATH_CONTEXT);
+        return price.divide(BigDecimal.ONE.subtract(profit), MATH_CONTEXT);
     }
 
     public ProductPricingValue getDiscountPricingValue() {
@@ -831,7 +830,7 @@ public class SimpleProduct
             return null;
         }
 
-        return price.multiply(ppv.getValue().divide(ONE_HUNDRED, MATH_CONTEXT));
+        return price.multiply(ppv.getValue(), MATH_CONTEXT);
     }
     
     /**
