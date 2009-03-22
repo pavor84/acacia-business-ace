@@ -12,8 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.pricing.ProductPricingValueRemote;
-import com.cosmos.acacia.crm.data.ProductPricingValue;
-import com.cosmos.acacia.crm.data.ProductPricingValue.Type;
+import com.cosmos.acacia.crm.data.ProductPercentValue;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -31,11 +30,11 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
     private ProductPricingValueRemote formSession = getBean(ProductPricingValueRemote.class);
     private BindingGroup bindingGroup;
 
-    private List<ProductPricingValue> list;
+    private List<ProductPercentValue> list;
 
-    private Type type;
+    private ProductPercentValue.Type type;
     
-    public ProductPricingValueListPanel(BigInteger parentDataObjectId, Type type) {
+    public ProductPricingValueListPanel(BigInteger parentDataObjectId, ProductPercentValue.Type type) {
         super(parentDataObjectId);
         this.type = type;
         if ( type!=null )
@@ -109,7 +108,7 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
      */
     @Override
     protected boolean deleteRow(Object rowObject) {
-        getFormSession().deleteProductPricingValue((ProductPricingValue)rowObject);
+        getFormSession().deleteProductPricingValue((ProductPercentValue)rowObject);
         return true;
     }
 
@@ -117,7 +116,7 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object modifyRow(Object rowObject) {
-        ProductPricingValue o = (ProductPricingValue) rowObject;
+        ProductPercentValue o = (ProductPercentValue) rowObject;
         return showDetailForm(o, true);
     }
 
@@ -125,11 +124,11 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object newRow() {
-        ProductPricingValue o = getFormSession().newProductPricingValue(getParentDataObjectId(), type);
+        ProductPercentValue o = getFormSession().newProductPricingValue(getParentDataObjectId(), type);
         return showDetailForm(o, true);
     }
 
-    private Object showDetailForm(ProductPricingValue o, boolean editable) {
+    private Object showDetailForm(ProductPercentValue o, boolean editable) {
         ProductPricingValueForm editPanel = new ProductPricingValueForm(o);
         if ( !editable )
             editPanel.setReadonly();
@@ -155,7 +154,7 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
     
     @Override
     protected void viewRow(Object rowObject) {
-        ProductPricingValue o = (ProductPricingValue) rowObject;
+        ProductPercentValue o = (ProductPercentValue) rowObject;
         showDetailForm(o, false);
     }
 }

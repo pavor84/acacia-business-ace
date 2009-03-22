@@ -7,12 +7,10 @@
 package com.cosmos.acacia.crm.gui;
 
 
-import java.beans.PropertyChangeEvent;
 import java.math.BigInteger;
 
 import javax.ejb.EJB;
 
-import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
@@ -30,13 +28,10 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBPercentField;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
-import java.beans.PropertyChangeListener;
-import java.math.BigDecimal;
 import javax.swing.BorderFactory;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
@@ -462,7 +457,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    System.out.println("percent.binding.isContentChanged(): " + binding.isContentChanged());
                     Object newValue;
                     Object oldValue;
                     if(syncing || !binding.isContentChanged() ||
@@ -484,7 +478,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    System.out.println("value.binding.isContentChanged(): " + binding.isContentChanged());
                     Object newValue;
                     Object oldValue;
                     if(syncing || !binding.isContentChanged() ||
@@ -501,4 +494,5 @@ public class ProductCategoryPanel extends BaseEntityPanel {
             });
         }
     }
+
 }

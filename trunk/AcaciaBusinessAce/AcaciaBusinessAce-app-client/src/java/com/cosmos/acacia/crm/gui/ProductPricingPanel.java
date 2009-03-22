@@ -6,15 +6,14 @@
 
 package com.cosmos.acacia.crm.gui;
 
+import com.cosmos.acacia.crm.data.ProductPercentValue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import com.cosmos.acacia.crm.data.ProductPricingValue;
 import com.cosmos.acacia.crm.data.SimpleProduct;
-import com.cosmos.acacia.crm.data.ProductPricingValue.Type;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaPercentValueField;
@@ -42,16 +41,16 @@ public class ProductPricingPanel extends AcaciaPanel {
     private void initComponentsCustom() {
         additionalDiscountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPricingValue.Type.DISCOUNT);}});
+                onChoosePriceValue(ProductPercentValue.Type.DISCOUNT);}});
         transportButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPricingValue.Type.TRANSPORT);}});
+                onChoosePriceValue(ProductPercentValue.Type.TRANSPORT);}});
         dutyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPricingValue.Type.DUTY);}});
+                onChoosePriceValue(ProductPercentValue.Type.CUSTOMS_DUTY);}});
         additionalProfitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPricingValue.Type.PROFIT);}});
+                onChoosePriceValue(ProductPercentValue.Type.PROFIT);}});
         
         additionalProfitField.setPercentInclusive(true);
         categoryProfitField.setPercentInclusive(true);
@@ -79,44 +78,44 @@ public class ProductPricingPanel extends AcaciaPanel {
     }
 
     protected void onValueUpdated(ActionEvent e) {
-        Type type = null;
+        ProductPercentValue.Type type = null;
         if ( additionalDiscountField.equals(e.getSource()) ){
-            type = Type.DISCOUNT;
+            type = ProductPercentValue.Type.DISCOUNT;
         }else if ( dutyField.equals(e.getSource())){
-            type = Type.DUTY;
+            type = ProductPercentValue.Type.CUSTOMS_DUTY;
         }else if ( transportPriceField.equals(e.getSource())){
-            type = Type.TRANSPORT;
+            type = ProductPercentValue.Type.TRANSPORT;
         }else if ( additionalProfitField.equals(e.getSource())){
-            type = Type.PROFIT;
+            type = ProductPercentValue.Type.PROFIT;
         }
         
         if ( AcaciaPercentValueField.COMMAND_CLEAR.equals(e.getActionCommand())){
             onValueUpdated(null, type);
-        }else if (Type.TRANSPORT.equals(type) && AcaciaPercentValueField.COMMAND_VALUE_EDIT.equals(e.getActionCommand())){
-            product.setTransportPricingValue(null);
+        }else if (ProductPercentValue.Type.TRANSPORT.equals(type) && AcaciaPercentValueField.COMMAND_VALUE_EDIT.equals(e.getActionCommand())){
+//            product.setTransportPricingValue(null);
         }
     }
 
-    protected void onChoosePriceValue(Type type) {
+    protected void onChoosePriceValue(ProductPercentValue.Type type) {
         ProductPricingValueListPanel valuesPanel = new ProductPricingValueListPanel(getOrganizationDataObjectId(), type);
         DialogResponse resp = valuesPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(resp)){
-            ProductPricingValue pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject();
+            ProductPercentValue pricingValue = (ProductPercentValue) valuesPanel.getSelectedRowObject();
             onValueUpdated(pricingValue, type);
         }else{
-            ProductPricingValue oldValue = null;
-            if ( Type.DISCOUNT.equals(type) )
-                oldValue = product.getDiscountPricingValue();
-            else if ( Type.DUTY.equals(type) )
-                oldValue = product.getDutyPricingValue();
-            else if ( Type.TRANSPORT.equals(type) )
-                oldValue = product.getTransportPricingValue();
-            else if ( Type.PROFIT.equals(type) )
-                oldValue = product.getProfitPricingValue();
+            ProductPercentValue oldValue = null;
+            if ( ProductPercentValue.Type.DISCOUNT.equals(type) )
+                oldValue = product.getDiscountPercentValue();
+            else if ( ProductPercentValue.Type.CUSTOMS_DUTY.equals(type) )
+                oldValue = product.getCustomsDutyPercentValue();
+            else if ( ProductPercentValue.Type.TRANSPORT.equals(type) )
+                oldValue = product.getTransportPercentValue();
+            else if ( ProductPercentValue.Type.PROFIT.equals(type) )
+                oldValue = product.getProfitPercentValue();
             for (Object ppValueObj : valuesPanel.getListData()) {
-                ProductPricingValue current = (ProductPricingValue) ppValueObj;
+                ProductPercentValue current = (ProductPercentValue) ppValueObj;
                 if ( current.getId().equals(oldValue.getId())){
-                    if ( !oldValue.getValue().equals(current.getValue()))
+                    if ( !oldValue.getPercentValue().equals(current.getPercentValue()))
                         onValueUpdated(current, type);
                     break;
                 }
@@ -124,31 +123,31 @@ public class ProductPricingPanel extends AcaciaPanel {
         }
     }
 
-    private void onValueUpdated(ProductPricingValue pricingValue, Type type) {
+    private void onValueUpdated(ProductPercentValue pricingValue, ProductPercentValue.Type type) {
         BigDecimal numberValue = null;
         if ( pricingValue!=null ){
-            numberValue = pricingValue.getValue();
+            numberValue = pricingValue.getPercentValue();
         }
-        if ( Type.DISCOUNT.equals(type) ){
+        if ( ProductPercentValue.Type.DISCOUNT.equals(type) ){
             additionalDiscountField.setPercent(numberValue);
-            product.setDiscountPricingValue(pricingValue);
+            product.setDiscountPercentValue(pricingValue);
             updateTotalDiscountField(true);
             updatePurchasePriceField(true);
         }
-        else if ( Type.DUTY.equals(type) ){
+        else if ( ProductPercentValue.Type.CUSTOMS_DUTY.equals(type) ){
             dutyField.setPercent(numberValue);
-            product.setDutyPricingValue(pricingValue);
+            product.setCustomsDutyPercentValue(pricingValue);
             updateCostPriceField(true);
         }
-        else if ( Type.TRANSPORT.equals(type)){
+        else if ( ProductPercentValue.Type.TRANSPORT.equals(type)){
             transportPriceField.setPercent(numberValue);
-            product.setTransportPricingValue(pricingValue);
+            product.setTransportPercentValue(pricingValue);
             updateCostPriceField(true);
             transportPriceField.setFreezePercent(true);
         }
-        else if ( Type.PROFIT.equals(type)){
+        else if ( ProductPercentValue.Type.PROFIT.equals(type)){
             additionalProfitField.setPercent(numberValue);
-            product.setProfitPricingValue(pricingValue);
+            product.setProfitPercentValue(pricingValue);
             updateTotalProfitField(true);
             updateSalePriceField(true);
         }
@@ -157,7 +156,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     public void updateTotalProfitField(boolean valid) {
         BigDecimal totalProfit = null;
         if ( valid ){
-            totalProfit = product.getTotalProfit();
+            totalProfit = product.getTotalProfitPercent();
         }
         
         this.getTotalProfitField().setPercent(totalProfit); 
@@ -193,7 +192,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     public void updateTotalDiscountField(boolean valid) {
         BigDecimal totalDiscount = null;
         if ( valid ){
-            totalDiscount = product.getTotalDiscount();
+            totalDiscount = product.getTotalDiscountPercent();
         }
         
         this.getTotalDiscountField().setPercent(totalDiscount);  
