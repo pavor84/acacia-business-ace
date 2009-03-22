@@ -26,7 +26,7 @@ import com.cosmos.acacia.annotation.ValidationType;
  *
  */
 @Entity
-@Table(name = "product_pricing_value")
+@Table(name = "product_percent_values")
 @NamedQueries(
     {
         /**
@@ -37,9 +37,12 @@ import com.cosmos.acacia.annotation.ValidationType;
          */
         @NamedQuery
             (
-                name = "ProductPricingValue.findForParentAndDeleted",
-                query = "select p from ProductPricingValue p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
-                        "and p.dataObject.deleted = :deleted and p.type = :type"
+                name = "ProductPercentValue.findForParentAndDeleted",
+                query = "select p from ProductPercentValue p" +
+                    " where" +
+                    "  p.dataObject.parentDataObjectId = :parentDataObjectId" +
+                    "  and p.dataObject.deleted = :deleted" +
+                    "  and p.type = :type"
             ),
         /**
          * Parameters:
@@ -51,66 +54,81 @@ import com.cosmos.acacia.annotation.ValidationType;
          */
         @NamedQuery
             (
-                name = "ProductPricingValue.findByNameTypeNotDeleted",
-                query = "select p from ProductPricingValue p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
-                "and p.dataObject.deleted = :deleted and p.name like :name and p.type = :type"
+                name = "ProductPercentValue.findByNameTypeNotDeleted",
+                query = "select p from ProductPercentValue p" +
+                    " where" +
+                    "  p.dataObject.parentDataObjectId = :parentDataObjectId " +
+                    "  and p.dataObject.deleted = :deleted" +
+                    "  and p.name like :name" +
+                    "  and p.type = :type"
             )  
     })
-public class ProductPricingValue extends DataObjectBean implements Serializable{
+public class ProductPercentValue extends DataObjectBean implements Serializable{
     
-    public enum Type{
+    public enum Type {
         DISCOUNT,
-        DUTY,
+        CUSTOMS_DUTY,
         TRANSPORT,
-        PROFIT
+        PROFIT,
+        EXCISE_DUTY,
     }
     
     @Id
-    @Column(name = "value_id", nullable = false)
+    @Column(name = "percent_value_id", nullable = false)
     private BigInteger valueId;
     
-    @Column(name = "name", nullable = false)
-    @Property(title="Value Name", propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.LENGTH, minLength=2, maxLength=50))
+    @Column(name = "value_name", nullable = false)
+    @Property(title="Value Name",
+        propertyValidator=@PropertyValidator(required=true,
+            validationType=ValidationType.LENGTH, minLength=2, maxLength=128))
     private String name;
 
     @Property(title="Percent Value", percent=true,
-        propertyValidator=@PropertyValidator(required=true,
-            validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
-    @Column(name = "value", precision=20, scale=4)
-    private BigDecimal value;
+        propertyValidator=@PropertyValidator(required=true))
+    @Column(name = "percent_value", precision=8, scale=6)
+    private BigDecimal percentValue;
     
-    @Column(name = "type")
+    @Column(name = "value_type_id")
     private Type type;
     
-    @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Column(name = "organization_id")
+    private BigInteger organizationId;
 
-    @JoinColumn(name = "value_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "percent_value_id", referencedColumnName = "data_object_id",
+        insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-    
-    public BigInteger getParentId() {
-        return parentId;
+
+    public BigInteger getOrganizationId() {
+        return organizationId;
     }
 
+    public void setOrganizationId(BigInteger organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        return getOrganizationId();
+    }
+
+    @Override
     public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
+        setOrganizationId(parentId);
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (valueId != null ? valueId.hashCode() : 0);
-        return hash;
+        return valueId != null ? valueId.hashCode() : 0;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductPricingValue)) {
+        if (!(object instanceof ProductPercentValue)) {
             return false;
         }
-        ProductPricingValue other = (ProductPricingValue) object;
+        ProductPercentValue other = (ProductPercentValue) object;
         if ((this.valueId == null && other.valueId != null) || (this.valueId != null && !this.valueId.equals(other.valueId))) {
             return false;
         }
@@ -155,12 +173,12 @@ public class ProductPricingValue extends DataObjectBean implements Serializable{
         this.valueId = valueId;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getPercentValue() {
+        return percentValue;
     }
 
-    public void setValue(BigDecimal value) {
-        this.value = value;
+    public void setPercentValue(BigDecimal value) {
+        this.percentValue = value;
     }
 
     public Type getType() {

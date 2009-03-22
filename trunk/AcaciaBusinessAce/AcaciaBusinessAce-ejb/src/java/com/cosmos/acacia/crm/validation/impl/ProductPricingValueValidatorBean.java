@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.crm.data.ProductPricingValue;
+import com.cosmos.acacia.crm.data.ProductPercentValue;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationUtil;
 
@@ -20,18 +20,18 @@ public class ProductPricingValueValidatorBean implements ProductPricingValueVali
     @PersistenceContext  
     private EntityManager em;
 
-    public void validate(ProductPricingValue entity) throws ValidationException {
+    public void validate(ProductPercentValue entity) throws ValidationException {
         ValidationException ve = new ValidationException();
         
         //unique name 
-        Query getByName = em.createNamedQuery("ProductPricingValue.findByNameTypeNotDeleted");
+        Query getByName = em.createNamedQuery("ProductPercentValue.findByNameTypeNotDeleted");
         getByName.setParameter("name", entity.getName());
         getByName.setParameter("parentDataObjectId", entity.getParentId());
         getByName.setParameter("deleted", Boolean.FALSE);
         getByName.setParameter("type", entity.getType());
         
         if ( !ValidationUtil.checkUnique(getByName.getResultList(), entity))
-            ve.addMessage("name", "ProductPricingValue.err.nameInUse");
+            ve.addMessage("name", "ProductPercentValue.err.nameInUse");
         
         //if we have validation messages - throw the exception since not everything is OK
         if ( !ve.getMessages().isEmpty() )

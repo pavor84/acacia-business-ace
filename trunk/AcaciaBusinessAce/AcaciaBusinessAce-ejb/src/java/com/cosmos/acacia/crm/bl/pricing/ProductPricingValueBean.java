@@ -12,8 +12,8 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.ProductPricingValue;
-import com.cosmos.acacia.crm.data.ProductPricingValue.Type;
+import com.cosmos.acacia.crm.data.ProductPercentValue;
+import com.cosmos.acacia.crm.data.ProductPercentValue.Type;
 import com.cosmos.acacia.crm.validation.impl.ProductPricingValueValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -36,7 +36,7 @@ public class ProductPricingValueBean implements ProductPricingValueLocal, Produc
     
     public EntityProperties getListingEntityProperties() {
 
-        EntityProperties entityProperties = esm.getEntityProperties(ProductPricingValue.class);
+        EntityProperties entityProperties = esm.getEntityProperties(ProductPercentValue.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;
@@ -44,39 +44,39 @@ public class ProductPricingValueBean implements ProductPricingValueLocal, Produc
     }
 
     @SuppressWarnings("unchecked")
-    public List<ProductPricingValue> listProductPricingValues(BigInteger parentDataObjectId, Type type) {
+    public List<ProductPercentValue> listProductPricingValues(BigInteger parentDataObjectId, Type type) {
         if (parentDataObjectId == null)
             throw new IllegalArgumentException("parentDataObjectId can't be null");
 
-        Query q = em.createNamedQuery("ProductPricingValue.findForParentAndDeleted");
+        Query q = em.createNamedQuery("ProductPercentValue.findForParentAndDeleted");
         q.setParameter("parentDataObjectId", parentDataObjectId);
         q.setParameter("deleted", false);
         q.setParameter("type", type);
 
-        List<ProductPricingValue> result = q.getResultList();
+        List<ProductPercentValue> result = q.getResultList();
         return result;
     }
 
-    public void deleteProductPricingValue(ProductPricingValue entity) {
+    public void deleteProductPricingValue(ProductPercentValue entity) {
         if (entity == null)
             throw new IllegalArgumentException("null: 'ProductPricingValue'");
         esm.remove(em, entity);
     }
 
-    public ProductPricingValue newProductPricingValue(BigInteger parentDataObjectId, Type type) {
-        ProductPricingValue c = new ProductPricingValue();
+    public ProductPercentValue newProductPricingValue(BigInteger parentDataObjectId, Type type) {
+        ProductPercentValue c = new ProductPercentValue();
         c.setParentId(parentDataObjectId);
         c.setType(type);
         return c;
     }
 
     public EntityProperties getDetailEntityProperties() {
-        EntityProperties entityProperties = esm.getEntityProperties(ProductPricingValue.class);
+        EntityProperties entityProperties = esm.getEntityProperties(ProductPercentValue.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
 
-    public ProductPricingValue saveProductPricingValue(ProductPricingValue p) {
+    public ProductPercentValue saveProductPricingValue(ProductPercentValue p) {
         validator.validate(p);
         
         esm.persist(em, p);

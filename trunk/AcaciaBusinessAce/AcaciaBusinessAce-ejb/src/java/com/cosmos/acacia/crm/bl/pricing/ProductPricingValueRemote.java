@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.ProductPricingValue;
-import com.cosmos.acacia.crm.data.ProductPricingValue.Type;
+import com.cosmos.acacia.crm.data.ProductPercentValue;
+import com.cosmos.acacia.crm.data.ProductPercentValue.Type;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -31,21 +31,21 @@ public interface ProductPricingValueRemote {
      * @param type
      * @return not null list
      */
-    List<ProductPricingValue> listProductPricingValues(BigInteger parentDataObjectId, Type type);
+    List<ProductPercentValue> listProductPricingValues(BigInteger parentDataObjectId, Type type);
 
     /**
      * Deletes the value, - if the integrity is violated, throws an {@link ValidationException} 
      * @param value - not null
      */
-    void deleteProductPricingValue(ProductPricingValue value);
+    void deleteProductPricingValue(ProductPercentValue value);
 
     /**
-     * Create new instance of {@link ProductPricingValue}.
+     * Create new instance of {@link ProductPercentValue}.
      * 
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    ProductPricingValue newProductPricingValue(BigInteger parentDataObjectId, Type type);
+    ProductPercentValue newProductPricingValue(BigInteger parentDataObjectId, Type type);
 
     /**
      * Return entity properties for detailed view
@@ -58,5 +58,5 @@ public interface ProductPricingValueRemote {
      * @param entity
      * @return
      */
-    ProductPricingValue saveProductPricingValue(ProductPricingValue entity);
+    ProductPercentValue saveProductPricingValue(ProductPercentValue entity);
 }
