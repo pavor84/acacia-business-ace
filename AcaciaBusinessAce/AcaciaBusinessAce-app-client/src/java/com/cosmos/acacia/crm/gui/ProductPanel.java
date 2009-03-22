@@ -43,7 +43,7 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.crm.data.ProductPricingValue;
+import com.cosmos.acacia.crm.data.ProductPercentValue;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -842,19 +842,19 @@ public class ProductPanel extends AcaciaPanel {
             maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
             defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
             
-            product.setDiscountPercent(product.getDiscount());
-            product.setDutyPercent(product.getDuty());
-            product.setTransportPrice(product.getTransport());
-            product.setProfitPercent(product.getProfit());
-            this.setTotalDiscount(product.getTotalDiscount());
+//            product.setDiscountPercent(product.getDiscount());
+//            product.setDutyPercent(product.getDuty());
+//            product.setTransportPrice(product.getTransport());
+//            product.setProfitPercent(product.getProfit());
+//            this.setTotalDiscount(product.getTotalDiscount());
             this.setPurchasePrice(product.getPurchasePrice());
             this.setCostPrice(product.getCostPrice());
-            this.setTotalProfit(product.getTotalProfit());
+//            this.setTotalProfit(product.getTotalProfit());
             this.setSalePrice(product.getSalePrice());
             if ( product.getCategory()!=null )
                 this.setCategoryProfit(product.getCategory().getProfitPercent());
             
-            ProductPricingValue transportPricingValue = product.getTransportPricingValue();
+//            ProductPercentValue transportPricingValue = product.getTransportPricingValue();
             
             pricingPanel = new ProductPricingPanel(product);
             
@@ -1001,10 +1001,10 @@ public class ProductPanel extends AcaciaPanel {
 
             productBindingGroup.bind();
             
-            if ( transportPricingValue!=null ){
-                pricingPanel.getTransportPriceField().setPercent(transportPricingValue.getValue());
-                pricingPanel.getTransportPriceField().setFreezePercent(true);
-            }
+//            if ( transportPricingValue!=null ){
+//                pricingPanel.getTransportPriceField().setPercent(transportPricingValue.getPercentValue());
+//                pricingPanel.getTransportPriceField().setFreezePercent(true);
+//            }
             
             //additionally update the percent/value pairs
             pricingPanel.getCategoryDiscountField().totalValueChanged(product.getListPrice());

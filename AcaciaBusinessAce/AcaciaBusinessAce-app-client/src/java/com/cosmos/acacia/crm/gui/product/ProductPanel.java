@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.crm.data.ProductPricingValue;
+import com.cosmos.acacia.crm.data.ProductPercentValue;
 import com.cosmos.acacia.crm.data.ProductSupplier;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
@@ -67,6 +67,7 @@ public class ProductPanel extends BaseEntityPanel {
     public ProductPanel(SimpleProduct product) {
         super(product.getParentId());
         this.product = product;
+        System.out.println("product: " + product);
         init();
     }
 
@@ -410,9 +411,10 @@ public class ProductPanel extends BaseEntityPanel {
 
         if (product == null) {
             product = getFormSession().newProduct();
-        } else {
-            product = getFormSession().refresh(product);
         }
+        /* else {
+            product = getFormSession().refresh(product);
+        }*/
 
         BindingGroup bindingGroup = getBindingGroup();
         EntityProperties entityProps = getProductEntityProperties();
@@ -426,7 +428,7 @@ public class ProductPanel extends BaseEntityPanel {
                 productTabbedPane.removeTabAt(index);
             }
         } else {
-            initProductPricing(bindingGroup, entityProps);
+            //initProductPricing(bindingGroup, entityProps);
         }
 
         if (!getRightsManager().isAllowed(SpecialPermission.Product)) {
@@ -761,6 +763,7 @@ public class ProductPanel extends BaseEntityPanel {
     }
 
     private void refreshCubature() {
+        System.out.println("refreshCubature().product: " + product);
         BigDecimal cubature;
         if ((cubature = product.getDimensionCubature()) == null) {
             cubatureDecimalField.setText("");
@@ -1130,13 +1133,13 @@ public class ProductPanel extends BaseEntityPanel {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    ProductPricingValue pricingValue;
-                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.DISCOUNT)) == null) {
+                    ProductPercentValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPercentValue.Type.DISCOUNT)) == null) {
                         return;
                     }
 
-                    additionalDiscountPercentField.setPercent(pricingValue.getValue());
-                    product.setDiscountPricingValue(pricingValue);
+                    additionalDiscountPercentField.setPercent(pricingValue.getPercentValue());
+                    product.setDiscountPercentValue(pricingValue);
                     refreshPrices();
                 }
             });
@@ -1144,13 +1147,13 @@ public class ProductPanel extends BaseEntityPanel {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    ProductPricingValue pricingValue;
-                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.TRANSPORT)) == null) {
+                    ProductPercentValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPercentValue.Type.TRANSPORT)) == null) {
                         return;
                     }
 
-                    transportPricePercentField.setPercent(pricingValue.getValue());
-                    product.setTransportPricingValue(pricingValue);
+                    transportPricePercentField.setPercent(pricingValue.getPercentValue());
+                    product.setTransportPercentValue(pricingValue);
                     refreshPrices();
                 }
             });
@@ -1158,13 +1161,13 @@ public class ProductPanel extends BaseEntityPanel {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    ProductPricingValue pricingValue;
-                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.DUTY)) == null) {
+                    ProductPercentValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPercentValue.Type.CUSTOMS_DUTY)) == null) {
                         return;
                     }
 
-                    dutyPercentField.setPercent(pricingValue.getValue());
-                    product.setDutyPricingValue(pricingValue);
+                    dutyPercentField.setPercent(pricingValue.getPercentValue());
+                    product.setCustomsDutyPercentValue(pricingValue);
                     refreshPrices();
                 }
             });
@@ -1172,24 +1175,24 @@ public class ProductPanel extends BaseEntityPanel {
 
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    ProductPricingValue pricingValue;
-                    if((pricingValue = selectPricingValue(ProductPricingValue.Type.PROFIT)) == null) {
+                    ProductPercentValue pricingValue;
+                    if((pricingValue = selectPricingValue(ProductPercentValue.Type.PROFIT)) == null) {
                         return;
                     }
 
-                    additionalProfitPercentField.setPercent(pricingValue.getValue());
-                    product.setProfitPricingValue(pricingValue);
+                    additionalProfitPercentField.setPercent(pricingValue.getPercentValue());
+                    product.setProfitPercentValue(pricingValue);
                     refreshPrices();
                 }
             });
         }
 
-        private ProductPricingValue selectPricingValue(ProductPricingValue.Type type) {
+        private ProductPercentValue selectPricingValue(ProductPercentValue.Type type) {
             ProductPricingValueListPanel valuesPanel =
                     new ProductPricingValueListPanel(getOrganizationDataObjectId(), type);
             if (DialogResponse.SELECT.equals(valuesPanel.showDialog(ProductPanel.this))) {
-                ProductPricingValue pricingValue;
-                if((pricingValue = (ProductPricingValue) valuesPanel.getSelectedRowObject()) != null) {
+                ProductPercentValue pricingValue;
+                if((pricingValue = (ProductPercentValue) valuesPanel.getSelectedRowObject()) != null) {
                     return pricingValue;
                 }
             }
@@ -1256,6 +1259,9 @@ public class ProductPanel extends BaseEntityPanel {
         }
 
         private void refreshPrices() {
+            if(true)
+                return;
+
             SimpleProduct product = getProduct();
             ProductCategory category = product.getCategory();
             BigDecimal listPrice = product.getListPrice();
@@ -1267,24 +1273,24 @@ public class ProductPanel extends BaseEntityPanel {
                 categoryDiscountPercentField.setPercent(category.getDiscountPercent());
                 categoryProfitPercentField.setPercent(category.getProfitPercent());
             }
-            additionalDiscountPercentField.setPercent(product.getDiscountPercent());
-            totalDiscountPercentField.setPercent(product.getTotalDiscount());
+//            additionalDiscountPercentField.setPercent(product.getTotalDiscountPercent());
+//            totalDiscountPercentField.setPercent(product.getTotalDiscount());
 
-            ProductPricingValue ppv;
-            if ((ppv = product.getTransportPricingValue()) == null) {
-                transportPricePercentField.setPercent(product.getTransportPrice());
-            } else {
-                transportPricePercentField.setPercentValue(ppv.getValue());
-            }
-
-            if ((ppv = product.getDutyPricingValue()) == null) {
-                dutyPercentField.setPercent(product.getDutyPercent());
-            } else {
-                dutyPercentField.setPercentValue(ppv.getValue());
-            }
-
-            additionalProfitPercentField.setPercent(product.getProfitPercent());
-            totalProfitPercentField.setPercent(product.getTotalProfit());
+            ProductPercentValue ppv;
+//            if ((ppv = product.getTransportPricingValue()) == null) {
+//                transportPricePercentField.setPercent(product.getTransportPrice());
+//            } else {
+//                transportPricePercentField.setPercentValue(ppv.getPercentValue());
+//            }
+//
+//            if ((ppv = product.getDutyPricingValue()) == null) {
+//                dutyPercentField.setPercent(product.getDutyPercent());
+//            } else {
+//                dutyPercentField.setPercentValue(ppv.getPercentValue());
+//            }
+//
+//            additionalProfitPercentField.setPercent(product.getProfitPercent());
+//            totalProfitPercentField.setPercent(product.getTotalProfit());
 
             categoryDiscountPercentField.setBaseValue(listPrice);
             additionalDiscountPercentField.setBaseValue(listPrice);
