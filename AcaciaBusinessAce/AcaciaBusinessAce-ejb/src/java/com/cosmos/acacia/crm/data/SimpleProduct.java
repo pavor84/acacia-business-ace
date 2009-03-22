@@ -155,38 +155,29 @@ public class SimpleProduct
     @Property(title="List Price", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal listPrice;
-    
-    @Property(title="Discount %", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "discount_percent", precision=20, scale=4)
-    private BigDecimal discountPercent;
-    
-    @ManyToOne
-    private ProductPricingValue discountPricingValue;
-    
-    @ManyToOne
-    private ProductPricingValue dutyPricingValue;
-    
-    @ManyToOne
-    private ProductPricingValue transportPricingValue;
-    
-    @ManyToOne
-    private ProductPricingValue profitPricingValue;
-    
-    @Property(title="Duty %", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000d))
-    @Column(name = "duty_percent", precision=20, scale=4)
-    private BigDecimal dutyPercent;
-    
-    @Column(name = "transport_price")
-    @Property(title="Transport Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    private BigDecimal transportPrice;
-    
-    @Column(name = "profit_percent")
-    @Property(title="Profit Percent", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000d))
-    private BigDecimal profitPercent;
+
+    @JoinColumn(name = "transport_percent_id", referencedColumnName = "percent_value_id")
+    @ManyToOne(optional=false)
+    private ProductPercentValue transportPercentValue;
+
+    @JoinColumn(name = "discount_percent_id", referencedColumnName = "percent_value_id")
+    @ManyToOne(optional=false)
+    private ProductPercentValue discountPercentValue;
+
+    @JoinColumn(name = "profit_percent_id", referencedColumnName = "percent_value_id")
+    @ManyToOne(optional=false)
+    private ProductPercentValue profitPercentValue;
+
+    @JoinColumn(name = "customs_duty_percent_id", referencedColumnName = "percent_value_id")
+    @ManyToOne(optional=false)
+    private ProductPercentValue customsDutyPercentValue;
+
+    @JoinColumn(name = "excise_duty_percent_id", referencedColumnName = "percent_value_id")
+    @ManyToOne(optional=false)
+    private ProductPercentValue exciseDutyPercentValue;
+
+    @Column(name = "transport_value", precision = 19, scale = 4)
+    private BigDecimal transportValue;
     
     @Column(name = "quantity_per_package", nullable = false)
     @Property(title="Qty per Package", propertyValidator=@PropertyValidator(
@@ -253,16 +244,48 @@ public class SimpleProduct
     private DbResource currency;
 
     @Transient
-    @Property(title="Total Discount", editable=false)
-    private BigDecimal totalDiscount;
+    @Property(title="Total Discount %", editable=false)
+    private BigDecimal totalDiscountPercent;
 
     @Transient
-    @Property(title="Total Profit", editable=false)
-    private BigDecimal totalProfit;
+    @Property(title="Total Discount Value", editable=false)
+    private BigDecimal totalDiscountValue;
+
+    @Transient
+    @Property(title="Total Profit %", editable=false)
+    private BigDecimal totalProfitPercent;
+
+    @Transient
+    @Property(title="Total Profit Value", editable=false)
+    private BigDecimal totalProfitValue;
 
     @Transient
     @Property(title="Purchase Price", editable=false)
     private BigDecimal purchasePrice;
+
+    @Transient
+    @Property(title="Transport Price", editable=false)
+    private BigDecimal transportPrice;
+
+    @Transient
+    @Property(title="Base Duty Price", editable=false)
+    private BigDecimal baseDutyPrice;
+
+    @Transient
+    @Property(title="Customs Duty Percent", editable=false)
+    private BigDecimal customsDutyPercent;
+
+    @Transient
+    @Property(title="Customs Duty Value", editable=false)
+    private BigDecimal customsDutyValue;
+
+    @Transient
+    @Property(title="Excise Duty Percent", editable=false)
+    private BigDecimal exciseDutyPercent;
+
+    @Transient
+    @Property(title="Excise Duty Value", editable=false)
+    private BigDecimal exciseDutyValue;
 
     @Transient
     @Property(title="Cost Price", editable=false)
@@ -535,43 +558,6 @@ public class SimpleProduct
         }
     }
 
-
-    /*@PrePersist
-    public void prePersist()
-    {
-        System.out.println("PrePersist");
-    }
-
-    @PostPersist
-    public void postPersist()
-    {
-        System.out.println("PostPersist");
-    }
-
-    @PreUpdate
-    public void preUpdate()
-    {
-        System.out.println("PreUpdate");
-    }
-
-    @PostUpdate
-    public void postUpdate()
-    {
-        System.out.println("PostUpdate");
-    }
-
-    @PreRemove
-    public void preRemove()
-    {
-        System.out.println("PreRemove");
-    }
-
-    @PostRemove
-    public void postRemove()
-    {
-        System.out.println("PostRemove");
-    }*/
-
     @PostLoad
     public void postLoad()
     {
@@ -611,245 +597,12 @@ public class SimpleProduct
         return getProductName();
     }
 
-    public BigDecimal getDiscountPercent() {
-        return discountPercent;
-    }
-
-    public void setDiscountPercent(BigDecimal discountPercent) {
-        this.discountPercent = discountPercent;
-    }
-
-    public BigDecimal getDutyPercent() {
-        return dutyPercent;
-    }
-
-    public void setDutyPercent(BigDecimal dutyPercent) {
-        this.dutyPercent = dutyPercent;
-    }
-
-    public BigDecimal getTransportPrice() {
-        return transportPrice;
-    }
-
-    public void setTransportPrice(BigDecimal transportPrice) {
-        this.transportPrice = transportPrice;
-    }
-
     public DbResource getCurrency() {
         return currency;
     }
 
     public void setCurrency(DbResource currency) {
         this.currency = currency;
-    }
-    
-    public void setTotalDiscount(BigDecimal totalDiscount){
-    }
-
-    public BigDecimal getTotalDiscount() {
-        ProductCategory pc;
-        BigDecimal categoryDiscount = null;
-        if ((pc = getCategory()) != null) {
-            categoryDiscount = pc.getDiscountPercent();
-        }
-
-        BigDecimal discount = getDiscount();
-
-        if (categoryDiscount != null) {
-            if(discount != null) {
-                return getSequentialDiscount(categoryDiscount, discount);
-            } else {
-                return categoryDiscount;
-            }
-        }
-
-        return discount;
-    }
-
-    public void setPurchasePrice(BigDecimal purchasePrice) {
-    }
-    /**
-     * Synthetic getter - calculates the purchase price. If some of the needed prices is not available,
-     * returns null
-     * @return
-     */
-    public BigDecimal getPurchasePrice() {
-        BigDecimal price;
-        if ((price = getListPrice()) == null) {
-            return null;
-        }
-
-        BigDecimal percent = getTotalDiscount();
-        if (percent == null) {
-            return price;
-        }
-
-        return price.subtract(price.multiply(percent, MATH_CONTEXT), MATH_CONTEXT);
-    }
-
-    private BigDecimal substractPercent(BigDecimal value, BigDecimal percent){
-        return value.subtract(value.multiply(percent, MATH_CONTEXT), MATH_CONTEXT);
-    }
-    
-    private BigDecimal getSequentialDiscount(BigDecimal discountPercent1, BigDecimal discountPercent2) {
-        BigDecimal discount = substractPercent(ONE_HUNDRED, discountPercent1);
-        discount = substractPercent(discount, discountPercent2);
-        return ONE_HUNDRED.subtract(discount);
-    }
-
-    public void setCostPrice(BigDecimal costPrice) {
-    }
-
-    /**
-     * Synthetic getter - calculates the purchase price. If some of the needed prices is not available,
-     * returns null
-     * @return
-     */
-    public BigDecimal getCostPrice() {
-        BigDecimal price;
-        if ((price = getPurchasePrice()) == null) {
-            return null;
-        }
-
-        BigDecimal duty;
-        BigDecimal percent;
-        if ((percent = getDuty()) == null) {
-            duty = BigDecimal.ZERO;
-        } else {
-            duty = price.multiply(percent, MATH_CONTEXT);
-        }
-
-        BigDecimal transport;
-        if ((transport = getTransport()) == null) {
-            transport = BigDecimal.ZERO;
-        }
-
-        return price.add(duty).add(transport);
-    }
-    
-    @Override
-    public void setSalePrice(BigDecimal salesPrice) {
-    }
-
-    /**
-     * Synthetic getter - calculates the sales price. If some of the needed prices is not available,
-     * returns null
-     * @return
-     */
-    @Override
-    public BigDecimal getSalePrice() {
-        BigDecimal price;
-        if ((price = getCostPrice()) == null) {
-            return null;
-        }
-
-        BigDecimal profit = getTotalProfit();
-        if (profit == null) {
-            profit = BigDecimal.ZERO;
-        }
-
-        return price.divide(BigDecimal.ONE.subtract(profit), MATH_CONTEXT);
-    }
-
-    public ProductPricingValue getDiscountPricingValue() {
-        return discountPricingValue;
-    }
-
-    public void setDiscountPricingValue(ProductPricingValue discountPricingValue) {
-        this.discountPricingValue = discountPricingValue;
-    }
-
-    public ProductPricingValue getDutyPricingValue() {
-        return dutyPricingValue;
-    }
-
-    public void setDutyPricingValue(ProductPricingValue dutyPricingValue) {
-        this.dutyPricingValue = dutyPricingValue;
-    }
-
-    public ProductPricingValue getTransportPricingValue() {
-        return transportPricingValue;
-    }
-
-    public void setTransportPricingValue(ProductPricingValue transportPricingValue) {
-        this.transportPricingValue = transportPricingValue;
-    }
-
-    public ProductPricingValue getProfitPricingValue() {
-        return profitPricingValue;
-    }
-
-    public void setProfitPricingValue(ProductPricingValue profitPricingValue) {
-        this.profitPricingValue = profitPricingValue;
-    }
-    
-    /**
-     * Percent value of {@link #getListPrice()}.
-     * Synthetic getter - the value of {@link #getDiscountPricingValue()} or 
-     * {@link #getDiscountPercent()} if the former is null.
-     * @return
-     */
-    public BigDecimal getDiscount() {
-        ProductPricingValue ppv;
-        if ((ppv = getDiscountPricingValue()) == null) {
-            return getDiscountPercent();
-        }
-
-        return ppv.getValue();
-    }
-    
-    /**
-     * Percent value of {@link #getPurchasePrice()}
-     * Synthetic getter - the value of {@link #getDutyPricingValue()} or 
-     * {@link #getDutyPercent()} if the former is null.
-     * @return
-     */
-    public BigDecimal getDuty() {
-        ProductPricingValue ppv;
-        if ((ppv = getDutyPricingValue()) == null) {
-            return getDutyPercent();
-        }
-
-        return ppv.getValue();
-    }
-    
-    /**
-     * Absolute value.
-     * Synthetic getter - the value of {@link #getTransportPricingValue()} as percent calculated as absolute value 
-     * over {@link #getPurchasePrice()} or 
-     * {@link #getTransportPrice()} if {@link #getTransportPricingValue()} is null.
-     * @return
-     */
-    public BigDecimal getTransport() {
-        ProductPricingValue ppv;
-        if((ppv = getTransportPricingValue()) == null)
-            return getTransportPrice();
-
-        BigDecimal price;
-        if ((price = getPurchasePrice()) == null) {
-            return null;
-        }
-
-        return price.multiply(ppv.getValue(), MATH_CONTEXT);
-    }
-    
-    /**
-     * Percent value of {@link #getCostPrice()} inclusively.
-     */
-    public BigDecimal getProfit() {
-        ProductPricingValue ppv;
-        if ((ppv = getProfitPricingValue()) == null)
-            return getProfitPercent();
-
-        return ppv.getValue();
-    }
-
-    public BigDecimal getProfitPercent() {
-        return profitPercent;
-    }
-
-    public void setProfitPercent(BigDecimal profitPercent) {
-        this.profitPercent = profitPercent;
     }
 
     public String getProductDisplay() {
@@ -870,28 +623,277 @@ public class SimpleProduct
         return codeFormatted + " " + name + ", " + categoryName;
     }
 
-    public void setTotalProfit(BigDecimal totalProfit) {
+    public ProductPercentValue getCustomsDutyPercentValue() {
+        return customsDutyPercentValue;
     }
 
-    public BigDecimal getTotalProfit() {
-        ProductCategory pc;
-        BigDecimal categoryProfit;
-        if ((pc = getCategory()) != null) {
-            categoryProfit = pc.getProfitPercent();
-        } else {
-            categoryProfit = null;
+    public void setCustomsDutyPercentValue(ProductPercentValue customsDutyPercentValue) {
+        this.customsDutyPercentValue = customsDutyPercentValue;
+    }
+
+    public ProductPercentValue getDiscountPercentValue() {
+        return discountPercentValue;
+    }
+
+    public void setDiscountPercentValue(ProductPercentValue discountPercentValue) {
+        this.discountPercentValue = discountPercentValue;
+    }
+
+    public ProductPercentValue getExciseDutyPercentValue() {
+        return exciseDutyPercentValue;
+    }
+
+    public void setExciseDutyPercentValue(ProductPercentValue exciseDutyPercentValue) {
+        this.exciseDutyPercentValue = exciseDutyPercentValue;
+    }
+
+    public ProductPercentValue getProfitPercentValue() {
+        return profitPercentValue;
+    }
+
+    public void setProfitPercentValue(ProductPercentValue profitPercentValue) {
+        this.profitPercentValue = profitPercentValue;
+    }
+
+    public ProductPercentValue getTransportPercentValue() {
+        return transportPercentValue;
+    }
+
+    public void setTransportPercentValue(ProductPercentValue transportPercentValue) {
+        this.transportPercentValue = transportPercentValue;
+    }
+
+    public BigDecimal getTransportValue() {
+        return transportValue;
+    }
+
+    public void setTransportValue(BigDecimal transportValue) {
+        this.transportValue = transportValue;
+    }
+
+    public BigDecimal getTotalDiscountPercent() {
+        BigDecimal categoryDiscount;
+        if(category != null)
+            categoryDiscount = category.getDiscountPercent();
+        else
+            categoryDiscount = null;
+
+        BigDecimal productDiscount = null;
+        if(discountPercentValue != null)
+            productDiscount = discountPercentValue.getPercentValue();
+        else
+            productDiscount = null;
+
+        if(categoryDiscount != null && productDiscount != null) {
+            BigDecimal sumDiscount = categoryDiscount.add(productDiscount, MATH_CONTEXT);
+            BigDecimal multipliedDiscount = categoryDiscount.multiply(productDiscount, MATH_CONTEXT);
+            return sumDiscount.subtract(multipliedDiscount, MATH_CONTEXT);
         }
 
-        BigDecimal profit = getProfit();
+        if(categoryDiscount != null)
+            return categoryDiscount;
 
-        if (categoryProfit != null) {
-            if (profit != null) {
-                return getSequentialDiscount(categoryProfit, profit);
-            } else {
-                return categoryProfit;
-            }
+        if(productDiscount != null)
+            return productDiscount;
+
+        return null;
+    }
+
+    public void setTotalDiscountPercent(BigDecimal totalDiscount) {
+    }
+
+    public BigDecimal getTotalDiscountValue() {
+        BigDecimal discount;
+        if(listPrice == null || (discount = getTotalDiscountPercent()) == null)
+            return null;
+
+        return listPrice.multiply(discount, MATH_CONTEXT);
+    }
+
+    public void setTotalDiscountValue(BigDecimal totalDiscountValue) {
+    }
+
+    public BigDecimal getPurchasePrice() {
+        if(listPrice == null)
+            return null;
+
+        BigDecimal discountValue;
+        if((discountValue = getTotalDiscountValue()) == null)
+            return listPrice;
+
+        return listPrice.subtract(discountValue, MATH_CONTEXT);
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+    }
+
+    public BigDecimal getTransportPrice() {
+        BigDecimal price = getPurchasePrice();
+        BigDecimal transportPercent;
+        if(transportPercentValue != null)
+            transportPercent = transportPercentValue.getPercentValue();
+        else
+            transportPercent = null;
+
+        BigDecimal value;
+        if((value = getTransportPrice(transportValue, transportPercent, price)) != null)
+            return value;
+
+        if(category == null)
+            return null;
+
+        return getTransportPrice(
+                category.getTransportValue(), category.getTransportPercent(), price);
+    }
+
+    private BigDecimal getTransportPrice(BigDecimal value, BigDecimal percent, BigDecimal price) {
+        if(value != null)
+            return value;
+
+        if(percent == null || price == null)
+            return null;
+
+        return price.multiply(percent, MATH_CONTEXT);
+    }
+
+    public void setTransportPrice(BigDecimal transportPrice) {
+    }
+
+    public BigDecimal getBaseDutyPrice() {
+        BigDecimal price;
+        if((price = getPurchasePrice()) == null)
+            return null;
+
+        BigDecimal transport;
+        if((transport = getTransportPrice()) == null)
+            return price;
+
+        return price.add(transport, MATH_CONTEXT);
+    }
+
+    public void setBaseDutyPrice(BigDecimal baseDutyPrice) {
+    }
+
+    public BigDecimal getCustomsDutyPercent() {
+        if(customsDutyPercentValue != null)
+            return customsDutyPercentValue.getPercentValue();
+
+        BigDecimal percent;
+        if(category != null && (percent = category.getCustomsDutyPercent()) != null)
+            return percent;
+
+        return null;
+    }
+
+    public void setCustomsDutyPercent(BigDecimal customsDutyPercent) {
+    }
+
+    public BigDecimal getCustomsDutyValue() {
+        BigDecimal price;
+        BigDecimal percent;
+        if((price = getBaseDutyPrice()) == null || (percent = getCustomsDutyPercent()) == null)
+            return null;
+
+        return price.multiply(percent, MATH_CONTEXT);
+    }
+
+    public void setCustomsDutyValue(BigDecimal customsDutyValue) {
+    }
+
+    public BigDecimal getExciseDutyPercent() {
+        if(exciseDutyPercentValue != null)
+            return exciseDutyPercentValue.getPercentValue();
+
+        BigDecimal percent;
+        if(category != null && (percent = category.getExciseDutyPercent()) != null)
+            return percent;
+
+        return null;
+    }
+
+    public void setExciseDutyPercent(BigDecimal exciseDutyPercent) {
+    }
+
+    public BigDecimal getExciseDutyValue() {
+        BigDecimal price;
+        BigDecimal percent;
+        if((price = getBaseDutyPrice()) == null || (percent = getExciseDutyPercent()) == null)
+            return null;
+
+        return price.multiply(percent, MATH_CONTEXT);
+    }
+
+    public void setExciseDutyValue(BigDecimal exciseDutyValue) {
+    }
+
+    public BigDecimal getCostPrice() {
+        BigDecimal price;
+        if((price = getBaseDutyPrice()) == null)
+            return null;
+
+        BigDecimal duty;
+        if((duty = getCustomsDutyValue()) != null)
+            price = price.add(duty, MATH_CONTEXT);
+
+        if((duty = getExciseDutyValue()) != null)
+            price = price.add(duty, MATH_CONTEXT);
+
+        return price;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+    }
+
+    public BigDecimal getTotalProfitPercent() {
+        BigDecimal percent;
+        if(profitPercentValue != null)
+            percent = profitPercentValue.getPercentValue();
+        else
+            percent = null;
+
+        BigDecimal value;
+        if(category != null && (value = category.getProfitPercent()) != null) {
+            if(percent == null)
+                return value;
+
+            return percent.add(value, MATH_CONTEXT);
         }
 
-        return profit;
+        return percent;
+    }
+
+    public void setTotalProfitPercent(BigDecimal totalProfitPercent) {
+    }
+
+    public BigDecimal getTotalProfitValue() {
+        BigDecimal price;
+        if((price = getCostPrice()) == null)
+            return null;
+
+        BigDecimal profit;
+        if((profit = getTotalProfitPercent()) == null)
+            return null;
+
+        return price.multiply(profit, MATH_CONTEXT).divide(BigDecimal.ONE.subtract(profit, MATH_CONTEXT), MATH_CONTEXT);
+    }
+
+    public void setTotalProfitValue(BigDecimal totalProfitValue) {
+    }
+
+    @Override
+    public BigDecimal getSalePrice() {
+        BigDecimal price;
+        if((price = getCostPrice()) == null)
+            return null;
+
+        BigDecimal profit;
+        if((profit = getTotalProfitPercent()) == null)
+            return price;
+
+        return price.divide(BigDecimal.ONE.subtract(profit, MATH_CONTEXT), MATH_CONTEXT);
+    }
+
+    @Override
+    public void setSalePrice(BigDecimal salePrice) {
     }
 }

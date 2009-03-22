@@ -92,12 +92,12 @@ public class ProductCategory
     private BigDecimal profitPercent;
 
     @Property(title="Customs duty %", percent=true)
-    @Column(name = "customs_duty", precision=8, scale=6)
-    private BigDecimal customsDuty;
+    @Column(name = "customs_duty_percent", precision=8, scale=6)
+    private BigDecimal customsDutyPercent;
 
     @Property(title="Excise duty %", percent=true)
-    @Column(name = "excise_duty", precision=8, scale=6)
-    private BigDecimal exciseDuty;
+    @Column(name = "excise_duty_percent", precision=8, scale=6)
+    private BigDecimal exciseDutyPercent;
 
     @Property(title="Transport %", percent=true)
     @Column(name = "transport_percent", precision=8, scale=6)
@@ -267,36 +267,36 @@ public class ProductCategory
         return discountPercent;
     }
 
-    public void setDiscountPercent(BigDecimal discountPercent) {
-        firePropertyChange("discountPercent", this.discountPercent, discountPercent);
-        this.discountPercent = discountPercent;
+    public void setDiscountPercent(BigDecimal discount) {
+        firePropertyChange("discount", this.discountPercent, discount);
+        this.discountPercent = discount;
     }
 
     public BigDecimal getProfitPercent() {
         return profitPercent;
     }
 
-    public void setProfitPercent(BigDecimal profitPercent) {
-        firePropertyChange("profitPercent", this.profitPercent, profitPercent);
-        this.profitPercent = profitPercent;
+    public void setProfitPercent(BigDecimal profit) {
+        firePropertyChange("profit", this.profitPercent, profit);
+        this.profitPercent = profit;
     }
 
-    public BigDecimal getCustomsDuty() {
-        return customsDuty;
+    public BigDecimal getCustomsDutyPercent() {
+        return customsDutyPercent;
     }
 
-    public void setCustomsDuty(BigDecimal customsDuty) {
-        firePropertyChange("customsDuty", this.customsDuty, customsDuty);
-        this.customsDuty = customsDuty;
+    public void setCustomsDutyPercent(BigDecimal customsDuty) {
+        firePropertyChange("customsDuty", this.customsDutyPercent, customsDuty);
+        this.customsDutyPercent = customsDuty;
     }
 
-    public BigDecimal getExciseDuty() {
-        return exciseDuty;
+    public BigDecimal getExciseDutyPercent() {
+        return exciseDutyPercent;
     }
 
-    public void setExciseDuty(BigDecimal exciseDuty) {
-        firePropertyChange("exciseDuty", this.exciseDuty, exciseDuty);
-        this.exciseDuty = exciseDuty;
+    public void setExciseDutyPercent(BigDecimal exciseDuty) {
+        firePropertyChange("exciseDuty", this.exciseDutyPercent, exciseDuty);
+        this.exciseDutyPercent = exciseDuty;
     }
 
     public BigDecimal getTransportPercent() {
