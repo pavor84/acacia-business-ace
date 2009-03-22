@@ -158,25 +158,31 @@ public class SimpleProduct
 
     @JoinColumn(name = "transport_percent_id", referencedColumnName = "percent_value_id")
     @ManyToOne(optional=false)
+    @Property(title="Transport %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue transportPercentValue;
 
     @JoinColumn(name = "discount_percent_id", referencedColumnName = "percent_value_id")
     @ManyToOne(optional=false)
+    @Property(title="Discount %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue discountPercentValue;
 
     @JoinColumn(name = "profit_percent_id", referencedColumnName = "percent_value_id")
     @ManyToOne(optional=false)
+    @Property(title="Profit %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue profitPercentValue;
 
     @JoinColumn(name = "customs_duty_percent_id", referencedColumnName = "percent_value_id")
     @ManyToOne(optional=false)
+    @Property(title="Customs duty %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue customsDutyPercentValue;
 
     @JoinColumn(name = "excise_duty_percent_id", referencedColumnName = "percent_value_id")
     @ManyToOne(optional=false)
+    @Property(title="Excise duty %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue exciseDutyPercentValue;
 
     @Column(name = "transport_value", precision = 19, scale = 4)
+    @Property(title="Transport Value", editable=false, hidden=true, visible=false)
     private BigDecimal transportValue;
     
     @Column(name = "quantity_per_package", nullable = false)
@@ -244,51 +250,51 @@ public class SimpleProduct
     private DbResource currency;
 
     @Transient
-    @Property(title="Total Discount %", editable=false)
+    @Property(title="Total Discount %", editable=false, hidden=true, percent=true, visible=false)
     private BigDecimal totalDiscountPercent;
 
     @Transient
-    @Property(title="Total Discount Value", editable=false)
+    @Property(title="Total Discount Value", editable=false, hidden=true, visible=false)
     private BigDecimal totalDiscountValue;
 
     @Transient
-    @Property(title="Total Profit %", editable=false)
+    @Property(title="Total Profit %", editable=false, hidden=true, percent=true, visible=false)
     private BigDecimal totalProfitPercent;
 
     @Transient
-    @Property(title="Total Profit Value", editable=false)
+    @Property(title="Total Profit Value", editable=false, hidden=true, visible=false)
     private BigDecimal totalProfitValue;
 
     @Transient
-    @Property(title="Purchase Price", editable=false)
+    @Property(title="Purchase Price", editable=false, hidden=true, visible=false)
     private BigDecimal purchasePrice;
 
     @Transient
-    @Property(title="Transport Price", editable=false)
+    @Property(title="Transport Price", editable=false, hidden=true, visible=false)
     private BigDecimal transportPrice;
 
     @Transient
-    @Property(title="Base Duty Price", editable=false)
+    @Property(title="Base Duty Price", editable=false, hidden=true, visible=false)
     private BigDecimal baseDutyPrice;
 
     @Transient
-    @Property(title="Customs Duty Percent", editable=false)
+    @Property(title="Customs Duty Percent", editable=false, hidden=true, visible=false, percent=true)
     private BigDecimal customsDutyPercent;
 
     @Transient
-    @Property(title="Customs Duty Value", editable=false)
+    @Property(title="Customs Duty Value", editable=false, hidden=true, visible=false)
     private BigDecimal customsDutyValue;
 
     @Transient
-    @Property(title="Excise Duty Percent", editable=false)
+    @Property(title="Excise Duty Percent", editable=false, hidden=true, visible=false, percent=true)
     private BigDecimal exciseDutyPercent;
 
     @Transient
-    @Property(title="Excise Duty Value", editable=false)
+    @Property(title="Excise Duty Value", editable=false, hidden=true, visible=false)
     private BigDecimal exciseDutyValue;
 
     @Transient
-    @Property(title="Cost Price", editable=false)
+    @Property(title="Cost Price", editable=false, hidden=true, visible=false)
     private BigDecimal costPrice;
 
     @Transient
