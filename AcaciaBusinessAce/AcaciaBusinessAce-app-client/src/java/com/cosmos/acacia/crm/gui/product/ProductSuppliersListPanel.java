@@ -23,22 +23,23 @@ import org.jdesktop.swingbinding.JTableBinding;
  */
 public class ProductSuppliersListPanel extends AbstractTablePanel {
 
-    private ProductPanel productPanel;
     private BindingGroup bindingGroup;
     private EntityProperties productSuppliersEntityProperties;
     private ProductsListRemote formSession;
     private SimpleProduct product;
 
     public ProductSuppliersListPanel(ProductPanel productPanel) {
-        this.productPanel = productPanel;
-        this.bindingGroup = productPanel.getBindingGroup();
-        this.productSuppliersEntityProperties = productPanel.getProductSuppliersEntityProperties();
-        this.formSession = productPanel.getFormSession();
-        this.product = productPanel.getProduct();
+        super(productPanel);
     }
 
     @Override
     protected void initData() {
+        ProductPanel productPanel = (ProductPanel) getParentPanel();
+        this.bindingGroup = productPanel.getBindingGroup();
+        this.productSuppliersEntityProperties = productPanel.getProductSuppliersEntityProperties();
+        this.formSession = productPanel.getFormSession();
+        this.product = productPanel.getProduct();
+
         super.initData();
         setVisible(AbstractTablePanel.Button.Close, false);
 
