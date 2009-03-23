@@ -65,26 +65,27 @@ public abstract class AbstractTablePanel
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
 
-    public AbstractTablePanel()
-    {
+    protected AbstractTablePanel(JBPanel parentPanel) {
+        this.parentPanel = parentPanel;
+        init();
+    }
+
+    public AbstractTablePanel() {
         this((BigInteger)null);
     }
 
     /** Creates new form AbstractTablePanel */
-    public AbstractTablePanel(DataObjectBean dataObjectBean)
-    {
+    public AbstractTablePanel(DataObjectBean dataObjectBean) {
         super(dataObjectBean);
         init();
     }
 
-    public AbstractTablePanel(BigInteger parentDataObjectId)
-    {
+    public AbstractTablePanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }
 
-    private void init()
-    {
+    private void init() {
         initComponents();
         initData();
 
@@ -252,6 +253,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
 
+
+    private JBPanel parentPanel;
     private Map<Button, JBButton> buttonsMap;
 
     private boolean editable = true;
@@ -288,6 +291,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     private boolean closeAfterUnselect = false;
 
+    protected JBPanel getParentPanel() {
+        return parentPanel;
+    }
 
     @Override
     protected void initData()
