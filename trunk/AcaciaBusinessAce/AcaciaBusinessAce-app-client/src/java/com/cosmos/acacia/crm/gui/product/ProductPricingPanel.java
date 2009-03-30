@@ -336,12 +336,12 @@ public class ProductPricingPanel extends AcaciaPanel {
         helper.setLayoutFillX(true);
         helper.columnGap("15", mainValueColumn, valueColumn);
         //helper.rowGap("15", 1);
-        helper.columnSizeGroup("fieldSG", categoryColumn, productColumn, percentColumn,
-                mainValueColumn, valueColumn);
+        helper.columnSizeGroup("percentSG", categoryColumn, productColumn, percentColumn);
+        helper.columnSizeGroup("valueSG", mainValueColumn, valueColumn);
         helper.columnSizeGroup("buttonSG", clearColumn, selectColumn);
-        helper.columnGrow(100, categoryColumn, productColumn, percentColumn,
-                mainValueColumn, valueColumn);
-        helper.columnGrow(50, clearColumn, selectColumn);
+        helper.columnGrow(50, mainValueColumn, valueColumn);
+        helper.columnGrow(35, categoryColumn, productColumn, percentColumn);
+        helper.columnGrow(15, clearColumn, selectColumn);
         helper.columnFill(mainValueColumn, categoryColumn, productColumn, percentColumn,
                 valueColumn, clearColumn, selectColumn);
 
