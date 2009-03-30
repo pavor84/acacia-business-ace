@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.data.ProductPercentValue;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
+import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
@@ -19,12 +20,15 @@ import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPercentField;
 import com.cosmos.swingb.MigLayoutHelper;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
+import javax.swing.SwingConstants;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -43,35 +47,69 @@ public class ProductPricingPanel extends AcaciaPanel {
     private EntityProperties entityProps;
     private boolean bindingInit;
     //
-    private JBButton additionalDiscountButton;
-    private JXPercentValueField additionalDiscountPercentField;
-    private JBLabel additionalDiscountLabel;
-    private JBButton additionalProfitButton;
-    private JXPercentValueField additionalProfitPercentField;
-    private JBLabel additionalProfitLabel;
-    private JXPercentValueField categoryDiscountPercentField;
-    private JBLabel categoryDiscountLabel;
-    private JXPercentValueField categoryProfitPercentField;
-    private JBLabel categoryProfitLabel;
-    private JBDecimalField costPriceTextField;
-    private JBLabel costPriceLabel;
-    private JBComboBox currencyComboBox;
-    private JBButton dutyButton;
-    private JXPercentValueField dutyPercentField;
-    private JBLabel dutyLabel;
-    private JBDecimalField listPriceTextField;
+    // Row 0
+    private JBLabel categoryLabel;
+    private JBLabel productLabel;
+    private JBLabel percentLabel;
+    private JBLabel valueLabel;
+    private JBLabel totalLabel;
+    // Row 1
     private JBLabel listPriceLabel;
-    private JBDecimalField purchasePriceTextField;
+    private JBDecimalField listPriceDecimalField;
+    private JBLabel currencyLabel;
+    private AcaciaComboBox currencyComboBox;
+    // Row 2
+    private JBLabel discountLabel;
+    private JBPercentField discountCategoryPercentField;
+    private JBPercentField discountProductPercentField;
+    private JBPercentField discountPercentField;
+    private JBDecimalField discountDecimalField;
+    private JBButton discountClearButton;
+    private JBButton discountSelectButton;
+    // Row 3
     private JBLabel purchasePriceLabel;
-    private JBDecimalField salesPriceDecimalField;
+    private JBDecimalField purchasePriceDecimalField;
+    // Row 4
+    private JBLabel transportLabel;
+    private JBPercentField transportCategoryPercentField;
+    private JBPercentField transportProductPercentField;
+    private JBPercentField transportPercentField;
+    private JBDecimalField transportDecimalField;
+    private JBButton transportClearButton;
+    private JBButton transportSelectButton;
+    // Row 5
+    private JBLabel baseDutyPriceLabel;
+    private JBDecimalField baseDutyPriceDecimalField;
+    // Row 6
+    private JBLabel customsDutyLabel;
+    private JBPercentField customsDutyCategoryPercentField;
+    private JBPercentField customsDutyProductPercentField;
+    private JBPercentField customsDutyPercentField;
+    private JBDecimalField customsDutyDecimalField;
+    private JBButton customsDutyClearButton;
+    private JBButton customsDutySelectButton;
+    // Row 7
+    private JBLabel exciseDutyLabel;
+    private JBPercentField exciseDutyCategoryPercentField;
+    private JBPercentField exciseDutyProductPercentField;
+    private JBPercentField exciseDutyPercentField;
+    private JBDecimalField exciseDutyDecimalField;
+    private JBButton exciseDutyClearButton;
+    private JBButton exciseDutySelectButton;
+    // Row 8
+    private JBLabel costPriceLabel;
+    private JBDecimalField costPriceDecimalField;
+    // Row 9
+    private JBLabel profitLabel;
+    private JBPercentField profitCategoryPercentField;
+    private JBPercentField profitProductPercentField;
+    private JBPercentField profitPercentField;
+    private JBDecimalField profitDecimalField;
+    private JBButton profitClearButton;
+    private JBButton profitSelectButton;
+    // Row 10
     private JBLabel salesPriceLabel;
-    private JXPercentValueField totalDiscountPercentField;
-    private JBLabel totalDiscountLabel;
-    private JXPercentValueField totalProfitPercentField;
-    private JBLabel totalProfitLabel;
-    private JBButton transportButton;
-    private JXPercentValueField transportPricePercentField;
-    private JBLabel transportPriceLabel;
+    private JBDecimalField salesPriceDecimalField;
 
     public ProductPricingPanel(ProductPanel productPanel) {
         super(productPanel.getProduct());
@@ -87,197 +125,359 @@ public class ProductPricingPanel extends AcaciaPanel {
     }
 
     private void initComponents() {
+        // Row 0
+        categoryLabel = new JBLabel();
+        productLabel = new JBLabel();
+        percentLabel = new JBLabel();
+        valueLabel = new JBLabel();
+        totalLabel = new JBLabel();
+        // Row 1
         listPriceLabel = new JBLabel();
-        listPriceTextField = new JBDecimalField();
-        currencyComboBox = new JBComboBox();
-        additionalDiscountPercentField = new JXPercentValueField();
-        additionalDiscountButton = new JBButton();
-        additionalDiscountLabel = new JBLabel();
-        purchasePriceTextField = new JBDecimalField();
+        listPriceDecimalField = new JBDecimalField();
+        currencyLabel = new JBLabel();
+        currencyComboBox = new AcaciaComboBox();
+        // Row 2
+        discountLabel = new JBLabel();
+        discountCategoryPercentField = new JBPercentField();
+        discountProductPercentField = new JBPercentField();
+        discountPercentField = new JBPercentField();
+        discountDecimalField = new JBDecimalField();
+        discountClearButton = new JBButton();
+        discountSelectButton = new JBButton();
+        // Row 3
         purchasePriceLabel = new JBLabel();
-        transportPricePercentField = new JXPercentValueField();
-        transportButton = new JBButton();
-        transportPriceLabel = new JBLabel();
-        dutyPercentField = new JXPercentValueField();
-        dutyButton = new JBButton();
-        dutyLabel = new JBLabel();
-        costPriceTextField = new JBDecimalField();
+        purchasePriceDecimalField = new JBDecimalField();
+        // Row 4
+        transportLabel = new JBLabel();
+        transportCategoryPercentField = new JBPercentField();
+        transportProductPercentField = new JBPercentField();
+        transportPercentField = new JBPercentField();
+        transportDecimalField = new JBDecimalField();
+        transportClearButton = new JBButton();
+        transportSelectButton = new JBButton();
+        // Row 5
+        baseDutyPriceLabel = new JBLabel();
+        baseDutyPriceDecimalField = new JBDecimalField();
+        // Row 6
+        customsDutyLabel = new JBLabel();
+        customsDutyCategoryPercentField = new JBPercentField();
+        customsDutyProductPercentField = new JBPercentField();
+        customsDutyPercentField = new JBPercentField();
+        customsDutyDecimalField = new JBDecimalField();
+        customsDutyClearButton = new JBButton();
+        customsDutySelectButton = new JBButton();
+        // Row 7
+        exciseDutyLabel = new JBLabel();
+        exciseDutyCategoryPercentField = new JBPercentField();
+        exciseDutyProductPercentField = new JBPercentField();
+        exciseDutyPercentField = new JBPercentField();
+        exciseDutyDecimalField = new JBDecimalField();
+        exciseDutyClearButton = new JBButton();
+        exciseDutySelectButton = new JBButton();
+        // Row 8
         costPriceLabel = new JBLabel();
-        additionalProfitPercentField = new JXPercentValueField();
-        additionalProfitButton = new JBButton();
-        additionalProfitLabel = new JBLabel();
-        salesPriceDecimalField = new JBDecimalField();
+        costPriceDecimalField = new JBDecimalField();
+        // Row 9
+        profitLabel = new JBLabel();
+        profitCategoryPercentField = new JBPercentField();
+        profitProductPercentField = new JBPercentField();
+        profitPercentField = new JBPercentField();
+        profitDecimalField = new JBDecimalField();
+        profitClearButton = new JBButton();
+        profitSelectButton = new JBButton();
+        // Row 10
         salesPriceLabel = new JBLabel();
-        categoryDiscountPercentField = new JXPercentValueField();
-        categoryDiscountLabel = new JBLabel();
-        totalDiscountPercentField = new JXPercentValueField();
-        totalDiscountLabel = new JBLabel();
-        categoryProfitPercentField = new JXPercentValueField();
-        categoryProfitLabel = new JBLabel();
-        totalProfitPercentField = new JXPercentValueField();
-        totalProfitLabel = new JBLabel();
+        salesPriceDecimalField = new JBDecimalField();
 
+        // Row 0
+        categoryLabel.setText(getResourceString("categoryLabel.text"));
+        categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        productLabel.setText(getResourceString("productLabel.text"));
+        productLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        percentLabel.setText(getResourceString("percentLabel.text"));
+        percentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        valueLabel.setText(getResourceString("valueLabel.text"));
+        valueLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        totalLabel.setText(getResourceString("totalLabel.text"));
+        totalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Row 1
         listPriceLabel.setText(getResourceString("listPriceLabel.text"));
-        categoryDiscountLabel.setText(getResourceString("categoryDiscountLabel.text"));
-        additionalDiscountLabel.setText(getResourceString("additionalDiscountLabel.text"));
-        additionalDiscountButton.setText(getResourceString("additionalDiscountButton.text"));
-        totalDiscountLabel.setText(getResourceString("totalDiscountLabel.text"));
+        currencyLabel.setText(getResourceString("currencyLabel.text"));
+        // Row 2
+        discountLabel.setText(getResourceString("discountLabel.text"));
+        discountClearButton.setText(getResourceString("discountClearButton.text"));
+        discountSelectButton.setText(getResourceString("discountSelectButton.text"));
+        // Row 3
         purchasePriceLabel.setText(getResourceString("purchasePriceLabel.text"));
-        transportPriceLabel.setText(getResourceString("transportPriceLabel.text"));
-        transportButton.setText(getResourceString("transportButton.text"));
-        dutyLabel.setText(getResourceString("dutyLabel.text"));
-        dutyButton.setText(getResourceString("dutyButton.text"));
+        // Row 4
+        transportLabel.setText(getResourceString("transportLabel.text"));
+        transportClearButton.setText(getResourceString("transportClearButton.text"));
+        transportSelectButton.setText(getResourceString("transportSelectButton.text"));
+        // Row 5
+        baseDutyPriceLabel.setText(getResourceString("baseDutyPriceLabel.text"));
+        // Row 6
+        customsDutyLabel.setText(getResourceString("customsDutyLabel.text"));
+        customsDutyClearButton.setText(getResourceString("customsDutyClearButton.text"));
+        customsDutySelectButton.setText(getResourceString("customsDutySelectButton.text"));
+        // Row 7
+        exciseDutyLabel.setText(getResourceString("exciseDutyLabel.text"));
+        exciseDutyClearButton.setText(getResourceString("exciseDutyClearButton.text"));
+        exciseDutySelectButton.setText(getResourceString("exciseDutySelectButton.text"));
+        // Row 8
         costPriceLabel.setText(getResourceString("costPriceLabel.text"));
-        categoryProfitLabel.setText(getResourceString("categoryProfitLabel.text"));
-        additionalProfitLabel.setText(getResourceString("additionalProfitLabel.text"));
-        additionalProfitButton.setText(getResourceString("additionalProfitButton.text"));
-        totalProfitLabel.setText(getResourceString("totalProfitLabel.text"));
+        // Row 9
+        profitLabel.setText(getResourceString("profitLabel.text"));
+        profitClearButton.setText(getResourceString("profitClearButton.text"));
+        profitSelectButton.setText(getResourceString("profitSelectButton.text"));
+        // Row 10
         salesPriceLabel.setText(getResourceString("salesPriceLabel.text"));
 
-        purchasePriceTextField.setEditable(false);
-        costPriceTextField.setEditable(false);
+        discountCategoryPercentField.setEditable(false);
+        discountProductPercentField.setEditable(false);
+        discountPercentField.setEditable(false);
+        discountDecimalField.setEditable(false);
+        purchasePriceDecimalField.setEditable(false);
+        transportCategoryPercentField.setEditable(false);
+        transportProductPercentField.setEditable(false);
+        transportPercentField.setEditable(false);
+        baseDutyPriceDecimalField.setEditable(false);
+        customsDutyCategoryPercentField.setEditable(false);
+        customsDutyProductPercentField.setEditable(false);
+        customsDutyPercentField.setEditable(false);
+        customsDutyDecimalField.setEditable(false);
+        exciseDutyCategoryPercentField.setEditable(false);
+        exciseDutyProductPercentField.setEditable(false);
+        exciseDutyPercentField.setEditable(false);
+        exciseDutyDecimalField.setEditable(false);
+        costPriceDecimalField.setEditable(false);
+        profitCategoryPercentField.setEditable(false);
+        profitProductPercentField.setEditable(false);
+        profitPercentField.setEditable(false);
+        profitDecimalField.setEditable(false);
         salesPriceDecimalField.setEditable(false);
 
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(currencyComboBox, resourceToStringConverter);
 
+        // Row 0
+        add(categoryLabel);
+        add(productLabel);
+        add(percentLabel);
+        add(valueLabel);
+        add(totalLabel);
+        // Row 1
         add(listPriceLabel);
-        add(listPriceTextField);
+        add(listPriceDecimalField);
+        add(currencyLabel);
         add(currencyComboBox);
-        add(categoryDiscountLabel);
-        add(categoryDiscountPercentField);
-        add(additionalDiscountLabel);
-        add(additionalDiscountPercentField);
-        add(additionalDiscountButton);
-        add(totalDiscountLabel);
-        add(totalDiscountPercentField);
+        // Row 2
+        add(discountLabel);
+        add(discountCategoryPercentField);
+        add(discountProductPercentField);
+        add(discountPercentField);
+        add(discountDecimalField);
+        add(discountClearButton);
+        add(discountSelectButton);
+        // Row 3
         add(purchasePriceLabel);
-        add(purchasePriceTextField);
-        add(transportPriceLabel);
-        add(transportPricePercentField);
-        add(transportButton);
-        add(dutyLabel);
-        add(dutyPercentField);
-        add(dutyButton);
+        add(purchasePriceDecimalField);
+        // Row 4
+        add(transportLabel);
+        add(transportCategoryPercentField);
+        add(transportProductPercentField);
+        add(transportPercentField);
+        add(transportDecimalField);
+        add(transportClearButton);
+        add(transportSelectButton);
+        // Row 5
+        add(baseDutyPriceLabel);
+        add(baseDutyPriceDecimalField);
+        // Row 6
+        add(customsDutyLabel);
+        add(customsDutyCategoryPercentField);
+        add(customsDutyProductPercentField);
+        add(customsDutyPercentField);
+        add(customsDutyDecimalField);
+        add(customsDutyClearButton);
+        add(customsDutySelectButton);
+        // Row 7
+        add(exciseDutyLabel);
+        add(exciseDutyCategoryPercentField);
+        add(exciseDutyProductPercentField);
+        add(exciseDutyPercentField);
+        add(exciseDutyDecimalField);
+        add(exciseDutyClearButton);
+        add(exciseDutySelectButton);
+        // Row 8
         add(costPriceLabel);
-        add(costPriceTextField);
-        add(categoryProfitLabel);
-        add(categoryProfitPercentField);
-        add(additionalProfitLabel);
-        add(additionalProfitPercentField);
-        add(additionalProfitButton);
-        add(totalProfitLabel);
-        add(totalProfitPercentField);
+        add(costPriceDecimalField);
+        // Row 9
+        add(profitLabel);
+        add(profitCategoryPercentField);
+        add(profitProductPercentField);
+        add(profitPercentField);
+        add(profitDecimalField);
+        add(profitClearButton);
+        add(profitSelectButton);
+        // Row 10
         add(salesPriceLabel);
         add(salesPriceDecimalField);
 
+        int mainLabelColumn = 0;
+        int mainValueColumn = 1;
+        int labelColumn = 2;
+        int categoryColumn = 3;
+        int productColumn = 4;
+        int percentColumn = 5;
+        int valueColumn = 6;
+        int clearColumn = 7;
+        int selectColumn = 8;
         MigLayoutHelper helper = new MigLayoutHelper(this);
         helper.setLayoutFillX(true);
-        helper.setLayoutWrapAfter(4);
-        helper.columnGrow(100, 1, 2);
-        helper.columnFill(1, 2, 3);
-        helper.columnGap("15", 1, 2);
+        helper.columnGap("15", mainValueColumn, valueColumn);
+        //helper.rowGap("15", 1);
+        helper.columnSizeGroup("fieldSG", categoryColumn, productColumn, percentColumn,
+                mainValueColumn, valueColumn);
+        helper.columnSizeGroup("buttonSG", clearColumn, selectColumn);
+        helper.columnGrow(100, categoryColumn, productColumn, percentColumn,
+                mainValueColumn, valueColumn);
+        helper.columnGrow(50, clearColumn, selectColumn);
+        helper.columnFill(mainValueColumn, categoryColumn, productColumn, percentColumn,
+                valueColumn, clearColumn, selectColumn);
 
+        // Row 0
         int rowNumber = 0;
-        helper.getComponentConstraints(listPriceLabel).cell(0, rowNumber);
-        helper.getComponentConstraints(listPriceTextField).cell(2, rowNumber);
-        helper.getComponentConstraints(currencyComboBox).cell(3, rowNumber);
-
-        helper.getComponentConstraints(categoryDiscountLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(categoryDiscountPercentField).cell(1, rowNumber).spanX(2);
-
-        helper.getComponentConstraints(additionalDiscountLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(additionalDiscountPercentField).cell(1, rowNumber).spanX(2);
-        helper.getComponentConstraints(additionalDiscountButton).cell(3, rowNumber);
-
-        helper.getComponentConstraints(totalDiscountLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(totalDiscountPercentField).cell(1, rowNumber).spanX(2);
-
-        helper.getComponentConstraints(purchasePriceLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(purchasePriceTextField).cell(2, rowNumber);
-
-        helper.getComponentConstraints(transportPriceLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(transportPricePercentField).cell(1, rowNumber).spanX(2);
-        helper.getComponentConstraints(transportButton).cell(3, rowNumber);
-
-        helper.getComponentConstraints(dutyLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(dutyPercentField).cell(1, rowNumber).spanX(2);
-        helper.getComponentConstraints(dutyButton).cell(3, rowNumber);
-
-        helper.getComponentConstraints(costPriceLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(costPriceTextField).cell(2, rowNumber);
-
-        helper.getComponentConstraints(categoryProfitLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(categoryProfitPercentField).cell(1, rowNumber).spanX(2);
-
-        helper.getComponentConstraints(additionalProfitLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(additionalProfitPercentField).cell(1, rowNumber).spanX(2);
-        helper.getComponentConstraints(additionalProfitButton).cell(3, rowNumber);
-
-        helper.getComponentConstraints(totalProfitLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(totalProfitPercentField).cell(1, rowNumber).spanX(2);
-
-        helper.getComponentConstraints(salesPriceLabel).cell(0, ++rowNumber);
-        helper.getComponentConstraints(salesPriceDecimalField).cell(2, rowNumber);
+        helper.getComponentConstraints(listPriceLabel).cell(mainLabelColumn, rowNumber);
+        helper.getComponentConstraints(listPriceDecimalField).cell(mainValueColumn, rowNumber);
+        helper.getComponentConstraints(currencyLabel).cell(labelColumn, rowNumber);
+        helper.getComponentConstraints(currencyComboBox).cell(categoryColumn, rowNumber).spanX(2);
+        // Row 1
+        rowNumber++;
+        helper.getComponentConstraints(salesPriceLabel).cell(mainLabelColumn, rowNumber);
+        helper.getComponentConstraints(salesPriceDecimalField).cell(mainValueColumn, rowNumber);
+        // Row 2
+        rowNumber++;
+        helper.getComponentConstraints(categoryLabel).cell(categoryColumn, rowNumber);
+        helper.getComponentConstraints(productLabel).cell(productColumn, rowNumber);
+        helper.getComponentConstraints(percentLabel).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(valueLabel).cell(valueColumn, rowNumber);
+        helper.getComponentConstraints(totalLabel).cell(mainValueColumn, rowNumber);
+        // Row 3
+        rowNumber++;
+        helper.getComponentConstraints(discountLabel).cell(labelColumn, rowNumber);
+        helper.getComponentConstraints(discountCategoryPercentField).cell(categoryColumn, rowNumber);
+        helper.getComponentConstraints(discountProductPercentField).cell(productColumn, rowNumber);
+        helper.getComponentConstraints(discountPercentField).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(discountDecimalField).cell(valueColumn, rowNumber);
+        helper.getComponentConstraints(discountClearButton).cell(clearColumn, rowNumber);
+        helper.getComponentConstraints(discountSelectButton).cell(selectColumn, rowNumber);
+        // Row 4
+        rowNumber++;
+        helper.getComponentConstraints(purchasePriceLabel).cell(mainLabelColumn, rowNumber);
+        helper.getComponentConstraints(purchasePriceDecimalField).cell(mainValueColumn, rowNumber);
+        // Row 5
+        rowNumber++;
+        helper.getComponentConstraints(transportLabel).cell(labelColumn, rowNumber);
+        helper.getComponentConstraints(transportCategoryPercentField).cell(categoryColumn, rowNumber);
+        helper.getComponentConstraints(transportProductPercentField).cell(productColumn, rowNumber);
+        helper.getComponentConstraints(transportPercentField).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(transportDecimalField).cell(valueColumn, rowNumber);
+        helper.getComponentConstraints(transportClearButton).cell(clearColumn, rowNumber);
+        helper.getComponentConstraints(transportSelectButton).cell(selectColumn, rowNumber);
+        // Row 6
+        rowNumber++;
+        helper.getComponentConstraints(baseDutyPriceLabel).cell(mainLabelColumn, rowNumber);
+        helper.getComponentConstraints(baseDutyPriceDecimalField).cell(mainValueColumn, rowNumber);
+        // Row 7
+        rowNumber++;
+        helper.getComponentConstraints(customsDutyLabel).cell(labelColumn, rowNumber);
+        helper.getComponentConstraints(customsDutyCategoryPercentField).cell(categoryColumn, rowNumber);
+        helper.getComponentConstraints(customsDutyProductPercentField).cell(productColumn, rowNumber);
+        helper.getComponentConstraints(customsDutyPercentField).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(customsDutyDecimalField).cell(valueColumn, rowNumber);
+        helper.getComponentConstraints(customsDutyClearButton).cell(clearColumn, rowNumber);
+        helper.getComponentConstraints(customsDutySelectButton).cell(selectColumn, rowNumber);
+        // Row 8
+        rowNumber++;
+        helper.getComponentConstraints(exciseDutyLabel).cell(labelColumn, rowNumber);
+        helper.getComponentConstraints(exciseDutyCategoryPercentField).cell(categoryColumn, rowNumber);
+        helper.getComponentConstraints(exciseDutyProductPercentField).cell(productColumn, rowNumber);
+        helper.getComponentConstraints(exciseDutyPercentField).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(exciseDutyDecimalField).cell(valueColumn, rowNumber);
+        helper.getComponentConstraints(exciseDutyClearButton).cell(clearColumn, rowNumber);
+        helper.getComponentConstraints(exciseDutySelectButton).cell(selectColumn, rowNumber);
+        // Row 9
+        rowNumber++;
+        helper.getComponentConstraints(costPriceLabel).cell(mainLabelColumn, rowNumber);
+        helper.getComponentConstraints(costPriceDecimalField).cell(mainValueColumn, rowNumber);
+        // Row 10
+        rowNumber++;
+        helper.getComponentConstraints(profitLabel).cell(labelColumn, rowNumber);
+        helper.getComponentConstraints(profitCategoryPercentField).cell(categoryColumn, rowNumber);
+        helper.getComponentConstraints(profitProductPercentField).cell(productColumn, rowNumber);
+        helper.getComponentConstraints(profitPercentField).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(profitDecimalField).cell(valueColumn, rowNumber);
+        helper.getComponentConstraints(profitClearButton).cell(clearColumn, rowNumber);
+        helper.getComponentConstraints(profitSelectButton).cell(selectColumn, rowNumber);
 
         invalidate();
 
-        additionalDiscountButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                ProductPercentValue pricingValue;
-                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.DISCOUNT)) == null) {
-                    return;
-                }
-
-                additionalDiscountPercentField.setPercent(pricingValue.getPercentValue());
-                getProduct().setDiscountPercentValue(pricingValue);
-                refreshPrices();
-            }
-        });
-        transportButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                ProductPercentValue pricingValue;
-                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.TRANSPORT)) == null) {
-                    return;
-                }
-
-                transportPricePercentField.setPercent(pricingValue.getPercentValue());
-                getProduct().setTransportPercentValue(pricingValue);
-                refreshPrices();
-            }
-        });
-        dutyButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                ProductPercentValue pricingValue;
-                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.CUSTOMS_DUTY)) == null) {
-                    return;
-                }
-
-                dutyPercentField.setPercent(pricingValue.getPercentValue());
-                getProduct().setCustomsDutyPercentValue(pricingValue);
-                refreshPrices();
-            }
-        });
-        additionalProfitButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                ProductPercentValue pricingValue;
-                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.PROFIT)) == null) {
-                    return;
-                }
-
-                additionalProfitPercentField.setPercent(pricingValue.getPercentValue());
-                getProduct().setProfitPercentValue(pricingValue);
-                refreshPrices();
-            }
-        });
+//        additionalDiscountButton.addActionListener(new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent event) {
+//                ProductPercentValue pricingValue;
+//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.DISCOUNT)) == null) {
+//                    return;
+//                }
+//
+//                additionalDiscountPercentField.setPercent(pricingValue.getPercentValue());
+//                getProduct().setDiscountPercentValue(pricingValue);
+//                refreshPrices();
+//            }
+//        });
+//        transportButton.addActionListener(new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent event) {
+//                ProductPercentValue pricingValue;
+//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.TRANSPORT)) == null) {
+//                    return;
+//                }
+//
+//                transportPricePercentField.setPercent(pricingValue.getPercentValue());
+//                getProduct().setTransportPercentValue(pricingValue);
+//                refreshPrices();
+//            }
+//        });
+//        dutyButton.addActionListener(new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent event) {
+//                ProductPercentValue pricingValue;
+//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.CUSTOMS_DUTY)) == null) {
+//                    return;
+//                }
+//
+//                dutyPercentField.setPercent(pricingValue.getPercentValue());
+//                getProduct().setCustomsDutyPercentValue(pricingValue);
+//                refreshPrices();
+//            }
+//        });
+//        additionalProfitButton.addActionListener(new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent event) {
+//                ProductPercentValue pricingValue;
+//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.PROFIT)) == null) {
+//                    return;
+//                }
+//
+//                additionalProfitPercentField.setPercent(pricingValue.getPercentValue());
+//                getProduct().setProfitPercentValue(pricingValue);
+//                refreshPrices();
+//            }
+//        });
     }
 
     private ProductPercentValue selectPricingValue(ProductPercentValue.Type type) {
@@ -297,45 +497,45 @@ public class ProductPricingPanel extends AcaciaPanel {
     protected void initData() {
         final SimpleProduct product = getProduct();
 
-        ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
-        PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
-        Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails);
-        binding.addBindingListener(listPriceBindingListener);
-
-        propDetails = entityProps.getPropertyDetails("currency");
-        binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
-        binding.addBindingListener(new AbstractBindingListener() {
-
-            @Override
-            public void bindingBecameBound(Binding binding) {
-                productPanel.onCurrencyChanged(getProduct().getCurrency());
-            }
-        });
-        currencyComboBox.addItemListener(new ItemListener() {
-
-            @Override
-            public void itemStateChanged(ItemEvent event) {
-                productPanel.onCurrencyChanged((DbResource) event.getItem());
-            }
-        }, true);
-
-        categoryDiscountPercentField.setEditable(false);
-        additionalDiscountPercentField.setEditable(false);
-        totalDiscountPercentField.setEditable(false);
-        transportPricePercentField.setEditable(JXPercentValueField.Editable.Value);
-        transportPricePercentField.setFreezePercent(false);
-        dutyPercentField.setEditable(false);
-        categoryProfitPercentField.setEditable(false);
-        additionalProfitPercentField.setEditable(false);
-        totalProfitPercentField.setEditable(false);
-
-        bindingGroup.addBindingListener(new AbstractBindingListener() {
-
-            @Override
-            public void bindingBecameBound(Binding binding) {
-                bindingInit();
-            }
-        });
+//        ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
+//        PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
+//        Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails);
+//        binding.addBindingListener(listPriceBindingListener);
+//
+//        propDetails = entityProps.getPropertyDetails("currency");
+//        binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
+//        binding.addBindingListener(new AbstractBindingListener() {
+//
+//            @Override
+//            public void bindingBecameBound(Binding binding) {
+//                productPanel.onCurrencyChanged(getProduct().getCurrency());
+//            }
+//        });
+//        currencyComboBox.addItemListener(new ItemListener() {
+//
+//            @Override
+//            public void itemStateChanged(ItemEvent event) {
+//                productPanel.onCurrencyChanged((DbResource) event.getItem());
+//            }
+//        }, true);
+//
+//        categoryDiscountPercentField.setEditable(false);
+//        additionalDiscountPercentField.setEditable(false);
+//        totalDiscountPercentField.setEditable(false);
+//        transportPricePercentField.setEditable(JXPercentValueField.Editable.Value);
+//        transportPricePercentField.setFreezePercent(false);
+//        dutyPercentField.setEditable(false);
+//        categoryProfitPercentField.setEditable(false);
+//        additionalProfitPercentField.setEditable(false);
+//        totalProfitPercentField.setEditable(false);
+//
+//        bindingGroup.addBindingListener(new AbstractBindingListener() {
+//
+//            @Override
+//            public void bindingBecameBound(Binding binding) {
+//                bindingInit();
+//            }
+//        });
     }
 
     private void bindingInit() {
@@ -364,8 +564,8 @@ public class ProductPricingPanel extends AcaciaPanel {
         BigDecimal salesPrice = product.getSalePrice();
 
         if (category != null) {
-            categoryDiscountPercentField.setPercent(category.getDiscountPercent());
-            categoryProfitPercentField.setPercent(category.getProfitPercent());
+//            categoryDiscountPercentField.setPercent(category.getDiscountPercent());
+//            categoryProfitPercentField.setPercent(category.getProfitPercent());
         }
 //            additionalDiscountPercentField.setPercent(product.getTotalDiscountPercent());
 //            totalDiscountPercentField.setPercent(product.getTotalDiscount());
@@ -386,18 +586,18 @@ public class ProductPricingPanel extends AcaciaPanel {
 //            additionalProfitPercentField.setPercent(product.getProfitPercent());
 //            totalProfitPercentField.setPercent(product.getTotalProfit());
 
-        categoryDiscountPercentField.setBaseValue(listPrice);
-        additionalDiscountPercentField.setBaseValue(listPrice);
-        totalDiscountPercentField.setBaseValue(listPrice);
-        transportPricePercentField.setBaseValue(purchasePrice);
-        dutyPercentField.setBaseValue(purchasePrice);
-        categoryProfitPercentField.setBaseValue(costPrice);
-        additionalProfitPercentField.setBaseValue(costPrice);
-        totalProfitPercentField.setBaseValue(costPrice);
-
-        purchasePriceTextField.setValue(purchasePrice);
-        costPriceTextField.setValue(costPrice);
-        salesPriceDecimalField.setValue(salesPrice);
+//        categoryDiscountPercentField.setBaseValue(listPrice);
+//        additionalDiscountPercentField.setBaseValue(listPrice);
+//        totalDiscountPercentField.setBaseValue(listPrice);
+//        transportPricePercentField.setBaseValue(purchasePrice);
+//        dutyPercentField.setBaseValue(purchasePrice);
+//        categoryProfitPercentField.setBaseValue(costPrice);
+//        additionalProfitPercentField.setBaseValue(costPrice);
+//        totalProfitPercentField.setBaseValue(costPrice);
+//
+//        purchasePriceTextField.setValue(purchasePrice);
+//        costPriceTextField.setValue(costPrice);
+//        salesPriceDecimalField.setValue(salesPrice);
     }
 
     private class ListPriceBindingListener extends AbstractBindingListener {
