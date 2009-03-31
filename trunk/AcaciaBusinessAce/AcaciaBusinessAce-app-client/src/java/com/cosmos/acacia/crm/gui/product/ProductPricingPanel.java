@@ -27,7 +27,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.util.Set;
+import java.util.TreeSet;
+import javax.swing.AbstractAction;
 import javax.swing.SwingConstants;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
@@ -73,7 +78,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     private JBLabel transportLabel;
     private JBPercentField transportCategoryPercentField;
     private JBPercentField transportProductPercentField;
-    private JBPercentField transportPercentField;
+    private JBDecimalField transportValueField;
     private JBDecimalField transportDecimalField;
     private JBButton transportClearButton;
     private JBButton transportSelectButton;
@@ -151,7 +156,7 @@ public class ProductPricingPanel extends AcaciaPanel {
         transportLabel = new JBLabel();
         transportCategoryPercentField = new JBPercentField();
         transportProductPercentField = new JBPercentField();
-        transportPercentField = new JBPercentField();
+        transportValueField = new JBDecimalField();
         transportDecimalField = new JBDecimalField();
         transportClearButton = new JBButton();
         transportSelectButton = new JBButton();
@@ -239,7 +244,7 @@ public class ProductPricingPanel extends AcaciaPanel {
         purchasePriceDecimalField.setEditable(false);
         transportCategoryPercentField.setEditable(false);
         transportProductPercentField.setEditable(false);
-        transportPercentField.setEditable(false);
+        transportDecimalField.setEditable(false);
         baseDutyPriceDecimalField.setEditable(false);
         customsDutyCategoryPercentField.setEditable(false);
         customsDutyProductPercentField.setEditable(false);
@@ -285,7 +290,7 @@ public class ProductPricingPanel extends AcaciaPanel {
         add(transportLabel);
         add(transportCategoryPercentField);
         add(transportProductPercentField);
-        add(transportPercentField);
+        add(transportValueField);
         add(transportDecimalField);
         add(transportClearButton);
         add(transportSelectButton);
@@ -380,7 +385,7 @@ public class ProductPricingPanel extends AcaciaPanel {
         helper.getComponentConstraints(transportLabel).cell(labelColumn, rowNumber);
         helper.getComponentConstraints(transportCategoryPercentField).cell(categoryColumn, rowNumber);
         helper.getComponentConstraints(transportProductPercentField).cell(productColumn, rowNumber);
-        helper.getComponentConstraints(transportPercentField).cell(percentColumn, rowNumber);
+        helper.getComponentConstraints(transportValueField).cell(percentColumn, rowNumber);
         helper.getComponentConstraints(transportDecimalField).cell(valueColumn, rowNumber);
         helper.getComponentConstraints(transportClearButton).cell(clearColumn, rowNumber);
         helper.getComponentConstraints(transportSelectButton).cell(selectColumn, rowNumber);
@@ -422,62 +427,105 @@ public class ProductPricingPanel extends AcaciaPanel {
 
         invalidate();
 
-//        additionalDiscountButton.addActionListener(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent event) {
-//                ProductPercentValue pricingValue;
-//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.DISCOUNT)) == null) {
-//                    return;
-//                }
-//
-//                additionalDiscountPercentField.setPercent(pricingValue.getPercentValue());
-//                getProduct().setDiscountPercentValue(pricingValue);
-//                refreshPrices();
-//            }
-//        });
-//        transportButton.addActionListener(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent event) {
-//                ProductPercentValue pricingValue;
-//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.TRANSPORT)) == null) {
-//                    return;
-//                }
-//
-//                transportPricePercentField.setPercent(pricingValue.getPercentValue());
-//                getProduct().setTransportPercentValue(pricingValue);
-//                refreshPrices();
-//            }
-//        });
-//        dutyButton.addActionListener(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent event) {
-//                ProductPercentValue pricingValue;
-//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.CUSTOMS_DUTY)) == null) {
-//                    return;
-//                }
-//
-//                dutyPercentField.setPercent(pricingValue.getPercentValue());
-//                getProduct().setCustomsDutyPercentValue(pricingValue);
-//                refreshPrices();
-//            }
-//        });
-//        additionalProfitButton.addActionListener(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent event) {
-//                ProductPercentValue pricingValue;
-//                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.PROFIT)) == null) {
-//                    return;
-//                }
-//
-//                additionalProfitPercentField.setPercent(pricingValue.getPercentValue());
-//                getProduct().setProfitPercentValue(pricingValue);
-//                refreshPrices();
-//            }
-//        });
+        discountSelectButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                ProductPercentValue pricingValue;
+                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.DISCOUNT)) == null) {
+                    return;
+                }
+
+                getProduct().setDiscountPercentValue(pricingValue);
+            }
+        });
+        discountClearButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                getProduct().setDiscountPercentValue(null);
+            }
+        });
+
+        transportSelectButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                ProductPercentValue pricingValue;
+                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.TRANSPORT)) == null) {
+                    return;
+                }
+
+                getProduct().setTransportPercentValue(pricingValue);
+            }
+        });
+        transportClearButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                getProduct().setTransportPercentValue(null);
+            }
+        });
+
+        customsDutySelectButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                ProductPercentValue pricingValue;
+                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.CUSTOMS_DUTY)) == null) {
+                    return;
+                }
+
+                getProduct().setCustomsDutyPercentValue(pricingValue);
+            }
+        });
+        customsDutyClearButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                getProduct().setCustomsDutyPercentValue(null);
+            }
+        });
+
+        exciseDutySelectButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                ProductPercentValue pricingValue;
+                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.EXCISE_DUTY)) == null) {
+                    return;
+                }
+
+                getProduct().setExciseDutyPercentValue(pricingValue);
+            }
+        });
+        exciseDutyClearButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                getProduct().setExciseDutyPercentValue(null);
+            }
+        });
+
+        profitSelectButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                ProductPercentValue pricingValue;
+                if ((pricingValue = selectPricingValue(ProductPercentValue.Type.PROFIT)) == null) {
+                    return;
+                }
+
+                getProduct().setProfitPercentValue(pricingValue);
+            }
+        });
+        profitClearButton.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                getProduct().setProfitPercentValue(null);
+            }
+        });
     }
 
     private ProductPercentValue selectPricingValue(ProductPercentValue.Type type) {
@@ -496,46 +544,80 @@ public class ProductPricingPanel extends AcaciaPanel {
     @Override
     protected void initData() {
         final SimpleProduct product = getProduct();
+        product.addPropertyChangeListener(new PropertyChangeListener() {
 
-//        ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
-//        PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
-//        Binding binding = listPriceTextField.bind(bindingGroup, product, propDetails);
-//        binding.addBindingListener(listPriceBindingListener);
-//
-//        propDetails = entityProps.getPropertyDetails("currency");
-//        binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
-//        binding.addBindingListener(new AbstractBindingListener() {
-//
-//            @Override
-//            public void bindingBecameBound(Binding binding) {
-//                productPanel.onCurrencyChanged(getProduct().getCurrency());
-//            }
-//        });
-//        currencyComboBox.addItemListener(new ItemListener() {
-//
-//            @Override
-//            public void itemStateChanged(ItemEvent event) {
-//                productPanel.onCurrencyChanged((DbResource) event.getItem());
-//            }
-//        }, true);
-//
-//        categoryDiscountPercentField.setEditable(false);
-//        additionalDiscountPercentField.setEditable(false);
-//        totalDiscountPercentField.setEditable(false);
-//        transportPricePercentField.setEditable(JXPercentValueField.Editable.Value);
-//        transportPricePercentField.setFreezePercent(false);
-//        dutyPercentField.setEditable(false);
-//        categoryProfitPercentField.setEditable(false);
-//        additionalProfitPercentField.setEditable(false);
-//        totalProfitPercentField.setEditable(false);
-//
-//        bindingGroup.addBindingListener(new AbstractBindingListener() {
-//
-//            @Override
-//            public void bindingBecameBound(Binding binding) {
-//                bindingInit();
-//            }
-//        });
+            @Override
+            public void propertyChange(PropertyChangeEvent event) {
+                onProductPropertyChanged(event);
+            }
+        });
+
+        ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
+        PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
+        Binding binding = listPriceDecimalField.bind(bindingGroup, product, propDetails);
+        binding.addBindingListener(listPriceBindingListener);
+
+        propDetails = entityProps.getPropertyDetails("currency");
+        binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
+        binding.addBindingListener(new AbstractBindingListener() {
+
+            @Override
+            public void bindingBecameBound(Binding binding) {
+                productPanel.onCurrencyChanged(getProduct().getCurrency());
+            }
+        });
+
+//        propDetails = entityProps.getPropertyDetails("discountPercentValue");
+//        binding = discountPercentField.bind(bindingGroup, product, propDetails);
+
+        currencyComboBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent event) {
+                productPanel.onCurrencyChanged((DbResource) event.getItem());
+            }
+        }, true);
+
+        bindingGroup.addBindingListener(new AbstractBindingListener() {
+
+            @Override
+            public void bindingBecameBound(Binding binding) {
+                bindingInit();
+            }
+        });
+    }
+
+    private static Set<String> pricingProperties;
+
+    private static Set<String> getPricingProperties() {
+        if(pricingProperties == null) {
+            pricingProperties = new TreeSet<String>();
+            pricingProperties.add("customsDutyPercentValue");
+            pricingProperties.add("discountPercentValue");
+            pricingProperties.add("exciseDutyPercentValue");
+            pricingProperties.add("profitPercentValue");
+            pricingProperties.add("transportPercentValue");
+            pricingProperties.add("transportValue");
+            pricingProperties.add("listPrice");
+        }
+
+        return pricingProperties;
+    }
+
+    private void onProductPropertyChanged(PropertyChangeEvent event) {
+        String propertyName = event.getPropertyName();
+        if(!getPricingProperties().contains(propertyName)) {
+            return;
+        }
+        Object newValue = event.getNewValue();
+        Object oldValue = event.getOldValue();
+        if(newValue == oldValue || newValue == null && oldValue == null ||
+                newValue != null && newValue.equals(oldValue) ||
+                oldValue != null && oldValue.equals(newValue)) {
+            return;
+        }
+
+        refreshPrices();
     }
 
     private void bindingInit() {
@@ -551,53 +633,69 @@ public class ProductPricingPanel extends AcaciaPanel {
         return (SimpleProduct) getMainDataObject();
     }
 
-    private void refreshPrices() {
-        if (true) {
-            return;
-        }
-
+    protected void refreshPrices() {
         SimpleProduct product = getProduct();
-        ProductCategory category = product.getCategory();
-        BigDecimal listPrice = product.getListPrice();
-        BigDecimal purchasePrice = product.getPurchasePrice();
-        BigDecimal costPrice = product.getCostPrice();
-        BigDecimal salesPrice = product.getSalePrice();
-
-        if (category != null) {
-//            categoryDiscountPercentField.setPercent(category.getDiscountPercent());
-//            categoryProfitPercentField.setPercent(category.getProfitPercent());
-        }
-//            additionalDiscountPercentField.setPercent(product.getTotalDiscountPercent());
-//            totalDiscountPercentField.setPercent(product.getTotalDiscount());
 
         ProductPercentValue ppv;
-//            if ((ppv = product.getTransportPricingValue()) == null) {
-//                transportPricePercentField.setPercent(product.getTransportPrice());
-//            } else {
-//                transportPricePercentField.setPercentValue(ppv.getPercentValue());
-//            }
-//
-//            if ((ppv = product.getDutyPricingValue()) == null) {
-//                dutyPercentField.setPercent(product.getDutyPercent());
-//            } else {
-//                dutyPercentField.setPercentValue(ppv.getPercentValue());
-//            }
-//
-//            additionalProfitPercentField.setPercent(product.getProfitPercent());
-//            totalProfitPercentField.setPercent(product.getTotalProfit());
+        if((ppv = product.getDiscountPercentValue()) != null)
+            discountProductPercentField.setValue(ppv.getPercentValue());
+        else
+            discountProductPercentField.setValue(null);
+        discountPercentField.setValue(product.getTotalDiscountPercent());
+        discountDecimalField.setValue(product.getTotalDiscountValue());
 
-//        categoryDiscountPercentField.setBaseValue(listPrice);
-//        additionalDiscountPercentField.setBaseValue(listPrice);
-//        totalDiscountPercentField.setBaseValue(listPrice);
-//        transportPricePercentField.setBaseValue(purchasePrice);
-//        dutyPercentField.setBaseValue(purchasePrice);
-//        categoryProfitPercentField.setBaseValue(costPrice);
-//        additionalProfitPercentField.setBaseValue(costPrice);
-//        totalProfitPercentField.setBaseValue(costPrice);
-//
-//        purchasePriceTextField.setValue(purchasePrice);
-//        costPriceTextField.setValue(costPrice);
-//        salesPriceDecimalField.setValue(salesPrice);
+        purchasePriceDecimalField.setValue(product.getPurchasePrice());
+
+        if((ppv = product.getTransportPercentValue()) != null)
+            transportProductPercentField.setValue(ppv.getPercentValue());
+        else
+            transportProductPercentField.setValue(null);
+        System.out.println("product.getTransportValue(): " + product.getTransportValue());
+//        transportPercentField.setValue(product.getT);
+        transportDecimalField.setValue(product.getTransportPrice());
+
+        baseDutyPriceDecimalField.setValue(product.getBaseDutyPrice());
+        if((ppv = product.getCustomsDutyPercentValue()) != null)
+            customsDutyProductPercentField.setValue(ppv.getPercentValue());
+        else
+            customsDutyProductPercentField.setValue(null);
+        customsDutyPercentField.setValue(product.getCustomsDutyPercent());
+        customsDutyDecimalField.setValue(product.getCustomsDutyValue());
+
+        if((ppv = product.getExciseDutyPercentValue()) != null)
+            exciseDutyProductPercentField.setValue(ppv.getPercentValue());
+        else
+            exciseDutyProductPercentField.setValue(null);
+        exciseDutyPercentField.setValue(product.getExciseDutyPercent());
+        exciseDutyDecimalField.setValue(product.getExciseDutyValue());
+
+        costPriceDecimalField.setValue(product.getCostPrice());
+
+        if((ppv = product.getProfitPercentValue()) != null)
+            profitProductPercentField.setValue(ppv.getPercentValue());
+        else
+            profitProductPercentField.setValue(null);
+        profitPercentField.setValue(product.getTotalProfitPercent());
+        profitDecimalField.setValue(product.getTotalProfitValue());
+
+        salesPriceDecimalField.setValue(product.getSalePrice());
+
+        ProductCategory category = product.getCategory();
+        if((category = product.getCategory()) != null) {
+            discountCategoryPercentField.setValue(category.getDiscountPercent());
+            transportCategoryPercentField.setValue(category.getTransportPercent());
+            customsDutyCategoryPercentField.setValue(category.getCustomsDutyPercent());
+            exciseDutyCategoryPercentField.setValue(category.getExciseDutyPercent());
+            profitCategoryPercentField.setValue(category.getProfitPercent());
+        } else {
+            discountCategoryPercentField.setValue(null);
+            transportCategoryPercentField.setValue(null);
+            customsDutyCategoryPercentField.setValue(null);
+            exciseDutyCategoryPercentField.setValue(null);
+            profitCategoryPercentField.setValue(null);
+        }
+
+        productPanel.refreshPrimaryInfoForm();
     }
 
     private class ListPriceBindingListener extends AbstractBindingListener {

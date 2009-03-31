@@ -6,9 +6,11 @@
 package com.cosmos.acacia.crm.gui.product;
 
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.PatternMaskFormatListPanel;
 import com.cosmos.acacia.crm.gui.ProductCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
@@ -404,8 +406,8 @@ public class ProductPrimaryInfoPanel extends JBPanel {
         pricePerQuantityDecimalField.bind(bindingGroup, product, propDetails);
 
         salesPriceDecimalField.setEditable(false);
-        propDetails = entityProps.getPropertyDetails("salePrice");
-        salesPriceDecimalField.bind(bindingGroup, product, propDetails);
+//        propDetails = entityProps.getPropertyDetails("salePrice");
+//        salesPriceDecimalField.bind(bindingGroup, product, propDetails);
 
 //        propDetails = entityProps.getPropertyDetails("currency");
 //        currencyValueLabel.bind(bindingGroup, product, propDetails, "enumValue");
@@ -421,12 +423,19 @@ public class ProductPrimaryInfoPanel extends JBPanel {
     }
 
     private void onProductCategoryChanged(ProductCategory productCategory) {
+        System.out.println("onProductCategoryChanged(" + productCategory + ")");
+        if(productCategory != null) {
+            productCategory = productPanel.refreshProductCategory(productCategory);
+            System.out.println("productCategory.getDiscountPercent(): " + productCategory.getDiscountPercent());
+            product.setCategory(productCategory);
+        }
         PatternMaskFormat patternMaskFormat;
         if (productCategory == null || (patternMaskFormat = productCategory.getPatternMaskFormat()) == null) {
             categoryCodeFormatTextField.setText("");
         } else {
             categoryCodeFormatTextField.setText(patternMaskFormat.getFormat());
         }
+        productPanel.onProductCategoryChanged();
 
         setProductCodeMaskFormat();
     }
@@ -455,6 +464,17 @@ public class ProductPrimaryInfoPanel extends JBPanel {
             productCodeTextField.setMask(maskFormat);
         } catch (Exception ex) {
             handleException("maskFormat: " + maskFormat, ex);
+        }
+    }
+
+    protected void refreshForm() {
+        salesPriceDecimalField.setValue(product.getSalePrice());
+        DbResource currencyResource = product.getCurrency();
+        if(currencyResource != null) {
+            Currency currency = (Currency)currencyResource.getEnumValue();
+            currencyValueLabel.setText(currency.toString());
+        } else {
+            currencyValueLabel.setText("");
         }
     }
 }

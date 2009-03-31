@@ -444,10 +444,10 @@ public class ProductCategoryPanel extends BaseEntityPanel {
             propDetails = entityProps.getPropertyDetails("profitPercent");
             profitPercentField.bind(bg, productCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("customsDuty");
+            propDetails = entityProps.getPropertyDetails("customsDutyPercent");
             customsDutyPercentField.bind(bg, productCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("exciseDuty");
+            propDetails = entityProps.getPropertyDetails("exciseDutyPercent");
             exciseDutyPercentField.bind(bg, productCategory, propDetails);
 
             Binding binding;
