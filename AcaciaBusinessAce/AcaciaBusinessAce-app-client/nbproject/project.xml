@@ -32,7 +32,6 @@
             <included-library>file.reference.itext-paulo-155.jar</included-library>
             <included-library>file.reference.minium.jar</included-library>
             <included-library>file.reference.swingx-2008_01_20.jar</included-library>
-            <included-library>libs.MigLayout.classpath</included-library>
             <included-library>file.reference.miglayout-swing.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">

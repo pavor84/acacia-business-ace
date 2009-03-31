@@ -9,6 +9,7 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.ProductCategory;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -80,13 +81,13 @@ public class ProductPanel extends BaseEntityPanel {
                 getResourceString("additionalInfoPanel.TabConstraints.tabTitle"),
                 getAdditionalInfoPanel()); // NOI18N
 
-        if (getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+        if (hasProductPricingRights()) {
             productTabbedPane.addTab(
                     getResourceString("productPricingPanel.TabConstraints.tabTitle"),
                     getProductPricingPanel()); // NOI18N
         }
 
-        if (getRightsManager().isAllowed(SpecialPermission.Product)) {
+        if (hasProductRights()) {
             productTabbedPane.addTab(
                     getResourceString("suppliersPanel.TabConstraints.tabTitle"),
                     getSuppliersListPanel()); // NOI18N
@@ -95,6 +96,15 @@ public class ProductPanel extends BaseEntityPanel {
         add(productTabbedPane, BorderLayout.CENTER);
         add(getButtonPanel(), BorderLayout.PAGE_END);
     }
+
+    protected boolean hasProductPricingRights() {
+        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
+    }
+
+    protected boolean hasProductRights() {
+        return getRightsManager().isAllowed(SpecialPermission.Product);
+    }
+
     private SimpleProduct product;
     private BindingGroup productBindingGroup;
     private EntityFormButtonPanel entityFormButtonPanel;
@@ -111,6 +121,7 @@ public class ProductPanel extends BaseEntityPanel {
     @Override
     protected void initData() {
         getBindingGroup().bind();
+        refreshPrimaryInfoForm();
 
         getAdditionalInfoPanel().refreshCubature();
         getPrimaryInfoPanel().setProductCodeMaskFormat();
@@ -189,6 +200,14 @@ public class ProductPanel extends BaseEntityPanel {
         return getClassifier(Classifier.Producer.getClassifierCode());
     }
 
+    protected ProductCategory refreshProductCategory(ProductCategory category) {
+        return getFormSession().refreshProductCategory(category);
+    }
+
+    protected void refreshPrimaryInfoForm() {
+        getPrimaryInfoPanel().refreshForm();
+    }
+
     @Override
     public void performSave(boolean closeAfter) {
         try {
@@ -239,5 +258,11 @@ public class ProductPanel extends BaseEntityPanel {
 
         TextResource textResource = (TextResource) dbResource.getEnumValue();
         currencyValueLabel.setText(textResource.toText());
+    }
+
+    protected void onProductCategoryChanged() {
+        if(hasProductPricingRights()) {
+            getProductPricingPanel().refreshPrices();
+        }
     }
 }

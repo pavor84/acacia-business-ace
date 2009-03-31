@@ -177,8 +177,8 @@ public class ProductPricingValueForm extends BaseEntityPanel {
         // name 
         valueNameTextField.bind(bindGroup, entity, entProps.getPropertyDetails("name"));
         
-        // value
-        percentValuePercentField.bind(bindGroup, entity, entProps.getPropertyDetails("value"));
+        // percentValue
+        percentValuePercentField.bind(bindGroup, entity, entProps.getPropertyDetails("percentValue"));
         
         bindGroup.bind();
     }
