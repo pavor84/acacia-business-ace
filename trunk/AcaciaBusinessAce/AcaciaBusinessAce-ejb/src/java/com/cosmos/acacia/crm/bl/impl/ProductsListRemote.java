@@ -65,6 +65,8 @@ public interface ProductsListRemote {
      */
     ProductCategory saveProductCategory(ProductCategory entity);
     
+    ProductCategory refreshProductCategory(ProductCategory entity);
+
     /**
      * Create new instance for this object
      * @param object

@@ -91,7 +91,6 @@ public class SimpleProduct
 {
 
     private static final long serialVersionUID = 1L;
-    private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
     private static final MathContext MATH_CONTEXT = MathContext.DECIMAL64;
 
     @JoinColumn(name = "category_id", nullable=false, referencedColumnName = "product_category_id")
@@ -157,27 +156,27 @@ public class SimpleProduct
     private BigDecimal listPrice;
 
     @JoinColumn(name = "transport_percent_id", referencedColumnName = "percent_value_id")
-    @ManyToOne(optional=false)
+    @ManyToOne
     @Property(title="Transport %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue transportPercentValue;
 
     @JoinColumn(name = "discount_percent_id", referencedColumnName = "percent_value_id")
-    @ManyToOne(optional=false)
+    @ManyToOne
     @Property(title="Discount %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue discountPercentValue;
 
     @JoinColumn(name = "profit_percent_id", referencedColumnName = "percent_value_id")
-    @ManyToOne(optional=false)
+    @ManyToOne
     @Property(title="Profit %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue profitPercentValue;
 
     @JoinColumn(name = "customs_duty_percent_id", referencedColumnName = "percent_value_id")
-    @ManyToOne(optional=false)
+    @ManyToOne
     @Property(title="Customs duty %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue customsDutyPercentValue;
 
     @JoinColumn(name = "excise_duty_percent_id", referencedColumnName = "percent_value_id")
-    @ManyToOne(optional=false)
+    @ManyToOne
     @Property(title="Excise duty %", editable=false, hidden=true, percent=true, visible=false)
     private ProductPercentValue exciseDutyPercentValue;
 
@@ -314,8 +313,9 @@ public class SimpleProduct
     }
 
     public void setCategory(ProductCategory category) {
-        firePropertyChange("category", this.category, category);
+        ProductCategory oldValue = this.category;
         this.category = category;
+        firePropertyChange("category", oldValue, category);
     }
 
     @Override
@@ -325,8 +325,9 @@ public class SimpleProduct
 
     @Override
     public void setProductName(String productName) {
-        firePropertyChange("productName", this.productName, productName);
+        String oldValue = this.productName;
         this.productName = productName;
+        firePropertyChange("productName", oldValue, productName);
     }
 
     @Override
@@ -336,8 +337,9 @@ public class SimpleProduct
 
     @Override
     public void setProductCode(String productCode) {
-        firePropertyChange("productCode", this.productCode, productCode);
+        String oldValue = this.productCode;
         this.productCode = productCode;
+        firePropertyChange("productCode", oldValue, productCode);
     }
 
     @Override
@@ -347,35 +349,39 @@ public class SimpleProduct
 
     @Override
     public void setMeasureUnit(DbResource measureUnit) {
-        firePropertyChange("measureUnit", this.measureUnit, measureUnit);
+        DbResource oldValue = this.measureUnit;
         this.measureUnit = measureUnit;
+        firePropertyChange("measureUnit", oldValue, measureUnit);
     }
 
     public boolean isPurchased() {
         return purchased;
     }
 
-    public void setPurchased(boolean isPurchased) {
-        firePropertyChange("purchased", this.purchased, purchased);
-        this.purchased = isPurchased;
+    public void setPurchased(boolean purchased) {
+        boolean oldValue = this.purchased;
+        this.purchased = purchased;
+        firePropertyChange("purchased", oldValue, purchased);
     }
 
     public boolean isSalable() {
         return salable;
     }
 
-    public void setSalable(boolean isSalable) {
-        firePropertyChange("salable", this.salable, salable);
-        this.salable = isSalable;
+    public void setSalable(boolean salable) {
+        boolean oldValue = this.salable;
+        this.salable = salable;
+        firePropertyChange("salable", oldValue, salable);
     }
 
     public boolean isObsolete() {
         return obsolete;
     }
 
-    public void setObsolete(boolean isObsolete) {
-        firePropertyChange("obsolete", this.obsolete, obsolete);
-        this.obsolete = isObsolete;
+    public void setObsolete(boolean obsolete) {
+        boolean oldValue = this.obsolete;
+        this.obsolete = obsolete;
+        firePropertyChange("obsolete", oldValue, obsolete);
     }
 
     public PatternMaskFormat getPatternMaskFormat() {
@@ -383,8 +389,9 @@ public class SimpleProduct
     }
 
     public void setPatternMaskFormat(PatternMaskFormat patternMaskFormat) {
-        firePropertyChange("patternMaskFormat", this.patternMaskFormat, patternMaskFormat);
+        PatternMaskFormat oldValue = this.patternMaskFormat;
         this.patternMaskFormat = patternMaskFormat;
+        firePropertyChange("patternMaskFormat", oldValue, patternMaskFormat);
     }
 
     public DbResource getProductColor() {
@@ -392,8 +399,9 @@ public class SimpleProduct
     }
 
     public void setProductColor(DbResource productColor) {
-        firePropertyChange("productColor", this.productColor, productColor);
+        DbResource oldValue = this.productColor;
         this.productColor = productColor;
+        firePropertyChange("productColor", oldValue, productColor);
     }
 
     public BigDecimal getMinimumQuantity() {
@@ -401,8 +409,9 @@ public class SimpleProduct
     }
 
     public void setMinimumQuantity(BigDecimal minimumQuantity) {
-        firePropertyChange("minimumQuantity", this.minimumQuantity, minimumQuantity);
+        BigDecimal oldValue = this.minimumQuantity;
         this.minimumQuantity = minimumQuantity;
+        firePropertyChange("minimumQuantity", oldValue, minimumQuantity);
     }
 
     public BigDecimal getMaximumQuantity() {
@@ -410,8 +419,9 @@ public class SimpleProduct
     }
 
     public void setMaximumQuantity(BigDecimal maximumQuantity) {
-        firePropertyChange("maximumQuantity", this.maximumQuantity, maximumQuantity);
+        BigDecimal oldValue = this.maximumQuantity;
         this.maximumQuantity = maximumQuantity;
+        firePropertyChange("maximumQuantity", oldValue, maximumQuantity);
     }
 
     public BigDecimal getDefaultQuantity() {
@@ -419,8 +429,9 @@ public class SimpleProduct
     }
 
     public void setDefaultQuantity(BigDecimal defaultQuantity) {
-        firePropertyChange("defaultQuantity", this.defaultQuantity, defaultQuantity);
+        BigDecimal oldValue = this.defaultQuantity;
         this.defaultQuantity = defaultQuantity;
+        firePropertyChange("defaultQuantity", oldValue, defaultQuantity);
     }
 
     public BigDecimal getListPrice() {
@@ -428,8 +439,9 @@ public class SimpleProduct
     }
 
     public void setListPrice(BigDecimal listPrice) {
-        firePropertyChange("listPrice", this.listPrice, listPrice);
+        BigDecimal oldValue = this.listPrice;
         this.listPrice = listPrice;
+        firePropertyChange("listPrice", oldValue, listPrice);
     }
 
     public int getPricePerQuantity() {
@@ -437,7 +449,9 @@ public class SimpleProduct
     }
 
     public void setPricePerQuantity(int pricePerQuantity) {
+        int oldValue = this.pricePerQuantity;
         this.pricePerQuantity = pricePerQuantity;
+        firePropertyChange("pricePerQuantity", oldValue, pricePerQuantity);
     }
 
     public int getQuantityPerPackage() {
@@ -445,8 +459,9 @@ public class SimpleProduct
     }
 
     public void setQuantityPerPackage(int quantityPerPackage) {
-        firePropertyChange("quantityPerPackage", this.quantityPerPackage, quantityPerPackage);
+        int oldValue = this.quantityPerPackage;
         this.quantityPerPackage = quantityPerPackage;
+        firePropertyChange("quantityPerPackage", oldValue, quantityPerPackage);
     }
 
     public DbResource getDimensionUnit() {
@@ -454,8 +469,9 @@ public class SimpleProduct
     }
 
     public void setDimensionUnit(DbResource dimensionUnit) {
-        firePropertyChange("dimensionUnit", this.dimensionUnit, dimensionUnit);
+        DbResource oldValue = this.dimensionUnit;
         this.dimensionUnit = dimensionUnit;
+        firePropertyChange("dimensionUnit", oldValue, dimensionUnit);
     }
 
     public BigDecimal getDimensionWidth() {
@@ -463,8 +479,9 @@ public class SimpleProduct
     }
 
     public void setDimensionWidth(BigDecimal dimensionWidth) {
-        firePropertyChange("dimensionWidth", this.dimensionWidth, dimensionWidth);
+        BigDecimal oldValue = this.dimensionWidth;
         this.dimensionWidth = dimensionWidth;
+        firePropertyChange("dimensionWidth", oldValue, dimensionWidth);
     }
 
     public BigDecimal getDimensionLength() {
@@ -472,8 +489,9 @@ public class SimpleProduct
     }
 
     public void setDimensionLength(BigDecimal dimensionLength) {
-        firePropertyChange("dimensionLength", this.dimensionLength, dimensionLength);
+        BigDecimal oldValue = this.dimensionLength;
         this.dimensionLength = dimensionLength;
+        firePropertyChange("dimensionLength", oldValue, dimensionLength);
     }
 
     public BigDecimal getDimensionHeight() {
@@ -481,8 +499,9 @@ public class SimpleProduct
     }
 
     public void setDimensionHeight(BigDecimal dimensionHeight) {
-        firePropertyChange("dimensionHeight", this.dimensionHeight, dimensionHeight);
+        BigDecimal oldValue = this.dimensionHeight;
         this.dimensionHeight = dimensionHeight;
+        firePropertyChange("dimensionHeight", oldValue, dimensionHeight);
     }
 
     public BigDecimal getDimensionCubature() {
@@ -501,8 +520,9 @@ public class SimpleProduct
     }
 
     public void setWeightUnit(DbResource weightUnit) {
-        firePropertyChange("weightUnit", this.weightUnit, weightUnit);
+        DbResource oldValue = this.weightUnit;
         this.weightUnit = weightUnit;
+        firePropertyChange("weightUnit", oldValue, weightUnit);
     }
 
     public BigDecimal getWeight() {
@@ -510,8 +530,9 @@ public class SimpleProduct
     }
 
     public void setWeight(BigDecimal weight) {
-        firePropertyChange("weight", this.weight, weight);
+        BigDecimal oldValue = this.weight;
         this.weight = weight;
+        firePropertyChange("weight", oldValue, weight);
     }
 
     public Integer getDeliveryTime() {
@@ -519,8 +540,9 @@ public class SimpleProduct
     }
 
     public void setDeliveryTime(Integer deliveryTime) {
-        firePropertyChange("deliveryTime", this.deliveryTime, deliveryTime);
+        Integer oldValue = this.deliveryTime;
         this.deliveryTime = deliveryTime;
+        firePropertyChange("deliveryTime", oldValue, deliveryTime);
     }
 
     public String getDescription() {
@@ -528,8 +550,9 @@ public class SimpleProduct
     }
 
     public void setDescription(String description) {
-        firePropertyChange("description", this.description, description);
+        String oldValue = this.description;
         this.description = description;
+        firePropertyChange("description", oldValue, description);
     }
 
     /**
@@ -586,8 +609,9 @@ public class SimpleProduct
      * @param producer - BusinessPartner
      */
     public void setProducer(BusinessPartner producer) {
-        firePropertyChange("producer", this.producer, producer);
+        BusinessPartner oldValue = this.producer;
         this.producer = producer;
+        firePropertyChange("producer", oldValue, producer);
     }
 
     /**
@@ -608,7 +632,9 @@ public class SimpleProduct
     }
 
     public void setCurrency(DbResource currency) {
+        DbResource oldValue = this.currency;
         this.currency = currency;
+        firePropertyChange("currency", oldValue, currency);
     }
 
     public String getProductDisplay() {
@@ -634,7 +660,9 @@ public class SimpleProduct
     }
 
     public void setCustomsDutyPercentValue(ProductPercentValue customsDutyPercentValue) {
+        ProductPercentValue oldValue = this.customsDutyPercentValue;
         this.customsDutyPercentValue = customsDutyPercentValue;
+        firePropertyChange("customsDutyPercentValue", oldValue, customsDutyPercentValue);
     }
 
     public ProductPercentValue getDiscountPercentValue() {
@@ -642,7 +670,9 @@ public class SimpleProduct
     }
 
     public void setDiscountPercentValue(ProductPercentValue discountPercentValue) {
+        ProductPercentValue oldValue = this.discountPercentValue;
         this.discountPercentValue = discountPercentValue;
+        firePropertyChange("discountPercentValue", oldValue, discountPercentValue);
     }
 
     public ProductPercentValue getExciseDutyPercentValue() {
@@ -650,7 +680,9 @@ public class SimpleProduct
     }
 
     public void setExciseDutyPercentValue(ProductPercentValue exciseDutyPercentValue) {
+        ProductPercentValue oldValue = this.exciseDutyPercentValue;
         this.exciseDutyPercentValue = exciseDutyPercentValue;
+        firePropertyChange("exciseDutyPercentValue", oldValue, exciseDutyPercentValue);
     }
 
     public ProductPercentValue getProfitPercentValue() {
@@ -658,7 +690,9 @@ public class SimpleProduct
     }
 
     public void setProfitPercentValue(ProductPercentValue profitPercentValue) {
+        ProductPercentValue oldValue = this.profitPercentValue;
         this.profitPercentValue = profitPercentValue;
+        firePropertyChange("profitPercentValue", oldValue, profitPercentValue);
     }
 
     public ProductPercentValue getTransportPercentValue() {
@@ -666,7 +700,9 @@ public class SimpleProduct
     }
 
     public void setTransportPercentValue(ProductPercentValue transportPercentValue) {
+        ProductPercentValue oldValue = this.transportPercentValue;
         this.transportPercentValue = transportPercentValue;
+        firePropertyChange("transportPercentValue", oldValue, transportPercentValue);
     }
 
     public BigDecimal getTransportValue() {
@@ -674,7 +710,9 @@ public class SimpleProduct
     }
 
     public void setTransportValue(BigDecimal transportValue) {
+        BigDecimal oldValue = this.transportValue;
         this.transportValue = transportValue;
+        firePropertyChange("transportValue", oldValue, transportValue);
     }
 
     public BigDecimal getTotalDiscountPercent() {
