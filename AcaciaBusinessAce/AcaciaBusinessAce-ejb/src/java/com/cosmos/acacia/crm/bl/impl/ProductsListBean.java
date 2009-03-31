@@ -195,6 +195,11 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     }
 
     @Override
+    public ProductCategory refreshProductCategory(ProductCategory entity) {
+        return em.find(ProductCategory.class, entity.getId());
+    }
+
+    @Override
     public ProductCategory newProductCategory(ProductCategory parentCategory) {
         ProductCategory newObject = new ProductCategory();
         newObject.setParentCategory(parentCategory);
