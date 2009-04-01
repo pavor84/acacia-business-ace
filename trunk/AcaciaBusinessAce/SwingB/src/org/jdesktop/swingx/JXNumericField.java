@@ -19,7 +19,7 @@ import javax.swing.text.NumberFormatter;
  *
  * @author Miro
  */
-public class JXNumberField extends JFormattedTextField {
+public class JXNumericField extends JFormattedTextField {
 
     public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL64;
@@ -33,12 +33,12 @@ public class JXNumberField extends JFormattedTextField {
     protected MathContext mathContext;
     private DocumentHandler documentHandler;
 
-    public JXNumberField(Number value) {
+    public JXNumericField(Number value) {
         this();
         setValue(value);
     }
 
-    public JXNumberField() {
+    public JXNumericField() {
         init();
     }
 
@@ -199,7 +199,7 @@ public class JXNumberField extends JFormattedTextField {
         }
 
         public void textChanged(DocumentEvent event) {
-            TextEvent textEvent = new TextEvent(JXNumberField.this);
+            TextEvent textEvent = new TextEvent(JXNumericField.this);
             for(TextListener listener : getTextListeners()) {
                 listener.textChanged(textEvent);
             }
