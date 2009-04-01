@@ -7,6 +7,7 @@ package org.jdesktop.swingx;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import javax.swing.JLabel;
 
 /**
  *
@@ -26,6 +27,7 @@ public class JXPercentField extends JXNumericField {
         DecimalFormat format = (DecimalFormat)getNumberFormat();
         format.setMultiplier(100);
         super.init();
+        setSuffixComponent(new JLabel("%"));
     }
 
     public void setPercent(BigDecimal percent) {
