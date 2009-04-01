@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  *
  * @author Miro
  */
-public class JXDecimalField extends JXNumberField {
+public class JXDecimalField extends JXNumericField {
 
     public JXDecimalField(BigDecimal value) {
         super(value);

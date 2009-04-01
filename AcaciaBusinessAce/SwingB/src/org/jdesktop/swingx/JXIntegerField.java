@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  *
  * @author Miro
  */
-public class JXIntegerField extends JXNumberField {
+public class JXIntegerField extends JXNumericField {
 
     public enum NumberType {
 

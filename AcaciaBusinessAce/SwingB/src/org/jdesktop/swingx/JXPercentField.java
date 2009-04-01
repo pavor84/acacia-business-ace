@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
  *
  * @author Miro
  */
-public class JXPercentField extends JXNumberField {
+public class JXPercentField extends JXNumericField {
 
     public JXPercentField(BigDecimal value) {
         super(value);
