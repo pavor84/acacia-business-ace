@@ -263,7 +263,6 @@ public class ProductAdditionalInfoPanel extends JBPanel {
     }
 
     protected void refreshCubature() {
-        System.out.println("refreshCubature().product: " + product);
         BigDecimal cubature;
         if ((cubature = product.getDimensionCubature()) == null) {
             cubatureDecimalField.setValue(null);

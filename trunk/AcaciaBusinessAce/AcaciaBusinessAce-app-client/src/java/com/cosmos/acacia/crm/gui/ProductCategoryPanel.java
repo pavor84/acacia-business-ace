@@ -3,9 +3,7 @@
  *
  * Created on Понеделник, 2008, Април 21, 11:20
  */
-
 package com.cosmos.acacia.crm.gui;
-
 
 import java.math.BigInteger;
 
@@ -26,13 +24,13 @@ import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBPercentField;
+import com.cosmos.swingb.JBPercentValueSynchronizer;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -45,26 +43,23 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
     @EJB
     private static ProductsListRemote formSession;
-
     private ProductCategory productCategory;
     private BindingGroup bindingGroup;
 
     /** Creates new form ProductCategoryPanel */
-    public ProductCategoryPanel(ProductCategory category, BigInteger parentId)
-    {
+    public ProductCategoryPanel(ProductCategory category, BigInteger parentId) {
         super(parentId);
         this.productCategory = category;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
 
-    public ProductCategoryPanel(){
+    public ProductCategoryPanel() {
         super(null);
     }
 
@@ -184,8 +179,8 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         propDetails = entityProps.getPropertyDetails("parentCategory");
         ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
         parentCategoryComboList.bind(bg, categoryListPanel, productCategory, propDetails,
-            "${categoryName}", UpdateStrategy.READ_WRITE);
-        
+                "${categoryName}", UpdateStrategy.READ_WRITE);
+
         //category name
         propDetails = entityProps.getPropertyDetails("categoryName");
         categoryNameTextField.bind(bg, productCategory, propDetails);
@@ -193,11 +188,11 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         //pattern mask format
         propDetails = entityProps.getPropertyDetails("patternMaskFormat");
         PatternMaskFormatListPanel patternListPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
-        
-        patternMaskFormatComboList.bind(bg, patternListPanel, productCategory, propDetails,
-            "${patternName} (${format})", UpdateStrategy.READ_WRITE);
 
-        if(getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+        patternMaskFormatComboList.bind(bg, patternListPanel, productCategory, propDetails,
+                "${patternName} (${format})", UpdateStrategy.READ_WRITE);
+
+        if (getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
             productCategoryTabbedPane.addTab(getResourceString("categoryPricingPanel.TabConstraints.tabTitle"),
                     getCategoryPricingPanel()); // NOI18N
         }
@@ -217,10 +212,9 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
         DialogResponse dResponse = panel.showDialog(this);
 
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
 
-            ProductCategory category = (ProductCategory)
-                panel.getListPanel().getSelectedRowObject();
+            ProductCategory category = (ProductCategory) panel.getListPanel().getSelectedRowObject();
 
 //            PatternMaskFormat oldFormat =
 //                (PatternMaskFormat) patternMaskBinding.getTargetProperty()
@@ -232,11 +226,10 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 //            }
 
             return category;
-        }else{
+        } else {
             return null;
         }
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel categoryDetailsPanel;
     private com.cosmos.swingb.JBLabel categoryNameLabel;
@@ -250,7 +243,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel patternMaskFormatLabel;
     private javax.swing.JTabbedPane productCategoryTabbedPane;
     // End of variables declaration//GEN-END:variables
-
     private EntityFormButtonPanel entityFormButtonPanel;
     private CategoryPricingPanel categoryPricingPanel;
 
@@ -259,13 +251,14 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         productCategory = getFormSession().saveProductCategory(productCategory);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(productCategory);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        if(bindingGroup == null) {
+        if (bindingGroup == null) {
             bindingGroup = new BindingGroup();
         }
 
@@ -279,7 +272,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
-        if(entityFormButtonPanel == null) {
+        if (entityFormButtonPanel == null) {
             entityFormButtonPanel = new EntityFormButtonPanel();
             entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
         }
@@ -288,7 +281,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     private CategoryPricingPanel getCategoryPricingPanel() {
-        if(categoryPricingPanel == null) {
+        if (categoryPricingPanel == null) {
             categoryPricingPanel = new CategoryPricingPanel();
         }
 
@@ -296,8 +289,9 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     protected ProductsListRemote getFormSession() {
-        if (formSession == null)
-                formSession = getBean(ProductsListRemote.class);
+        if (formSession == null) {
+            formSession = getBean(ProductsListRemote.class);
+        }
 
         return formSession;
     }
@@ -311,9 +305,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         public CategoryDetailsPanel() {
             super(new MigLayout());
         }
-
     }
-
     private JBDecimalField transportDecimalField;
     private JBPercentField transportPercentField;
 
@@ -330,7 +322,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         private JBPanel transportPanel;
         private JBLabel transportPercentLabel;
         private JBLabel transportValueLabel;
-        private boolean syncing;
+        private JBPercentValueSynchronizer percentValueSynchronizer;
 
         public CategoryPricingPanel() {
             super(new MigLayout());
@@ -450,49 +442,25 @@ public class ProductCategoryPanel extends BaseEntityPanel {
             propDetails = entityProps.getPropertyDetails("exciseDutyPercent");
             exciseDutyPercentField.bind(bg, productCategory, propDetails);
 
-            Binding binding;
+            percentValueSynchronizer =
+                    new JBPercentValueSynchronizer(transportPercentField, transportDecimalField);
             propDetails = entityProps.getPropertyDetails("transportPercent");
-            binding = transportPercentField.bind(bg, productCategory, propDetails);
-            binding.addBindingListener(new AbstractBindingListener() {
-
-                @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    Object newValue;
-                    Object oldValue;
-                    if(syncing || !binding.isContentChanged() ||
-                            (newValue = event.getNewValue()) == (oldValue = event.getOldValue()) ||
-                            newValue != null && newValue.equals(oldValue) ||
-                            oldValue != null && oldValue.equals(newValue)) {
-                        if(syncing)
-                            syncing = false;
-                        return;
-                    }
-                    syncing = true;
-                    transportDecimalField.setValue(null);
-                }
-            });
-
+            transportPercentField.bind(bindingGroup, productCategory, propDetails);
             propDetails = entityProps.getPropertyDetails("transportValue");
-            binding = transportDecimalField.bind(bg, productCategory, propDetails);
+            Binding binding = transportDecimalField.bind(bindingGroup, productCategory, propDetails);
+
             binding.addBindingListener(new AbstractBindingListener() {
 
                 @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    Object newValue;
-                    Object oldValue;
-                    if(syncing || !binding.isContentChanged() ||
-                            (newValue = event.getNewValue()) == (oldValue = event.getOldValue()) ||
-                            newValue != null && newValue.equals(oldValue) ||
-                            oldValue != null && oldValue.equals(newValue)) {
-                        if(syncing)
-                            syncing = false;
-                        return;
-                    }
-                    syncing = true;
-                    transportPercentField.setValue(null);
+                public void bindingBecameBound(Binding binding) {
+                    percentValueSynchronizer.bind();
+                }
+
+                @Override
+                public void bindingBecameUnbound(Binding binding) {
+                    percentValueSynchronizer.unbind();
                 }
             });
         }
     }
-
 }

@@ -17,14 +17,12 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
-import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPercentField;
+import com.cosmos.swingb.JBPercentValueSynchronizer;
 import com.cosmos.swingb.MigLayoutHelper;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -37,8 +35,6 @@ import javax.swing.SwingConstants;
 import org.jdesktop.beansbinding.AbstractBindingListener;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.PropertyStateEvent;
-import org.jdesktop.swingx.JXPercentValueField;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -51,6 +47,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     private BindingGroup bindingGroup;
     private EntityProperties entityProps;
     private boolean bindingInit;
+    private JBPercentValueSynchronizer percentValueSynchronizer;
     //
     // Row 0
     private JBLabel categoryLabel;
@@ -193,6 +190,9 @@ public class ProductPricingPanel extends AcaciaPanel {
         // Row 10
         salesPriceLabel = new JBLabel();
         salesPriceDecimalField = new JBDecimalField();
+        //
+        percentValueSynchronizer = new PercentValueSynchronizer(
+                transportProductPercentField, transportValueField);
 
         // Row 0
         categoryLabel.setText(getResourceString("categoryLabel.text"));
@@ -463,7 +463,12 @@ public class ProductPricingPanel extends AcaciaPanel {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                getProduct().setTransportPercentValue(null);
+                percentValueSynchronizer.unbind();
+                try {
+                    getProduct().setTransportPercentValue(null);
+                } finally {
+                    percentValueSynchronizer.bind();
+                }
             }
         });
 
@@ -552,10 +557,10 @@ public class ProductPricingPanel extends AcaciaPanel {
             }
         });
 
-        ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
+        //ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
         PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
         Binding binding = listPriceDecimalField.bind(bindingGroup, product, propDetails);
-        binding.addBindingListener(listPriceBindingListener);
+        //binding.addBindingListener(listPriceBindingListener);
 
         propDetails = entityProps.getPropertyDetails("currency");
         binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
@@ -567,8 +572,20 @@ public class ProductPricingPanel extends AcaciaPanel {
             }
         });
 
-//        propDetails = entityProps.getPropertyDetails("discountPercentValue");
-//        binding = discountPercentField.bind(bindingGroup, product, propDetails);
+        propDetails = entityProps.getPropertyDetails("transportValue");
+        transportValueField.bind(bindingGroup, product, propDetails).addBindingListener(
+                new AbstractBindingListener() {
+
+            @Override
+            public void bindingBecameBound(Binding binding) {
+                percentValueSynchronizer.bind();
+            }
+
+            @Override
+            public void bindingBecameUnbound(Binding binding) {
+                percentValueSynchronizer.unbind();
+            }
+        });
 
         currencyComboBox.addItemListener(new ItemListener() {
 
@@ -650,8 +667,6 @@ public class ProductPricingPanel extends AcaciaPanel {
             transportProductPercentField.setValue(ppv.getPercentValue());
         else
             transportProductPercentField.setValue(null);
-        System.out.println("product.getTransportValue(): " + product.getTransportValue());
-//        transportPercentField.setValue(product.getT);
         transportDecimalField.setValue(product.getTransportPrice());
 
         baseDutyPriceDecimalField.setValue(product.getBaseDutyPrice());
@@ -698,11 +713,24 @@ public class ProductPricingPanel extends AcaciaPanel {
         productPanel.refreshPrimaryInfoForm();
     }
 
-    private class ListPriceBindingListener extends AbstractBindingListener {
+    private class PercentValueSynchronizer extends JBPercentValueSynchronizer {
+
+        public PercentValueSynchronizer(JBPercentField percentField, JBDecimalField decimalField) {
+            super(percentField, decimalField);
+        }
 
         @Override
-        public void targetChanged(Binding binding, PropertyStateEvent event) {
-            System.out.println("targetChanged(" + event + ")");
+        protected void setPercentValue(BigDecimal value) {
+            super.setPercentValue(value);
+            getProduct().setTransportPercentValue(null);
         }
     }
+
+//    private class ListPriceBindingListener extends AbstractBindingListener {
+//
+//        @Override
+//        public void targetChanged(Binding binding, PropertyStateEvent event) {
+//            System.out.println("targetChanged(" + event + ")");
+//        }
+//    }
 }
