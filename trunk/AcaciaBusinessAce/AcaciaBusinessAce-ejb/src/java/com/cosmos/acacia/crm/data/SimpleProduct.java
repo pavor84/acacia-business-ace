@@ -157,7 +157,7 @@ public class SimpleProduct
 
     @JoinColumn(name = "transport_percent_id", referencedColumnName = "percent_value_id")
     @ManyToOne
-    @Property(title="Transport %", editable=false, hidden=true, percent=true, visible=false)
+    @Property(title="Transport %", editable=false, percent=true, visible=false)
     private ProductPercentValue transportPercentValue;
 
     @JoinColumn(name = "discount_percent_id", referencedColumnName = "percent_value_id")
@@ -181,7 +181,7 @@ public class SimpleProduct
     private ProductPercentValue exciseDutyPercentValue;
 
     @Column(name = "transport_value", precision = 19, scale = 4)
-    @Property(title="Transport Value", editable=false, hidden=true, visible=false)
+    @Property(title="Transport Value")
     private BigDecimal transportValue;
     
     @Column(name = "quantity_per_package", nullable = false)
