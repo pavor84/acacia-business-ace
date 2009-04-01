@@ -423,10 +423,8 @@ public class ProductPrimaryInfoPanel extends JBPanel {
     }
 
     private void onProductCategoryChanged(ProductCategory productCategory) {
-        System.out.println("onProductCategoryChanged(" + productCategory + ")");
         if(productCategory != null) {
             productCategory = productPanel.refreshProductCategory(productCategory);
-            System.out.println("productCategory.getDiscountPercent(): " + productCategory.getDiscountPercent());
             product.setCategory(productCategory);
         }
         PatternMaskFormat patternMaskFormat;

@@ -40,17 +40,29 @@ public class ProductPricingPanel extends AcaciaPanel {
 
     private void initComponentsCustom() {
         additionalDiscountButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPercentValue.Type.DISCOUNT);}});
+                onChoosePriceValue(ProductPercentValue.Type.DISCOUNT);
+            }
+        });
         transportButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPercentValue.Type.TRANSPORT);}});
+                onChoosePriceValue(ProductPercentValue.Type.TRANSPORT);
+            }
+        });
         dutyButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPercentValue.Type.CUSTOMS_DUTY);}});
+                onChoosePriceValue(ProductPercentValue.Type.CUSTOMS_DUTY);
+            }
+        });
         additionalProfitButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                onChoosePriceValue(ProductPercentValue.Type.PROFIT);}});
+                onChoosePriceValue(ProductPercentValue.Type.PROFIT);
+            }
+        });
         
         additionalProfitField.setPercentInclusive(true);
         categoryProfitField.setPercentInclusive(true);
