@@ -7,6 +7,7 @@ package org.jdesktop.swingx;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import javax.swing.JFormattedTextField;
 
 /**
  *
@@ -36,19 +37,23 @@ public class JXPercentValueSynchronizer {
 
     public void bind() {
         percentChangeListener = new PercentChangeListener();
-        percentField.addPropertyChangeListener(percentChangeListener);
+        percentField.getNumericField().
+                addPropertyChangeListener(PROPERTY_NAME_VALUE, percentChangeListener);
         decimalChangeListener = new DecimalChangeListener();
-        decimalField.addPropertyChangeListener(decimalChangeListener);
+        decimalField.getNumericField().
+                addPropertyChangeListener(PROPERTY_NAME_VALUE, decimalChangeListener);
         syncing = false;
     }
 
     public void unbind() {
         if (decimalChangeListener != null) {
-            decimalField.removePropertyChangeListener(decimalChangeListener);
+            decimalField.getNumericField().
+                    removePropertyChangeListener(PROPERTY_NAME_VALUE, decimalChangeListener);
             decimalChangeListener = null;
         }
         if (percentChangeListener != null) {
-            percentField.removePropertyChangeListener(percentChangeListener);
+            percentField.getNumericField().
+                    removePropertyChangeListener(PROPERTY_NAME_VALUE, percentChangeListener);
             percentChangeListener = null;
         }
         syncing = false;
