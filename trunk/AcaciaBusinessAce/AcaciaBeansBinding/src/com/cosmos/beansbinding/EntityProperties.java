@@ -31,8 +31,12 @@ public class EntityProperties
     private Map<String, PropertyDetails> beanProperties;
     private AutoBinding.UpdateStrategy updateStrategy;
 
-    EntityProperties(Class entityClass) {
+    public EntityProperties(Class entityClass) {
         this.entityClass = entityClass;
+    }
+    
+    public EntityProperties(Collection<PropertyDetails> beanProps) {
+        setBeanProperties(beanProps);
     }
 
     /*

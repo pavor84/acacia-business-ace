@@ -60,6 +60,8 @@ import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.deliverycertificates.DeliveryCertificatesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
+import com.cosmos.acacia.crm.gui.payment.PaymentMatchingPanel;
+import com.cosmos.acacia.crm.gui.payment.PaymentsReceivablesPanel;
 import com.cosmos.acacia.crm.gui.pricing.PricelistListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
@@ -579,6 +581,18 @@ public class AcaciaApplicationView extends FrameView {
         LocalSession.instance().setViewDataFromAllBranches(
                 new Boolean(viewDataFromAllBranchesMenuItem.getState()));
     }
+    
+    @Action
+    public void customerPaymentsAction(){
+        PaymentsReceivablesPanel panel = new PaymentsReceivablesPanel(getParentId());
+        panel.showFrame();
+    }
+    
+    @Action
+    public void customerPaymentsMatchingAction(){
+        PaymentMatchingPanel panel = new PaymentMatchingPanel(getParentId());
+        panel.showFrame();
+    }
 
     private ActionMap getActionMap()
     {
@@ -698,7 +712,29 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setMnemonic('P');
         ordersMenu.add(menuItem);
         menuBar.add(ordersMenu);
-
+        
+        //payments menu
+        JBMenu paymentMenu = new JBMenu();
+        paymentMenu.setText(resourceMap.getString("paymentMenu.text"));
+        paymentMenu.setName("paymentMenu");
+        paymentMenu.setMnemonic('M');
+        
+        //customer payments
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("customerPaymentsAction"));
+        menuItem.setText(resourceMap.getString("paymentMenu.customerPayments.text"));
+        menuItem.setMnemonic('C');
+        paymentMenu.add(menuItem);
+        
+        //payments matching
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("customerPaymentsMatchingAction"));
+        menuItem.setText(resourceMap.getString("paymentMenu.customerPaymentsMatching.text"));
+        menuItem.setMnemonic('M');
+        paymentMenu.add(menuItem);
+        
+        menuBar.add(paymentMenu);
+        
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("orderConfirmationsAction"));
         menuItem.setMnemonic('C');

@@ -79,7 +79,7 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
         AcaciaTable deliveryCertTable = getDataTable();
         
         this.serialNumbers = getDeliveryCertificateItemSerialNumbers();	
-        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, true);
+        JTableBinding tableBinding = deliveryCertTable.bind(bidingGroup, this.serialNumbers, entProps, UpdateStrategy.READ, null, true);
         tableBinding.setEditable(true);
         deliveryCertTable.setEditable(true);
         
