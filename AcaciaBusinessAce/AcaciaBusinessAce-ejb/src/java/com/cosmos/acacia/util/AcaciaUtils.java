@@ -14,6 +14,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.swing.text.MaskFormatter;
 
 import org.apache.log4j.Logger;
@@ -351,5 +354,59 @@ public class AcaciaUtils
     public static void setLocale(Locale locale)
     {
         AcaciaUtils.locale = locale;
+    }
+    
+    /**
+     * Convinient method to save writing
+     * @param queryName - named query
+     * @param parameters - the parameters are name/value pairs (every odd object is parameter name, and
+     * every even object is parameter value).
+     * @return - null if not found
+     */
+    public static Object getSingleResult(EntityManager em, String queryName, Object ... parameters) {
+        try{
+            Query q = getQuery(em, queryName, parameters);
+            return q.getSingleResult();
+        }catch ( NoResultException e ){
+            return null;
+        }
+    }
+    
+    /**
+     * Convinient method to save writing
+     * @param queryName - named query
+     * @param parameters - the parameters are name/value pairs (every odd object is parameter name, and
+     * every even object is parameter value).
+     * @return
+     */
+    public static Object getResultList(EntityManager em, String queryName, Object ... parameters) {
+        Query q = getQuery(em, queryName, parameters);
+        return q.getResultList();
+    }
+
+    /**
+     * Convinient method to save writing
+     * @param em
+     * @param queryName
+     * @param parameters
+     * @return
+     */
+    public static Query getQuery(EntityManager em, String queryName, Object[] parameters) {
+        Query q = em.createNamedQuery(queryName);
+        if ( parameters!=null ){
+            boolean odd = true;
+            Object parName = null;
+            for (Object object : parameters) {
+                if ( odd ){
+                    parName = object;
+                    odd = false;
+                }
+                else{
+                    q.setParameter(parName.toString(), object);
+                    odd = true;
+                }
+            }
+        }
+        return q;
     }
 }

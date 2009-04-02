@@ -62,14 +62,14 @@ import javax.persistence.PrimaryKeyJoinColumn;
                     "  and t2.classifiedObjectPK.classifierId = :classifierId"
             ),
         @NamedQuery
-            (
-             name = "BusinessPartner.getAll",
-             query = "select distinct t1" +
-                    " from BusinessPartner t1" +
-                    " where" +
-                    "  t1.parentId = :parentId" +
-                    "  and t1.dataObject.deleted = :deleted"
-            )
+        (
+         name = "BusinessPartner.getAll",
+         query = "select distinct t1" +
+                " from BusinessPartner t1" +
+                " where" +
+                "  t1.parentId = :parentId" +
+                "  and t1.dataObject.deleted = :deleted"
+        )
     }
 )
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {

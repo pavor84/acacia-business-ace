@@ -289,7 +289,7 @@ public class JBTable
         AutoBinding.UpdateStrategy updateStrategy = entityProperties.getUpdateStrategy();
         if(updateStrategy == null)
             updateStrategy = AutoBinding.UpdateStrategy.READ;
-        return bind(bindingGroup, data, entityProperties, updateStrategy, showIndexColumn);
+        return bind(bindingGroup, data, entityProperties, updateStrategy, null, showIndexColumn);
     }
     
     /**
@@ -306,7 +306,7 @@ public class JBTable
             List data,
             Collection<PropertyDetails> propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
-        return bind(bindingGroup, data, propertyDetails, updateStrategy, false);
+        return bind(bindingGroup, data, propertyDetails, updateStrategy, null, false);
     }
 
     /**
@@ -315,6 +315,7 @@ public class JBTable
      * @param bindingGroup
      * @param data
      * @param propertyDetails
+     * @param customColumns - supply columns
      * @param updateStrategy
      * @return
      */
@@ -322,7 +323,7 @@ public class JBTable
             BindingGroup bindingGroup,
             List data,
             Collection<PropertyDetails> propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy, boolean showIndexColumn) {
+            AutoBinding.UpdateStrategy updateStrategy, List<JBColumn> customColumns, boolean showIndexColumn) {
         updateStrategy = UpdateStrategy.READ;
         if(!(data instanceof ObservableList))
             observableData = ObservableCollections.observableList(data);
@@ -330,7 +331,7 @@ public class JBTable
             observableData = (ObservableList)data;
 
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy, observableData, this);
-        createColumnsBinding(tableBinding, propertyDetails, showIndexColumn);
+        createColumnsBinding(tableBinding, propertyDetails, customColumns, showIndexColumn);
         tableBinding.bind();
         afterBindInit(propertyDetails);
 
@@ -346,14 +347,14 @@ public class JBTable
     public JTableBinding bind(BindingGroup bindingGroup, List data,
                               EntityProperties entityProperties,
                               AutoBinding.UpdateStrategy updateStrategy) {
-        return bind(bindingGroup, data, entityProperties, updateStrategy, false);
+        return bind(bindingGroup, data, entityProperties, updateStrategy, null, false);
     }
 
     //
     public JTableBinding bind(BindingGroup bindingGroup, List data,
                               EntityProperties entityProperties,
-                              AutoBinding.UpdateStrategy updateStrategy, boolean showIndexColumn) {
-        updateStrategy = UpdateStrategy.READ;
+                              AutoBinding.UpdateStrategy updateStrategy, List<JBColumn> customColumns, boolean showIndexColumn) {
+        updateStrategy = UpdateStrategy.READ;//pesho: why overwrite the parameter?
         if (!(data instanceof ObservableList))
             observableData = ObservableCollections.observableList(data);
         else
@@ -362,7 +363,7 @@ public class JBTable
 
         JTableBinding tableBinding = SwingBindings.createJTableBinding(updateStrategy,
             observableData, this);
-        createColumnsBinding(tableBinding, entityProperties, showIndexColumn);
+        createColumnsBinding(tableBinding, entityProperties, customColumns, showIndexColumn);
         
         tableBinding.bind();
         afterBindInit(entityProperties.getValues());
@@ -390,14 +391,14 @@ public class JBTable
 
     protected void createColumnsBinding(
             JTableBinding tableBinding,
-            EntityProperties entityProperties, boolean showIndexColumn)
+            EntityProperties entProps, List<JBColumn> customColumns, boolean showIndexColumn)
     {
-        createColumnsBinding(tableBinding, entityProperties.getValues(), showIndexColumn);
+        createColumnsBinding(tableBinding, entProps.getValues(), customColumns, showIndexColumn);
     }
 
     protected void createColumnsBinding(
             JTableBinding tableBinding,
-            Collection<PropertyDetails> properties, boolean showIndexColumn)
+            Collection<PropertyDetails> properties, List<JBColumn> customColumns, boolean showIndexColumn)
     {
         if ( showIndexColumn )
             createIndexColumnBinding(tableBinding);
@@ -406,6 +407,48 @@ public class JBTable
             if(!property.isHiden())
                 createColumnBinding(tableBinding, property);
         }
+        if ( customColumns!=null ){
+            for (JBColumn column : customColumns) {
+                createCustomColumnBinding(tableBinding, column);
+            }
+        }
+    }
+
+    protected ColumnBinding createCustomColumnBinding(JTableBinding tableBinding, final JBColumn column) {
+        Property indexProperty = new PropertyHelper() {
+            @Override
+            public void setValue(Object arg0, Object arg1) {
+                column.setValue(arg0, arg1);
+            }
+        
+            @Override
+            public boolean isWriteable(Object arg0) {
+                return column.isWriteable(arg0);
+            }
+        
+            @Override
+            public boolean isReadable(Object arg0) {
+                return column.isReadable(arg0);
+            }
+        
+            @Override
+            public Class getWriteType(Object arg0) {
+                return column.getColumnClass();
+            }
+        
+            @Override
+            public Object getValue(Object item) {
+                return column.getValue(item);
+            }
+        };
+        
+        ColumnBinding indexBinding = tableBinding.addColumnBinding(column.getIndex(), indexProperty);
+        indexBinding.setColumnName(column.getColumnName());
+        indexBinding.setColumnClass(column.getColumnClass());
+        indexBinding.setEditable(column.isEditable());
+        indexBinding.setVisible(column.isVisible());
+        
+        return indexBinding;
     }
 
     /**

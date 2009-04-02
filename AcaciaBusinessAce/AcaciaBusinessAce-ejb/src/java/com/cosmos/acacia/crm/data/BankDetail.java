@@ -3,6 +3,8 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.resource.TextResource;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -37,7 +39,7 @@ import javax.persistence.Table;
 )
 public class BankDetail
         extends DataObjectBean
-        implements Serializable
+        implements Serializable, TextResource
 {
     private static final long serialVersionUID = 1L;
 
@@ -268,5 +270,20 @@ public class BankDetail
     @Override
     public String getInfo() {
         return getBankAccount();
+    }
+
+    @Override
+    public String toShortText() {
+        if ( getBankAccount()!=null )
+            return getBankAccount();
+        return getIban();
+    }
+
+    @Override
+    public String toText() {
+        String bank = "";
+        if ( getBank()!=null )
+            bank = getBank().getDisplayName();
+        return bank+" ["+toShortText()+"]";
     }
 }
