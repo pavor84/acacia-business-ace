@@ -52,6 +52,14 @@ public class PropertyDetails
             String propertyClassName) {
         this(propertyName, propertyTitle, propertyClassName, null);
     }
+    
+    public PropertyDetails(
+                           String propertyName,
+                           String propertyTitle,
+                           String propertyClassName,
+                           int orderPosition) {
+                       this(propertyName, propertyTitle, propertyClassName, null, null, orderPosition);
+                   }
 
     public PropertyDetails(
             String propertyName,
@@ -67,12 +75,24 @@ public class PropertyDetails
             String propertyClassName,
             Object sourceUnreadableValue,
             String columnName) {
-        this.propertyName = propertyName;
-        this.propertyTitle = propertyTitle;
-        this.propertyClassName = propertyClassName;
-        this.sourceUnreadableValue = sourceUnreadableValue;
-        this.columnName = columnName;
+        this (propertyName, propertyTitle, propertyClassName, sourceUnreadableValue, columnName, 0);
     }
+    
+    public PropertyDetails(
+                           String propertyName,
+                           String propertyTitle,
+                           String propertyClassName,
+                           Object sourceUnreadableValue,
+                           String columnName,
+                           int orderPosition) {
+                       this.propertyName = propertyName;
+                       this.propertyTitle = propertyTitle;
+                       this.propertyClassName = propertyClassName;
+                       this.sourceUnreadableValue = sourceUnreadableValue;
+                       this.columnName = columnName;
+                       this.orderPosition = orderPosition;
+                   }
+
 
     public String getColumnName() {
         return columnName;

@@ -22,10 +22,13 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBColumn;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigInteger;
@@ -59,13 +62,23 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     private Classifier partnerClassifier;
     private Classifier customerClassifier;
     private boolean initialized;
+    private List<BusinessPartner> businessPartnersStaticList;
+
+    private List<JBColumn> customColumns;
 
     public BusinessPartnersListPanel() {
-        this(null);
+        this((Classifier)null);
     }
 
     public BusinessPartnersListPanel(Classifier partnerClassifier) {
         super(partnerClassifier);
+        bindComponents();
+    }
+
+    public BusinessPartnersListPanel(List<BusinessPartner> businessPartnersStaticList, List<JBColumn> customColumns) {
+        this.businessPartnersStaticList = businessPartnersStaticList;
+        this.customColumns = customColumns;
+        bindComponents();
     }
 
     @Override
@@ -178,6 +191,10 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
     @Override
     protected void initData() {
+        
+    }
+    
+    protected void bindComponents(){
         Classifier classifier;
         if((classifier = (Classifier)getMainDataObject()) != null && partnerClassifier == null)
             partnerClassifier = classifier;
@@ -193,7 +210,8 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
         bindingGroup = new BindingGroup();
         AcaciaTable citiesTable = getDataTable();
-        JTableBinding tableBinding = citiesTable.bind(bindingGroup, getBusinessPartners(), getEntityProperties());
+        JTableBinding tableBinding = 
+            citiesTable.bind(bindingGroup, getBusinessPartners(), getEntityProperties(), null, customColumns, false);
 
         bindingGroup.bind();
 
@@ -278,7 +296,12 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     protected List<BusinessPartner> getBusinessPartners() {
-        return getFormSession().getBusinessPartners(getPartnerClassifier());
+        //if we have static list, don't query the service layer, just use the list
+        if (businessPartnersStaticList!=null)
+            return businessPartnersStaticList;
+        //otherwise, refresh the list from service layer
+        else
+            return getFormSession().getBusinessPartners(getPartnerClassifier());
     }
 
     protected EntityProperties getEntityProperties() {
@@ -308,11 +331,23 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         button.setToolTipText(getResourceMap().getString("button.discount.tooltip"));
         setVisible(Button.Special, true);
         setEnabled(Button.Special, false);
+        specialBehaviourListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onDiscount();
+            }
+        };
     }
+    
+    private ActionListener specialBehaviourListener=null;
 
     @Override
     public void specialAction() {
-        onDiscount();
+        if ( specialBehaviourListener!=null )
+            specialBehaviourListener.actionPerformed(new ActionEvent(getButtonsMap().get(Button.Special), 1, "specialAction"));
+    }
+    
+    public void setSpecialAction(ActionListener action){
+        specialBehaviourListener = action;
     }
 
     protected void onDiscount() {
@@ -323,5 +358,19 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
         CustomerDiscountListPanel panel = new CustomerDiscountListPanel(selected);
         panel.showDialog(this);
+    }
+
+    public List<BusinessPartner> getBusinessPartnersStaticList() {
+        return businessPartnersStaticList;
+    }
+
+    public void setBusinessPartnersStaticList(List<BusinessPartner> businessPartnersStaticList) {
+        this.businessPartnersStaticList = businessPartnersStaticList;
+        refreshTable();
+    }
+
+    public void setClassifierVisible(boolean visible) {
+        if ( topPanel!=null )
+            topPanel.setVisible(visible);
     }
 }
