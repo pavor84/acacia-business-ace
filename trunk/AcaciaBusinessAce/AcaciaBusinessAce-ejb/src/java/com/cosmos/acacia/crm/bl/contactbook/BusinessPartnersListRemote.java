@@ -1,12 +1,15 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -39,5 +42,27 @@ public interface BusinessPartnersListRemote {
      *
      */
     void deleteBusinessPartner(BusinessPartner businessPartner);
+
+    /**
+     * Get the contact persons of a given business partner.
+     * @param customer
+     * @return
+     */
+    List<ContactPerson> getContactPersons(BusinessPartner businessPartner);
+
+    /**
+     * Returns all partner classified as {@link Classifier#Customer} with positive laiabilites.
+     * Every partner is mapped with his liability.
+     * @return
+     */
+    Map<BusinessPartner, BigDecimal> getLiabilityCustomers();
+
+    /**
+     * Returns all partner classified as {@link Classifier#Customer} with prepaid amounts 
+     * (negative laiabilites).
+     * Every partner is mapped with his prepaid amount.
+     * @return
+     */
+    Map<BusinessPartner, BigDecimal> getPrepaidCustomers();
 
 }

@@ -17,6 +17,7 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -41,7 +42,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
     private EntityStoreManagerLocal esm;
 
     @EJB
-    private AddressesListLocal contactPersonsManager;
+    private AddressesListLocal addressesListLocal;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -87,7 +88,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
     }
 
     public List<Person> getBankContacts(BigInteger parentDataObjectId) {
-        List<ContactPerson> contactPersons = contactPersonsManager.getContactPersons(parentDataObjectId);
+        List<ContactPerson> contactPersons = addressesListLocal.getContactPersons(parentDataObjectId);
 
         ArrayList<Person> persons = new ArrayList<Person>(contactPersons.size());
 
@@ -100,5 +101,16 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
 
     public List<DbResource> getCurrencies() {
         return Currency.getDbResources();
+    }
+
+    @Override
+    public List<BankDetail> getBankDetailsForOrganization(BigInteger organizationDataObjectId) {
+        List<Address> orgAddresses = addressesListLocal.getAddresses(organizationDataObjectId);
+        List<BankDetail> result = new ArrayList<BankDetail>();
+        
+        for (Address address : orgAddresses) {
+            result.addAll(getBankDetails(address.getId()));
+        }
+        return result;
     }
 }

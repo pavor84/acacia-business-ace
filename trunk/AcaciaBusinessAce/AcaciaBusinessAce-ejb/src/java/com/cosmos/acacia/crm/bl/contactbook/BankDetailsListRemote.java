@@ -30,6 +30,13 @@ public interface BankDetailsListRemote {
      * @return list of bank details
      */
     List<BankDetail> getBankDetails(BigInteger parentId);
+    
+    /**
+     * Returns all bank details for the given organization.
+     * @param organizationDataObjectId
+     * @return
+     */
+    List<BankDetail> getBankDetailsForOrganization(BigInteger organizationDataObjectId);
 
     /**
      * Gets the EntithyProperties of BankDetail

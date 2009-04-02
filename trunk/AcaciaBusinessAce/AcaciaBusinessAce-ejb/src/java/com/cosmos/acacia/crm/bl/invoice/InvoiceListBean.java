@@ -21,6 +21,7 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingLocal;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
+import com.cosmos.acacia.crm.bl.impl.DocumentNumberLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.impl.WarehouseListLocal;
 import com.cosmos.acacia.crm.data.Address;
@@ -49,6 +50,7 @@ import com.cosmos.acacia.crm.enums.PaymentTerm;
 import com.cosmos.acacia.crm.enums.PaymentType;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 
@@ -81,6 +83,9 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     
     @EJB
     private AssemblingLocal assemblingLocal;
+    
+    @EJB
+    private DocumentNumberLocal documentNumberLocal;
     
     public EntityProperties getListingEntityProperties() {
         
@@ -174,6 +179,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.MONTH, 1);
         c.setValidTo(now.getTime());
+        c.setPaidAmount(BigDecimal.ZERO);
         
         return c;
     }
@@ -462,35 +468,6 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         return saveInvoice(entity);
     }
 
-    private void setInvoiceNumber(Invoice entity) {
-        Query q = em.createNamedQuery("Invoice.maxInvoiceNumberForBranch");
-        if ( entity.getBranch()==null )
-            throw new IllegalArgumentException("Invoice branch is null!");
-        q.setParameter("branch", entity.getBranch());
-        q.setParameter("proformaInvoice", entity.getProformaInvoice());
-        
-        BigInteger result = (BigInteger) q.getSingleResult();
-        //no orders for this warehouse
-        if ( result==null ){
-            Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(entity.getBranch());
-            if ( warehouse==null ){
-                throw new IllegalStateException("No warehouse found for address: "+entity.getBranch()==null?"null":entity.getBranch().getAddressName());
-            }
-            
-            if ( warehouse.getIndex()==null || warehouse.getIndex().equals(new Long(0))){
-                throw new IllegalStateException("No warehouse index set for warehouse: "
-                    +warehouse.getAddress().getAddressName()+". This is needed to generate document numbers!");
-            }
-           
-            result = new BigInteger(""+warehouse.getIndex());
-            result = result.multiply(WarehouseListLocal.DOCUMENT_INDEX_MULTIPLICATOR);
-        }else{
-            result = result.add(new BigInteger("1"));
-        }
-        
-        entity.setInvoiceNumber(result);
-    }
-
     @Override
     public void saveInvoiceItems(List<InvoiceItem> newItems) {
         if ( newItems==null )
@@ -560,7 +537,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         //the document date is the date that it was confirmed as valid document
         entity.setInvoiceDate(new Date());
         //the number of the document is generated at confirmation
-        setInvoiceNumber(entity);
+        documentNumberLocal.setDocumentNumber(entity);
         entity.setStatus(InvoiceStatus.WaitForPayment.getDbResource());
         
         return saveInvoice(entity);
@@ -803,7 +780,17 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         Query q = em.createNamedQuery("Invoice.getDueInvoicesForRecipient");
         q.setParameter("recipient", recipient);
         q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
-        q.setParameter("proformaInvoice", Boolean.FALSE);
+        
+        List<Invoice> result = q.getResultList();
+        return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Invoice> getDueDocuments() { 
+        Query q = em.createNamedQuery("Invoice.getDueInvoices");
+        q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+        q.setParameter("parentId", acaciaSession.getOrganization().getId());
         
         List<Invoice> result = q.getResultList();
         return result;
@@ -890,6 +877,40 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     	}else{
     		return result.get(0);
     	}
+    }
+
+    @Override
+    public List<Invoice> getConfirmedDocuments() {
+        Query q = em.createNamedQuery("Invoice.getConfirmedInvoices");
+        q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+        q.setParameter("paid", InvoiceStatus.Paid.getDbResource());
+        q.setParameter("parentId", acaciaSession.getOrganization().getId());
+        
+        List<Invoice> result = q.getResultList();
+        return result;
+    }
+
+    @Override
+    public List<Invoice> getPendingInvoices(BusinessPartner recipient, Boolean includedPartlyPaid,
+                                            Boolean includeUnpaid) {
+        List<Invoice> result = new ArrayList<Invoice>();
+        if ( includedPartlyPaid ){
+            List<Invoice> partlyMatched = (List<Invoice>)
+                AcaciaUtils.getResultList(em, "Invoice.getPartlyMatched", 
+                "branch", acaciaSession.getBranch(),
+                "recipient", recipient,
+                "waitForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+            result.addAll(partlyMatched);
+        }
+        if ( includeUnpaid ){
+            List<Invoice> unmatched = (List<Invoice>)
+            AcaciaUtils.getResultList(em, "Invoice.getUnmatched",
+                "branch", acaciaSession.getBranch(),
+                "recipient", recipient,
+                "waitForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+            result.addAll(unmatched);
+        }
+        return result;
     }
     
 //    public static void main(String[] args) {

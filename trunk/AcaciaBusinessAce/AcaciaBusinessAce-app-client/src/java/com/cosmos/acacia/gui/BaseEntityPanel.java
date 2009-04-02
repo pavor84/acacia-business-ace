@@ -91,7 +91,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     protected void initSaveStateListener()
     {
         try {
-            getButtonPanel().initSaveStateListener();
+            getButtonPanel().initSaveStateListener(this);
         } catch (NullPointerException ex){
             // No button panel
         }
