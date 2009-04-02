@@ -133,15 +133,15 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     private com.cosmos.swingb.JBButton problemsButton;
     private com.cosmos.swingb.JBButton saveButton;
     // End of variables declaration//GEN-END:variables
+    private BaseEntityPanel baseEntityPanel;
 
 
     @Action
     public void saveAction()
     {
         try {
-            BaseEntityPanel parent = (BaseEntityPanel) getParent();
-            if (parent.checkFormValidity()){
-                parent.saveAction();
+            if (baseEntityPanel.checkFormValidity()){
+                baseEntityPanel.saveAction();
             }
         } catch (ClassCastException ex) {
             ex.printStackTrace();
@@ -153,7 +153,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     public void closeAction()
     {
         try {
-            ((BaseEntityPanel) getParent()).closeAction();
+            baseEntityPanel.closeAction();
         } catch (ClassCastException ex) {
             ex.printStackTrace();
             //log.info("closeAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
@@ -164,7 +164,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     public void problemsAction()
     {
         try {
-            ((BaseEntityPanel) getParent()).checkFormValidity();
+            baseEntityPanel.checkFormValidity();
         } catch (ClassCastException ex) {
             ex.printStackTrace();
             //log.info("problemsAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
@@ -175,29 +175,28 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     public void printAction()
     {
         try {
-            ((BaseEntityPanel) getParent()).print();
+            baseEntityPanel.print();
         } catch (ClassCastException ex) {
             ex.printStackTrace();
             //log.info("printAction: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
         }
     }
 
-    public void initSaveStateListener()
+    public void initSaveStateListener(final BaseEntityPanel baseEntityPanel)
     {
+        this.baseEntityPanel = baseEntityPanel;
         try {
-            final BaseEntityPanel parent = (BaseEntityPanel) getParent();
-            setSaveActionState(parent);
+            setSaveActionState(baseEntityPanel);
 
-            BindingGroup bindingGroup;
-            if((bindingGroup = parent.getBindingGroup()) != null)
+            BindingGroup bindingGroup = baseEntityPanel.getBindingGroup();
+            if(bindingGroup != null)
             {
                 bindingGroup.addBindingListener(new AbstractBindingListener()
                 {
                     @SuppressWarnings("unchecked")
                     @Override
                     public void targetChanged(Binding binding, PropertyStateEvent event) {
-                        setSaveActionState(parent);
-                        
+                        setSaveActionState(baseEntityPanel);
                     }
                 });
             }

@@ -57,7 +57,7 @@ public class AcaciaComboBox extends JBComboBox {
             Object beanEntity,
             PropertyDetails propertyDetails)
     {
-        AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
+        AcaciaToStringConverter resourceToStringConverter = createToStringConverter(propertyDetails);
         AutoCompleteDecorator.decorate(this, resourceToStringConverter);
         setConverter(resourceToStringConverter);
         return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);

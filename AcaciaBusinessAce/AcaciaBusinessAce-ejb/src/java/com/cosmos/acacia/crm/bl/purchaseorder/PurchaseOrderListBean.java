@@ -18,8 +18,8 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
+import com.cosmos.acacia.crm.bl.impl.DocumentNumberLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.bl.impl.WarehouseListLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
@@ -28,7 +28,6 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.acacia.crm.data.SimpleProduct;
-import com.cosmos.acacia.crm.data.Warehouse;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DeliveryStatus;
@@ -70,7 +69,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     private PurchaseOrderItemValidatorLocal purchaseOrderItemValidator;
     
     @EJB
-    private WarehouseListLocal warehouseListLocal;
+    private DocumentNumberLocal documentNumberLocal;
     
     @Override
     public EntityProperties getListingEntityProperties() {
@@ -176,8 +175,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         
         //if new order - set some numbers
         if ( po.getOrderNumber()==null || po.getOrderNumber().equals(new BigInteger("0")) ){
-            BigInteger orderNumber = getNextOrderNumber(po);
-            po.setOrderNumber(orderNumber);
+            documentNumberLocal.setDocumentNumber(po);
             BigInteger sequenceNumber = getNextSequenceNumber(po);
             po.setSupplierOrderNumber(sequenceNumber);
         }
@@ -199,50 +197,6 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
             return new BigInteger("1");
         else
             return n.add(new BigInteger("1"));
-    }
-
-    private BigInteger getNextOrderNumber(PurchaseOrder po) {
-        Query q = em.createNamedQuery("PurchaseOrder.maxOrderNumberForBranch");
-        if ( po.getBranch()==null )
-            throw new IllegalArgumentException("PurchaseOrder branch is null!");
-        q.setParameter("branch", po.getBranch());
-        
-        BigInteger result = (BigInteger) q.getSingleResult();
-        //no orders for this warehouse
-        if ( result==null ){
-            Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(po.getBranch());
-            if ( warehouse==null ){
-                throw new IllegalStateException("No warehouse found for address: "+po.getBranch()==null?"null":po.getBranch().getAddressName());
-            }
-            
-            if ( warehouse.getIndex()==null || warehouse.getIndex().equals(new Long(0))){
-                throw new IllegalStateException("No warehouse index set for warehouse: "
-                    +warehouse.getAddress().getAddressName()+". This is needed to generate document numbers!");
-            }
-            
-            result = new BigInteger(""+warehouse.getIndex());
-            result = result.multiply(WarehouseListLocal.DOCUMENT_INDEX_MULTIPLICATOR);
-            
-//            q = em.createNamedQuery("PurchaseOrder.maxOrderNumber");
-//            q.setParameter("parentDataObjectId", po.getParentId());
-//            
-//            result = (BigInteger) q.getSingleResult();
-//            BigInteger step = new BigInteger("1000000000");
-//            //no orders at all
-//            if ( result==null ){
-//                result = step;
-//            //first order for this warehouse - get next step
-//            }else{
-//                BigInteger newWarehouseNumber = result.divide(step);
-//                newWarehouseNumber = newWarehouseNumber.add(new BigInteger("1"));
-//                newWarehouseNumber = newWarehouseNumber.multiply(step);
-//                result = newWarehouseNumber;
-//            }
-        //just get the next number
-        }else{
-            result = result.add(new BigInteger("1"));
-        }
-        return result;
     }
 
     @Override

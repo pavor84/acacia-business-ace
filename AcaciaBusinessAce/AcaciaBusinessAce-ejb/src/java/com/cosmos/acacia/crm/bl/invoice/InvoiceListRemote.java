@@ -276,6 +276,13 @@ public interface InvoiceListRemote {
      * @return
      */
     List<Invoice> getDueDocuments(BusinessPartner recipient);
+    
+    /**
+     * Get the documents that are still not paid for the current organization.
+     * @param recipient
+     * @return
+     */
+    List<Invoice> getDueDocuments();
 
     /**
      * Returns the invoices that can be cancelled by a credit note
@@ -298,4 +305,22 @@ public interface InvoiceListRemote {
      * @return
      */
     BigDecimal getRecipientTurnover(BusinessPartner recipient, Date startDate);
+    
+    /**
+     * All documents that are actually confirmed 
+     * ( {@link InvoiceStatus#WaitForPayment} or
+     * {@link InvoiceStatus#Paid} )
+     * @return
+     */
+    List<Invoice> getConfirmedDocuments();
+
+    /**
+     * Get all pending invoices (the ones that are not fully matched)
+     * @param includedPartlyPaid - get the invoices that have partial matching
+     * @param includeUnpaid - get the payments that have no match amounts
+     * @param recipient
+     * @return
+     */
+    List<Invoice> getPendingInvoices(BusinessPartner recipient, Boolean includedPartlyPaid,
+                                     Boolean includeUnpaid);
 }

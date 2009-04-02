@@ -22,6 +22,8 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.Currency;
+import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
+import com.cosmos.acacia.crm.enums.CustomerPaymentType;
 import com.cosmos.acacia.crm.enums.DataType;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
@@ -92,6 +94,8 @@ public class DatabaseResourceBean
             getDbResources(PurchaseOrderStatus.class);
             getDbResources(OrderConfirmationType.class);
             getDbResources(SpecialPermission.class);
+            getDbResources(CustomerPaymentStatus.class);
+            getDbResources(CustomerPaymentType.class);
             initialized = true;
         }
     }
