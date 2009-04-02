@@ -39,12 +39,22 @@ import com.cosmos.acacia.annotation.ValidationType;
          * Parameters: 
          * - recipient - BusinessPartner instance (assuming 'customer' classified), required
          * - waitingForPayment - status, supply not null InvoiceStatus.WaitForPayment.getDbResource
-         * - proformaInvoice - Boolean value, required - to get the proformas or invoices
          */
         @NamedQuery
             (
                 name = "Invoice.getDueInvoicesForRecipient",
-                query = "select i from Invoice i where i.recipient = :recipient and i.status = :waitingForPayment and i.proformaInvoice = :proformaInvoice "
+                query = "select i from Invoice i where i.recipient = :recipient and i.status = :waitingForPayment"
+            ),
+        /**
+         * Get all unpaid invoices for the given recipient
+         * Parameters: 
+         * - parentId - BusinessPartner instance (assuming 'customer' classified), required
+         * - waitingForPayment - status, supply not null InvoiceStatus.WaitForPayment.getDbResource
+         */
+        @NamedQuery
+            (
+                name = "Invoice.getDueInvoices",
+                query = "select i from Invoice i where i.status = :waitingForPayment and i.dataObject.parentDataObjectId = :parentId"
             ),
         /**
          * If a given InvoiceItem is copied from an other document, then this query returns all
@@ -141,6 +151,47 @@ import com.cosmos.acacia.annotation.ValidationType;
             query = "select i from Invoice i where i.recipient = :recipient and " +
             		"(i.status = :waitingForPayment or i.status = :paid) and " +
             		"i.proformaInvoice = :proformaInvoice order by i.invoiceDate desc"
+        ),
+        /**
+         * Parameters:
+         * - parentId - not null
+         * - waitingForPayment - InvoiceStatus.WaitForPayment.getDbResource()
+         * - paid - InvoiceStatus.Paid.getDbResource()
+         */
+        @NamedQuery
+        (
+            name = "Invoice.getConfirmedInvoices",
+            query = "select i from Invoice i where " +
+            		"(i.status = :waitingForPayment or i.status = :paid)" +
+            		" and i.dataObject.parentDataObjectId = :parentId and i.dataObject.deleted = false"
+        ),
+        /**
+         * Parameters:
+         * - waitForPayment - InvoiceStatus.WaitForPayment.getDbResource()
+         * - branch
+         * - recipient
+         */
+        @NamedQuery
+        (
+            name = "Invoice.getPartlyMatched",
+            query = "select i from Invoice i where " +
+                    "(i.status = :waitForPayment) and i.recipient=:recipient " +
+                    " and i.branch= :branch and i.dataObject.deleted = false " +
+                    " and i.paidAmount is not null and i.paidAmount>0 order by i.id"
+        ),
+        /**
+         * Parameters:
+         * - waitingForPayment - InvoiceStatus.WaitForPayment.getDbResource()
+         * - branch
+         * - recipient
+         */
+        @NamedQuery
+        (
+            name = "Invoice.getUnmatched",
+            query = "select i from Invoice i where " +
+                    "(i.status = :waitForPayment) and i.recipient=:recipient " +
+                    " and i.branch= :branch and i.dataObject.deleted = false " +
+                    " and (i.paidAmount is null or i.paidAmount=0) order by i.id"
         )
     })
 public class Invoice extends DataObjectBean implements Serializable {
@@ -380,6 +431,9 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Column(name = "additionalTerms")
     @Property(title="Additional Terms")
     private String additionalTerms;
+    
+    @Column(name = "paid_amount", precision=20, scale=4)
+    private BigDecimal paidAmount;
 
     @JoinColumn(name = "invoice_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -857,5 +911,27 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     public void setAdditionalTerms(String additionalTerms) {
         this.additionalTerms = additionalTerms;
+    }
+
+    public BigDecimal getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(BigDecimal paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+    
+    /**
+     * Synthetic getter. Substracts the {@link #getPaidAmount()} from {@link #getTotalValue()}.
+     * Always returns not null result.
+     */
+    public BigDecimal getDueAmount(){
+        BigDecimal totalValue = getTotalValue();
+        if ( totalValue==null )
+            totalValue = BigDecimal.ZERO;
+        BigDecimal paidAmount = getPaidAmount();
+        if ( paidAmount==null )
+            paidAmount = BigDecimal.ZERO;
+        return totalValue.subtract(paidAmount);
     }
 }

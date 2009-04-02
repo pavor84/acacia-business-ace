@@ -352,4 +352,14 @@ public class JBComboBox
     public void setBinding(Binding binding) {
         this.binding = binding;
     }
+    
+    public void removeFromBindingGroup(BindingGroup bindGroup) {
+        bindGroup.removeBinding(binding);
+        bindGroup.removeBinding(comboBoxBinding);
+    }
+    
+    public void addToBindingGroup(BindingGroup bindGroup) {
+        bindGroup.addBinding(comboBoxBinding);
+        bindGroup.addBinding(binding);
+    }
 }

@@ -174,4 +174,8 @@ public class JBTextPane
         this.application = application;
     }
 
+    public Binding getBinding() {
+        return binding;
+    }
+
 }
