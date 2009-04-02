@@ -30,7 +30,7 @@ import javax.persistence.TemporalType;
  * @author Miro
  */
 @Entity
-@Table(name = "invoice_items")
+@Table(name = "sales_invoice_items")
 @NamedQueries(
     {
         /**

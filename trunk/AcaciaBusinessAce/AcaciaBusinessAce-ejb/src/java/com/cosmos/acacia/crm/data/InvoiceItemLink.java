@@ -28,7 +28,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "invoice_item_link")
+@Table(name = "sales_invoice_item_link")
 @NamedQueries(
     {
         /**

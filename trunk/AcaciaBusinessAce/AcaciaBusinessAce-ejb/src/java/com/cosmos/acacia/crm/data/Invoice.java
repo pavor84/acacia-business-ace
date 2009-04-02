@@ -31,7 +31,7 @@ import com.cosmos.acacia.annotation.ValidationType;
  * @author Miro
  */
 @Entity
-@Table(name = "invoices")
+@Table(name = "sales_invoices")
 @NamedQueries(
     {
         /**
