@@ -104,8 +104,8 @@ public class JXPercentValueField extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(percentField)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(percentLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                //.addComponent(percentLabel)
+                //.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(percentValueField))
         );
 
