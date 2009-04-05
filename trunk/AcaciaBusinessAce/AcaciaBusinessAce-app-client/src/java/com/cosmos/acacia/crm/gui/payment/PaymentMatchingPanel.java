@@ -417,7 +417,8 @@ public class PaymentMatchingPanel extends AcaciaPanel {
             }
         });
         
-        paymentListPanel = new CustomerPaymentListPanel(getParentDataObjectId(), getPaymentsList());
+        EntityProperties entityProperties = getPaymentListEntityProperties();
+        paymentListPanel = new CustomerPaymentListPanel(getParentDataObjectId(), getPaymentsList(), entityProperties);
         paymentListPanel.setVisibleButtons(0);
         paymentsParentPanel.setLayout(new GridLayout());
         paymentsParentPanel.add(paymentListPanel);
@@ -463,6 +464,16 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         
         updateMatchButton();
         updateViewPaymentButton();
+    }
+
+    private EntityProperties getPaymentListEntityProperties() {
+        EntityProperties entProps = formSession.getListingEntityProperties();
+        entProps.getPropertyDetails("creationTime").setOrderPosition(1000);
+        
+        PropertyDetails unmatchedAmountPD = new PropertyDetails("unmatchedAmount", 
+            getResourceMap().getString("column.unmatchedamount"), BigDecimal.class.getName(), 35);
+        entProps.addPropertyDetails(unmatchedAmountPD);
+        return entProps;
     }
 
     protected void onViewPaymentButton() {

@@ -154,7 +154,7 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     @Column(name = "document_number")
     private BigInteger documentNumber;
     
-    @Property(title="Customer Contact", propertyValidator=@PropertyValidator(required=true), customDisplay="${customerContact.contact.displayName}")
+    @Property(title="Customer Contact", customDisplay="${customerContact.contact.displayName}")
     @JoinColumn(name = "customer_contact_id")
     @ManyToOne
     private ContactPerson customerContact;

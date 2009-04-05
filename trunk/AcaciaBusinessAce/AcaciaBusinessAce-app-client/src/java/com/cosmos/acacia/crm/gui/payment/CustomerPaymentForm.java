@@ -34,6 +34,7 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
@@ -43,7 +44,10 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.beansbinding.validation.RequiredValidator;
+import com.cosmos.beansbinding.validation.ValidationError;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 
@@ -634,6 +638,7 @@ public class CustomerPaymentForm extends BaseEntityPanel {
                 onPaymentReturnChanged();
             }
         });
+        onPaymentReturnChanged();
         
         //complete button
         if ( CustomerPaymentStatus.Open.equals(entity.getStatus().getEnumValue())){
@@ -765,6 +770,11 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         paymentAccountField.setVisible(bankPayment);
         cashierField.setVisible(!bankPayment);
         cashierLabel.setVisible(!bankPayment);
+        
+        //refresh customer contact field
+        Object selContact = customerContactField.getSelectedItem();
+        customerContactField.getBinding().refresh();
+        customerContactField.setSelectedItem(selContact);
     }
 
     private List getPaymentTypes() {
@@ -791,7 +801,7 @@ public class CustomerPaymentForm extends BaseEntityPanel {
                 bindGroup.removeBinding(customerContactBinding);
             bindCustomerContact(customer);
             customerContactBinding.bind();
-
+            
             // auto select if one choice is available
             if (customerContactField.getModel().getSize() == 1) {
                 customerContactField.setSelectedIndex(0);
@@ -800,6 +810,51 @@ public class CustomerPaymentForm extends BaseEntityPanel {
             }
     }
     
+//    private void setCustomerContactMandatory() {
+//        BusinessPartner customer = (BusinessPartner) customerField.getSelectedItem();
+//        DbResource paymentType = (DbResource) paymentTypeField.getSelectedItem();
+//        
+//        boolean required = false;
+//        if ( customer instanceof Organization 
+//                && CustomerPaymentType.Cash.equals(paymentType.getEnumValue())){
+//            required = true;
+//        }
+//        
+//        Binding contactBinding = customerContactField.getBinding();
+//        
+//        if ( contactBinding.isBound() ){
+//            contactBinding.unbind();
+//        }
+//        if ( required ){
+//            contactBinding.setValidator(new RequiredValidator());
+//        }else{
+//            contactBinding.setValidator(null);
+//        }
+//        contactBinding.bind();
+//    }
+    
+    private class CustomerContactValidator extends BaseValidator{
+        
+        public Result validate(Object value) {
+            boolean required = false;
+            if ( paymentTypeField.getSelectedItem() instanceof String )
+                return null;
+            
+            DbResource paymentType = (DbResource) paymentTypeField.getSelectedItem();
+            BusinessPartner customer = (BusinessPartner) customerField.getSelectedItem();
+            
+            if ( customer instanceof Organization 
+                    && CustomerPaymentType.Cash.equals(paymentType.getEnumValue())){
+                required = true;
+            }
+            
+            if ( required && value==null )
+                return ValidationError.EmptyValue.getValidatorResult();
+            else
+                return null;
+        }
+    }
+
     private void bindCustomerContact(BusinessPartner customer) {
         List<ContactPerson> customerContacts = null;
         if (customer != null) {
@@ -807,6 +862,8 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         } else
             customerContacts = new ArrayList<ContactPerson>();
         
+        PropertyDetails pd = entProps.getPropertyDetails("customerContact");
+        pd.setValidator(new CustomerContactValidator());
         customerContactBinding = customerContactField.bind(bindGroup, customerContacts, entity,
             entProps.getPropertyDetails("customerContact"));
     }
