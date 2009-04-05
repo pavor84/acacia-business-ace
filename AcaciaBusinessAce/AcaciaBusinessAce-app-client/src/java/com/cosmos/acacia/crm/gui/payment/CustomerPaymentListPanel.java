@@ -39,13 +39,19 @@ public class CustomerPaymentListPanel extends AbstractTablePanel {
     }
     
     public CustomerPaymentListPanel(BigInteger parentDataObjectId, List<CustomerPayment> list) {
+        this(parentDataObjectId, list, null);
+    }
+    
+    public CustomerPaymentListPanel(BigInteger parentDataObjectId, List<CustomerPayment> list, EntityProperties entProperties) {
         super(parentDataObjectId);
+        this.entityProps = entProperties;
         this.list=list;
         bindComponents();
     }
     
     protected void bindComponents(){
-        entityProps = getFormSession().getListingEntityProperties();
+        if ( entityProps==null )
+            entityProps = getFormSession().getListingEntityProperties();
         
         refreshDataTable(entityProps);
         

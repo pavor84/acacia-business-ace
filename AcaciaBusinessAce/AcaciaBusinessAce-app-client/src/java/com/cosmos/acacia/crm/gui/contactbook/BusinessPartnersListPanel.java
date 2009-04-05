@@ -4,6 +4,24 @@
  */
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+
+import org.apache.log4j.Logger;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.swingbinding.JTableBinding;
+
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
 import com.cosmos.acacia.crm.data.BusinessPartner;
@@ -25,21 +43,6 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBColumn;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.math.BigInteger;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import org.apache.log4j.Logger;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 /**
  *
