@@ -1,12 +1,30 @@
 #summary One-sentence summary of this page.
 #labels Featured
 
+Base Principals and Ideas for the next version after the first working release
+
 = Introduction =
 
-Add your content here.
+When this first release with limited functionality is in production, the next release will be started. This next release will be the first release with all planed functionality. It will be maven based. All functionality will be separated in small modules (OSGi Bundles) as follow:
+- API Modules - the API and the implementation will be in different bundles
+- Implementation Modules
+- Persistence (Data Access Services) Modules
+- Services (Business Logic) Modules
+- GUI Modules - Eclipse RCP (or/and SwingX)
+The Web Services will be the communication protocol between the Server and Client.
+BPEL will be the connection language between the services.
 
 
 = Details =
+
+1. OSGi based - Enterprise OSGi and Distributed OSGi (RFC-119)
+
+2. Program model
+- Data Types
+- Entity definitions
+- Forms: Entity, Entity List, Customization, Relations
+- Form modes: read only, update, create, delete
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
