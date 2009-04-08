@@ -27,7 +27,7 @@ BPEL will be the connection language between the services.
 
 2. Program model
 
-- Data Types
+- Data Types definitions
 
 - Entity definitions
 
