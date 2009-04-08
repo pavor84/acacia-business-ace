@@ -26,6 +26,7 @@ BPEL will be the connection language between the services.
 1. OSGi based - Enterprise OSGi and Distributed OSGi (RFC-119)
 
 2. Program model
+
 - Data Types
 
 - Entity definitions
