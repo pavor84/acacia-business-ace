@@ -34,9 +34,3 @@ BPEL will be the connection language between the services.
 - Forms: Entity, Entity List, Customization, Relations
 
 - Form modes: read only, update, create, delete
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
