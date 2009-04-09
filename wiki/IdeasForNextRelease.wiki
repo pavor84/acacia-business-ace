@@ -1,0 +1,23 @@
+#summary Our vision for next version of framework.
+
+= Introduction =
+Next version of our application should be:
+
+ # OSGi based 
+ # Has Distributed OSGi communication with the server
+ # Has Single Sign On
+ # Client has bundles for Authorization with Username/Password, Certificates, e.t.c.
+
+
+= Details =
+
+This is attempt to identify base components which *Good Framework* should have. 
+
+== Principles ==
+We used bellow principles when identifying components a *Good Framework* need to have:
+ # Should help developer to free his mind from low level technology coding and help him to concentrate on implementing business processes.
+ # Should use best *Design* and *Coding* practices in the java world. 
+ # Should be modular based and allow dynamic update of modules. Real world is dynamic and application must be as close as possible to the real world.
+
+== Main layers of application ==
+We strongly believe that software systems must be build in layers. 
