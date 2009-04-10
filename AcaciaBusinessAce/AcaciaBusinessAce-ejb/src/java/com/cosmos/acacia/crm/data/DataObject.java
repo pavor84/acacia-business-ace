@@ -77,7 +77,7 @@ public class DataObject implements Serializable {
     private boolean isLink;
 
     @Column(name = "order_position")
-    private String orderPosition;
+    private Integer orderPosition;
 
     @Column(name = "child_counter")
     private Integer childCounter;
@@ -204,11 +204,11 @@ public class DataObject implements Serializable {
         this.isLink = isLink;
     }
 
-    public String getOrderPosition() {
+    public Integer getOrderPosition() {
         return orderPosition;
     }
 
-    public void setOrderPosition(String orderPosition) {
+    public void setOrderPosition(Integer orderPosition) {
         this.orderPosition = orderPosition;
     }
 
