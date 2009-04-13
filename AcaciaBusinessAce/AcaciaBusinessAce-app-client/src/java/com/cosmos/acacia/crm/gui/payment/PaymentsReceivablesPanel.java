@@ -247,7 +247,7 @@ public class PaymentsReceivablesPanel extends AcaciaPanel {
         );
         paymentsPanelLayout.setVerticalGroup(
             paymentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 627, Short.MAX_VALUE)
         );
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(PaymentsReceivablesPanel.class);
@@ -263,7 +263,7 @@ public class PaymentsReceivablesPanel extends AcaciaPanel {
         );
         liabilityClientsPanelLayout.setVerticalGroup(
             liabilityClientsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 627, Short.MAX_VALUE)
         );
 
         jBTabbedPane1.addTab(resourceMap.getString("liabilityClientsPanel.TabConstraints.tabTitle"), liabilityClientsPanel); // NOI18N
@@ -278,7 +278,7 @@ public class PaymentsReceivablesPanel extends AcaciaPanel {
         );
         prepaidClientsPanelLayout.setVerticalGroup(
             prepaidClientsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 627, Short.MAX_VALUE)
         );
 
         jBTabbedPane1.addTab(resourceMap.getString("prepaidClientsPanel.TabConstraints.tabTitle"), prepaidClientsPanel); // NOI18N
@@ -291,7 +291,7 @@ public class PaymentsReceivablesPanel extends AcaciaPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+            .addComponent(jBTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
         );
 
         jBTabbedPane1.getAccessibleContext().setAccessibleName(resourceMap.getString("jBTabbedPane1.AccessibleContext.accessibleName")); // NOI18N

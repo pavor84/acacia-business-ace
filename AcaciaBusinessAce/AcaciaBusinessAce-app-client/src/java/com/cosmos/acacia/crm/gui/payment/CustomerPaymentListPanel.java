@@ -31,7 +31,7 @@ public class CustomerPaymentListPanel extends AbstractTablePanel {
     
     private CustomerPaymentRemote formSession;
     private BindingGroup bindingGroup;
-
+    
     private List<CustomerPayment> list;
     
     public CustomerPaymentListPanel(BigInteger parentDataObjectId) {

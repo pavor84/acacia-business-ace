@@ -170,6 +170,7 @@ import com.cosmos.acacia.annotation.ValidationType;
          * - waitForPayment - InvoiceStatus.WaitForPayment.getDbResource()
          * - branch
          * - recipient
+         * - creditNote - InvoiceType.CretidNoteInvoice.getDbResource()
          */
         @NamedQuery
         (
@@ -177,13 +178,15 @@ import com.cosmos.acacia.annotation.ValidationType;
             query = "select i from Invoice i where " +
                     "(i.status = :waitForPayment) and i.recipient=:recipient " +
                     " and i.branch= :branch and i.dataObject.deleted = false " +
-                    " and i.paidAmount is not null and i.paidAmount>0 order by i.id"
+                    " and i.paidAmount is not null and i.paidAmount>0 and i.invoiceType<>:creditNote " +
+                    " order by i.id"
         ),
         /**
          * Parameters:
          * - waitingForPayment - InvoiceStatus.WaitForPayment.getDbResource()
          * - branch
          * - recipient
+         * - creditNote - InvoiceType.CretidNoteInvoice.getDbResource()
          */
         @NamedQuery
         (
@@ -191,7 +194,8 @@ import com.cosmos.acacia.annotation.ValidationType;
             query = "select i from Invoice i where " +
                     "(i.status = :waitForPayment) and i.recipient=:recipient " +
                     " and i.branch= :branch and i.dataObject.deleted = false " +
-                    " and (i.paidAmount is null or i.paidAmount=0) order by i.id"
+                    " and (i.paidAmount is null or i.paidAmount=0) and i.invoiceType<>:creditNote " +
+                    " order by i.id"
         )
     })
 public class Invoice extends DataObjectBean implements Serializable {
@@ -205,7 +209,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     
     @Column(name = "proforma", nullable=false)
     private Boolean proformaInvoice;
-
+    
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
@@ -434,7 +438,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     
     @Column(name = "paid_amount", precision=20, scale=4)
     private BigDecimal paidAmount;
-
+    
     @JoinColumn(name = "invoice_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     @Property(title="Invoice ID", editable=false, readOnly=true, visible=false)
@@ -932,6 +936,7 @@ public class Invoice extends DataObjectBean implements Serializable {
         BigDecimal paidAmount = getPaidAmount();
         if ( paidAmount==null )
             paidAmount = BigDecimal.ZERO;
-        return totalValue.subtract(paidAmount);
+        totalValue = totalValue.subtract(paidAmount);
+        return totalValue;
     }
 }
