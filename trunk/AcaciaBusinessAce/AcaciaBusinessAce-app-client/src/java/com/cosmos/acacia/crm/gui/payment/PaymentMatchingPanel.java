@@ -548,7 +548,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         result.add(new PropertyDetails("dueAmount", getResourceMap().getString("column.dueamount"), BigDecimal.class.getName(), 50));
         int position = 0;
         for (PropertyDetails propertyDetails : result) {
-            position +=10;
+            position +=10; 
             propertyDetails.setOrderPosition(position);
         }
         return result;

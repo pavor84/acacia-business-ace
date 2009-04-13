@@ -50,6 +50,17 @@ import javax.persistence.Table;
         (
             name = "InvoiceItemLink.getInvoicesItemLinks",
             query = "select itemLink from InvoiceItemLink itemLink where itemLink.invoiceItem = :invoiceItem"
+        ),
+        /**
+         * Get links for invoice.
+         * Parameters:
+         * - invoiceId
+         */
+        @NamedQuery
+        (
+            name = "InvoiceItemLink.getForInvoice",
+            query = "select itemLink from InvoiceItemLink itemLink where " +
+                    "itemLink.invoiceItem.dataObject.parentDataObjectId = :invoiceId"
         )
     })
 public class InvoiceItemLink implements Serializable{

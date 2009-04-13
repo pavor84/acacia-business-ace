@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -482,8 +483,12 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     public void addInvoiceItems(List<InvoiceItemLink> itemLinks) {
         for (InvoiceItemLink invoiceItemLink : itemLinks) {
             saveInvoiceItem(invoiceItemLink.getInvoiceItem());
-            esm.persist(em, invoiceItemLink);
+            saveInvoiceItemLink(invoiceItemLink);
         }
+    }
+
+    private void saveInvoiceItemLink(InvoiceItemLink invoiceItemLink) {
+        esm.persist(em, invoiceItemLink);
     }
 
     @Override
@@ -540,7 +545,42 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         documentNumberLocal.setDocumentNumber(entity);
         entity.setStatus(InvoiceStatus.WaitForPayment.getDbResource());
         
+        //update template documents
+        //updateTemplateDocuments(entity);
+        
         return saveInvoice(entity);
+    }
+
+    /**
+     * If this is a proforma-invoice, updates the respective invoice for the canceled amount 
+     * @param entity
+     */
+//    private void updateTemplateDocuments(Invoice entity) {
+//        //update the canceled amount for the template invoice if this is proforma
+//        if ( entity.getInvoiceType()!=null &&
+//                InvoiceType.CretidNoteInvoice.equals(entity.getInvoiceType().getEnumValue()) ){
+//            
+//            Set<Invoice> templateDocuments = new HashSet<Invoice>();
+//            List<InvoiceItemLink> proformaItemLinks = getInvoiceItemLinks(entity);
+//            
+//            for (InvoiceItemLink invoiceItemLink : proformaItemLinks) {
+//                Invoice template = em.getReference(Invoice.class, invoiceItemLink.getTemplateDocumentId());
+//                templateDocuments.add(template);
+//                
+//                BigDecimal canceledAmount = template.getCanceledAmount();
+//                canceledAmount = canceledAmount.add(invoiceItemLink.getInvoiceItem().getExtendedPrice());
+//                template.setCanceledAmount(canceledAmount);
+//            }
+//            
+//            for (Invoice templateInvoices : templateDocuments) {
+//                esm.persist(em, templateInvoices);
+//            }
+//        }
+//    }
+
+    private List<InvoiceItemLink> getInvoiceItemLinks(Invoice entity) {
+        return (List<InvoiceItemLink>) 
+        AcaciaUtils.getResultList(em, "InvoiceItemLink.getForInvoice", "invoiceId", entity.getId());
     }
 
     /**
@@ -899,7 +939,8 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
                 AcaciaUtils.getResultList(em, "Invoice.getPartlyMatched", 
                 "branch", acaciaSession.getBranch(),
                 "recipient", recipient,
-                "waitForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+                "waitForPayment", InvoiceStatus.WaitForPayment.getDbResource(),
+                "creditNote", InvoiceType.CretidNoteInvoice.getDbResource());
             result.addAll(partlyMatched);
         }
         if ( includeUnpaid ){
@@ -907,24 +948,19 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
             AcaciaUtils.getResultList(em, "Invoice.getUnmatched",
                 "branch", acaciaSession.getBranch(),
                 "recipient", recipient,
-                "waitForPayment", InvoiceStatus.WaitForPayment.getDbResource());
+                "waitForPayment", InvoiceStatus.WaitForPayment.getDbResource(),
+                "creditNote", InvoiceType.CretidNoteInvoice.getDbResource());
             result.addAll(unmatched);
         }
+        
+        //remove the invoices that have no due
+        for (Iterator iterator = result.iterator(); iterator.hasNext();) {
+            Invoice invoice = (Invoice) iterator.next();
+            if (  BigDecimal.ZERO.compareTo(invoice.getDueAmount())>=0 ){
+                iterator.remove();
+            }
+        }
+        
         return result;
     }
-    
-//    public static void main(String[] args) {
-//        MeasurementUnit targetUnit = MeasurementUnit.Kilogram;
-//        MeasurementUnit sourceUnit = MeasurementUnit.Gram;
-//        BigDecimal sourceQuantity = new BigDecimal("300");
-//        
-//        BigDecimal targetUnitValue = targetUnit.getCgsUnitValue();
-//        
-//        BigDecimal sourceUnitValue = sourceUnit.getCgsUnitValue();
-//        
-//        BigDecimal multiplier = sourceUnitValue.divide(targetUnitValue);
-//        
-//        BigDecimal result = sourceQuantity.multiply(multiplier);
-//        System.out.println(result);
-//    }
 }
