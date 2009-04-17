@@ -31,6 +31,7 @@ BPEL will be the connection language between the services.
 
 [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
 
+- Server specification
 
 
 2. Program model
