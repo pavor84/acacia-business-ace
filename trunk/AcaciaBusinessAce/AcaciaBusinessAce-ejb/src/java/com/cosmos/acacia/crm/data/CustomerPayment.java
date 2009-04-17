@@ -93,6 +93,10 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     @Column(name = "payment_id", nullable = false)
     private BigInteger paymentId;
     
+    @Property(title="Doc. Number", editable=false)
+    @Column(name = "document_number")
+    private BigInteger documentNumber;
+    
     @JoinColumn(name = "customer_id", referencedColumnName = "partner_id", nullable=false)
     @ManyToOne
     @Property(title="Customer",
@@ -149,10 +153,6 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     @ManyToOne
     @Property(title="Branch")
     private Address branch;
-    
-    @Property(title="Doc. Number", editable=false)
-    @Column(name = "document_number")
-    private BigInteger documentNumber;
     
     @Property(title="Customer Contact", customDisplay="${customerContact.contact.displayName}")
     @JoinColumn(name = "customer_contact_id")
