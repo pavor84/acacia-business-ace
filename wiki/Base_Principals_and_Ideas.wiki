@@ -39,6 +39,8 @@ Helpful projects:
 
 [http://cxf.apache.org/dosgi-releases.html Apache CXF-DOSGi]
 
+[http://newton.codecauldron.org/site/index.html Newton Framework]
+
 
 - Server specification
 
