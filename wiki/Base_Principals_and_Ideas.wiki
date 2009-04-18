@@ -31,6 +31,15 @@ BPEL will be the connection language between the services.
 
 [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
 
+Helpful projects:
+
+[http://www.eclipse.org/proposals/riena/ Eclipse Riena Project]
+
+[http://www.eclipse.org/ecf/ Eclipse Communication Framework Project]
+
+[http://cxf.apache.org/dosgi-releases.html Apache CXF-DOSGi]
+
+
 - Server specification
 
 
