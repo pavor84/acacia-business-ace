@@ -17,6 +17,13 @@ is divided into following sections:
         -->
 <project xmlns:ejbjarproject1="http://www.netbeans.org/ns/j2ee-ejbjarproject/1" xmlns:ejbjarproject2="http://www.netbeans.org/ns/j2ee-ejbjarproject/2" xmlns:ejbjarproject3="http://www.netbeans.org/ns/j2ee-ejbjarproject/3" basedir=".." default="default" name="AcaciaBusinessAce-ejb-impl">
     <import file="ant-deploy.xml"/>
+    <fail message="Please build using Ant 1.7.1 or higher.">
+        <condition>
+            <not>
+                <antversion atleast="1.7.1"/>
+            </not>
+        </condition>
+    </fail>
     <target depends="dist,javadoc" description="Build whole project." name="default"/>
     <!-- 
                 INITIALIZATION SECTION 
@@ -310,13 +317,21 @@ exists or setup the property manually. For example like this:
                 COMPILATION SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
-        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
-        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.AcaciaAnnotations}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.AcaciaBeansBinding}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
         <ant antfile="${project.AcaciaBusinessLogic}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
         </ant>
@@ -368,6 +383,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.jasper-compiler-jdt-5.5.15.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.commons-collections-2.1.1.jar-1}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.swing-worker-1.1.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.hibernate-tools.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jdbc2_0-stdext.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jtidy-r8-20060801.jar}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.AcaciaAnnotations.jar}" manifestproperty="manifest.reference.AcaciaAnnotations.jar" todir="${dist.ear.dir}"/>
@@ -407,8 +425,11 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.jasper-compiler-jdt-5.5.15.jar}" manifestproperty="manifest.file.reference.jasper-compiler-jdt-5.5.15.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.commons-collections-2.1.1.jar-1}" manifestproperty="manifest.file.reference.commons-collections-2.1.1.jar-1" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.swing-worker-1.1.jar}" manifestproperty="manifest.file.reference.swing-worker-1.1.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.hibernate-tools.jar}" manifestproperty="manifest.file.reference.hibernate-tools.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jdbc2_0-stdext.jar}" manifestproperty="manifest.file.reference.jdbc2_0-stdext.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jtidy-r8-20060801.jar}" manifestproperty="manifest.file.reference.jtidy-r8-20060801.jar" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.AcaciaAnnotations.jar} ${manifest.reference.AcaciaBusinessLogic.dist} ${manifest.reference.AcaciaBeansBinding.jar} ${manifest.file.reference.commons-logging-1.1.1.jar} ${manifest.file.reference.concurrent.jar} ${manifest.file.reference.antlr-2.7.6.jar} ${manifest.file.reference.asm-attrs.jar} ${manifest.file.reference.asm.jar} ${manifest.file.reference.c3p0-0.9.1.jar} ${manifest.file.reference.cglib-2.1.3.jar} ${manifest.file.reference.commons-collections-2.1.1.jar} ${manifest.file.reference.commons-logging-1.0.4.jar} ${manifest.file.reference.concurrent-1.3.2.jar} ${manifest.file.reference.dom4j-1.6.1.jar} ${manifest.file.reference.ehcache-1.2.3.jar} ${manifest.file.reference.ejb3-persistence.jar} ${manifest.file.reference.hibernate-annotations.jar} ${manifest.file.reference.hibernate-commons-annotations.jar} ${manifest.file.reference.hibernate-entitymanager.jar} ${manifest.file.reference.hibernate-validator.jar} ${manifest.file.reference.hibernate3.jar} ${manifest.file.reference.javassist.jar} ${manifest.file.reference.jboss-archive-browsing.jar} ${manifest.file.reference.jta.jar} ${manifest.file.reference.log4j-1.2.11.jar} ${manifest.file.reference.javaee.jar} ${manifest.file.reference.appframework-1.0.3.jar} ${manifest.file.reference.junit-4.0.jar} ${manifest.file.reference.liquidlnf.jar} ${manifest.file.reference.beansbinding.jar} ${manifest.file.reference.commons-digester-1.8.jar} ${manifest.file.reference.jasperreports-3.0.1.jar} ${manifest.file.reference.commons-beanutils-1.8.0.jar} ${manifest.file.reference.iText-2.1.3.jar} ${manifest.file.reference.jasper-compiler-jdt-5.5.15.jar} ${manifest.file.reference.commons-collections-2.1.1.jar-1} ${manifest.file.reference.swing-worker-1.1.jar} "/>
+            <attribute name="Class-Path" value="${manifest.reference.AcaciaAnnotations.jar} ${manifest.reference.AcaciaBusinessLogic.dist} ${manifest.reference.AcaciaBeansBinding.jar} ${manifest.file.reference.commons-logging-1.1.1.jar} ${manifest.file.reference.concurrent.jar} ${manifest.file.reference.antlr-2.7.6.jar} ${manifest.file.reference.asm-attrs.jar} ${manifest.file.reference.asm.jar} ${manifest.file.reference.c3p0-0.9.1.jar} ${manifest.file.reference.cglib-2.1.3.jar} ${manifest.file.reference.commons-collections-2.1.1.jar} ${manifest.file.reference.commons-logging-1.0.4.jar} ${manifest.file.reference.concurrent-1.3.2.jar} ${manifest.file.reference.dom4j-1.6.1.jar} ${manifest.file.reference.ehcache-1.2.3.jar} ${manifest.file.reference.ejb3-persistence.jar} ${manifest.file.reference.hibernate-annotations.jar} ${manifest.file.reference.hibernate-commons-annotations.jar} ${manifest.file.reference.hibernate-entitymanager.jar} ${manifest.file.reference.hibernate-validator.jar} ${manifest.file.reference.hibernate3.jar} ${manifest.file.reference.javassist.jar} ${manifest.file.reference.jboss-archive-browsing.jar} ${manifest.file.reference.jta.jar} ${manifest.file.reference.log4j-1.2.11.jar} ${manifest.file.reference.javaee.jar} ${manifest.file.reference.appframework-1.0.3.jar} ${manifest.file.reference.junit-4.0.jar} ${manifest.file.reference.liquidlnf.jar} ${manifest.file.reference.beansbinding.jar} ${manifest.file.reference.commons-digester-1.8.jar} ${manifest.file.reference.jasperreports-3.0.1.jar} ${manifest.file.reference.commons-beanutils-1.8.0.jar} ${manifest.file.reference.iText-2.1.3.jar} ${manifest.file.reference.jasper-compiler-jdt-5.5.15.jar} ${manifest.file.reference.commons-collections-2.1.1.jar-1} ${manifest.file.reference.swing-worker-1.1.jar} ${manifest.file.reference.hibernate-tools.jar} ${manifest.file.reference.jdbc2_0-stdext.jar} ${manifest.file.reference.jtidy-r8-20060801.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -646,7 +667,7 @@ exists or setup the property manually. For example like this:
         <ejbjarproject2:junit testincludes="**/*Test.java"/>
     </target>
     <target depends="init,compile-test,-pre-test-run,-do-test-run" if="have.tests" name="-post-test-run">
-        <fail if="tests.failed">Some tests failed; see details above.</fail>
+        <fail if="tests.failed" unless="ignore.failing.tests">Some tests failed; see details above.</fail>
     </target>
     <target depends="init" if="have.tests" name="test-report"/>
     <target depends="init" if="netbeans.home+have.tests" name="-test-browse"/>
@@ -659,7 +680,7 @@ exists or setup the property manually. For example like this:
         <ejbjarproject2:junit excludes="" includes="${test.includes}"/>
     </target>
     <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single" if="have.tests" name="-post-test-run-single">
-        <fail if="tests.failed">Some tests failed; see details above.</fail>
+        <fail if="tests.failed" unless="ignore.failing.tests">Some tests failed; see details above.</fail>
     </target>
     <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single,-post-test-run-single" description="Run single unit test." name="test-single"/>
     <!--
