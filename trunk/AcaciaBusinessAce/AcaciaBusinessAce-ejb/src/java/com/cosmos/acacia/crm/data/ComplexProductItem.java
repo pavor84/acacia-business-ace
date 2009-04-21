@@ -36,7 +36,7 @@ import javax.persistence.Table;
                 query = "select t from ComplexProductItem t" +
                         " where t.complexProduct = :complexProduct" +
                         " and t.dataObject.deleted = :deleted" +
-                        " order by t.orderPosition"
+                        " order by t.dataObject.orderPosition"
             ),
         @NamedQuery
             (
@@ -57,16 +57,12 @@ public class ComplexProductItem
     @Column(name = "complex_product_item_id", nullable = false)
     private BigInteger complexProductItemId;
 
-    @Column(name = "order_position")
-    @Property(title="Order Position", editable=false, readOnly=true, visible=false, hidden=true)
-    private int orderPosition;
-
     @Column(name = "quantity", nullable = false)
     @Property(title="Quantity", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private BigDecimal quantity;
     
-    @Column(name = "dueQuantity")
+    @Column(name = "due_quantity")
     private BigDecimal dueQuantity;
 
     @Column(name = "unit_price", nullable = false)
@@ -126,14 +122,6 @@ public class ComplexProductItem
 
     public void setComplexProductItemId(BigInteger complexProductItemId) {
         this.complexProductItemId = complexProductItemId;
-    }
-
-    public int getOrderPosition() {
-        return orderPosition;
-    }
-
-    public void setOrderPosition(int orderPosition) {
-        this.orderPosition = orderPosition;
     }
 
     public BigDecimal getQuantity() {
