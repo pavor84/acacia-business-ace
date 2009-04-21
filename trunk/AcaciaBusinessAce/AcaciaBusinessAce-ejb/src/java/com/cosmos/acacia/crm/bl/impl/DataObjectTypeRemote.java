@@ -20,9 +20,9 @@ public interface DataObjectTypeRemote {
     DataObjectType getDataObjectType(int id);
     DataObjectType getDataObjectType(String name);
 
-    DataObjectType persist(DataObjectType dataObjectType);
-
-    void remove(DataObjectType dataObjectType);
+//    DataObjectType persist(DataObjectType dataObjectType);
+//
+//    void remove(DataObjectType dataObjectType);
     
     /**
      * Lists all objects for the specified data object types

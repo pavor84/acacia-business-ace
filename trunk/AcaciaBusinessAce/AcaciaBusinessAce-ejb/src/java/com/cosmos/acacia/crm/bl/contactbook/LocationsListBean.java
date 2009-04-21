@@ -18,6 +18,7 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.CityValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.EntitySequenceServiceLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.Address;
@@ -39,10 +40,10 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     @EJB
     private EntityStoreManagerLocal esm;
-
+    @EJB
+    private EntitySequenceServiceLocal entitySequenceService;
     @EJB
     private BankDetailsListLocal bankDetailsManager;
-
     @EJB
     private GenericUniqueValidatorLocal<Country> validator;
 

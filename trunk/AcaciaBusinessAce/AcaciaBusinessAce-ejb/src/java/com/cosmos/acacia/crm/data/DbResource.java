@@ -97,12 +97,14 @@ public class DbResource
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        if(object == null)
+            return false;
+
         if (!(object instanceof DbResource)) {
             return false;
         }
         DbResource other = (DbResource) object;
-        if ((this.resourceId == null && other.resourceId != null) || (this.resourceId != null && !this.resourceId.equals(other.resourceId))) {
+        if ((resourceId == null && other.resourceId != null) || (resourceId != null && !resourceId.equals(other.resourceId))) {
             return false;
         }
         return true;
@@ -110,7 +112,7 @@ public class DbResource
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.DbResource[resourceId=" + resourceId +
+        return "DbResource[resourceId=" + resourceId +
             ", enumName=" + enumName +
             ", enumClass=" + enumClass + "]";
     }

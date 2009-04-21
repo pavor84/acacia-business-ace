@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -26,6 +27,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "assembling_schemas")
 @DiscriminatorValue(value="AS")
+@PrimaryKeyJoinColumn(name="product_id",referencedColumnName="product_id")
 @NamedQueries(
     {
         @NamedQuery

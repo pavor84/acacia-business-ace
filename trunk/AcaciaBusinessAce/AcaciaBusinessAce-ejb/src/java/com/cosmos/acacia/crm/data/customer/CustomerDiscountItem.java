@@ -256,16 +256,6 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
         return null;
     }
 
-
-    @Override
-    public void setParentId(BigInteger parentId) {
-        if(dataObject == null) {
-            dataObject = new DataObject();
-        }
-
-        dataObject.setParentDataObjectId(parentId);
-    }
-
     @Override
     public String getInfo() {
         return toString();
