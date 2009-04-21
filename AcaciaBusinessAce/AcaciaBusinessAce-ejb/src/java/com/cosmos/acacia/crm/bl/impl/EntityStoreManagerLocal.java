@@ -5,8 +5,10 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 
@@ -46,4 +48,8 @@ public interface EntityStoreManagerLocal
 
     DataObjectBean getDataObjectBean(EntityManager em, DataObject dataObject);
     DataObjectBean getDataObjectBean(EntityManager em, BigInteger dataObjectId);
+
+    Address getParentAddress(EntityManager em, DataObject dataObject);
+
+    void setDocumentNumber(EntityManager em, BusinessDocument documentEntity);
 }

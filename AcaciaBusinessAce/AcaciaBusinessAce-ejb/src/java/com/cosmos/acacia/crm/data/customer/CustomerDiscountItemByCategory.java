@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -32,6 +33,7 @@ import javax.persistence.UniqueConstraint;
     uniqueConstraints = {@UniqueConstraint(columnNames = {"customer_discount_id", "category_id"})}
 )
 @DiscriminatorValue(value = "C")
+@PrimaryKeyJoinColumn(name="customer_discount_item_id",referencedColumnName="customer_discount_item_id")
 @NamedQueries({
     @NamedQuery(
         name = "CustomerDiscountItemByCategory.findByCustomerDiscountAndCategory",

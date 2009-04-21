@@ -25,6 +25,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.util.CodeFormatter;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 
 
@@ -35,6 +36,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "simple_products")
 @DiscriminatorValue(value="S")
+@PrimaryKeyJoinColumn(name="product_id",referencedColumnName="product_id")
 @NamedQueries(
     {
         @NamedQuery

@@ -24,6 +24,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  *
@@ -32,6 +33,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 @Entity
 @Table(name = "complex_products")
 @DiscriminatorValue(value="C")
+@PrimaryKeyJoinColumn(name="product_id",referencedColumnName="product_id")
 @NamedQueries(
     {
     })

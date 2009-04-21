@@ -18,13 +18,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.BusinessDocument;
+import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
+import com.cosmos.acacia.crm.data.BusinessDocumentStatusLogPK;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import java.util.Date;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -33,27 +41,33 @@ import com.cosmos.beansbinding.PropertyDetails;
 @Stateless
 public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
-    @EJB
-    private DataObjectTypeLocal dotLocal;
+    private static final long DOCUMENT_NUMBER_MULTIPLIER = 10000000;
 
     @EJB
+    private DataObjectTypeLocal dotLocal;
+    @EJB
     private AcaciaSessionLocal session;
+    @EJB
+    private EntitySequenceServiceLocal entitySequenceService;
+    //
+    private static Integer addressDataObjectTypeId;
 
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
 
     @Override
     public void persist(EntityManager em, Object entity) {
         boolean mustMerge = false;
-        if(entity instanceof DataObjectBean)
-        {
+        BusinessDocument oldBusinessDocument = null;
+        if(entity instanceof BusinessDocument && ((BusinessDocument)entity).getId() != null) {
+            oldBusinessDocument = (BusinessDocument)getDataObjectBean(em, ((BusinessDocument)entity).getDataObject());
+        }
+        if(entity instanceof DataObjectBean) {
             DataObjectBean doBean = (DataObjectBean)entity;
             BigInteger id = doBean.getId();
             DataObject dataObject = doBean.getDataObject();
             BigInteger parentId = doBean.getParentId();
-            if(id == null)
-            {
-                if(dataObject == null || dataObject.getDataObjectId() == null)
-                {
+            if(id == null) {
+                if(dataObject == null || dataObject.getDataObjectId() == null) {
                     DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
                     DataObjectType dot = dotLocal.getDataObjectType(entity.getClass().getName());
 
@@ -78,27 +92,20 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     dataObject.setOwnerId(ownerId);
 
                     em.persist(dataObject);
-                }
-                else
-                {
+                } else {
                     BigInteger doParentId = dataObject.getParentDataObjectId();
                     boolean mustUpdateDO = false;
-                    if(parentId != null)
-                    {
-                        if(doParentId == null || !parentId.equals(doParentId))
-                        {
+                    if(parentId != null) {
+                        if(doParentId == null || !parentId.equals(doParentId)) {
                             dataObject.setParentDataObjectId(parentId);
                             mustUpdateDO = true;
                         }
-                    }
-                    else if(doParentId != null)
-                    {
+                    } else if(doParentId != null) {
                         dataObject.setParentDataObjectId(parentId);
                         mustUpdateDO = true;
                     }
 
-                    if(mustUpdateDO)
-                    {
+                    if(mustUpdateDO) {
                         dataObject = em.merge(dataObject);
                         em.persist(dataObject);
                     }
@@ -122,15 +129,76 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 dataObject.setDataObjectVersion(version + 1);
                 em.persist(dataObject);
             }
+
+            if(dataObject.getOrderPosition() == null) {
+                setOrderPosition(em, dataObject);
+            }
         } else {
             mustMerge = !(entity.hashCode() == 0);
-
         }
 
         if(mustMerge)
             entity = em.merge(entity);
 
         em.persist(entity);
+
+        if(entity instanceof BusinessDocument) {
+            BusinessDocument businessDocument = (BusinessDocument)entity;
+            DbResource docStatus;
+            if((docStatus = businessDocument.getDocumentStatus()) != null) {
+                DbResource oldDocStatus;
+                if(oldBusinessDocument != null) {
+                    oldDocStatus = oldBusinessDocument.getDocumentStatus();
+                } else {
+                    oldDocStatus = null;
+                }
+
+                if(!docStatus.equals(oldDocStatus)) {
+                    BusinessDocumentStatusLog log = new BusinessDocumentStatusLog(
+                            businessDocument.getDocumentId(), docStatus.getResourceId(), new Date());
+                    log.setOfficer(session.getPerson());
+                    em.persist(log);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setDocumentNumber(EntityManager em, BusinessDocument businessDocument) {
+        businessDocument.setDocumentDate(new Date());
+        BigInteger parentEntityId = businessDocument.getParentId();
+        DataObject dataObject = businessDocument.getDataObject();
+        int dataObjectTypeId = dataObject.getDataObjectType().getDataObjectTypeId();
+        Address branch = getParentAddress(em, dataObject);
+        if(branch.getOrderPosition() == null) {
+            // store the address to generate order position for the old objects
+            persist(em, branch);
+        }
+        long initialValue = branch.getOrderPosition() * DOCUMENT_NUMBER_MULTIPLIER;
+        long docNumber = entitySequenceService.nextValue(parentEntityId, dataObjectTypeId, initialValue);
+        businessDocument.setDocumentNumber(docNumber);
+    }
+
+    private void setOrderPosition(EntityManager em, DataObject dataObject) {
+        BigInteger parentDataObjectId;
+        Query q;
+        if((parentDataObjectId = dataObject.getParentDataObjectId()) != null) {
+            q = em.createNamedQuery("DataObject.maxOrderPositionByParentDataObjectIdAndDataObjectType");
+            q.setParameter("parentDataObjectId", parentDataObjectId);
+        } else {
+            q = em.createNamedQuery("DataObject.maxOrderPositionByDataObjectType");
+        }
+        q.setParameter("dataObjectType", dataObject.getDataObjectType());
+        Integer maxOrderPosition;
+        try {
+            maxOrderPosition = (Integer)q.getSingleResult();
+        } catch(NoResultException ex) {
+            maxOrderPosition = 0;
+        }
+        if(maxOrderPosition == null)
+            maxOrderPosition = 0;
+        dataObject.setOrderPosition(maxOrderPosition + 1);
+        em.persist(dataObject);
     }
 
     @Override
@@ -255,5 +323,44 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             return null;
 
         return getDataObjectBean(em, dataObject);
+    }
+
+    public DataObjectBean getParentEntity(EntityManager em, DataObjectBean entity) {
+        return getParentEntity(em, entity.getDataObject());
+    }
+
+    public DataObjectBean getParentEntity(EntityManager em, DataObject dataObject) {
+        BigInteger parentDataObjectId;
+        if((parentDataObjectId = dataObject.getParentDataObjectId()) == null)
+            return null;
+
+        return getDataObjectBean(em, parentDataObjectId);
+    }
+
+    private Integer getAddressDotId() {
+        if(addressDataObjectTypeId == null) {
+            DataObjectType dot = dotLocal.getDataObjectType(Address.class.getName());
+            addressDataObjectTypeId = dot.getDataObjectTypeId();
+        }
+
+        return addressDataObjectTypeId;
+    }
+
+    @Override
+    public Address getParentAddress(EntityManager em, DataObject dataObject) {
+        int addressDotId = getAddressDotId();
+        while(dataObject != null &&
+                dataObject.getDataObjectType().getDataObjectTypeId() != addressDotId) {
+            BigInteger parentId;
+            if((parentId = dataObject.getParentDataObjectId()) == null) {
+                return null;
+            }
+            dataObject = em.find(DataObject.class, parentId);
+        }
+
+        if(dataObject == null)
+            return null;
+
+        return em.find(Address.class, dataObject.getDataObjectId());
     }
 }

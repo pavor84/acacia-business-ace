@@ -14,24 +14,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  *
  * @author Miro
  */
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "data_object_types")
 @NamedQueries(
     {
         @NamedQuery(
             name = "DataObjectType.findByDataObjectTypeId",
-            query = "SELECT d FROM DataObjectType d WHERE d.dataObjectTypeId = :dataObjectTypeId"
+            query = "SELECT d FROM DataObjectType d WHERE d.dataObjectTypeId = :dataObjectTypeId",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
         ),
         @NamedQuery(
             name = "DataObjectType.findByDataObjectType",
-            query = "SELECT d FROM DataObjectType d WHERE d.dataObjectType = :dataObjectType"
+            query = "SELECT d FROM DataObjectType d WHERE d.dataObjectType = :dataObjectType",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
         ),
         @NamedQuery(
             name = "DataObjectType.listAll",
