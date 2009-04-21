@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
  *
  * @author Miro
  */
-public abstract class DataObjectBean
+public abstract class DataObjectBean<E>
     implements Cloneable
 {
 
@@ -39,7 +39,10 @@ public abstract class DataObjectBean
     public abstract void setId(BigInteger id);
     
     public abstract BigInteger getParentId();
-    public abstract void setParentId(BigInteger parentId);
+    //public abstract void setParentId(BigInteger parentId);
+    public void setParentId(BigInteger parentId) {
+        getEntityDataObject().setParentDataObjectId(parentId);
+    }
 
     public abstract String getInfo();
     
@@ -83,13 +86,23 @@ public abstract class DataObjectBean
         return null;
     }
 
-    private DataObject getEntityDataObject()
+    protected DataObject getEntityDataObject()
     {
-        DataObject dataObject = getDataObject();
-        if(dataObject == null)
-            setDataObject(new DataObject());
+        DataObject dataObject;
+        if((dataObject = getDataObject()) == null) {
+            dataObject = new DataObject();
+            setDataObject(dataObject);
+        }
 
         return dataObject;
+    }
+
+    public Integer getOrderPosition() {
+        return getEntityDataObject().getOrderPosition();
+    }
+
+    public void setOrderPosition(Integer orderPosition) {
+        getEntityDataObject().setOrderPosition(orderPosition);
     }
 
     public String getNotes()
