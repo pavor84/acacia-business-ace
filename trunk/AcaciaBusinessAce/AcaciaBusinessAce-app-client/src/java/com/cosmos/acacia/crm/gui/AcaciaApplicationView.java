@@ -63,6 +63,8 @@ import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
 import com.cosmos.acacia.crm.gui.payment.PaymentMatchingPanel;
 import com.cosmos.acacia.crm.gui.payment.PaymentsReceivablesPanel;
 import com.cosmos.acacia.crm.gui.pricing.PricelistListPanel;
+import com.cosmos.acacia.crm.gui.purchase.GoodsReceiptPanel;
+import com.cosmos.acacia.crm.gui.purchase.PurchaseInvoiceListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
@@ -524,7 +526,19 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void ordersAction() {
+    public void purchaseInvoicesAction() {
+        PurchaseInvoiceListPanel panel = new PurchaseInvoiceListPanel();
+        panel.showFrame();
+    }
+
+    @Action
+    public void goodsReceiptsAction() {
+        GoodsReceiptPanel panel = new GoodsReceiptPanel();
+        panel.showFrame();
+    }
+
+    @Action
+    public void purchaseOrdersAction() {
         BigInteger parentId = getParentId();
         PurchaseOrderListPanel panel = new PurchaseOrderListPanel(parentId);
         panel.showFrame();
@@ -616,7 +630,7 @@ public class AcaciaApplicationView extends FrameView {
         JBMenu productsMenu = new JBMenu();
         JBMenu assemblingMenu = new JBMenu();
         JBMenu salesMenu = new JBMenu();
-        JBMenu ordersMenu = new JBMenu();
+        JBMenu purchaseMenu = new JBMenu();
         JBMenu reportsMenu = new JBMenu();
         JBMenu helpMenu = new JBMenu();
         JBMenuItem aboutMenuItem = new JBMenuItem();
@@ -703,15 +717,38 @@ public class AcaciaApplicationView extends FrameView {
         salesMenu.add(proformaInvoicesItem);
         menuBar.add(salesMenu);
 
-        ordersMenu.setText(resourceMap.getString("ordersMenu.text")); // NOI18N
-        ordersMenu.setName("ordersMenu"); // NOI18N
-        ordersMenu.setMnemonic('O');
+        purchaseMenu.setText(resourceMap.getString("purchaseMenu.text")); // NOI18N
+        purchaseMenu.setName("purchaseMenu"); // NOI18N
+        purchaseMenu.setMnemonic('P');
 
         menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("ordersAction"));
+        menuItem.setAction(actionMap.get("purchaseOrdersAction"));
         menuItem.setMnemonic('P');
-        ordersMenu.add(menuItem);
-        menuBar.add(ordersMenu);
+        purchaseMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("goodsReceiptsAction"));
+        menuItem.setMnemonic('G');
+        purchaseMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("purchaseInvoicesAction"));
+        menuItem.setMnemonic('I');
+        purchaseMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("orderConfirmationsAction"));
+        menuItem.setMnemonic('C');
+        purchaseMenu.add(menuItem);
+
+        purchaseMenu.add(new Separator());
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("ordersMatchingAction"));
+        menuItem.setMnemonic('M');
+        purchaseMenu.add(menuItem);
+
+        menuBar.add(purchaseMenu);
         
         //payments menu
         JBMenu paymentMenu = new JBMenu();
@@ -735,18 +772,6 @@ public class AcaciaApplicationView extends FrameView {
         
         menuBar.add(paymentMenu);
         
-        menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("orderConfirmationsAction"));
-        menuItem.setMnemonic('C');
-        ordersMenu.add(menuItem);
-
-        ordersMenu.add(new Separator());
-
-        menuItem = new JBMenuItem();
-        menuItem.setAction(actionMap.get("ordersMatchingAction"));
-        menuItem.setMnemonic('M');
-        ordersMenu.add(menuItem);
-
         reportsMenu.setText(resourceMap.getString("reportsMenu.text")); // NOI18N
         reportsMenu.setName("reportsMenu"); // NOI18N
         reportsMenu.setMnemonic('R');

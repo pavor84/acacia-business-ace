@@ -58,16 +58,16 @@ public class DataObjectTest
         System.out.println("");
         assertNull(dot);
 
-        dot = new DataObjectType();
-        dot.setDataObjectType(dotName);
-        dot = doh.persist(dot);
+//        dot = new DataObjectType();
+//        dot.setDataObjectType(dotName);
+//        dot = doh.persist(dot);
 
         DataObjectType dotCache = doh.getDataObjectType(dotName);
         assertNotNull(dotCache);
 
-        doh.remove(dot);
-        dotCache = doh.getDataObjectType(dotName);
-        assertNull(dotCache);
+//        doh.remove(dot);
+//        dotCache = doh.getDataObjectType(dotName);
+//        assertNull(dotCache);
     }
 
 }
