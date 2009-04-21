@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,6 +29,24 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name = "data_objects")
+@NamedQueries({
+    @NamedQuery(
+        name="DataObject.maxOrderPositionByParentDataObjectIdAndDataObjectType",
+        query="select max(t1.orderPosition)" +
+            " from DataObject t1" +
+            " where" +
+            " t1.parentDataObjectId = :parentDataObjectId" +
+            " and t1.dataObjectType = :dataObjectType" +
+            " and t1.deleted = false"),
+    @NamedQuery(
+        name="DataObject.maxOrderPositionByDataObjectType",
+        query="select max(t1.orderPosition)" +
+            " from DataObject t1" +
+            " where" +
+            " t1.parentDataObjectId is null" +
+            " and t1.dataObjectType = :dataObjectType" +
+            " and t1.deleted = false")
+})
 public class DataObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
