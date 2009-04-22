@@ -41,7 +41,7 @@ Helpful projects:
 
 [http://newton.codecauldron.org/site/index.html Newton Framework]
 
-[http://code.google.com/p/uface/ UFace] implements the [http://wiki.eclipse.org/index.php/JFace_Data_Binding JFace Data Binding] for GWT, gwt-ext, MyGWT, JFace and Swing.
+[http://code.google.com/p/uface/ UFace] implements the [http://wiki.eclipse.org/index.php/JFace_Data_Binding JFace Data Binding] for GWT, gwt-ext, MyGWT, JFace, Swing and SwingX.
 
 
 - Server specification
