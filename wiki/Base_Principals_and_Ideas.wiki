@@ -6,10 +6,8 @@ Base Principals and Ideas for the next version after the first working release
 = Introduction =
 
 When this first release with limited functionality is in production, the next release will be started. This next release will be the first release with all planed functionality. It will be maven based. All functionality will be separated in small modules (OSGi Bundles) as follow:
-
-- API Modules - the API and the implementation will be in different bundles
-
-- Implementation Modules
+* API Modules - the API and the implementation will be in different bundles
+* Implementation Modules.
 
 - Persistence (Data Access Services) Modules
 
