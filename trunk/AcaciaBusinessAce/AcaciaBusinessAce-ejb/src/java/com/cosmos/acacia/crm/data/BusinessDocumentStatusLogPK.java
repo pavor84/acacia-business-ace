@@ -30,7 +30,7 @@ public class BusinessDocumentStatusLogPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "action_time", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date actionTime;
 
     public BusinessDocumentStatusLogPK() {
