@@ -40,6 +40,7 @@ BPEL will be the connection language between the services.
   * [http://sourceforge.net/projects/xui/ XUI] is a Java and XML RIA platform for building smart app's. Swing, AWT and other widget sets can be used on a range of hardware. XUI's modular framework can help many aspects of application development. NetBeans and Eclipse are available.
   * [http://spring-rich-c.sourceforge.net/1.0.0/index.html Spring Rich Client Project] (Spring-RCP) mission is to provide an elegant way to build highly-configurable, GUI-standards-following rich-client applications faster by leveraging the Spring Framework, and a rich library of UI factories and support classes.
   * [http://creamtec.com/products/ajaxswing/ AjaxSwing] automatically converts Java Swing and AWT applications into AJAX websites at runtime.
+  * [http://www.javafx.com/ JavaFX]
 
  * Server specification
 
