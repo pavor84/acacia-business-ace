@@ -34,6 +34,7 @@ BPEL will be the connection language between the services.
    * a standalone application with a Swing GUI;
    * a client/server application with a thin Swing client;
    * or a mobile application on different devices like PDAs or Smartphones.
+  * [http://cookxml.yuanheng.org/ CookXml] is a powerful general purpose dynamic XML data binding tool. It is designed to be easy to use and easily extensible. The current implementation only does the unmarshaling. The marshaling aspect will be added.
 
  * Server specification
 
