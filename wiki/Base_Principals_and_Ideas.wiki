@@ -18,11 +18,11 @@ BPEL will be the connection language between the services.
 
 = Details =
 
-1. OSGi based Server and Client - Enterprise OSGi and Distributed OSGi (RFC-119)
+1. The Server and Client will be OSGi based using Enterprise OSGi and Distributed OSGi (RFC-119):
  * Client specification:
   * [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
   * [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
- * Helpful projects:
+ Helpful projects:
   * [http://www.eclipse.org/proposals/riena/ Eclipse Riena Project]
   * [http://www.eclipse.org/ecf/ Eclipse Communication Framework Project]
   * [http://cxf.apache.org/dosgi-releases.html Apache CXF-DOSGi]
@@ -46,11 +46,7 @@ BPEL will be the connection language between the services.
 
 
 2. Program model
-
-- Data Types definitions
-
-- Entity definitions
-
-- Forms: Entity, Entity List, Customization, Relations
-
-- Form modes: read only, update, create, delete
+ * Data Types definitions
+ * Entity definitions
+ * Forms: Entity, Entity List, Customization, Relations
+ * Form modes: read only, update, create, delete
