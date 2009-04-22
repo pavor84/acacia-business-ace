@@ -37,6 +37,7 @@ BPEL will be the connection language between the services.
   * [http://cookxml.yuanheng.org/ CookXml] is a powerful general purpose dynamic XML data binding tool. It is designed to be easy to use and easily extensible. The current implementation only does the unmarshaling. The marshaling aspect will be added.
   * [http://www.swixml.org/ SwiXml], is a small GUI generating engine for Java applications and applets. Graphical User Interfaces are described in XML documents that are parsed at runtime and rendered into javax.swing objects.
   * The [http://sourceforge.net/projects/jxmlguibuilder/ Java-XML-GuiBuilder] creates on the basis of XML documents a runable Java swing surface. These tools are meant for the production by horizontal prototypes, the specification/documentation of the user's interface, the runtime to
+  * [http://sourceforge.net/projects/xui/ XUI] is a Java and XML RIA platform for building smart app's. Swing, AWT and other widget sets can be used on a range of hardware. XUI's modular framework can help many aspects of application development. NetBeans and Eclipse are available.
 
  * Server specification
 
