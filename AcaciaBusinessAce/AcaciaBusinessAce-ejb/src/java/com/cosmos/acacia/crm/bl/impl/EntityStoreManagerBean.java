@@ -24,7 +24,6 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
-import com.cosmos.acacia.crm.data.BusinessDocumentStatusLogPK;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
