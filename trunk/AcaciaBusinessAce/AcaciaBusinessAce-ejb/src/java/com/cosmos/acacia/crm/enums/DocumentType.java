@@ -4,7 +4,9 @@
  */
 package com.cosmos.acacia.crm.enums;
 
+import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,28 +17,36 @@ import java.util.List;
 public enum DocumentType implements DatabaseResource {
 
     // Sales
-    DeliveryCertificate("Delivery Certificate", "The delivery certificate"),
-    SalesOffer("Sales Offer", "The Sales Offer or Sales Quotation"),
-    SalesProformaInvoice("Sales Proforma Invoice", "The Sales Proforma Invoice"),
-    SalesInvoice("Sales Invoice", "The Sales Invoice"),
-    CustomerPayment("Customer Payment", "The Customer Payment"),
+    DeliveryCertificate("Delivery Certificate", "The delivery certificate", null),
+    SalesOffer("Sales Offer", "The Sales Offer or Sales Quotation", null),
+    SalesProformaInvoice("Sales Proforma Invoice", "The Sales Proforma Invoice", null),
+    SalesInvoice("Sales Invoice", "The Sales Invoice", null),
+    CustomerPayment("Customer Payment", "The Customer Payment", null),
     //
     // Purchase
-    GoodsReceipt("Goods Receipt", "The Goods Receipt"),
-    PurchaseOrder("Purchase Order", "The Purchase Order"),
-    PurchaseOrderConfirmation("Purchase Order Confirmation", "The Purchase Order Confirmation"),
-    PurchaseInvoice("Purchase Invoice", "The Purchase Invoice"),
+    GoodsReceipt("Goods Receipt", "The Goods Receipt", null),
+    PurchaseOrder("Purchase Order", "The Purchase Order", null),
+    PurchaseOrderConfirmation("Purchase Order Confirmation", "The Purchase Order Confirmation", null),
+    PurchaseInvoice("Purchase Invoice", "The Purchase Invoice", PurchaseInvoice.class),
     ;
 
-    private DocumentType(String name, String description) {
+    private DocumentType(String name, String description, Class<? extends BusinessDocument> documentClass) {
         this.name = name;
         this.description = description;
+        this.documentClass = documentClass;
     }
     //
     private String name;
     private String description;
+    private Class<? extends BusinessDocument> documentClass;
     private DbResource dbResource;
     private static List<DbResource> dbResources;
+
+    public Class<? extends BusinessDocument> getDocumentClass() {
+        if(documentClass == null)
+            throw new IllegalStateException("The class variable is not initialized.");
+        return documentClass;
+    }
 
     public String getDescription() {
         return description;
