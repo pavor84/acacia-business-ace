@@ -44,10 +44,15 @@ Helpful projects:
 [http://code.google.com/p/uface/ UFace] implements the [http://wiki.eclipse.org/index.php/JFace_Data_Binding JFace Data Binding] for GWT, gwt-ext, MyGWT, JFace, Swing and SwingX.
 
 [http://www.c1-setcon.de/widgetserver/ WidgetServer] is a component based, server-side, Java/XML rich-client-framework which enables an application to run as either:
+
 * an application with a rich Web client based on AJAX (HTML, XML, CSS, Javascript);
+
 * an application with a simple Web client based on HTML and CSS;
+
 * a standalone application with a Swing GUI;
+
 * a client/server application with a thin Swing client;
+
 * or a mobile application on different devices like PDAs or Smartphones.
 
 
