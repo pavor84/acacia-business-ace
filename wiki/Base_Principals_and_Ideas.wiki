@@ -19,30 +19,23 @@ BPEL will be the connection language between the services.
 = Details =
 
 1. OSGi based Server and Client - Enterprise OSGi and Distributed OSGi (RFC-119)
- - Client specification:
- * [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
- * [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
- - Helpful projects:
- * [http://www.eclipse.org/proposals/riena/ Eclipse Riena Project]
- * [http://www.eclipse.org/ecf/ Eclipse Communication Framework Project]
- * [http://cxf.apache.org/dosgi-releases.html Apache CXF-DOSGi]
- * [http://newton.codecauldron.org/site/index.html Newton Framework]
- * [http://code.google.com/p/uface/ UFace] implements the [http://wiki.eclipse.org/index.php/JFace_Data_Binding JFace Data Binding] for GWT, gwt-ext, MyGWT, JFace, Swing and SwingX.
+ * Client specification:
+ - [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
+ - [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
+ * Helpful projects:
+ - [http://www.eclipse.org/proposals/riena/ Eclipse Riena Project]
+ - [http://www.eclipse.org/ecf/ Eclipse Communication Framework Project]
+ - [http://cxf.apache.org/dosgi-releases.html Apache CXF-DOSGi]
+ - [http://newton.codecauldron.org/site/index.html Newton Framework]
+ - [http://code.google.com/p/uface/ UFace] implements the [http://wiki.eclipse.org/index.php/JFace_Data_Binding JFace Data Binding] for GWT, gwt-ext, MyGWT, JFace, Swing and SwingX.
+ - [http://www.c1-setcon.de/widgetserver/ WidgetServer] is a component based, server-side, Java/XML rich-client-framework which enables an application to run as either:
+  - an application with a rich Web client based on AJAX (HTML, XML, CSS, Javascript);
+  - an application with a simple Web client based on HTML and CSS;
+  - a standalone application with a Swing GUI;
+  - a client/server application with a thin Swing client;
+  - or a mobile application on different devices like PDAs or Smartphones.
 
-[http://www.c1-setcon.de/widgetserver/ WidgetServer] is a component based, server-side, Java/XML rich-client-framework which enables an application to run as either:
-
-- an application with a rich Web client based on AJAX (HTML, XML, CSS, Javascript);
-
-- an application with a simple Web client based on HTML and CSS;
-
-- a standalone application with a Swing GUI;
-
-- a client/server application with a thin Swing client;
-
-- or a mobile application on different devices like PDAs or Smartphones.
-
-
-- Server specification
+ * Server specification
 
 
 2. Program model
