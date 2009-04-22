@@ -20,7 +20,7 @@ BPEL will be the connection language between the services.
 
 1. OSGi based Server and Client - Enterprise OSGi and Distributed OSGi (RFC-119)
 
-- Client specification:
+ - Client specification:
 
 [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
 
