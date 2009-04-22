@@ -59,16 +59,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
 
     @Override
     public PurchaseInvoice newPurchaseInvoice() {
-        PurchaseInvoice invoice = new PurchaseInvoice();
-        invoice.setPublisher(acaciaSession.getOrganization());
-        invoice.setPublisherBranch(acaciaSession.getBranch());
-        invoice.setPublisherOfficer(acaciaSession.getPerson());
-        invoice.setDocumentType(DocumentType.PurchaseInvoice.getDbResource());
-        invoice.setDocumentStatus(DocumentStatus.Draft.getDbResource());
-        DataObject dataObject = new DataObject();
-        dataObject.setDataObjectType(dotLocal.getDataObjectType(PURCHASE_INVOICE_CLASS_NAME));
-        invoice.setDataObject(dataObject);
-        return invoice;
+        return esm.newBusinessDocument(DocumentType.PurchaseInvoice);
     }
 
     @Override

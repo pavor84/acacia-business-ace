@@ -26,6 +26,8 @@ import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
 import com.cosmos.acacia.crm.data.BusinessDocumentStatusLogPK;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.enums.DocumentStatus;
+import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
@@ -362,5 +364,24 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             return null;
 
         return em.find(Address.class, dataObject.getDataObjectId());
+    }
+
+    @Override
+    public <D extends BusinessDocument> D newBusinessDocument(DocumentType documentType) {
+        try {
+            Class<? extends BusinessDocument> cls = documentType.getDocumentClass();
+            D document = (D)cls.newInstance();
+            document.setPublisher(session.getOrganization());
+            document.setPublisherBranch(session.getBranch());
+            document.setPublisherOfficer(session.getPerson());
+            document.setDocumentType(documentType.getDbResource());
+            document.setDocumentStatus(DocumentStatus.Draft.getDbResource());
+            DataObject dataObject = new DataObject();
+            dataObject.setDataObjectType(dotLocal.getDataObjectType(cls.getName()));
+            document.setDataObject(dataObject);
+            return document;
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
