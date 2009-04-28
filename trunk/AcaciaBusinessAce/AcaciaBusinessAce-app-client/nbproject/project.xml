@@ -35,6 +35,7 @@
             <included-library>file.reference.miglayout-swing.jar</included-library>
             <included-library>file.reference.hibernate3.jar</included-library>
             <included-library>file.reference.hibernate-annotations.jar</included-library>
+            <included-library>file.reference.commons-logging-1.1.1.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
