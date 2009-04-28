@@ -7,6 +7,7 @@ package com.cosmos.acacia.gui.entity;
 import com.cosmos.acacia.annotation.BorderType;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
+import com.cosmos.acacia.annotation.ComponentProperty;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
@@ -15,7 +16,9 @@ import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
+import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import com.cosmos.util.BeanUtils;
 import java.awt.BorderLayout;
 import java.awt.LayoutManager;
 import java.lang.annotation.Annotation;
@@ -57,6 +60,7 @@ public class AbstractEntityPanel<E extends DataObjectBean, I extends DataObjectB
     private static final String FORM_ANNOTATION_CLASS_NAME = Form.class.getName();
     private static final int INITIAL_VALUE = 1000000000;
     private E entity;
+    private EntityService<DataObjectBean> entityService;
     private Map<String, JComponent> containers;
     private Map<String, JComponent> components;
 
@@ -84,6 +88,11 @@ public class AbstractEntityPanel<E extends DataObjectBean, I extends DataObjectB
                 if (!containers.containsKey(containerName)) {
                     containers.put(containerName, container);
                 }
+            }
+
+            if(entityService == null && form.serviceClass() != EntityService.NULL.class) {
+                entityService = getBean(form.serviceClass());
+                System.out.println("entityService: " + entityService);
             }
         }
         List<FormContainer> formContainers = getAnnotations(forms);
@@ -208,6 +217,17 @@ public class AbstractEntityPanel<E extends DataObjectBean, I extends DataObjectB
         }
 
         jComponent.setName(getComponentName(field, componentClass));
+
+        BeanUtils beanUtils = BeanUtils.getInstance();
+        for(ComponentProperty componentProperty : component.componentProperties()) {
+            try {
+                beanUtils.setProperty(jComponent, componentProperty.name(), componentProperty.value());
+            } catch(Exception ex) {
+                throw new EntityPanelException("Can not set propery " + componentProperty.name()+
+                        " with value " + componentProperty.value() +
+                        " of " + jComponent, ex);
+            }
+        }
 
         return jComponent;
     }
