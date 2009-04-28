@@ -13,8 +13,6 @@ import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
-import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
-import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBDatePicker;
 import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.JBLabel;
@@ -82,7 +80,7 @@ import javax.persistence.UniqueConstraint;
                 componentBorder=@ComponentBorder(
                     borderType=BorderType.TitledBorder, title="Publisher Details"
                 ),
-                componentConstraints="span 2, growx"
+                componentConstraints="span 2, sizegroup publisherSG, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=1),
             componentIndex=2
@@ -169,7 +167,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Publisher: "
         ),
         secondComponent=@Component(
-            componentClass=JBComboList.class
+            componentClass=JBTextField.class
         )
     )
     protected Organization publisher;
@@ -183,7 +181,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Branch: "
         ),
         secondComponent=@Component(
-            componentClass=JBComboList.class
+            componentClass=JBTextField.class
         )
     )
     protected Address publisherBranch;
@@ -197,7 +195,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Officer: "
         ),
         secondComponent=@Component(
-            componentClass=JBComboList.class
+            componentClass=JBTextField.class
         )
     )
     protected Person publisherOfficer;
