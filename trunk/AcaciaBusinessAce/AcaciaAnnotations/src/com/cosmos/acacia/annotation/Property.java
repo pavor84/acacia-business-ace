@@ -6,22 +6,20 @@ package com.cosmos.acacia.annotation;
  */
 
 
-
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.swing.text.DefaultFormatter;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  *
  * @author Miro
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
+@Target(FIELD)
+@Retention(RUNTIME)
 public @interface Property
 {
-    public static final String NULL = NullClass.NULL;
 
     String title();
     boolean readOnly() default false;
@@ -33,7 +31,7 @@ public @interface Property
      * MaskFormatter, DateFormatter, NumberFormatter (Decimal, Integer, Percent)
      */
     Class<DefaultFormatter> formatter() default DefaultFormatter.class;
-    String formatPattern() default NULL;
+    String formatPattern() default "";
 
     /**
      * hidden means is existing as ColumnBinding. If true, then that property
@@ -42,7 +40,7 @@ public @interface Property
      */
     boolean hidden() default false;
 
-    String sourceUnreadableValue() default NULL;
+    String sourceUnreadableValue() default "";
 
     PropertyValidator propertyValidator() default @PropertyValidator;
 
@@ -52,7 +50,7 @@ public @interface Property
      * If not provided, {@link #propertyName} will be used instead.
      * @return String
      */
-    String customDisplay() default NULL;
+    String customDisplay() default "";
 
     /**
      * Specifies how is the resource displayed in a table
