@@ -48,6 +48,7 @@ import javax.swing.text.DefaultFormatter;
 public class BeansBindingHelper {
 
     public static final String DEFAULT_FORMATTER_CLASS_NAME = DefaultFormatter.class.getName();
+    private static final String EMPTY_STRING = "";
 
     protected static Logger log = Logger.getLogger(BeansBindingHelper.class);
 
@@ -166,14 +167,14 @@ public class BeansBindingHelper {
                 }
             }
             String value;
-            if((value = property.formatPattern()) != Property.NULL) {
+            if(!EMPTY_STRING.equals(value = property.formatPattern())) {
                 pd.setFormatPattern(value);
             }
             pd.setResourceDisplayInTable(property.resourceDisplayInTable());
             pd.setExportable(property.exportable());
             pd.setReportColumnWidth(property.reportColumnWidth());
 
-            if ( !Property.NULL.equals(property.customDisplay()) )
+            if ( !EMPTY_STRING.equals(property.customDisplay()) )
                 pd.setCustomDisplay(property.customDisplay());
 
             /* Setting validation-related values */
@@ -283,7 +284,7 @@ public class BeansBindingHelper {
             }
 
             value = property.sourceUnreadableValue();
-            if(!Property.NULL.equals(value))
+            if(!EMPTY_STRING.equals(value))
                 pd.setSourceUnreadableValue(value);
 
             String columnName = null;
@@ -342,7 +343,7 @@ public class BeansBindingHelper {
             }
 
             // Setting custom display for Dates
-            if (pd.getPropertyClass() == Date.class && pd.getCustomDisplay() == Property.NULL)
+            if (pd.getPropertyClass() == Date.class && EMPTY_STRING.equals(pd.getCustomDisplay()))
             {
                 log.info("Setting date custom display for property " + pd.getPropertyName());
 
