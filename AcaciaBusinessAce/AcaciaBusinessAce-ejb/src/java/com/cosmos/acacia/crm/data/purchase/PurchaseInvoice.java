@@ -71,7 +71,7 @@ import javax.persistence.TemporalType;
                 componentBorder=@ComponentBorder(
                     borderType=BorderType.TitledBorder, title="Supplier Details"
                 ),
-                componentConstraints="span 2, growx"
+                componentConstraints="span 2, sizegroup publisherSG, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=1)
         )
