@@ -66,7 +66,7 @@ import javax.ejb.EJB;
  *
  * @author miro
  */
-public abstract class AcaciaPanel
+public class AcaciaPanel
     extends JBPanel
 {
     //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
@@ -95,6 +95,9 @@ public abstract class AcaciaPanel
     {
         this(mainDataObject != null ? mainDataObject.getParentId() : (BigInteger)null);
         this.mainDataObject = mainDataObject;
+    }
+
+    protected void initData() {
     }
 
     public BigInteger getParentDataObjectId()
@@ -142,8 +145,6 @@ public abstract class AcaciaPanel
 
         return organizationDataObjectId;
     }
-
-    protected abstract void initData();
 
     protected void setFonts()
     {
