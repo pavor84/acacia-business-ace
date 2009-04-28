@@ -9,6 +9,7 @@ import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.DataObjectTypeLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
@@ -41,13 +42,6 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     private EntityStoreManagerLocal esm;
     @EJB
     private DataObjectTypeLocal dotLocal;
-
-    @Override
-    public EntityProperties getEntityProperties(Class entityClass) {
-        EntityProperties entityProperties = esm.getEntityProperties(entityClass);
-        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        return entityProperties;
-    }
 
     @Override
     public List<PurchaseInvoice> getPurchaseInvoices() {
@@ -104,6 +98,52 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     public boolean deletePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
- 
+
+    @Override
+    public <E extends DataObjectBean> E newEntity(Class<E> entityClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean, I extends DataObjectBean> I newItem(E entity, Class<I> itemClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean> List<E> getEntities(Class<E> entityClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean, I extends DataObjectBean> List<I> getEntityItems(E entity, Class<I> itemClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean> E save(E entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean> E confirm(E entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean> E cancel(E entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean> void delete(E entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <E extends DataObjectBean> EntityProperties getEntityProperties(Class<E> entityClass) {
+        EntityProperties entityProperties = esm.getEntityProperties(entityClass);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+        return entityProperties;
+    }
+
 }

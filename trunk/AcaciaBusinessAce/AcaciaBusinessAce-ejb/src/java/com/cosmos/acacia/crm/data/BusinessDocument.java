@@ -5,6 +5,21 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.BorderType;
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.ComponentBorder;
+import com.cosmos.acacia.annotation.ComponentProperty;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBDatePicker;
+import com.cosmos.swingb.JBIntegerField;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -41,19 +56,53 @@ import javax.persistence.UniqueConstraint;
 @DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING, length=4, name="discriminator_id")
 @NamedQueries({
 })
+@Form(
+    mainContainer=@FormContainer(
+        name="BusinessDocument",
+        container=@Component(componentClass=JBPanel.class)/*,
+        layout=@Layout(extraConstraints="debug")*/
+    ),
+    formContainers={
+        @FormContainer(
+            name="documentDetails",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Document Details"
+                ),
+                componentConstraints="span, growx"
+            ),
+            layout=@Layout(/*extraConstraints="debug", */columnsPairs=3),
+            componentIndex=1
+        ),
+        @FormContainer(
+            name="publisherDetails",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Publisher Details"
+                ),
+                componentConstraints="span 2, growx"
+            ),
+            layout=@Layout(/*extraConstraints="debug", */columnsPairs=1),
+            componentIndex=2
+        )
+    }
+)
 public abstract class BusinessDocument extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //
     public static final String DELIVERY_CERTIFICATE = "DC";
     public static final String SALES_OFFER = "SO";
-    public static final String SALES_PROFORMA_INVOICE = "SPI";
+    public static final String SALES_PROFORMA_INVOICE = "SPFI";
     public static final String SALES_INVOICE = "SI";
     public static final String GOODS_RECEIPT = "GR";
     public static final String PURCHASE_ORDER = "PO";
     public static final String PURCHASE_ORDER_CONFIRMATION = "POC";
     public static final String PURCHASE_INVOICE = "PI";
 
+    //
     @Id
     @Basic(optional = false)
     @Column(name = "document_id", nullable = false)
@@ -63,8 +112,48 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @ManyToOne(optional = false)
     protected DbResource documentType;
 
+    @Column(name = "document_number")
+    @FormComponentPair(
+        parentContainerName="documentDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Number: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBIntegerField.class,
+            componentProperties={
+                @ComponentProperty(name="numberType", value="LongType")
+            }
+        )
+    )
+    protected Long documentNumber;
+
+    @Column(name = "document_date")
+    @Temporal(TemporalType.DATE)
+    @FormComponentPair(
+        parentContainerName="documentDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Date: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBDatePicker.class
+        )
+    )
+    protected Date documentDate;
+
     @JoinColumn(name = "document_status_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
+    @FormComponentPair(
+        parentContainerName="documentDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Status: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBTextField.class
+        )
+    )
     protected DbResource documentStatus;
 
     @Basic(optional = false)
@@ -73,22 +162,45 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
 
     @JoinColumn(name = "publisher_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)
+    @FormComponentPair(
+        parentContainerName="publisherDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Publisher: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBComboList.class
+        )
+    )
     protected Organization publisher;
 
     @JoinColumn(name = "publisher_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne(optional = false)
+    @FormComponentPair(
+        parentContainerName="publisherDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Branch: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBComboList.class
+        )
+    )
     protected Address publisherBranch;
 
     @JoinColumn(name = "publisher_officer_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
+    @FormComponentPair(
+        parentContainerName="publisherDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Officer: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBComboList.class
+        )
+    )
     protected Person publisherOfficer;
-
-    @Column(name = "document_number")
-    protected Long documentNumber;
-
-    @Column(name = "document_date")
-    @Temporal(TemporalType.DATE)
-    protected Date documentDate;
 
     @JoinColumn(name = "customer_discount_item_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)

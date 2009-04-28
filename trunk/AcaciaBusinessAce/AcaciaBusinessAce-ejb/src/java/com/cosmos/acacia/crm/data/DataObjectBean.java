@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
  *
  * @author Miro
  */
-public abstract class DataObjectBean<E>
+public abstract class DataObjectBean
     implements Cloneable
 {
 

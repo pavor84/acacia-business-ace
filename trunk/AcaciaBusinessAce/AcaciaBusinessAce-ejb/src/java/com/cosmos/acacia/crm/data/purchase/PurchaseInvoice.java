@@ -4,13 +4,24 @@
  */
 package com.cosmos.acacia.crm.data.purchase;
 
+import com.cosmos.acacia.annotation.BorderType;
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.ComponentBorder;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -46,6 +57,27 @@ import javax.persistence.TemporalType;
             "  and p.dataObject.deleted = false" +
             " order by p.documentNumber")
 })
+@Form(
+    mainContainer=@FormContainer(
+        name="PurchaseInvoice",
+        container=@Component(componentClass=JBPanel.class)/*,
+        layout=@Layout(extraConstraints="debug")*/
+    ),
+    formContainers={
+        @FormContainer(
+            name="supplierDetails",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Supplier Details"
+                ),
+                componentConstraints="span 2, growx"
+            ),
+            layout=@Layout(/*extraConstraints="debug", */columnsPairs=1)
+        )
+    },
+    serviceClass=PurchaseServiceRemote.class
+)
 public class PurchaseInvoice extends BusinessDocument implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,16 +87,46 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Supplier")
+    @FormComponentPair(
+        parentContainerName="supplierDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Supplier: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBComboList.class
+        )
+    )
     private BusinessPartner supplier;
 
     @JoinColumn(name = "supplier_branch_id", referencedColumnName = "address_id")
     @ManyToOne
     @Property(title="Supplier Branch")
+    @FormComponentPair(
+        parentContainerName="supplierDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Branch: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBComboList.class
+        )
+    )
     private Address supplierBranch;
 
     @JoinColumn(name = "supplier_contact_id", referencedColumnName = "partner_id")
     @ManyToOne
     @Property(title="Supplier Contact")
+    @FormComponentPair(
+        parentContainerName="supplierDetails",
+        firstComponent=@Component(
+            componentClass=JBLabel.class,
+            text="Officer: "
+        ),
+        secondComponent=@Component(
+            componentClass=JBComboList.class
+        )
+    )
     private Person supplierContact;
 
     @Basic(optional = false)
