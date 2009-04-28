@@ -120,14 +120,15 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
         secondComponent=@Component(
             componentClass=JBIntegerField.class,
             componentProperties={
-                @ComponentProperty(name="numberType", value="LongType")
+                @ComponentProperty(name="numberType", value="LongType"),
+                @ComponentProperty(name="editable", value="false")
             }
         )
     )
     protected Long documentNumber;
 
     @Column(name = "document_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @FormComponentPair(
         parentContainerName="documentDetails",
         firstComponent=@Component(
@@ -135,7 +136,10 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Date: "
         ),
         secondComponent=@Component(
-            componentClass=JBDatePicker.class
+            componentClass=JBDatePicker.class,
+            componentProperties={
+                @ComponentProperty(name="editable", value="false")
+            }
         )
     )
     protected Date documentDate;
@@ -149,7 +153,10 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Status: "
         ),
         secondComponent=@Component(
-            componentClass=JBTextField.class
+            componentClass=JBTextField.class,
+            componentProperties={
+                @ComponentProperty(name="editable", value="false")
+            }
         )
     )
     protected DbResource documentStatus;
@@ -167,7 +174,10 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Publisher: "
         ),
         secondComponent=@Component(
-            componentClass=JBTextField.class
+            componentClass=JBTextField.class,
+            componentProperties={
+                @ComponentProperty(name="editable", value="false")
+            }
         )
     )
     protected Organization publisher;
@@ -181,7 +191,10 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Branch: "
         ),
         secondComponent=@Component(
-            componentClass=JBTextField.class
+            componentClass=JBTextField.class,
+            componentProperties={
+                @ComponentProperty(name="editable", value="false")
+            }
         )
     )
     protected Address publisherBranch;
@@ -195,7 +208,10 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             text="Officer: "
         ),
         secondComponent=@Component(
-            componentClass=JBTextField.class
+            componentClass=JBTextField.class,
+            componentProperties={
+                @ComponentProperty(name="editable", value="false")
+            }
         )
     )
     protected Person publisherOfficer;
