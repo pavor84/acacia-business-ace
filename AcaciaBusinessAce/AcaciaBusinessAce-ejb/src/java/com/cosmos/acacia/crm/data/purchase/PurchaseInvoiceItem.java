@@ -5,6 +5,7 @@
 package com.cosmos.acacia.crm.data.purchase;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.data.Product;
@@ -32,7 +33,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "PurchaseInvoiceItem.findAll", query = "SELECT p FROM PurchaseInvoiceItem p")
 })
-public class PurchaseInvoiceItem implements Serializable {
+public class PurchaseInvoiceItem extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -221,5 +222,25 @@ public class PurchaseInvoiceItem implements Serializable {
     @Override
     public String toString() {
         return "PurchaseInvoiceItem[invoiceItemId=" + invoiceItemId + "]";
+    }
+
+    @Override
+    public BigInteger getId() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getInfo() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

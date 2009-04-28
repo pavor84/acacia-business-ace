@@ -5,8 +5,10 @@
 
 package com.cosmos.acacia.crm.bl.purchase;
 
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
+import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.List;
 import javax.ejb.Remote;
@@ -16,8 +18,9 @@ import javax.ejb.Remote;
  * @author Miro
  */
 @Remote
-public interface PurchaseServiceRemote {
-    EntityProperties getEntityProperties(Class entityClass);
+public interface PurchaseServiceRemote extends EntityService<DataObjectBean> {
+
+    //EntityProperties getEntityProperties(Class entityClass);
 
     List<PurchaseInvoice> getPurchaseInvoices();
     PurchaseInvoice newPurchaseInvoice();
