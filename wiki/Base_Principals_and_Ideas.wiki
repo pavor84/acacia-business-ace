@@ -53,7 +53,7 @@ BPEL will be the connection language between the services.
  * Form modes: read only, update, create, delete
 The reference implementation will be hosted in [http://kenai.com/projects/acacia-business-ace Kenai project space]
 
-3. GUI based Form Development.
+3. GUI based Rich Form Development. The forms will be dynamically generated from both Java annotations or Database. The customization of the system and standard/integrated forms also will be GUI based. The primary GUI will be Swing or/and SWT based. As alternative Ajax Web Client will be provided.
 
 4. Useful links:
  * [http://www.orangehrm.com/ OrangeHRM - Open Source HR Management]
