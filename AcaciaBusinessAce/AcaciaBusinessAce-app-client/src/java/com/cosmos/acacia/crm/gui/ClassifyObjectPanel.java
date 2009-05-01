@@ -17,6 +17,7 @@ import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -29,14 +30,14 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public ClassifyObjectPanel(DataObject dataObject) {
-        super(null);
+        super((BigInteger)null);
         dataObjectToBeClassified = dataObject;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
     public ClassifyObjectPanel() {
-        super(null);
+        super((BigInteger)null);
         init();
     }
 

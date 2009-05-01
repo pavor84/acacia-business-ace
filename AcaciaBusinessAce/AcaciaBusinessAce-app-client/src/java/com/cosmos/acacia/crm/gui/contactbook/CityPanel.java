@@ -14,6 +14,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  *
@@ -25,20 +26,20 @@ public class CityPanel extends BaseEntityPanel {
 
     /** Creates new form CityPanel */
     public CityPanel(City city) {
-        super(null);
+        super((BigInteger)null);
         this.city = city;
         init();
     }
 
     /** Creates new form CityPanel */
     public CityPanel() {
-        super(null);
+        super((BigInteger)null);
         init();
     }
 
     /** Creates new form CityPanel */
     public CityPanel(Country country) {
-        super(null);
+        super((BigInteger)null);
         init();
         city.setCountry(country);
         countryComboBox.setSelectedItem(country);

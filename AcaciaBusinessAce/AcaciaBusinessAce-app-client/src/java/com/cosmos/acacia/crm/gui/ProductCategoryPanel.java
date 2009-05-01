@@ -60,7 +60,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     public ProductCategoryPanel() {
-        super(null);
+        super((BigInteger)null);
     }
 
     /** This method is called from within the constructor to
@@ -294,10 +294,6 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         }
 
         return formSession;
-    }
-
-    private String getResourceString(String key) {
-        return getResourceMap().getString(key);
     }
 
     private class CategoryDetailsPanel extends JBPanel {

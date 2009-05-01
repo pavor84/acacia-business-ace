@@ -105,10 +105,6 @@ public class PurchaseInvoicePanel extends BaseEntityPanel {
         primaryInfoPanel.add(new PurchaseInvoicePrimaryInfoPanel(this), BorderLayout.CENTER);
     }
 
-    protected String getResourceString(String key) {
-        return getResourceMap().getString(key);
-    }
-
     @Override
     public void performSave(boolean closeAfter) {
         try {

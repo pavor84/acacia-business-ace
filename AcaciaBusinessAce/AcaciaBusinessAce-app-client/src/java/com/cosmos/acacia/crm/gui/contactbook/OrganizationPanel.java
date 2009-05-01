@@ -60,7 +60,7 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     public OrganizationPanel() {
-        super(null);
+        super((BigInteger)null);
         isInternal = true;
         this.organization = getAcaciaSession().getOrganization();
         init();

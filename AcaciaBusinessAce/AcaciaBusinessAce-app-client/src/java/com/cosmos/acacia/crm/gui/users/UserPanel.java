@@ -29,6 +29,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
+import java.math.BigInteger;
 
 /**
  *
@@ -39,7 +40,7 @@ public class UserPanel extends BaseEntityPanel {
 
     /** Creates new form UserPenl */
     public UserPanel(UserOrganization uo) {
-        super(null);
+        super((BigInteger)null);
         this.userOrganization = uo;
         init();
     }

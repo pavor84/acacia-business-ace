@@ -267,7 +267,8 @@ public class GoodsReceiptPrimaryInfoPanel extends JBPanel {
         add(notesPanel, "span 2, grow 100");
     }
 
-    private String getResourceString(String key) {
+    @Override
+    protected String getResourceString(String key) {
         return goodsReceiptPanel.getResourceString(key);
     }
 

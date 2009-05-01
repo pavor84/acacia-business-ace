@@ -113,7 +113,8 @@ public class GoodsReceiptItemListPanel extends JBPanel {
     private void initData() {
     }
 
-    private String getResourceString(String key) {
+    @Override
+    protected String getResourceString(String key) {
         return goodsReceiptPanel.getResourceString(key);
     }
 }

@@ -28,6 +28,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.MessageFormat;
 import javax.ejb.EJB;
 import net.miginfocom.swing.MigLayout;
@@ -49,7 +50,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
     private EntityFormButtonPanel buttonPanel;
 
     public CustomerDiscountItemPanel(CustomerDiscountItem item) {
-        super(null);
+        super((BigInteger)null);
         this.item = item;
         init();
     }
@@ -224,10 +225,6 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
     private void onProductDiscountChanged() {
         CustomerDiscountItemByProduct itemByProduct = (CustomerDiscountItemByProduct)item;
         customerPriceDecimalField.setValue(itemByProduct.getCutomerPrice());
-    }
-
-    private String getResourceString(String key) {
-        return getResourceMap().getString(key);
     }
 
     private boolean isByProduct() {
