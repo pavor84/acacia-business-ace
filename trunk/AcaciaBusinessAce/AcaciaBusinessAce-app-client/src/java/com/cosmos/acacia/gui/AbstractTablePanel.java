@@ -65,6 +65,13 @@ public abstract class AbstractTablePanel
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
 
+    private Class entityClass;
+
+    protected AbstractTablePanel(Class entityClass) {
+        this.entityClass = entityClass;
+        init();
+    }
+
     protected AbstractTablePanel(JBPanel parentPanel) {
         this.parentPanel = parentPanel;
         init();
@@ -83,6 +90,10 @@ public abstract class AbstractTablePanel
     public AbstractTablePanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
         init();
+    }
+
+    protected Class getEntityClass() {
+        return entityClass;
     }
 
     private void init() {
