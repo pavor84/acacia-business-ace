@@ -15,25 +15,25 @@ import java.util.List;
  *
  * @author Miro
  */
-public interface EntityService<T> {
+public interface EntityService {
 
-    <E extends T> E newEntity(Class<E> entityClass);
+    <E> E newEntity(Class<E> entityClass);
 
-    <E extends T, I extends T> I newItem(E entity, Class<I> itemClass);
+    <E, I> I newItem(E entity, Class<I> itemClass);
 
-    <E extends T> List<E> getEntities(Class<E> entityClass);
+    <E> List<E> getEntities(Class<E> entityClass);
 
-    <E extends T, I extends T> List<I> getEntityItems(E entity, Class<I> itemClass);
+    <E, I> List<I> getEntityItems(E entity, Class<I> itemClass);
 
-    <E extends T> E save(E entity);
+    <E> E save(E entity);
 
-    <E extends T> E confirm(E entity);
+    <E> E confirm(E entity);
 
-    <E extends T> E cancel(E entity);
+    <E> E cancel(E entity);
 
-    <E extends T> void delete(E entity);
+    <E> void delete(E entity);
 
-    <E extends T> EntityProperties getEntityProperties(Class<E> entityClass);
+    <E> EntityProperties getEntityProperties(Class<E> entityClass);
 
     public static class NULL implements EntityService {
 
