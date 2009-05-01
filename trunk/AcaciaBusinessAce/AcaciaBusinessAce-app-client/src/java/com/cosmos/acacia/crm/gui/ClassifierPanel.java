@@ -62,7 +62,7 @@ public class ClassifierPanel extends BaseEntityPanel {
      * indicating that the form has been opened while classifying an object
      */
     public ClassifierPanel() {
-        super(null);
+        super((BigInteger)null);
         init();
         addObjectTypeButton.setEnabled(false);
     }

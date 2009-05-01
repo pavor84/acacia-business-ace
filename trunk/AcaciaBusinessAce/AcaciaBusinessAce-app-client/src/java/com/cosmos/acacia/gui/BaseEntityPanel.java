@@ -51,11 +51,18 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     private boolean editable = true;
 
+    protected BaseEntityPanel(DataObjectBean dataObjectBean) {
+        super(dataObjectBean);
+        initConstructor();
+    }
 
-    public BaseEntityPanel(BigInteger parentDataObjectId)
-    {
+    public BaseEntityPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
-        this.addKeyListener(new KeyAdapter() {
+        initConstructor();
+    }
+
+    private void initConstructor() {
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent evt) {
                 onKeyEvent(evt);

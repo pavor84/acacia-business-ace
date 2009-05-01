@@ -46,7 +46,7 @@ public class BasicOrganizationPanel
     }
 
     public BasicOrganizationPanel() {
-        super(null);
+        super((BigInteger)null);
         init();
     }
 

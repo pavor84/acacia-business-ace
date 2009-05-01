@@ -15,6 +15,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -39,7 +40,7 @@ public class AssemblingSchemaPanel
     /** Creates new form AssemblingSchemaPanel */
     public AssemblingSchemaPanel()
     {
-        super(null);
+        super((BigInteger)null);
         initComponents();
     }
 

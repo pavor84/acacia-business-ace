@@ -14,6 +14,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  *
@@ -25,14 +26,14 @@ public class CountryPanel extends BaseEntityPanel {
 
     /** Creates new form CountryPanel */
     public CountryPanel(Country country) {
-        super(null);
+        super((BigInteger)null);
         this.country = country;
         init();
     }
 
     /** Creates new form CountryPanel */
     public CountryPanel() {
-        super(null);
+        super((BigInteger)null);
         init();
     }
 

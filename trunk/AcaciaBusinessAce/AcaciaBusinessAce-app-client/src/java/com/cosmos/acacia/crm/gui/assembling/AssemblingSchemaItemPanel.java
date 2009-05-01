@@ -19,6 +19,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -43,7 +44,7 @@ public class AssemblingSchemaItemPanel
     /** Creates new form AssemblingSchemaItemPanel */
     public AssemblingSchemaItemPanel()
     {
-        super(null);
+        super((BigInteger)null);
         initComponents();
     }
 

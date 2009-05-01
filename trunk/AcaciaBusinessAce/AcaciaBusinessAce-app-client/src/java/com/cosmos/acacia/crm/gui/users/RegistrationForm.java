@@ -27,6 +27,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  *
@@ -37,7 +38,7 @@ public class RegistrationForm extends BaseEntityPanel {
 
     /** Creates new form RegistrationForm */
     public RegistrationForm(String email) {
-        super(null);
+        super((BigInteger)null);
         this.email = email;
         init();
     }

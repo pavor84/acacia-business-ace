@@ -81,18 +81,15 @@ public class AcaciaPanel
     private DataObjectBean mainDataObject;
     private BigInteger organizationDataObjectId;
 
-    public AcaciaPanel()
-    {
+    public AcaciaPanel() {
     }
 
-    public AcaciaPanel(BigInteger parentDataObjectId)
-    {
+    public AcaciaPanel(BigInteger parentDataObjectId) {
         this();
         this.parentDataObjectId = parentDataObjectId;
     }
 
-    public AcaciaPanel(DataObjectBean mainDataObject)
-    {
+    public AcaciaPanel(DataObjectBean mainDataObject) {
         this(mainDataObject != null ? mainDataObject.getParentId() : (BigInteger)null);
         this.mainDataObject = mainDataObject;
     }

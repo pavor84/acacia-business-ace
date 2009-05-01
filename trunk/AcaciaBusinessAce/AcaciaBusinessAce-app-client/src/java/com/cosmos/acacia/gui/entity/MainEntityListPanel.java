@@ -12,6 +12,7 @@ import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.swingb.DialogResponse;
 import java.util.List;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -23,7 +24,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  */
 public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTablePanel {
 
-    protected EntityFormProcessor entityFormProcessor;
+    private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;
 
     private BindingGroup bindingGroup;
@@ -49,22 +50,22 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        return editRow((PurchaseInvoice) rowObject);
+        return editRow((E)rowObject);
     }
 
     @Override
     protected Object newRow() {
-        return editRow(getEntityService().newEntity(PurchaseInvoice.class));
+        return editRow((E)getEntityService().newEntity(PurchaseInvoice.class));
     }
 
-    protected PurchaseInvoice editRow(PurchaseInvoice purchaseInvoice) {
-//        if (purchaseInvoice != null) {
-//            PurchaseInvoicePanel entityPanel = new PurchaseInvoicePanel(purchaseInvoice);
-//            DialogResponse response = entityPanel.showDialog(this);
-//            if (DialogResponse.SAVE.equals(response)) {
-//                return (PurchaseInvoice) entityPanel.getSelectedValue();
-//            }
-//        }
+    protected E editRow(E entity) {
+        if(entity != null) {
+            MainEntityPanel entityPanel = new MainEntityPanel(entity);
+            DialogResponse response = entityPanel.showDialog(this);
+            if (DialogResponse.SAVE.equals(response)) {
+                return (E) entityPanel.getSelectedValue();
+            }
+        }
 
         return null;
     }
@@ -77,7 +78,7 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
         AcaciaTable table = getDataTable();
         JTableBinding tableBinding = table.bind(
                 bindingGroup,
-                getPurchaseInvoices(),
+                getEntities(),
                 getEntityProperties(),
                 UpdateStrategy.READ);
         tableBinding.setEditable(false);
@@ -101,18 +102,16 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
         return entityProperties;
     }
 
-    protected List<PurchaseInvoice> getPurchaseInvoices() {
-        System.out.println("entityService: " + entityService);
+    @Override
+    protected List<PurchaseInvoice> getEntities() {
         return getEntityService().getEntities(PurchaseInvoice.class);
     }
 
-    public EntityService getEntityService() {
+    protected EntityService getEntityService() {
         if(entityService == null) {
             Class<? extends EntityService> entityServiceClass =
                     getEntityFormProcessor().getEntityServiceClass();
-            System.out.println("entityServiceClass: " + entityServiceClass);
             entityService = getBean(entityServiceClass);
-            System.out.println("entityService: " + entityService);
         }
 
         return entityService;
