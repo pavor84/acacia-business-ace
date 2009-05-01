@@ -52,6 +52,8 @@ BPEL will be the connection language between the services.
  * Forms: Entity, Entity List, Customization, Relations
  * Form modes: read only, update, create, delete
 
-3. Useful links:
+3. GUI based Form Development.
+
+4. Useful links:
  * [http://www.orangehrm.com/ OrangeHRM - Open Source HR Management]
  * [http://www.xtuple.org/ xTuple ERP - open source ERP, accounting, CRM package for small to midsized businesses.]
