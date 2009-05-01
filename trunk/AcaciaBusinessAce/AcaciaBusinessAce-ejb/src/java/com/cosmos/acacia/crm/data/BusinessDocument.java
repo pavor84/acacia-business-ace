@@ -216,7 +216,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     )
     protected Person publisherOfficer;
 
-    @JoinColumn(name = "customer_discount_item_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "document_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     protected DataObject dataObject;
 

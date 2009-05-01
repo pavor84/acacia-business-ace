@@ -18,15 +18,14 @@ import javax.ejb.Remote;
  * @author Miro
  */
 @Remote
-public interface PurchaseServiceRemote extends EntityService<DataObjectBean> {
+public interface PurchaseServiceRemote extends EntityService {
 
     //EntityProperties getEntityProperties(Class entityClass);
 
-    List<PurchaseInvoice> getPurchaseInvoices();
-    PurchaseInvoice newPurchaseInvoice();
-    PurchaseInvoice savePurchaseInvoice(PurchaseInvoice purchaseInvoice);
-    PurchaseInvoice completePurchaseInvoice(PurchaseInvoice purchaseInvoice);
-    boolean deletePurchaseInvoice(PurchaseInvoice purchaseInvoice);
+    //List<PurchaseInvoice> getPurchaseInvoices();
+    //PurchaseInvoice savePurchaseInvoice(PurchaseInvoice purchaseInvoice);
+    //PurchaseInvoice completePurchaseInvoice(PurchaseInvoice purchaseInvoice);
+    //boolean deletePurchaseInvoice(PurchaseInvoice purchaseInvoice);
 
     List<PurchaseInvoiceItem> getPurchaseInvoiceItems(PurchaseInvoice purchaseInvoice);
     PurchaseInvoiceItem newPurchaseInvoiceItem(PurchaseInvoice purchaseInvoice);

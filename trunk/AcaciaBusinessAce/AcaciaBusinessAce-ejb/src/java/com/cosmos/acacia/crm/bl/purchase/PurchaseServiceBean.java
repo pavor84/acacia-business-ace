@@ -43,27 +43,23 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     @EJB
     private DataObjectTypeLocal dotLocal;
 
-    @Override
-    public List<PurchaseInvoice> getPurchaseInvoices() {
+    private List<PurchaseInvoice> getPurchaseInvoices() {
         Query q = em.createNamedQuery(PurchaseInvoice.NQ_FIND_ALL);
-        q.setParameter("consignee", acaciaSession.getOrganization());
-        q.setParameter("consigneeBranch", acaciaSession.getBranch());
+        q.setParameter("publisher", acaciaSession.getOrganization());
+        q.setParameter("publisherBranch", acaciaSession.getBranch());
         return new ArrayList<PurchaseInvoice>(q.getResultList());
     }
 
-    @Override
-    public PurchaseInvoice newPurchaseInvoice() {
+    private PurchaseInvoice newPurchaseInvoice() {
         return esm.newBusinessDocument(DocumentType.PurchaseInvoice);
     }
 
-    @Override
-    public PurchaseInvoice savePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
+    private PurchaseInvoice savePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
         esm.persist(em, purchaseInvoice);
         return purchaseInvoice;
     }
 
-    @Override
-    public PurchaseInvoice completePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
+    private PurchaseInvoice confirmPurchaseInvoice(PurchaseInvoice purchaseInvoice) {
         if(purchaseInvoice.getDocumentNumber() != null ||
                 purchaseInvoice.getDocumentDate() != null) {
             throw new PurchaseInvoiceException("The Purchase Invoice is already completed.");
@@ -74,8 +70,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
         return savePurchaseInvoice(purchaseInvoice);
     }
 
-    @Override
-    public boolean deletePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
+    private boolean deletePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -100,50 +95,69 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E extends DataObjectBean> E newEntity(Class<E> entityClass) {
+    public <E> E newEntity(Class<E> entityClass) {
+        if(PURCHASE_INVOICE_CLASS_NAME.equals(entityClass.getName())) {
+            return (E)newPurchaseInvoice();
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean, I extends DataObjectBean> I newItem(E entity, Class<I> itemClass) {
+    public <E, I> I newItem(E entity, Class<I> itemClass) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean> List<E> getEntities(Class<E> entityClass) {
+    public <E> List<E> getEntities(Class<E> entityClass) {
+        if(PURCHASE_INVOICE_CLASS_NAME.equals(entityClass.getName())) {
+            return (List<E>)getPurchaseInvoices();
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean, I extends DataObjectBean> List<I> getEntityItems(E entity, Class<I> itemClass) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean> E save(E entity) {
+    public <E> E save(E entity) {
+        if(entity instanceof PurchaseInvoice) {
+            return (E)savePurchaseInvoice((PurchaseInvoice)entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean> E confirm(E entity) {
+    public <E> E confirm(E entity) {
+        if(entity instanceof PurchaseInvoice) {
+            return (E)confirmPurchaseInvoice((PurchaseInvoice)entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean> E cancel(E entity) {
+    public <E> E cancel(E entity) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean> void delete(E entity) {
+    public <E> void delete(E entity) {
+        if(entity instanceof PurchaseInvoice) {
+            deletePurchaseInvoice((PurchaseInvoice)entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E extends DataObjectBean> EntityProperties getEntityProperties(Class<E> entityClass) {
+    public <E> EntityProperties getEntityProperties(Class<E> entityClass) {
         EntityProperties entityProperties = esm.getEntityProperties(entityClass);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
-
 }
