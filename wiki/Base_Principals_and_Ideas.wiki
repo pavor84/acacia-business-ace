@@ -44,6 +44,10 @@ BPEL will be the connection language between the services.
   * [http://www.javafx.com/ JavaFX]
 
  * Server specification
+  * [http://fusesource.com/ FUSE Open Source Project]
+  * [http://ode.apache.org/ Apache ODE (Orchestration Director Engine)]
+  * [https://fuji.dev.java.net/ OSGi based OpenESB with BPEL integration] and GUI Design using [http://www.netbeans.org/ NetBeans]
+  * [https://glassfish.dev.java.net/ GlassFish v3 - OSGi based Java EE 6 implementation]
 
 
 2. Program model
