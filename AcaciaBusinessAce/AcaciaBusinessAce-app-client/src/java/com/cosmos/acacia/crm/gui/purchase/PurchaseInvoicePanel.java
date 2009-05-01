@@ -112,7 +112,7 @@ public class PurchaseInvoicePanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         try {
-            purchaseInvoice = getFormSession().savePurchaseInvoice(purchaseInvoice);
+            purchaseInvoice = getFormSession().save(purchaseInvoice);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(purchaseInvoice);
             if (closeAfter) {
