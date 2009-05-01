@@ -6,15 +6,13 @@
 package com.cosmos.acacia.crm.bl.purchase;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.bl.impl.DataObjectTypeLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
-import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
+import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -33,6 +31,8 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
 
     private static final String PURCHASE_INVOICE_CLASS_NAME =
             PurchaseInvoice.class.getName();
+    private static final String PURCHASE_INVOICE_ITEM_CLASS_NAME =
+            PurchaseInvoiceItem.class.getName();
 
     @PersistenceContext
     private EntityManager em;
@@ -40,8 +40,6 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     private AcaciaSessionLocal acaciaSession;
     @EJB
     private EntityStoreManagerLocal esm;
-    @EJB
-    private DataObjectTypeLocal dotLocal;
 
     private List<PurchaseInvoice> getPurchaseInvoices() {
         Query q = em.createNamedQuery(PurchaseInvoice.NQ_FIND_ALL);
@@ -70,27 +68,27 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
         return savePurchaseInvoice(purchaseInvoice);
     }
 
-    private boolean deletePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
+    private void deletePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
+        em.remove(purchaseInvoice);
+    }
+
+    private List<PurchaseInvoiceItem> getPurchaseInvoiceItems(PurchaseInvoice purchaseInvoice) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public List<PurchaseInvoiceItem> getPurchaseInvoiceItems(PurchaseInvoice purchaseInvoice) {
+    private PurchaseInvoiceItem newPurchaseInvoiceItem(PurchaseInvoice purchaseInvoice) {
+        PurchaseInvoiceItem invoiceItem = new PurchaseInvoiceItem();
+        invoiceItem.setInvoice(purchaseInvoice);
+        invoiceItem.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
+        invoiceItem.setReceivedQuantity(BigDecimal.ONE);
+        return invoiceItem;
+    }
+
+    private PurchaseInvoiceItem savePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public PurchaseInvoiceItem newPurchaseInvoiceItem(PurchaseInvoice purchaseInvoice) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public PurchaseInvoiceItem savePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean deletePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
+    private boolean deletePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -105,6 +103,10 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
 
     @Override
     public <E, I> I newItem(E entity, Class<I> itemClass) {
+        if(PURCHASE_INVOICE_ITEM_CLASS_NAME.equals(itemClass.getName())) {
+            return (I)newPurchaseInvoiceItem((PurchaseInvoice)entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -119,6 +121,10 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
 
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass) {
+        if(PURCHASE_INVOICE_ITEM_CLASS_NAME.equals(itemClass.getName())) {
+            return (List<I>)getPurchaseInvoiceItems((PurchaseInvoice)entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -126,6 +132,8 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     public <E> E save(E entity) {
         if(entity instanceof PurchaseInvoice) {
             return (E)savePurchaseInvoice((PurchaseInvoice)entity);
+        } else if(entity instanceof PurchaseInvoiceItem) {
+            return (E)savePurchaseInvoiceItem((PurchaseInvoiceItem)entity);
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
@@ -149,6 +157,8 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     public <E> void delete(E entity) {
         if(entity instanceof PurchaseInvoice) {
             deletePurchaseInvoice((PurchaseInvoice)entity);
+        } else if(entity instanceof PurchaseInvoiceItem) {
+            deletePurchaseInvoiceItem((PurchaseInvoiceItem)entity);
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
