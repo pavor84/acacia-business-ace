@@ -396,7 +396,9 @@ public class JBPanel
         this.application = application;
     }
 
-
+    protected String getResourceString(String key) {
+        return getResourceMap().getString(key);
+    }
 
     public boolean isResizable() {
         return resizable;
