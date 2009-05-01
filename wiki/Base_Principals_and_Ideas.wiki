@@ -22,6 +22,7 @@ BPEL will be the connection language between the services.
  * Client specification:
   * [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
   * [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
+  * [http://www.zkoss.org/ ZK Direct RIA, Open Source Ajax]
  Helpful projects:
   * [http://www.eclipse.org/proposals/riena/ Eclipse Riena Project]
   * [http://www.eclipse.org/ecf/ Eclipse Communication Framework Project]
@@ -50,3 +51,7 @@ BPEL will be the connection language between the services.
  * Entity definitions
  * Forms: Entity, Entity List, Customization, Relations
  * Form modes: read only, update, create, delete
+
+3. Useful links:
+ * [http://www.orangehrm.com/ OrangeHRM - Open Source HR Management]
+ * [http://www.xtuple.org/ xTuple ERP - open source ERP, accounting, CRM package for small to midsized businesses.]
