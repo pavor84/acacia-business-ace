@@ -60,12 +60,16 @@ The reference implementation will be hosted in [http://kenai.com/projects/acacia
 3. GUI based Rich Form Development. The forms will be dynamically generated from both Java annotations or Database. The customization of the system and standard/integrated forms also will be GUI based. The primary GUI will be Swing or/and SWT based. As alternative Ajax Web Client will be provided.
 
 4. ERP module
+ 4.1. 
 
 5. CRM module
+ 5.1. 
 
 6. HR Management module
+ 6.1. 
 
 7. e-Commerce module
+ 7.1. 
 
 8. Useful links:
  * [http://www.orangehrm.com/ OrangeHRM - Open Source HR Management]
