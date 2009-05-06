@@ -2,18 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.gui.entity;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
+import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.util.List;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -22,20 +20,27 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Miro
  */
-public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTablePanel {
+public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends AbstractTablePanel {
 
     private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;
-
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
 
-    public MainEntityListPanel(Class<E> entityClass) {
+    protected AbstractEntityListPanel(Class<E> entityClass) {
         super(entityClass);
     }
 
+    protected AbstractEntityListPanel(EntityPanel mainEntityPanel, Class<E> itemEntityClass) {
+        super(mainEntityPanel, itemEntityClass);
+    }
+
+    protected EntityPanel getMainEntityPanel() {
+        return (EntityPanel)getParentPanel();
+    }
+
     protected EntityFormProcessor getEntityFormProcessor() {
-        if(entityFormProcessor == null) {
+        if (entityFormProcessor == null) {
             entityFormProcessor = new EntityFormProcessor(getEntityClass());
         }
 
@@ -44,23 +49,23 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-        getEntityService().delete((E)rowObject);
+        getEntityService().delete((E) rowObject);
         return true;
     }
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        return editRow((E)rowObject);
+        return editRow((E) rowObject);
     }
 
     @Override
     protected Object newRow() {
-        return editRow((E)getEntityService().newEntity(PurchaseInvoice.class));
+        return editRow(newEntity());
     }
 
     protected E editRow(E entity) {
-        if(entity != null) {
-            MainEntityPanel entityPanel = new MainEntityPanel(entity);
+        if (entity != null) {
+            BaseEntityPanel entityPanel = getEntityPanel(entity);
             DialogResponse response = entityPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return (E) entityPanel.getSelectedValue();
@@ -68,6 +73,12 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
         }
 
         return null;
+    }
+
+    protected abstract E newEntity();
+
+    protected EntityPanel getEntityPanel(E entity) {
+        return new EntityPanel(entity);
     }
 
     @Override
@@ -87,7 +98,7 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
     }
 
     public BindingGroup getBindingGroup() {
-        if(bindingGroup == null) {
+        if (bindingGroup == null) {
             bindingGroup = new BindingGroup();
         }
 
@@ -95,20 +106,15 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
     }
 
     protected EntityProperties getEntityProperties() {
-        if(entityProperties == null) {
-            entityProperties = getEntityService().getEntityProperties(PurchaseInvoice.class);
+        if (entityProperties == null) {
+            entityProperties = getEntityService().getEntityProperties(getEntityClass());
         }
 
         return entityProperties;
     }
 
-    @Override
-    protected List<PurchaseInvoice> getEntities() {
-        return getEntityService().getEntities(PurchaseInvoice.class);
-    }
-
     protected EntityService getEntityService() {
-        if(entityService == null) {
+        if (entityService == null) {
             Class<? extends EntityService> entityServiceClass =
                     getEntityFormProcessor().getEntityServiceClass();
             entityService = getBean(entityServiceClass);
@@ -116,7 +122,4 @@ public class MainEntityListPanel<E extends DataObjectBean> extends AbstractTable
 
         return entityService;
     }
-
-
-
 }

@@ -68,12 +68,16 @@ public abstract class AbstractTablePanel
     private Class entityClass;
 
     protected AbstractTablePanel(Class entityClass) {
-        this.entityClass = entityClass;
-        init();
+        this(null, entityClass);
     }
 
     protected AbstractTablePanel(JBPanel parentPanel) {
+        this(parentPanel, null);
+    }
+
+    protected AbstractTablePanel(JBPanel parentPanel, Class entityClass) {
         this.parentPanel = parentPanel;
+        this.entityClass = entityClass;
         init();
     }
 
