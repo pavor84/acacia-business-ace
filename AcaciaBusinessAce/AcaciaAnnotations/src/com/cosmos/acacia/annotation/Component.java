@@ -18,6 +18,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Component {
 
+    public static final class NullJComponent extends JComponent {
+
+        public NullJComponent() {
+            throw new UnsupportedOperationException("The NULL class can not be used.");
+        }
+    }
+
     String resourceKey() default "";
 
     String text() default "";
