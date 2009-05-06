@@ -19,6 +19,8 @@ public @interface FormContainer {
 
     String name();
 
+    String title() default "";
+
     Layout layout() default @Layout();
 
     Component container();
@@ -26,4 +28,8 @@ public @interface FormContainer {
     int componentIndex() default -1;
 
     String parentContainerName() default "";
+
+    RelationshipType relationshipType() default RelationshipType.None;
+
+    Class entityClass() default void.class;
 }

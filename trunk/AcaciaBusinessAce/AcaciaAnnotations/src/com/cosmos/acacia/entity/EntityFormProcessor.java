@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.entity;
 
 import com.cosmos.acacia.annotation.BorderType;
@@ -14,6 +13,7 @@ import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.util.BeanUtils;
 import java.awt.LayoutManager;
 import java.lang.annotation.Annotation;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -39,6 +40,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
+import static com.cosmos.acacia.annotation.Component.NullJComponent;
+import static com.cosmos.acacia.entity.EntityService.NullEntityService;
 
 /**
  *
@@ -58,6 +61,7 @@ public class EntityFormProcessor {
     private Class<? extends EntityService> entityServiceClass;
     private Map<String, JComponent> containers;
     private Map<String, JComponent> components;
+    private List<ContainerEntity> containerEntities;
 
     public EntityFormProcessor(Class entityClass) {
         this.entityClass = entityClass;
@@ -67,6 +71,7 @@ public class EntityFormProcessor {
     private void init() {
         containers = new TreeMap<String, JComponent>();
         components = new TreeMap<String, JComponent>();
+        containerEntities = new ArrayList<ContainerEntity>();
         List<Form> forms = getAnnotations(entityClass);
         for (Form form : forms) {
             JComponent container = null;
@@ -82,11 +87,11 @@ public class EntityFormProcessor {
                 }
             }
 
-            if(entityServiceClass == null && form.serviceClass() != EntityService.NULL.class) {
+            if (entityServiceClass == null && form.serviceClass() != NullEntityService.class) {
                 entityServiceClass = form.serviceClass();
             }
         }
-        if(entityServiceClass == null) {
+        if (entityServiceClass == null) {
             throw new EntityFormException("The Entity Service is not initialized.");
         }
 
@@ -108,13 +113,19 @@ public class EntityFormProcessor {
             for (FormContainer formContainer : formContainers) {
                 Component component = formContainer.container();
                 String componentConstraints = component.componentConstraints();
+                String containerName = formContainer.name();
                 String parentContainerName = formContainer.parentContainerName();
-                JComponent jContainer = containers.get(formContainer.name());
+                JComponent jContainer = containers.get(containerName);
                 JComponent parentContainer = containers.get(parentContainerName);
                 if (parentContainer == null) {
                     throw new EntityFormException("Missing container with name: " + parentContainerName);
                 }
-                if ("".equals(componentConstraints)) {
+                if(parentContainer instanceof JTabbedPane) {
+                    String title = formContainer.title();
+                    Icon icon = null;
+                    String tooltip = null;
+                    ((JTabbedPane)parentContainer).addTab(title, jContainer);
+                } else if ("".equals(componentConstraints)) {
                     parentContainer.add(jContainer);
                 } else {
                     parentContainer.add(jContainer, componentConstraints);
@@ -172,6 +183,10 @@ public class EntityFormProcessor {
         return entityServiceClass;
     }
 
+    public List<ContainerEntity> getContainerEntities() {
+        return containerEntities;
+    }
+
     protected Map<String, JComponent> getContainers() {
         return containers;
     }
@@ -218,11 +233,11 @@ public class EntityFormProcessor {
         jComponent.setName(getComponentName(field, componentClass));
 
         BeanUtils beanUtils = BeanUtils.getInstance();
-        for(ComponentProperty componentProperty : component.componentProperties()) {
+        for (ComponentProperty componentProperty : component.componentProperties()) {
             try {
                 beanUtils.setProperty(jComponent, componentProperty.name(), componentProperty.value());
-            } catch(Exception ex) {
-                throw new EntityFormException("Can not set propery " + componentProperty.name()+
+            } catch (Exception ex) {
+                throw new EntityFormException("Can not set propery " + componentProperty.name() +
                         " with value " + componentProperty.value() +
                         " of " + jComponent, ex);
             }
@@ -237,12 +252,21 @@ public class EntityFormProcessor {
 
     private JComponent getContainer(FormContainer formContainer) {
         Component container = formContainer.container();
-        //Layout layout
+
+        Class<? extends JComponent> componentClass;
+        if ((componentClass = container.componentClass()) == NullJComponent.class) {
+            return null;
+        }
+
         JComponent jContainer;
         try {
-            jContainer = container.componentClass().newInstance();
+            jContainer = componentClass.newInstance();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }
+
+        if(jContainer instanceof JTabbedPane) {
+            return jContainer;
         }
 
         LayoutManager layoutManager = getLayoutManager(formContainer.layout());
@@ -251,6 +275,14 @@ public class EntityFormProcessor {
         Border border;
         if ((border = getBorder(container.componentBorder())) != null) {
             jContainer.setBorder(border);
+        }
+
+        RelationshipType relationshipType = formContainer.relationshipType();
+        Class containerEntityClass;
+        if((!RelationshipType.None.equals(relationshipType)) &&
+                (containerEntityClass = formContainer.entityClass()) != void.class) {
+            ContainerEntity containerEntity = new ContainerEntity(jContainer, relationshipType, containerEntityClass);
+            containerEntities.add(containerEntity);
         }
 
         return jContainer;
@@ -293,8 +325,8 @@ public class EntityFormProcessor {
         List<Integer> columnsGaps;
         if ((size = layout.columnsGaps().length) > 0) {
             columnsGaps = new ArrayList<Integer>(size);
-            for(int value : layout.columnsGaps()) {
-                if(value < 0) {
+            for (int value : layout.columnsGaps()) {
+                if (value < 0) {
                     columnsGaps.add(null);
                 } else {
                     columnsGaps.add(value);
@@ -307,8 +339,8 @@ public class EntityFormProcessor {
         List<Integer> rowsGaps;
         if ((size = layout.rowsGaps().length) > 0) {
             rowsGaps = new ArrayList<Integer>(size);
-            for(int value : layout.rowsGaps()) {
-                if(value < 0) {
+            for (int value : layout.rowsGaps()) {
+                if (value < 0) {
                     rowsGaps.add(null);
                 } else {
                     rowsGaps.add(value);
@@ -333,7 +365,7 @@ public class EntityFormProcessor {
                 }
             }
 
-            if(columnsGaps.size() == 0) {
+            if (columnsGaps.size() == 0) {
                 for (int i = 0, length = columnsPairs - 1; i < length; i++) {
                     int pos = i << 1;
                     put(columnsGaps, pos + 1, Layout.DEFAULT_COLUMNS_PAIR_GAP);
@@ -400,17 +432,19 @@ public class EntityFormProcessor {
 
         StringBuilder sb = new StringBuilder();
         size = Math.max(size, gaps.size());
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             String item;
-            if(i < array.size())
+            if (i < array.size()) {
                 item = array.get(i);
-            else
+            } else {
                 item = null;
+            }
             Integer gap;
-            if(i < gaps.size())
+            if (i < gaps.size()) {
                 gap = gaps.get(i);
-            else
+            } else {
                 gap = null;
+            }
 
             if (item != null && (item = item.trim()).length() > 0) {
                 if (!item.startsWith("[")) {
@@ -424,8 +458,9 @@ public class EntityFormProcessor {
                 sb.append("[]");
             }
 
-            if(gap != null)
+            if (gap != null) {
                 sb.append(gap);
+            }
         }
 
         if (sb.length() > 0) {
@@ -601,5 +636,4 @@ public class EntityFormProcessor {
             return hash;
         }
     }
-
 }

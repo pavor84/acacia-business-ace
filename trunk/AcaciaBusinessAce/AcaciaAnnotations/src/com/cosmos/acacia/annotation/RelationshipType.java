@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.annotation;
 
 /**
@@ -11,8 +10,9 @@ package com.cosmos.acacia.annotation;
  */
 public enum RelationshipType {
 
-    OneToMany, // MasterDetail
-    ManyToOne,
+    None,
     OneToOne,
-    ManyToMany
+    OneToMany,
+    ManyToOne,
+    ManyToMany,
 }

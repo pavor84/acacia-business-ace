@@ -7,6 +7,8 @@ package com.cosmos.acacia.annotation;
 import com.cosmos.acacia.entity.EntityService;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import static com.cosmos.acacia.annotation.Component.NullJComponent;
+import static com.cosmos.acacia.entity.EntityService.NullEntityService;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -18,9 +20,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Form {
 
-    FormContainer mainContainer();
+    FormContainer mainContainer() default @FormContainer(
+            name="",
+            container=@Component(componentClass=NullJComponent.class));
 
     FormContainer[] formContainers() default {};
 
-    Class<? extends EntityService> serviceClass() default EntityService.NULL.class;
+    Class<? extends EntityService> serviceClass() default NullEntityService.class;
 }

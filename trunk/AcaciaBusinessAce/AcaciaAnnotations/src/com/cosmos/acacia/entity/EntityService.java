@@ -35,7 +35,11 @@ public interface EntityService {
 
     <E> EntityProperties getEntityProperties(Class<E> entityClass);
 
-    public static class NULL implements EntityService {
+    public static final class NullEntityService implements EntityService {
+
+        public NullEntityService() {
+            throw new UnsupportedOperationException("The NULL class can not be used.");
+        }
 
         public Object newEntity(Class entityClass) {
             throw new UnsupportedOperationException("Not supported yet.");
