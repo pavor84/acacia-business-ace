@@ -4,13 +4,18 @@
  */
 package com.cosmos.acacia.crm.data.purchase;
 
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
+import com.cosmos.swingb.JBPanel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,16 +39,26 @@ import javax.persistence.Transient;
 @Table(name = "purchase_invoice_items", catalog = "acacia", schema = "public")
 @NamedQueries({
     @NamedQuery(
-        name = "PurchaseInvoiceItem.findAll",
+        name = PurchaseInvoiceItem.NQ_FIND_ALL,
         query = "SELECT p FROM PurchaseInvoiceItem p" +
             " where" +
             "  p.invoice = :invoice" +
             "  and p.dataObject.deleted = false" +
             " order by p.dataObject.orderPosition")
 })
+@Form(
+    mainContainer=@FormContainer(
+        name="PurchaseInvoiceItem",
+        container=@Component(componentClass=JBPanel.class)
+    ),
+    serviceClass=PurchaseServiceRemote.class
+)
 public class PurchaseInvoiceItem extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static final String NQ_FIND_ALL = "PurchaseInvoiceItem.findAll";
+
 
     @Id
     @Basic(optional = false)

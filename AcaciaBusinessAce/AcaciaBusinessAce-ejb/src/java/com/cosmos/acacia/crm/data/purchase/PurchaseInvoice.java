@@ -12,6 +12,7 @@ import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
@@ -58,12 +59,16 @@ import javax.persistence.TemporalType;
             " order by p.documentNumber")
 })
 @Form(
-    mainContainer=@FormContainer(
-        name="PurchaseInvoice",
-        container=@Component(componentClass=JBPanel.class)/*,
-        layout=@Layout(extraConstraints="debug")*/
-    ),
     formContainers={
+        @FormContainer(
+            name="itemList",
+            title="Item List",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=PurchaseInvoiceItem.class
+        ),
         @FormContainer(
             name="supplierDetails",
             container=@Component(
@@ -73,7 +78,8 @@ import javax.persistence.TemporalType;
                 ),
                 componentConstraints="span 2, sizegroup publisherSG, growx"
             ),
-            layout=@Layout(/*extraConstraints="debug", */columnsPairs=1)
+            layout=@Layout(/*extraConstraints="debug", */columnsPairs=1),
+            parentContainerName="primaryInfo"
         )
     },
     serviceClass=PurchaseServiceRemote.class

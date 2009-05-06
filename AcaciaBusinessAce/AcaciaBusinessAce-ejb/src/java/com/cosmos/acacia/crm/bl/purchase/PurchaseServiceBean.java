@@ -73,7 +73,9 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     private List<PurchaseInvoiceItem> getPurchaseInvoiceItems(PurchaseInvoice purchaseInvoice) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Query q = em.createNamedQuery(PurchaseInvoiceItem.NQ_FIND_ALL);
+        q.setParameter("invoice", purchaseInvoice);
+        return new ArrayList<PurchaseInvoiceItem>(q.getResultList());
     }
 
     private PurchaseInvoiceItem newPurchaseInvoiceItem(PurchaseInvoice purchaseInvoice) {
@@ -85,11 +87,13 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     private PurchaseInvoiceItem savePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        esm.persist(em, invoiceItem);
+        return invoiceItem;
     }
 
     private boolean deletePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.remove(invoiceItem);
+        return true;
     }
 
     @Override
@@ -112,7 +116,8 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
 
     @Override
     public <E> List<E> getEntities(Class<E> entityClass) {
-        if(PURCHASE_INVOICE_CLASS_NAME.equals(entityClass.getName())) {
+        String entityClassName;
+        if(PURCHASE_INVOICE_CLASS_NAME.equals(entityClassName = entityClass.getName())) {
             return (List<E>)getPurchaseInvoices();
         }
 
@@ -121,7 +126,8 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
 
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass) {
-        if(PURCHASE_INVOICE_ITEM_CLASS_NAME.equals(itemClass.getName())) {
+        String itemClassName;
+        if(PURCHASE_INVOICE_ITEM_CLASS_NAME.equals(itemClassName = itemClass.getName())) {
             return (List<I>)getPurchaseInvoiceItems((PurchaseInvoice)entity);
         }
 
