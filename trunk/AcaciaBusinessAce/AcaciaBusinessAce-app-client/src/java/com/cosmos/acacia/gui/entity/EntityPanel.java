@@ -4,7 +4,9 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -12,13 +14,14 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.BorderLayout;
+import javax.swing.JComponent;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
  * @author Miro
  */
-public class MainEntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
+public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     private E entity;
     private Class<E> entityClass;
@@ -28,7 +31,7 @@ public class MainEntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
 
-    public MainEntityPanel(E entity) {
+    public EntityPanel(E entity) {
         super(entity);
         this.entity = entity;
         this.entityClass = (Class<E>) entity.getClass();
@@ -113,7 +116,20 @@ public class MainEntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         setLayout(new BorderLayout());
         //setPreferredSize(new Dimension(920, 480));
 
-        add(getEntityFormProcessor().getMainComponent(), BorderLayout.CENTER);
+        EntityFormProcessor formProcessor = getEntityFormProcessor();
+        add(formProcessor.getMainComponent(), BorderLayout.CENTER);
         add(getButtonPanel(), BorderLayout.PAGE_END);
+
+        for(ContainerEntity containerEntity : formProcessor.getContainerEntities()) {
+            JComponent jContainer = containerEntity.getJContainer();
+            Class itemEntityClass = containerEntity.getEntityClass();
+            RelationshipType relationshipType;
+            if(RelationshipType.OneToMany.equals(relationshipType = containerEntity.getRelationshipType())) {
+                DetailEntityListPanel<E, ?> listPanel =
+                        new DetailEntityListPanel(this, itemEntityClass);
+                jContainer.setLayout(new BorderLayout());
+                jContainer.add(listPanel, BorderLayout.CENTER);
+            }
+        }
     }
 }
