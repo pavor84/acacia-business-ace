@@ -13,11 +13,14 @@ import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.swingb.JBDatePicker;
 import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
+import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -57,10 +60,17 @@ import javax.persistence.UniqueConstraint;
 @Form(
     mainContainer=@FormContainer(
         name="BusinessDocument",
-        container=@Component(componentClass=JBPanel.class)/*,
+        container=@Component(componentClass=JBTabbedPane.class)/*,
         layout=@Layout(extraConstraints="debug")*/
     ),
     formContainers={
+        @FormContainer(
+            name="primaryInfo",
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            )
+        ),
         @FormContainer(
             name="documentDetails",
             container=@Component(
@@ -71,7 +81,8 @@ import javax.persistence.UniqueConstraint;
                 componentConstraints="span, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=3),
-            componentIndex=1
+            componentIndex=1,
+            parentContainerName="primaryInfo"
         ),
         @FormContainer(
             name="publisherDetails",
@@ -83,7 +94,8 @@ import javax.persistence.UniqueConstraint;
                 componentConstraints="span 2, sizegroup publisherSG, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=1),
-            componentIndex=2
+            componentIndex=2,
+            parentContainerName="primaryInfo"
         )
     }
 )
