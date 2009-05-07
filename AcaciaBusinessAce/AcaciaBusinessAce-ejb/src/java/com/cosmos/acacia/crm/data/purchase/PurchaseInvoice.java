@@ -67,7 +67,8 @@ import javax.persistence.TemporalType;
                 componentClass=JBPanel.class
             ),
             relationshipType=RelationshipType.OneToMany,
-            entityClass=PurchaseInvoiceItem.class
+            entityClass=PurchaseInvoiceItem.class/*,
+            componentIndex=1*/
         ),
         @FormContainer(
             name="supplierDetails",
@@ -92,45 +93,48 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
 
     @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Supplier")
-    @FormComponentPair(
-        parentContainerName="supplierDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Supplier: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBComboList.class
+    @Property(title="Supplier",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="supplierDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Supplier: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
         )
     )
     private BusinessPartner supplier;
 
     @JoinColumn(name = "supplier_branch_id", referencedColumnName = "address_id")
     @ManyToOne
-    @Property(title="Supplier Branch")
-    @FormComponentPair(
-        parentContainerName="supplierDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Branch: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBComboList.class
+    @Property(title="Supplier Branch",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="supplierDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Branch: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
         )
     )
     private Address supplierBranch;
 
     @JoinColumn(name = "supplier_contact_id", referencedColumnName = "partner_id")
     @ManyToOne
-    @Property(title="Supplier Contact")
-    @FormComponentPair(
-        parentContainerName="supplierDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Officer: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBComboList.class
+    @Property(title="Supplier Contact",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="supplierDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Officer: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
         )
     )
     private Person supplierContact;
