@@ -13,6 +13,7 @@ import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.swingb.JBDatePicker;
 import com.cosmos.swingb.JBIntegerField;
@@ -69,7 +70,8 @@ import javax.persistence.UniqueConstraint;
             title="Primary Info",
             container=@Component(
                 componentClass=JBPanel.class
-            )
+            ),
+            componentIndex=1
         ),
         @FormContainer(
             name="documentDetails",
@@ -81,7 +83,7 @@ import javax.persistence.UniqueConstraint;
                 componentConstraints="span, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=3),
-            componentIndex=1,
+            componentIndex=101,
             parentContainerName="primaryInfo"
         ),
         @FormContainer(
@@ -94,7 +96,7 @@ import javax.persistence.UniqueConstraint;
                 componentConstraints="span 2, sizegroup publisherSG, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=1),
-            componentIndex=2,
+            componentIndex=102,
             parentContainerName="primaryInfo"
         )
     }
@@ -123,52 +125,58 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     protected DbResource documentType;
 
     @Column(name = "document_number")
-    @FormComponentPair(
-        parentContainerName="documentDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Number: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBIntegerField.class,
-            componentProperties={
-                @ComponentProperty(name="numberType", value="LongType"),
-                @ComponentProperty(name="editable", value="false")
-            }
+    @Property(title="Document Number",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="documentDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Number: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBIntegerField.class,
+                componentProperties={
+                    @ComponentProperty(name="numberType", value="LongType"),
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
         )
     )
     protected Long documentNumber;
 
     @Column(name = "document_date")
     @Temporal(TemporalType.TIMESTAMP)
-    @FormComponentPair(
-        parentContainerName="documentDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Date: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBDatePicker.class,
-            componentProperties={
-                @ComponentProperty(name="editable", value="false")
-            }
+    @Property(title="Document Date",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="documentDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Date: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBDatePicker.class,
+                componentProperties={
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
         )
     )
     protected Date documentDate;
 
     @JoinColumn(name = "document_status_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @FormComponentPair(
-        parentContainerName="documentDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Status: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBTextField.class,
-            componentProperties={
-                @ComponentProperty(name="editable", value="false")
-            }
+    @Property(title="Document Status",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="documentDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Status: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class,
+                componentProperties={
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
         )
     )
     protected DbResource documentStatus;
@@ -179,51 +187,57 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
 
     @JoinColumn(name = "publisher_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)
-    @FormComponentPair(
-        parentContainerName="publisherDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Publisher: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBTextField.class,
-            componentProperties={
-                @ComponentProperty(name="editable", value="false")
-            }
+    @Property(title="Publisher",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="publisherDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Publisher: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class,
+                componentProperties={
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
         )
     )
     protected Organization publisher;
 
     @JoinColumn(name = "publisher_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne(optional = false)
-    @FormComponentPair(
-        parentContainerName="publisherDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Branch: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBTextField.class,
-            componentProperties={
-                @ComponentProperty(name="editable", value="false")
-            }
+    @Property(title="Publisher Branch",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="publisherDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Branch: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class,
+                componentProperties={
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
         )
     )
     protected Address publisherBranch;
 
     @JoinColumn(name = "publisher_officer_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
-    @FormComponentPair(
-        parentContainerName="publisherDetails",
-        firstComponent=@Component(
-            componentClass=JBLabel.class,
-            text="Officer: "
-        ),
-        secondComponent=@Component(
-            componentClass=JBTextField.class,
-            componentProperties={
-                @ComponentProperty(name="editable", value="false")
-            }
+    @Property(title="Publisher Officer",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="publisherDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Officer: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class,
+                componentProperties={
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
         )
     )
     protected Person publisherOfficer;
