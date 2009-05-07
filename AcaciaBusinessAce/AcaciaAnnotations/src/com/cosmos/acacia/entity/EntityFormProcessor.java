@@ -13,6 +13,7 @@ import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.util.BeanUtils;
 import java.awt.LayoutManager;
@@ -515,6 +516,11 @@ public class EntityFormProcessor {
                 if ((index = formContainer.componentIndex()) < 0) {
                     map.put(++counter, formContainer);
                 } else {
+                    if(map.containsKey(index)) {
+                        throw new DuplicateComponentIndexException(index,
+                                map.get(index),
+                                formContainer);
+                    }
                     map.put(index, formContainer);
                 }
             }
@@ -531,7 +537,11 @@ public class EntityFormProcessor {
             if (declaredFields != null && declaredFields.length > 0) {
                 for (Field field : declaredFields) {
                     for (Annotation annotation : field.getAnnotations()) {
-                        if (annotation.annotationType().getName().startsWith(ACACIA_FORM_ANNOTATION_PREFIX)) {
+                        if (annotation.annotationType().getName().startsWith(ACACIA_ANNOTATION_PREFIX)) {
+                            if((annotation = getFormComponentAnnotation(annotation)) == null) {
+                                continue;
+                            }
+
                             int index = -1;
                             String str = "";
                             if (annotation instanceof FormComponentPair) {
@@ -569,7 +579,11 @@ public class EntityFormProcessor {
         int counter = INITIAL_VALUE;
         Map<Integer, Annotation> map = new TreeMap<Integer, Annotation>();
         for (Annotation annotation : declaredAnnotations) {
-            if (annotation.annotationType().getName().startsWith(ACACIA_FORM_ANNOTATION_PREFIX)) {
+            if (annotation.annotationType().getName().startsWith(ACACIA_ANNOTATION_PREFIX)) {
+                if((annotation = getFormComponentAnnotation(annotation)) == null) {
+                    continue;
+                }
+
                 int index = -1;
                 if (annotation instanceof FormComponentPair) {
                     index = ((FormComponentPair) annotation).componentIndex();
@@ -585,6 +599,22 @@ public class EntityFormProcessor {
         }
 
         return new ArrayList<Annotation>(map.values());
+    }
+
+    private Annotation getFormComponentAnnotation(Annotation annotation) {
+        if(!(annotation instanceof Property)) {
+            return null;
+        }
+
+        Property property = (Property)annotation;
+        if(property.formComponentPair().firstComponent().componentClass() != NullJComponent.class &&
+                property.formComponentPair().secondComponent().componentClass() != NullJComponent.class) {
+            return property.formComponentPair();
+        } else if(property.formComponent().component().componentClass() != NullJComponent.class) {
+            return property.formComponent();
+        }
+
+        return null;
     }
 
     public JComponent getMainComponent() {
