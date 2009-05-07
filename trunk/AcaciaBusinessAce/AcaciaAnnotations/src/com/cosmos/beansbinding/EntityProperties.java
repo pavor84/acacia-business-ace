@@ -63,16 +63,20 @@ public class EntityProperties implements Cloneable, Serializable {
     }
 
     public Collection<PropertyDetails> getValues() {
+        return getPropertyDetailsMap().values();
+    }
+
+    protected Map<Integer, PropertyDetails> getPropertyDetailsMap() {
         if (beanProperties != null) {
             Collection<PropertyDetails> values = beanProperties.values();
             TreeMap<Integer, PropertyDetails> map = new TreeMap<Integer, PropertyDetails>();
             for (PropertyDetails property : values) {
                 map.put(property.getOrderPosition(), property);
             }
-            return map.values();
+            return map;
         }
 
-        return Collections.EMPTY_LIST;
+        return Collections.emptyMap();
     }
 
     public Set<String> getKeys() {
@@ -92,7 +96,17 @@ public class EntityProperties implements Cloneable, Serializable {
             beanProperties = new HashMap<String, PropertyDetails>();
         }
 
+        int orderPosition;
+        Map<Integer, PropertyDetails> map = getPropertyDetailsMap();
+        if((map = getPropertyDetailsMap()).size() == 0) {
+            orderPosition = 0;
+        } else {
+            orderPosition = ((TreeMap<Integer, PropertyDetails>)map).lastKey();
+        }
+
         for (PropertyDetails propDetails : beanProps) {
+            propDetails = (PropertyDetails)propDetails.clone();
+            propDetails.setOrderPosition(++orderPosition);
             String propName = propDetails.getPropertyName();
             if (!beanProperties.containsKey(propName)) {
                 beanProperties.put(propName, propDetails);
