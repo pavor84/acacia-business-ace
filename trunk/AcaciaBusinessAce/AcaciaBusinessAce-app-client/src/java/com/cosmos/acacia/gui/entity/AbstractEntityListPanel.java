@@ -12,6 +12,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
@@ -41,7 +42,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
 
     protected EntityFormProcessor getEntityFormProcessor() {
         if (entityFormProcessor == null) {
-            entityFormProcessor = new EntityFormProcessor(getEntityClass());
+            entityFormProcessor = new EntityFormProcessor(getEntityClass(), getResourceMap());
         }
 
         return entityFormProcessor;
@@ -78,7 +79,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     protected abstract E newEntity();
 
     protected EntityPanel getEntityPanel(E entity) {
-        return new EntityPanel(entity);
+        return new EntityPanel(this, entity);
     }
 
     @Override
@@ -121,5 +122,15 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
         }
 
         return entityService;
+    }
+
+    @Override
+    public ResourceMap getResourceMap() {
+        EntityPanel mainEntityPanel;
+        if((mainEntityPanel = getMainEntityPanel()) != null) {
+            return mainEntityPanel.getResourceMap();
+        }
+
+        return super.getResourceMap();
     }
 }
