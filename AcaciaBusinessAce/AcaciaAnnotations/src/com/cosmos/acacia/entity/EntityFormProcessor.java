@@ -27,6 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -41,6 +42,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
+import org.jdesktop.application.ResourceMap;
 import static com.cosmos.acacia.annotation.Component.NullJComponent;
 import static com.cosmos.acacia.entity.EntityService.NullEntityService;
 
@@ -58,14 +60,18 @@ public class EntityFormProcessor {
             ACACIA_ANNOTATION_PREFIX + "Form";
     private static final String FORM_ANNOTATION_CLASS_NAME = Form.class.getName();
     private static final int INITIAL_VALUE = 1000000000;
+    //
     private Class entityClass;
+    private ResourceMap resourceMap;
+    //
     private Class<? extends EntityService> entityServiceClass;
     private Map<String, JComponent> containers;
     private Map<String, JComponent> components;
     private List<ContainerEntity> containerEntities;
 
-    public EntityFormProcessor(Class entityClass) {
+    public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
         this.entityClass = entityClass;
+        this.resourceMap = resourceMap;
         init();
     }
 
@@ -122,7 +128,11 @@ public class EntityFormProcessor {
                     throw new EntityFormException("Missing container with name: " + parentContainerName);
                 }
                 if(parentContainer instanceof JTabbedPane) {
-                    String title = formContainer.title();
+                    String title;
+                    if((title = resourceMap.getString(jContainer.getName() + ".TabConstraints.tabTitle")) == null ||
+                            title.trim().length() == 0) {
+                        title = formContainer.title();
+                    }
                     Icon icon = null;
                     String tooltip = null;
                     ((JTabbedPane)parentContainer).addTab(title, jContainer);
@@ -196,6 +206,10 @@ public class EntityFormProcessor {
         return components.get(componentName);
     }
 
+    protected ResourceMap getResourceMap() {
+        return resourceMap;
+    }
+
     private ContainerType getContainerType(JComponent container) {
         if (container instanceof JPanel) {
             return ContainerType.Panel;
@@ -226,12 +240,15 @@ public class EntityFormProcessor {
         } catch (Exception ex) {
             throw new EntityFormException("Can not create instance of " + componentClass, ex);
         }
+
         String text;
-        if (jComponent instanceof JLabel && (!"".equals(text = component.text()))) {
+        if ((jComponent instanceof JLabel || jComponent instanceof AbstractButton)
+                && (!"".equals(text = component.text()))) {
             ((JLabel) jComponent).setText(text);
         }
 
-        jComponent.setName(getComponentName(field, componentClass));
+        String componentName = getComponentName(field, componentClass);
+        jComponent.setName(componentName);
 
         BeanUtils beanUtils = BeanUtils.getInstance();
         for (ComponentProperty componentProperty : component.componentProperties()) {
@@ -244,7 +261,16 @@ public class EntityFormProcessor {
             }
         }
 
+        initJComponentResources(jComponent);
+
         return jComponent;
+    }
+
+    protected void initJComponentResources(JComponent jComponent) {
+        resourceMap.injectComponent(jComponent);
+//        if (!(jComponent instanceof JLabel || jComponent instanceof AbstractButton)) {
+//            return;
+//        }
     }
 
     private JComponent getContainer(String containerName) {
@@ -266,15 +292,10 @@ public class EntityFormProcessor {
             throw new RuntimeException(ex);
         }
 
-        if(jContainer instanceof JTabbedPane) {
-            return jContainer;
-        }
-
-        LayoutManager layoutManager = getLayoutManager(formContainer.layout());
-        jContainer.setLayout(layoutManager);
         jContainer.setName(formContainer.name());
+
         Border border;
-        if ((border = getBorder(container.componentBorder())) != null) {
+        if ((border = getBorder(container.componentBorder(), jContainer)) != null) {
             jContainer.setBorder(border);
         }
 
@@ -285,6 +306,15 @@ public class EntityFormProcessor {
             ContainerEntity containerEntity = new ContainerEntity(jContainer, relationshipType, containerEntityClass);
             containerEntities.add(containerEntity);
         }
+
+        initJComponentResources(jContainer);
+
+        if(jContainer instanceof JTabbedPane) {
+            return jContainer;
+        }
+
+        LayoutManager layoutManager = getLayoutManager(formContainer.layout());
+        jContainer.setLayout(layoutManager);
 
         return jContainer;
     }
@@ -471,7 +501,7 @@ public class EntityFormProcessor {
         return "";
     }
 
-    private Border getBorder(ComponentBorder componentBorder) {
+    private Border getBorder(ComponentBorder componentBorder, JComponent jContainer) {
         BorderType borderType;
         if (BorderType.NONE.equals((borderType = componentBorder.borderType()))) {
             return null;
@@ -480,7 +510,12 @@ public class EntityFormProcessor {
         Border border;
         switch (borderType) {
             case TitledBorder:
-                border = BorderFactory.createTitledBorder(componentBorder.title());
+                String title;
+                if((title = resourceMap.getString(jContainer.getName() + ".border.title")) == null ||
+                        title.trim().length() == 0) {
+                    title = componentBorder.title();
+                }
+                border = BorderFactory.createTitledBorder(title);
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported borderType: " + borderType);
