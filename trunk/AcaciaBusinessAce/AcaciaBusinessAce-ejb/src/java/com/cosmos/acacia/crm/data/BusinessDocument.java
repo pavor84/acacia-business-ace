@@ -14,14 +14,12 @@ import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.swingb.JBDatePicker;
 import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
-import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -130,7 +128,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             parentContainerName="documentDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Number: "
+                text="Number:"
             ),
             secondComponent=@Component(
                 componentClass=JBIntegerField.class,
@@ -169,7 +167,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             parentContainerName="documentDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Status: "
+                text="Status:"
             ),
             secondComponent=@Component(
                 componentClass=JBTextField.class,
@@ -192,7 +190,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             parentContainerName="publisherDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Publisher: "
+                text="Publisher:"
             ),
             secondComponent=@Component(
                 componentClass=JBTextField.class,
@@ -211,7 +209,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             parentContainerName="publisherDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Branch: "
+                text="Branch:"
             ),
             secondComponent=@Component(
                 componentClass=JBTextField.class,
@@ -230,7 +228,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             parentContainerName="publisherDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Officer: "
+                text="Officer:"
             ),
             secondComponent=@Component(
                 componentClass=JBTextField.class,
