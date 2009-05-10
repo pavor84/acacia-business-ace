@@ -13,8 +13,10 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBPanel;
 import java.awt.BorderLayout;
 import javax.swing.JComponent;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.BindingGroup;
 
 /**
@@ -23,6 +25,7 @@ import org.jdesktop.beansbinding.BindingGroup;
  */
 public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
+    private JBPanel listPanel;
     private E entity;
     private Class<E> entityClass;
     private EntityFormProcessor entityFormProcessor;
@@ -31,8 +34,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
 
-    public EntityPanel(E entity) {
+    public EntityPanel(JBPanel listPanel, E entity) {
         super(entity);
+        this.listPanel = listPanel;
         this.entity = entity;
         this.entityClass = (Class<E>) entity.getClass();
         init();
@@ -49,7 +53,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     protected EntityFormProcessor getEntityFormProcessor() {
         if (entityFormProcessor == null) {
-            entityFormProcessor = new EntityFormProcessor(getEntityClass());
+            entityFormProcessor = new EntityFormProcessor(getEntityClass(), getResourceMap());
         }
 
         return entityFormProcessor;
@@ -131,5 +135,10 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 jContainer.add(listPanel, BorderLayout.CENTER);
             }
         }
+    }
+
+    @Override
+    public ResourceMap getResourceMap() {
+        return listPanel.getResourceMap();
     }
 }

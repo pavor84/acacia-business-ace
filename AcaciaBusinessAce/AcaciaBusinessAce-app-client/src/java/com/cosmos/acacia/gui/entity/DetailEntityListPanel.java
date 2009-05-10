@@ -6,7 +6,6 @@ package com.cosmos.acacia.gui.entity;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.entity.EntityService;
-import com.cosmos.acacia.gui.BaseEntityPanel;
 import java.util.ArrayList;
 import java.util.List;
 
