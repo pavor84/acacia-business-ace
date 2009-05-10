@@ -98,7 +98,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             parentContainerName="supplierDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Supplier: "
+                text="Supplier:"
             ),
             secondComponent=@Component(
                 componentClass=JBComboList.class
@@ -114,7 +114,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             parentContainerName="supplierDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Branch: "
+                text="Branch:"
             ),
             secondComponent=@Component(
                 componentClass=JBComboList.class
@@ -130,7 +130,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             parentContainerName="supplierDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Officer: "
+                text="Contact:"
             ),
             secondComponent=@Component(
                 componentClass=JBComboList.class
