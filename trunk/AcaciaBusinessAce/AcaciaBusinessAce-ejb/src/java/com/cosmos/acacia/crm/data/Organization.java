@@ -148,7 +148,9 @@ public class Organization
     }
 
     public void setOrganizationName(String organizationName) {
+        String oldValue = this.organizationName;
         this.organizationName = organizationName;
+        firePropertyChange("organizationName", oldValue, organizationName);
     }
 
     public String getNickname() {
