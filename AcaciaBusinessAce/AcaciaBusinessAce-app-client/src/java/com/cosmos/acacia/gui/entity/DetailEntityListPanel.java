@@ -40,6 +40,21 @@ public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjec
 
     @Override
     protected I newEntity() {
-        return (I) getEntityService().newItem(getMainEntity(), getEntityClass());
+        E mainEntity;
+        if((mainEntity = getMainEntity()) != null && mainEntity.getId() == null) {
+            try {
+                mainEntity = getEntityService().save(mainEntity);
+            } catch(Exception ex) {
+                handleException("Save mainEntity: " + mainEntity, ex);
+            }
+        }
+
+        return (I) getEntityService().newItem(mainEntity, getEntityClass());
     }
+
+    @Override
+    public boolean isDetailEntity() {
+        return true;
+    }
+
 }
