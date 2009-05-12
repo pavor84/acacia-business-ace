@@ -163,6 +163,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @JoinColumn(name = "document_status_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Document Status",
+        customDisplay="${documentStatus.enumValue}",
+        showOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
             firstComponent=@Component(
@@ -186,6 +188,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @JoinColumn(name = "publisher_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Publisher",
+        customDisplay="${publisher.organizationName}",
+        showOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="publisherDetails",
             firstComponent=@Component(
@@ -205,6 +209,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @JoinColumn(name = "publisher_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Publisher Branch",
+        customDisplay="${publisherBranch.addressName}",
+        showOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="publisherDetails",
             firstComponent=@Component(
@@ -224,6 +230,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @JoinColumn(name = "publisher_officer_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Publisher Officer",
+        customDisplay="${publisherOfficer.firstName} ${publisherOfficer.lastName}",
+        showOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="publisherDetails",
             firstComponent=@Component(

@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.apache.log4j.Logger;
 
 /**
@@ -59,6 +60,8 @@ public class DbResource
     @ManyToOne
     private EnumClass enumClass;
 
+    @Transient
+    private Enum enumValue;
 
     public DbResource() {
     }
@@ -117,21 +120,24 @@ public class DbResource
             ", enumClass=" + enumClass + "]";
     }
 
+    public void setEnumValue(Enum enumValue) {
+    }
+
     @Override
     public Enum getEnumValue()
     {
-        try
-        {
-            logger.debug("DbResource: " + toString());
-            Class cls = Class.forName(enumClass.getEnumClassName());
-            Enum enumValue = Enum.valueOf(cls, enumName);
-            logger.debug("enumValue: " + enumValue);
-            return enumValue;
+        if(enumValue == null) {
+            try {
+                logger.debug("DbResource: " + toString());
+                Class cls = Class.forName(enumClass.getEnumClassName());
+                enumValue = Enum.valueOf(cls, enumName);
+                logger.debug("enumValue: " + enumValue);
+            } catch(Exception ex) {
+                logger.fatal(toString(), ex);
+                throw new RuntimeException(toString(), ex);
+            }
         }
-        catch(Exception ex)
-        {
-            logger.fatal(toString(), ex);
-            throw new RuntimeException(toString(), ex);
-        }
+
+        return enumValue;
     }
 }

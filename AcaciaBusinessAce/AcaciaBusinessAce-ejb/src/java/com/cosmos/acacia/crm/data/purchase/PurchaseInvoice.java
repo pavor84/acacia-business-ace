@@ -147,7 +147,21 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     @Basic(optional = false)
     @Column(name = "invoice_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    @Property(title="Invoice Date")
+    @Property(title="Invoice Date"/*,
+        formComponentPair=@FormComponentPair(
+            parentContainerName="documentDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Date: "
+            ),
+            secondComponent=@Component(
+                componentClass=JBDatePicker.class,
+                componentProperties={
+                    @ComponentProperty(name="editable", value="false")
+                }
+            )
+        )*/
+    )
     private Date invoiceDate;
 
     @Column(name = "delivery_note", length = 16)

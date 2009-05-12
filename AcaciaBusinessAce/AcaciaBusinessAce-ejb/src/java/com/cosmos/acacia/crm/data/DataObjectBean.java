@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.util.ImageUtils;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
@@ -22,7 +23,7 @@ import javax.imageio.ImageIO;
  * @author Miro
  */
 public abstract class DataObjectBean
-    implements Cloneable
+    implements Cloneable, PropertyChangeNotificationBroadcaster
 {
 
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
