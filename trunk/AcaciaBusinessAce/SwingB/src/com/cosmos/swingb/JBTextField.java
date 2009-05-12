@@ -2,11 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
+import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JTextField;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
@@ -25,38 +28,45 @@ import org.jdesktop.beansbinding.Validator;
  * @author Miro
  */
 public class JBTextField
-    extends JTextField
-    implements Validatable
-{
+        extends JTextField
+        implements Validatable, EntityBinder, PropertyChangeListener {
+
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
-
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
+    private ELProperty elProperty;
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
-        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+            PropertyDetails propertyDetails) {
+        return bind(bindingGroup, beanEntity, propertyDetails, getExpression(propertyDetails),
+                propertyDetails.getUpdateStrategy());
+    }
+
+    protected String getExpression(PropertyDetails propertyDetails) {
+        String expression;
+        if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
+            return expression;
+        }
+
+        return "${" + propertyDetails.getPropertyName() + "}";
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getPropertyName(), updateStrategy);
+            AutoBinding.UpdateStrategy updateStrategy) {
+        return bind(bindingGroup, beanEntity, propertyDetails, getExpression(propertyDetails), updateStrategy);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            String elProperyDisplay)
-    {
+            String elProperyDisplay) {
         return bind(bindingGroup, beanEntity, propertyDetails, elProperyDisplay, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
@@ -64,28 +74,31 @@ public class JBTextField
             Object beanEntity,
             PropertyDetails propertyDetails,
             String elProperyDisplay,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        if(propertyDetails == null || propertyDetails.isHiden())
-        {
+            AutoBinding.UpdateStrategy updateStrategy) {
+        if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);
             setEnabled(false);
             return null;
         }
 
         this.propertyName = elProperyDisplay;
-        ELProperty elProperty = ELProperty.create("${" + elProperyDisplay + "}");
-        bind(bindingGroup, beanEntity, elProperty, updateStrategy);
-        setEditable(propertyDetails.isEditable());
-        setEnabled(!propertyDetails.isReadOnly());
+        elProperty = ELProperty.create(elProperyDisplay);
 
-        Validator validator = propertyDetails.getValidator();
-        if(validator != null)
-        {
-            binding.setValidator(validator);
+        if (propertyDetails.isShowOnly()) {
+            validateText(beanEntity);
+            if(beanEntity instanceof PropertyChangeNotificationBroadcaster) {
+                ((PropertyChangeNotificationBroadcaster)beanEntity).addPropertyChangeListener(this);
+            }
+        } else {
+            bind(bindingGroup, beanEntity, elProperty, updateStrategy);
+            setEditable(propertyDetails.isEditable());
+            setEnabled(!propertyDetails.isReadOnly());
+            Validator validator = propertyDetails.getValidator();
+            if (validator != null) {
+                binding.setValidator(validator);
+            }
+            binding.addBindingListener(new BindingValidationListener(this));
         }
-
-        binding.addBindingListener(new BindingValidationListener(this));
 
         return binding;
     }
@@ -94,8 +107,7 @@ public class JBTextField
             BindingGroup bindingGroup,
             Object beanEntity,
             ELProperty elProperty,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
+            AutoBinding.UpdateStrategy updateStrategy) {
         this.beanEntity = beanEntity;
 
         BeanProperty beanProperty = BeanProperty.create("text");
@@ -113,13 +125,10 @@ public class JBTextField
         return beanEntity;
     }
 
-    public ApplicationContext getContext()
-    {
-        if(applicationContext == null)
-        {
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
             Application app = getApplication();
-            if(app != null)
-            {
+            if (app != null) {
                 applicationContext = app.getContext();
             }
         }
@@ -127,13 +136,10 @@ public class JBTextField
         return applicationContext;
     }
 
-    public ApplicationActionMap getApplicationActionMap()
-    {
-        if(applicationActionMap == null)
-        {
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 applicationActionMap = context.getActionMap(this);
             }
         }
@@ -141,13 +147,10 @@ public class JBTextField
         return applicationActionMap;
     }
 
-    public ResourceMap getResourceMap()
-    {
-        if(resourceMap == null)
-        {
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 resourceMap = context.getResourceMap(this.getClass());
             }
         }
@@ -160,8 +163,9 @@ public class JBTextField
     }
 
     public Application getApplication() {
-        if(application == null)
+        if (application == null) {
             application = Application.getInstance();
+        }
 
         return application;
     }
@@ -179,14 +183,33 @@ public class JBTextField
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
-    
+
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
-    
+
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
+    }
+
+    private void validateText(Object beanEntity) {
+        try {
+            Object propertyValue;
+            if ((propertyValue = elProperty.getValue(beanEntity)) != null) {
+                setText(String.valueOf(propertyValue));
+            } else {
+                setText(null);
+            }
+        } catch(RuntimeException ex) {
+            throw new RuntimeException("beanEntity: " + beanEntity +
+                    ", elProperty: " + elProperty, ex);
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        validateText(beanEntity);
     }
 }
