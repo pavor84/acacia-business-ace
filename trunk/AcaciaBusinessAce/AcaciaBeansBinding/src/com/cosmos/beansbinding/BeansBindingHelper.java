@@ -39,6 +39,7 @@ import com.cosmos.beansbinding.validation.RegexValidator;
 import com.cosmos.beansbinding.validation.TextLengthValidator;
 import com.cosmos.util.ClassHelper;
 import javax.swing.text.DefaultFormatter;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 
 /**
@@ -158,6 +159,8 @@ public class BeansBindingHelper {
             pd.setVisible(property.visible());
             pd.setHiden(property.hidden());
             pd.setPercent(property.percent());
+            pd.setShowOnly(property.showOnly());
+            pd.setUpdateStrategy(property.updateStrategy());
             Class<DefaultFormatter> formatterClass = property.formatter();
             if(!DEFAULT_FORMATTER_CLASS_NAME.equals(formatterClass.getName())) {
                 try {
