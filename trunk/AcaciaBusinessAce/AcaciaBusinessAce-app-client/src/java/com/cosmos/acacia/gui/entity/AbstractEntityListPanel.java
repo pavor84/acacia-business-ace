@@ -96,6 +96,19 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
         tableBinding.setEditable(false);
 
         bindingGroup.bind();
+
+        String title;
+        if(isDetailEntity()) {
+            title = getResourceMap().getString("form.detailEntityList.title");
+        } else {
+            title = getResourceMap().getString("form.entityList.title");
+        }
+        if(title != null && title.trim().length() > 0) {
+            setTitle(title);
+        }
+
+        setVisible(Button.Classify, false);
+        setVisible(Button.Close, false);
     }
 
     public BindingGroup getBindingGroup() {
@@ -133,4 +146,6 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
 
         return super.getResourceMap();
     }
+
+    public abstract boolean isDetailEntity();
 }

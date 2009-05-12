@@ -27,4 +27,9 @@ public class EntityListPanel<E extends DataObjectBean> extends AbstractEntityLis
     protected E newEntity() {
         return (E) getEntityService().newEntity(getEntityClass());
     }
+
+    @Override
+    public boolean isDetailEntity() {
+        return false;
+    }
 }
