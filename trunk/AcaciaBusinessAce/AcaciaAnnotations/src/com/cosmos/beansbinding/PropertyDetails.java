@@ -8,6 +8,8 @@ import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
 import javax.swing.text.DefaultFormatter;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.Validator;
 
 /**
@@ -39,6 +41,8 @@ public class PropertyDetails implements Cloneable, Serializable {
      * @see #getCustomDislay()
      */
     private String customDisplay;
+    private boolean showOnly;
+    private AutoBinding.UpdateStrategy updateStrategy;
 
     public PropertyDetails() {
     }
@@ -104,6 +108,22 @@ public class PropertyDetails implements Cloneable, Serializable {
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    public boolean isShowOnly() {
+        return showOnly;
+    }
+
+    public void setShowOnly(boolean showOnly) {
+        this.showOnly = showOnly;
+    }
+
+    public UpdateStrategy getUpdateStrategy() {
+        return updateStrategy;
+    }
+
+    public void setUpdateStrategy(UpdateStrategy updateStrategy) {
+        this.updateStrategy = updateStrategy;
     }
 
     public boolean isPercent() {

@@ -7,6 +7,7 @@ package com.cosmos.acacia.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.swing.text.DefaultFormatter;
+import org.jdesktop.beansbinding.AutoBinding;
 import static com.cosmos.acacia.annotation.Component.NullJComponent;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -28,6 +29,10 @@ public @interface Property {
     boolean visible() default true;
 
     boolean percent() default false;
+
+    boolean showOnly() default false;
+
+    AutoBinding.UpdateStrategy updateStrategy() default AutoBinding.UpdateStrategy.READ_WRITE;
 
     /**
      * MaskFormatter, DateFormatter, NumberFormatter (Decimal, Integer, Percent)
