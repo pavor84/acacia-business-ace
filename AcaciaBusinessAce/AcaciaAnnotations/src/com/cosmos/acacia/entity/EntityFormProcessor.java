@@ -16,6 +16,7 @@ import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.util.BeanUtils;
+import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -65,8 +66,10 @@ public class EntityFormProcessor {
     private ResourceMap resourceMap;
     //
     private Class<? extends EntityService> entityServiceClass;
-    private Map<String, JComponent> containers;
-    private Map<String, JComponent> components;
+    private Map<String, JComponent> containersMap;
+    private Map<String, JComponent> componentsMap;
+    private Map<String, Property> propertiesMap;
+    private Map<String, String> propertyNamesMap;
     private List<ContainerEntity> containerEntities;
 
     public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
@@ -76,21 +79,23 @@ public class EntityFormProcessor {
     }
 
     private void init() {
-        containers = new TreeMap<String, JComponent>();
-        components = new TreeMap<String, JComponent>();
+        containersMap = new TreeMap<String, JComponent>();
+        componentsMap = new TreeMap<String, JComponent>();
+        propertiesMap = new TreeMap<String, Property>();
+        propertyNamesMap = new TreeMap<String, String>();
         containerEntities = new ArrayList<ContainerEntity>();
         List<Form> forms = getAnnotations(entityClass);
         for (Form form : forms) {
             JComponent container = null;
             String containerName = "";
-            if (!containers.containsKey("")) {
+            if (!containersMap.containsKey("")) {
                 container = getContainer(form.mainContainer());
             }
 
             if (container != null) {
                 getContainerType(container); // Check for compatibility
-                if (!containers.containsKey(containerName)) {
-                    containers.put(containerName, container);
+                if (!containersMap.containsKey(containerName)) {
+                    containersMap.put(containerName, container);
                 }
             }
 
@@ -107,23 +112,23 @@ public class EntityFormProcessor {
             JComponent container = getContainer(formContainer);
             String containerName = container.getName();
             getContainerType(container); // Check for compatibility
-            if (!containers.containsKey(containerName)) {
-                containers.put(containerName, container);
+            if (!containersMap.containsKey(containerName)) {
+                containersMap.put(containerName, container);
             }
         }
 
-        if (!containers.containsKey("")) {
+        if (!containersMap.containsKey("")) {
             throw new EntityFormException("The mainContainer can not be null. The com.cosmos.acacia.annotation.Form is required.");
         }
 
-        if (containers.size() > 0) {
+        if (containersMap.size() > 0) {
             for (FormContainer formContainer : formContainers) {
                 Component component = formContainer.container();
                 String componentConstraints = component.componentConstraints();
                 String containerName = formContainer.name();
                 String parentContainerName = formContainer.parentContainerName();
-                JComponent jContainer = containers.get(containerName);
-                JComponent parentContainer = containers.get(parentContainerName);
+                JComponent jContainer = containersMap.get(containerName);
+                JComponent parentContainer = containersMap.get(parentContainerName);
                 if (parentContainer == null) {
                     throw new EntityFormException("Missing container with name: " + parentContainerName);
                 }
@@ -147,10 +152,15 @@ public class EntityFormProcessor {
         List<Field> fields = getAnnotatedFields(entityClass);
         for (Field field : fields) {
             for (Annotation annotation : getAnnotations(field)) {
+                Property property = field.getAnnotation(Property.class);
+                String propertyName = field.getName();
                 if (annotation instanceof FormComponent) {
                     FormComponent formComponent = (FormComponent) annotation;
                     Component component = formComponent.component();
                     JComponent jComponent = getComponent(component, field);
+                    String componentName = jComponent.getName();
+                    propertiesMap.put(componentName, property);
+                    propertyNamesMap.put(componentName, propertyName);
                     String componentConstraints = component.componentConstraints();
                     String parentContainerName = formComponent.parentContainerName();
 
@@ -158,6 +168,9 @@ public class EntityFormProcessor {
                     FormComponentPair componentPair = (FormComponentPair) annotation;
                     Component component = componentPair.firstComponent();
                     JComponent jComponent = getComponent(component, field);
+                    String componentName = jComponent.getName();
+                    propertiesMap.put(componentName, property);
+                    propertyNamesMap.put(componentName, propertyName);
                     String componentConstraints = component.componentConstraints();
                     String parentContainerName = componentPair.parentContainerName();
                     JComponent container = getContainer(parentContainerName);
@@ -166,17 +179,20 @@ public class EntityFormProcessor {
                     } else {
                         container.add(jComponent, componentConstraints);
                     }
-                    components.put(jComponent.getName(), jComponent);
+                    componentsMap.put(jComponent.getName(), jComponent);
 
                     component = componentPair.secondComponent();
                     jComponent = getComponent(component, field);
+                    componentName = jComponent.getName();
+                    propertiesMap.put(componentName, property);
+                    propertyNamesMap.put(componentName, propertyName);
                     componentConstraints = component.componentConstraints();
                     if ("".equals(componentConstraints)) {
                         container.add(jComponent);
                     } else {
                         container.add(jComponent, componentConstraints);
                     }
-                    components.put(jComponent.getName(), jComponent);
+                    componentsMap.put(jComponent.getName(), jComponent);
                 }
             }
         }
@@ -198,12 +214,32 @@ public class EntityFormProcessor {
         return containerEntities;
     }
 
-    protected Map<String, JComponent> getContainers() {
-        return containers;
+    public Map<String, JComponent> getContainersMap() {
+        return containersMap;
+    }
+
+    public Map<String, JComponent> getJComponentsMap() {
+        return componentsMap;
+    }
+
+    public Map<String, Property> getPropertiesMap() {
+        return propertiesMap;
+    }
+
+    public Map<String, String> getPropertyNamesMap() {
+        return propertyNamesMap;
+    }
+
+    public String getPropertyName(String componentName) {
+        return propertyNamesMap.get(componentName);
+    }
+
+    public Property getProperty(String componentName) {
+        return propertiesMap.get(componentName);
     }
 
     protected JComponent getComponent(String componentName) {
-        return components.get(componentName);
+        return componentsMap.get(componentName);
     }
 
     protected ResourceMap getResourceMap() {
@@ -273,8 +309,8 @@ public class EntityFormProcessor {
 //        }
     }
 
-    private JComponent getContainer(String containerName) {
-        return containers.get(containerName);
+    public JComponent getContainer(String containerName) {
+        return containersMap.get(containerName);
     }
 
     private JComponent getContainer(FormContainer formContainer) {
