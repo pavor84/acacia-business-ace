@@ -34,6 +34,14 @@ public @interface Property {
 
     AutoBinding.UpdateStrategy updateStrategy() default AutoBinding.UpdateStrategy.READ_WRITE;
 
+    SelectableList selectableList() default @SelectableList(className = "");
+
+    /**
+     * The property name(s) from which this property depends.
+     * List<PropertyDetails> getPropertyDetailsDependencies() from PropertyDetails
+     */
+    String[] depends() default {};
+
     /**
      * MaskFormatter, DateFormatter, NumberFormatter (Decimal, Integer, Percent)
      */
@@ -79,5 +87,5 @@ public @interface Property {
     FormComponentPair formComponentPair() default @FormComponentPair(firstComponent = @Component(componentClass = NullJComponent.class),
             secondComponent = @Component(componentClass = NullJComponent.class));
 
-    FormComponent formComponent() default @FormComponent(component=@Component(componentClass = NullJComponent.class));
+    FormComponent formComponent() default @FormComponent(component = @Component(componentClass = NullJComponent.class));
 }
