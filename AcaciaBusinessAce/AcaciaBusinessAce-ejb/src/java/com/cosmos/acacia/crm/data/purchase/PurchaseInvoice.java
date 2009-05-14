@@ -12,7 +12,9 @@ import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
@@ -94,6 +96,9 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Supplier",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel"
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName="supplierDetails",
             firstComponent=@Component(
@@ -109,7 +114,12 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
 
     @JoinColumn(name = "supplier_branch_id", referencedColumnName = "address_id")
     @ManyToOne
-    @Property(title="Supplier Branch",
+    @Property(title="Supplier Branch"/*,
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel",
+            constructorParameters={@PropertyName(getter="supplier", setter="businessPartner")}
+        ),
+        depends={"supplier"},
         formComponentPair=@FormComponentPair(
             parentContainerName="supplierDetails",
             firstComponent=@Component(
@@ -119,13 +129,16 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             secondComponent=@Component(
                 componentClass=JBComboList.class
             )
-        )
+        )*/
     )
     private Address supplierBranch;
 
     @JoinColumn(name = "supplier_contact_id", referencedColumnName = "partner_id")
     @ManyToOne
     @Property(title="Supplier Contact",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName="supplierDetails",
             firstComponent=@Component(

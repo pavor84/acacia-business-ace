@@ -114,14 +114,15 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     @SuppressWarnings("unchecked")
     public List<Address> getAddresses(BigInteger parentId) {
-        if (parentId != null) {
-            Query query = em.createNamedQuery("Address.findByParentDataObjectAndDeleted");
-            query.setParameter("parentDataObjectId", parentId);
-            query.setParameter("deleted", false);
-
-            return new ArrayList<Address>(query.getResultList());
+        if (parentId == null) {
+            return new ArrayList<Address>();
         }
-        return new ArrayList<Address>();
+
+        Query query = em.createNamedQuery("Address.findByParentDataObjectAndDeleted");
+        query.setParameter("parentDataObjectId", parentId);
+        query.setParameter("deleted", false);
+
+        return new ArrayList<Address>(query.getResultList());
     }
 
     public EntityProperties getAddressEntityProperties() {

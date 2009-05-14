@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
@@ -22,31 +21,31 @@ import javax.imageio.ImageIO;
  *
  * @author Miro
  */
-public abstract class DataObjectBean
-    implements Cloneable, PropertyChangeNotificationBroadcaster
-{
+public abstract class DataObjectBean implements Cloneable, PropertyChangeNotificationBroadcaster {
 
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
     private URI smallImageURI;
     private Image smallImage;
     private URI mediumImageURI;
     private Image mediumImage;
 
     public abstract DataObject getDataObject();
+
     public abstract void setDataObject(DataObject dataObject);
 
     public abstract BigInteger getId();
+
     public abstract void setId(BigInteger id);
-    
+
     public abstract BigInteger getParentId();
     //public abstract void setParentId(BigInteger parentId);
+
     public void setParentId(BigInteger parentId) {
         getEntityDataObject().setParentDataObjectId(parentId);
     }
 
     public abstract String getInfo();
-    
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
@@ -56,41 +55,40 @@ public abstract class DataObjectBean
     }
 
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-        if(oldValue == newValue || (oldValue == null && newValue == null))
+        if (oldValue == newValue || (oldValue == null && newValue == null)) {
             return;
+        }
 
         changeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 
     protected void firePropertyChange(String propertyName, int oldValue, int newValue) {
-	if (oldValue == newValue)
-	    return;
+        if (oldValue == newValue) {
+            return;
+        }
 
         firePropertyChange(propertyName, new Integer(oldValue), new Integer(newValue));
     }
 
     protected void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
-	if (oldValue == newValue)
-	    return;
+        if (oldValue == newValue) {
+            return;
+        }
 
         firePropertyChange(propertyName, Boolean.valueOf(oldValue), Boolean.valueOf(newValue));
     }
 
-    protected DataObjectBean getDataObject(ClassifiedObject classifiedObject)
-    {
+    protected DataObjectBean getDataObject(ClassifiedObject classifiedObject) {
         // TODO: Retreive the classified object from LinkedDataObjectId
-        if(classifiedObject != null)
-        {
-            
+        if (classifiedObject != null) {
         }
 
         return null;
     }
 
-    protected DataObject getEntityDataObject()
-    {
+    protected DataObject getEntityDataObject() {
         DataObject dataObject;
-        if((dataObject = getDataObject()) == null) {
+        if ((dataObject = getDataObject()) == null) {
             dataObject = new DataObject();
             setDataObject(dataObject);
         }
@@ -106,30 +104,22 @@ public abstract class DataObjectBean
         getEntityDataObject().setOrderPosition(orderPosition);
     }
 
-    public String getNotes()
-    {
+    public String getNotes() {
         return getEntityDataObject().getNotes();
     }
 
-    public void setNotes(String notes)
-    {
+    public void setNotes(String notes) {
         getEntityDataObject().setNotes(notes);
     }
 
-    public URI getSmallImageURI()
-    {
-        if(smallImageURI == null)
-        {
+    public URI getSmallImageURI() {
+        if (smallImageURI == null) {
             String uriString;
-            if((uriString = getEntityDataObject().getSmallImageUri()) != null &&
-                    (uriString = uriString.trim()).length() > 0)
-            {
-                try
-                {
+            if ((uriString = getEntityDataObject().getSmallImageUri()) != null &&
+                    (uriString = uriString.trim()).length() > 0) {
+                try {
                     smallImageURI = new URI(uriString);
-                }
-                catch(URISyntaxException ex)
-                {
+                } catch (URISyntaxException ex) {
                     throw new RuntimeException(ex);
                 }
             }
@@ -138,61 +128,42 @@ public abstract class DataObjectBean
         return smallImageURI;
     }
 
-    public void setSmallImageURL(URL imageURL)
-    {
-        try
-        {
-            if(imageURL != null)
+    public void setSmallImageURL(URL imageURL) {
+        try {
+            if (imageURL != null) {
                 setSmallImageURI(imageURL.toURI());
-            else
+            } else {
                 setSmallImageURI(null);
-        }
-        catch(URISyntaxException ex)
-        {
+            }
+        } catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public void setSmallImageURI(URI smallImageURI)
-    {
+    public void setSmallImageURI(URI smallImageURI) {
         this.smallImageURI = smallImageURI;
-        if(smallImageURI != null)
-        {
+        if (smallImageURI != null) {
             getEntityDataObject().setSmallImageUri(smallImageURI.toASCIIString());
-        }
-        else
-        {
+        } else {
             getEntityDataObject().setSmallImageUri(null);
         }
     }
 
-    public Image getSmallImage()
-    {
-        if(smallImage == null)
-        {
+    public Image getSmallImage() {
+        if (smallImage == null) {
             byte[] ba;
-            if((ba = getEntityDataObject().getSmallImage()) != null && ba.length > 0)
-            {
-                try
-                {
+            if ((ba = getEntityDataObject().getSmallImage()) != null && ba.length > 0) {
+                try {
                     smallImage = ImageIO.read(new ByteArrayInputStream(ba));
-                }
-                catch(IOException ex)
-                {
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-            }
-            else
-            {
+            } else {
                 URI imageURI;
-                if((imageURI = getSmallImageURI()) != null)
-                {
-                    try
-                    {
+                if ((imageURI = getSmallImageURI()) != null) {
+                    try {
                         smallImage = ImageIO.read(imageURI.toURL());
-                    }
-                    catch(IOException ex)
-                    {
+                    } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
@@ -202,41 +173,28 @@ public abstract class DataObjectBean
         return smallImage;
     }
 
-    public void setSmallImage(Image smallImage)
-    {
+    public void setSmallImage(Image smallImage) {
         this.smallImage = smallImage;
-        if(smallImage != null)
-        {
-            try
-            {
+        if (smallImage != null) {
+            try {
                 byte[] ba = ImageUtils.toByteArray(smallImage);
                 getEntityDataObject().setSmallImage(ba);
-            }
-            catch(IOException ex)
-            {
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        }
-        else
-        {
+        } else {
             getEntityDataObject().setSmallImage(null);
         }
     }
 
-    public URI getMediumImageURI()
-    {
-        if(mediumImageURI == null)
-        {
+    public URI getMediumImageURI() {
+        if (mediumImageURI == null) {
             String uriString;
-            if((uriString = getEntityDataObject().getMediumImageUri()) != null &&
-                    (uriString = uriString.trim()).length() > 0)
-            {
-                try
-                {
+            if ((uriString = getEntityDataObject().getMediumImageUri()) != null &&
+                    (uriString = uriString.trim()).length() > 0) {
+                try {
                     mediumImageURI = new URI(uriString);
-                }
-                catch(URISyntaxException ex)
-                {
+                } catch (URISyntaxException ex) {
                     throw new RuntimeException(ex);
                 }
             }
@@ -245,61 +203,42 @@ public abstract class DataObjectBean
         return mediumImageURI;
     }
 
-    public void setMediumImageURL(URL imageURL)
-    {
-        try
-        {
-            if(imageURL != null)
+    public void setMediumImageURL(URL imageURL) {
+        try {
+            if (imageURL != null) {
                 setMediumImageURI(imageURL.toURI());
-            else
+            } else {
                 setMediumImageURI(null);
-        }
-        catch(URISyntaxException ex)
-        {
+            }
+        } catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public void setMediumImageURI(URI mediumImageURI)
-    {
+    public void setMediumImageURI(URI mediumImageURI) {
         this.mediumImageURI = mediumImageURI;
-        if(mediumImageURI != null)
-        {
+        if (mediumImageURI != null) {
             getEntityDataObject().setMediumImageUri(mediumImageURI.toASCIIString());
-        }
-        else
-        {
+        } else {
             getEntityDataObject().setMediumImageUri(null);
         }
     }
 
-    public Image getMediumImage()
-    {
-        if(mediumImage == null)
-        {
+    public Image getMediumImage() {
+        if (mediumImage == null) {
             byte[] ba;
-            if((ba = getEntityDataObject().getMediumImage()) != null && ba.length > 0)
-            {
-                try
-                {
+            if ((ba = getEntityDataObject().getMediumImage()) != null && ba.length > 0) {
+                try {
                     mediumImage = ImageIO.read(new ByteArrayInputStream(ba));
-                }
-                catch(IOException ex)
-                {
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-            }
-            else
-            {
+            } else {
                 URI imageURI;
-                if((imageURI = getMediumImageURI()) != null)
-                {
-                    try
-                    {
+                if ((imageURI = getMediumImageURI()) != null) {
+                    try {
                         mediumImage = ImageIO.read(imageURI.toURL());
-                    }
-                    catch(IOException ex)
-                    {
+                    } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
@@ -309,36 +248,25 @@ public abstract class DataObjectBean
         return mediumImage;
     }
 
-    public void setMediumImage(Image mediumImage)
-    {
+    public void setMediumImage(Image mediumImage) {
         this.mediumImage = mediumImage;
-        if(mediumImage != null)
-        {
-            try
-            {
+        if (mediumImage != null) {
+            try {
                 byte[] ba = ImageUtils.toByteArray(mediumImage);
                 getEntityDataObject().setMediumImage(ba);
-            }
-            catch(IOException ex)
-            {
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        }
-        else
-        {
+        } else {
             getEntityDataObject().setMediumImage(null);
         }
     }
 
     @Override
-    public Object clone()
-    {
-        try
-        {
+    public Object clone() {
+        try {
             return super.clone();
-        }
-        catch(CloneNotSupportedException ex)
-        {
+        } catch (CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
     }

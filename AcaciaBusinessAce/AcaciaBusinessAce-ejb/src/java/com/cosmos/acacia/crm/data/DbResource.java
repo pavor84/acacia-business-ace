@@ -16,10 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  *
@@ -27,17 +30,30 @@ import org.apache.log4j.Logger;
  */
 @Entity
 @Table(name = "resource_bundle")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NamedQueries(
     {
         @NamedQuery(
             name = "DbResource.findByResourceId",
-            query = "SELECT d FROM DbResource d WHERE d.resourceId = :resourceId"),
+            query = "SELECT d FROM DbResource d WHERE d.resourceId = :resourceId",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
+        ),
         @NamedQuery(
             name = "DbResource.findByEnumClassAndName",
-            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass and d.enumName = :enumName"),
+            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass and d.enumName = :enumName",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
+        ),
         @NamedQuery(
             name = "DbResource.findAllByEnumClass",
-            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass")
+            query = "SELECT d FROM DbResource d WHERE d.enumClass = :enumClass",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
+        )
     }
 )
 public class DbResource

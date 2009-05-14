@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.bl.purchase;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.BusinessDocument;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.crm.enums.DocumentType;
@@ -176,5 +176,10 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
         EntityProperties entityProperties = esm.getEntityProperties(entityClass);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
+    }
+
+    @Override
+    public List<DbResource> getResources(Class<? extends Enum> enumClass) {
+        return esm.getResources(em, enumClass);
     }
 }
