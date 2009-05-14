@@ -24,13 +24,16 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import static com.cosmos.beansbinding.BeansBindingHelper.createEntityProperties;
@@ -114,9 +117,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 //id = new BigInteger(dataObject.getDataObjectId().toByteArray());
                 id = dataObject.getDataObjectId();
                 doBean.setId(id);
-                doBean.setDataObject(dataObject);
             } else {
-                System.out.println("Update Entity");
                 mustMerge = true;
                 if (dataObject == null) {
                     dataObject = em.find(DataObject.class, id);
@@ -132,6 +133,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             if (dataObject.getOrderPosition() == null) {
                 setOrderPosition(em, dataObject);
             }
+            doBean.setDataObject(dataObject);
         } else {
             mustMerge = !(entity.hashCode() == 0);
         }
@@ -165,11 +167,13 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
     @Override
     public void setDocumentNumber(EntityManager em, BusinessDocument businessDocument) {
+        //persist(em, businessDocument);
         businessDocument.setDocumentDate(new Date());
         BigInteger parentEntityId = businessDocument.getParentId();
         DataObject dataObject = businessDocument.getDataObject();
         int dataObjectTypeId = dataObject.getDataObjectType().getDataObjectTypeId();
-        Address branch = getParentAddress(em, dataObject);
+        //Address branch = getParentAddress(em, dataObject);
+        Address branch = businessDocument.getPublisherBranch();
         if (branch.getOrderPosition() == null) {
             // store the address to generate order position for the old objects
             persist(em, branch);
@@ -376,5 +380,15 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public List<DbResource> getResources(EntityManager em, Class<? extends Enum> cls) {
+        Query q = em.createNamedQuery("EnumClass.findByEnumClassName");
+        q.setParameter("enumClassName", cls.getName());
+        EnumClass enumClass = (EnumClass)q.getSingleResult();
+        q = em.createNamedQuery("DbResource.findAllByEnumClass");
+        q.setParameter("enumClass", enumClass);
+        return new ArrayList<DbResource>(q.getResultList());
     }
 }

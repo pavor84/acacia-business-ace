@@ -13,19 +13,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  *
  * @author miro
  */
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "enum_classes")
 @NamedQueries(
     {
-        @NamedQuery(name = "EnumClass.findByEnumClassId", query = "SELECT e FROM EnumClass e WHERE e.enumClassId = :enumClassId"),
-        @NamedQuery(name = "EnumClass.findByEnumClassName", query = "SELECT e FROM EnumClass e WHERE e.enumClassName = :enumClassName")
+        @NamedQuery(
+            name = "EnumClass.findByEnumClassId",
+            query = "SELECT e FROM EnumClass e WHERE e.enumClassId = :enumClassId",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
+        ),
+        @NamedQuery(
+            name = "EnumClass.findByEnumClassName",
+            query = "SELECT e FROM EnumClass e WHERE e.enumClassName = :enumClassName",
+            hints={
+                @QueryHint(name="org.hibernate.cacheable", value="true")
+            }
+        )
     }
 )
 public class EnumClass implements Serializable {

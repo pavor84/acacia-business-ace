@@ -9,11 +9,13 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.BusinessDocument;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 
 import java.math.BigInteger;
+import java.util.List;
 import javax.ejb.Local;
 import javax.persistence.EntityManager;
 
@@ -54,4 +56,6 @@ public interface EntityStoreManagerLocal
 
     void setDocumentNumber(EntityManager em, BusinessDocument documentEntity);
     <D extends BusinessDocument> D newBusinessDocument(DocumentType documentType);
+
+    List<DbResource> getResources(EntityManager em, Class<? extends Enum> enumClass);
 }
