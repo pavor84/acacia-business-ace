@@ -13,22 +13,25 @@ import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.PropertyDetail;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.JBTextField;
+import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.binding.EntityBinder;
+import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.util.BeanUtils;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.ELProperty;
 
 /**
  *
@@ -97,6 +100,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     @Override
     protected void initData() {
         super.initData();
+        if(true)
+            return;
 
         EntityProperties entityProps = getEntityProperties();
         BindingGroup bg = getBindingGroup();
@@ -111,14 +116,72 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
             if(jComponent instanceof EntityBinder) {
                 ((EntityBinder)jComponent).bind(bindingGroup, entity, propertyDetails);
+            } else if(jComponent instanceof EntityListBinder) {
+                ((EntityListBinder)jComponent).bind(bindingGroup,
+                        getSelectableListDialog(propertyDetails, entityProps),
+                        entity, propertyDetails);
             } else if(jComponent instanceof JBIntegerField) {
                 JBIntegerField integerField = (JBIntegerField)jComponent;
-                System.out.println("integerField.getNumberType(): " + integerField.getNumberType());
                 integerField.bind(bg, entity, propertyDetails);
             }
         }
 
         bg.bind();
+    }
+
+    protected SelectableListDialog getSelectableListDialog(PropertyDetails propertyDetails,
+            EntityProperties entityProps) {
+        System.out.println("getSelectableListDialog(propertyDetails=" + propertyDetails +
+                ", entityProps=" + entityProps + ")");
+        String className;
+        if((className = propertyDetails.getSelectableListDialogClassName()) != null) {
+            System.out.println("className: " + className);
+            try {
+                Class<? extends SelectableListDialog> cls =
+                        (Class<? extends SelectableListDialog>)Class.forName(className);
+                List<PropertyDetail> parameters;
+                if((parameters = propertyDetails.getSelectableListDialogConstructorParameters()) == null
+                        || parameters.size() == 0) {
+                    return cls.newInstance();
+                }
+
+                Constructor<? extends SelectableListDialog> constructor =
+                        cls.getConstructor(getParameterTypes(parameters, entityProps));
+                return constructor.newInstance(getParameters(parameters));
+            } catch(Exception ex) {
+                throw new EntityPanelException("className: " + className +
+                        ", propertyDetails: " + propertyDetails, ex);
+            }
+        }
+
+        System.out.println("new EntityListPanel(propertyDetails.getPropertyClass()): " + propertyDetails.getPropertyClass());
+        return new EntityListPanel(propertyDetails.getPropertyClass());
+    }
+
+    protected Object[] getParameters(List<PropertyDetail> parameters) {
+        int size;
+        Object[] parameterValues = new Object[size = parameters.size()];
+        for(int i = 0; i < size; i++) {
+            String parameterName = parameters.get(i).getGetter();
+            parameterValues[i] = getPropertyValue(parameterName);
+        }
+
+        return parameterValues;
+    }
+
+    protected Class[] getParameterTypes(List<PropertyDetail> parameters, EntityProperties entityProps) {
+        int size;
+        Class[] parameterTypes = new Class[size = parameters.size()];
+        for(int i = 0; i < size; i++) {
+            String parameterName = parameters.get(i).getGetter();
+            PropertyDetails propertyDetails = entityProps.getPropertyDetails(parameterName);
+            if(propertyDetails == null) {
+                throw new EntityPanelException("Missing PropertyDetails with name '" + parameterName + "'");
+            }
+            parameterTypes[i] = propertyDetails.getPropertyClass();
+        }
+
+        return parameterTypes;
     }
 
     protected Object getPropertyValue(String propertyName) {
@@ -148,7 +211,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         try {
-            entity = getEntityService().save(entity);
+            //entity = getEntityService().save(entity);
+            entity = getEntityService().confirm(entity);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(entity);
             if (closeAfter) {

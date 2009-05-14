@@ -65,8 +65,6 @@ public abstract class AbstractTablePanel
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
 
-    private Class entityClass;
-
     protected AbstractTablePanel(Class entityClass) {
         this(null, entityClass);
     }
@@ -280,6 +278,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Classifier classifier;
     private boolean allowClassifierChange;
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
+
+    private Class entityClass;
 
     /**
      * 

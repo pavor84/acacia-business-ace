@@ -16,6 +16,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -36,7 +37,11 @@ import org.jdesktop.application.Task;
  * @author  Bozhidar Bozhanov
  */
 public class OrganizationsListPanel extends AbstractTablePanel {
-    
+
+    public OrganizationsListPanel() {
+        this(LocalSession.instance().getOrganization().getId());
+    }
+
     /** Creates new form OrganizationsListPanel */
     public OrganizationsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);

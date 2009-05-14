@@ -2,7 +2,6 @@
  * PersonsListPanel.java
  *
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
@@ -17,6 +16,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Person;
@@ -33,29 +33,32 @@ import com.cosmos.swingb.DialogResponse;
  * @author  Bozhidar Bozhanov
  */
 public class PersonsListPanel extends AbstractTablePanel {
-    
+
+    public PersonsListPanel() {
+        this(LocalSession.instance().getOrganization().getId());
+    }
+
     /** Creates new form PersonsListPanel */
-    public PersonsListPanel(BigInteger parentDataObjectId)
-    {
+    public PersonsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
         postInitData();
         initComponentsCustom();
     }
 
     /** Creates new form PersonsListPanel */
-    public PersonsListPanel(BigInteger parentDataObjectId, boolean staff)
-    {
+    public PersonsListPanel(BigInteger parentDataObjectId, boolean staff) {
         super(parentDataObjectId);
         this.staff = staff;
         postInitData();
         initComponentsCustom();
     }
-    
+
     private void initComponentsCustom() {
         setSpecialButtonBehavior(true);
         getButton(Button.Special).setText(getResourceMap().getString("button.discount"));
         getButton(Button.Special).setToolTipText(getResourceMap().getString("button.discount.tooltip"));
         getButton(Button.Special).addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 onDiscount();
             }
@@ -70,23 +73,22 @@ public class PersonsListPanel extends AbstractTablePanel {
         CustomerDiscountListPanel customerDiscountForm = new CustomerDiscountListPanel(selected);
         customerDiscountForm.showFrame(this);
     }
-    
     @EJB
     private PersonsListRemote formSession;
-
     private BindingGroup personsBindingGroup;
     private List<Person> persons;
     private boolean staff = false;
-    
+
     @Override
     protected void initData() {
         super.initData();
     }
 
     protected void postInitData() {
-        if (staff)
+        if (staff) {
             setTitle(getResourceMap().getString("Form.altTitle"));
-        
+        }
+
         personsBindingGroup = new BindingGroup();
         AcaciaTable personsTable = getDataTable();
         JTableBinding tableBinding = personsTable.bind(personsBindingGroup, getPersons(), getPersonEntityProperties());
@@ -95,34 +97,28 @@ public class PersonsListPanel extends AbstractTablePanel {
 
         personsTable.setEditable(false);
     }
-    
-    protected List<Person> getPersons()
-    {
-        if(persons == null) {
-            if (!staff)
+
+    protected List<Person> getPersons() {
+        if (persons == null) {
+            if (!staff) {
                 persons = getFormSession().getPersons(getParentDataObjectId());
-            else
+            } else {
                 persons = getFormSession().getStaff();
+            }
         }
 
         return persons;
     }
 
-    protected EntityProperties getPersonEntityProperties()
-    {
+    protected EntityProperties getPersonEntityProperties() {
         return getFormSession().getPersonEntityProperties();
     }
 
-    protected PersonsListRemote getFormSession()
-    {
-        if(formSession == null)
-        {
-            try
-            {
+    protected PersonsListRemote getFormSession() {
+        if (formSession == null) {
+            try {
                 formSession = getBean(PersonsListRemote.class);
-            }
-            catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -130,15 +126,13 @@ public class PersonsListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    protected int deletePerson(Person person)
-    {
+    protected int deletePerson(Person person) {
         return getFormSession().deletePerson(person);
     }
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
+        if (rowObject != null) {
             deletePerson((Person) rowObject);
             return true;
         }
@@ -148,12 +142,10 @@ public class PersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            PersonPanel personPanel = new PersonPanel((Person)rowObject);
+        if (rowObject != null) {
+            PersonPanel personPanel = new PersonPanel((Person) rowObject);
             DialogResponse response = personPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return personPanel.getSelectedValue();
             }
         }
@@ -165,8 +157,7 @@ public class PersonsListPanel extends AbstractTablePanel {
     protected Object newRow() {
         PersonPanel personPanel = new PersonPanel(getParentDataObjectId());
         DialogResponse response = personPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
+        if (DialogResponse.SAVE.equals(response)) {
             return personPanel.getSelectedValue();
         }
 
@@ -178,8 +169,9 @@ public class PersonsListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (personsBindingGroup != null)
+        if (personsBindingGroup != null) {
             personsBindingGroup.unbind();
+        }
 
         persons = null;
 
@@ -195,15 +187,15 @@ public class PersonsListPanel extends AbstractTablePanel {
 
     @Override
     public boolean canModify(Object rowObject) {
-        if ( rowObject instanceof DataObjectBean ){
+        if (rowObject instanceof DataObjectBean) {
             DataObjectBean bean = (DataObjectBean) rowObject;
-            if (getClassifiersManager().isClassifiedAs(bean, "customer")){
+            if (getClassifiersManager().isClassifiedAs(bean, "customer")) {
                 setVisible(Button.Special, true);
-            }else{
+            } else {
                 setVisible(Button.Special, false);
             }
         }
-        
+
         return true;
     }
 
