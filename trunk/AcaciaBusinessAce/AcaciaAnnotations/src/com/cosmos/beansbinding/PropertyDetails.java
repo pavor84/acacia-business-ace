@@ -7,6 +7,7 @@ package com.cosmos.beansbinding;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
+import java.util.List;
 import javax.swing.text.DefaultFormatter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -43,6 +44,9 @@ public class PropertyDetails implements Cloneable, Serializable {
     private String customDisplay;
     private boolean showOnly;
     private AutoBinding.UpdateStrategy updateStrategy;
+    private String selectableListDialogClassName;
+    private List<PropertyDetail> selectableListDialogConstructorParameters;
+    private List<PropertyDetails> propertyDetailsDependencies;
 
     public PropertyDetails() {
     }
@@ -124,6 +128,30 @@ public class PropertyDetails implements Cloneable, Serializable {
 
     public void setUpdateStrategy(UpdateStrategy updateStrategy) {
         this.updateStrategy = updateStrategy;
+    }
+
+    public String getSelectableListDialogClassName() {
+        return selectableListDialogClassName;
+    }
+
+    public void setSelectableListDialogClassName(String selectableListDialogClassName) {
+        this.selectableListDialogClassName = selectableListDialogClassName;
+    }
+
+    public List<PropertyDetail> getSelectableListDialogConstructorParameters() {
+        return selectableListDialogConstructorParameters;
+    }
+
+    public void setSelectableListDialogConstructorParameters(List<PropertyDetail> selectableListDialogConstructorParameters) {
+        this.selectableListDialogConstructorParameters = selectableListDialogConstructorParameters;
+    }
+
+    public List<PropertyDetails> getPropertyDetailsDependencies() {
+        return propertyDetailsDependencies;
+    }
+
+    public void setPropertyDetailsDependencies(List<PropertyDetails> propertyDetailsDependencies) {
+        this.propertyDetailsDependencies = propertyDetailsDependencies;
     }
 
     public boolean isPercent() {

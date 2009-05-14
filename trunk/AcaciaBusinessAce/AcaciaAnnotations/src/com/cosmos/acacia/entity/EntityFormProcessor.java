@@ -104,7 +104,7 @@ public class EntityFormProcessor {
             }
         }
         if (entityServiceClass == null) {
-            throw new EntityFormException("The Entity Service is not initialized.");
+            throw new EntityFormException("The Entity Service for entity '" + entityClass + "' is not initialized.");
         }
 
         List<FormContainer> formContainers = getAnnotations(forms);

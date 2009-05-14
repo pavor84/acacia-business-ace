@@ -35,6 +35,8 @@ public interface EntityService {
 
     <E> EntityProperties getEntityProperties(Class<E> entityClass);
 
+    List getResources(Class<? extends Enum> enumClass);
+
     public static final class NullEntityService implements EntityService {
 
         public NullEntityService() {
@@ -74,6 +76,10 @@ public interface EntityService {
         }
 
         public EntityProperties getEntityProperties(Class entityClass) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public List getResources(Class<? extends Enum> enumClass) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
