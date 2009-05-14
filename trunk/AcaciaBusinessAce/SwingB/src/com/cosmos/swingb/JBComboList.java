@@ -41,6 +41,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.swingb.validation.Validatable;
 
 /**
@@ -49,7 +50,7 @@ import com.cosmos.swingb.validation.Validatable;
  */
 public class JBComboList
     extends JXPanel
-    implements ItemSelectable, ActionListener, Validatable
+    implements ItemSelectable, ActionListener, Validatable, EntityListBinder
 {
     private Application application;
     private ApplicationContext applicationContext;
@@ -70,6 +71,7 @@ public class JBComboList
 
     private SelectableListDialog selectableListDialog;
     private ObjectToStringConverter converter;
+    private ELProperty elProperty;
     private Binding binding;
 
     public JBComboList()
@@ -210,9 +212,17 @@ public class JBComboList
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
+            PropertyDetails propertyDetails) {
         return bind(bindingGroup, selectableListDialog, beanEntity, propertyDetails, null);
+    }
+
+    protected String getExpression(PropertyDetails propertyDetails) {
+        String expression;
+        if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
+            return expression;
+        }
+
+        return "${" + propertyDetails.getPropertyName() + "}";
     }
 
     public JComboBoxBinding bind(
@@ -263,7 +273,7 @@ public class JBComboList
                 comboBox);
         bindingGroup.addBinding(comboBoxBinding);
         
-        ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
+        elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         binding = Bindings.createAutoBinding(
                 updateStrategy,
