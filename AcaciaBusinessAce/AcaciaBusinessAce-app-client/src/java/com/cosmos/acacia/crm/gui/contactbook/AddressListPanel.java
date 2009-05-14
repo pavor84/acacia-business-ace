@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.util.List;
@@ -13,8 +12,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -28,23 +27,34 @@ import org.jdesktop.application.Task;
  */
 public class AddressListPanel extends AbstractTablePanel {
 
+    public AddressListPanel(BusinessPartner businessPartner) {
+        this(businessPartner != null ? businessPartner.getId() : null);
+        this.businessPartner = businessPartner;
+    }
+
     /** Creates new form AddresssListPanel */
-    public AddressListPanel(BigInteger parentDataObjectId)
-    {
+    public AddressListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
-
-    public AddressListPanel(DataObjectBean parent) {
-        super(parent);
-    }
+    //
     @EJB
     private AddressesListRemote formSession;
-
     private BindingGroup addressesBindingGroup;
     private List<Address> addresses;
-
     /** Indicates whether the addresses are internal to the organization */
     private boolean isInternal;
+    //
+    private BusinessPartner businessPartner;
+
+    public void setBusinessPartner(BusinessPartner businessPartner) {
+        this.businessPartner = businessPartner;
+        setParentDataObjectId(businessPartner.getId());
+        refreshAction();
+    }
+
+    public BusinessPartner getBusinessPartner() {
+        return businessPartner;
+    }
 
     @Override
     protected void initData() {
@@ -60,10 +70,10 @@ public class AddressListPanel extends AbstractTablePanel {
         setVisible(Button.Select, false);
     }
 
-    protected void refreshDataTable(EntityProperties entityProps)
-    {
-        if ( addressesBindingGroup!=null )
+    protected void refreshDataTable(EntityProperties entityProps) {
+        if (addressesBindingGroup != null) {
             addressesBindingGroup.unbind();
+        }
 
         addressesBindingGroup = new BindingGroup();
         AcaciaTable addressesTable = getDataTable();
@@ -72,43 +82,38 @@ public class AddressListPanel extends AbstractTablePanel {
         addressesBindingGroup.bind();
         addressesTable.setEditable(false);
     }
-    protected List<Address> getAddresses()
-    {
-        if(addresses == null)
-        {
+
+    protected List<Address> getAddresses() {
+        if (addresses == null) {
             addresses = getFormSession().getAddresses(getParentDataObjectId());
         }
 
         return addresses;
     }
 
-    protected List<City> getCities()
-    {
+    protected List<City> getCities() {
         return getFormSession().getCities();
     }
 
-    protected EntityProperties getAddressEntityProperties()
-    {
+    protected EntityProperties getAddressEntityProperties() {
         return getFormSession().getAddressEntityProperties();
     }
 
-    protected AddressesListRemote getFormSession()
-    {
-        if(formSession == null)
+    protected AddressesListRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AddressesListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected int deleteAddress(Address addresses)
-    {
+    protected int deleteAddress(Address addresses) {
         return getFormSession().deleteAddress(addresses);
     }
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
+        if (rowObject != null) {
             deleteAddress((Address) rowObject);
             return true;
         }
@@ -119,13 +124,11 @@ public class AddressListPanel extends AbstractTablePanel {
     @Override
     protected Object modifyRow(Object rowObject) {
 
-        if(rowObject != null)
-        {
-            AddressPanel addressPanel = new AddressPanel((Address)rowObject);
+        if (rowObject != null) {
+            AddressPanel addressPanel = new AddressPanel((Address) rowObject);
             addressPanel.setInternal(isInternal);
             DialogResponse response = addressPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return addressPanel.getSelectedValue();
             }
         }
@@ -134,14 +137,12 @@ public class AddressListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        if (canNestedOperationProceed())
-        {
+        if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
             AddressPanel addressPanel = new AddressPanel(getParentDataObjectId());
             addressPanel.setInternal(isInternal);
             DialogResponse response = addressPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return addressPanel.getSelectedValue();
             }
         }
@@ -153,8 +154,9 @@ public class AddressListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (addressesBindingGroup != null)
+        if (addressesBindingGroup != null) {
             addressesBindingGroup.unbind();
+        }
 
         addresses = null;
 

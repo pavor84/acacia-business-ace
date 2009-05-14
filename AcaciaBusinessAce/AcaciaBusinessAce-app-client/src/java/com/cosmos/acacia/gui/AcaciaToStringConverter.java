@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 import org.jdesktop.beansbinding.ELProperty;
 
-import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.swingb.BeanResourceToStringConverter;
 
 /**

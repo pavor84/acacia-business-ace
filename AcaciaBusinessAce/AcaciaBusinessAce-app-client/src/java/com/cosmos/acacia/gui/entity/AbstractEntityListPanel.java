@@ -5,6 +5,7 @@
 package com.cosmos.acacia.gui.entity;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -132,6 +133,9 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
             Class<? extends EntityService> entityServiceClass =
                     getEntityFormProcessor().getEntityServiceClass();
             entityService = getBean(entityServiceClass);
+
+            System.out.println("entityService.getResources(DocumentStatus.class): " + entityService.getResources(DocumentStatus.class));
+            System.out.println("getEnumResources(DocumentStatus.class): " + getEnumResources(DocumentStatus.class));
         }
 
         return entityService;

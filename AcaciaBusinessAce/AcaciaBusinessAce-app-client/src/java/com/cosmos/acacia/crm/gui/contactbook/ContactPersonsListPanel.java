@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.math.BigInteger;
@@ -29,14 +28,12 @@ import com.cosmos.swingb.DialogResponse;
 public class ContactPersonsListPanel extends AbstractTablePanel {
 
     /** Creates new form AddresssListPanel */
-    public ContactPersonsListPanel(BigInteger parentDataObjectId)
-    {
+    public ContactPersonsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
-
+    //
     @EJB
     private AddressesListRemote formSession;
-
     private BindingGroup contactPersonsBindingGroup;
     private List<ContactPerson> contactPersons;
     /** Indicates whether the addresses are internal to the organization */
@@ -57,24 +54,22 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         contactPersonsTable.setEditable(false);
     }
 
-    protected List<ContactPerson> getContactPersons()
-    {
-        if(contactPersons == null)
-        {
+    protected List<ContactPerson> getContactPersons() {
+        if (contactPersons == null) {
             contactPersons = getFormSession().getContactPersons(getParentDataObjectId());
         }
 
         return contactPersons;
     }
 
-    protected EntityProperties getContactPersonEntityProperties()
-    {
+    protected EntityProperties getContactPersonEntityProperties() {
         return getFormSession().getContactPersonEntityProperties();
     }
 
     protected AddressesListRemote getFormSession() {
-        if(formSession == null)
+        if (formSession == null) {
             formSession = getBean(AddressesListRemote.class);
+        }
 
         return formSession;
     }
@@ -85,15 +80,14 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
     @Override
     @Action
-    public void selectAction(){
+    public void selectAction() {
         super.selectAction();
         //
     }
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
+        if (rowObject != null) {
             deleteContactPerson((ContactPerson) rowObject);
             return true;
         }
@@ -103,13 +97,11 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            ContactPersonPanel contactPersonPanel = new ContactPersonPanel((ContactPerson)rowObject);
+        if (rowObject != null) {
+            ContactPersonPanel contactPersonPanel = new ContactPersonPanel((ContactPerson) rowObject);
             contactPersonPanel.setInternal(isInternal);
             DialogResponse response = contactPersonPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return contactPersonPanel.getSelectedValue();
             }
         }
@@ -122,8 +114,9 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (contactPersonsBindingGroup != null)
+        if (contactPersonsBindingGroup != null) {
             contactPersonsBindingGroup.unbind();
+        }
 
         contactPersons = null;
 
@@ -135,14 +128,12 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     @Override
     protected Object newRow() {
         log.info("Internal : " + isInternal);
-        if (canNestedOperationProceed())
-        {
+        if (canNestedOperationProceed()) {
             ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObjectId());
             contactPersonPanel.setInternal(isInternal);
 
             DialogResponse response = contactPersonPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return contactPersonPanel.getSelectedValue();
             }
         }
@@ -167,5 +158,4 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     public void setInternal(boolean isInternal) {
         this.isInternal = isInternal;
     }
-
 }
