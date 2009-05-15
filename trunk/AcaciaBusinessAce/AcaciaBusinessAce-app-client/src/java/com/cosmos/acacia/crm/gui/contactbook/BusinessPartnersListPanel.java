@@ -65,7 +65,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     private Classifier partnerClassifier;
     private Classifier customerClassifier;
     private boolean initialized;
-    private List<BusinessPartner> businessPartnersStaticList;
+    private List<? extends BusinessPartner> businessPartnersStaticList;
 
     private List<JBColumn> customColumns;
 
@@ -78,7 +78,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         bindComponents();
     }
 
-    public BusinessPartnersListPanel(List<BusinessPartner> businessPartnersStaticList, List<JBColumn> customColumns) {
+    public BusinessPartnersListPanel(List<? extends BusinessPartner> businessPartnersStaticList, List<JBColumn> customColumns) {
         this.businessPartnersStaticList = businessPartnersStaticList;
         this.customColumns = customColumns;
         bindComponents();
@@ -298,7 +298,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         }
     }
 
-    protected List<BusinessPartner> getBusinessPartners() {
+    protected List<? extends BusinessPartner> getBusinessPartners() {
         //if we have static list, don't query the service layer, just use the list
         if (businessPartnersStaticList!=null)
             return businessPartnersStaticList;
@@ -363,7 +363,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         panel.showDialog(this);
     }
 
-    public List<BusinessPartner> getBusinessPartnersStaticList() {
+    public List<? extends BusinessPartner> getBusinessPartnersStaticList() {
         return businessPartnersStaticList;
     }
 

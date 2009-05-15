@@ -76,7 +76,7 @@ import com.cosmos.acacia.annotation.ValidationType;
                 "and w.product = :product"
     )
 })
-public class WarehouseProduct extends DataObjectBean implements Serializable {
+public class WarehouseProduct extends DataObjectBean implements Serializable { 
 
     private static final long serialVersionUID = 1L;
     

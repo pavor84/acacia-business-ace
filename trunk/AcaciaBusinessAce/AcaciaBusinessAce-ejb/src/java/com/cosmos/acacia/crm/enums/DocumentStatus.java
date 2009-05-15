@@ -4,12 +4,13 @@
  */
 package com.cosmos.acacia.crm.enums;
 
-import com.cosmos.acacia.crm.data.DbResource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+
+import com.cosmos.acacia.crm.data.DbResource;
 
 /**
  *
@@ -65,6 +66,10 @@ public enum DocumentStatus implements DatabaseResource {
             // GoodsReceipt
             list = Arrays.asList(Draft.dbResource, Accepted.dbResource);
             dbResourcesByType.put(DocumentType.GoodsReceipt, list);
+            
+            // CashReconcile
+            list = Arrays.asList(Draft.dbResource, Completed.dbResource);
+            dbResourcesByType.put(DocumentType.CashReconcile, list);
         }
 
         return dbResourcesByType.get(docType);

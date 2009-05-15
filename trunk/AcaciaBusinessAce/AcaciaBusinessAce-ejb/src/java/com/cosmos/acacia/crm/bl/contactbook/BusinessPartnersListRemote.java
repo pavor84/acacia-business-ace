@@ -29,7 +29,7 @@ public interface BusinessPartnersListRemote {
     List<BusinessPartner> getBusinessPartners(BigInteger parentDataObjectId);
 
     List<BusinessPartner> getBusinessPartners(Classifier classifier);
-
+    
     /**
      * Return the entity properties for showing in tables
      * @return

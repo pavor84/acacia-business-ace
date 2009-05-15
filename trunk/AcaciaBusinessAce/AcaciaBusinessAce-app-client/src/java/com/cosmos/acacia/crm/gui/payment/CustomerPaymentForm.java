@@ -717,7 +717,7 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         paymentTypeField.bind(bindGroup, getPaymentTypes(), entity, entProps.getPropertyDetails("paymentType"));
         
         // amount
-        amountField.bind(bindGroup, entity, entProps.getPropertyDetails("amount"));
+        amountField.bind(bindGroup, entity, entProps.getPropertyDetails("amount"), AcaciaUtils.getDecimalFormat());
         
         // currency
         currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));

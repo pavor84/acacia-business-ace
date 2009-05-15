@@ -28,6 +28,9 @@ public enum DocumentType implements DatabaseResource {
     PurchaseOrder("Purchase Order", "The Purchase Order", null),
     PurchaseOrderConfirmation("Purchase Order Confirmation", "The Purchase Order Confirmation", null),
     PurchaseInvoice("Purchase Invoice", "The Purchase Invoice", PurchaseInvoice.class),
+    //
+    // Cash
+    CashReconcile("Cash Reconcile", "The Cash Reconcile", com.cosmos.acacia.crm.data.CashReconcile.class),
     ;
 
     private DocumentType(String name, String description, Class<? extends BusinessDocument> documentClass) {

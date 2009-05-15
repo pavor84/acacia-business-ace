@@ -1,6 +1,8 @@
 package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,5 +73,25 @@ public enum Currency implements DatabaseResource {
         }
 
         return dbResources;
+    }
+    
+    /**
+     * @param targetCurrency
+     * @param sourceCurrency
+     * @param sourceAmount
+     * @return targetAmount
+     * 
+     * Currently mock functionality. To be updated when CurrencyRate is implemented.
+     */
+    public static BigDecimal convertAmount(Currency targetCurrency, Currency sourceCurrency, BigDecimal sourceAmount) {
+        BigDecimal rateMultiplier = new BigDecimal("1");
+        if ( targetCurrency.equals(Currency.Leva) ){
+            if ( sourceCurrency.equals(Currency.Euro) ){
+                rateMultiplier = new BigDecimal("1.9558");
+            }else if ( sourceCurrency.equals(Currency.Dollar) ){
+                rateMultiplier = new BigDecimal("1.4733");
+            }
+        }
+        return sourceAmount.multiply(rateMultiplier);
     }
 }

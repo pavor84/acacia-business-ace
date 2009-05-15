@@ -9,7 +9,7 @@ package com.cosmos.swingb;
  * @author	Petar Milev
  *
  */
-public abstract class JBColumn {
+public abstract class JBColumn<T> {
     private int index;
     private String columnName;
     private Class columnClass;
@@ -41,17 +41,17 @@ public abstract class JBColumn {
         this.index = index;
     }
 
-    public abstract void setValue(Object arg0, Object arg1);
+    public void setValue(T arg0, Object arg1){}
 
-    public boolean isWriteable(Object arg0) {
+    public boolean isWriteable(T arg0) {
         return writeable;
     }
 
-    public boolean isReadable(Object arg0) {
+    public boolean isReadable(T arg0) {
         return readable;
     }
 
-    public abstract Object getValue(Object item);
+    public abstract Object getValue(T item);
 
     public String getColumnName() {
         return columnName;

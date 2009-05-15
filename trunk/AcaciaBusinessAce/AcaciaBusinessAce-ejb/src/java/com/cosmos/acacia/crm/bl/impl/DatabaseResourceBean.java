@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,6 +19,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.cosmos.acacia.crm.assembling.Algorithm;
+import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.CommunicationType;
@@ -62,6 +64,9 @@ public class DatabaseResourceBean
 
     private static Map<String, EnumClass> enumClassMap;
     private static Map<Enum, Map<String, DbResource>> dbResourceMap;
+    
+    @EJB
+    private CurrencyNominalLocal currencyNominalManager;
 
     @PersistenceContext
     private EntityManager em;
@@ -100,6 +105,7 @@ public class DatabaseResourceBean
             getDbResources(CustomerPaymentType.class);
             getDbResources(DocumentType.class);
             getDbResources(DocumentStatus.class);
+            currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }
     }

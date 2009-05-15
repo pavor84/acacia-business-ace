@@ -62,6 +62,7 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     private static final long serialVersionUID = 1L;
 
     public static final Classifier Employee = new Classifier();
+    public static final Classifier Cashier = new Classifier();
     public static final Classifier Customer = new Classifier();
     public static final Classifier Supplier = new Classifier();
     public static final Classifier Producer = new Classifier();
@@ -112,6 +113,7 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
 
     static {
         setClassifier(Employee, "Employee");
+        setClassifier(Cashier, "Cashier");
         setClassifier(Customer, "Customer", "Customer/Client", "With this classifier are classified the customers.");
         setClassifier(Supplier, "Supplier");
         setClassifier(Producer, "Producer");

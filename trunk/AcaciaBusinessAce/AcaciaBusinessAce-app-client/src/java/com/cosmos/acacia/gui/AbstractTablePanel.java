@@ -660,9 +660,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             // where the selection is unselected and as result the refresh DataTable
             // is invoked and the new row is already in the table.
             if(dataTable.getRowIndex(newRowObject) == -1)
-                dataTable.addRow(newRowObject);
+                addTableObject(newRowObject);
             fireAdd(newRowObject);
         }
+    }
+
+    protected void addTableObject(Object newRowObject) {
+        dataTable.addRow(newRowObject);
     }
 
     /**
@@ -684,11 +688,15 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                 Object newRowObject = modifyRow(rowObject);
                 if(newRowObject != null)
                 {
-                    dataTable.replaceSelectedRow(newRowObject);
+                    replaceTableObject(newRowObject);
                     fireModify(newRowObject);
                 }
             }
         }
+    }
+
+    protected void replaceTableObject(Object newRowObject) {
+        dataTable.replaceSelectedRow(newRowObject);
     }
 
     @Action
