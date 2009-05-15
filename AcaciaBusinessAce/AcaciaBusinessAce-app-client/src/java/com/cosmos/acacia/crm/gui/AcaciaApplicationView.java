@@ -48,6 +48,7 @@ import com.cosmos.acacia.crm.gui.assembling.AssemblingCategoryTreeTablePanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingMessageListPanel;
 import com.cosmos.acacia.crm.gui.assembling.AssemblingSchemasPanel;
 import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
+import com.cosmos.acacia.crm.gui.cash.CashReconcileListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BranchSelectionPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
@@ -607,6 +608,12 @@ public class AcaciaApplicationView extends FrameView {
         PaymentMatchingPanel panel = new PaymentMatchingPanel(getParentId());
         panel.showFrame();
     }
+    
+    @Action
+    public void cashReconcileAction(){
+        CashReconcileListPanel panel = new CashReconcileListPanel(getParentId());
+        panel.showFrame();
+    }
 
     private ActionMap getActionMap()
     {
@@ -755,22 +762,35 @@ public class AcaciaApplicationView extends FrameView {
         paymentMenu.setText(resourceMap.getString("paymentMenu.text"));
         paymentMenu.setName("paymentMenu");
         paymentMenu.setMnemonic('M');
+        menuBar.add(paymentMenu);
         
-        //customer payments
+        //customer payments item
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("customerPaymentsAction"));
         menuItem.setText(resourceMap.getString("paymentMenu.customerPayments.text"));
         menuItem.setMnemonic('C');
         paymentMenu.add(menuItem);
         
-        //payments matching
+        //payments matching item
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("customerPaymentsMatchingAction"));
         menuItem.setText(resourceMap.getString("paymentMenu.customerPaymentsMatching.text"));
         menuItem.setMnemonic('M');
         paymentMenu.add(menuItem);
         
-        menuBar.add(paymentMenu);
+        //cash management menu
+        JBMenu cashManagement = new JBMenu();
+        cashManagement.setText(resourceMap.getString("cashManagementMenu.text"));
+        cashManagement.setName("cashManagementMenu");
+        cashManagement.setMnemonic('G');
+        menuBar.add(cashManagement);
+        
+        //cash matching : cash reconcile item
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("cashReconcileAction"));
+        menuItem.setText(resourceMap.getString("cashManagementMenu.cashReconcile.text"));
+        menuItem.setMnemonic('R');
+        cashManagement.add(menuItem);
         
         reportsMenu.setText(resourceMap.getString("reportsMenu.text")); // NOI18N
         reportsMenu.setName("reportsMenu"); // NOI18N

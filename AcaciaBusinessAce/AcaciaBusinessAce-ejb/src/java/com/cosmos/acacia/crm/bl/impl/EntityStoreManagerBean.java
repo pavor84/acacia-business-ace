@@ -52,6 +52,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     private AcaciaSessionLocal session;
     @EJB
     private EntitySequenceServiceLocal entitySequenceService;
+    
     //
     private static Integer addressDataObjectTypeId;
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
@@ -373,6 +374,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             document.setPublisherOfficer(session.getPerson());
             document.setDocumentType(documentType.getDbResource());
             document.setDocumentStatus(DocumentStatus.Draft.getDbResource());
+            document.setCreationTime(new Date());
             DataObject dataObject = new DataObject();
             dataObject.setDataObjectType(dotLocal.getDataObjectType(cls.getName()));
             document.setDataObject(dataObject);

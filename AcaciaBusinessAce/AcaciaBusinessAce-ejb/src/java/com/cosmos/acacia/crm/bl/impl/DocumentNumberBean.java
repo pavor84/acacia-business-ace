@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.ELProperty;
 
 import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.CashReconcile;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Invoice;
@@ -39,7 +40,7 @@ public class DocumentNumberBean implements DocumentNumberLocal{
     }
     
     public BigInteger getNextDocumentNumber(Class<? extends DataObjectBean> entityClass, Address branch, Query maxNumberQuery) {
-        BigInteger number = (BigInteger) maxNumberQuery.getSingleResult();
+        Number number = (Number) maxNumberQuery.getSingleResult();
         // no orders for this warehouse
         if (number == null) {
             Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(branch);
@@ -55,13 +56,12 @@ public class DocumentNumberBean implements DocumentNumberLocal{
                         + ". This is needed to generate document numbers!");
             }
 
-            number = new BigInteger("" + warehouse.getIndex());
-            number = number.multiply(DOCUMENT_INDEX_MULTIPLICATOR);
+            BigInteger result = new BigInteger("" + warehouse.getIndex());
+            result = result.multiply(DOCUMENT_INDEX_MULTIPLICATOR);
+            return result;
         } else {
-            number = number.add(new BigInteger("1"));
+            return new BigInteger(""+(number.longValue()+1));
         }
-
-        return number;
     }
 
     public BigInteger getNextDocumentNumber(Class<? extends DataObjectBean> entityClass, Address branch, String maxNumberQueryName, Object[] queryParameters) {
@@ -91,6 +91,9 @@ public class DocumentNumberBean implements DocumentNumberLocal{
         }else if ( entity instanceof PurchaseOrder ){
             PurchaseOrder e = (PurchaseOrder) entity;
             e.setOrderNumber(number);
+        }else if ( entity instanceof CashReconcile ){
+            CashReconcile e = (CashReconcile) entity;
+            e.setDocumentNumber(number.longValue());
         }
     }
 
@@ -109,6 +112,9 @@ public class DocumentNumberBean implements DocumentNumberLocal{
         }else if ( entity instanceof PurchaseOrder ){
             q = em.createNamedQuery("PurchaseOrder.maxOrderNumberForBranch");
             q.setParameter("branch", getBranch(entity));
+        }else if ( entity instanceof CashReconcile ){
+                q = em.createNamedQuery(CashReconcile.NQ_MAX_NUMBER);
+                q.setParameter("branch", getBranch(entity));
         }
         
         return q;
@@ -116,7 +122,11 @@ public class DocumentNumberBean implements DocumentNumberLocal{
 
     //add custom support for every document entity here
     private Address getBranch(DataObjectBean entity) {
-        return (Address) ELProperty.create("${branch}").getValue(entity);
+        if ( entity instanceof CashReconcile ){
+            CashReconcile e = (CashReconcile) entity;
+            return e.getPublisherBranch();
+        }else
+            return (Address) ELProperty.create("${branch}").getValue(entity);
     }
 }
 

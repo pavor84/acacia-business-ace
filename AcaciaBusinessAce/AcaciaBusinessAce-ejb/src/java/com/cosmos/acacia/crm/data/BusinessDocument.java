@@ -112,6 +112,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     public static final String PURCHASE_ORDER = "PO";
     public static final String PURCHASE_ORDER_CONFIRMATION = "POC";
     public static final String PURCHASE_INVOICE = "PI";
+    public static final String CASH_RECONCILE = "CR";
 
     //
     @Id
@@ -249,6 +250,10 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
         )
     )
     protected Person publisherOfficer;
+    
+    @Column(name = "creation_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date creationTime;
 
     @JoinColumn(name = "document_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
@@ -414,5 +419,13 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Override
     public String getInfo() {
         return toString();
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

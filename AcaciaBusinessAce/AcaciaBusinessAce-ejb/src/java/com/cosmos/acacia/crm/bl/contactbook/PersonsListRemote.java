@@ -12,6 +12,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
@@ -130,4 +131,10 @@ public interface PersonsListRemote {
      * @return list of staff persons
      */
     List<Person> getStaff();
+
+    /**
+     * List all persons that are Classified as {@link Classifier#Cashier} and are from the current branch
+     * @return
+     */
+    List<Person> getCashiers();
 }

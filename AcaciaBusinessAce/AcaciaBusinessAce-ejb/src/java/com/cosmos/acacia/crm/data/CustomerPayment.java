@@ -85,6 +85,19 @@ import com.cosmos.acacia.annotation.ValidationType;
                 name = "CustomerPayment.getUnmatched",
                 query = "select e from CustomerPayment e where e.branch = :branch and e.dataObject.deleted = false and e.status = :completed " +
                         "and (e.matchedAmount = 0 or e.matchedAmount is null) order by e.id"
+            ),
+        /**
+         * Parameters:
+         * - branch
+         * - completed - CustomerPaymentStatus.Completed.getDbResource()
+         * - start - not null, start date (inclusive)
+         * - end - not null, end date (exclusive)
+         */
+        @NamedQuery
+            (
+                name = "CustomerPayment.confirmedForPeriod",
+                query = "select e from CustomerPayment e where e.branch = :branch and e.dataObject.deleted = false and e.status = :completed " +
+                        "and e.completionTime >= :start and e.completionTime < :end "
             )
         
     })
@@ -118,7 +131,7 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     private DbResource currency;
     
     @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Property(title="Created At", editable=false)
     private Date creationTime;
     
@@ -142,7 +155,7 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     private Person cashier;
     
     @Column(name = "transaction_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Property(title="Transaction Date", propertyValidator=@PropertyValidator(required=true))
     private Date transactionDate;
     
@@ -170,7 +183,7 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     private Person creator;
     
     @Column(name = "completed_at")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Property(title="Completed At", editable=false)
     private Date completionTime;
 

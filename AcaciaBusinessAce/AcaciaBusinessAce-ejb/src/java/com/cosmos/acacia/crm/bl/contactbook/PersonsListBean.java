@@ -3,6 +3,7 @@ package com.cosmos.acacia.crm.bl.contactbook;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -15,16 +16,19 @@ import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
+import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.users.UsersLocal;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.City;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.enums.Gender;
+import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -51,6 +55,9 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     @EJB
     private AcaciaSessionLocal session;
+    
+    @EJB
+    private ClassifiersLocal classifersManager;
     
     @EJB
     private UsersLocal usersManager;
@@ -182,5 +189,24 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
                 result.add(person);
         }
         return result;
+    }
+
+    @Override
+    public List<Person> getCashiers() {
+        Classifier cashierClassifer = classifersManager.getClassifier(Classifier.Cashier.getClassifierCode()); 
+        
+        List cashiers = (List)
+            AcaciaUtils.getResultList(em, "Person.getCassifiedFromBranch", 
+            "branchId", session.getBranch().getAddressId(),
+            "classifierId", cashierClassifer.getClassifierId()
+            );
+        
+        //double check if the result only contains persons, otherwise it will blow ugly
+        for (Iterator iterator = cashiers.iterator(); iterator.hasNext();) {
+            if ( !(iterator.next() instanceof Person) )
+                iterator.remove();
+            
+        }
+        return cashiers;
     }
 }

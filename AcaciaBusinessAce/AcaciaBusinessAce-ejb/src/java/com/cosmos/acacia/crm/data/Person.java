@@ -53,6 +53,22 @@ import javax.persistence.Transient;
             (
             name = "Person.getAllNotDeleted",
             query = "select p from Person p where p.dataObject.deleted = false"
+            ),
+        /**
+         * All persons registered as contacts in a given branch and classified with a classifier.
+         * Parameters:
+         * - branchId
+         * - classifierId
+         */
+        @NamedQuery
+            (
+            name = "Person.getCassifiedFromBranch",
+            query = "select cp.contact from ContactPerson cp, ClassifiedObject co "+
+            " where" +
+            "  cp.contact.partnerId = co.classifiedObjectPK.classifiedObjectId" +
+            "  and cp.parentId = :branchId" +
+            "  and cp.contact.dataObject.deleted = false" +
+            "  and co.classifiedObjectPK.classifierId = :classifierId"
             )
     }
 )

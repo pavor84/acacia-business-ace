@@ -60,6 +60,8 @@ public class AcaciaUtils
 
     private static NumberFormat moneyFormat = createMoneyFormat();
 
+    private static DateFormat dateTimeFormat;
+
     public static String formatMoney(BigDecimal value)
     {
         return moneyFormat.format(value);
@@ -259,6 +261,12 @@ public class AcaciaUtils
         }
 
         return mediumDateFormat;
+    }
+    
+    public static DateFormat getDateTimeFormat(){
+        if ( dateTimeFormat==null )
+            dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return dateTimeFormat;
     }
 
     public static SimpleDateFormat getLongDateFormat()

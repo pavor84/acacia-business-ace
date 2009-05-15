@@ -65,6 +65,14 @@ public class PropertyDetails implements Cloneable, Serializable {
             int orderPosition) {
         this(propertyName, propertyTitle, propertyClassName, null, null, orderPosition);
     }
+    
+    public PropertyDetails(
+                           String propertyName,
+                           String propertyTitle,
+                           String propertyClassName,
+                           int orderPosition, boolean editable) {
+        this(propertyName, propertyTitle, propertyClassName, null, null, orderPosition, editable);
+    }
 
     public PropertyDetails(
             String propertyName,
@@ -90,12 +98,23 @@ public class PropertyDetails implements Cloneable, Serializable {
             Object sourceUnreadableValue,
             String columnName,
             int orderPosition) {
-        this.propertyName = propertyName;
-        this.propertyTitle = propertyTitle;
-        this.propertyClassName = propertyClassName;
-        this.sourceUnreadableValue = sourceUnreadableValue;
-        this.columnName = columnName;
-        this.orderPosition = orderPosition;
+        this(propertyName, propertyTitle, propertyClassName, sourceUnreadableValue, columnName, orderPosition, true);
+    }
+    
+    public PropertyDetails(
+                           String propertyName,
+                           String propertyTitle,
+                           String propertyClassName,
+                           Object sourceUnreadableValue,
+                           String columnName,
+                           int orderPosition, boolean editable) {
+       this.propertyName = propertyName;
+       this.propertyTitle = propertyTitle;
+       this.propertyClassName = propertyClassName;
+       this.sourceUnreadableValue = sourceUnreadableValue;
+       this.columnName = columnName;
+       this.orderPosition = orderPosition;
+       this.editable = editable;
     }
 
     public String getColumnName() {
