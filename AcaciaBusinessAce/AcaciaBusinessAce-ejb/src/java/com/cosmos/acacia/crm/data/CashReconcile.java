@@ -62,7 +62,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
             name = CashReconcile.NQ_MAX_NUMBER,
             query = "select max(e.documentNumber) from CashReconcile e " +
             		"where e.publisherBranch = :branch"
-        ),
+        )
 })
 public class CashReconcile extends BusinessDocument implements Serializable {
 
