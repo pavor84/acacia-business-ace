@@ -44,7 +44,7 @@ import com.cosmos.resource.TextResource;
         query = "SELECT e FROM CurrencyNominal e" +
             " where" +
             " e.currency = :currency" +
-            " order by e.nominal "),
+            " order by e.nominal ")
 })
 public class CurrencyNominal extends DataObjectBean implements Serializable, TextResource {
     public static final String NQ_FIND_BY_CUR = "CurrencyNominal.findByCurrency";

@@ -165,7 +165,6 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @JoinColumn(name = "document_status_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Document Status",
-        //customDisplay="${documentStatus.enumValue}",//customDisplay="${documentStatus.enumValue}",
         showOnly=true,
         updateStrategy=UpdateStrategy.READ,
         formComponentPair=@FormComponentPair(

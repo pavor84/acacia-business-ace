@@ -32,7 +32,7 @@ import com.cosmos.acacia.annotation.Property;
         name = CashReconcilePaymentSummary.NQ_FIND_FOR_RECONCILE,
         query = "SELECT e FROM CashReconcilePaymentSummary e" +
             " where" +
-            "  e.cashReconcile.id = :cashReconcile "),
+            "  e.cashReconcile.id = :cashReconcile ")
 })
 public class CashReconcilePaymentSummary implements Serializable{
     public static final String NQ_FIND_FOR_RECONCILE = "findForReconcile";

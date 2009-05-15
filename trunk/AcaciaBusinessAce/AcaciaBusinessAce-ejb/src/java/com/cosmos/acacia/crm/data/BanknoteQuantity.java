@@ -44,8 +44,7 @@ import com.cosmos.acacia.crm.enums.Currency;
             " where" +
             " e.dataObject.parentDataObjectId = :parentId " +
             " and e.dataObject.deleted = false " +
-            " and e.currencyNominal = :currencyNominal"),
- 
+            " and e.currencyNominal = :currencyNominal")
 })
 public class BanknoteQuantity extends DataObjectBean implements Serializable {
     public static final String NQ_BY_PARENT = "BanknoteQuantity.findForParent";
