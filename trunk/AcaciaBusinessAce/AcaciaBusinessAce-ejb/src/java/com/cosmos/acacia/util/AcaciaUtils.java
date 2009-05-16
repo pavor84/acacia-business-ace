@@ -12,10 +12,10 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.swing.text.MaskFormatter;
 
@@ -372,12 +372,11 @@ public class AcaciaUtils
      * @return - null if not found
      */
     public static Object getSingleResult(EntityManager em, String queryName, Object ... parameters) {
-        try{
-            Query q = getQuery(em, queryName, parameters);
-            return q.getSingleResult();
-        }catch ( NoResultException e ){
+        List result = (List) getResultList(em, queryName, parameters);
+        if ( result.isEmpty() )
             return null;
-        }
+        else 
+            return result.get(0);
     }
     
     /**
@@ -387,7 +386,7 @@ public class AcaciaUtils
      * every even object is parameter value).
      * @return
      */
-    public static Object getResultList(EntityManager em, String queryName, Object ... parameters) {
+    public static List getResultList(EntityManager em, String queryName, Object ... parameters) {
         Query q = getQuery(em, queryName, parameters);
         return q.getResultList();
     }

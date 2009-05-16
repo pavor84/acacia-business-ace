@@ -94,17 +94,34 @@ public class CurrencyNominalBean implements CurrencyNominalRemote, CurrencyNomin
         }
     }
 
+//    private void initNominals(Map<Currency, Collection<? extends CurrencyNominal>> defaultNominals) {
+//        for (Map.Entry<Currency, Collection<? extends CurrencyNominal>> nominalsEntry : defaultNominals.entrySet()) {
+//            DbResource currency = nominalsEntry.getKey().getDbResource();
+//            List<CurrencyNominal> existing = (List<CurrencyNominal>) AcaciaUtils.getResultList(em, 
+//                CurrencyNominal.NQ_FIND_BY_CUR, 
+//                "currency", currency);
+//            if ( existing.isEmpty()){
+//                for (CurrencyNominal currencyNominal : nominalsEntry.getValue()) {
+//                    esm.persist(em, currencyNominal);
+//                }
+//            }
+//        }
+//    }
+//    
     private void initNominals(Map<Currency, Collection<? extends CurrencyNominal>> defaultNominals) {
         for (Map.Entry<Currency, Collection<? extends CurrencyNominal>> nominalsEntry : defaultNominals.entrySet()) {
-            DbResource currency = nominalsEntry.getKey().getDbResource();
-            List<CurrencyNominal> existing = (List<CurrencyNominal>) AcaciaUtils.getResultList(em, 
-                CurrencyNominal.NQ_FIND_BY_CUR, 
-                "currency", currency);
-            if ( existing.isEmpty()){
-                for (CurrencyNominal currencyNominal : nominalsEntry.getValue()) {
+            for (CurrencyNominal currencyNominal : nominalsEntry.getValue()) {
+                DbResource currency = nominalsEntry.getKey().getDbResource();
+                CurrencyNominal existing = (CurrencyNominal) AcaciaUtils.getSingleResult(em, 
+                    CurrencyNominal.NQ_FIND_BY_NOM_AND_CURR, 
+                    "currency", currency,
+                    "nominal", currencyNominal.getNominal());
+                if ( existing==null )
                     esm.persist(em, currencyNominal);
-                }
             }
+            
+            
+                
         }
     }
 
@@ -113,8 +130,11 @@ public class CurrencyNominalBean implements CurrencyNominalRemote, CurrencyNomin
         int[] n = {1, 2, 5};
         double m = 0.01d;
         int i = 0;
-        while ( new BigDecimal(m).compareTo(biggestNominal)<0 ){
+        while ( true ){
             BigDecimal nominalValue = new BigDecimal((double)n[i]*m);
+            if ( nominalValue.compareTo(biggestNominal)>0 )
+                break;
+            
             nominalValue = nominalValue.round(MathContext.DECIMAL32);
             CurrencyNominal nominal = new CurrencyNominal(nominalValue, currency.getDbResource()); 
             result.add(nominal);
