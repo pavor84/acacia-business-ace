@@ -108,13 +108,13 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         jBLabel5 = new com.cosmos.swingb.JBLabel();
         jBLabel6 = new com.cosmos.swingb.JBLabel();
         statusField = new com.cosmos.acacia.gui.AcaciaComboBox();
-        completedAtField = new com.cosmos.swingb.JBDatePicker();
         docNumberField = new com.cosmos.swingb.JBTextField();
         jBLabel14 = new com.cosmos.swingb.JBLabel();
         createdAtField = new com.cosmos.swingb.JBDatePicker();
         jBLabel15 = new com.cosmos.swingb.JBLabel();
         createdByField = new com.cosmos.swingb.JBTextField();
         jBLabel16 = new com.cosmos.swingb.JBLabel();
+        completedAtField = new com.cosmos.swingb.JBTextField();
         jBPanel2 = new com.cosmos.swingb.JBPanel();
         amountField = new com.cosmos.swingb.JBFormattedTextField();
         jBLabel7 = new com.cosmos.swingb.JBLabel();
@@ -176,9 +176,6 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         statusField.setEnabled(false);
         statusField.setName("statusField"); // NOI18N
 
-        completedAtField.setEditable(false);
-        completedAtField.setName("completedAtField"); // NOI18N
-
         docNumberField.setEditable(false);
         docNumberField.setName("docNumberField"); // NOI18N
 
@@ -196,6 +193,10 @@ public class CustomerPaymentForm extends BaseEntityPanel {
 
         jBLabel16.setText(resourceMap.getString("jBLabel16.text")); // NOI18N
         jBLabel16.setName("jBLabel16"); // NOI18N
+
+        completedAtField.setEditable(false);
+        completedAtField.setText(resourceMap.getString("completedAtField.text")); // NOI18N
+        completedAtField.setName("completedAtField"); // NOI18N
 
         javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
         jBPanel1.setLayout(jBPanel1Layout);
@@ -218,8 +219,8 @@ public class CustomerPaymentForm extends BaseEntityPanel {
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(branchField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                     .addComponent(docNumberField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                    .addComponent(completedAtField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                    .addComponent(completedByField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
+                    .addComponent(completedByField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                    .addComponent(completedAtField, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jBPanel1Layout.createSequentialGroup()
@@ -256,8 +257,8 @@ public class CustomerPaymentForm extends BaseEntityPanel {
                             .addComponent(docNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(completedAtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jBLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(completedAtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(completedByField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -491,7 +492,7 @@ public class CustomerPaymentForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField branchField;
     private com.cosmos.acacia.gui.AcaciaComboBox cashierField;
     private com.cosmos.swingb.JBLabel cashierLabel;
-    private com.cosmos.swingb.JBDatePicker completedAtField;
+    private com.cosmos.swingb.JBTextField completedAtField;
     private com.cosmos.swingb.JBTextField completedByField;
     private com.cosmos.swingb.JBDatePicker createdAtField;
     private com.cosmos.swingb.JBTextField createdByField;
@@ -689,8 +690,9 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         // document number
         docNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("documentNumber"));
         
-        // completed at
-        completedAtField.bind(bindGroup, entity, entProps.getPropertyDetails("completionTime"), AcaciaUtils.getShortDateFormat());
+        // completion time
+        if ( entity.getCompletionTime()!=null )
+            completedAtField.setText(AcaciaUtils.getDateTimeFormat().format(entity.getCompletionTime()));
         
         // completed by
         if (entity.getCompletor() != null)

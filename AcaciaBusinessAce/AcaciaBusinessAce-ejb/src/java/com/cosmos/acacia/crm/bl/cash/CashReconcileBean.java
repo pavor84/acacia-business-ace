@@ -21,7 +21,6 @@ import javax.swing.text.DateFormatter;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.bl.impl.DocumentNumberLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.BanknoteQuantity;
 import com.cosmos.acacia.crm.data.CashReconcile;
@@ -56,9 +55,6 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
     
     @EJB
     private AcaciaSessionLocal session;
-    
-    @EJB
-    private DocumentNumberLocal documentNumberLocal;
     
     public EntityProperties getListingEntityProperties() {
 
@@ -237,7 +233,8 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
         entity.setDocumentStatus(DocumentStatus.Completed.getDbResource());
         entity.setDocumentDate(new Date());
         //esm.setDocumentNumber(em, entity);
-        documentNumberLocal.setDocumentNumber(entity);
+        //documentNumberLocal.setDocumentNumber(entity);
+        esm.setDocumentNumber(em, entity);
         return saveCashReconcile(entity);
     }
 

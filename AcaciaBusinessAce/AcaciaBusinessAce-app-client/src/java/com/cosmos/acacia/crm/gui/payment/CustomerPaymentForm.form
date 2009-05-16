@@ -84,8 +84,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="branchField" alignment="1" pref="249" max="32767" attributes="2"/>
                       <Component id="docNumberField" alignment="1" pref="249" max="32767" attributes="2"/>
-                      <Component id="completedAtField" alignment="1" pref="249" max="32767" attributes="2"/>
                       <Component id="completedByField" alignment="1" pref="249" max="32767" attributes="2"/>
+                      <Component id="completedAtField" alignment="0" pref="249" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -132,8 +132,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="completedAtField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jBLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="completedAtField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -241,12 +241,6 @@
             <Property name="name" type="java.lang.String" value="statusField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBDatePicker" name="completedAtField">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="completedAtField" noResource="true"/>
-          </Properties>
-        </Component>
         <Component class="com.cosmos.swingb.JBTextField" name="docNumberField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
@@ -281,6 +275,13 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jBLabel16.text"/>
             <Property name="name" type="java.lang.String" value="jBLabel16" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="completedAtField">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="text" type="java.lang.String" resourceKey="completedAtField.text"/>
+            <Property name="name" type="java.lang.String" value="completedAtField" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

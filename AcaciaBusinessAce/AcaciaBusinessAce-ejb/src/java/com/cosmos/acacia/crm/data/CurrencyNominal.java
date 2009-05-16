@@ -44,12 +44,27 @@ import com.cosmos.resource.TextResource;
         query = "SELECT e FROM CurrencyNominal e" +
             " where" +
             " e.currency = :currency" +
-            " order by e.nominal ")
+            " order by e.nominal "),
+    /**
+     * Parameters:
+     * - currency
+     * - nominal
+     */
+    @NamedQuery(
+        name = CurrencyNominal.NQ_FIND_BY_NOM_AND_CURR,
+        query = "SELECT e FROM CurrencyNominal e" +
+            " where" +
+            " e.dataObject.deleted = false" +
+            " and e.dataObject.parentDataObjectId is null " +
+            " and e.currency = :currency" +
+            " and e.nominal = :nominal ")
 })
 public class CurrencyNominal extends DataObjectBean implements Serializable, TextResource {
     public static final String NQ_FIND_BY_CUR = "CurrencyNominal.findByCurrency";
 
     public static final String NQ_FIND_NOMINAL_VALUES = "CurrencyNominal.findNominalValues";
+
+    public static final String NQ_FIND_BY_NOM_AND_CURR = "NQ_FIND_BY_NOM_AND_CURR";
 
     @Id
     @Column(name = "nominal_id", nullable = false)
