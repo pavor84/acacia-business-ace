@@ -43,7 +43,7 @@ public class PropertyDetails implements Cloneable, Serializable {
      */
     private String customDisplay;
     private boolean showOnly;
-    private AutoBinding.UpdateStrategy updateStrategy;
+    private AutoBinding.UpdateStrategy updateStrategy = AutoBinding.UpdateStrategy.READ_WRITE;
     private String selectableListDialogClassName;
     private List<PropertyDetail> selectableListDialogConstructorParameters;
     private List<PropertyDetails> propertyDetailsDependencies;
