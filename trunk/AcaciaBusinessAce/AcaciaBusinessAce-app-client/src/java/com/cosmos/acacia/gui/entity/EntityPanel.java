@@ -100,8 +100,6 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     @Override
     protected void initData() {
         super.initData();
-        if(true)
-            return;
 
         EntityProperties entityProps = getEntityProperties();
         BindingGroup bg = getBindingGroup();

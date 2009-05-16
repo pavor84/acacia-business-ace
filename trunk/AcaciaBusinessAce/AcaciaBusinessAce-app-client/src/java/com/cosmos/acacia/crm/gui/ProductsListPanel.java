@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.gui.product.ProductPanel;
@@ -33,19 +32,19 @@ import com.cosmos.swingb.DialogResponse;
  * @author Miro
  */
 public class ProductsListPanel
-    extends AbstractTablePanel
-{
-    
+        extends AbstractTablePanel {
+
     @EJB
     private ProductsListRemote formSession;
-
     private BindingGroup productsBindingGroup;
     private List<SimpleProduct> products;
-
     private EntityProperties entityProps;
 
-    public ProductsListPanel(BigInteger parentDataObjectId)
-    {
+    public ProductsListPanel() {
+        this(getAcaciaSession().getOrganization().getId());
+    }
+
+    public ProductsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
@@ -57,15 +56,15 @@ public class ProductsListPanel
         entityProps = getFormSession().getProductListingEntityProperties();
 
         List<PropertyDetails> propertyDetails =
-            new ArrayList<PropertyDetails>(entityProps.getValues());
+                new ArrayList<PropertyDetails>(entityProps.getValues());
 
         //set custom display for 'productCategory'
         setCustomDisplay(propertyDetails, "category",
-            "${category.categoryName}");
+                "${category.categoryName}");
 
         //set custom display for 'patternMaskFormat'
         setCustomDisplay(propertyDetails, "patternMaskFormat",
-            "${patternMaskFormat.patternName} (${patternMaskFormat.format})");
+                "${patternMaskFormat.patternName} (${patternMaskFormat.format})");
 
         //set custom display for 'producer'
         setCustomDisplay(propertyDetails, "producer", "${producer.displayName}");
@@ -77,9 +76,10 @@ public class ProductsListPanel
     }
 
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( productsBindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (productsBindingGroup != null) {
             productsBindingGroup.unbind();
+        }
 
         productsBindingGroup = new BindingGroup();
         AcaciaTable productsTable = getDataTable();
@@ -96,11 +96,9 @@ public class ProductsListPanel
 
     }
 
-    protected boolean deleteRow(Object rowObject)
-    {
-        if(rowObject != null)
-        {
-            deleteProduct((SimpleProduct)rowObject);
+    protected boolean deleteRow(Object rowObject) {
+        if (rowObject != null) {
+            deleteProduct((SimpleProduct) rowObject);
             return true;
         }
 
@@ -108,15 +106,12 @@ public class ProductsListPanel
     }
 
     @Override
-    protected Object modifyRow(Object rowObject)
-    {
-        if(rowObject != null)
-        {
+    protected Object modifyRow(Object rowObject) {
+        if (rowObject != null) {
             //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
-            ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
+            ProductPanel productPanel = new ProductPanel((SimpleProduct) rowObject);
             DialogResponse response = productPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return productPanel.getSelectedValue();
             }
         }
@@ -126,22 +121,18 @@ public class ProductsListPanel
 
     @Override
     protected void viewRow(Object rowObject) {
-        if(rowObject != null)
-        {
+        if (rowObject != null) {
             //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
-            ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
+            ProductPanel productPanel = new ProductPanel((SimpleProduct) rowObject);
             DialogResponse response = productPanel.showDialog(this);
         }
     }
 
     @Override
-    protected Object newRow()
-    {
-        //ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
-        ProductPanel productPanel = new ProductPanel(getParentDataObjectId());
+    protected Object newRow() {
+        ProductPanel productPanel = new ProductPanel(getFormSession().newProduct());
         DialogResponse response = productPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
+        if (DialogResponse.SAVE.equals(response)) {
             return productPanel.getSelectedValue();
         }
 
@@ -149,64 +140,55 @@ public class ProductsListPanel
     }
 
     @Override
-    public boolean canCreate()
-    {
+    public boolean canCreate() {
         return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
 
     @Override
-    public boolean canModify(Object rowObject)
-    {
+    public boolean canModify(Object rowObject) {
         return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
 
     @Override
-    public boolean canDelete(Object rowObject)
-    {
+    public boolean canDelete(Object rowObject) {
         return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
-    
+
     @Override
     public boolean canView(Object rowObject) {
         //return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
         return true;
     }
 
-
-    protected List<SimpleProduct> getProducts()
-    {
-        if(products == null)
-        {
-                  products = getFormSession().getProducts(getParentDataObjectId());
+    protected List<SimpleProduct> getProducts() {
+        if (products == null) {
+            products = getFormSession().getProducts(getParentDataObjectId());
         }
 
         return products;
     }
 
-    private List<DbResource> getMeasureUnits()
-    {
+    private List<DbResource> getMeasureUnits() {
         return getFormSession().getMeasureUnits();
     }
 
-    private List<DbResource> getMeasureUnits(MeasurementUnit.Category category)
-    {
+    private List<DbResource> getMeasureUnits(MeasurementUnit.Category category) {
         return getFormSession().getMeasureUnits(category);
     }
 
-    protected EntityProperties getProductEntityProperties()
-    {
+    protected EntityProperties getProductEntityProperties() {
         return getFormSession().getProductEntityProperties();
     }
 
     protected ProductsListRemote getFormSession() {
-        if(formSession == null)
+        if (formSession == null) {
             formSession = getBean(ProductsListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected int deleteProduct(SimpleProduct product)
-    {
+    protected int deleteProduct(SimpleProduct product) {
         return getFormSession().deleteProduct(product);
     }
 

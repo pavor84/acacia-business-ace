@@ -37,22 +37,8 @@ public class ProductPanel extends BaseEntityPanel {
 
     public ProductPanel(SimpleProduct product) {
         super(product.getParentId());
-        if (product == null) {
-            this.product = getFormSession().newProduct();
-        } else {
-            this.product = product;
-        }
+        this.product = product;
         init();
-    }
-
-    public ProductPanel(BigInteger parentDataObjectId) {
-        super(parentDataObjectId);
-        init();
-    }
-
-    /** Creates new form ProductPanelNew */
-    public ProductPanel() {
-        this((BigInteger) null);
     }
 
     public SimpleProduct getProduct() {
