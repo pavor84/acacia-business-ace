@@ -430,6 +430,10 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
 
     @Override
     public List<ProductSupplier> getProductSuppliers(SimpleProduct product) {
+        if(product == null || product.getId() == null) {
+            return new ArrayList<ProductSupplier>();
+        }
+
         Query q = em.createNamedQuery("ProductSupplier.findByProduct");
         q.setParameter("product", product);
         return new ArrayList<ProductSupplier>(q.getResultList());
