@@ -43,4 +43,15 @@ public class PropertyDetail implements Serializable {
     public void setSetter(String setter) {
         this.setter = setter;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PropertyDetail[");
+        sb.append("getter=").append(getter);
+        sb.append(", setter=").append(setter);
+        sb.append("]@").append(super.hashCode());
+
+        return sb.toString();
+    }
 }

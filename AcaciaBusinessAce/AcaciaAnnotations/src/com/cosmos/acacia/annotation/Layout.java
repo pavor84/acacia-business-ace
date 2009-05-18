@@ -20,10 +20,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Layout {
 
     public static final String DEFAULT_CONSTRAINTS = "wrap {0}, fillx";
-    public static final String[] DEFAULT_COLUMNS_CONSTRAINTS_PAIR =
-        {
-            "sizegroup labelSG",
-            "sizegroup valueSG, grow 50, fill"
+    public static final String[] DEFAULT_COLUMNS_CONSTRAINTS_PAIR = {
+            "sizegroup labelSG, :{0}:{1}",
+            "sizegroup valueSG, grow 50, fill, :{0}:{1}"
         };
     public static final int DEFAULT_COLUMNS_PAIR_GAP = 10;
     public static final String DEFAULT_ROW_CONSTRAINTS = "";
@@ -49,4 +48,12 @@ public @interface Layout {
     int[] columnsGaps() default {};
 
     int[] rowsGaps() default {};
+
+    int preferredLabelWidth() default -1;
+
+    int maxLabelWidth() default 200;
+
+    int preferredFieldWidth() default 150;
+
+    int maxFieldWidth() default -1;
 }
