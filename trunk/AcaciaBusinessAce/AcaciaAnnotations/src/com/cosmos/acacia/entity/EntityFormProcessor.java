@@ -16,7 +16,6 @@ import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.util.BeanUtils;
-import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -427,8 +426,28 @@ public class EntityFormProcessor {
             if (columnsConstraints.size() == 0) {
                 for (int i = 0; i < columnsPairs; i++) {
                     int pos = i << 1;
-                    put(columnsConstraints, pos, Layout.DEFAULT_COLUMNS_CONSTRAINTS_PAIR[0]);
-                    put(columnsConstraints, pos + 1, Layout.DEFAULT_COLUMNS_CONSTRAINTS_PAIR[1]);
+
+                    Integer preferredWidth;
+                    Integer maximumWidth;
+                    if((preferredWidth = layout.preferredLabelWidth()) < 0) {
+                        preferredWidth = null;
+                    }
+                    if((maximumWidth = layout.maxLabelWidth()) < 0) {
+                        maximumWidth = null;
+                    }
+                    put(columnsConstraints, pos, 
+                            MessageFormat.format(Layout.DEFAULT_COLUMNS_CONSTRAINTS_PAIR[0],
+                                preferredWidth, maximumWidth));
+
+                    if((preferredWidth = layout.preferredFieldWidth()) < 0) {
+                        preferredWidth = null;
+                    }
+                    if((maximumWidth = layout.maxFieldWidth()) < 0) {
+                        maximumWidth = null;
+                    }
+                    put(columnsConstraints, pos + 1,
+                            MessageFormat.format(Layout.DEFAULT_COLUMNS_CONSTRAINTS_PAIR[1],
+                                preferredWidth, maximumWidth));
                 }
             }
 
