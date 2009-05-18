@@ -589,10 +589,7 @@ public class JBTable
     {
         Application app = getApplication();
         JBComboList comboList;
-        if(app != null)
-            comboList = new JBComboList(app);
-        else
-            comboList = new JBComboList();
+        comboList = new JBComboList();
 
         comboList.bind(
             bindingGroup,
