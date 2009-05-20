@@ -42,6 +42,7 @@ BPEL will be the connection language between the services.
   * [http://spring-rich-c.sourceforge.net/1.0.0/index.html Spring Rich Client Project] (Spring-RCP) mission is to provide an elegant way to build highly-configurable, GUI-standards-following rich-client applications faster by leveraging the Spring Framework, and a rich library of UI factories and support classes.
   * [http://creamtec.com/products/ajaxswing/ AjaxSwing] automatically converts Java Swing and AWT applications into AJAX websites at runtime.
   * [http://www.javafx.com/ JavaFX]
+  * [http://www.itmill.com/ IT Mill]/[http://vaadin.com/ Vaadin] Server-Driven RIA Framework (DHTML/JavaScript & Swing).
 
  * Server specification
   * [http://fusesource.com/ FUSE Open Source Project]
