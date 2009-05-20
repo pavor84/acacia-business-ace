@@ -17,4 +17,6 @@ public interface EntityListBinder {
 
     JComboBoxBinding bind(BindingGroup bindingGroup, SelectableListDialog selectableListDialog,
             Object beanEntity, PropertyDetails propertyDetails);
+
+    void refresh();
 }

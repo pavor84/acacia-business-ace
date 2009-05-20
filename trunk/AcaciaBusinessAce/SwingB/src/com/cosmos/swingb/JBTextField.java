@@ -6,8 +6,12 @@ package com.cosmos.swingb;
 
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.resource.BeanResource;
+import com.cosmos.resource.EnumResource;
+import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
+import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JTextField;
@@ -39,6 +43,7 @@ public class JBTextField
     private String propertyName;
     private Object beanEntity;
     private ELProperty elProperty;
+    private BeanResource beanResource;
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
@@ -195,11 +200,27 @@ public class JBTextField
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
 
+    protected BeanResource getBeanResource() {
+        if(beanResource == null) {
+            beanResource = new BeanResource(getApplication());
+        }
+
+        return beanResource;
+    }
+
     private void validateText(Object beanEntity) {
         try {
             Object propertyValue;
             if ((propertyValue = elProperty.getValue(beanEntity)) != null) {
-                setText(String.valueOf(propertyValue));
+                String text;
+                if(propertyValue instanceof EnumResource) {
+                    text = getBeanResource().getName((EnumResource)propertyValue);
+                } else if(propertyValue instanceof TextResource) {
+                    text = getBeanResource().getName((TextResource)propertyValue);
+                } else {
+                    text = String.valueOf(propertyValue);
+                }
+                setText(text);
             } else {
                 setText(null);
             }
