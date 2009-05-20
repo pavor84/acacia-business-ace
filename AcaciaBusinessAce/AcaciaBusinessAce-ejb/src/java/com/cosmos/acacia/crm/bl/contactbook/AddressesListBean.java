@@ -34,6 +34,7 @@ import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
+import javax.persistence.NoResultException;
 
 /**
  * Implementation of handling persons (see interface for more information)
@@ -184,6 +185,22 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         log.info("Parent: " + parentId);
 
         return new ArrayList<ContactPerson>(q.getResultList());
+    }
+
+    @Override
+    public ContactPerson getContactPerson(Address address, Person person) {
+        if(address == null || address.getId() == null || person == null || person.getId() == null) {
+            return null;
+        }
+
+        Query q = em.createNamedQuery("ContactPerson.findByAddressIdAndPerson");
+        q.setParameter("addressId", address.getAddressId());
+        q.setParameter("person", person);
+        try {
+            return (ContactPerson)q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
     }
 
     @Override

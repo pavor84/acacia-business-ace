@@ -21,6 +21,8 @@ public interface SessionContext {
     static String BRANCH_KEY = "BRANCH_KEY";
     /** Currently logged person */
     static String PERSON_KEY = "PERSON_KEY";
+    /** Currently logged contact person */
+    static String CONTACT_PERSON_KEY = "CONTACT_PERSON_KEY";
     /** Whether data from all branches should be presented */
     static String VIEW_DATA_FROM_ALL_BRANCHES_KEY = "VIEW_DATA_FROM_ALL_BRANCHES_KEY";
     /** Currently logged person */
