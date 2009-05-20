@@ -1,11 +1,14 @@
 package com.cosmos.acacia.app;
 
+import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import static com.cosmos.acacia.app.SessionContext.BRANCH_KEY;
 import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
+import static com.cosmos.acacia.app.SessionContext.CONTACT_PERSON_KEY;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -62,6 +65,8 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @EJB
     private ClassifiersLocal classifiersManager;
+    @EJB
+    private AddressesListLocal addressService;
 
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
@@ -134,6 +139,19 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public Person getPerson() {
         return (Person) getSession().getValue(PERSON_KEY);
+    }
+
+    @Override
+    public ContactPerson getContactPerson() {
+        ContactPerson contactPerson;
+        if((contactPerson = (ContactPerson)getSession().getValue(CONTACT_PERSON_KEY)) != null) {
+            return contactPerson;
+        }
+
+        contactPerson = addressService.getContactPerson(getBranch(), getPerson());
+        getSession().setValue(CONTACT_PERSON_KEY, contactPerson);
+
+        return contactPerson;
     }
 
     @Override

@@ -114,7 +114,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
 
     @JoinColumn(name = "supplier_branch_id", referencedColumnName = "address_id")
     @ManyToOne
-    @Property(title="Supplier Branch"/*,
+    @Property(title="Supplier Branch",
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel",
             constructorParameters={@PropertyName(getter="supplier", setter="businessPartner")}
@@ -129,7 +129,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             secondComponent=@Component(
                 componentClass=JBComboList.class
             )
-        )*/
+        )
     )
     private Address supplierBranch;
 
@@ -299,7 +299,9 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     }
 
     public void setSupplierBranch(Address supplierBranch) {
+        Address oldValue = this.supplierBranch;
         this.supplierBranch = supplierBranch;
+        firePropertyChange("supplierBranch", oldValue, supplierBranch);
     }
 
     public BankDetail getBankDetail() {
@@ -315,7 +317,9 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     }
 
     public void setSupplier(BusinessPartner supplier) {
+        BusinessPartner oldValue = this.supplier;
         this.supplier = supplier;
+        firePropertyChange("supplier", oldValue, supplier);
     }
 
     public Person getSupplierContact() {
@@ -323,7 +327,9 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     }
 
     public void setSupplierContact(Person supplierContact) {
+        Person oldValue = this.supplierContact;
         this.supplierContact = supplierContact;
+        firePropertyChange("supplierContact", oldValue, supplierContact);
     }
 
     public DbResource getDeliveryTerms() {

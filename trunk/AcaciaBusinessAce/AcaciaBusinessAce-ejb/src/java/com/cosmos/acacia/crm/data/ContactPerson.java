@@ -21,37 +21,45 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author Miro
  */
 @Entity
-@Table(name = "contact_persons")
+@Table(name = "contact_persons",
+    uniqueConstraints=@UniqueConstraint(
+        columnNames={"parent_id", "contact_id"}
+    )
+)
 @NamedQueries(
     {
-        @NamedQuery
-        (
+        @NamedQuery(
            name = "ContactPerson.findByParentDataObjectAndDeleted",
            query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId = :parentDataObjectId and cp.dataObject.deleted = :deleted"
         ),
-        @NamedQuery
-        (
+        @NamedQuery(
            name = "ContactPerson.findByParentDataObjectIsNullAndDeleted",
            query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId is null and cp.dataObject.deleted = :deleted"
         ),
-        @NamedQuery
-        (
+        @NamedQuery(
             name = "ContactPerson.findByPersonAndTypeAndParentDataObject",
             query = "select cp from ContactPerson cp where cp.contact=:person and " +
                     "cp.dataObject.parentDataObjectId = :parentDataObjectId and " +
                     "cp.positionType=:positionType"
         ),
-        @NamedQuery
-        (
+        @NamedQuery(
             name = "ContactPerson.findByPersonAndParentDataObject",
             query = "select cp from ContactPerson cp where cp.contact=:person" +
                     " and cp.dataObject.parentDataObjectId=:parentDataObjectId"
+        ),
+        @NamedQuery(
+            name = "ContactPerson.findByAddressIdAndPerson",
+            query = "select cp from ContactPerson cp" +
+                    " where" +
+                    "  cp.parentId=:addressId" +
+                    "  cp.contact=:person"
         )
     }
 )

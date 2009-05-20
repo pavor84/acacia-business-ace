@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
@@ -43,6 +44,12 @@ public interface AcaciaSessionRemote {
      * @return
      */
     Person getPerson();
+
+    /**
+     * Get the currently logged contact person
+     * @return
+     */
+    ContactPerson getContactPerson();
 
     /**
      * Gets the list of all data object types

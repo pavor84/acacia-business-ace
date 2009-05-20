@@ -99,6 +99,14 @@ public interface AddressesListRemote {
     List<ContactPerson> getContactPersons(BigInteger parentDataObjectId);
 
     /**
+     * 
+     * @param address
+     * @param person
+     * @return
+     */
+    ContactPerson getContactPerson(Address address, Person person);
+
+    /**
      * Gets the EntityProperties for a ContactPerson entity
      *
      * @return entity properties

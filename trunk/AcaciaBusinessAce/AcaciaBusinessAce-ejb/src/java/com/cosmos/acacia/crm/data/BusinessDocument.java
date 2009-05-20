@@ -166,6 +166,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @ManyToOne(optional = false)
     @Property(title="Document Status",
         showOnly=true,
+        //customDisplay="documentStatus.enumValue",
         updateStrategy=UpdateStrategy.READ,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
