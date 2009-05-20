@@ -2,6 +2,7 @@ package com.cosmos.acacia.crm.client;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -17,7 +18,6 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
@@ -190,5 +190,10 @@ public class LocalSession implements AcaciaSessionRemote {
     @Override
     public Classifier getClassifier(String classifierCode) {
         return remoteSession.getClassifier(classifierCode);
+    }
+
+    @Override
+    public ContactPerson getContactPerson() {
+        return remoteSession.getContactPerson();
     }
 }
