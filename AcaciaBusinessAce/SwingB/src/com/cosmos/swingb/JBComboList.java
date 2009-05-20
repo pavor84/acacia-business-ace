@@ -491,4 +491,18 @@ public class JBComboList
     public Binding getBinding() {
         return binding;
     }
+
+    public void refresh() {
+        if (selectableListDialog != null) {
+            Object selectedItem = comboBox.getSelectedItem();
+
+            List listData = selectableListDialog.getListData();
+            observableData.clear();
+            observableData.addAll(listData);
+
+            if(selectedItem != null && listData.contains(selectedItem)) {
+                comboBox.setSelectedItem(selectedItem);
+            }
+        }
+    }
 }
