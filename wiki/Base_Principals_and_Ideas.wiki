@@ -22,7 +22,6 @@ BPEL will be the connection language between the services.
  * Client specification:
   * [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
   * [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
-  * [http://www.zkoss.org/ ZK Direct RIA, Open Source Ajax]
  Helpful projects:
   * [http://www.eclipse.org/proposals/riena/ Eclipse Riena Project]
   * [http://www.eclipse.org/ecf/ Eclipse Communication Framework Project]
@@ -43,6 +42,7 @@ BPEL will be the connection language between the services.
   * [http://creamtec.com/products/ajaxswing/ AjaxSwing] automatically converts Java Swing and AWT applications into AJAX websites at runtime.
   * [http://www.javafx.com/ JavaFX]
   * [http://www.itmill.com/ IT Mill]/[http://vaadin.com/ Vaadin] Server-Driven RIA Framework (DHTML/JavaScript & Swing).
+  * [http://www.zkoss.org/ ZK Direct RIA, Open Source Ajax]
 
  * Server specification
   * [http://fusesource.com/ FUSE Open Source Project]
