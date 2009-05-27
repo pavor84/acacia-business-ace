@@ -21,7 +21,7 @@ import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.BusinessDocument;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -65,6 +65,7 @@ import javax.persistence.TemporalType;
         @FormContainer(
             name="itemList",
             title="Item List",
+            depends={"<entityForm>"},
             container=@Component(
                 componentClass=JBPanel.class
             ),
@@ -119,7 +120,6 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel",
             constructorParameters={@PropertyName(getter="supplier", setter="businessPartner")}
         ),
-        depends={"supplier"},
         formComponentPair=@FormComponentPair(
             parentContainerName="supplierDetails",
             firstComponent=@Component(
@@ -133,11 +133,12 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private Address supplierBranch;
 
-    @JoinColumn(name = "supplier_contact_id", referencedColumnName = "partner_id")
+    @JoinColumn(name = "supplier_contact_id", referencedColumnName = "contact_person_id")
     @ManyToOne
     @Property(title="Supplier Contact",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
+            className="com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel",
+            constructorParameters={@PropertyName(getter="supplierBranch", setter="address")}
         ),
         formComponentPair=@FormComponentPair(
             parentContainerName="supplierDetails",
@@ -150,7 +151,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             )
         )
     )
-    private Person supplierContact;
+    private ContactPerson supplierContact;
 
     @Basic(optional = false)
     @Column(name = "invoice_number", nullable = false, length = 16)
@@ -322,12 +323,12 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
         firePropertyChange("supplier", oldValue, supplier);
     }
 
-    public Person getSupplierContact() {
+    public ContactPerson getSupplierContact() {
         return supplierContact;
     }
 
-    public void setSupplierContact(Person supplierContact) {
-        Person oldValue = this.supplierContact;
+    public void setSupplierContact(ContactPerson supplierContact) {
+        ContactPerson oldValue = this.supplierContact;
         this.supplierContact = supplierContact;
         firePropertyChange("supplierContact", oldValue, supplierContact);
     }
