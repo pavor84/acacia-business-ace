@@ -3,7 +3,6 @@
  *
  * Created on 30 March 2008, 00:32
  */
-
 package com.cosmos.acacia.gui;
 
 import java.awt.Component;
@@ -20,16 +19,15 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 
 import com.cosmos.swingb.JBButton;
 
-
 /**
  *
  * @author  Bozhidar Bozhanov
  */
 public class EntityFormButtonPanel extends AcaciaPanel {
+
     private static final long serialVersionUID = 1L;
 
     //protected static Logger log = Logger.getLogger(EntityFormButtonPanel.class);
-
     /** Creates new form EntityFormButtonPanel */
     public EntityFormButtonPanel() {
         super();
@@ -123,8 +121,6 @@ public class EntityFormButtonPanel extends AcaciaPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBButton closeButton;
     private com.cosmos.swingb.JBButton customButton;
@@ -135,12 +131,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     // End of variables declaration//GEN-END:variables
     private BaseEntityPanel baseEntityPanel;
 
-
     @Action
-    public void saveAction()
-    {
+    public void saveAction() {
         try {
-            if (baseEntityPanel.checkFormValidity()){
+            if (baseEntityPanel.checkFormValidity()) {
                 baseEntityPanel.saveAction();
             }
         } catch (ClassCastException ex) {
@@ -150,8 +144,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     }
 
     @Action
-    public void closeAction()
-    {
+    public void closeAction() {
         try {
             baseEntityPanel.closeAction();
         } catch (ClassCastException ex) {
@@ -161,8 +154,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     }
 
     @Action
-    public void problemsAction()
-    {
+    public void problemsAction() {
         try {
             baseEntityPanel.checkFormValidity();
         } catch (ClassCastException ex) {
@@ -172,8 +164,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     }
 
     @Action
-    public void printAction()
-    {
+    public void printAction() {
         try {
             baseEntityPanel.print();
         } catch (ClassCastException ex) {
@@ -182,42 +173,36 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         }
     }
 
-    public void initSaveStateListener(final BaseEntityPanel baseEntityPanel)
-    {
+    public void initSaveStateListener(final BaseEntityPanel baseEntityPanel) {
         this.baseEntityPanel = baseEntityPanel;
-        try {
-            setSaveActionState(baseEntityPanel);
-
-            BindingGroup bindingGroup = baseEntityPanel.getBindingGroup();
-            if(bindingGroup != null)
-            {
-                bindingGroup.addBindingListener(new AbstractBindingListener()
-                {
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public void targetChanged(Binding binding, PropertyStateEvent event) {
-                        setSaveActionState(baseEntityPanel);
-                    }
-                });
-            }
-        } catch (ClassCastException ex) {
-            ex.printStackTrace();
-            //log.error("initSaveStateListener: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
-        }
+//        try {
+//            setSaveActionState(baseEntityPanel);
+//
+//            BindingGroup bindingGroup = baseEntityPanel.getBindingGroup();
+//            if(bindingGroup != null)
+//            {
+//                bindingGroup.addBindingListener(new AbstractBindingListener()
+//                {
+//                    @SuppressWarnings("unchecked")
+//                    @Override
+//                    public void targetChanged(Binding binding, PropertyStateEvent event) {
+//                        setSaveActionState(baseEntityPanel);
+//                    }
+//                });
+//            }
+//        } catch (ClassCastException ex) {
+//            ex.printStackTrace();
+//            //log.error("initSaveStateListener: Parent of the EntityFormButtonPanel can only be BaseEntityPanel");
+//        }
     }
 
-    public void setSaveActionState(BaseEntityPanel parent)
-    {
-        BindingGroup bindingGroup;
-        if((bindingGroup = parent.getBindingGroup()) != null)
-        {
-            setEnabled(Button.Save, bindingGroup.isContentValid());
-            setEnabled(Button.Problems, !bindingGroup.isContentValid());
-            setEnabled(Button.Custom, bindingGroup.isContentValid());
-            setEnabledCustomButtons(bindingGroup.isContentValid());
-        }
+    public void setSaveActionState(BaseEntityPanel parent) {
+        boolean isContentValid = baseEntityPanel.isContentValid();
+        setEnabled(Button.Save, isContentValid);
+        setEnabled(Button.Problems, !isContentValid);
+        setEnabled(Button.Custom, isContentValid);
+        setEnabledCustomButtons(isContentValid);
     }
-
 
     protected void setEnabledCustomButtons(boolean enabled) {
         for (Component button : customButtonsPanel.getComponents()) {
@@ -225,20 +210,17 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         }
     }
 
+    public enum Button {
 
-    public enum Button
-    {
         Save("saveAction"),
         Close("closeAction"),
         Problems("problemsAction"),
         Custom("customButton"),
         Print("printButton");
 
-        private Button(String actionName)
-        {
+        private Button(String actionName) {
             this.actionName = actionName;
         }
-
         private String actionName;
 
         public String getActionName() {
@@ -246,12 +228,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         }
     };
 
-    public javax.swing.Action getAction(Button button)
-    {
+    public javax.swing.Action getAction(Button button) {
         ApplicationActionMap actionMap = getApplicationActionMap();
 
-        if(actionMap != null && button != null)
-        {
+        if (actionMap != null && button != null) {
             return actionMap.get(button.getActionName());
         }
 
@@ -259,33 +239,31 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     }
 
     public void setEnabled(Button button, boolean enabled) {
-        ApplicationAction action = (ApplicationAction)getAction(button);
-        if(action != null)
-        {
+        ApplicationAction action = (ApplicationAction) getAction(button);
+        if (action != null) {
             action.setEnabled(enabled);
-        }else{
-            if ( button.equals(Button.Save) )
+        } else {
+            if (button.equals(Button.Save)) {
                 saveButton.setEnabled(enabled);
-            else if ( button.equals(Button.Close) )
+            } else if (button.equals(Button.Close)) {
                 closeButton.setEnabled(enabled);
-            else if ( button.equals(Button.Problems) )
+            } else if (button.equals(Button.Problems)) {
                 problemsButton.setEnabled(enabled);
-            else if ( button.equals(Button.Custom) )
+            } else if (button.equals(Button.Custom)) {
                 customButton.setEnabled(enabled);
+            }
         }
     }
 
     public void setSelected(Button button, boolean enabled) {
-        ApplicationAction action = (ApplicationAction)getAction(button);
-        if(action != null)
-        {
+        ApplicationAction action = (ApplicationAction) getAction(button);
+        if (action != null) {
             action.setSelected(enabled);
         }
     }
 
     public void setVisible(Button button, boolean visible) {
-        switch(button)
-        {
+        switch (button) {
             case Save:
                 saveButton.setVisible(visible);
                 break;
@@ -309,8 +287,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     }
 
     public boolean isVisible(Button button) {
-        switch(button)
-        {
+        switch (button) {
             case Save:
                 return saveButton.isVisible();
 
@@ -333,7 +310,7 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     @Override
     protected void initData() {
         setVisible(Button.Custom, false);
-        
+
         customButtonsPanel.setLayout(new FlowLayout(FlowLayout.TRAILING, 10, 0));
     }
 
@@ -341,9 +318,8 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         return customButton;
     }
 
-    public JBButton getButton(Button button){
-        switch(button)
-        {
+    public JBButton getButton(Button button) {
+        switch (button) {
             case Save:
                 return saveButton;
 
@@ -361,30 +337,30 @@ public class EntityFormButtonPanel extends AcaciaPanel {
         }
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
-    
+
     /**
      * Adds additional button to the panel. The button is added on the left side of the close button.
      * Any number of buttons can be added. Their state (visible, enabled) should be managed externally.
      * @param Button
      */
-    public void addButton(JBButton button){
+    public void addButton(JBButton button) {
         customButtonsPanel.add(button);
     }
-    
+
     /**
      * Removes a button from the additional buttons panel. The button should have been added
      * before with {@link #addButton(JBButton)}
      * @param button
      */
-    public void removeButton(JBButton button){
+    public void removeButton(JBButton button) {
         customButtonsPanel.remove(button);
     }
-    
+
     /**
      * Removes all buttons added before with {@link #addButton(JBButton)}
      * @param button
      */
-    public void removeAllButtons(){
+    public void removeAllButtons() {
         customButtonsPanel.removeAll();
     }
 }
