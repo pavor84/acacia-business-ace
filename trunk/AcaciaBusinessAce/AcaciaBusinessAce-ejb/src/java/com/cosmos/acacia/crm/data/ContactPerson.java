@@ -59,7 +59,8 @@ import javax.persistence.UniqueConstraint;
             query = "select cp from ContactPerson cp" +
                     " where" +
                     "  cp.parentId=:addressId" +
-                    "  cp.contact=:person"
+                    "  and cp.contact=:person" +
+                    "  and cp.dataObject.deleted = false"
         )
     }
 )

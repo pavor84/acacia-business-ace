@@ -83,7 +83,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
         PurchaseInvoiceItem invoiceItem = new PurchaseInvoiceItem();
         invoiceItem.setInvoice(purchaseInvoice);
         invoiceItem.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
-        invoiceItem.setReceivedQuantity(BigDecimal.ONE);
+        invoiceItem.setReceivedQuantity(BigDecimal.ZERO);
         return invoiceItem;
     }
 

@@ -126,6 +126,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
 
     @Column(name = "document_number")
     @Property(title="Document Number",
+        showOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
             firstComponent=@Component(
@@ -146,6 +147,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Column(name = "document_date")
     @Temporal(TemporalType.TIMESTAMP)
     @Property(title="Document Date",
+        showOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
             firstComponent=@Component(
