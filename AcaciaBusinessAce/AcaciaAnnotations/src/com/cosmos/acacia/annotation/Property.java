@@ -20,6 +20,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Property {
 
+    public static final String  ENTITY_FORM_NAME = "<entityForm>";
+
     String title();
 
     boolean readOnly() default false;
@@ -38,6 +40,7 @@ public @interface Property {
 
     /**
      * The property name(s) from which this property depends.
+     * If the property name is "<entityForm>", then the whole form validity is the condition.
      * List<PropertyDetails> getPropertyDetailsDependencies() from PropertyDetails
      */
     String[] depends() default {};

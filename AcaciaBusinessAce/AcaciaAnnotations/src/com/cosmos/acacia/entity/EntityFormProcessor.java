@@ -26,7 +26,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -56,8 +58,6 @@ public class EntityFormProcessor {
             Object.class.getName();
     private static final String ACACIA_ANNOTATION_PREFIX =
             "com.cosmos.acacia.annotation.";
-    private static final String ACACIA_FORM_ANNOTATION_PREFIX =
-            ACACIA_ANNOTATION_PREFIX + "Form";
     private static final String FORM_ANNOTATION_CLASS_NAME = Form.class.getName();
     private static final int INITIAL_VALUE = 1000000000;
     //
@@ -70,6 +70,7 @@ public class EntityFormProcessor {
     private Map<String, Property> propertiesMap;
     private Map<String, String> propertyNamesMap;
     private List<ContainerEntity> containerEntities;
+    private Map<String, Set<String>> containerDependenciesMap;
 
     public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
         this.entityClass = entityClass;
@@ -83,6 +84,7 @@ public class EntityFormProcessor {
         propertiesMap = new TreeMap<String, Property>();
         propertyNamesMap = new TreeMap<String, String>();
         containerEntities = new ArrayList<ContainerEntity>();
+        containerDependenciesMap = new TreeMap<String, Set<String>>();
         List<Form> forms = getAnnotations(entityClass);
         for (Form form : forms) {
             JComponent container = null;
@@ -237,7 +239,7 @@ public class EntityFormProcessor {
         return propertiesMap.get(componentName);
     }
 
-    protected JComponent getComponent(String componentName) {
+    public JComponent getJComponent(String componentName) {
         return componentsMap.get(componentName);
     }
 
@@ -265,6 +267,14 @@ public class EntityFormProcessor {
         }
 
         throw new RuntimeException("Unsupported container type: " + container);
+    }
+
+    public Map<String, Set<String>> getContainerDependenciesMap() {
+        return containerDependenciesMap;
+    }
+
+    public Set<String> getContainerDependencies(String containerName) {
+        return containerDependenciesMap.get(containerName);
     }
 
     private JComponent getComponent(Component component, Field field) {
@@ -303,9 +313,6 @@ public class EntityFormProcessor {
 
     protected void initJComponentResources(JComponent jComponent) {
         resourceMap.injectComponent(jComponent);
-//        if (!(jComponent instanceof JLabel || jComponent instanceof AbstractButton)) {
-//            return;
-//        }
     }
 
     public JComponent getContainer(String containerName) {
@@ -327,7 +334,8 @@ public class EntityFormProcessor {
             throw new RuntimeException(ex);
         }
 
-        jContainer.setName(formContainer.name());
+        String containerName;
+        jContainer.setName(containerName = formContainer.name());
 
         Border border;
         if ((border = getBorder(container.componentBorder(), jContainer)) != null) {
@@ -343,6 +351,16 @@ public class EntityFormProcessor {
         }
 
         initJComponentResources(jContainer);
+
+        String[] values;
+        if((values = formContainer.depends()) != null && values.length > 0) {
+            Set<String> dependencies;
+            if((dependencies = containerDependenciesMap.get(containerName)) == null) {
+                dependencies = new TreeSet<String>();
+                containerDependenciesMap.put(containerName, dependencies);
+            }
+            dependencies.addAll(Arrays.asList(values));
+        }
 
         if(jContainer instanceof JTabbedPane) {
             return jContainer;
