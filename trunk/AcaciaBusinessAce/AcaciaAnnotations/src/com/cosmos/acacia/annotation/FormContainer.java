@@ -32,4 +32,11 @@ public @interface FormContainer {
     RelationshipType relationshipType() default RelationshipType.None;
 
     Class entityClass() default void.class;
+
+    /**
+     * The property name(s) from which this property depends.
+     * If the property name is "<entityForm>", then the whole form validity is the condition.
+     * List<PropertyDetails> getPropertyDetailsDependencies() from PropertyDetails
+     */
+    String[] depends() default {};
 }
