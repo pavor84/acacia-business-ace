@@ -22,7 +22,6 @@
             <included-library>file.reference.log4j-1.2.11.jar</included-library>
             <included-library>file.reference.liquidlnf.jar</included-library>
             <included-library>libs.absolutelayout.classpath</included-library>
-            <included-library>file.reference.beansbinding.jar</included-library>
             <included-library>file.reference.commons-beanutils-1.8.0.jar</included-library>
             <included-library>file.reference.commons-digester-1.8.jar</included-library>
             <included-library>file.reference.iText-2.1.3.jar</included-library>
@@ -36,6 +35,7 @@
             <included-library>file.reference.hibernate3.jar</included-library>
             <included-library>file.reference.hibernate-annotations.jar</included-library>
             <included-library>file.reference.commons-logging-1.1.1.jar</included-library>
+            <included-library>reference.beansbinding.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
@@ -72,6 +72,14 @@
             </reference>
             <reference>
                 <foreign-project>SwingB</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>beansbinding</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

@@ -17,24 +17,27 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetail;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.binding.EntityListBinder;
-import com.cosmos.util.BeanUtils;
 import java.awt.BorderLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import java.awt.Container;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -50,7 +53,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private EntityFormButtonPanel buttonPanel;
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
-    private Map<String, PropertyDependencies> propertyDependencies;
+    private Map<String, PropertyDependencies> propertyDependenciesMap;
 
     public EntityPanel(AbstractEntityListPanel entityListPanel, E entity) {
         super(entity);
@@ -115,6 +118,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
             String componentName = jComponent.getName();
             String propertyName = getPropertyName(componentName);
             PropertyDetails propertyDetails = entityProps.getPropertyDetails(propertyName);
+            addDependencies(jComponent.getName(), propertyDetails.getPropertyDetailsDependencies());
 
             if (jComponent instanceof EntityBinder) {
                 ((EntityBinder) jComponent).bind(bindingGroup, entity, propertyDetails);
@@ -129,6 +133,79 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         }
 
         bg.bind();
+
+        validateForm();
+    }
+
+    @Override
+    protected void entityChanged(Binding binding, PropertyStateEvent event) {
+        super.entityChanged(binding, event);
+        refreshRelatedComponents((JComponent)binding.getTargetObject(), event.getNewValue());
+        validateForm();
+    }
+
+    protected void refreshRelatedComponents(JComponent jComponent, Object newValue) {
+        PropertyChangeHandler handler = getPropertyChangeHandler();
+        String componentName = getJComponentName(jComponent);
+
+        String propertyName;
+        if((propertyName = getPropertyName(componentName)) == null) {
+            return;
+        }
+
+        List<PropertyBean> propertyBeans = handler.getPropertyBeansMap().get(propertyName);
+        if (propertyBeans != null && propertyBeans.size() > 0) {
+            for (PropertyBean propertyBean : propertyBeans) {
+                Object bean = propertyBean.getBean();
+                String setterName = propertyBean.getSetterName();
+                jComponent = propertyBean.getJComponent();
+                try {
+                    PropertyUtils.setProperty(bean, setterName, newValue);
+                    if (jComponent instanceof EntityListBinder) {
+                        ((EntityListBinder) jComponent).refresh();
+                    }
+                } catch (Exception ex) {
+                    throw new EntityPanelException("propertyName=" + propertyName +
+                            ", newValue=" + newValue +
+                            ", bean=" + bean + ", setterName=" + setterName +
+                            ", jComponent=" + jComponent, ex);
+                }
+            }
+        }
+    }
+
+    protected void validateForm() {
+        Map<String, PropertyDependencies> pdMap = getPropertyDependenciesMap();
+        for(String propertyName : pdMap.keySet()) {
+            boolean ready = true;
+            for(String pn : pdMap.get(propertyName).getDependencies()) {
+                if(getPropertyValue(pn) == null) {
+                    ready = false;
+                    break;
+                }
+            }
+
+            getJComponent(propertyName).setEnabled(ready);
+        }
+
+        Map<String, Set<String>> cdMap = getContainerDependenciesMap();
+        for(String containerName : cdMap.keySet()) {
+            for(String dependency : cdMap.get(containerName)) {
+                if(Property.ENTITY_FORM_NAME.equals(dependency)) {
+                    JComponent container = getContainer(containerName);
+                    JComponent parentContainer = (JComponent)container.getParent();
+                    boolean ready = getBindingGroup().isContentValid();
+                    container.setEnabled(ready);
+                    if(parentContainer instanceof JTabbedPane) {
+                        JTabbedPane tabbedPane = (JTabbedPane)parentContainer;
+                        int index;
+                        if((index = tabbedPane.indexOfComponent(container)) >= 0) {
+                            tabbedPane.setEnabledAt(index, ready);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     protected SelectableListDialog getSelectableListDialog(PropertyDetails propertyDetails,
@@ -143,6 +220,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                     return cls.newInstance();
                 }
 
+                addDependenciesByParameters(jComponent.getName(), parameters);
                 Class[] parameterTypes = getParameterTypes(parameters, entityProps);
                 Object[] parameterValues = getParameters(parameters);
                 SelectableListDialog listDialog = (SelectableListDialog) ConstructorUtils.invokeConstructor(cls, parameterValues, parameterTypes);
@@ -157,6 +235,17 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         }
 
         return new EntityListPanel(propertyDetails.getPropertyClass());
+    }
+
+    protected String getJComponentName(JComponent jComponent) {
+        if(jComponent instanceof JComboBox) {
+            Container parent;
+            if((parent = jComponent.getParent()) instanceof JBComboList) {
+                return parent.getName();
+            }
+        }
+
+        return jComponent.getName();
     }
 
     protected Object[] getParameters(List<PropertyDetail> parameters) {
@@ -197,7 +286,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private PropertyChangeHandler getPropertyChangeHandler() {
         if (propertyChangeHandler == null && entity instanceof PropertyChangeNotificationBroadcaster) {
             propertyChangeHandler = new PropertyChangeHandler();
-            ((PropertyChangeNotificationBroadcaster) entity).addPropertyChangeListener(propertyChangeHandler);
+            //((PropertyChangeNotificationBroadcaster) entity).addPropertyChangeListener(propertyChangeHandler);
         }
 
         return propertyChangeHandler;
@@ -282,7 +371,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     public JComponent getJComponent(String name) {
-        return entityFormProcessor.getContainer(name);
+        return entityFormProcessor.getJComponent(name);
     }
 
     public Map<String, JComponent> getContainersMap() {
@@ -307,5 +396,66 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     public Property getProperty(String componentName) {
         return entityFormProcessor.getProperty(componentName);
+    }
+
+    public Map<String, PropertyDependencies> getPropertyDependenciesMap() {
+        if(propertyDependenciesMap == null) {
+            propertyDependenciesMap = new TreeMap<String, PropertyDependencies>();
+        }
+
+        return propertyDependenciesMap;
+    }
+
+    public PropertyDependencies getPropertyDependencies(String propertyName) {
+        return getPropertyDependenciesMap().get(propertyName);
+    }
+
+    public PropertyDependencies putPropertyDependencies(String propertyName, PropertyDependencies propertyDependencies) {
+        return getPropertyDependenciesMap().put(propertyName, propertyDependencies);
+    }
+
+    public void addDependency(String propertyName, String dependencyPropertyName) {
+        PropertyDependencies propertyDependencies;
+        if((propertyDependencies = getPropertyDependencies(propertyName)) == null) {
+            propertyDependencies = new PropertyDependencies(propertyName);
+            putPropertyDependencies(propertyName, propertyDependencies);
+        }
+        propertyDependencies.addDependency(dependencyPropertyName);
+    }
+
+    public void addDependencies(String propertyName, List<PropertyDetails> pdList) {
+        if(pdList == null || pdList.size() == 0) {
+            return;
+        }
+
+        PropertyDependencies propertyDependencies;
+        if((propertyDependencies = getPropertyDependencies(propertyName)) == null) {
+            propertyDependencies = new PropertyDependencies(propertyName);
+            putPropertyDependencies(propertyName, propertyDependencies);
+        }
+
+        for(PropertyDetails pd : pdList) {
+            propertyDependencies.addDependency(pd.getPropertyName());
+        }
+    }
+
+    public void addDependenciesByParameters(String propertyName, List<PropertyDetail> pdList) {
+        if(pdList == null || pdList.size() == 0) {
+            return;
+        }
+
+        PropertyDependencies propertyDependencies;
+        if((propertyDependencies = getPropertyDependencies(propertyName)) == null) {
+            propertyDependencies = new PropertyDependencies(propertyName);
+            putPropertyDependencies(propertyName, propertyDependencies);
+        }
+
+        for(PropertyDetail pd : pdList) {
+            propertyDependencies.addDependency(pd.getGetter());
+        }
+    }
+
+    public Map<String, Set<String>> getContainerDependenciesMap() {
+        return entityFormProcessor.getContainerDependenciesMap();
     }
 }

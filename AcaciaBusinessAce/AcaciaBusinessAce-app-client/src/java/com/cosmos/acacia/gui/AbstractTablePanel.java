@@ -775,7 +775,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @SuppressWarnings("unchecked")
     @Action
     public Task refreshAction() {
-        log.info("refreshAction");
+        log.debug("refreshAction");
         Task result = new RefreshActionTask(getApplication());
         fireTableRefreshed();
         return result;
@@ -987,7 +987,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             // doInBackground() depends on from parameters
             // to RefreshActionTask fields, here.
             super(app);
-            log.info("RefreshActionTask()");
+            log.debug("RefreshActionTask()");
         }
 
         @Override

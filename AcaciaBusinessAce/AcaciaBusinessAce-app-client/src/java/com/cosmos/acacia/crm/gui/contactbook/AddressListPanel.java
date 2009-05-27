@@ -48,7 +48,11 @@ public class AddressListPanel extends AbstractTablePanel {
 
     public void setBusinessPartner(BusinessPartner businessPartner) {
         this.businessPartner = businessPartner;
-        setParentDataObjectId(businessPartner.getId());
+        if(businessPartner != null) {
+            setParentDataObjectId(businessPartner.getId());
+        } else {
+            setParentDataObjectId(null);
+        }
         refreshAction();
     }
 

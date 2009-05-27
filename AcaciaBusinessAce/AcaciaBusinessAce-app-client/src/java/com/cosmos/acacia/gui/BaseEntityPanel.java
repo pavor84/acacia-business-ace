@@ -37,6 +37,8 @@ import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBErrorPane;
 import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.listeners.NestedFormListener;
+import org.jdesktop.beansbinding.AbstractBindingListener;
+import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  * A base class for all panels representing a single entity
@@ -46,9 +48,8 @@ import com.cosmos.swingb.listeners.NestedFormListener;
 public abstract class BaseEntityPanel extends AcaciaPanel {
 
     //protected static Logger log = Logger.getLogger(BaseEntityPanel.class);
-
     protected DialogResponse modifiedResponse = null;
-
+    private EntityBindingListener entityBindingListener;
     private boolean editable = true;
 
     protected BaseEntityPanel(DataObjectBean dataObjectBean) {
@@ -63,13 +64,13 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     private void initConstructor() {
         addKeyListener(new KeyAdapter() {
+
             @Override
             public void keyPressed(KeyEvent evt) {
                 onKeyEvent(evt);
             }
         });
     }
-
 
     public abstract void performSave(boolean closeAfter);
 
@@ -79,8 +80,9 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     public abstract EntityFormButtonPanel getButtonPanel();
 
-    protected void init()
-    {
+    protected void init() {
+        entityBindingListener = new EntityBindingListener();
+        getBindingGroup().addBindingListener(entityBindingListener);
         initData();
         initSaveStateListener();
         setPrintButtonVisibility();
@@ -88,63 +90,57 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     private void setPrintButtonVisibility() {
-        boolean printButtonVisible = getReport() != null
-            || getReports().size() > 0;
+        boolean printButtonVisible = getReport() != null || getReports().size() > 0;
 
 
         getButtonPanel().setVisible(Button.Print, printButtonVisible);
     }
 
-    protected void initSaveStateListener()
-    {
+    protected void initSaveStateListener() {
         try {
             getButtonPanel().initSaveStateListener(this);
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             // No button panel
         }
     }
 
-    public boolean checkFormValidity()
-    {
-        if (getBindingGroup().isContentValid()){
-                return true;
+    public boolean checkFormValidity() {
+        if (getBindingGroup().isContentValid()) {
+            return true;
         }
         // TODO : Detailed message?
         JOptionPane.showMessageDialog(this, getResourceMap().getString("save.invalid"));
         return false;
     }
 
-
-    public void saveAction()
-    {
+    public void saveAction() {
         try {
             performSave(true);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             checkForValidationException(ex);
         }
     }
 
     final public void closeAction() {
-        if ( isEditable() ){
+        if (isEditable()) {
             BindingGroup bindingGroup;
-            if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
-            {
-                if(!closeDialogConfirmation())
+            if ((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged()) {
+                if (!closeDialogConfirmation()) {
                     return;
+                }
             }
         }
 
-        if (modifiedResponse != null)
+        if (modifiedResponse != null) {
             setDialogResponse(modifiedResponse);
-        else
+        } else {
             setDialogResponse(DialogResponse.CLOSE);
+        }
         close();
     }
 
-    public DataObject getDataObject()
-    {
-        if (getEntity() instanceof DataObjectBean)
-        {
+    public DataObject getDataObject() {
+        if (getEntity() instanceof DataObjectBean) {
             return ((DataObjectBean) getEntity()).getDataObject();
         }
 
@@ -159,36 +155,30 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
      * @param messages
      */
     @SuppressWarnings("unchecked")
-    private void updateFieldsStyle(List<ValidationMessage> messages)
-    {
+    private void updateFieldsStyle(List<ValidationMessage> messages) {
         //compose a set for easier and faster lookup
         BindingGroup bindingGroup;
-        if((bindingGroup = getBindingGroup()) != null)
-        {
+        if ((bindingGroup = getBindingGroup()) != null) {
             bindingGroup.getBindings();
             Set<String> errorProperties = new HashSet<String>();
-            for(ValidationMessage msg : messages)
-            {
-                if(msg.getTarget() != null)
-                {
+            for (ValidationMessage msg : messages) {
+                if (msg.getTarget() != null) {
                     String el = msg.getTarget();
                     errorProperties.add(el);
                 }
             }
 
-            for(Binding binding : bindingGroup.getBindings())
-            {
-                if(binding.getTargetObject() instanceof JBTextField)
-                {
-                    JBTextField textField = (JBTextField)binding.getTargetObject();
-                    if(errorProperties.contains(textField.getPropertyName()))
+            for (Binding binding : bindingGroup.getBindings()) {
+                if (binding.getTargetObject() instanceof JBTextField) {
+                    JBTextField textField = (JBTextField) binding.getTargetObject();
+                    if (errorProperties.contains(textField.getPropertyName())) {
                         textField.setStyleInvalid("");//temporary code, TODO fix
-                }
-                else if(binding.getTargetObject() instanceof JBComboBox)
-                {
-                    JBComboBox comboBox = (JBComboBox)binding.getTargetObject();
-                    if(errorProperties.contains(comboBox.getPropertyName()))
+                    }
+                } else if (binding.getTargetObject() instanceof JBComboBox) {
+                    JBComboBox comboBox = (JBComboBox) binding.getTargetObject();
+                    if (errorProperties.contains(comboBox.getPropertyName())) {
                         comboBox.setStyleInvalid();
+                    }
                 }
             }
         }
@@ -214,18 +204,17 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     @SuppressWarnings("unchecked")
-    protected Map<String, String> populateState()
-    {
-        Map <String, String> state = new HashMap<String, String>();
+    protected Map<String, String> populateState() {
+        Map<String, String> state = new HashMap<String, String>();
         Class clazz = getEntity().getClass();
         Field[] fields = clazz.getDeclaredFields();
 
-        for (Field field: fields)
-        {
+        for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                if (!Modifier.isTransient(field.getModifiers()))
+                if (!Modifier.isTransient(field.getModifiers())) {
                     state.put(field.getName(), String.valueOf(field.get(getEntity())));
+                }
             } catch (Exception ex) {
                 // Log?
                 ex.printStackTrace();
@@ -234,20 +223,17 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return state;
     }
 
-    protected void addNestedFormListener(AbstractTablePanel table)
-    {
+    protected void addNestedFormListener(AbstractTablePanel table) {
         table.addNestedFormListener(createNestedFormListener(table));
     }
 
-    protected NestedFormListener createNestedFormListener(final AbstractTablePanel table)
-    {
+    protected NestedFormListener createNestedFormListener(final AbstractTablePanel table) {
         final String dialogMessage = getResourceMap().getString("save.confirm");
         NestedFormListener listener = new NestedFormListener() {
 
             @Override
             public boolean actionPerformed() {
-                if (getDataObject() == null)
-                {
+                if (getDataObject() == null) {
                     int answer = JOptionPane.showConfirmDialog(
                             BaseEntityPanel.this, dialogMessage, "", JOptionPane.OK_CANCEL_OPTION);
 
@@ -257,8 +243,9 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                             performSave(false);
 
                             // Checking is special conditions for disabling new window after save are met
-                            if (isSpecialConditionPresent() == true)
+                            if (isSpecialConditionPresent() == true) {
                                 return false;
+                            }
 
                         } catch (Exception ex) {
                             checkForValidationException(ex);
@@ -280,27 +267,26 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     }
 
     @Override
-    protected void dialogWindowClosing(WindowEvent event)
-    {
-        if ( isEditable() ){
+    protected void dialogWindowClosing(WindowEvent event) {
+        if (isEditable()) {
             BindingGroup bindingGroup;
-            if((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged())
-            {
-                if(!closeDialogConfirmation())
+            if ((bindingGroup = getBindingGroup()) != null && bindingGroup.isContentChanged()) {
+                if (!closeDialogConfirmation()) {
                     return;
+                }
             }
         }
 
-        if (modifiedResponse != null)
+        if (modifiedResponse != null) {
             setDialogResponse(modifiedResponse);
-        else
+        } else {
             setDialogResponse(DialogResponse.CLOSE);
+        }
 
         super.dialogWindowClosing(event);
     }
 
-    protected boolean closeDialogConfirmation()
-    {
+    protected boolean closeDialogConfirmation() {
         ResourceMap resource = getResourceMap();
         String title = resource.getString("closeAction.ConfirmDialog.unsavedData.title");
         String message = resource.getString("closeAction.ConfirmDialog.unsavedData.message");
@@ -315,7 +301,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return JOptionPane.YES_OPTION == result;
     }
 
-    protected boolean showConfirmationDialog(String msg){
+    protected boolean showConfirmationDialog(String msg) {
         ResourceMap resource = getResourceMap();
         String title = resource.getString("ConfirmDialog.areYouSureTitle");
         int result = JOptionPane.showConfirmDialog(
@@ -327,10 +313,9 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         return JOptionPane.YES_OPTION == result;
     }
 
-    protected void checkForValidationException(Exception ex)
-    {
+    protected void checkForValidationException(Exception ex) {
         ValidationException ve = extractValidationException(ex);
-        if ( ve!=null ){
+        if (ve != null) {
             updateFieldsStyle(ve.getMessages());
             String message = getValidationErrorsMessage(ve);
             JBErrorPane.showDialog(this, createSaveErrorInfo(message, null));
@@ -343,8 +328,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         }
     }
 
-    protected void setModifiedResponse(DialogResponse modifiedResponse)
-    {
+    protected void setModifiedResponse(DialogResponse modifiedResponse) {
         this.modifiedResponse = modifiedResponse;
     }
 
@@ -354,43 +338,40 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
      *
      * @return if special conditions are present
      */
-    protected boolean isSpecialConditionPresent()
-    {
+    protected boolean isSpecialConditionPresent() {
         return false;
     }
 
     private void onKeyEvent(KeyEvent evt) {
-        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             closeAction();
-        } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() ==  KeyEvent.VK_S) {
-            if ( isEditable() )
+        } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_S) {
+            if (isEditable()) {
                 saveAction();
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void setReadonly(){
+    public void setReadonly() {
         this.editable = false;
         getButtonPanel().getButton(Button.Save).setVisible(editable);
         getButtonPanel().getButton(Button.Problems).setVisible(editable);
 
         BindingGroup bindGroup = getBindingGroup();
-        if ( bindGroup!=null ){
+        if (bindGroup != null) {
             for (Binding binding : bindGroup.getBindings()) {
                 Object targetObject = binding.getTargetObject();
-                if ( targetObject instanceof JBComboList ){
+                if (targetObject instanceof JBComboList) {
                     JBComboList c = (JBComboList) targetObject;
                     c.setEditable(editable);
-                }
-                else if ( targetObject instanceof JTextComponent ){
+                } else if (targetObject instanceof JTextComponent) {
                     JTextComponent c = (JTextComponent) targetObject;
                     c.setEditable(editable);
-                }
-                else if ( targetObject instanceof TextComponent ){
+                } else if (targetObject instanceof TextComponent) {
                     TextComponent c = (TextComponent) targetObject;
                     c.setEditable(editable);
-                }
-                else if ( targetObject instanceof Component ){
+                } else if (targetObject instanceof Component) {
                     Component c = (Component) targetObject;
                     c.setEnabled(editable);
                 }
@@ -408,5 +389,21 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         List entities = new ArrayList(1);
         entities.add(getEntity());
         return entities;
+    }
+
+    protected void entityChanged(Binding binding, PropertyStateEvent event) {
+        getButtonPanel().setSaveActionState(this);
+    }
+
+    public boolean isContentValid() {
+        return getBindingGroup().isContentValid();
+    }
+
+    private class EntityBindingListener extends AbstractBindingListener {
+
+        @Override
+        public void targetChanged(Binding binding, PropertyStateEvent event) {
+            entityChanged(binding, event);
+        }
     }
 }

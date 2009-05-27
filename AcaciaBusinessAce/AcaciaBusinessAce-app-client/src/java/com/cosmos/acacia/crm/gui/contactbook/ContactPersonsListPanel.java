@@ -15,6 +15,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
+import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -27,6 +29,12 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class ContactPersonsListPanel extends AbstractTablePanel {
 
+    public ContactPersonsListPanel(Address address) {
+        this(address != null ? address.getId() : (BigInteger)null);
+        this.address = address;
+    }
+
+
     /** Creates new form AddresssListPanel */
     public ContactPersonsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
@@ -36,6 +44,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     private AddressesListRemote formSession;
     private BindingGroup contactPersonsBindingGroup;
     private List<ContactPerson> contactPersons;
+    private Address address;
     /** Indicates whether the addresses are internal to the organization */
     private boolean isInternal;
 
@@ -52,6 +61,20 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
         contactPersonsBindingGroup.bind();
 
         contactPersonsTable.setEditable(false);
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+        if(address != null) {
+            setParentDataObjectId(address.getId());
+        } else {
+            setParentDataObjectId(null);
+        }
+        refreshAction();
     }
 
     protected List<ContactPerson> getContactPersons() {

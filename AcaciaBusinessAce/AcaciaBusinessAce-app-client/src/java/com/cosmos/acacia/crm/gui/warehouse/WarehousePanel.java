@@ -209,13 +209,7 @@ public class WarehousePanel extends BaseEntityPanel {
     
     protected void bindWarehouseManField(Address address) {
         
-        ContactPersonsListPanel listPanel = null;
-        if ( address!=null ){
-            listPanel = new ContactPersonsListPanel(address.getAddressId());
-        }
-        else{
-            listPanel = new ContactPersonsListPanel(null);
-        }
+        ContactPersonsListPanel listPanel = new ContactPersonsListPanel(address);
         
         if ( bindGroup.getBindings().contains(warehouseManBinding) )
             bindGroup.removeBinding(warehouseManBinding);
