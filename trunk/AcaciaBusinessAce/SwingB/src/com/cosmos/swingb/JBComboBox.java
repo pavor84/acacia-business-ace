@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
 import java.awt.Color;
@@ -43,32 +42,25 @@ import com.cosmos.swingb.validation.Validatable;
  * @author Miro
  */
 public class JBComboBox
-    extends JComboBox
-    implements Validatable
-{
+        extends JComboBox
+        implements Validatable {
 
     public static final String SELECTED_ITEM = "selectedItem";
-
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
-
     private ObservableList observableData;
     private String propertyName;
     private Object beanEntity;
-
     private JComboBoxBinding comboBoxBinding;
 
-
-    public JBComboBox()
-    {
+    public JBComboBox() {
         super();
         init();
     }
 
-    public JBComboBox(Object[] items)
-    {
+    public JBComboBox(Object[] items) {
         super(items);
         init();
     }
@@ -76,14 +68,14 @@ public class JBComboBox
     private void init() {
         setEditor(new JBComboBoxEditor());
         setRenderer(new CustomCellRenderer());
+        setPrototypeDisplayValue("1234567890");
     }
 
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
+            PropertyDetails propertyDetails) {
         return bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
@@ -92,19 +84,18 @@ public class JBComboBox
             List data,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        if(propertyDetails == null || propertyDetails.isHiden())
-        {
+            AutoBinding.UpdateStrategy updateStrategy) {
+        if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);
             setEnabled(false);
             return null;
         }
 
-        if(!(data instanceof ObservableList))
+        if (!(data instanceof ObservableList)) {
             observableData = ObservableCollections.observableList(data);
-        else
-            observableData = (ObservableList)data;
+        } else {
+            observableData = (ObservableList) data;
+        }
         this.propertyName = propertyDetails.getPropertyName();
         this.beanEntity = beanEntity;
 
@@ -123,8 +114,7 @@ public class JBComboBox
                 this,
                 beanProperty);
         Validator validator = propertyDetails.getValidator();
-        if(validator != null)
-        {
+        if (validator != null) {
             binding.setValidator(validator);
         }
 
@@ -150,18 +140,14 @@ public class JBComboBox
         return beanEntity;
     }
 
-    public JComboBoxBinding getComboBoxBinding()
-    {
+    public JComboBoxBinding getComboBoxBinding() {
         return comboBoxBinding;
     }
 
-    public ApplicationContext getContext()
-    {
-        if(applicationContext == null)
-        {
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
             Application app = getApplication();
-            if(app != null)
-            {
+            if (app != null) {
                 applicationContext = app.getContext();
             }
         }
@@ -169,13 +155,10 @@ public class JBComboBox
         return applicationContext;
     }
 
-    public ApplicationActionMap getApplicationActionMap()
-    {
-        if(applicationActionMap == null)
-        {
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 applicationActionMap = context.getActionMap(this);
             }
         }
@@ -183,13 +166,10 @@ public class JBComboBox
         return applicationActionMap;
     }
 
-    public ResourceMap getResourceMap()
-    {
-        if(resourceMap == null)
-        {
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 resourceMap = context.getResourceMap(this.getClass());
             }
         }
@@ -202,8 +182,9 @@ public class JBComboBox
     }
 
     public Application getApplication() {
-        if(application == null)
+        if (application == null) {
             application = Application.getInstance();
+        }
 
         return application;
     }
@@ -240,7 +221,6 @@ public class JBComboBox
         getEditor().getEditorComponent().setBackground(color);
     }
 
-
     @Override
     public void addKeyListener(KeyListener listener) {
         super.addKeyListener(listener);
@@ -254,18 +234,15 @@ public class JBComboBox
     }
 
     private class JBComboBoxEditor
-        extends BasicComboBoxEditor
-    {
+            extends BasicComboBoxEditor {
+
         public JBComboBoxEditor() {
             super();
             getEditorComponent().addMouseListener(new JBContextMenuCreaetor());
         }
     }
-
     /** Handling coversions */
-
     private ObjectToStringConverter converter;
-
     @SuppressWarnings("unchecked")
     private Binding binding;
 
@@ -277,7 +254,6 @@ public class JBComboBox
         this.converter = converter;
     }
 
-
     class CustomCellRenderer extends BeanListCellRenderer {
 
         public CustomCellRenderer() {
@@ -285,61 +261,54 @@ public class JBComboBox
 
         @Override
         public Component getListCellRendererComponent(JList list,
-                Object value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            if (getConverter() != null)
+                Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (getConverter() != null) {
                 value = getConverter().getPreferredStringForItem(value);
+            }
 
             return super.getListCellRendererComponent(list, value,
                     index, isSelected, cellHasFocus);
         }
     }
 
-    public void addItemListener(ItemListener listener, boolean ignoreSelectEvents)
-    {
-        if (ignoreSelectEvents)
+    public void addItemListener(ItemListener listener, boolean ignoreSelectEvents) {
+        if (ignoreSelectEvents) {
             super.addItemListener(new ComboListEventListener(listener));
-        else
+        } else {
             super.addItemListener(listener);
+        }
     }
 
     @Override
-    public void setSelectedItem(Object anObject)
-    {
+    public void setSelectedItem(Object anObject) {
         Object oldSelectedItem = getSelectedItem();
         super.setSelectedItem(anObject);
         Object newSelectedItem = getSelectedItem();
-        if(oldSelectedItem != null)
-        {
-            if(!oldSelectedItem.equals(newSelectedItem))
+        if (oldSelectedItem != null) {
+            if (!oldSelectedItem.equals(newSelectedItem)) {
                 selectedItemChanged(newSelectedItem, oldSelectedItem);
-        }
-        else if(newSelectedItem != null)
-        {
+            }
+        } else if (newSelectedItem != null) {
             selectedItemChanged(newSelectedItem, oldSelectedItem);
         }
     }
 
-    protected void selectedItemChanged(Object selectedItem, Object oldSelectedItem)
-    {
+    protected void selectedItemChanged(Object selectedItem, Object oldSelectedItem) {
         ItemEvent event;
-        if(selectedItem != null)
-        {
+        if (selectedItem != null) {
             event = new ItemEvent(this,
-                ItemEvent.ITEM_STATE_CHANGED,
-                selectedItem,
-                ItemEvent.SELECTED + 0x700);
+                    ItemEvent.ITEM_STATE_CHANGED,
+                    selectedItem,
+                    ItemEvent.SELECTED + 0x700);
 
             firePropertyChange(SELECTED_ITEM,
                     selectedItem,
                     oldSelectedItem);
-        }
-        else
-        {
+        } else {
             event = new ItemEvent(this,
-                ItemEvent.ITEM_STATE_CHANGED,
-                selectedItem,
-                ItemEvent.DESELECTED + 0x700);
+                    ItemEvent.ITEM_STATE_CHANGED,
+                    selectedItem,
+                    ItemEvent.DESELECTED + 0x700);
         }
 
         fireItemStateChanged(event);
@@ -352,12 +321,12 @@ public class JBComboBox
     public void setBinding(Binding binding) {
         this.binding = binding;
     }
-    
+
     public void removeFromBindingGroup(BindingGroup bindGroup) {
         bindGroup.removeBinding(binding);
         bindGroup.removeBinding(comboBoxBinding);
     }
-    
+
     public void addToBindingGroup(BindingGroup bindGroup) {
         bindGroup.addBinding(comboBoxBinding);
         bindGroup.addBinding(binding);

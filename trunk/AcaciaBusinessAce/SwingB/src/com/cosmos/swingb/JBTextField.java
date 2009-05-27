@@ -91,7 +91,7 @@ public class JBTextField
         elProperty = ELProperty.create(elProperyDisplay);
 
         if (propertyDetails.isShowOnly()) {
-            validateText(beanEntity);
+            validate(beanEntity);
             if(beanEntity instanceof PropertyChangeNotificationBroadcaster) {
                 ((PropertyChangeNotificationBroadcaster)beanEntity).addPropertyChangeListener(this);
             }
@@ -208,7 +208,7 @@ public class JBTextField
         return beanResource;
     }
 
-    private void validateText(Object beanEntity) {
+    private void validate(Object beanEntity) {
         try {
             Object propertyValue;
             if ((propertyValue = elProperty.getValue(beanEntity)) != null) {
@@ -233,7 +233,7 @@ public class JBTextField
     @Override
     public void propertyChange(PropertyChangeEvent event) {
         if(propertyName != null && propertyName.equals(event.getPropertyName())) {
-            validateText(beanEntity);
+            validate(beanEntity);
         }
     }
 }
