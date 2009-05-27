@@ -67,6 +67,7 @@ public class JBComboList
     private JComboBoxBinding comboBoxBinding;
     private SelectableListDialog selectableListDialog;
     private ObjectToStringConverter converter;
+    private ELProperty displayELProperty;
     private ELProperty elProperty;
     private Binding binding;
 
@@ -116,7 +117,6 @@ public class JBComboList
             comboBox.setFont(font); // NOI18N
         }
         comboBox.setName("comboBox"); // NOI18N
-        comboBox.setPrototypeDisplayValue("1234567");
         comboBox.addItemListener(new ComboListItemListener(), true);
         add(comboBox, BorderLayout.CENTER);
     }
@@ -157,9 +157,20 @@ public class JBComboList
         }
     }
 
+    protected Object getPropertyValue() {
+        return getELProperty().getValue(beanEntity);
+    }
+
+    protected void setPropertyValue(Object value) {
+        getELProperty().setValue(beanEntity, value);
+    }
+
     @Action
     public void unselectButtonAction() {
-        comboBox.setSelectedIndex(-1);
+        comboBox.setSelectedItem(null);
+        if(getPropertyValue() != null) {
+            setPropertyValue(null);
+        }
     }
 
     private class ComboListItemListener
@@ -248,12 +259,12 @@ public class JBComboList
                 comboBox);
         bindingGroup.addBinding(comboBoxBinding);
 
-        elProperty = ELProperty.create("${" + propertyName + "}");
+        displayELProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         binding = Bindings.createAutoBinding(
                 updateStrategy,
                 beanEntity,
-                elProperty,
+                displayELProperty,
                 comboBox,
                 beanProperty);
         Validator validator = propertyDetails.getValidator();
@@ -272,6 +283,14 @@ public class JBComboList
 
     public boolean isEditable() {
         return editable;
+    }
+
+    protected ELProperty getELProperty() {
+        if(elProperty == null) {
+            elProperty = ELProperty.create("${" + getPropertyName() + "}");
+        }
+
+        return elProperty;
     }
 
     protected void setEnabledUnselectButton(boolean enabled) {
