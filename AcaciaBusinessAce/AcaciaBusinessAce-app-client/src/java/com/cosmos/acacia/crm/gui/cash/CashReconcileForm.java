@@ -746,6 +746,8 @@ public class CashReconcileForm extends BaseEntityPanel {
     
     @Override
     public BindingGroup getBindingGroup() {
+        if ( bindGroup==null )
+            bindGroup = new BindingGroup();
         return bindGroup;
     }
 
@@ -774,9 +776,6 @@ public class CashReconcileForm extends BaseEntityPanel {
         
         if (entProps == null)
             entProps = getFormSession().getDetailEntityProperties();
-
-        if (bindGroup == null)
-            bindGroup = new BindingGroup();
 
         beforeBind();
         bind();
@@ -903,7 +902,7 @@ public class CashReconcileForm extends BaseEntityPanel {
     protected void bind() {
         
         //document number
-        documentNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("documentNumber"), UpdateStrategy.READ);
+        documentNumberField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("documentNumber"), UpdateStrategy.READ);
         
         //document date
         if ( entity.getDocumentDate()!=null )
@@ -919,53 +918,53 @@ public class CashReconcileForm extends BaseEntityPanel {
         officerInChargeField.setSelectedItem(entity.getPublisherOfficer());
         
         //cashier
-        cashierField.bind(bindGroup, cashiersPanel, entity, entProps.getPropertyDetails("cashier"));
+        cashierField.bind(getBindingGroup(), cashiersPanel, entity, entProps.getPropertyDetails("cashier"));
         
         //initial cash
-        initialCashField.bind(bindGroup, entity, entProps.getPropertyDetails("initialCashBalance"), AcaciaUtils.getDecimalFormat());
+        initialCashField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("initialCashBalance"), AcaciaUtils.getDecimalFormat());
         
         //initial bank
-        initialBankField.bind(bindGroup, entity, entProps.getPropertyDetails("initialBankBalance"), AcaciaUtils.getDecimalFormat());
+        initialBankField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("initialBankBalance"), AcaciaUtils.getDecimalFormat());
 
         //initial balance
-        initialBalanceField.bind(bindGroup, entity, entProps.getPropertyDetails("initialBalance"), AcaciaUtils.getDecimalFormat());
+        initialBalanceField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("initialBalance"), AcaciaUtils.getDecimalFormat());
         
         //period revenue
-        preiodRevenueField.bind(bindGroup, entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
+        preiodRevenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
         
         //period expenses
-        periodExpensesField.bind(bindGroup, entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
+        periodExpensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
         
         //end balance
-        endBalanceField.bind(bindGroup, entity, entProps.getPropertyDetails("endBalance"), AcaciaUtils.getDecimalFormat());
+        endBalanceField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("endBalance"), AcaciaUtils.getDecimalFormat());
         
         //notes
-        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("notes"));
         
         //period cash revenue
-        cashRevenueField.bind(bindGroup, entity, entProps.getPropertyDetails("periodCashRevenue"), AcaciaUtils.getDecimalFormat());
+        cashRevenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodCashRevenue"), AcaciaUtils.getDecimalFormat());
         
         //period bank revenue
-        bankRevenueField.bind(bindGroup, entity, entProps.getPropertyDetails("periodBankRevenue"), AcaciaUtils.getDecimalFormat());
+        bankRevenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodBankRevenue"), AcaciaUtils.getDecimalFormat());
         
         //period revenue
-        revenueField.bind(bindGroup, entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
+        revenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
         
         //period cash expenses
-        cashExpensesField.bind(bindGroup, entity, entProps.getPropertyDetails("periodCashExpenses"), AcaciaUtils.getDecimalFormat());
+        cashExpensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodCashExpenses"), AcaciaUtils.getDecimalFormat());
         
         //period bank expenses
-        bankExpensesField.bind(bindGroup, entity, entProps.getPropertyDetails("periodBankExpenses"), AcaciaUtils.getDecimalFormat());
+        bankExpensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodBankExpenses"), AcaciaUtils.getDecimalFormat());
         
         //period expenses
-        expensesField.bind(bindGroup, entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
+        expensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
         
         //end balances table
         List<EndBalance> endBalances = getEndBalances();
-        endBalanceTable.bind(bindGroup, endBalances, 
+        endBalanceTable.bind(getBindingGroup(), endBalances, 
             new EntityProperties(createEndBalancesColumns()), UpdateStrategy.READ);
         
-        bindGroup.bind();
+        getBindingGroup().bind();
     }
     
     private List<PropertyDetails> createEndBalancesColumns() {

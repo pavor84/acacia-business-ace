@@ -226,6 +226,8 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
+        if ( bindGroup==null )
+            bindGroup = new BindingGroup();
         return bindGroup;
     }
 
