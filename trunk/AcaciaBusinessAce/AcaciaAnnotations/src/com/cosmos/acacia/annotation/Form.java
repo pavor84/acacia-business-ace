@@ -27,4 +27,6 @@ public @interface Form {
     FormContainer[] formContainers() default {};
 
     Class<? extends EntityService> serviceClass() default NullEntityService.class;
+
+    Logic logic() default @Logic();
 }
