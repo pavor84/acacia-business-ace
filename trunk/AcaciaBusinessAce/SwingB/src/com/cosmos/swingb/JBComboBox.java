@@ -33,6 +33,7 @@ import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.binding.EnumerationBinder;
 import com.cosmos.swingb.listeners.ComboListEventListener;
 import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
@@ -43,7 +44,7 @@ import com.cosmos.swingb.validation.Validatable;
  */
 public class JBComboBox
         extends JComboBox
-        implements Validatable {
+        implements Validatable, EnumerationBinder {
 
     public static final String SELECTED_ITEM = "selectedItem";
     private Application application;
@@ -71,12 +72,13 @@ public class JBComboBox
         setPrototypeDisplayValue("1234567890");
     }
 
+    @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
             PropertyDetails propertyDetails) {
-        return bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+        return bind(bindingGroup, data, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy());
     }
 
     public JComboBoxBinding bind(
