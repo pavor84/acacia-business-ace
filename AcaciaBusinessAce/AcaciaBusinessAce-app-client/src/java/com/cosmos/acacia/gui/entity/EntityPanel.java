@@ -286,7 +286,6 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private PropertyChangeHandler getPropertyChangeHandler() {
         if (propertyChangeHandler == null && entity instanceof PropertyChangeNotificationBroadcaster) {
             propertyChangeHandler = new PropertyChangeHandler();
-            //((PropertyChangeNotificationBroadcaster) entity).addPropertyChangeListener(propertyChangeHandler);
         }
 
         return propertyChangeHandler;

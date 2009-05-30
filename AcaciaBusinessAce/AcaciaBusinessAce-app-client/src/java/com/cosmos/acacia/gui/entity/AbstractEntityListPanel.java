@@ -4,6 +4,12 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.annotation.LogicUnitType;
+import com.cosmos.acacia.annotation.OperationRow;
+import com.cosmos.acacia.annotation.OperationType;
+import com.cosmos.acacia.annotation.Unit;
+import com.cosmos.acacia.annotation.UnitType;
+import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
@@ -12,9 +18,14 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.util.BooleanUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingbinding.JTableBinding;
 
 /**
@@ -27,6 +38,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     private EntityService entityService;
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
+    private E entity;
 
     protected AbstractEntityListPanel(Class<E> entityClass) {
         super(entityClass);
@@ -48,20 +60,144 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
         return entityFormProcessor;
     }
 
+    public final E getEntity() {
+        if(entity != null) {
+            return entity;
+        }
+
+        return (E)getDataTable().getSelectedRowObject();
+    }
+
+    public final void setEntity(E entity) {
+        this.entity = entity;
+    }
+
+    public void rowChanging(AlterationType alterationType, E rowObject) {
+    }
+
+    public void rowChanged(AlterationType alterationType, E oldRowObject, E newRowObject) {
+        List<Unit> units;
+        if((units = getUnits(UnitType.Record, LogicUnitType.Suffix)) != null && units.size() > 0) {
+            for(Unit unit : units) {
+                for(OperationRow operationRow : unit.operations()) {
+                    if(!AlterationType.Nothing.equals(alterationType) &&
+                            OperationType.Update.equals(operationRow.operationType())) {
+                        UpdateOperation update = operationRow.update();
+                        if(evaluateBooleanExpression(update.condition())) {
+                            continue;
+                        }
+
+                        String variableExpression = update.variable();
+                        String withExpression = update.with();
+                        try {
+                            if(AlterationType.Create.equals(alterationType)) {
+                                setEntity(newRowObject);
+                                if(update.incremental()) {
+                                    withExpression = variableExpression + " + (" + update.with() + ")";
+                                }
+                            } else if(AlterationType.Modify.equals(alterationType)) {
+                                setEntity(oldRowObject);
+                                if(update.incremental()) {
+                                    withExpression = variableExpression + " - (" + update.with() + ")";
+                                }
+                            } else if(AlterationType.Delete.equals(alterationType)) {
+                                setEntity(oldRowObject);
+                                if(update.incremental()) {
+                                    withExpression = variableExpression + " - (" + update.with() + ")";
+                                }
+                            } else {
+                                throw new EntityPanelException("Unsupported alteration type: " + alterationType);
+                            }
+
+                            updateVariable(variableExpression, withExpression);
+                            if(update.incremental() && AlterationType.Modify.equals(alterationType)) {
+                                setEntity(newRowObject);
+                                withExpression = variableExpression + " + (" + update.with() + ")";
+                                updateVariable(variableExpression, withExpression);
+                            }
+                        } finally {
+                            setEntity(null);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected boolean evaluateBooleanExpression(String expression) {
+        if(true) {
+            return true;
+        }
+
+        return BooleanUtils.evaluateExpression(this, expression);
+    }
+
+    protected List<Unit> getUnits(UnitType unitType, LogicUnitType logicUnitType) {
+        List<Unit> list;
+        int size;
+        if((list = getUnits(unitType)) == null || (size = list.size()) == 0) {
+            return Collections.emptyList();
+        }
+
+        List<Unit> units = new ArrayList<Unit>(size);
+        for(Unit unit : list) {
+            if(logicUnitType.equals(unit.logicUnitType())) {
+                units.add(unit);
+            }
+        }
+
+        return units;
+    }
+
+    protected List<Unit> getUnits(UnitType unitType) {
+        return entityFormProcessor.getEntityListLogicUnits(unitType);
+    }
+
+    public void updateVariable(String variable, String expression) {
+        updateVariable(ELProperty.create(variable), ELProperty.create(expression));
+    }
+
+    public void updateVariable(ELProperty variable, ELProperty expression) {
+        Object value = expression.getValue(this);
+        variable.setValue(this, value);
+    }
+
     @Override
     protected boolean deleteRow(Object rowObject) {
-        getEntityService().delete((E) rowObject);
+        E oldRowObject = (E) rowObject;
+        rowChanging(AlterationType.Modify, oldRowObject);
+        getEntityService().delete(oldRowObject);
+        rowChanged(AlterationType.Delete, oldRowObject, null);
+
         return true;
     }
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        return editRow((E) rowObject);
+        E oldRowObject = (E)((E) rowObject).clone();
+        E newRowObject = (E) rowObject;
+        rowChanging(AlterationType.Modify, newRowObject);
+        if((newRowObject = editRow(newRowObject)) != null) {
+            rowChanged(AlterationType.Modify, oldRowObject, newRowObject);
+        } else {
+            rowChanged(AlterationType.Nothing, oldRowObject, newRowObject);
+        }
+
+        return newRowObject;
     }
 
     @Override
     protected Object newRow() {
-        return editRow(newEntity());
+        E oldRowObject = newEntity();
+        E newRowObject = (E)oldRowObject.clone();
+        rowChanging(AlterationType.Create, newRowObject);
+        if((newRowObject = editRow(newRowObject)) != null) {
+            rowChanged(AlterationType.Create, oldRowObject, newRowObject);
+        } else {
+            rowChanged(AlterationType.Nothing, oldRowObject, newRowObject);
+        }
+
+        return newRowObject;
     }
 
     protected E editRow(E entity) {
