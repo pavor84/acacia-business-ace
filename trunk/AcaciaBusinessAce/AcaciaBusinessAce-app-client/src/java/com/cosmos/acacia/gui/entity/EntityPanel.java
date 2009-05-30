@@ -18,10 +18,10 @@ import com.cosmos.beansbinding.PropertyDetail;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboList;
-import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.binding.EntityListBinder;
+import com.cosmos.swingb.binding.EnumerationBinder;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.List;
@@ -126,9 +126,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 ((EntityListBinder) jComponent).bind(bindingGroup,
                         getSelectableListDialog(propertyDetails, entityProps, jComponent),
                         entity, propertyDetails);
-            } else if (jComponent instanceof JBIntegerField) {
-                JBIntegerField integerField = (JBIntegerField) jComponent;
-                integerField.bind(bg, entity, propertyDetails);
+            } else if (jComponent instanceof EnumerationBinder) {
+                List listData = getEntityService().getResources(getSelectableListDialogClass(propertyDetails));
+                ((EnumerationBinder) jComponent).bind(bindingGroup, listData, entity, propertyDetails);
             }
         }
 
@@ -208,13 +208,24 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         }
     }
 
+    protected Class getSelectableListDialogClass(PropertyDetails propertyDetails) {
+        String className;
+        if ((className = propertyDetails.getSelectableListDialogClassName()) == null) {
+            return null;
+        }
+
+        try {
+            return Class.forName(className);
+        } catch(ClassNotFoundException ex) {
+            throw new EntityPanelException(ex);
+        }
+    }
+
     protected SelectableListDialog getSelectableListDialog(PropertyDetails propertyDetails,
             EntityProperties entityProps, JComponent jComponent) {
-        String className;
-        if ((className = propertyDetails.getSelectableListDialogClassName()) != null) {
-            try {
-                Class<? extends SelectableListDialog> cls =
-                        (Class<? extends SelectableListDialog>) Class.forName(className);
+        Class<? extends SelectableListDialog> cls;
+        try {
+            if ((cls = (Class<? extends SelectableListDialog>) getSelectableListDialogClass(propertyDetails)) != null) {
                 List<PropertyDetail> parameters;
                 if ((parameters = propertyDetails.getSelectableListDialogConstructorParameters()) == null || parameters.size() == 0) {
                     return cls.newInstance();
@@ -228,21 +239,18 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 handler.addPropertyBean(parameters, listDialog, jComponent);
 
                 return listDialog;
-            } catch (Exception ex) {
-                throw new EntityPanelException("className: " + className +
-                        ", propertyDetails: " + propertyDetails, ex);
             }
+        } catch (Exception ex) {
+            throw new EntityPanelException("propertyDetails: " + propertyDetails, ex);
         }
 
         return new EntityListPanel(propertyDetails.getPropertyClass());
     }
 
     protected String getJComponentName(JComponent jComponent) {
-        if(jComponent instanceof JComboBox) {
-            Container parent;
-            if((parent = jComponent.getParent()) instanceof JBComboList) {
-                return parent.getName();
-            }
+        Container parent;
+        if(jComponent instanceof JComboBox && (parent = jComponent.getParent()) instanceof JBComboList) {
+            return parent.getName();
         }
 
         return jComponent.getName();
