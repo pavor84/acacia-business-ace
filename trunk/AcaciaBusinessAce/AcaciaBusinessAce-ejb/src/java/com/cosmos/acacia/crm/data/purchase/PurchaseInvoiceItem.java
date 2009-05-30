@@ -5,9 +5,17 @@
 package com.cosmos.acacia.crm.data.purchase;
 
 import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.EntityListLogic;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Logic;
+import com.cosmos.acacia.annotation.LogicUnitType;
+import com.cosmos.acacia.annotation.OperationRow;
+import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.Unit;
+import com.cosmos.acacia.annotation.UnitType;
+import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -51,7 +59,28 @@ import javax.persistence.Transient;
         name="PurchaseInvoiceItem",
         container=@Component(componentClass=JBPanel.class)
     ),
-    serviceClass=PurchaseServiceRemote.class
+    serviceClass=PurchaseServiceRemote.class,
+    logic=@Logic(
+        entityListLogic=@EntityListLogic(
+            units={
+                @Unit(
+                    unitType=UnitType.Record,
+                    logicUnitType=LogicUnitType.Suffix,
+                    operations={
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="mainEntity.totalQuantity",
+                                with="entity.receivedQuantity",
+                                incremental=true,
+                                condition="taskMode(0, 'CMD')"
+                            )
+                        )
+                    }
+                )
+            }
+        )
+    )
 )
 public class PurchaseInvoiceItem extends DataObjectBean implements Serializable {
 

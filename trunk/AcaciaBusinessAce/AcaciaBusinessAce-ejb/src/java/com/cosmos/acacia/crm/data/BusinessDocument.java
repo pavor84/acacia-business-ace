@@ -127,6 +127,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Column(name = "document_number")
     @Property(title="Document Number",
         showOnly=true,
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
             firstComponent=@Component(
@@ -136,8 +138,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             secondComponent=@Component(
                 componentClass=JBIntegerField.class,
                 componentProperties={
-                    @ComponentProperty(name="numberType", value="LongType"),
-                    @ComponentProperty(name="editable", value="false")
+                    @ComponentProperty(name="numberType", value="LongType")
                 }
             )
         )
@@ -148,6 +149,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Temporal(TemporalType.TIMESTAMP)
     @Property(title="Document Date",
         showOnly=true,
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
             firstComponent=@Component(
@@ -155,10 +158,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
                 text="Date: "
             ),
             secondComponent=@Component(
-                componentClass=JBDatePicker.class,
-                componentProperties={
-                    @ComponentProperty(name="editable", value="false")
-                }
+                componentClass=JBDatePicker.class
             )
         )
     )
@@ -168,7 +168,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @ManyToOne(optional = false)
     @Property(title="Document Status",
         showOnly=true,
-        //customDisplay="documentStatus.enumValue",
+        editable=false,
+        readOnly=true,
         updateStrategy=UpdateStrategy.READ,
         formComponentPair=@FormComponentPair(
             parentContainerName="documentDetails",
@@ -177,10 +178,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
                 text="Status:"
             ),
             secondComponent=@Component(
-                componentClass=JBTextField.class,
-                componentProperties={
-                    @ComponentProperty(name="editable", value="false")
-                }
+                componentClass=JBTextField.class
             )
         )
     )
@@ -195,6 +193,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Property(title="Publisher",
         customDisplay="${publisher.organizationName}",
         showOnly=true,
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="publisherDetails",
             firstComponent=@Component(
@@ -202,10 +202,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
                 text="Publisher:"
             ),
             secondComponent=@Component(
-                componentClass=JBTextField.class,
-                componentProperties={
-                    @ComponentProperty(name="editable", value="false")
-                }
+                componentClass=JBTextField.class
             )
         )
     )
@@ -216,6 +213,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Property(title="Publisher Branch",
         customDisplay="${publisherBranch.addressName}",
         showOnly=true,
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="publisherDetails",
             firstComponent=@Component(
@@ -223,10 +222,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
                 text="Branch:"
             ),
             secondComponent=@Component(
-                componentClass=JBTextField.class,
-                componentProperties={
-                    @ComponentProperty(name="editable", value="false")
-                }
+                componentClass=JBTextField.class
             )
         )
     )
@@ -237,6 +233,8 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
     @Property(title="Publisher Officer",
         customDisplay="${publisherOfficer.firstName} ${publisherOfficer.lastName}",
         showOnly=true,
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="publisherDetails",
             firstComponent=@Component(
@@ -244,15 +242,12 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
                 text="Officer:"
             ),
             secondComponent=@Component(
-                componentClass=JBTextField.class,
-                componentProperties={
-                    @ComponentProperty(name="editable", value="false")
-                }
+                componentClass=JBTextField.class
             )
         )
     )
     protected Person publisherOfficer;
-    
+
     @Column(name = "creation_time")
     @Temporal(TemporalType.TIMESTAMP)
     protected Date creationTime;

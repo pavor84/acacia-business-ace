@@ -22,9 +22,13 @@ import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBDatePicker;
+import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -83,6 +87,40 @@ import javax.persistence.TemporalType;
                 componentConstraints="span 2, sizegroup publisherSG, growx"
             ),
             layout=@Layout(/*extraConstraints="debug", */columnsPairs=1),
+            parentContainerName="primaryInfo"
+        ),
+        @FormContainer(
+            name="supplierInvoiceDetails",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Invoice Details"
+                ),
+                componentConstraints="span, growx"
+            ),
+            layout=@Layout(/*extraConstraints="debug", */columnsPairs=3),
+            parentContainerName="primaryInfo"
+        ),
+        @FormContainer(
+            name="finalValues",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Final Values"
+                ),
+                componentConstraints="span, growx"
+            ),
+            parentContainerName="primaryInfo"
+        ),
+        @FormContainer(
+            name="termsAndConditions",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Terms & Conditions"
+                ),
+                componentConstraints="span, growx"
+            ),
             parentContainerName="primaryInfo"
         )
     },
@@ -155,72 +193,185 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "invoice_number", nullable = false, length = 16)
-    @Property(title="Invoice No")
+    @Property(title="Invoice No",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="supplierInvoiceDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Invoice No:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String invoiceNumber;
 
     @Basic(optional = false)
     @Column(name = "invoice_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    @Property(title="Invoice Date"/*,
+    @Property(title="Invoice Date",
         formComponentPair=@FormComponentPair(
-            parentContainerName="documentDetails",
+            parentContainerName="supplierInvoiceDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Date: "
+                text="Date:"
             ),
             secondComponent=@Component(
-                componentClass=JBDatePicker.class,
-                componentProperties={
-                    @ComponentProperty(name="editable", value="false")
-                }
+                componentClass=JBDatePicker.class
             )
-        )*/
+        )
     )
     private Date invoiceDate;
 
     @Column(name = "delivery_note", length = 16)
-    @Property(title="Delivery Note")
+    @Property(title="Delivery Note",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="supplierInvoiceDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Delivery Note:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String deliveryNote;
 
     @Basic(optional = false)
-    @Column(name = "total_quantity", nullable = false, precision = 19, scale = 4)
-    @Property(title="Total Quantity")
+    @Column(name = "total_quantity", precision = 19, scale = 4)
+    @Property(title="Total Quantity",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="finalValues",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Total Quantity:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal totalQuantity;
 
     @Basic(optional = false)
-    @Column(name = "total_net_amount", nullable = false, precision = 19, scale = 4)
-    @Property(title="Total Net Amount")
+    @Column(name = "total_net_amount", precision = 19, scale = 4)
+    @Property(title="Total Net Amount",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="finalValues",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Total Net Amount:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal totalNetAmount;
 
     @Basic(optional = false)
-    @Column(name = "total_tax", nullable = false, precision = 19, scale = 4)
-    @Property(title="Total Tax")
+    @Column(name = "total_tax", precision = 19, scale = 4)
+    @Property(title="Total Tax",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="finalValues",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Total Tax:",
+                componentConstraints="skip 2"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal totalTax;
 
     @Basic(optional = false)
-    @Column(name = "total_gross_amount", nullable = false, precision = 19, scale = 4)
-    @Property(title="Total Gross Amount")
+    @Column(name = "total_gross_amount", precision = 19, scale = 4)
+    @Property(title="Total Gross Amount",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="finalValues",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Total Gross Amount:",
+                componentConstraints="skip 2"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal totalGrossAmount;
 
     @JoinColumn(name = "payment_terms_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Terms of Payment")
+    @Property(title="Terms of Payment",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="termsAndConditions",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Terms of Payment:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource paymentTerms;
 
     @Basic(optional = false)
     @Column(name = "payment_deadline", nullable = false)
     @Temporal(TemporalType.DATE)
-    @Property(title="Payment Deadline")
+    @Property(title="Payment Deadline",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="termsAndConditions",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Payment Deadline:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDatePicker.class
+            )
+        )
+    )
     private Date paymentDeadline;
 
     @JoinColumn(name = "bank_detail_id", referencedColumnName = "bank_detail_id")
     @ManyToOne
-    @Property(title="Bank Details")
+    @Property(title="Bank Details",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.BankDetailsListPanel",
+            constructorParameters={@PropertyName(getter="supplierBranch", setter="address")}
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="termsAndConditions",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Bank Details:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private BankDetail bankDetail;
 
     @JoinColumn(name = "delivery_terms_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Terms of Delivery")
+    @Property(title="Terms of Delivery",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="termsAndConditions",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Terms of Delivery:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource deliveryTerms;
 
     public PurchaseInvoice() {
