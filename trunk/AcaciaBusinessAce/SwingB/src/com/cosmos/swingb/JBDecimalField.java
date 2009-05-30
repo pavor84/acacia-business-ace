@@ -2,11 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
+import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
@@ -25,7 +28,8 @@ import org.jdesktop.swingx.JXDecimalField;
  *
  * @author Miro
  */
-public class JBDecimalField extends JXDecimalField implements Validatable {
+public class JBDecimalField extends JXDecimalField
+        implements Validatable, EntityBinder, PropertyChangeListener {
 
     public JBDecimalField() {
     }
@@ -33,36 +37,43 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
     public JBDecimalField(BigDecimal value) {
         super(value);
     }
-
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
-
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
+    private ELProperty elProperty;
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
-        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
+            PropertyDetails propertyDetails) {
+        return bind(bindingGroup, beanEntity, propertyDetails, getExpression(propertyDetails),
+                propertyDetails.getUpdateStrategy());
+    }
+
+    protected String getExpression(PropertyDetails propertyDetails) {
+        String expression;
+        if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
+            return expression;
+        }
+
+        return "${" + propertyDetails.getPropertyName() + "}";
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getPropertyName(), updateStrategy);
+            AutoBinding.UpdateStrategy updateStrategy) {
+        return bind(bindingGroup, beanEntity, propertyDetails, getExpression(propertyDetails), updateStrategy);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            String elProperyDisplay)
-    {
+            String elProperyDisplay) {
         return bind(bindingGroup, beanEntity, propertyDetails, elProperyDisplay, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
@@ -70,28 +81,35 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
             Object beanEntity,
             PropertyDetails propertyDetails,
             String elProperyDisplay,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        if(propertyDetails == null || propertyDetails.isHiden())
-        {
+            AutoBinding.UpdateStrategy updateStrategy) {
+        if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);
             setEnabled(false);
             return null;
         }
 
-        this.propertyName = elProperyDisplay;
-        ELProperty elProperty = ELProperty.create("${" + elProperyDisplay + "}");
-        bind(bindingGroup, beanEntity, elProperty, updateStrategy);
-        setEditable(propertyDetails.isEditable());
-        setEnabled(!propertyDetails.isReadOnly());
+        this.propertyName = propertyDetails.getPropertyName();
+        this.elProperty = ELProperty.create(elProperyDisplay);
 
-        Validator validator = propertyDetails.getValidator();
-        if(validator != null)
-        {
-            binding.setValidator(validator);
+        if (propertyDetails.isShowOnly()) {
+            validate(beanEntity);
+            if (beanEntity instanceof PropertyChangeNotificationBroadcaster) {
+                ((PropertyChangeNotificationBroadcaster) beanEntity).addPropertyChangeListener(this);
+            }
+            setEditable(false);
+            setEnabled(false);
+        } else {
+            bind(bindingGroup, beanEntity, elProperty, updateStrategy);
+            setEditable(propertyDetails.isEditable());
+            setEnabled(!propertyDetails.isReadOnly());
+
+            Validator validator = propertyDetails.getValidator();
+            if (validator != null) {
+                binding.setValidator(validator);
+            }
+
+            binding.addBindingListener(new BindingValidationListener(this));
         }
-
-        binding.addBindingListener(new BindingValidationListener(this));
 
         return binding;
     }
@@ -100,9 +118,9 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
             BindingGroup bindingGroup,
             Object beanEntity,
             ELProperty elProperty,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
+            AutoBinding.UpdateStrategy updateStrategy) {
         this.beanEntity = beanEntity;
+        this.elProperty = elProperty;
 
         BeanProperty beanProperty = BeanProperty.create("value");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
@@ -139,13 +157,10 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
 
-    public ApplicationContext getContext()
-    {
-        if(applicationContext == null)
-        {
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
             Application app = getApplication();
-            if(app != null)
-            {
+            if (app != null) {
                 applicationContext = app.getContext();
             }
         }
@@ -153,13 +168,10 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
         return applicationContext;
     }
 
-    public ApplicationActionMap getApplicationActionMap()
-    {
-        if(applicationActionMap == null)
-        {
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 applicationActionMap = context.getActionMap(this);
             }
         }
@@ -167,13 +179,10 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
         return applicationActionMap;
     }
 
-    public ResourceMap getResourceMap()
-    {
-        if(resourceMap == null)
-        {
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 resourceMap = context.getResourceMap(this.getClass());
             }
         }
@@ -186,13 +195,30 @@ public class JBDecimalField extends JXDecimalField implements Validatable {
     }
 
     public Application getApplication() {
-        if(application == null)
+        if (application == null) {
             application = Application.getInstance();
+        }
 
         return application;
     }
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if (propertyName != null && propertyName.equals(event.getPropertyName())) {
+            validate(beanEntity);
+        }
+    }
+
+    private void validate(Object beanEntity) {
+        try {
+            setValue((Number) elProperty.getValue(beanEntity));
+        } catch (RuntimeException ex) {
+            throw new RuntimeException("beanEntity: " + beanEntity +
+                    ", elProperty: " + elProperty, ex);
+        }
     }
 }
