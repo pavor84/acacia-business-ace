@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.math.BigInteger;
@@ -16,6 +15,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -28,17 +28,35 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class BankDetailsListPanel extends AbstractTablePanel {
 
+    public BankDetailsListPanel(Address address) {
+        this(address != null ? address.getId() : null);
+        this.address = address;
+    }
+
     /** Creates new form BankDetailsListPanel */
-    public BankDetailsListPanel(BigInteger parentDataObjectId)
-    {
+    public BankDetailsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
     @EJB
     private BankDetailsListRemote formSession;
-
     private BindingGroup bankDetailsBindingGroup;
     private List<BankDetail> bankDetails;
+    private Address address;
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+        if(address != null) {
+            setParentDataObjectId(address.getId());
+        } else {
+            setParentDataObjectId(null);
+        }
+        refreshAction();
+    }
 
     @Override
     protected void initData() {
@@ -55,45 +73,40 @@ public class BankDetailsListPanel extends AbstractTablePanel {
         bankDetailsTable.setEditable(false);
     }
 
-    protected List<BankDetail> getBankDetails()
-    {
-        if(bankDetails == null)
-        {
+    protected List<BankDetail> getBankDetails() {
+        if (bankDetails == null) {
             bankDetails = getFormSession().getBankDetails(getParentDataObjectId());
         }
 
         return bankDetails;
     }
 
-    protected EntityProperties getBankDetailEntityProperties()
-    {
+    protected EntityProperties getBankDetailEntityProperties() {
         return getFormSession().getBankDetailEntityProperties();
     }
 
-    protected BankDetailsListRemote getFormSession()
-    {
-        if(formSession == null)
+    protected BankDetailsListRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(BankDetailsListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected int deleteBankDetail(BankDetail bankDetail)
-    {
+    protected int deleteBankDetail(BankDetail bankDetail) {
         return getFormSession().deleteBankDetail(bankDetail);
     }
 
     @Override
     @Action
-    public void selectAction(){
+    public void selectAction() {
         super.selectAction();
         //
     }
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
+        if (rowObject != null) {
             deleteBankDetail((BankDetail) rowObject);
             return true;
         }
@@ -103,12 +116,10 @@ public class BankDetailsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            BankDetailPanel bankDetailPanel = new BankDetailPanel((BankDetail)rowObject);
+        if (rowObject != null) {
+            BankDetailPanel bankDetailPanel = new BankDetailPanel((BankDetail) rowObject);
             DialogResponse response = bankDetailPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return bankDetailPanel.getSelectedValue();
             }
         }
@@ -121,8 +132,9 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (bankDetailsBindingGroup != null)
+        if (bankDetailsBindingGroup != null) {
             bankDetailsBindingGroup.unbind();
+        }
 
         bankDetails = null;
 
@@ -133,13 +145,11 @@ public class BankDetailsListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        if (canNestedOperationProceed())
-        {
+        if (canNestedOperationProceed()) {
             BankDetailPanel bankDetailPanel = new BankDetailPanel(getParentDataObjectId());
 
             DialogResponse response = bankDetailPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
+            if (DialogResponse.SAVE.equals(response)) {
                 return bankDetailPanel.getSelectedValue();
             }
         }
@@ -161,5 +171,4 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     public boolean canDelete(Object rowObject) {
         return true;
     }
-
 }
