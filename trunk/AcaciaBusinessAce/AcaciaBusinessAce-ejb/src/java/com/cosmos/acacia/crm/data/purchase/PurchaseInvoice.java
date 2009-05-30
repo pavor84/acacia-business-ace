@@ -239,9 +239,10 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private String deliveryNote;
 
-    @Basic(optional = false)
     @Column(name = "total_quantity", precision = 19, scale = 4)
     @Property(title="Total Quantity",
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="finalValues",
             firstComponent=@Component(
@@ -255,9 +256,10 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private BigDecimal totalQuantity;
 
-    @Basic(optional = false)
     @Column(name = "total_net_amount", precision = 19, scale = 4)
     @Property(title="Total Net Amount",
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="finalValues",
             firstComponent=@Component(
@@ -271,9 +273,10 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private BigDecimal totalNetAmount;
 
-    @Basic(optional = false)
     @Column(name = "total_tax", precision = 19, scale = 4)
     @Property(title="Total Tax",
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="finalValues",
             firstComponent=@Component(
@@ -288,9 +291,10 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private BigDecimal totalTax;
 
-    @Basic(optional = false)
     @Column(name = "total_gross_amount", precision = 19, scale = 4)
     @Property(title="Total Gross Amount",
+        editable=false,
+        readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="finalValues",
             firstComponent=@Component(
@@ -308,6 +312,9 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     @JoinColumn(name = "payment_terms_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Terms of Payment",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.MeasurementUnit"
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName="termsAndConditions",
             firstComponent=@Component(
@@ -361,6 +368,9 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     @JoinColumn(name = "delivery_terms_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Terms of Delivery",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.MeasurementUnit"
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName="termsAndConditions",
             firstComponent=@Component(
