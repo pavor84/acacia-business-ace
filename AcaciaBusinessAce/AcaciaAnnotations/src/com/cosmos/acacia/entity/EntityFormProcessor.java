@@ -13,8 +13,11 @@ import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Logic;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.Unit;
+import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.util.BeanUtils;
 import java.awt.LayoutManager;
 import java.lang.annotation.Annotation;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,6 +75,8 @@ public class EntityFormProcessor {
     private Map<String, String> propertyNamesMap;
     private List<ContainerEntity> containerEntities;
     private Map<String, Set<String>> containerDependenciesMap;
+    private Map<UnitType, List<Unit>> entityListLogicUnitsMap;
+    private Map<UnitType, List<Unit>> entityLogicUnitsMap;
 
     public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
         this.entityClass = entityClass;
@@ -85,6 +91,9 @@ public class EntityFormProcessor {
         propertyNamesMap = new TreeMap<String, String>();
         containerEntities = new ArrayList<ContainerEntity>();
         containerDependenciesMap = new TreeMap<String, Set<String>>();
+        entityListLogicUnitsMap = new EnumMap<UnitType, List<Unit>>(UnitType.class);
+        entityLogicUnitsMap = new EnumMap<UnitType, List<Unit>>(UnitType.class);
+
         List<Form> forms = getAnnotations(entityClass);
         for (Form form : forms) {
             JComponent container = null;
@@ -103,6 +112,9 @@ public class EntityFormProcessor {
             if (entityServiceClass == null && form.serviceClass() != NullEntityService.class) {
                 entityServiceClass = form.serviceClass();
             }
+
+            addUnits(entityListLogicUnitsMap, form.logic().entityListLogic().units());
+            addUnits(entityLogicUnitsMap, form.logic().entityLogic().units());
         }
         if (entityServiceClass == null) {
             throw new EntityFormException("The Entity Service for entity '" + entityClass + "' is not initialized.");
@@ -197,6 +209,47 @@ public class EntityFormProcessor {
                 }
             }
         }
+    }
+
+    protected void addUnits(Map<UnitType, List<Unit>> unitsMap, Unit... units) {
+        if(units == null || units.length == 0) {
+            return;
+        }
+
+        for(Unit unit : units) {
+            UnitType unitType = unit.unitType();
+            List<Unit> list;
+            if((list = unitsMap.get(unitType)) == null) {
+                list = new ArrayList<Unit>();
+                unitsMap.put(unitType, list);
+            }
+            list.add(unit);
+        }
+    }
+
+    public Map<UnitType, List<Unit>> getEntityListLogicUnitsMap() {
+        return entityListLogicUnitsMap;
+    }
+
+    public Map<UnitType, List<Unit>> getEntityLogicUnitsMap() {
+        return entityLogicUnitsMap;
+    }
+
+    protected List<Unit> getUnits(Map<UnitType, List<Unit>> unitsMap, UnitType unitType) {
+        List<Unit> units;
+        if((units = unitsMap.get(unitType)) != null) {
+            return units;
+        }
+
+        return Collections.emptyList();
+    }
+
+    public List<Unit> getEntityListLogicUnits(UnitType unitType) {
+        return getUnits(entityListLogicUnitsMap, unitType);
+    }
+
+    public List<Unit> getEntityLogicUnits(UnitType unitType) {
+        return getUnits(entityLogicUnitsMap, unitType);
     }
 
     private String getComponentName(Field field, Class<? extends JComponent> componentClass) {
