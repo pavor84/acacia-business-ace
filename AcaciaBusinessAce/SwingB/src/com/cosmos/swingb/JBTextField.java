@@ -87,23 +87,24 @@ public class JBTextField
         }
 
         this.propertyName = propertyDetails.getPropertyName();
-        //this.propertyName = elProperyDisplay;
-        elProperty = ELProperty.create(elProperyDisplay);
+        this.elProperty = ELProperty.create(elProperyDisplay);
 
         if (propertyDetails.isShowOnly()) {
             validate(beanEntity);
             if(beanEntity instanceof PropertyChangeNotificationBroadcaster) {
                 ((PropertyChangeNotificationBroadcaster)beanEntity).addPropertyChangeListener(this);
             }
+            setEditable(false);
+            setEnabled(false);
         } else {
             bind(bindingGroup, beanEntity, elProperty, updateStrategy);
-            setEditable(propertyDetails.isEditable());
-            setEnabled(!propertyDetails.isReadOnly());
             Validator validator = propertyDetails.getValidator();
             if (validator != null) {
                 binding.setValidator(validator);
             }
             binding.addBindingListener(new BindingValidationListener(this));
+            setEditable(propertyDetails.isEditable());
+            setEnabled(!propertyDetails.isReadOnly());
         }
 
         return binding;

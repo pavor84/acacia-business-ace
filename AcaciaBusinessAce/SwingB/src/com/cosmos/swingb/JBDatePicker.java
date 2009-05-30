@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
 import java.text.DateFormat;
@@ -29,59 +29,66 @@ import org.jdesktop.swingx.JXDatePicker;
  * @author Miro
  */
 public class JBDatePicker
-    extends JXDatePicker
-    implements Validatable
-{
+        extends JXDatePicker
+        implements Validatable, EntityBinder {
 
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
-
     private Binding binding;
     private String propertyName;
+    private ELProperty elProperty;
     private Object beanEntity;
-    
+    private DateFormat dateFormat;
+
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
-        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, null);
+            PropertyDetails propertyDetails) {
+        return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), null);
     }
-    
-    public Binding bind(BindingGroup bindingGroup,
-                        Object beanEntity,
-                        PropertyDetails propertyDetails, DateFormat dateFormat)
-    {
-        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, dateFormat);
+
+    protected String getExpression(PropertyDetails propertyDetails) {
+        String expression;
+        if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
+            return expression;
+        }
+
+        return "${" + propertyDetails.getPropertyName() + "}";
     }
-    
+
     public Binding bind(BindingGroup bindingGroup,
-                        Object beanEntity,
-                        PropertyDetails propertyDetails,
-                        AutoBinding.UpdateStrategy updateStrategy){
-        return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, null);
+            Object beanEntity,
+            PropertyDetails propertyDetails, DateFormat dateFormat) {
+        return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), dateFormat);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat)
-    {
-        if(propertyDetails == null || propertyDetails.isHiden())
-        {
+            AutoBinding.UpdateStrategy updateStrategy) {
+        return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), null);
+    }
+
+    public Binding bind(BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat) {
+        if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);
             setEnabled(false);
             return null;
         }
 
-        binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy, dateFormat);
+        this.propertyName = propertyDetails.getPropertyName();
+        this.elProperty = ELProperty.create(getExpression(propertyDetails));
+        this.beanEntity = beanEntity;
+        binding = bind(bindingGroup, updateStrategy, dateFormat);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
         Validator validator = propertyDetails.getValidator();
-        if(validator != null)
-        {
+        if (validator != null) {
             binding.setValidator(validator);
         }
 
@@ -90,40 +97,42 @@ public class JBDatePicker
         return binding;
     }
 
-     private Binding bind(BindingGroup bindingGroup,
-            Object beanEntity,
-            String propertyName,
-            AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat)
-     {
-        if ( dateFormat==null )
+    private Binding bind(BindingGroup bindingGroup,
+            AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat) {
+        if (dateFormat == null) {
             dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-        this.setFormats(dateFormat);
+        }
+        setDateFormat(dateFormat);
 
-        ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("date");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
         bindingGroup.addBinding(binding);
 
         return binding;
 
-     }
-     
-     
+    }
+
+    public DateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+        setFormats(dateFormat);
+    }
+
     public String getPropertyName() {
-       return propertyName;
+        return propertyName;
     }
 
     public Object getBeanEntity() {
         return beanEntity;
     }
 
-    public ApplicationContext getContext()
-    {
-        if(applicationContext == null)
-        {
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
             Application app = getApplication();
-            if(app != null)
-            {
+            if (app != null) {
                 applicationContext = app.getContext();
             }
         }
@@ -131,13 +140,10 @@ public class JBDatePicker
         return applicationContext;
     }
 
-    public ApplicationActionMap getApplicationActionMap()
-    {
-        if(applicationActionMap == null)
-        {
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 applicationActionMap = context.getActionMap(this);
             }
         }
@@ -145,13 +151,10 @@ public class JBDatePicker
         return applicationActionMap;
     }
 
-    public ResourceMap getResourceMap()
-    {
-        if(resourceMap == null)
-        {
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 resourceMap = context.getResourceMap(this.getClass());
             }
         }
@@ -164,8 +167,9 @@ public class JBDatePicker
     }
 
     public Application getApplication() {
-        if(application == null)
+        if (application == null) {
             application = Application.getInstance();
+        }
 
         return application;
     }
@@ -183,17 +187,17 @@ public class JBDatePicker
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
-    
+
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
-    
+
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
-    
+
     public void setBackground(Color color) {
         JFormattedTextField editor = getEditor();
         editor.setBackground(color);

@@ -46,6 +46,7 @@ public class JBIntegerField extends JXIntegerField
     private Object beanEntity;
     private ELProperty elProperty;
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails) {
@@ -88,13 +89,15 @@ public class JBIntegerField extends JXIntegerField
         }
 
         this.propertyName = propertyDetails.getPropertyName();
-        elProperty = ELProperty.create(elProperyDisplay);
+        this.elProperty = ELProperty.create(elProperyDisplay);
 
         if (propertyDetails.isShowOnly()) {
             validate(beanEntity);
             if(beanEntity instanceof PropertyChangeNotificationBroadcaster) {
                 ((PropertyChangeNotificationBroadcaster)beanEntity).addPropertyChangeListener(this);
             }
+            setEditable(false);
+            setEnabled(false);
         } else {
             bind(bindingGroup, beanEntity, elProperty, updateStrategy);
             setEditable(propertyDetails.isEditable());
