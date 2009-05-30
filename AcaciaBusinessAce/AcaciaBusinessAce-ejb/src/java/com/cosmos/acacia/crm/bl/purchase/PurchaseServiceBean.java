@@ -179,7 +179,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public List<DbResource> getResources(Class<? extends Enum> enumClass) {
+    public List<DbResource> getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
         return esm.getResources(em, enumClass);
     }
 }
