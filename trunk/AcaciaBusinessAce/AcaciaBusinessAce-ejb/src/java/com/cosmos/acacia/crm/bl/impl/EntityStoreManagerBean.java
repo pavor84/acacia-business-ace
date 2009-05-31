@@ -385,7 +385,8 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     }
 
     @Override
-    public List<DbResource> getResources(EntityManager em, Class<? extends Enum> cls) {
+    public List<DbResource> getResources(EntityManager em, Class<? extends Enum> cls,
+            Class<? extends Enum>... enumCategoryClasses) {
         Query q = em.createNamedQuery("EnumClass.findByEnumClassName");
         q.setParameter("enumClassName", cls.getName());
         EnumClass enumClass = (EnumClass)q.getSingleResult();

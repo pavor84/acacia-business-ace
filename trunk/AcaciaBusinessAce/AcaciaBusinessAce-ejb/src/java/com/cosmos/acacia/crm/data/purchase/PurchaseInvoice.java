@@ -74,8 +74,8 @@ import javax.persistence.TemporalType;
                 componentClass=JBPanel.class
             ),
             relationshipType=RelationshipType.OneToMany,
-            entityClass=PurchaseInvoiceItem.class/*,
-            componentIndex=1*/
+            entityClass=PurchaseInvoiceItem.class,
+            componentIndex=2
         ),
         @FormContainer(
             name="supplierDetails",
