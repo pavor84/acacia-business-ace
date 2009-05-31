@@ -11,12 +11,12 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.ELProperty;
 
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.CashReconcile;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.Warehouse;
+import com.cosmos.acacia.crm.data.cash.CashReconcile;
 
 /**
  * Created	:	10.03.2009

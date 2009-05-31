@@ -16,9 +16,9 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.cash.BanknoteQuantityRemote;
 import com.cosmos.acacia.crm.data.BanknoteQuantity;
-import com.cosmos.acacia.crm.data.CashReconcile;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.cash.CashReconcile;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;

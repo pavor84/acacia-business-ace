@@ -12,7 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.cash.CashReconcileRemote;
-import com.cosmos.acacia.crm.data.CashReconcile;
+import com.cosmos.acacia.crm.data.cash.CashReconcile;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;

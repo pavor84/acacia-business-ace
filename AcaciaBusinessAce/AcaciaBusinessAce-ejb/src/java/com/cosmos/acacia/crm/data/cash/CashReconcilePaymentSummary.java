@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.cash;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +19,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.data.DbResource;
 
 /**
  * Created	:	26.04.2009
