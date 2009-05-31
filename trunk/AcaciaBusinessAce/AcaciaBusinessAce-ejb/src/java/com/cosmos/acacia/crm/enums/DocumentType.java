@@ -30,7 +30,7 @@ public enum DocumentType implements DatabaseResource {
     PurchaseInvoice("Purchase Invoice", "The Purchase Invoice", PurchaseInvoice.class),
     //
     // Cash
-    CashReconcile("Cash Reconcile", "The Cash Reconcile", com.cosmos.acacia.crm.data.CashReconcile.class),
+    CashReconcile("Cash Reconcile", "The Cash Reconcile", com.cosmos.acacia.crm.data.cash.CashReconcile.class),
     ;
 
     private DocumentType(String name, String description, Class<? extends BusinessDocument> documentClass) {

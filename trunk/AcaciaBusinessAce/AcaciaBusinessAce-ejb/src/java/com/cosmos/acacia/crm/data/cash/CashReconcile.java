@@ -1,4 +1,4 @@
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.cash;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,6 +26,9 @@ import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.crm.data.BusinessDocument;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Person;
 
 /**
  * 
