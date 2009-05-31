@@ -44,4 +44,6 @@ public @interface Component {
     String componentConstraints() default "";
 
     ComponentBorder componentBorder() default @ComponentBorder();
+
+    boolean scrollable() default false;
 }
