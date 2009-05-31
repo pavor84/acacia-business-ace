@@ -10,6 +10,7 @@ import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
 import com.cosmos.acacia.annotation.ComponentProperty;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
@@ -20,6 +21,8 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
+import com.cosmos.swingb.JBTextPane;
+import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -71,6 +74,14 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
                 componentClass=JBPanel.class
             ),
             componentIndex=1
+        ),
+        @FormContainer(
+            name="notes",
+            title="Notes",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(layoutClass=BorderLayout.class)
         ),
         @FormContainer(
             name="documentDetails",
@@ -247,6 +258,19 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
         )
     )
     protected Person publisherOfficer;
+
+    @Transient
+    @Property(title="Notes",
+        formComponent=@FormComponent(
+            component=@Component(
+                componentClass=JBTextPane.class,
+                componentConstraints=BorderLayout.CENTER,
+                scrollable=true
+            ),
+            parentContainerName="notes"
+        )
+    )
+    private String notes;
 
     @Column(name = "creation_time")
     @Temporal(TemporalType.TIMESTAMP)
