@@ -13,7 +13,6 @@ import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
-import com.cosmos.acacia.annotation.Logic;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
@@ -46,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import javax.swing.Scrollable;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.application.ResourceMap;
@@ -165,50 +165,56 @@ public class EntityFormProcessor {
         List<Field> fields = getAnnotatedFields(entityClass);
         for (Field field : fields) {
             for (Annotation annotation : getAnnotations(field)) {
-                Property property = field.getAnnotation(Property.class);
-                String propertyName = field.getName();
                 if (annotation instanceof FormComponent) {
                     FormComponent formComponent = (FormComponent) annotation;
-                    Component component = formComponent.component();
-                    JComponent jComponent = getComponent(component, field);
-                    String componentName = jComponent.getName();
-                    propertiesMap.put(componentName, property);
-                    propertyNamesMap.put(componentName, propertyName);
-                    String componentConstraints = component.componentConstraints();
                     String parentContainerName = formComponent.parentContainerName();
 
+                    Component component = formComponent.component();
+                    getJComponent(component, parentContainerName, field);
                 } else if (annotation instanceof FormComponentPair) {
                     FormComponentPair componentPair = (FormComponentPair) annotation;
-                    Component component = componentPair.firstComponent();
-                    JComponent jComponent = getComponent(component, field);
-                    String componentName = jComponent.getName();
-                    propertiesMap.put(componentName, property);
-                    propertyNamesMap.put(componentName, propertyName);
-                    String componentConstraints = component.componentConstraints();
                     String parentContainerName = componentPair.parentContainerName();
-                    JComponent container = getContainer(parentContainerName);
-                    if ("".equals(componentConstraints)) {
-                        container.add(jComponent);
-                    } else {
-                        container.add(jComponent, componentConstraints);
-                    }
-                    componentsMap.put(jComponent.getName(), jComponent);
+
+                    Component component = componentPair.firstComponent();
+                    getJComponent(component, parentContainerName, field);
 
                     component = componentPair.secondComponent();
-                    jComponent = getComponent(component, field);
-                    componentName = jComponent.getName();
-                    propertiesMap.put(componentName, property);
-                    propertyNamesMap.put(componentName, propertyName);
-                    componentConstraints = component.componentConstraints();
-                    if ("".equals(componentConstraints)) {
-                        container.add(jComponent);
-                    } else {
-                        container.add(jComponent, componentConstraints);
-                    }
-                    componentsMap.put(jComponent.getName(), jComponent);
+                    getJComponent(component, parentContainerName, field);
                 }
             }
         }
+    }
+
+    protected JComponent getJComponent(Component component, String parentContainerName, Field field) {
+        Property property = field.getAnnotation(Property.class);
+        String propertyName = field.getName();
+        JComponent jComponent = getComponent(component, field);
+
+        initJComponent(jComponent, property, propertyName);
+        if(jComponent instanceof JScrollPane) {
+            initJComponent(getJComponent((JScrollPane)jComponent), property, propertyName);
+        }
+
+        String componentConstraints = component.componentConstraints();
+        JComponent container = getContainer(parentContainerName);
+        if ("".equals(componentConstraints)) {
+            container.add(jComponent);
+        } else {
+            container.add(jComponent, componentConstraints);
+        }
+
+        return jComponent;
+    }
+
+    protected JComponent getJComponent(JScrollPane scrollPane) {
+        return (JComponent)scrollPane.getViewport().getView();
+    }
+
+    protected void initJComponent(JComponent jComponent, Property property, String propertyName) {
+        String componentName = jComponent.getName();
+        propertiesMap.put(componentName, property);
+        propertyNamesMap.put(componentName, propertyName);
+        componentsMap.put(componentName, jComponent);
     }
 
     protected void addUnits(Map<UnitType, List<Unit>> unitsMap, Unit... units) {
@@ -360,6 +366,15 @@ public class EntityFormProcessor {
         }
 
         initJComponentResources(jComponent);
+
+        if(jComponent instanceof Scrollable && component.scrollable()) {
+            JScrollPane scrollPane = new JScrollPane();
+            componentName = getComponentName(field, JScrollPane.class);
+            scrollPane.setName(componentName);
+            scrollPane.setViewportView(jComponent);
+            componentsMap.put(scrollPane.getName(), scrollPane);
+            return scrollPane;
+        }
 
         return jComponent;
     }
