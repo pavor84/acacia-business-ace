@@ -53,7 +53,7 @@ public @interface Layout {
 
     int maxLabelWidth() default 200;
 
-    int preferredFieldWidth() default 150;
+    int preferredFieldWidth() default 100;
 
     int maxFieldWidth() default -1;
 }
