@@ -82,15 +82,24 @@ import com.cosmos.acacia.annotation.PropertyValidator;
          *  - supplier - may be null
          *  - branch - may be null
          */
-        @NamedQuery
-            (
-                name = "PurchaseOrder.findPendingForParentAndDeleted",
-                query = "select po from PurchaseOrder po where po.dataObject.parentDataObjectId = :parentDataObjectId " +
-                        "and po.dataObject.deleted = :deleted " +
-                        "and (po.status = :status_sent or po.status = :status_partlyConfirmed) " +
-                        "and (po.supplier = :supplier or :supplier is null) " +
-                        "and (po.branch = :branch or :branch is null)"
-            )
+        @NamedQuery(
+            name = "PurchaseOrder.findPendingOrdersBySupplier",
+            query = "select po from PurchaseOrder po" +
+                    " where po.dataObject.parentDataObjectId = :parentDataObjectId" +
+                    "  and po.dataObject.deleted = :deleted" +
+                    "  and (po.status = :status_sent or po.status = :status_partlyConfirmed)" +
+                    "  and (po.supplier = :supplier or :supplier is null)" +
+                    "  and po.branch = :branch"
+        ),
+        @NamedQuery(
+            name = "PurchaseOrder.findAllPendingOrders",
+            query = "select po from PurchaseOrder po" +
+                    " where po.dataObject.parentDataObjectId = :parentDataObjectId" +
+                    "  and po.dataObject.deleted = :deleted" +
+                    "  and (po.status = :status_sent or po.status = :status_partlyConfirmed)" +
+                    "  and (po.supplier = :supplier or :supplier is null)" +
+                    "  and po.branch = :branch"
+        )
     })
 public class PurchaseOrder extends DataObjectBean implements Serializable {
 

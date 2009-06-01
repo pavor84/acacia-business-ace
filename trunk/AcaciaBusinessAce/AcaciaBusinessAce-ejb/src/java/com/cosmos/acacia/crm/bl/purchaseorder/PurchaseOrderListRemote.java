@@ -34,10 +34,27 @@ public interface PurchaseOrderListRemote {
 
     /**
      * Return all orders for a given parent.
-     * @param parentDataObjectId - mandatory
      * @return not null list
      */
-    List<PurchaseOrder> listPurchaseOrders(BigInteger parentDataObjectId);
+    List<PurchaseOrder> getPurchaseOrders();
+
+    /**
+     * Get all orders in status {@link PurchaseOrderStatus#Sent} or {@link PurchaseOrderStatus#PartlyConfirmed}
+     * @param parentDataObjectId
+     * @param branch for branch
+     * @return
+     */
+    List<PurchaseOrder> getPendingPurchaseOrders();
+
+    /**
+     * Get all orders in status {@link PurchaseOrderStatus#Sent} or {@link PurchaseOrderStatus#PartlyConfirmed}
+     * for a given supplier in a given branch ( or all branches if null )
+     * @param parentDataObjectId - not null
+     * @param supplier - not null
+     * @param branch - may be null
+     * @return
+     */
+    List<PurchaseOrder> getPendingPurchaseOrders(BusinessPartner supplier);
 
     /**
      * Deletes the order, - if the integrity is violated, throws an {@link ValidationException} 
@@ -51,7 +68,7 @@ public interface PurchaseOrderListRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    PurchaseOrder newPurchaseOrder(BigInteger parentDataObjectId);
+    PurchaseOrder newPurchaseOrder();
 
     /**
      * Return entity properties for detailed view
@@ -151,24 +168,6 @@ public interface PurchaseOrderListRemote {
      */
     void saveOrderItems(List<PurchaseOrderItem> orderItems);
 
-    /**
-     * Get all orders in status {@link PurchaseOrderStatus#Sent} or {@link PurchaseOrderStatus#PartlyConfirmed}
-     * @param parentDataObjectId
-     * @param branch for branch
-     * @return
-     */
-    List<PurchaseOrder> getPendingOrders(BigInteger parentDataObjectId, Address branch);
-
-    /**
-     * Get all orders in status {@link PurchaseOrderStatus#Sent} or {@link PurchaseOrderStatus#PartlyConfirmed}
-     * for a given supplier in a given branch ( or all branches if null )
-     * @param parentDataObjectId - not null
-     * @param supplier - not null
-     * @param branch - may be null
-     * @return
-     */
-    List<PurchaseOrder> getPendingOrders(BigInteger parentDataObjectId, BusinessPartner supplier, Address branch);
-    
     /**
      * Get an order by its id
      * @param parentId

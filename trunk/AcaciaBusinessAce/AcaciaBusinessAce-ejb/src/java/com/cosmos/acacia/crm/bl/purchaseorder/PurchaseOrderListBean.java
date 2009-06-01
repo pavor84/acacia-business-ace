@@ -47,35 +47,29 @@ import com.cosmos.beansbinding.EntityProperties;
  */
 @Stateless
 public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseOrderListLocal {
-    @PersistenceContext
-    private EntityManager em; 
 
+    @PersistenceContext
+    private EntityManager em;
     @EJB
     private EntityStoreManagerLocal esm;
-    
     @EJB
     private AcaciaSessionLocal acaciaSession;
-    
-    @EJB 
+    @EJB
     private LocationsListLocal locationsList;
-    
-    @EJB 
+    @EJB
     private AddressesListLocal addressesList;
-
     @EJB
     private PurchaseOrderValidatorLocal purchaseOrderValidator;
-    
     @EJB
     private PurchaseOrderItemValidatorLocal purchaseOrderItemValidator;
-    
     @EJB
     private DocumentNumberLocal documentNumberLocal;
-    
+
     @Override
     public EntityProperties getListingEntityProperties() {
-        
+
         EntityProperties entityProperties = esm.getEntityProperties(PurchaseOrder.class);
-        
+
         //let's keep the columns in the table a reasonable count, so remove all not-crucial information
         entityProperties.removePropertyDetails("branchName");
         entityProperties.removePropertyDetails("supplierName");
@@ -86,43 +80,41 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         entityProperties.removePropertyDetails("firstDeliveryTime");
         entityProperties.removePropertyDetails("lastDeliveryTime");
         entityProperties.removePropertyDetails("notes");
-        
+
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;
-        
+
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<PurchaseOrder> listPurchaseOrders(BigInteger parentDataObjectId) {
-        if ( parentDataObjectId==null )
-            throw new IllegalArgumentException("parentDataObjectId can't be null");
-        
+    public List<PurchaseOrder> getPurchaseOrders() {
         Query q = em.createNamedQuery("PurchaseOrder.findForParentAndDeleted");
-        q.setParameter("parentDataObjectId", parentDataObjectId);
+        q.setParameter("parentDataObjectId", getOrganizationId());
         q.setParameter("deleted", false);
-        
+
         List<PurchaseOrder> result = q.getResultList();
         return result;
     }
 
     @Override
     public void deletePurchaseOrder(PurchaseOrder purchaseOrder) {
-        if ( purchaseOrder==null )
+        if (purchaseOrder == null) {
             throw new IllegalArgumentException("null: 'purchaseOrder'");
+        }
         esm.remove(em, purchaseOrder);
     }
 
     @Override
-    public PurchaseOrder newPurchaseOrder(BigInteger parentDataObjectId) {
-        
+    public PurchaseOrder newPurchaseOrder() {
+
         PurchaseOrder order = new PurchaseOrder();
-        
+
         Address branch = acaciaSession.getBranch();
         Person person = acaciaSession.getPerson();
-        
-        if ( branch!=null ){
+
+        if (branch != null) {
             order.setBranch(branch);
             order.setBranchName(branch.getAddressName());
         }
@@ -131,9 +123,9 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         order.setCreatorName(person.getDisplayName());
         order.setDocumentDeliveryMethod(DocumentDeliveryMethod.Courier.getDbResource());
         order.setStatus(PurchaseOrderStatus.Open.getDbResource());
-        order.setParentId(parentDataObjectId);
+        order.setParentId(getOrganizationId());
         order.setDeliveryStatus(DeliveryStatus.NotDelivered.getDbResource());
-        
+
         return order;
     }
 
@@ -156,34 +148,35 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
 
     @Override
     public List<ContactPerson> getSupplierContacts(BusinessPartner supplier) {
-        if ( supplier == null )
+        if (supplier == null) {
             throw new IllegalArgumentException("not null supplier please!");
-        
+        }
+
         Set<ContactPerson> result = new HashSet<ContactPerson>();
-        
+
         List<Address> addrs = locationsList.getAddresses(supplier.getPartnerId());
         for (Address address : addrs) {
             List<ContactPerson> cPersons = addressesList.getContactPersons(address.getAddressId());
             result.addAll(cPersons);
         }
-        
+
         return new ArrayList<ContactPerson>(result);
     }
 
     @Override
     public PurchaseOrder savePurchaseOrder(PurchaseOrder po) {
-        
+
         //if new order - set some numbers
-        if ( po.getOrderNumber()==null || po.getOrderNumber().equals(new BigInteger("0")) ){
+        if (po.getOrderNumber() == null || po.getOrderNumber().equals(new BigInteger("0"))) {
             documentNumberLocal.setDocumentNumber(po);
             BigInteger sequenceNumber = getNextSequenceNumber(po);
             po.setSupplierOrderNumber(sequenceNumber);
         }
-        
+
         purchaseOrderValidator.validate(po);
-        
+
         esm.persist(em, po);
-        
+
         return po;
     }
 
@@ -191,25 +184,26 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         Query q = em.createNamedQuery("PurchaseOrder.maxSupplierOrderNumberForSupplier");
         q.setParameter("parentDataObjectId", po.getParentId());
         q.setParameter("supplier", po.getSupplier());
-        
+
         BigInteger n = (BigInteger) q.getSingleResult();
-        if ( n==null )
+        if (n == null) {
             return new BigInteger("1");
-        else
+        } else {
             return n.add(new BigInteger("1"));
+        }
     }
 
     @Override
     public PurchaseOrder updateOrderStatus(PurchaseOrder order, PurchaseOrderStatus status) {
         order.setStatus(status.getDbResource());
-        
-        if ( status.equals(PurchaseOrderStatus.Sent)){
+
+        if (status.equals(PurchaseOrderStatus.Sent)) {
             Person person = acaciaSession.getPerson();
             order.setSender(person);
             order.setSenderName(person.getDisplayName());
             order.setSentTime(new Date());
         }
-        
+
         return savePurchaseOrder(order);
     }
 
@@ -229,13 +223,14 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     @SuppressWarnings("unchecked")
     @Override
     public List<PurchaseOrderItem> getOrderItems(BigInteger parentDataObjectId) {
-        if ( parentDataObjectId==null )
+        if (parentDataObjectId == null) {
             throw new IllegalArgumentException("parentDataObjectId can't be null");
-        
+        }
+
         Query q = em.createNamedQuery("PurchaseOrderItem.findForParentAndDeleted");
         q.setParameter("parentDataObjectId", parentDataObjectId);
         q.setParameter("deleted", false);
-        
+
         List<PurchaseOrderItem> result = q.getResultList();
         return result;
     }
@@ -252,9 +247,9 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     @Override
     public PurchaseOrderItem saveOrderItem(PurchaseOrderItem item) {
         purchaseOrderItemValidator.validate(item);
-        
+
         esm.persist(em, item);
-        
+
         return item;
     }
 
@@ -262,20 +257,23 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     @Override
     public WarehouseProduct getWarehouseProduct(SimpleProduct product) {
         Address branch = acaciaSession.getBranch();
-        if ( branch==null )
+        if (branch == null) {
             throw new IllegalArgumentException("Branch of logged user required!");
-        if ( product==null )
+        }
+        if (product == null) {
             throw new IllegalArgumentException("Product parameter missing!");
-        
+        }
+
         Query q = em.createNamedQuery("WarehouseProduct.findByProductAndBranch");
         q.setParameter("branch", branch);
         q.setParameter("product", product);
-        
+
         List result = q.getResultList();
-        if ( result.isEmpty() )
+        if (result.isEmpty()) {
             return null;
-        else
+        } else {
             return (WarehouseProduct) q.getResultList().get(0);
+        }
     }
 
     @Override
@@ -292,8 +290,9 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
 
     @Override
     public void saveOrderItems(List<PurchaseOrderItem> orderItems) {
-        if ( orderItems==null )
+        if (orderItems == null) {
             throw new IllegalArgumentException("orderItems can't be null!");
+        }
         for (PurchaseOrderItem item : orderItems) {
             purchaseOrderItemValidator.validate(item);
             esm.persist(em, item);
@@ -303,50 +302,54 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<PurchaseOrder> getPendingOrders(BigInteger parentDataObjectId, Address branch) {
-        if ( parentDataObjectId==null )
-            throw new IllegalArgumentException("parentDataObjectId can't be null");
-        
-        List<PurchaseOrder> result = listPendingOrders(parentDataObjectId, branch, null);
+    public List<PurchaseOrder> getPendingPurchaseOrders() {
+        List<PurchaseOrder> result = listPendingOrders(null);
         return result;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private List<PurchaseOrder> listPendingOrders(BigInteger parentDataObjectId,
-                                                Address branch, BusinessPartner supplier) {
-        if ( parentDataObjectId==null )
-            throw new IllegalArgumentException("parentDataObjectId can't be null");
-        
-        Query q = em.createNamedQuery("PurchaseOrder.findPendingForParentAndDeleted");
-        q.setParameter("parentDataObjectId", parentDataObjectId);
+    private List<PurchaseOrder> listPendingOrders(BusinessPartner supplier) {
+        Query q;
+        if(supplier != null) {
+            q = em.createNamedQuery("PurchaseOrder.findPendingOrdersBySupplier");
+            q.setParameter("supplier", supplier);
+        } else {
+            q = em.createNamedQuery("PurchaseOrder.findAllPendingOrders");
+        }
+        q.setParameter("parentDataObjectId", getOrganizationId());
         q.setParameter("deleted", false);
         q.setParameter("status_sent", PurchaseOrderStatus.Sent.getDbResource());
         q.setParameter("status_partlyConfirmed", PurchaseOrderStatus.PartlyConfirmed.getDbResource());
-        q.setParameter("supplier", supplier);
-        q.setParameter("branch", branch);
-        
+        q.setParameter("branch", getBranch());
+
         List<PurchaseOrder> result = q.getResultList();
         return result;
     }
-    
 
     @Override
-    public List<PurchaseOrder> getPendingOrders(BigInteger parentDataObjectId,
-                                                BusinessPartner supplier, Address branch) {
-        if ( parentDataObjectId==null )
-            throw new IllegalArgumentException("parentDataObjectId can't be null");
-        if ( supplier==null )
+    public List<PurchaseOrder> getPendingPurchaseOrders(BusinessPartner supplier) {
+        if (supplier == null) {
             throw new IllegalArgumentException("supplier can't be null");
-        
-        List<PurchaseOrder> result = listPendingOrders(parentDataObjectId, branch, supplier);
+        }
+
+        List<PurchaseOrder> result = listPendingOrders(supplier);
         return result;
     }
 
     @Override
     public PurchaseOrder getPurchaseOrder(BigInteger id) {
-        if ( id==null )
+        if (id == null) {
             throw new IllegalArgumentException("Please provide 'id' parameter");
+        }
         PurchaseOrder result = em.find(PurchaseOrder.class, id);
         return result;
+    }
+
+    private BigInteger getOrganizationId() {
+        return acaciaSession.getOrganization().getId();
+    }
+
+    private Address getBranch() {
+        return acaciaSession.getBranch();
     }
 }
