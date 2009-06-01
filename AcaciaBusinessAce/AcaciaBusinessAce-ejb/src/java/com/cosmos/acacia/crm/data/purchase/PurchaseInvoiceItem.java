@@ -4,15 +4,20 @@
  */
 package com.cosmos.acacia.crm.data.purchase;
 
+import com.cosmos.acacia.annotation.BorderType;
 import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.ComponentBorder;
 import com.cosmos.acacia.annotation.EntityListLogic;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Logic;
 import com.cosmos.acacia.annotation.LogicUnitType;
 import com.cosmos.acacia.annotation.OperationRow;
 import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
@@ -22,7 +27,13 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBDecimalField;
+import com.cosmos.swingb.JBIntegerField;
+import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -59,6 +70,30 @@ import javax.persistence.Transient;
         name="PurchaseInvoiceItem",
         container=@Component(componentClass=JBPanel.class)
     ),
+    formContainers={
+        @FormContainer(
+            name="itemDetails",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Item Details"
+                ),
+                componentConstraints="span, growx"
+            )/*,
+            layout=@Layout(columnsPairs=4)*/
+        ),
+        @FormContainer(
+            name="orderDetails",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Order Details"
+                ),
+                componentConstraints="span, growx"
+            )/*,
+            layout=@Layout(columnsPairs=4)*/
+        )
+    },
     serviceClass=PurchaseServiceRemote.class,
     logic=@Logic(
         entityListLogic=@EntityListLogic(
@@ -99,46 +134,178 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     private PurchaseInvoice invoice;
 
     @Transient
-    @Property(title="Item #")
+    @Property(title="Item #",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Item #:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBIntegerField.class
+            )
+        )
+    )
     private Integer orderPosition;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Product")
+    @Property(title="Product",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.ProductsListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Product:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private Product product;
 
     @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Measure Unit")
+    @Property(title="Measure Unit",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.MeasurementUnit"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Measure Unit:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource measureUnit;
 
     @Basic(optional = false)
     @Column(name = "received_quantity", nullable = false, precision = 19, scale = 4)
-    @Property(title="Quantity")
+    @Property(title="Quantity",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Quantity:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal receivedQuantity;
 
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Currency")
+    @Property(title="Currency",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.Currency"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Currency:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource currency;
 
     @Basic(optional = false)
     @Column(name = "received_price", nullable = false, precision = 19, scale = 4)
-    @Property(title="Unit Price")
+    @Property(title="Unit Price",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Unit Price:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal receivedPrice;
+
+    @Column(name = "tax_value", precision = 19, scale = 4)
+    @Property(title="Tax",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Tax:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
+    private BigDecimal taxValue;
 
     @Basic(optional = false)
     @Column(name = "extended_price", nullable = false, precision = 19, scale = 4)
-    @Property(title="Extended Price")
+    @Property(title="Extended Price",
+        editable=false,
+        readOnly=true,
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Ext. Price:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
     private BigDecimal extendedPrice;
 
-    @Column(name = "tax_value", precision = 19, scale = 4)
-    @Property(title="Tax")
-    private BigDecimal taxValue;
+    @Transient
+    @Property(title="Purchase Order",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="orderDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Purchase Order:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
+    private PurchaseOrder purchaseOrder;
 
     @JoinColumn(name = "purchase_order_item_id", referencedColumnName = "order_item_id")
     @ManyToOne
-    @Property(title="PO Item")
+    @Property(title="PO Item",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderItemListPanel",
+            constructorParameters={@PropertyName(getter="purchaseOrder")}
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="orderDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="PO Item:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private PurchaseOrderItem purchaseOrderItem;
 
     @JoinColumn(name = "order_confirmation_item_id", referencedColumnName = "confirmation_item_id")
@@ -243,6 +410,14 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
             setParentId(invoice.getId());
         else
             setParentId(null);
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
 
     public PurchaseOrderItem getPurchaseOrderItem() {
