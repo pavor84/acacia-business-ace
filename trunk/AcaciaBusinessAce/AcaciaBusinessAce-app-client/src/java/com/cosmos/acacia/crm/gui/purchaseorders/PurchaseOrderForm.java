@@ -672,7 +672,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
      */
     protected void bindComponents(BindingGroup bindGroup, EntityProperties entProps) {
         //if already persisted form - then the supplier can't be changed
-        if (entity.getOrderNumber() != null && entity.getOrderNumber().compareTo(new BigInteger("0")) > 0) {
+        if (entity.getOrderNumber() != null && entity.getOrderNumber().compareTo(BigInteger.ZERO) > 0) {
             entProps.getPropertyDetails("supplier").setReadOnly(true);
             entProps.getPropertyDetails("supplier").setEditable(false);
         }
@@ -714,7 +714,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             }
         }, true);
 
-        if (entity.getOrderNumber() != null && entity.getOrderNumber().compareTo(new BigInteger("0")) > 0) {
+        if (entity.getOrderNumber() != null && entity.getOrderNumber().compareTo(BigInteger.ZERO) > 0) {
             supplierField.setEditable(false);
             supplierField.setEnabled(false);
         }
