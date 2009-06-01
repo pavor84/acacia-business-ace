@@ -88,7 +88,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
                     " where po.dataObject.parentDataObjectId = :parentDataObjectId" +
                     "  and po.dataObject.deleted = :deleted" +
                     "  and (po.status = :status_sent or po.status = :status_partlyConfirmed)" +
-                    "  and (po.supplier = :supplier or :supplier is null)" +
+                    "  and po.supplier = :supplier" +
                     "  and po.branch = :branch"
         ),
         @NamedQuery(
@@ -97,7 +97,6 @@ import com.cosmos.acacia.annotation.PropertyValidator;
                     " where po.dataObject.parentDataObjectId = :parentDataObjectId" +
                     "  and po.dataObject.deleted = :deleted" +
                     "  and (po.status = :status_sent or po.status = :status_partlyConfirmed)" +
-                    "  and (po.supplier = :supplier or :supplier is null)" +
                     "  and po.branch = :branch"
         )
     })
