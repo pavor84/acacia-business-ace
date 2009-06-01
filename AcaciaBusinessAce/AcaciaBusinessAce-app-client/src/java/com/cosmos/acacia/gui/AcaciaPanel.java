@@ -67,16 +67,13 @@ import javax.ejb.EJB;
  * @author miro
  */
 public class AcaciaPanel
-    extends JBPanel
-{
+        extends JBPanel {
     //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
 
     @EJB
     private static RightsManagerRemote rightsManager;
-
     @EJB
     private static ClassifiersRemote classifiersManager;
-
     private BigInteger parentDataObjectId;
     private DataObjectBean mainDataObject;
     private BigInteger organizationDataObjectId;
@@ -90,38 +87,39 @@ public class AcaciaPanel
     }
 
     public AcaciaPanel(DataObjectBean mainDataObject) {
-        this(mainDataObject != null ? mainDataObject.getParentId() : (BigInteger)null);
+        this(mainDataObject != null ? mainDataObject.getParentId() : (BigInteger) null);
         this.mainDataObject = mainDataObject;
     }
 
     protected void initData() {
     }
 
-    public BigInteger getParentDataObjectId()
-    {
+    public BigInteger getParentDataObjectId() {
         //log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.longValue() : "null"));
         return parentDataObjectId;
     }
 
-    public void setParentDataObjectId(BigInteger parentDataObjectId)
-    {
+    public void setParentDataObjectId(BigInteger parentDataObjectId) {
         this.parentDataObjectId = parentDataObjectId;
     }
 
-    public DataObjectBean getMainDataObject()
-    {
+    public DataObjectBean getMainDataObject() {
         return mainDataObject;
     }
 
-    public void setMainDataObject(DataObjectBean mainDataObject)
-    {
+    public void setMainDataObject(DataObjectBean mainDataObject) {
         this.mainDataObject = mainDataObject;
+        if(mainDataObject != null) {
+            setParentDataObjectId(mainDataObject.getParentId());
+        } else {
+            setParentDataObjectId(null);
+        }
     }
 
-    public DataObject getParentDataObject()
-    {
-        if (getParentDataObjectId() != null)
+    public DataObject getParentDataObject() {
+        if (getParentDataObjectId() != null) {
             return getAcaciaSession().getDataObject(getParentDataObjectId());
+        }
 
         return null;
     }
@@ -130,44 +128,39 @@ public class AcaciaPanel
 
         // Quitting in case there is no organization data object
 
-        if (organizationDataObjectId == null)
+        if (organizationDataObjectId == null) {
             try {
                 organizationDataObjectId = getAcaciaSession().getOrganization().getId();
             } catch (NullPointerException ex) {
                 AcaciaApplication.getApplication().exit();
             }
+        }
 
-        if (organizationDataObjectId == null)
+        if (organizationDataObjectId == null) {
             AcaciaApplication.getApplication().exit();
+        }
 
         return organizationDataObjectId;
     }
 
-    protected void setFonts()
-    {
+    protected void setFonts() {
         //Component[] components = this.getComponents();
         // Get a font from config?
         //Font font = new Font("Tahoma", Font.PLAIN, 11);
         //setFontToComponents(components, font);
     }
 
-    protected void setFontToComponents(Component[] components, Font font)
-    {
-        for (Component component : components)
-        {
-            if (component instanceof Container)
-            {
+    protected void setFontToComponents(Component[] components, Font font) {
+        for (Component component : components) {
+            if (component instanceof Container) {
                 setFontToComponents(((Container) component).getComponents(), font);
             }
-            if (component instanceof JBTable)
-            {
+            if (component instanceof JBTable) {
                 ((JBTable) component).getTableHeader().setFont(font);
             }
-            if (component instanceof JBPanel)
-            {
+            if (component instanceof JBPanel) {
                 Border border = ((JBPanel) component).getBorder();
-                if (border instanceof TitledBorder)
-                {
+                if (border instanceof TitledBorder) {
                     ((TitledBorder) border).setTitleFont(font);
                 }
             }
@@ -183,25 +176,19 @@ public class AcaciaPanel
      * @return - the ValidationException if some 'caused by' exception is {@link ValidationException},
      * null otherwise
      */
-    protected ValidationException extractValidationException(Throwable ex)
-    {
+    protected ValidationException extractValidationException(Throwable ex) {
         Throwable e = ex;
-        while(e != null)
-        {
-            if(e instanceof ValidationException)
-            {
-                return (ValidationException)e;
-            }
-            else if(e instanceof ServerException || e instanceof RemoteException)
-            {
+        while (e != null) {
+            if (e instanceof ValidationException) {
+                return (ValidationException) e;
+            } else if (e instanceof ServerException || e instanceof RemoteException) {
                 e = e.getCause();
-            }
-            else if(e instanceof EJBException)
-            {
-                e = ((EJBException)e).getCausedByException();
+            } else if (e instanceof EJBException) {
+                e = ((EJBException) e).getCausedByException();
                 //log.info(e);
-            } else
+            } else {
                 break;
+            }
         }
 
         return null;
@@ -216,12 +203,12 @@ public class AcaciaPanel
      * @param ve
      * @return
      */
-    protected String getValidationErrorsMessage(ValidationException ve)
-    {
+    protected String getValidationErrorsMessage(ValidationException ve) {
         String errorMessagesHeader = getResourceMap().getString("ValidationException.errorsListFollow");
         StringBuilder msg = new StringBuilder();
-        if ( errorMessagesHeader!=null )
+        if (errorMessagesHeader != null) {
             msg.append(errorMessagesHeader);
+        }
         msg.append("\n\n");
         int i = 1;
         for (ValidationMessage validationMessage : ve.getMessages()) {
@@ -231,11 +218,11 @@ public class AcaciaPanel
 //            else
 //                currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
             String currentMsg = getResourceMap().getString(validationMessage.getMessageKey());
-            if ( validationMessage.getArguments()!=null ){
-               Object[] params = validationMessage.getArguments();
-               for(int index = 0; index < params.length; index ++){
-                   currentMsg = currentMsg.replace("{"+index+"}", params[index].toString());
-               }
+            if (validationMessage.getArguments() != null) {
+                Object[] params = validationMessage.getArguments();
+                for (int index = 0; index < params.length; index++) {
+                    currentMsg = currentMsg.replace("{" + index + "}", params[index].toString());
+                }
             }
 
 
@@ -253,24 +240,24 @@ public class AcaciaPanel
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> remoteInterface) {
-       return getBean(remoteInterface, true);
+        return getBean(remoteInterface, true);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> remoteInterface, boolean checkPermissions) {
-         try {
-             InitialContext ctx = new InitialContext();
-             T bean = (T) ctx.lookup(remoteInterface.getName());
-             InvocationHandler handler = new RemoteBeanInvocationHandler(bean, checkPermissions);
+        try {
+            InitialContext ctx = new InitialContext();
+            T bean = (T) ctx.lookup(remoteInterface.getName());
+            InvocationHandler handler = new RemoteBeanInvocationHandler(bean, checkPermissions);
 
-             T proxy = (T) Proxy.newProxyInstance(AcaciaPanel.class.getClassLoader(),
-                 new Class[]{remoteInterface}, handler);
+            T proxy = (T) Proxy.newProxyInstance(AcaciaPanel.class.getClassLoader(),
+                    new Class[]{remoteInterface}, handler);
 
-             return proxy;
-         } catch (Exception ex){
-             ex.printStackTrace();
-             return null;
-         }
+            return proxy;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -284,7 +271,7 @@ public class AcaciaPanel
         }
     }
 
-     static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
+    static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
 
         private E bean;
         private SessionFacadeRemote sessionFacade;
@@ -295,7 +282,7 @@ public class AcaciaPanel
             this.checkPermissions = checkPermissions;
             try {
                 sessionFacade = InitialContext.doLookup(SessionFacadeRemote.class.getName());
-            } catch (NamingException ex){
+            } catch (NamingException ex) {
                 ex.printStackTrace();
                 //log.error("", ex);
             }
@@ -311,22 +298,18 @@ public class AcaciaPanel
                     method.getParameterTypes(),
                     AcaciaApplication.getSessionId(), checkPermissions);
         }
-
-
     }
 
     public static AcaciaSessionRemote getAcaciaSession() {
         return LocalSession.instance();
     }
-
     private EnumResourceRemote enumResourceRemote = getBean(EnumResourceRemote.class);
-
     private Map<Class<? extends DatabaseResource>, List<DbResource>> enumResourcesCache =
-        new HashMap<Class<? extends DatabaseResource>, List<DbResource>>();
+            new HashMap<Class<? extends DatabaseResource>, List<DbResource>>();
 
     public List<DbResource> getEnumResources(Class<? extends DatabaseResource> enumClass) {
         List<DbResource> result = enumResourcesCache.get(enumClass);
-        if ( result==null ){
+        if (result == null) {
             result = getEnumResourceRemote().getEnumResources(enumClass);
             enumResourcesCache.put(enumClass, result);
         }
@@ -334,15 +317,11 @@ public class AcaciaPanel
     }
 
     @Override
-    protected void handleException(String message, Throwable ex)
-    {
-        if(ex instanceof ValidationException)
-        {
+    protected void handleException(String message, Throwable ex) {
+        if (ex instanceof ValidationException) {
             logException(message, ex);
-            handleBusinessException(message, (ValidationException)ex);
-        }
-        else
-        {
+            handleBusinessException(message, (ValidationException) ex);
+        } else {
             super.handleException(message, ex);
         }
     }
@@ -359,21 +338,20 @@ public class AcaciaPanel
         }
     }
 
-    public void handleValidationException(Exception ex)
-    {
+    public void handleValidationException(Exception ex) {
         handleValidationException(null, ex);
     }
 
-    public void handleValidationException(String message, Exception ex){
+    public void handleValidationException(String message, Exception ex) {
         //log.error(message, ex);
         ValidationException ve = extractValidationException(ex);
-        if ( ve!=null ){
+        if (ve != null) {
             String errorMessage = getValidationErrorsMessage(ve);
             JOptionPane.showConfirmDialog(this.getParent(),
-                errorMessage,
-                getResourceMap().getString("ValidationException.errorsListFollow"),
-                JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
-        } else{
+                    errorMessage,
+                    getResourceMap().getString("ValidationException.errorsListFollow"),
+                    JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+        } else {
             ex.printStackTrace();
         }
     }
@@ -404,8 +382,9 @@ public class AcaciaPanel
 
     protected final Report determineReport() {
         Report report = getReport();
-        if (report == null && getReports().size() == 1)
+        if (report == null && getReports().size() == 1) {
             report = getReports().iterator().next();
+        }
 
         if (report == null && getReports().size() > 1) {
             //String[] reportNames = new String[getReports().size()];
@@ -436,29 +415,33 @@ public class AcaciaPanel
     protected final JRDataSource getJasperDataSource(List entities,
             List<Collection> subreports1, List<Collection> subreports2, Object headerEntity) {
 
-        if ((subreports1 != null && entities.size() != subreports1.size())
-                || (subreports2 != null && entities.size() != subreports2.size()))
+        if ((subreports1 != null && entities.size() != subreports1.size()) || (subreports2 != null && entities.size() != subreports2.size())) {
             throw new RuntimeException("All passed collections must have the same size");
+        }
 
         Iterator<Collection> subreport1Iterator = null;
-        if (subreports1 != null)
+        if (subreports1 != null) {
             subreport1Iterator = subreports1.iterator();
+        }
 
         Iterator<Collection> subreport2Iterator = null;
-        if (subreports2 != null)
+        if (subreports2 != null) {
             subreport2Iterator = subreports2.iterator();
+        }
 
         List<CombinedDataSourceObject> dataList =
-            new ArrayList<CombinedDataSourceObject>(entities.size());
+                new ArrayList<CombinedDataSourceObject>(entities.size());
 
         for (Object entity : entities) {
             Collection subreport1 = null;
-            if (subreport1Iterator != null)
+            if (subreport1Iterator != null) {
                 subreport1 = subreport1Iterator.next();
+            }
 
             Collection subreport2 = null;
-            if (subreport2Iterator != null)
+            if (subreport2Iterator != null) {
                 subreport2 = subreport2Iterator.next();
+            }
 
             CombinedDataSourceObject cdso = new CombinedDataSourceObject();
             cdso.setEntity(entity);
@@ -486,8 +469,7 @@ public class AcaciaPanel
             Map<String, Object> params = new HashMap<String, Object>();
             if (report.getAutoSubreport1Class() != null) {
                 EntityProperties entityProps = report.getAutoSubreport1Properties();
-                JasperDesign design = reportsUtil
-                    .createTableReport(report.getAutoSubreport1Class(), entityProps, true);
+                JasperDesign design = reportsUtil.createTableReport(report.getAutoSubreport1Class(), entityProps, true);
 
                 JasperReport subreport1 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT1", subreport1);
@@ -495,8 +477,7 @@ public class AcaciaPanel
 
             if (report.getAutoSubreport2Class() != null) {
                 EntityProperties entityProps2 = report.getAutoSubreport2Properties();
-                JasperDesign design = reportsUtil
-                    .createTableReport(report.getAutoSubreport2Class(), entityProps2, true);
+                JasperDesign design = reportsUtil.createTableReport(report.getAutoSubreport2Class(), entityProps2, true);
                 JasperReport subreport2 = JasperCompileManager.compileReport(design);
                 params.put("SUBREPORT2", subreport2);
             }
@@ -507,32 +488,35 @@ public class AcaciaPanel
             }
 
             JRDataSource ds = getJasperDataSource(getEntities(),
-                report.getSubreports1Data(), report.getSubreports2Data(), getReportHeader());
+                    report.getSubreports1Data(), report.getSubreports2Data(), getReportHeader());
 
             String[] exportTypes = getExportTypes();
             int choice = chooseReportType(exportTypes);
             if (choice != JOptionPane.CLOSED_OPTION) {
                 String targetPath = "";
-                if (choice != ReportsTools.TYPE_PRINTER)
+                if (choice != ReportsTools.TYPE_PRINTER) {
                     targetPath = chooseTargetPath();
+                }
 
                 if (targetPath != null) {
                     String filename = targetPath + ReportsTools.FS;
-                    if (report.getExportFileName() != null)
+                    if (report.getExportFileName() != null) {
                         filename += report.getExportFileName();
-                    else
+                    } else {
                         filename += jasperReport.getName();
+                    }
 
                     boolean success = ReportsTools.print(jasperReport, ds, params, filename, choice);
 
                     String message = exportTypes[choice];
-                    if (choice != ReportsTools.TYPE_PRINTER)
+                    if (choice != ReportsTools.TYPE_PRINTER) {
                         message += ": " + filename;
+                    }
 
                     if (success) {
                         JOptionPane.showMessageDialog(this,
-                            getResourceMap().getString("export.successful") +
-                            " " + message);
+                                getResourceMap().getString("export.successful") +
+                                " " + message);
                     }
                 }
             }
@@ -555,25 +539,26 @@ public class AcaciaPanel
     private int chooseReportType(String[] exportTypes) {
         ResourceMap resourceMap = getResourceMap();
         int choice = JOptionPane.showOptionDialog(this,
-                    resourceMap.getString("choose.export.type"),
-                    resourceMap.getString("choose.export.type"),
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    exportTypes,
-                    exportTypes[0]);
+                resourceMap.getString("choose.export.type"),
+                resourceMap.getString("choose.export.type"),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                exportTypes,
+                exportTypes[0]);
 
         return choice;
     }
-
     private static final String REPORT_PATH = "reportPath";
+
     private String chooseTargetPath() {
         String lastPath = Preferences.systemRoot().get(
                 LocalSession.instance().getUser().getUserName() + REPORT_PATH, null);
 
         JFileChooser fc = new JFileChooser();
-        if (lastPath != null)
+        if (lastPath != null) {
             fc.setCurrentDirectory(new File(lastPath));
+        }
 
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int fChoice = fc.showOpenDialog(this);
@@ -586,6 +571,7 @@ public class AcaciaPanel
         }
         return null;
     }
+
     /**
      * Override this to specify listing behaviour for reporting
      * @return
@@ -608,27 +594,29 @@ public class AcaciaPanel
     public EnumResourceRemote getEnumResourceRemote() {
         return enumResourceRemote;
     }
-    
-    protected void showMessageDialog(String messageKey){
+
+    protected void showMessageDialog(String messageKey) {
         ResourceMap resourceMap = getResourceMap();
         String message = resourceMap.getString(messageKey);
         JOptionPane.showMessageDialog(this, message);
     }
-    
-    protected void showMessageBox(String message){
+
+    protected void showMessageBox(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
 
     protected static RightsManagerRemote getRightsManager() {
-        if(rightsManager == null)
+        if (rightsManager == null) {
             rightsManager = LocalSession.instance().getRightsManager();
+        }
 
         return rightsManager;
     }
 
     protected static ClassifiersRemote getClassifiersManager() {
-        if(classifiersManager == null)
+        if (classifiersManager == null) {
             classifiersManager = getBean(ClassifiersRemote.class);
+        }
 
         return classifiersManager;
     }
@@ -652,5 +640,4 @@ public class AcaciaPanel
     protected static Classifier getClassifier(String classifierCode) {
         return LocalSession.instance().getClassifier(classifierCode);
     }
-
 }

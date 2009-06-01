@@ -12,6 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -32,7 +33,11 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     private BindingGroup bindingGroup;
 
     private List<PurchaseOrder> list;
-    
+
+    public PurchaseOrderListPanel() {
+        this(LocalSession.instance().getOrganization().getId());
+    }
+
     /**
      * @param pendingOrders 
      * @param parentDataObject
@@ -80,7 +85,7 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     @SuppressWarnings("unchecked")
     private List getList() {
         if ( list==null )
-            list = getFormSession().listPurchaseOrders(getParentDataObjectId());
+            list = getFormSession().getPurchaseOrders();
         return list;
     }
 
@@ -134,7 +139,7 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
      */
     @Override
     protected Object newRow() {
-        PurchaseOrder o = getFormSession().newPurchaseOrder(getParentDataObjectId());
+        PurchaseOrder o = getFormSession().newPurchaseOrder();
         return showDetailsForm(o, true);
     }
 
