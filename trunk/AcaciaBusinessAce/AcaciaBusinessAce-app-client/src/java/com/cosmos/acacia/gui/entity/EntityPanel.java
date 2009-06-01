@@ -31,6 +31,7 @@ import java.util.TreeMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -248,9 +249,11 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     protected String getJComponentName(JComponent jComponent) {
-        Container parent;
-        if(jComponent instanceof JComboBox && (parent = jComponent.getParent()) instanceof JBComboList) {
+        Container parent = jComponent.getParent();
+        if(jComponent instanceof JComboBox && parent instanceof JBComboList) {
             return parent.getName();
+        } else if(jComponent instanceof JScrollPane) {
+            parent.getName();
         }
 
         return jComponent.getName();

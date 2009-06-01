@@ -250,7 +250,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
         });
 
         //purchase orders
-        List<PurchaseOrder> pendingOrders = purchaseOrderListRemote.getPendingOrders(getParentDataObjectId(), getUserBranch());
+        List<PurchaseOrder> pendingOrders = purchaseOrderListRemote.getPendingPurchaseOrders();
         bindorderConfirmationField(pendingOrders);
 
         //order confirmations
@@ -417,11 +417,11 @@ public class OrdersMatchingForm extends AcaciaPanel {
         List<PurchaseOrder> possibleOrders = null;
         if ( orderConfirmation!=null ){
             items = orderConfirmationListRemote.getPendingItems(orderConfirmation.getId());
-            possibleOrders = purchaseOrderListRemote.getPendingOrders(getParentDataObjectId(), orderConfirmation.getSupplier(), getUserBranch());
+            possibleOrders = purchaseOrderListRemote.getPendingPurchaseOrders(orderConfirmation.getSupplier());
         }
         else{
             items = new ArrayList<OrderConfirmationItem>();
-            possibleOrders = purchaseOrderListRemote.getPendingOrders(getParentDataObjectId(), getUserBranch());
+            possibleOrders = purchaseOrderListRemote.getPendingPurchaseOrders();
         }
 
         confirmationItemsListPanel.refreshList(items);

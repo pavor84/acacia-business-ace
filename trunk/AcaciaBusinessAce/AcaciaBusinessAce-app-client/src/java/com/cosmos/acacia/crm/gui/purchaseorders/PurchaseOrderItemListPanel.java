@@ -19,11 +19,11 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -58,8 +58,8 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
         super(parentDataObjectId);
     }
 
-    public PurchaseOrderItemListPanel(DataObjectBean parent) {
-        super(parent);
+    public PurchaseOrderItemListPanel(PurchaseOrder purchaseOrder) {
+        super(purchaseOrder);
     }
 
     @Override
@@ -75,6 +75,15 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
         refreshDataTable(entityProps);
 
         setVisible(Button.Select, false);
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return (PurchaseOrder)getMainDataObject();
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        setMainDataObject(purchaseOrder);
+        refreshAction();
     }
 
     protected void refreshDataTable(EntityProperties entityProps) {

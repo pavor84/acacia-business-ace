@@ -65,7 +65,7 @@ public class PurchaseOrderListTest extends BaseTest{
 
         Assert.assertNotNull(formSession.getStatuses());
 
-        Assert.assertNotNull(formSession.getPendingOrders(getOrganizationId(), getBranch()));
+        Assert.assertNotNull(formSession.getPendingPurchaseOrders());
     }
 
     /**
@@ -97,7 +97,7 @@ public class PurchaseOrderListTest extends BaseTest{
 
 
     private List<PurchaseOrder> list() {
-        return formSession.listPurchaseOrders(getOrganizationId());
+        return formSession.getPurchaseOrders();
     }
 
     private PurchaseOrder createNew() throws UncompleteUnitTestException {
@@ -108,7 +108,7 @@ public class PurchaseOrderListTest extends BaseTest{
         if ( addresses.size()==0 )
             throw new UncompleteUnitTestException("Not available branches to select from for branchParent= dataobject.id"+branchParent.getDataObjectId());
 
-        PurchaseOrder result = formSession.newPurchaseOrder(getOrganizationId());
+        PurchaseOrder result = formSession.newPurchaseOrder();
         List<Organization> orgs = organizationsListRemote.getOrganizations(getOrganizationId());
         Organization o = null;
         List<ContactPerson> persons = null;
@@ -128,7 +128,7 @@ public class PurchaseOrderListTest extends BaseTest{
         result.setSupplierContactName(persons.get(0).getContact().getDisplayName());
 
         //mean while do unrelated to createNew test, but do it here, because we found a supplier
-        Assert.assertNotNull(formSession.getPendingOrders(getOrganizationId(), o, getBranch()));
+        Assert.assertNotNull(formSession.getPendingPurchaseOrders(o));
 
         try{
             return
