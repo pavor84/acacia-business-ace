@@ -19,7 +19,7 @@ public @interface Unit {
 
     UnitType unitType();
 
-    LogicUnitType logicUnitType();
+    LogicUnitType logicUnitType() default LogicUnitType.None;
 
     OperationRow[] operations() default {};
 }

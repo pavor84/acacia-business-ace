@@ -13,6 +13,7 @@ import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.LogicUnitType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -241,6 +243,17 @@ public class EntityFormProcessor {
         return entityLogicUnitsMap;
     }
 
+    public Set<JComponent> getJComponentsByPropertyName(String propertyName) {
+        Set<JComponent> set = new HashSet<JComponent>();
+        for(String componentName : propertyNamesMap.keySet()) {
+            if(propertyName.equals(propertyNamesMap.get(componentName))) {
+                set.add(componentsMap.get(componentName));
+            }
+        }
+
+        return set;
+    }
+
     protected List<Unit> getUnits(Map<UnitType, List<Unit>> unitsMap, UnitType unitType) {
         List<Unit> units;
         if((units = unitsMap.get(unitType)) != null) {
@@ -254,8 +267,32 @@ public class EntityFormProcessor {
         return getUnits(entityListLogicUnitsMap, unitType);
     }
 
+    public List<Unit> getEntityListLogicUnits(UnitType unitType, LogicUnitType logicUnitType) {
+        return getUnits(getEntityListLogicUnits(unitType), logicUnitType);
+    }
+
     public List<Unit> getEntityLogicUnits(UnitType unitType) {
         return getUnits(entityLogicUnitsMap, unitType);
+    }
+
+    public List<Unit> getEntityLogicUnits(UnitType unitType, LogicUnitType logicUnitType) {
+        return getUnits(getEntityLogicUnits(unitType), logicUnitType);
+    }
+
+    protected List<Unit> getUnits(List<Unit> list, LogicUnitType logicUnitType) {
+        int size;
+        if(list == null || (size = list.size()) == 0) {
+            return Collections.emptyList();
+        }
+
+        List<Unit> units = new ArrayList<Unit>(size);
+        for(Unit unit : list) {
+            if(logicUnitType.equals(unit.logicUnitType())) {
+                units.add(unit);
+            }
+        }
+
+        return units;
     }
 
     private String getComponentName(Field field, Class<? extends JComponent> componentClass) {
