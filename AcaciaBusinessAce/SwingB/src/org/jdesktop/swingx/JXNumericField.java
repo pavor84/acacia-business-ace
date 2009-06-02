@@ -62,6 +62,12 @@ public class JXNumericField extends JXPanel {//JFormattedTextField {
         return numericField;
     }
 
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+        numericField.setName(name);
+    }
+
     public Component getPrefixComponent() {
         return prefixComponent;
     }

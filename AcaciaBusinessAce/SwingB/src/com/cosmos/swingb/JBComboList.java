@@ -337,6 +337,7 @@ public class JBComboList
         return comboBoxBinding;
     }
 
+    @Override
     public Object[] getSelectedObjects() {
         return comboBox.getSelectedObjects();
     }
@@ -345,10 +346,12 @@ public class JBComboList
         comboBox.addItemListener(listener, ignoreSelectEvents);
     }
 
+    @Override
     public void addItemListener(ItemListener listener) {
         comboBox.addItemListener(listener);
     }
 
+    @Override
     public void removeItemListener(ItemListener listener) {
         comboBox.removeItemListener(listener);
     }
@@ -415,6 +418,7 @@ public class JBComboList
         return this;
     }
 
+    @Override
     public ResourceMap getResourceMap() {
         if (resourceMap == null) {
             ApplicationContext context = getContext();
@@ -442,6 +446,7 @@ public class JBComboList
         this.application = application;
     }
 
+    @Override
     public void setStyleRequired(String tooltip) {
         comboBox.setToolTipText(tooltip);
         Color color = getResourceMap().getColor("validation.field.required.background");
@@ -452,18 +457,21 @@ public class JBComboList
         setStyleInvalid(null);
     }
 
+    @Override
     public void setStyleInvalid(String tooltip) {
         comboBox.setToolTipText(tooltip);
         Color color = getResourceMap().getColor("validation.field.invalid.background");
         comboBox.getEditor().getEditorComponent().setBackground(color);
     }
 
+    @Override
     public void setStyleValid() {
         comboBox.setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.valid.background");
         comboBox.getEditor().getEditorComponent().setBackground(color);
     }
 
+    @Override
     public void setStyleNormal() {
         comboBox.setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.normal.background");

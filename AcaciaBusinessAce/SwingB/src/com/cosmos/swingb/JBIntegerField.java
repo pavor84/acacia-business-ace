@@ -11,6 +11,7 @@ import com.cosmos.swingb.validation.Validatable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -123,35 +124,64 @@ public class JBIntegerField extends JXIntegerField
         this.elProperty = elProperty;
 
         BeanProperty beanProperty = BeanProperty.create("value");
-        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, this, beanProperty);
+        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, getNumericField(), beanProperty);
         bindingGroup.addBinding(binding);
 
         return binding;
     }
 
+    @Override
     public String getPropertyName() {
         return propertyName;
     }
 
+    @Override
     public Object getBeanEntity() {
         return beanEntity;
     }
 
+    @Override
+    public ELProperty getELProperty() {
+        return elProperty;
+    }
+
+    @Override
+    public Binding getBinding() {
+        return binding;
+    }
+
+    @Override
+    public void refresh() {
+        setValue(getPropertyValue());
+    }
+
+    protected Number getPropertyValue() {
+        try {
+            return (Number)PropertyUtils.getProperty(beanEntity, propertyName);
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
+    }
+
+    @Override
     public void setStyleRequired(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.required.background"));
     }
 
+    @Override
     public void setStyleInvalid(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
 
+    @Override
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
 
+    @Override
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
@@ -179,6 +209,7 @@ public class JBIntegerField extends JXIntegerField
         return applicationActionMap;
     }
 
+    @Override
     public ResourceMap getResourceMap() {
         if (resourceMap == null) {
             ApplicationContext context = getContext();
