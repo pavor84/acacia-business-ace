@@ -19,9 +19,8 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.util.BooleanUtils;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -83,7 +82,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
                     if(!AlterationType.Nothing.equals(alterationType) &&
                             OperationType.Update.equals(operationRow.operationType())) {
                         UpdateOperation update = operationRow.update();
-                        if(evaluateBooleanExpression(update.condition())) {
+                        if(!evaluateBooleanExpression(update.condition())) {
                             continue;
                         }
 
@@ -133,20 +132,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     protected List<Unit> getUnits(UnitType unitType, LogicUnitType logicUnitType) {
-        List<Unit> list;
-        int size;
-        if((list = getUnits(unitType)) == null || (size = list.size()) == 0) {
-            return Collections.emptyList();
-        }
-
-        List<Unit> units = new ArrayList<Unit>(size);
-        for(Unit unit : list) {
-            if(logicUnitType.equals(unit.logicUnitType())) {
-                units.add(unit);
-            }
-        }
-
-        return units;
+        return entityFormProcessor.getEntityListLogicUnits(unitType, logicUnitType);
     }
 
     protected List<Unit> getUnits(UnitType unitType) {
@@ -154,12 +140,34 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     public void updateVariable(String variable, String expression) {
-        updateVariable(ELProperty.create(variable), ELProperty.create(expression));
+        ELProperty elProperty = ELProperty.create("${" + expression + "}");
+        Object value = elProperty.getValue(this);
+        setProperty(variable, value);
     }
 
-    public void updateVariable(ELProperty variable, ELProperty expression) {
-        Object value = expression.getValue(this);
-        variable.setValue(this, value);
+    protected void setProperty(String name, Object value) {
+        setProperty(this, name, value);
+    }
+
+    protected void setProperty(Object bean, String name, Object value) {
+        try {
+            PropertyUtils.setProperty(bean, name, value);
+        } catch(Exception ex) {
+            throw new EntityPanelException("bean=" + bean +
+                    ", name=" + name + ", value=" + value, ex);
+        }
+    }
+
+    protected Object getPropertyValue(Object bean, String propertyName) {
+        try {
+            return PropertyUtils.getProperty(bean, propertyName);
+        } catch (Exception ex) {
+            throw new EntityPanelException("propertyName: " + propertyName, ex);
+        }
+    }
+
+    protected Object getPropertyValue(String propertyName) {
+        return getPropertyValue(this, propertyName);
     }
 
     @Override

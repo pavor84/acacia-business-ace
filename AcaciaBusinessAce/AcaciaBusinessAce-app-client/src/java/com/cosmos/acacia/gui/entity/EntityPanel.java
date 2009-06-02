@@ -4,9 +4,16 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.annotation.LogicUnitType;
+import com.cosmos.acacia.annotation.OperationRow;
+import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.Unit;
+import com.cosmos.acacia.annotation.UnitType;
+import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
@@ -22,8 +29,10 @@ import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.swingb.binding.EnumerationBinder;
+import com.cosmos.swingb.binding.Refreshable;
+import com.cosmos.util.BooleanUtils;
 import java.awt.BorderLayout;
-import java.awt.Container;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +47,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.swingx.JXNumericField;
 
 /**
  *
@@ -141,8 +152,94 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     @Override
     protected void entityChanged(Binding binding, PropertyStateEvent event) {
         super.entityChanged(binding, event);
-        refreshRelatedComponents((JComponent)binding.getTargetObject(), event.getNewValue());
+
+        List<Unit> units;
+        if((units = getUnits(UnitType.Variable, LogicUnitType.Verification)) != null && units.size() > 0) {
+            for(Unit unit : units) {
+                for(OperationRow operationRow : unit.operations()) {
+                    if(OperationType.Update.equals(operationRow.operationType())) {
+                        UpdateOperation update = operationRow.update();
+                        if(!evaluateBooleanExpression(update.condition(), binding, event)) {
+                            continue;
+                        }
+                        String variableExpression = update.variable();
+                        updateVariable(variableExpression, update.with());
+                        for(JComponent jComponent : getJComponentsByExpression(variableExpression)) {
+                            if(jComponent instanceof Refreshable) {
+                                ((Refreshable)jComponent).refresh();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        refreshRelatedComponents(getJComponent(binding), event.getNewValue());
         validateForm();
+    }
+
+    protected Set<JComponent> getJComponentsByExpression(String expression) {
+        if((expression = expression.trim()).length() == 0) {
+            return Collections.emptySet();
+        }
+
+        if(!expression.startsWith("entity.")) {
+            return Collections.emptySet();
+        }
+
+        expression = expression.substring(7);
+        return getJComponentsByPropertyName(expression);
+    }
+
+    protected boolean evaluateBooleanExpression(String expression, Binding binding, PropertyStateEvent event) {
+        if(BooleanUtils.parseBoolean(expression)) {
+            return true;
+        }
+
+        if((expression = expression.trim()).startsWith("onChange(")) {
+            expression = expression.substring(9);
+            int index = expression.indexOf(')');
+            expression = expression.substring(0, index);
+            return onChange(expression, binding, event);
+        }
+
+        return BooleanUtils.evaluateExpression(this, expression);
+    }
+
+    protected boolean onChange(String expression, Binding binding, PropertyStateEvent event) {
+        JComponent jComponent = getJComponent(binding);
+        String propertyName = getPropertyName(jComponent.getName());
+
+        for(String name : expression.split(",")) {
+            if(!name.startsWith("entity.")) {
+                continue;
+            }
+            name = name.substring(7);
+            if(propertyName.equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void updateVariable(String variable, String expression) {
+        ELProperty elProperty = ELProperty.create("${" + expression + "}");
+        Object value = elProperty.getValue(this);
+        setProperty(variable, value);
+    }
+
+    protected void setProperty(String name, Object value) {
+        setProperty(this, name, value);
+    }
+
+    protected void setProperty(Object bean, String name, Object value) {
+        try {
+            PropertyUtils.setProperty(bean, name, value);
+        } catch(Exception ex) {
+            throw new EntityPanelException("bean=" + bean +
+                    ", name=" + name + ", value=" + value, ex);
+        }
     }
 
     protected void refreshRelatedComponents(JComponent jComponent, Object newValue) {
@@ -160,16 +257,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 Object bean = propertyBean.getBean();
                 String setterName = propertyBean.getSetterName();
                 jComponent = propertyBean.getJComponent();
-                try {
-                    PropertyUtils.setProperty(bean, setterName, newValue);
-                    if (jComponent instanceof EntityListBinder) {
-                        ((EntityListBinder) jComponent).refresh();
-                    }
-                } catch (Exception ex) {
-                    throw new EntityPanelException("propertyName=" + propertyName +
-                            ", newValue=" + newValue +
-                            ", bean=" + bean + ", setterName=" + setterName +
-                            ", jComponent=" + jComponent, ex);
+                setProperty(bean, setterName, newValue);
+                if (jComponent instanceof EntityListBinder) {
+                    ((EntityListBinder) jComponent).refresh();
                 }
             }
         }
@@ -249,14 +339,24 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     protected String getJComponentName(JComponent jComponent) {
-        Container parent = jComponent.getParent();
-        if(jComponent instanceof JComboBox && parent instanceof JBComboList) {
-            return parent.getName();
+        return normalizeJComponent(jComponent).getName();
+    }
+
+    protected JComponent getJComponent(Binding binding) {
+        return normalizeJComponent((JComponent)binding.getTargetObject());
+    }
+
+    protected JComponent normalizeJComponent(JComponent jComponent) {
+        JComponent parent = (JComponent)jComponent.getParent();
+        if(jComponent instanceof JXNumericField && parent instanceof EntityBinder) {
+            return parent;
+        } else if(jComponent instanceof JComboBox && parent instanceof JBComboList) {
+            return parent;
         } else if(jComponent instanceof JScrollPane) {
-            parent.getName();
+            return parent;
         }
 
-        return jComponent.getName();
+        return jComponent;
     }
 
     protected Object[] getParameters(List<PropertyDetail> parameters) {
@@ -305,8 +405,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         try {
-            //entity = getEntityService().save(entity);
-            entity = getEntityService().confirm(entity);
+            entity = getEntityService().save(entity);
+            //entity = getEntityService().confirm(entity);
             setDialogResponse(DialogResponse.SAVE);
             setSelectedValue(entity);
             if (closeAfter) {
@@ -408,6 +508,10 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         return entityFormProcessor.getProperty(componentName);
     }
 
+    public Set<JComponent> getJComponentsByPropertyName(String propertyName) {
+        return entityFormProcessor.getJComponentsByPropertyName(propertyName);
+    }
+
     public Map<String, PropertyDependencies> getPropertyDependenciesMap() {
         if(propertyDependenciesMap == null) {
             propertyDependenciesMap = new TreeMap<String, PropertyDependencies>();
@@ -467,5 +571,13 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     public Map<String, Set<String>> getContainerDependenciesMap() {
         return entityFormProcessor.getContainerDependenciesMap();
+    }
+
+    protected List<Unit> getUnits(UnitType unitType, LogicUnitType logicUnitType) {
+        return entityFormProcessor.getEntityLogicUnits(unitType, logicUnitType);
+    }
+
+    protected List<Unit> getUnits(UnitType unitType) {
+        return entityFormProcessor.getEntityLogicUnits(unitType);
     }
 }
