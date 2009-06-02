@@ -26,25 +26,6 @@ public class EntityListPanel<E extends DataObjectBean> extends AbstractEntityLis
     @Override
     protected E newEntity() {
         return (E) getEntityService().newEntity(getEntityClass());
-//        E e = (E) getEntityService().newEntity(getEntityClass());
-//        if(e instanceof PurchaseInvoice) {
-//            PurchaseInvoice pi = (PurchaseInvoice)e;
-//            pi.setSupplier(pi.getPublisher());
-//            pi.setSupplierBranch(pi.getPublisherBranch());
-//            //pi.setSupplierContact(pi.getPublisherOfficer());
-//            pi.setInvoiceNumber("Some Number");
-//            pi.setInvoiceDate(new Date());
-//            pi.setTotalGrossAmount(BigDecimal.ZERO);
-//            pi.setTotalNetAmount(BigDecimal.ZERO);
-//            pi.setTotalQuantity(BigDecimal.ZERO);
-//            pi.setTotalTax(BigDecimal.ZERO);
-//            pi.setPaymentDeadline(new Date());
-//            DbResource resource = getResources(MeasurementUnit.class).get(0);
-//            pi.setPaymentTerms(resource);
-//            pi.setDeliveryTerms(resource);
-//        }
-//
-//        return e;
     }
 
     public List<DbResource> getResources(Class<? extends Enum> enumClass) {

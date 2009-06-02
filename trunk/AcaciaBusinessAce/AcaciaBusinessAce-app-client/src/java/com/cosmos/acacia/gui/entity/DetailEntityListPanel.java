@@ -20,7 +20,7 @@ public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjec
         super(mainEntityPanel, itemEntityClass);
     }
 
-    protected E getMainEntity() {
+    public E getMainEntity() {
         return (E) getMainEntityPanel().getEntity();
     }
 
