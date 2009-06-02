@@ -8,6 +8,7 @@ import com.cosmos.acacia.annotation.BorderType;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
 import com.cosmos.acacia.annotation.EntityListLogic;
+import com.cosmos.acacia.annotation.EntityLogic;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
@@ -109,6 +110,24 @@ import javax.persistence.Transient;
                                 with="entity.receivedQuantity",
                                 incremental=true,
                                 condition="taskMode(0, 'CMD')"
+                            )
+                        )
+                    }
+                )
+            }
+        ),
+        entityLogic=@EntityLogic(
+            units={
+                @Unit(
+                    unitType=UnitType.Variable,
+                    logicUnitType=LogicUnitType.Verification,
+                    operations={
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="entity.extendedPrice",
+                                with="entity.receivedPrice * entity.receivedQuantity",
+                                condition="onChange(entity.receivedPrice, entity.receivedQuantity)"
                             )
                         )
                     }
@@ -256,7 +275,7 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     @Column(name = "extended_price", nullable = false, precision = 19, scale = 4)
     @Property(title="Extended Price",
         editable=false,
-        readOnly=true,
+        //readOnly=true,
         formComponentPair=@FormComponentPair(
             parentContainerName="itemDetails",
             firstComponent=@Component(
@@ -325,6 +344,7 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     }
 
     public PurchaseInvoiceItem(BigInteger invoiceItemId) {
+        this();
         this.invoiceItemId = invoiceItemId;
     }
 
@@ -466,7 +486,8 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
 
     @Override
     public String toString() {
-        return "PurchaseInvoiceItem[invoiceItemId=" + invoiceItemId + "]";
+        return "PurchaseInvoiceItem[invoiceItemId=" + invoiceItemId + "]@" +
+                Integer.toHexString(super.hashCode());
     }
 
     @Override
