@@ -45,6 +45,7 @@ public class JBTextField
     private ELProperty elProperty;
     private BeanResource beanResource;
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails) {
@@ -124,12 +125,29 @@ public class JBTextField
         return binding;
     }
 
+    @Override
     public String getPropertyName() {
         return propertyName;
     }
 
+    @Override
     public Object getBeanEntity() {
         return beanEntity;
+    }
+
+    @Override
+    public ELProperty getELProperty() {
+        return elProperty;
+    }
+
+    @Override
+    public Binding getBinding() {
+        return binding;
+    }
+
+    @Override
+    public void refresh() {
+        setText((String)elProperty.getValue(beanEntity));
     }
 
     public ApplicationContext getContext() {
@@ -154,6 +172,7 @@ public class JBTextField
         return applicationActionMap;
     }
 
+    @Override
     public ResourceMap getResourceMap() {
         if (resourceMap == null) {
             ApplicationContext context = getContext();
@@ -181,21 +200,25 @@ public class JBTextField
         this.application = application;
     }
 
+    @Override
     public void setStyleRequired(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.required.background"));
     }
 
+    @Override
     public void setStyleInvalid(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
 
+    @Override
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
 
+    @Override
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));

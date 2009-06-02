@@ -9,8 +9,10 @@ import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -42,6 +44,7 @@ public class JBDatePicker
     private Object beanEntity;
     private DateFormat dateFormat;
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails) {
@@ -121,12 +124,37 @@ public class JBDatePicker
         setFormats(dateFormat);
     }
 
+    @Override
     public String getPropertyName() {
         return propertyName;
     }
 
+    @Override
     public Object getBeanEntity() {
         return beanEntity;
+    }
+
+    @Override
+    public ELProperty getELProperty() {
+        return elProperty;
+    }
+
+    @Override
+    public Binding getBinding() {
+        return binding;
+    }
+
+    @Override
+    public void refresh() {
+        setDate(getPropertyValue());
+    }
+
+    protected Date getPropertyValue() {
+        try {
+            return (Date)PropertyUtils.getProperty(beanEntity, propertyName);
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
     }
 
     public ApplicationContext getContext() {
