@@ -70,7 +70,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     private void deletePurchaseInvoice(PurchaseInvoice purchaseInvoice) {
-        em.remove(purchaseInvoice);
+        esm.remove(em, purchaseInvoice);
     }
 
     private List<PurchaseInvoiceItem> getPurchaseInvoiceItems(PurchaseInvoice purchaseInvoice) {
@@ -93,7 +93,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     private boolean deletePurchaseInvoiceItem(PurchaseInvoiceItem invoiceItem) {
-        em.remove(invoiceItem);
+        esm.remove(em, invoiceItem);
         return true;
     }
 
@@ -166,9 +166,9 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
             deletePurchaseInvoice((PurchaseInvoice)entity);
         } else if(entity instanceof PurchaseInvoiceItem) {
             deletePurchaseInvoiceItem((PurchaseInvoiceItem)entity);
+        } else {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
-
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
