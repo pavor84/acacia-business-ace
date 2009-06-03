@@ -40,7 +40,6 @@ public class JBDatePicker
     private ResourceMap resourceMap;
     private Binding binding;
     private String propertyName;
-    private ELProperty elProperty;
     private Object beanEntity;
     private DateFormat dateFormat;
 
@@ -84,9 +83,9 @@ public class JBDatePicker
         }
 
         this.propertyName = propertyDetails.getPropertyName();
-        this.elProperty = ELProperty.create(getExpression(propertyDetails));
+        ELProperty elProperty = ELProperty.create(getExpression(propertyDetails));
         this.beanEntity = beanEntity;
-        binding = bind(bindingGroup, updateStrategy, dateFormat);
+        binding = bind(bindingGroup, elProperty, updateStrategy, dateFormat);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
@@ -100,7 +99,7 @@ public class JBDatePicker
         return binding;
     }
 
-    private Binding bind(BindingGroup bindingGroup,
+    private Binding bind(BindingGroup bindingGroup, ELProperty elProperty,
             AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat) {
         if (dateFormat == null) {
             dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -132,11 +131,6 @@ public class JBDatePicker
     @Override
     public Object getBeanEntity() {
         return beanEntity;
-    }
-
-    @Override
-    public ELProperty getELProperty() {
-        return elProperty;
     }
 
     @Override
@@ -179,6 +173,7 @@ public class JBDatePicker
         return applicationActionMap;
     }
 
+    @Override
     public ResourceMap getResourceMap() {
         if (resourceMap == null) {
             ApplicationContext context = getContext();
@@ -206,26 +201,31 @@ public class JBDatePicker
         this.application = application;
     }
 
+    @Override
     public void setStyleRequired(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.required.background"));
     }
 
+    @Override
     public void setStyleInvalid(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
 
+    @Override
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
 
+    @Override
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
 
+    @Override
     public void setBackground(Color color) {
         JFormattedTextField editor = getEditor();
         editor.setBackground(color);

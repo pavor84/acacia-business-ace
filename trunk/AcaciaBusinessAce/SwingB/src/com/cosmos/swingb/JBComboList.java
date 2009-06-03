@@ -42,6 +42,7 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.swingb.validation.Validatable;
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  *
@@ -67,8 +68,6 @@ public class JBComboList
     private JComboBoxBinding comboBoxBinding;
     private SelectableListDialog selectableListDialog;
     private ObjectToStringConverter converter;
-    private ELProperty displayELProperty;
-    private ELProperty elProperty;
     private Binding binding;
 
     public JBComboList() {
@@ -158,11 +157,20 @@ public class JBComboList
     }
 
     protected Object getPropertyValue() {
-        return getELProperty().getValue(beanEntity);
+        try {
+            return PropertyUtils.getProperty(beanEntity, propertyName);
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
     }
 
     protected void setPropertyValue(Object value) {
-        getELProperty().setValue(beanEntity, value);
+        try {
+            PropertyUtils.setProperty(beanEntity, propertyName, value);
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName +
+                    ", value=" + value, ex);
+        }
     }
 
     @Action
@@ -176,6 +184,7 @@ public class JBComboList
     private class ComboListItemListener
             implements ItemListener {
 
+        @Override
         public void itemStateChanged(ItemEvent event) {
             if (isEnabled()) {
                 setEnabledUnselectButton(comboBox.getSelectedItem() != null);
@@ -196,6 +205,7 @@ public class JBComboList
     AutoCompleteDecorator.decorate(this, converter);
     return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }*/
+    @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
@@ -259,7 +269,7 @@ public class JBComboList
                 comboBox);
         bindingGroup.addBinding(comboBoxBinding);
 
-        displayELProperty = ELProperty.create("${" + propertyName + "}");
+        ELProperty displayELProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         binding = Bindings.createAutoBinding(
                 updateStrategy,
@@ -283,14 +293,6 @@ public class JBComboList
 
     public boolean isEditable() {
         return editable;
-    }
-
-    protected ELProperty getELProperty() {
-        if(elProperty == null) {
-            elProperty = ELProperty.create("${" + getPropertyName() + "}");
-        }
-
-        return elProperty;
     }
 
     protected void setEnabledUnselectButton(boolean enabled) {
@@ -364,6 +366,7 @@ public class JBComboList
         comboBox.setSelectedItem(selectedItem);
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         comboBox.actionPerformed(event);
     }
@@ -519,6 +522,7 @@ public class JBComboList
         return binding;
     }
 
+    @Override
     public void refresh() {
         if (selectableListDialog != null) {
             Object selectedItem = comboBox.getSelectedItem();

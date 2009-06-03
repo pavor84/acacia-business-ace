@@ -11,10 +11,10 @@ import com.cosmos.resource.EnumResource;
 import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
-import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JTextField;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -42,7 +42,6 @@ public class JBTextField
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
-    private ELProperty elProperty;
     private BeanResource beanResource;
 
     @Override
@@ -88,7 +87,7 @@ public class JBTextField
         }
 
         this.propertyName = propertyDetails.getPropertyName();
-        this.elProperty = ELProperty.create(elProperyDisplay);
+        ELProperty elProperty = ELProperty.create(elProperyDisplay);
 
         if (propertyDetails.isShowOnly()) {
             validate(beanEntity);
@@ -136,18 +135,36 @@ public class JBTextField
     }
 
     @Override
-    public ELProperty getELProperty() {
-        return elProperty;
-    }
-
-    @Override
     public Binding getBinding() {
         return binding;
     }
 
     @Override
     public void refresh() {
-        setText((String)elProperty.getValue(beanEntity));
+        setText(getPropertyValue());
+    }
+
+    protected String getPropertyValue() {
+        return getPropertyValue(beanEntity);
+    }
+
+    protected String getPropertyValue(Object beanEntity) {
+        try {
+            Object propertyValue;
+            if ((propertyValue = PropertyUtils.getProperty(beanEntity, propertyName)) != null) {
+                if(propertyValue instanceof EnumResource) {
+                    return getBeanResource().getName((EnumResource)propertyValue);
+                } else if(propertyValue instanceof TextResource) {
+                    return getBeanResource().getName((TextResource)propertyValue);
+                } else {
+                    return String.valueOf(propertyValue);
+                }
+            }
+
+            return null;
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
     }
 
     public ApplicationContext getContext() {
@@ -233,25 +250,7 @@ public class JBTextField
     }
 
     private void validate(Object beanEntity) {
-        try {
-            Object propertyValue;
-            if ((propertyValue = elProperty.getValue(beanEntity)) != null) {
-                String text;
-                if(propertyValue instanceof EnumResource) {
-                    text = getBeanResource().getName((EnumResource)propertyValue);
-                } else if(propertyValue instanceof TextResource) {
-                    text = getBeanResource().getName((TextResource)propertyValue);
-                } else {
-                    text = String.valueOf(propertyValue);
-                }
-                setText(text);
-            } else {
-                setText(null);
-            }
-        } catch(RuntimeException ex) {
-            throw new RuntimeException("beanEntity: " + beanEntity +
-                    ", elProperty: " + elProperty, ex);
-        }
+        setText(getPropertyValue(beanEntity));
     }
 
     @Override
