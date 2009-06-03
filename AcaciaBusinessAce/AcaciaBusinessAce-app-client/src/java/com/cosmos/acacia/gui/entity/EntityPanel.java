@@ -13,7 +13,6 @@ import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
@@ -32,6 +31,7 @@ import com.cosmos.swingb.binding.EnumerationBinder;
 import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.util.BooleanUtils;
 import java.awt.BorderLayout;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -164,11 +164,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                         }
                         String variableExpression = update.variable();
                         updateVariable(variableExpression, update.with());
-                        for(JComponent jComponent : getJComponentsByExpression(variableExpression)) {
-                            if(jComponent instanceof Refreshable) {
-                                ((Refreshable)jComponent).refresh();
-                            }
-                        }
+                        refreshComponents(getJComponentsByExpression(variableExpression));
                     }
                 }
             }
@@ -211,10 +207,11 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         String propertyName = getPropertyName(jComponent.getName());
 
         for(String name : expression.split(",")) {
+            name = name.trim();
             if(!name.startsWith("entity.")) {
                 continue;
             }
-            name = name.substring(7);
+            name = name.substring("entity.".length());
             if(propertyName.equals(name)) {
                 return true;
             }
@@ -242,6 +239,19 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         }
     }
 
+    public void refreshComponent(String propertyName) {
+        Set<JComponent> components = getJComponentsByPropertyName(propertyName);
+        refreshComponents(components);
+    }
+
+    protected void refreshComponents(Collection<JComponent> components) {
+        for(JComponent jComponent : components) {
+            if(jComponent instanceof Refreshable) {
+                ((Refreshable)jComponent).refresh();
+            }
+        }
+    }
+
     protected void refreshRelatedComponents(JComponent jComponent, Object newValue) {
         PropertyChangeHandler handler = getPropertyChangeHandler();
         String componentName = getJComponentName(jComponent);
@@ -258,8 +268,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 String setterName = propertyBean.getSetterName();
                 jComponent = propertyBean.getJComponent();
                 setProperty(bean, setterName, newValue);
-                if (jComponent instanceof EntityListBinder) {
-                    ((EntityListBinder) jComponent).refresh();
+                if (jComponent instanceof Refreshable) {
+                    ((Refreshable) jComponent).refresh();
                 }
             }
         }
@@ -411,10 +421,18 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
             setSelectedValue(entity);
             if (closeAfter) {
                 close();
+            } else {
+                rebind();
             }
         } catch (Exception ex) {
             handleException("entity: " + entity, ex);
         }
+    }
+
+    protected void rebind() {
+        getBindingGroup().unbind();
+        bindingGroup = null;
+        initData();
     }
 
     @Override
