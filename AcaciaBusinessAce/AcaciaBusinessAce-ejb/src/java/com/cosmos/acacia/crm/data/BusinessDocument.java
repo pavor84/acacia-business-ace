@@ -410,7 +410,7 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
             className = getClass().getSimpleName();
         }
 
-        return className + "[id=" + documentId + "]";
+        return className + "[id=" + documentId + "]@" + Integer.toHexString(super.hashCode());
     }
 
     @Override
