@@ -461,9 +461,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     }
 
     public void setSupplierBranch(Address supplierBranch) {
-        Address oldValue = this.supplierBranch;
         this.supplierBranch = supplierBranch;
-        firePropertyChange("supplierBranch", oldValue, supplierBranch);
     }
 
     public BankDetail getBankDetail() {
@@ -479,9 +477,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     }
 
     public void setSupplier(BusinessPartner supplier) {
-        BusinessPartner oldValue = this.supplier;
         this.supplier = supplier;
-        firePropertyChange("supplier", oldValue, supplier);
     }
 
     public ContactPerson getSupplierContact() {
@@ -489,9 +485,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     }
 
     public void setSupplierContact(ContactPerson supplierContact) {
-        ContactPerson oldValue = this.supplierContact;
         this.supplierContact = supplierContact;
-        firePropertyChange("supplierContact", oldValue, supplierContact);
     }
 
     public DbResource getDeliveryTerms() {
