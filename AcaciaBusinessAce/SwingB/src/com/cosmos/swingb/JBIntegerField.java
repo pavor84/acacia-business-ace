@@ -45,7 +45,6 @@ public class JBIntegerField extends JXIntegerField
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
-    private ELProperty elProperty;
 
     @Override
     public Binding bind(BindingGroup bindingGroup,
@@ -90,7 +89,7 @@ public class JBIntegerField extends JXIntegerField
         }
 
         this.propertyName = propertyDetails.getPropertyName();
-        this.elProperty = ELProperty.create(elProperyDisplay);
+        ELProperty elProperty = ELProperty.create(elProperyDisplay);
 
         if (propertyDetails.isShowOnly()) {
             validate(beanEntity);
@@ -121,7 +120,6 @@ public class JBIntegerField extends JXIntegerField
             ELProperty elProperty,
             AutoBinding.UpdateStrategy updateStrategy) {
         this.beanEntity = beanEntity;
-        this.elProperty = elProperty;
 
         BeanProperty beanProperty = BeanProperty.create("value");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, getNumericField(), beanProperty);
@@ -141,11 +139,6 @@ public class JBIntegerField extends JXIntegerField
     }
 
     @Override
-    public ELProperty getELProperty() {
-        return elProperty;
-    }
-
-    @Override
     public Binding getBinding() {
         return binding;
     }
@@ -156,6 +149,10 @@ public class JBIntegerField extends JXIntegerField
     }
 
     protected Number getPropertyValue() {
+        return getPropertyValue(beanEntity);
+    }
+
+    protected Number getPropertyValue(Object beanEntity) {
         try {
             return (Number)PropertyUtils.getProperty(beanEntity, propertyName);
         } catch(Exception ex) {
@@ -245,11 +242,6 @@ public class JBIntegerField extends JXIntegerField
     }
 
     private void validate(Object beanEntity) {
-        try {
-            setValue((Number)elProperty.getValue(beanEntity));
-        } catch (RuntimeException ex) {
-            throw new RuntimeException("beanEntity: " + beanEntity +
-                    ", elProperty: " + elProperty, ex);
-        }
+        setValue(getPropertyValue(beanEntity));
     }
 }

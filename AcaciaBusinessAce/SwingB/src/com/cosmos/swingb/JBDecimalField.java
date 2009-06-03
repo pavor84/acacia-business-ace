@@ -45,7 +45,6 @@ public class JBDecimalField extends JXDecimalField
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
-    private ELProperty elProperty;
 
     @Override
     public Binding bind(BindingGroup bindingGroup,
@@ -90,7 +89,7 @@ public class JBDecimalField extends JXDecimalField
         }
 
         this.propertyName = propertyDetails.getPropertyName();
-        this.elProperty = ELProperty.create(elProperyDisplay);
+        ELProperty elProperty = ELProperty.create(elProperyDisplay);
 
         if (propertyDetails.isShowOnly()) {
             validate(beanEntity);
@@ -121,7 +120,6 @@ public class JBDecimalField extends JXDecimalField
             ELProperty elProperty,
             AutoBinding.UpdateStrategy updateStrategy) {
         this.beanEntity = beanEntity;
-        this.elProperty = elProperty;
 
         BeanProperty beanProperty = BeanProperty.create("value");
         binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, getNumericField(), beanProperty);
@@ -141,21 +139,21 @@ public class JBDecimalField extends JXDecimalField
     }
 
     @Override
-    public ELProperty getELProperty() {
-        return elProperty;
-    }
-
-    @Override
     public Binding getBinding() {
         return binding;
     }
 
     @Override
     public void refresh() {
-        setValue(getPropertyValue());
+        Number newValue = getPropertyValue();
+        setValue(newValue);
     }
 
     protected Number getPropertyValue() {
+        return getPropertyValue(beanEntity);
+    }
+
+    protected Number getPropertyValue(Object beanEntity) {
         try {
             return (Number)PropertyUtils.getProperty(beanEntity, propertyName);
         } catch(Exception ex) {
@@ -245,11 +243,6 @@ public class JBDecimalField extends JXDecimalField
     }
 
     private void validate(Object beanEntity) {
-        try {
-            setValue((Number) elProperty.getValue(beanEntity));
-        } catch (RuntimeException ex) {
-            throw new RuntimeException("beanEntity: " + beanEntity +
-                    ", elProperty: " + elProperty, ex);
-        }
+        setValue(getPropertyValue(beanEntity));
     }
 }

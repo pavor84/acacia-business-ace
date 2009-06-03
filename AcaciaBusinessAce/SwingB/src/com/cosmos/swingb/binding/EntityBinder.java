@@ -7,7 +7,6 @@ package com.cosmos.swingb.binding;
 import com.cosmos.beansbinding.PropertyDetails;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.ELProperty;
 
 /**
  *
@@ -20,8 +19,6 @@ public interface EntityBinder extends Refreshable {
     String getPropertyName();
 
     Object getBeanEntity();
-
-    ELProperty getELProperty();
 
     Binding getBinding();
 }
