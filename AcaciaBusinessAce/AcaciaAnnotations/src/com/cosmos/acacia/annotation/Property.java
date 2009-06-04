@@ -91,4 +91,6 @@ public @interface Property {
             secondComponent = @Component(componentClass = NullJComponent.class));
 
     FormComponent formComponent() default @FormComponent(component = @Component(componentClass = NullJComponent.class));
+
+    int maxTableColumnWidth() default 200;
 }
