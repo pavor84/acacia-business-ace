@@ -38,6 +38,7 @@ public class PropertyDetails implements Cloneable, Serializable {
     private ResourceDisplay resourceDisplayInTable;
     private boolean exportable;
     private byte reportColumnWidth;
+    private int maxTableColumnWidth;
     /**
      * @see #getCustomDislay()
      */
@@ -115,6 +116,14 @@ public class PropertyDetails implements Cloneable, Serializable {
        this.columnName = columnName;
        this.orderPosition = orderPosition;
        this.editable = editable;
+    }
+
+    public int getMaxTableColumnWidth() {
+        return maxTableColumnWidth;
+    }
+
+    public void setMaxTableColumnWidth(int maxTableColumnWidth) {
+        this.maxTableColumnWidth = maxTableColumnWidth;
     }
 
     public String getColumnName() {
