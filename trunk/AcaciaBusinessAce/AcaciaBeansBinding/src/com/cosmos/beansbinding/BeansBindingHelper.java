@@ -188,6 +188,7 @@ public class BeansBindingHelper {
         pd.setPercent(property.percent());
         pd.setShowOnly(property.showOnly());
         pd.setUpdateStrategy(property.updateStrategy());
+        pd.setMaxTableColumnWidth(property.maxTableColumnWidth());
         SelectableList selectableList = property.selectableList();
         String value;
         if (!EMPTY_STRING.equals(value = selectableList.className())) {
