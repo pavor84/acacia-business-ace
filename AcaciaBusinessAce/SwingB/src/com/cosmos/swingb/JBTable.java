@@ -5,6 +5,7 @@
 
 package com.cosmos.swingb;
 
+import java.awt.Dimension;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -380,13 +381,26 @@ public class JBTable
     protected void afterBindInit(Collection<PropertyDetails> propertyDetails) {
         for(PropertyDetails pd : propertyDetails) {
             TableColumnExt column = getColumn(pd);
-            if(column != null && column.getCellRenderer() == null) {
-                if(pd.isPercent()) {
-                    TableCellRenderer cellRenderer = getBeanResourceCellRenderer(pd);
-                    column.setCellRenderer(cellRenderer);
+            if(column != null) {
+                column.setMaxWidth(pd.getMaxTableColumnWidth());
+                if(column.getCellRenderer() == null) {
+                    if(pd.isPercent()) {
+                        TableCellRenderer cellRenderer = getBeanResourceCellRenderer(pd);
+                        column.setCellRenderer(cellRenderer);
+                    }
                 }
             }
         }
+    }
+
+    @Override
+    public Dimension getPreferredScrollableViewportSize() {
+        Dimension size;
+        if((size = super.getPreferredScrollableViewportSize()).width > 800) {
+            size.width = 800;
+        }
+
+        return size;
     }
 
     protected void createColumnsBinding(
