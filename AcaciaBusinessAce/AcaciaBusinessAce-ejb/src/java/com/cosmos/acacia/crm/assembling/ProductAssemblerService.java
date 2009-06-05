@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface ProductAssemblerService
 {
-    List<AssemblingSchemaItem> getAssemblingSchemaItems(
-        AssemblingSchema assemblingSchema);
-    List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(
-        AssemblingSchemaItem assemblingSchemaItem);
+    List<AssemblingSchemaItem> getAssemblingSchemaItems(AssemblingSchema assemblingSchema);
+
+    List<AssemblingSchemaItemValue> getAssemblingSchemaItemValues(AssemblingSchemaItem assemblingSchemaItem);
+
     List<String> getPropertyKeys(AssemblingSchema schema, AssemblingMessage message);
 }

@@ -133,7 +133,7 @@ public class ProductPriceSummary extends ProductPrice {
         if ( quantity==null )
             quantity = new BigDecimal("1");
         
-        BigDecimal salePrice = getProduct().getSalePrice();
+        BigDecimal salePrice = getProduct().getSalesPrice();
         if ( salePrice==null )
             salePrice = new BigDecimal("0");
         
