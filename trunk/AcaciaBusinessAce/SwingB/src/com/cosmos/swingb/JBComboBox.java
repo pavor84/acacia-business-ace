@@ -37,6 +37,7 @@ import com.cosmos.swingb.binding.EnumerationBinder;
 import com.cosmos.swingb.listeners.ComboListEventListener;
 import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  *
@@ -168,6 +169,7 @@ public class JBComboBox
         return applicationActionMap;
     }
 
+    @Override
     public ResourceMap getResourceMap() {
         if (resourceMap == null) {
             ApplicationContext context = getContext();
@@ -195,6 +197,7 @@ public class JBComboBox
         this.application = application;
     }
 
+    @Override
     public void setStyleRequired(String tooltip) {
         setToolTipText(tooltip);
         Color color = getResourceMap().getColor("validation.field.required.background");
@@ -205,18 +208,21 @@ public class JBComboBox
         setStyleInvalid(null);
     }
 
+    @Override
     public void setStyleInvalid(String tooltip) {
         setToolTipText(tooltip);
         Color color = getResourceMap().getColor("validation.field.invalid.background");
         getEditor().getEditorComponent().setBackground(color);
     }
 
+    @Override
     public void setStyleValid() {
         setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.valid.background");
         getEditor().getEditorComponent().setBackground(color);
     }
 
+    @Override
     public void setStyleNormal() {
         setToolTipText(null);
         Color color = getResourceMap().getColor("validation.field.normal.background");
@@ -332,5 +338,27 @@ public class JBComboBox
     public void addToBindingGroup(BindingGroup bindGroup) {
         bindGroup.addBinding(comboBoxBinding);
         bindGroup.addBinding(binding);
+    }
+
+    protected Object getPropertyValue() {
+        try {
+            return PropertyUtils.getProperty(beanEntity, propertyName);
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
+    }
+
+    protected void setPropertyValue(Object value) {
+        try {
+            PropertyUtils.setProperty(beanEntity, propertyName, value);
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName +
+                    ", value=" + value, ex);
+        }
+    }
+
+    @Override
+    public void refresh() {
+        setSelectedItem(getPropertyValue());
     }
 }
