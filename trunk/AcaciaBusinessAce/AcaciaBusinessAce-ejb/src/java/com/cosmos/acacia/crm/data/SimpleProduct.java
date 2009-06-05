@@ -87,9 +87,7 @@ import javax.persistence.Transient;
             		"not exists (select i from PricelistItem i where i.dataObject.parentDataObjectId = :pricelistId and i.product=p)"
 		)
     })
-public class SimpleProduct
-    extends Product
-    implements Serializable
+public class SimpleProduct extends Product implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
@@ -280,7 +278,7 @@ public class SimpleProduct
 
     @Transient
     @Property(title="Sales Price", editable=false)
-    private BigDecimal salePrice;
+    private BigDecimal salesPrice;
 
     
     public SimpleProduct() {
@@ -862,7 +860,7 @@ public class SimpleProduct
     }
 
     @Override
-    public BigDecimal getSalePrice() {
+    public BigDecimal getSalesPrice() {
         BigDecimal price;
         if((price = getCostPrice()) == null)
             return null;

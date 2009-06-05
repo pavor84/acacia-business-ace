@@ -34,17 +34,18 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @DiscriminatorValue(value = Product.DISCRIMINATOR_COMPLEX_PRODUCT)
 @PrimaryKeyJoinColumn(name = "product_id", referencedColumnName = "product_id")
 @NamedQueries({})
-public class ComplexProduct
-        extends Product
-        implements Serializable {
+public class ComplexProduct extends Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
     @Column(name = "sale_price", nullable = false)
     @Property(title = "Sales Price", propertyValidator = @PropertyValidator(validationType = ValidationType.NUMBER_RANGE, minValue = 0d, maxValue = 1000000000000d))
-    private BigDecimal salePrice;
+    private BigDecimal salesPrice;
+    //
     @JoinColumn(name = "applied_schema_id", referencedColumnName = "product_id")
     @ManyToOne
     private AssemblingSchema appliedSchema;
+    //
     @Transient
     private List<ComplexProductItem> complexProductItems;
 
@@ -65,14 +66,14 @@ public class ComplexProduct
     }
 
     @Override
-    public BigDecimal getSalePrice() {
-        return salePrice;
+    public BigDecimal getSalesPrice() {
+        return salesPrice;
     }
 
     @Override
-    public void setSalePrice(BigDecimal salePrice) {
-        firePropertyChange("salePrice", this.salePrice, salePrice);
-        this.salePrice = salePrice;
+    public void setSalePrice(BigDecimal salesPrice) {
+        firePropertyChange("salePrice", this.salesPrice, salesPrice);
+        this.salesPrice = salesPrice;
     }
 
     public AssemblingSchema getAppliedSchema() {

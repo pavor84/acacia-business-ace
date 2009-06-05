@@ -203,10 +203,10 @@ public class ProductAssembler
     protected BigDecimal getClientPrice(Product product)
     {
         if(product instanceof ComplexProduct)
-            return product.getSalePrice();
+            return product.getSalesPrice();
 
         // ToDO: Calculate the price
-        BigDecimal productPrice = product.getSalePrice();
+        BigDecimal productPrice = product.getSalesPrice();
         BigDecimal discount = getDiscount(product);
         productPrice = productPrice.subtract(productPrice.multiply(discount).divide(ONE_HUNDRED));
         return productPrice;

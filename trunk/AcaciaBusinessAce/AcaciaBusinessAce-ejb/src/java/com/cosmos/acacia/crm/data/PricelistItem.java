@@ -200,7 +200,7 @@ public class PricelistItem extends DataObjectBean implements Serializable{
     public BigDecimal getSourcePrice(){
         if ( product==null )
             return null;
-        return product.getSalePrice();
+        return product.getSalesPrice();
     }
     
     public BigDecimal getSalesPrice(){

@@ -142,7 +142,15 @@ import javax.persistence.Transient;
                             operationType=OperationType.Update,
                             update=@UpdateOperation(
                                 variable="entity.currency",
-                                with="entity.product.measureUnit",
+                                with="entity.product.currency",
+                                condition="onChange(entity.product)"
+                            )
+                        ),
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="entity.receivedPrice",
+                                with="entity.product.salesPrice",
                                 condition="onChange(entity.product)"
                             )
                         )
