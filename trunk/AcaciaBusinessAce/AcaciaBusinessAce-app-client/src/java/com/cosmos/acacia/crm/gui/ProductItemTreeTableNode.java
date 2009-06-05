@@ -161,7 +161,7 @@ public class ProductItemTreeTableNode
                 return product.getMeasureUnit().getEnumName();
 
             case 3:
-                return product.getSalePrice();
+                return product.getSalesPrice();
 
             default:
                 return null;

@@ -646,8 +646,8 @@ public class PricelistItemForm extends BaseEntityPanel {
         if ( !multipleMode ){
             // sale price
             String salePrice = "";
-            if ( entity.getProduct().getSalePrice()!=null )
-                salePrice = getDecimalFormat().format(entity.getProduct().getSalePrice());
+            if ( entity.getProduct().getSalesPrice()!=null )
+                salePrice = getDecimalFormat().format(entity.getProduct().getSalesPrice());
             salePriceField.setText((salePrice));
             
             // price
@@ -658,7 +658,7 @@ public class PricelistItemForm extends BaseEntityPanel {
 
     private BigDecimal getPrice(PricelistItem item) {
         //sale price
-        BigDecimal salePrice = item.getProduct().getSalePrice();
+        BigDecimal salePrice = item.getProduct().getSalesPrice();
         if ( salePrice==null )
             return null;
         

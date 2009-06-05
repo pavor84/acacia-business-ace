@@ -850,7 +850,7 @@ public class ProductPanel extends AcaciaPanel {
             this.setPurchasePrice(product.getPurchasePrice());
             this.setCostPrice(product.getCostPrice());
 //            this.setTotalProfit(product.getTotalProfit());
-            this.setSalePrice(product.getSalePrice());
+            this.setSalePrice(product.getSalesPrice());
             if ( product.getCategory()!=null )
                 this.setCategoryProfit(product.getCategory().getProfitPercent());
             

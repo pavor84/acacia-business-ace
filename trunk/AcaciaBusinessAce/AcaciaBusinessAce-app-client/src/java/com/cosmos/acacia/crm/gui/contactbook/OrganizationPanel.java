@@ -3,7 +3,6 @@
  *
  * Created on 09 March 2008, 16:50
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
@@ -43,7 +42,6 @@ import com.cosmos.swingb.listeners.TableModificationListener;
 public class OrganizationPanel extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(OrganizationPanel.class);
-    
     private static CustomerDiscountRemote customerDiscountRemote = getBean(CustomerDiscountRemote.class);
 
     /** Creates new form organizationPanel */
@@ -60,25 +58,25 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     public OrganizationPanel() {
-        super((BigInteger)null);
+        super((BigInteger) null);
         isInternal = true;
         this.organization = getAcaciaSession().getOrganization();
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         initComponentsCustom();
         super.init();
     }
 
     private void initComponentsCustom() {
-        if ( getClassifiersManager().isClassifiedAs(organization, "customer")){
+        if (getClassifiersManager().isClassifiedAs(organization, "customer")) {
             JBButton b = new JBButton();
             b.setText(getResourceMap().getString("button.discount"));
             b.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent e) {
                     onDiscount();
                 }
@@ -371,8 +369,6 @@ public class OrganizationPanel extends BaseEntityPanel {
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {generalInfoPanel, registrationDetailsPanel});
 
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBLabel administrationAddressLabel;
     private com.cosmos.acacia.gui.AcaciaLookup administrativeAddressLookup;
@@ -403,14 +399,11 @@ public class OrganizationPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel vatNumberLabel;
     private com.cosmos.swingb.JBTextField vatNumberTextField;
     // End of variables declaration//GEN-END:variables
-
     @EJB
     private OrganizationsListRemote formSession;
-
     private AddressListPanel branchesTable;
-    private BindingGroup organizationBindingGroup;
+    private BindingGroup bindingGroup;
     private Organization organization;
-    private Binding registeringOrganizationBinding;
     private boolean isInternal;
 
     @Override
@@ -418,49 +411,49 @@ public class OrganizationPanel extends BaseEntityPanel {
         setResizable(false);
         log.info("initData().organization: " + organization);
 
-        if(organization == null)
-        {
-            if (getParentDataObjectId() == null)
+        if (organization == null) {
+            if (getParentDataObjectId() == null) {
                 organization = getFormSession().newOrganization(null);
-            else
+            } else {
                 organization = getFormSession().newOrganization(getOrganizationDataObjectId());
+            }
         }
 
-        if (organizationBindingGroup == null)
-            organizationBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getOrganizationEntityProperties();
 
-        nameTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("organizationName"));
-        nicknameTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("nickname"));
-        shareCapitalTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("shareCapital"));
-        vatNumberTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("vatNumber"));
-        uniqueIdTextField.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("uniqueIdentifierCode"));
+        nameTextField.bind(bg, organization, entityProps.getPropertyDetails("organizationName"));
+        nicknameTextField.bind(bg, organization, entityProps.getPropertyDetails("nickname"));
+        shareCapitalTextField.bind(bg, organization, entityProps.getPropertyDetails("shareCapital"));
+        vatNumberTextField.bind(bg, organization, entityProps.getPropertyDetails("vatNumber"));
+        uniqueIdTextField.bind(bg, organization, entityProps.getPropertyDetails("uniqueIdentifierCode"));
 
-        registrationDateDatePicker.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("registrationDate"), AcaciaUtils.getShortDateFormat());
+        registrationDateDatePicker.bind(bg, organization, entityProps.getPropertyDetails("registrationDate"), AcaciaUtils.getShortDateFormat());
 
-        organizationTypeComboBox.bind(organizationBindingGroup,
+        organizationTypeComboBox.bind(bg,
                 getOrganizationTypes(),
                 organization,
                 entityProps.getPropertyDetails("organizationType"));
 
-        currencyComboBox.bind(organizationBindingGroup,
+        currencyComboBox.bind(bg,
                 getCurrencies(),
                 organization,
                 entityProps.getPropertyDetails("currency"));
 
-        registeringOrganizationBinding = registeringOrganizationLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseRegisteringOrganization();
-                }
-            }, organizationBindingGroup,
-            organization,
-            entityProps.getPropertyDetails("registrationOrganization"),
-            "${organizationName}",
-            UpdateStrategy.READ_WRITE);
+        registeringOrganizationLookup.bind(new AcaciaLookupProvider() {
 
-        descriptionTextPane.bind(organizationBindingGroup, organization, entityProps.getPropertyDetails("description"));
+            @Override
+            public Object showSelectionControl() {
+                return onChooseRegisteringOrganization();
+            }
+        }, bg,
+                organization,
+                entityProps.getPropertyDetails("registrationOrganization"),
+                "${organizationName}",
+                UpdateStrategy.READ_WRITE);
+
+        descriptionTextPane.bind(bg, organization, entityProps.getPropertyDetails("description"));
 
         // Using an AbstractTablePanel implementation
         branchesTable = new AddressListPanel(organization != null ? organization.getId() : null);
@@ -481,29 +474,31 @@ public class OrganizationPanel extends BaseEntityPanel {
 
 
         Binding regAddressBinding = registrationAddressLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseAddress();
-                }
-            }, organizationBindingGroup,
-            organization,
-            entityProps.getPropertyDetails("registrationAddress"),
-            "${addressName}",
-            UpdateStrategy.READ_WRITE);
+
+            @Override
+            public Object showSelectionControl() {
+                return onChooseAddress();
+            }
+        }, bg,
+                organization,
+                entityProps.getPropertyDetails("registrationAddress"),
+                "${addressName}",
+                UpdateStrategy.READ_WRITE);
 
 
         Binding adminAddressBinding = administrativeAddressLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseAddress();
-                }
-            }, organizationBindingGroup,
-            organization,
-            entityProps.getPropertyDetails("administrationAddress"),
-            "${addressName}",
-            UpdateStrategy.READ_WRITE);
 
-        organizationBindingGroup.bind();
+            @Override
+            public Object showSelectionControl() {
+                return onChooseAddress();
+            }
+        }, bg,
+                organization,
+                entityProps.getPropertyDetails("administrationAddress"),
+                "${addressName}",
+                UpdateStrategy.READ_WRITE);
+
+        bg.bind();
     }
 
     protected Object onChooseRegisteringOrganization() {
@@ -512,7 +507,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         // TODO: Classifiers
 
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             Organization result = (Organization) listPanel.getSelectedRowObject();
 
             if (result.equals(organization)) {
@@ -536,7 +531,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         addNestedFormListener(listPanel);
 
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             Address result = (Address) listPanel.getSelectedRowObject();
             branchesTable.refreshAction();
             return result;
@@ -545,16 +540,11 @@ public class OrganizationPanel extends BaseEntityPanel {
         return null;
     }
 
-    protected OrganizationsListRemote getFormSession()
-    {
-        if(formSession == null)
-        {
-            try
-            {
+    protected OrganizationsListRemote getFormSession() {
+        if (formSession == null) {
+            try {
                 formSession = getBean(OrganizationsListRemote.class);
-            }
-            catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -562,18 +552,19 @@ public class OrganizationPanel extends BaseEntityPanel {
         return formSession;
     }
 
-    public BindingGroup getBindingGroup()
-    {
-        return organizationBindingGroup;
+    public BindingGroup getBindingGroup() {
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return organization;
     }
 
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         log.info("Save: organization: " + organization);
 
         organization = getFormSession().saveOrganization(organization);
@@ -582,73 +573,60 @@ public class OrganizationPanel extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            organizationBindingGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
 
-    protected EntityProperties getOrganizationEntityProperties()
-    {
+    protected EntityProperties getOrganizationEntityProperties() {
         return getFormSession().getOrganizationEntityProperties();
     }
 
-    protected EntityProperties getAddressEntityProperties()
-    {
+    protected EntityProperties getAddressEntityProperties() {
         return getFormSession().getAddressEntityProperties();
     }
 
-    private List<Organization> getOrganizations()
-    {
+    private List<Organization> getOrganizations() {
         List<Organization> organizations = getFormSession().getOrganizations(null);
         return organizations;
     }
 
-    private List<DbResource> getCurrencies()
-    {
+    private List<DbResource> getCurrencies() {
         return getFormSession().getCurrencies();
     }
 
-    private List<DbResource> getOrganizationTypes()
-    {
+    private List<DbResource> getOrganizationTypes() {
         return getFormSession().getOrganizationTypes();
     }
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
-       return entityFormButtonPanel;
+        return entityFormButtonPanel;
     }
 
     class DeletionListener implements TableModificationListener {
 
         public void rowDeleted(Object row) {
             if (row != null) {
-                Address deletedAddress  = (Address) row;
+                Address deletedAddress = (Address) row;
                 Address administrationAddress = organization.getAdministrationAddress();
                 Address registrationAddress = organization.getRegistrationAddress();
 
-                if (administrationAddress != null
-                        && administrationAddress.getAddressId()
-                            .equals(deletedAddress.getAddressId()))
-                {
+                if (administrationAddress != null && administrationAddress.getAddressId().equals(deletedAddress.getAddressId())) {
                     administrativeAddressLookup.clearSelectedValue();
                 }
 
-                if (registrationAddress != null
-                        && registrationAddress.getAddressId()
-                            .equals(deletedAddress.getAddressId()))
-                {
+                if (registrationAddress != null && registrationAddress.getAddressId().equals(deletedAddress.getAddressId())) {
                     registrationAddressLookup.clearSelectedValue();
                 }
             }
         }
 
         public void rowModified(Object row) {
-
         }
 
         public void rowAdded(Object row) {
-
         }
-
     }
 }

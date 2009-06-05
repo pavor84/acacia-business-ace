@@ -693,7 +693,7 @@ public class ProductPricingPanel extends AcaciaPanel {
         profitPercentField.setValue(product.getTotalProfitPercent());
         profitDecimalField.setValue(product.getTotalProfitValue());
 
-        salesPriceDecimalField.setValue(product.getSalePrice());
+        salesPriceDecimalField.setValue(product.getSalesPrice());
 
         ProductCategory category = product.getCategory();
         if((category = product.getCategory()) != null) {

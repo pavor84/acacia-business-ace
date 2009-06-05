@@ -3,7 +3,6 @@
  *
  * Created on 09 March 2008, 16:50
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
@@ -46,7 +45,7 @@ import com.cosmos.swingb.JBButton;
 public class PersonPanel extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(PersonPanel.class);
-    
+
     /** Creates new form PersonPanel */
     public PersonPanel(Person person) {
         super(person.getDataObject().getParentDataObjectId());
@@ -61,18 +60,18 @@ public class PersonPanel extends BaseEntityPanel {
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         initComponentsCustom();
         super.init();
     }
-    
+
     private void initComponentsCustom() {
-        if ( getClassifiersManager().isClassifiedAs(person, "customer")){
+        if (getClassifiersManager().isClassifiedAs(person, "customer")) {
             JBButton b = new JBButton();
             b.setText(getResourceMap().getString("button.discount"));
             b.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent e) {
                     onDiscount();
                 }
@@ -80,7 +79,7 @@ public class PersonPanel extends BaseEntityPanel {
             getButtonPanel().addButton(b);
         }
     }
-    
+
     protected void onDiscount() {
         if (person.getId() != null) {
             CustomerDiscountListPanel customerDiscountForm = new CustomerDiscountListPanel(person);
@@ -377,8 +376,6 @@ public class PersonPanel extends BaseEntityPanel {
 
 private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testCallback
 }//GEN-LAST:event_testCallback
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.TableHolderPanel addressesPanel;
     private com.cosmos.swingb.JBPanel birthDataPanel;
@@ -407,13 +404,11 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     private javax.swing.JLabel secondNameLabel;
     private com.cosmos.swingb.JBTextField secondNameTextField;
     // End of variables declaration//GEN-END:variables
-
     @EJB
     private PersonsListRemote formSession;
-
     private AddressListPanel addressesTable;
     private PassportsListPanel passportsTable;
-    private BindingGroup personBindingGroup;
+    private BindingGroup bindingGroup;
     private Person person;
     private Binding cityBinding;
     private Country country;
@@ -424,27 +419,26 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     protected void initData() {
         setResizable(false);
         log.info("initData().person: " + person);
-        if(person == null)
-        {
+        if (person == null) {
             person = getFormSession().newPerson(getOrganizationDataObjectId());
         }
 
-        if (personBindingGroup == null)
-            personBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         final EntityProperties entityProps = getPersonEntityProperties();
 
-        genderComboBox.bind(personBindingGroup, getGenders(), person, entityProps.getPropertyDetails("gender"));
+        genderComboBox.bind(bg, getGenders(), person, entityProps.getPropertyDetails("gender"));
 
-        firstNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("firstName"));
-        secondNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("secondName"));
-        lastNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("lastName"));
-        extraNameTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("extraName"));
+        firstNameTextField.bind(bg, person, entityProps.getPropertyDetails("firstName"));
+        secondNameTextField.bind(bg, person, entityProps.getPropertyDetails("secondName"));
+        lastNameTextField.bind(bg, person, entityProps.getPropertyDetails("lastName"));
+        extraNameTextField.bind(bg, person, entityProps.getPropertyDetails("extraName"));
 
-        personalUniqueIdTextField.bind(personBindingGroup, person, entityProps.getPropertyDetails("personalUniqueId"));
-        birthdateDatePicker.bind(personBindingGroup, person, entityProps.getPropertyDetails("birthDate"), AcaciaUtils.getShortDateFormat());
-        birthPlaceCountryComboBox.bind(personBindingGroup, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
-         birthPlaceCountryComboBox.addActionListener(new ActionListener(){
+        personalUniqueIdTextField.bind(bg, person, entityProps.getPropertyDetails("personalUniqueId"));
+        birthdateDatePicker.bind(bg, person, entityProps.getPropertyDetails("birthDate"), AcaciaUtils.getShortDateFormat());
+        birthPlaceCountryComboBox.bind(bg, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
+        birthPlaceCountryComboBox.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 country = (Country) birthPlaceCountryComboBox.getSelectedItem();
@@ -453,17 +447,18 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         });
 
         cityBinding = cityLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseCity();
-                }
-            }, personBindingGroup,
-            person,
-            entityProps.getPropertyDetails("birthPlaceCity"),
-            "${cityName}",
-            UpdateStrategy.READ_WRITE);
 
-        descriptionTextPane.bind(personBindingGroup, person, entityProps.getPropertyDetails("description"));
+            @Override
+            public Object showSelectionControl() {
+                return onChooseCity();
+            }
+        }, bg,
+                person,
+                entityProps.getPropertyDetails("birthPlaceCity"),
+                "${cityName}",
+                UpdateStrategy.READ_WRITE);
+
+        descriptionTextPane.bind(bg, person, entityProps.getPropertyDetails("description"));
 
         // Using an AbstractTablePanel implementation
         addressesTable = new AddressListPanel(person.getId());
@@ -478,7 +473,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         addressesPanel.add(addressesTable);
 
 
-         // Using an AbstractTablePanel implementation
+        // Using an AbstractTablePanel implementation
         passportsTable = new PassportsListPanel(person.getId());
         //passportsTable.setVisibleButtons(14); //Only New, Modify and Delete
         passportsTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
@@ -493,7 +488,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         secondNameTextField.addKeyListener(nameChangeListener);
         lastNameTextField.addKeyListener(nameChangeListener);
 
-        personBindingGroup.bind();
+        bg.bind();
     }
 
     protected Object onChooseCity() {
@@ -503,10 +498,11 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         log.info("Displaying cities for country: " + country);
 
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             City selectedCity = (City) listPanel.getSelectedRowObject();
-            if (birthPlaceCountryComboBox.getSelectedItem() == null)
+            if (birthPlaceCountryComboBox.getSelectedItem() == null) {
                 birthPlaceCountryComboBox.setSelectedItem(selectedCity.getCountry());
+            }
 
             return selectedCity;
         } else {
@@ -515,15 +511,20 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     }
 
     protected PersonsListRemote getFormSession() {
-        if(formSession == null)
+        if (formSession == null) {
             formSession = getBean(PersonsListRemote.class);
+        }
 
         return formSession;
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return personBindingGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -545,16 +546,17 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
             isUnique = false;
 
             int answer = JOptionPane.showConfirmDialog(
-                        this, getResourceMap().getString("Person.confirm.uniqueness"), "", JOptionPane.OK_CANCEL_OPTION);
+                    this, getResourceMap().getString("Person.confirm.uniqueness"), "", JOptionPane.OK_CANCEL_OPTION);
 
-            if(answer == JOptionPane.OK_OPTION) {
+            if (answer == JOptionPane.OK_OPTION) {
                 person = getFormSession().savePerson(person);
                 isUnique = true;
             }
         }
 
-        if (tmpPerson != null)
+        if (tmpPerson != null) {
             person = tmpPerson;
+        }
 
         if (isUnique) {
             setDialogResponse(DialogResponse.SAVE);
@@ -562,59 +564,53 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
             if (closeAfter) {
                 close();
             } else {
-                personBindingGroup.unbind();
+                getBindingGroup().unbind();
+                bindingGroup = null;
                 initData();
             }
         }
     }
 
-    protected EntityProperties getPersonEntityProperties()
-    {
+    protected EntityProperties getPersonEntityProperties() {
         return getFormSession().getPersonEntityProperties();
     }
 
-    protected EntityProperties getAddressEntityProperties()
-    {
+    protected EntityProperties getAddressEntityProperties() {
         return getFormSession().getAddressEntityProperties();
     }
 
-    protected EntityProperties getPassportEntityProperties()
-    {
+    protected EntityProperties getPassportEntityProperties() {
         return getFormSession().getPassportEntityProperties();
     }
 
-    private List<Country> getCountries()
-    {
+    private List<Country> getCountries() {
         return getFormSession().getCountries();
     }
 
-    private List<City> getCities()
-    {
+    private List<City> getCities() {
         return getFormSession().getCities();
     }
 
-    private List<City> getCities(Country country)
-    {
+    private List<City> getCities(Country country) {
         return getFormSession().getCities(country);
     }
 
-    private List<DbResource> getGenders()
-    {
+    private List<DbResource> getGenders() {
         return getFormSession().getGenders();
     }
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
-       return entityFormButtonPanel;
+        return entityFormButtonPanel;
     }
 
     @Override
-    protected boolean isSpecialConditionPresent()
-    {
+    protected boolean isSpecialConditionPresent() {
         return !isUnique;
     }
 
     class NameChangeListener extends KeyAdapter {
+
         @Override
         public void keyTyped(KeyEvent e) {
             namesChanged = true;
@@ -622,7 +618,7 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     }
 
     @Override
-    protected Report getReport(){
+    protected Report getReport() {
         Report report = new Report("person", addressesTable.getAddresses(), null);
         return report;
     }
