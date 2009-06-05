@@ -35,7 +35,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "simple_products")
-@DiscriminatorValue(value="S")
+@DiscriminatorValue(value=Product.DISCRIMINATOR_SIMPLE_PRODUCT)
 @PrimaryKeyJoinColumn(name="product_id",referencedColumnName="product_id")
 @NamedQueries(
     {
@@ -99,21 +99,6 @@ public class SimpleProduct
     @ManyToOne
     @Property(title="Category", propertyValidator=@PropertyValidator(required=true))
     private ProductCategory category;
-
-    @Column(name = "product_name", nullable = false)
-    @Property(title="Product Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=100))
-    private String productName;
-
-    @Column(name = "product_code", nullable = false)
-    @Property(title="Product Code",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, maxLength=50, required=true))
-    private String productCode;
-
-    @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
-    @ManyToOne
-    @Property(title="Measure Unit")
-    private DbResource measureUnit;
 
     @Column(name = "is_purchased", nullable = false)
     @Property(title="Is Purchased")
@@ -245,11 +230,6 @@ public class SimpleProduct
     @Property(title="Producer")
     private BusinessPartner producer;
     
-    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
-    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
-    @ManyToOne
-    private DbResource currency;
-
     @Transient
     @Property(title="Total Discount %", editable=false, hidden=true, percent=true, visible=false)
     private BigDecimal totalDiscountPercent;
@@ -304,10 +284,11 @@ public class SimpleProduct
 
     
     public SimpleProduct() {
+        super(DISCRIMINATOR_SIMPLE_PRODUCT);
     }
 
     public SimpleProduct(BigInteger productId) {
-        super(productId);
+        super(DISCRIMINATOR_SIMPLE_PRODUCT, productId);
     }
 
     public ProductCategory getCategory() {
@@ -318,42 +299,6 @@ public class SimpleProduct
         ProductCategory oldValue = this.category;
         this.category = category;
         firePropertyChange("category", oldValue, category);
-    }
-
-    @Override
-    public String getProductName() {
-        return productName;
-    }
-
-    @Override
-    public void setProductName(String productName) {
-        String oldValue = this.productName;
-        this.productName = productName;
-        firePropertyChange("productName", oldValue, productName);
-    }
-
-    @Override
-    public String getProductCode() {
-        return productCode;
-    }
-
-    @Override
-    public void setProductCode(String productCode) {
-        String oldValue = this.productCode;
-        this.productCode = productCode;
-        firePropertyChange("productCode", oldValue, productCode);
-    }
-
-    @Override
-    public DbResource getMeasureUnit() {
-        return measureUnit;
-    }
-
-    @Override
-    public void setMeasureUnit(DbResource measureUnit) {
-        DbResource oldValue = this.measureUnit;
-        this.measureUnit = measureUnit;
-        firePropertyChange("measureUnit", oldValue, measureUnit);
     }
 
     public boolean isPurchased() {
@@ -627,16 +572,6 @@ public class SimpleProduct
     @Override
     public String getInfo() {
         return getProductName();
-    }
-
-    public DbResource getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(DbResource currency) {
-        DbResource oldValue = this.currency;
-        this.currency = currency;
-        firePropertyChange("currency", oldValue, currency);
     }
 
     public String getProductDisplay() {

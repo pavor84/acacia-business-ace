@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
@@ -32,104 +31,46 @@ import javax.persistence.PrimaryKeyJoinColumn;
  */
 @Entity
 @Table(name = "complex_products")
-@DiscriminatorValue(value="C")
-@PrimaryKeyJoinColumn(name="product_id",referencedColumnName="product_id")
-@NamedQueries(
-    {
-    })
+@DiscriminatorValue(value = Product.DISCRIMINATOR_COMPLEX_PRODUCT)
+@PrimaryKeyJoinColumn(name = "product_id", referencedColumnName = "product_id")
+@NamedQueries({})
 public class ComplexProduct
-    extends Product
-    implements Serializable
-{
+        extends Product
+        implements Serializable {
+
     private static final long serialVersionUID = 1L;
-
-    @Column(name = "product_code", nullable = false)
-    private String productCode;
-
-    @Column(name = "product_name", nullable = false)
-    private String productName;
-
-    @JoinColumn(name = "measure_unit_id", nullable=false, referencedColumnName = "resource_id")
-    @ManyToOne
-    @Property(title="Measure Unit")
-    private DbResource measureUnit;
-
     @Column(name = "sale_price", nullable = false)
-    @Property(title="Sales Price", propertyValidator=@PropertyValidator(
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Property(title = "Sales Price", propertyValidator = @PropertyValidator(validationType = ValidationType.NUMBER_RANGE, minValue = 0d, maxValue = 1000000000000d))
     private BigDecimal salePrice;
-
     @JoinColumn(name = "applied_schema_id", referencedColumnName = "product_id")
     @ManyToOne
     private AssemblingSchema appliedSchema;
-
     @Transient
     private List<ComplexProductItem> complexProductItems;
 
-
-    public ComplexProduct()
-    {
-        super();
+    public ComplexProduct() {
+        super(DISCRIMINATOR_COMPLEX_PRODUCT);
     }
 
-    public ComplexProduct(BigInteger productId)
-    {
-        super(productId);
+    public ComplexProduct(BigInteger productId) {
+        super(DISCRIMINATOR_COMPLEX_PRODUCT, productId);
     }
 
-    @Override
-    public String getProductCode() {
-        return productCode;
-    }
-
-    @Override
-    public void setProductCode(String productCode) {
-        firePropertyChange("productCode", this.productCode, productCode);
-        this.productCode = productCode;
-    }
-    
-    public String getCodeFormatted(){
-        if ( getProductCode()!=null )
+    public String getCodeFormatted() {
+        if (getProductCode() != null) {
             return getProductCode();
-        else
+        } else {
             return "";
+        }
     }
 
     @Override
-    public String getProductName()
-    {
-        return productName;
-    }
-
-    @Override
-    public void setProductName(String productName)
-    {
-        firePropertyChange("productName", this.productName, productName);
-        this.productName = productName;
-    }
-
-    @Override
-    public DbResource getMeasureUnit()
-    {
-        return measureUnit;
-    }
-
-    @Override
-    public void setMeasureUnit(DbResource measureUnit)
-    {
-        firePropertyChange("measureUnit", this.measureUnit, measureUnit);
-        this.measureUnit = measureUnit;
-    }
-
-    @Override
-    public BigDecimal getSalePrice()
-    {
+    public BigDecimal getSalePrice() {
         return salePrice;
     }
 
     @Override
-    public void setSalePrice(BigDecimal salePrice)
-    {
+    public void setSalePrice(BigDecimal salePrice) {
         firePropertyChange("salePrice", this.salePrice, salePrice);
         this.salePrice = salePrice;
     }
@@ -148,32 +89,32 @@ public class ComplexProduct
         return getProductName();
     }
 
-    public List<ComplexProductItem> getComplexProductItems()
-    {
+    public List<ComplexProductItem> getComplexProductItems() {
         return complexProductItems;
     }
 
-    public boolean addComplexProductItem(ComplexProductItem complexProductItem)
-    {
+    public boolean addComplexProductItem(ComplexProductItem complexProductItem) {
         firePropertyChange("add.complexProductItem", null, complexProductItem);
 
-        if(complexProductItems == null)
+        if (complexProductItems == null) {
             complexProductItems = new ArrayList<ComplexProductItem>();
+        }
 
         boolean result = complexProductItems.add(complexProductItem);
         firePropertyChange("complexProductItems", this.complexProductItems, complexProductItems);
         return result;
     }
 
-    public String toString(boolean debug)
-    {
-        if(!debug)
+    public String toString(boolean debug) {
+        if (!debug) {
             return toString();
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append(toString());
-        if(complexProductItems != null && complexProductItems.size() > 0)
+        if (complexProductItems != null && complexProductItems.size() > 0) {
             sb.append("; items: ").append(complexProductItems.toString());
+        }
 
         return sb.toString();
     }
