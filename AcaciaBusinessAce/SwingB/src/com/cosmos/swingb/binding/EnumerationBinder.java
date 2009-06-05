@@ -13,7 +13,7 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
  *
  * @author Miro
  */
-public interface EnumerationBinder {
+public interface EnumerationBinder extends Refreshable {
 
     JComboBoxBinding bind(
             BindingGroup bindingGroup,
