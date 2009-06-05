@@ -82,8 +82,6 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     private PurchaseInvoiceItem newPurchaseInvoiceItem(PurchaseInvoice purchaseInvoice) {
         PurchaseInvoiceItem invoiceItem = new PurchaseInvoiceItem();
         invoiceItem.setInvoice(purchaseInvoice);
-        invoiceItem.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
-        invoiceItem.setReceivedQuantity(BigDecimal.ZERO);
         return invoiceItem;
     }
 
