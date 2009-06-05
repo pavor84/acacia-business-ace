@@ -65,11 +65,11 @@ public class SimpleProductTest {
     @Test
     public void testGetSalePrice() {
         System.out.println("getSalePrice");
-        BigDecimal value = product.getSalePrice();
+        BigDecimal value = product.getSalesPrice();
         assertNull(value);
 
         product.setListPrice(ONE_THOUSAND);
-        value = product.getSalePrice();
+        value = product.getSalesPrice();
         assertEquals(ONE_THOUSAND, value);
 
         ProductPercentValue ppv = new ProductPercentValue();
@@ -80,7 +80,7 @@ public class SimpleProductTest {
         assertTrue(equals(TEN_PERCENT, value));
         value = product.getTotalDiscountValue();
         assertTrue(equals(ONE_HUNDRED, value));
-        value = product.getSalePrice();
+        value = product.getSalesPrice();
         assertTrue(equals(NINE_HUNDRED, value));
 
         ProductCategory category = new ProductCategory();
@@ -151,7 +151,7 @@ public class SimpleProductTest {
         value = product.getTotalProfitValue();
         assertTrue(equals(BigDecimal.valueOf(2673, 1), value));
 
-        value = product.getSalePrice();
+        value = product.getSalesPrice();
         assertTrue(equals(BigDecimal.valueOf(13365, 1), value));
     }
 
