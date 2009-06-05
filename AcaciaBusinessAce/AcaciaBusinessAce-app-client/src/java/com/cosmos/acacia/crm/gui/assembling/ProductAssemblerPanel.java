@@ -592,7 +592,7 @@ public class ProductAssemblerPanel
             logger.info("\t UnitPrice: " + productItem.getUnitPrice());
 
             ComplexProduct product = event.getComplexProduct();
-            productPriceTextField.setValue(product.getSalePrice());
+            productPriceTextField.setValue(product.getSalesPrice());
 
             //productTreeTable.addRow(productItem);
             DefaultTreeTableModel treeTableModel = 

@@ -207,7 +207,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
         SimpleProduct product = (SimpleProduct)itemByProduct.getProduct();
 
         if(product != null)
-            salesPriceDecimalField.setValue(product.getSalePrice());
+            salesPriceDecimalField.setValue(product.getSalesPrice());
 
         BigDecimal itemDiscountPercent;
         String defaultDiscountString;

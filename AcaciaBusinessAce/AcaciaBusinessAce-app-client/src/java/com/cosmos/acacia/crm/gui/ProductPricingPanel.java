@@ -177,7 +177,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     public void updateSalePriceField(boolean valid) {
         BigDecimal salePrice = null;
         if ( valid )
-            salePrice = product.getSalePrice();
+            salePrice = product.getSalesPrice();
         
         this.getSalesPriceField().setValue(salePrice);
     }

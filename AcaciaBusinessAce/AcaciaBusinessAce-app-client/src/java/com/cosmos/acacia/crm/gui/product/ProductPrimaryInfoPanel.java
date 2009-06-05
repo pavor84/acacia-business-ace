@@ -466,7 +466,7 @@ public class ProductPrimaryInfoPanel extends JBPanel {
     }
 
     protected void refreshForm() {
-        salesPriceDecimalField.setValue(product.getSalePrice());
+        salesPriceDecimalField.setValue(product.getSalesPrice());
         DbResource currencyResource = product.getCurrency();
         if(currencyResource != null) {
             Currency currency = (Currency)currencyResource.getEnumValue();
