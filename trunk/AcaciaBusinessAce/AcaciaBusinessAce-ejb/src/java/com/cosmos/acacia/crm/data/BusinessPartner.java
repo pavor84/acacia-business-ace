@@ -15,6 +15,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.ResourceDisplay;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
@@ -82,6 +85,11 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
+
+    @JoinColumn(name = "default_currency_id", referencedColumnName = "resource_id")
+    @ManyToOne(optional=false)
+    @Property(title="Default Currency", resourceDisplayInTable = ResourceDisplay.FullName)
+    private DbResource defaultCurrency;
 
     /*
     @JoinColumn(name = "id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -153,6 +161,14 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     @Override
     public void setId(BigInteger id) {
         setPartnerId(id);
+    }
+
+    public DbResource getDefaultCurrency() {
+        return defaultCurrency;
+    }
+
+    public void setDefaultCurrency(DbResource defaultCurrency) {
+        this.defaultCurrency = defaultCurrency;
     }
 
     public abstract String getDisplayName();

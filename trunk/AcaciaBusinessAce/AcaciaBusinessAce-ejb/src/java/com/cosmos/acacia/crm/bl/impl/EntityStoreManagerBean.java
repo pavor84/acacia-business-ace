@@ -23,6 +23,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.BusinessDocument;
 import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
+import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.Product;
@@ -278,7 +279,10 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         String entityClassName = entityClass.getName();
         EntityProperties entityProperties = entityPropertiesMap.get(entityClassName);
         if (entityProperties == null) {
-            if (BusinessDocument.class.isAssignableFrom(entityClass)) {
+            if (BusinessPartner.class.isAssignableFrom(entityClass)) {
+                entityProperties = createEntityProperties(BusinessPartner.class);
+                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+            } else if (BusinessDocument.class.isAssignableFrom(entityClass)) {
                 entityProperties = createEntityProperties(BusinessDocument.class);
                 entityProperties.addEntityProperties(createEntityProperties(entityClass));
             } else if (Product.class.isAssignableFrom(entityClass)) {

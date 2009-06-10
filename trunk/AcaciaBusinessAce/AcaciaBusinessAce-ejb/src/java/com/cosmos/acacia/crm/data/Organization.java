@@ -110,10 +110,10 @@ public class Organization
     @Property(title="Administration Address", customDisplay="${administrationAddress.addressName}")
     private Address administrationAddress;
 
-    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
+    @JoinColumn(name = "share_capital_currency_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Currency", resourceDisplayInTable = ResourceDisplay.FullName)
-    private DbResource currency;
+    @Property(title="Capital Currency", resourceDisplayInTable = ResourceDisplay.FullName)
+    private DbResource shareCapitalCurrency;
 
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
     @ManyToOne
@@ -217,12 +217,12 @@ public class Organization
         this.administrationAddress = administrationAddress;
     }
 
-    public DbResource getCurrency() {
-        return currency;
+    public DbResource getShareCapitalCurrency() {
+        return shareCapitalCurrency;
     }
 
-    public void setCurrency(DbResource currency) {
-        this.currency = currency;
+    public void setShareCapitalCurrency(DbResource shareCapitalCurrency) {
+        this.shareCapitalCurrency = shareCapitalCurrency;
     }
 
     public Organization getRegistrationOrganization() {

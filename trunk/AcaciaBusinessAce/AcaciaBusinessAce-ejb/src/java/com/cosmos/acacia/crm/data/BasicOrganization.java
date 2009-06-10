@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 
@@ -86,6 +87,8 @@ public class BasicOrganization implements Serializable {
     @Property(title="Bank")
     private boolean bank;
 
+    @Property(title="Default Currency", resourceDisplayInTable = ResourceDisplay.FullName)
+    private DbResource defaultCurrency;
 
     public City getCity() {
         return city;
@@ -221,5 +224,13 @@ public class BasicOrganization implements Serializable {
 
     public void setSupplier(boolean supplier) {
         this.supplier = supplier;
+    }
+
+    public DbResource getDefaultCurrency() {
+        return defaultCurrency;
+    }
+
+    public void setDefaultCurrency(DbResource defaultCurrency) {
+        this.defaultCurrency = defaultCurrency;
     }
 }

@@ -120,7 +120,7 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         return result;
     }
 
-    public void addPropertyDetails(int orderPosition, String propertyName, String columnName,
+    private void addPropertyDetails(int orderPosition, String propertyName, String columnName,
                           String customELDisplay, EntityProperties entityProperties) {
        PropertyDetails pd = new PropertyDetails(propertyName, columnName, null);
        pd.setCustomDisplay(customELDisplay);
@@ -129,7 +129,6 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
    }
 
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<BusinessPartner> getBusinessPartners(BigInteger parentDataObjectId) {
         if ( parentDataObjectId==null )

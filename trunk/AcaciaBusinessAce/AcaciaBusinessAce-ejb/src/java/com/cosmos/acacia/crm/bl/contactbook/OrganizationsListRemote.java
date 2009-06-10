@@ -97,4 +97,5 @@ public interface OrganizationsListRemote {
 
     EntityProperties getBasicOrganizationEntityProperties();
     Organization saveBasicOrganization(BasicOrganization basicOrganization);
+    BasicOrganization newBasicOrganization();
 }
