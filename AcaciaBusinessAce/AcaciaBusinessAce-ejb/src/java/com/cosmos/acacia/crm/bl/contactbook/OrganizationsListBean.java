@@ -29,6 +29,7 @@ import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.OrganizationType;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -68,7 +69,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     private ClassifiersLocal classifiersManager;
 
 
-    @SuppressWarnings("unchecked")
+    @Override
     public List<Organization> getOrganizations(BigInteger parentId)
     {
         Query q;
@@ -85,11 +86,13 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return new ArrayList<Organization>(q.getResultList());
     }
 
+    @Override
     public List<DbResource> getCurrencies()
     {
         return bankDetailsManager.getCurrencies();
     }
 
+    @Override
     public EntityProperties getOrganizationEntityProperties()
     {
         EntityProperties entityProperties = esm.getEntityProperties(Organization.class);
@@ -106,10 +109,19 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return entityProperties;
     }
 
+    @Override
     public Organization newOrganization(BigInteger parentId) {
         Organization org = new Organization();
         org.setParentId(parentId);
+        org.setDefaultCurrency(Currency.Leva.getDbResource());
         return org;
+    }
+
+    @Override
+    public BasicOrganization newBasicOrganization() {
+        BasicOrganization basicOrganization = new BasicOrganization();
+        basicOrganization.setDefaultCurrency(Currency.Leva.getDbResource());
+        return basicOrganization;
     }
 
     public Organization saveOrganization(Organization organization) {
@@ -127,6 +139,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         organization.setVatNumber(basicOrganization.getVatNumber());
         organization.setVatNumber(basicOrganization.getVatNumber());
         organization.setUniqueIdentifierCode(basicOrganization.getUniqueIdentifierCode());
+        organization.setDefaultCurrency(basicOrganization.getDefaultCurrency());
         organization = saveOrganization(organization);
 
         Person person = personsManager.newPerson(acaciaSession.getOrganization().getId());
@@ -189,19 +202,22 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return organization;
     }
 
+    @Override
     public int deleteOrganization(Organization organization) {
         return esm.remove(em, organization);
     }
 
+    @Override
     public List<Address> getAddresses(BigInteger parentId) {
        return locationsManager.getAddresses(parentId);
     }
 
-
+    @Override
     public EntityProperties getAddressEntityProperties() {
        return locationsManager.getAddressEntityProperties();
     }
 
+    @Override
     public EntityProperties getBankDetailEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(BankDetail.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
@@ -209,6 +225,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         return entityProperties;
     }
 
+    @Override
     public List<DbResource> getOrganizationTypes() {
         return OrganizationType.getDbResources();
     }
