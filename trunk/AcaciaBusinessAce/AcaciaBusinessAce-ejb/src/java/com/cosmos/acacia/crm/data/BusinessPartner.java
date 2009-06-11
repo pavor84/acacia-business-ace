@@ -91,12 +91,6 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     @Property(title="Default Currency", resourceDisplayInTable = ResourceDisplay.FullName)
     private DbResource defaultCurrency;
 
-    /*
-    @JoinColumn(name = "id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
-    private DataObject dataObject;
-    */
-
     @OneToOne
     @PrimaryKeyJoinColumn
     private DataObject dataObject;

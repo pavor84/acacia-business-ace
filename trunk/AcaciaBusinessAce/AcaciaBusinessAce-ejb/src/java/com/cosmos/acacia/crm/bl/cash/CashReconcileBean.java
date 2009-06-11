@@ -109,7 +109,7 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
     public CashReconcile newCashReconcile(BigInteger parentDataObjectId) {
         CashReconcile c = esm.newBusinessDocument(DocumentType.CashReconcile);
         c.setParentId(parentDataObjectId);
-        c.setCurrency(session.getOrganization().getCurrency());
+        c.setCurrency(session.getOrganization().getDefaultCurrency());
         setInitialAmounts(c);
         return c;
     }
