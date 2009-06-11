@@ -175,7 +175,9 @@ public class BeansBindingHelper {
         }
 
         PropertyDetails pd = new PropertyDetails();
-        if (orderPosition != null) {
+        if(property.index() > 0) {
+            pd.setOrderPosition(property.index());
+        } else if (orderPosition != null) {
             pd.setOrderPosition(orderPosition);
         }
         pd.setPropertyName(propertyName);
