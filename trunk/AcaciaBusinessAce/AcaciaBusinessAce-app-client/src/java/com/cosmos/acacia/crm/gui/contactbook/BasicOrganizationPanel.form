@@ -14,409 +14,443 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-57,0,0,1,-14"/>
   </AuxValues>
 
-  <Layout>
-    <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jBPanel2" alignment="0" pref="524" max="32767" attributes="0"/>
-                  <Component id="registrationAddressPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jBPanel1" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="organizationNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="vatNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="organizationNameTextField" pref="219" max="32767" attributes="0"/>
-                          <Component id="vatNumberTextField" pref="219" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="nicknameLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="nicknameTextField" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="uniqueIdLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="uniqueIdTextField" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
-                  <Component id="entityFormButtonPanel" alignment="0" pref="524" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-    <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="organizationNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="nicknameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="nicknameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="organizationNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="vatNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="uniqueIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="vatNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="registrationAddressPanel" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jBPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jBPanel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="entityFormButtonPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-  </Layout>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
-    <Component class="com.cosmos.swingb.JBLabel" name="organizationNameLabel">
+    <Container class="javax.swing.JPanel" name="mainPanel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="organizationNameLabel.text"/>
-        <Property name="name" type="java.lang.String" value="organizationNameLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="mainPanel" noResource="true"/>
       </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="organizationNameTextField">
-      <Properties>
-        <Property name="columns" type="int" value="10"/>
-        <Property name="name" type="java.lang.String" value="organizationNameTextField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="nicknameTextField">
-      <Properties>
-        <Property name="columns" type="int" value="10"/>
-        <Property name="name" type="java.lang.String" value="nicknameTextField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="nicknameLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="nicknameLabel.text"/>
-        <Property name="name" type="java.lang.String" value="nicknameLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="vatNumberLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="vatNumberLabel.text"/>
-        <Property name="name" type="java.lang.String" value="vatNumberLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="vatNumberTextField">
-      <Properties>
-        <Property name="columns" type="int" value="10"/>
-        <Property name="name" type="java.lang.String" value="vatNumberTextField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBTextField" name="uniqueIdTextField">
-      <Properties>
-        <Property name="columns" type="int" value="10"/>
-        <Property name="name" type="java.lang.String" value="uniqueIdTextField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="com.cosmos.swingb.JBLabel" name="uniqueIdLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="uniqueIdLabel.text"/>
-        <Property name="name" type="java.lang.String" value="uniqueIdLabel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Container class="com.cosmos.swingb.JBPanel" name="registrationAddressPanel">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Address as per Registration">
-              <Property name="titleX" resourceKey="registrationAddressPanel.border.title"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-        <Property name="name" type="java.lang.String" value="registrationAddressPanel" noResource="true"/>
-      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="postalAddressPanel" alignment="0" pref="488" max="32767" attributes="0"/>
+                      <Component id="classifiersPanel" alignment="0" pref="474" max="32767" attributes="0"/>
+                      <Component id="registrationAddressPanel" alignment="0" max="32767" attributes="0"/>
+                      <Component id="contactPersonPanel" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="organizationNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="vatNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="defaultCurrencyLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="cityComboList" pref="246" max="32767" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="postalCodeLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="postalCodeTextField" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="organizationNameTextField" alignment="0" pref="169" max="32767" attributes="0"/>
+                              <Component id="vatNumberTextField" alignment="0" pref="169" max="32767" attributes="0"/>
+                              <Component id="defaultCurrencyComboBox" alignment="1" pref="169" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="nicknameLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Component id="nicknameTextField" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="1" pref="1" max="1" attributes="0"/>
+                                  <Component id="uniqueIdLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Component id="uniqueIdTextField" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="postalCodeLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="postalCodeTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="cityLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="cityComboList" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="organizationNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nicknameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nicknameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="organizationNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="postalAddressPanel" pref="108" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="vatNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="uniqueIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="vatNumberTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="defaultCurrencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="defaultCurrencyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="registrationAddressPanel" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="contactPersonPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="classifiersPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="cityComboList">
+        <Component class="com.cosmos.swingb.JBLabel" name="organizationNameLabel">
           <Properties>
-            <Property name="name" type="java.lang.String" value="cityComboList" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="organizationNameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="organizationNameLabel" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="postalCodeTextField">
+        <Component class="com.cosmos.swingb.JBTextField" name="organizationNameTextField">
           <Properties>
             <Property name="columns" type="int" value="10"/>
-            <Property name="name" type="java.lang.String" value="postalCodeTextField" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="organizationNameTextField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="postalCodeLabel">
+        <Component class="com.cosmos.swingb.JBTextField" name="nicknameTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="postalCodeLabel.text"/>
-            <Property name="name" type="java.lang.String" value="postalCodeLabel" noResource="true"/>
+            <Property name="columns" type="int" value="10"/>
+            <Property name="name" type="java.lang.String" value="nicknameTextField" noResource="true"/>
           </Properties>
         </Component>
-        <Container class="com.cosmos.swingb.JBPanel" name="postalAddressPanel">
+        <Component class="com.cosmos.swingb.JBLabel" name="nicknameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="nicknameLabel.text"/>
+            <Property name="name" type="java.lang.String" value="nicknameLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="vatNumberLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="vatNumberLabel.text"/>
+            <Property name="name" type="java.lang.String" value="vatNumberLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="vatNumberTextField">
+          <Properties>
+            <Property name="columns" type="int" value="10"/>
+            <Property name="name" type="java.lang.String" value="vatNumberTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBTextField" name="uniqueIdTextField">
+          <Properties>
+            <Property name="columns" type="int" value="10"/>
+            <Property name="name" type="java.lang.String" value="uniqueIdTextField" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.swingb.JBLabel" name="uniqueIdLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="uniqueIdLabel.text"/>
+            <Property name="name" type="java.lang.String" value="uniqueIdLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Container class="com.cosmos.swingb.JBPanel" name="registrationAddressPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Postal Address">
-                  <Property name="titleX" resourceKey="postalAddressPanel.border.title"/>
+                <TitledBorder title="Address as per Registration">
+                  <Property name="titleX" resourceKey="registrationAddressPanel.border.title"/>
                 </TitledBorder>
               </Border>
             </Property>
-            <Property name="name" type="java.lang.String" value="postalAddressPanel" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="registrationAddressPanel" noResource="true"/>
           </Properties>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="postalAddressPanel" alignment="0" pref="438" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="cityLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="cityComboList" pref="196" max="32767" attributes="0"/>
+                              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                              <Component id="postalCodeLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="postalCodeTextField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="2" attributes="0">
+                          <Component id="postalCodeLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="postalCodeTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="cityLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="cityComboList" alignment="2" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="postalAddressPanel" pref="57" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="postalAddressScrollPane">
+            <Component class="com.cosmos.acacia.gui.AcaciaComboList" name="cityComboList">
               <Properties>
-                <Property name="name" type="java.lang.String" value="postalAddressScrollPane" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="cityComboList" noResource="true"/>
               </Properties>
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="Center"/>
-                </Constraint>
-              </Constraints>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="postalCodeTextField">
+              <Properties>
+                <Property name="columns" type="int" value="10"/>
+                <Property name="name" type="java.lang.String" value="postalCodeTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="postalCodeLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="postalCodeLabel.text"/>
+                <Property name="name" type="java.lang.String" value="postalCodeLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Container class="com.cosmos.swingb.JBPanel" name="postalAddressPanel">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Postal Address">
+                      <Property name="titleX" resourceKey="postalAddressPanel.border.title"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+                <Property name="name" type="java.lang.String" value="postalAddressPanel" noResource="true"/>
+              </Properties>
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
               <SubComponents>
-                <Component class="com.cosmos.swingb.JBTextPane" name="postalAddressTextPane">
+                <Container class="javax.swing.JScrollPane" name="postalAddressScrollPane">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="postalAddressTextPane" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="postalAddressScrollPane" noResource="true"/>
                   </Properties>
-                </Component>
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                      <BorderConstraints direction="Center"/>
+                    </Constraint>
+                  </Constraints>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="com.cosmos.swingb.JBTextPane" name="postalAddressTextPane">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="postalAddressTextPane" noResource="true"/>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
+            <Component class="com.cosmos.swingb.JBLabel" name="cityLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="cityLabel.text"/>
+                <Property name="name" type="java.lang.String" value="cityLabel" noResource="true"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
-        <Component class="com.cosmos.swingb.JBLabel" name="cityLabel">
+        <Container class="com.cosmos.swingb.JBPanel" name="contactPersonPanel">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="cityLabel.text"/>
-            <Property name="name" type="java.lang.String" value="cityLabel" noResource="true"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Contact Person">
+                  <Property name="titleX" resourceKey="contactPersonPanel.border.title"/>
+                </TitledBorder>
+              </Border>
+            </Property>
+            <Property name="name" type="java.lang.String" value="contactPersonPanel" noResource="true"/>
           </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="com.cosmos.swingb.JBPanel" name="jBPanel1">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Contact Person">
-              <Property name="titleX" resourceKey="jBPanel1.border.title"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-        <Property name="name" type="java.lang.String" value="jBPanel1" noResource="true"/>
-      </Properties>
 
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="firstNameLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="lastNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="firstNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lastNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lastNameTextField" alignment="0" pref="153" max="32767" attributes="2"/>
+                          <Component id="firstNameTextField" alignment="0" pref="153" max="32767" attributes="2"/>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="secondNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="extraNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="extraNameTextField" alignment="1" pref="119" max="32767" attributes="0"/>
+                          <Component id="secondNameTextField" alignment="1" pref="119" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="lastNameTextField" max="32767" attributes="1"/>
-                      <Component id="firstNameTextField" alignment="0" pref="153" max="32767" attributes="1"/>
-                  </Group>
-                  <EmptySpace pref="24" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="secondNameLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="extraNameLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="extraNameTextField" pref="150" max="32767" attributes="0"/>
-                      <Component id="secondNameTextField" alignment="1" pref="150" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="secondNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="firstNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="secondNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="firstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="secondNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="firstNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="secondNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="firstNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="extraNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lastNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="extraNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="extraNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lastNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="extraNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lastNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="com.cosmos.swingb.JBTextField" name="secondNameTextField">
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBTextField" name="secondNameTextField">
+              <Properties>
+                <Property name="columns" type="int" value="10"/>
+                <Property name="name" type="java.lang.String" value="secondNameTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="secondNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="secondNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="secondNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="firstNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="firstNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="firstNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="firstNameTextField">
+              <Properties>
+                <Property name="columns" type="int" value="10"/>
+                <Property name="name" type="java.lang.String" value="firstNameTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="lastNameTextField">
+              <Properties>
+                <Property name="columns" type="int" value="10"/>
+                <Property name="name" type="java.lang.String" value="lastNameTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBTextField" name="extraNameTextField">
+              <Properties>
+                <Property name="columns" type="int" value="10"/>
+                <Property name="name" type="java.lang.String" value="extraNameTextField" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="lastNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="lastNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="lastNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBLabel" name="extraNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="extraNameLabel.text"/>
+                <Property name="name" type="java.lang.String" value="extraNameLabel" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.cosmos.swingb.JBPanel" name="classifiersPanel">
           <Properties>
-            <Property name="columns" type="int" value="10"/>
-            <Property name="name" type="java.lang.String" value="secondNameTextField" noResource="true"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Classifiers">
+                  <Property name="titleX" resourceKey="classifiersPanel.border.title"/>
+                </TitledBorder>
+              </Border>
+            </Property>
+            <Property name="name" type="java.lang.String" value="classifiersPanel" noResource="true"/>
           </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="secondNameLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="secondNameLabel.text"/>
-            <Property name="name" type="java.lang.String" value="secondNameLabel" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="firstNameLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="firstNameLabel.text"/>
-            <Property name="name" type="java.lang.String" value="firstNameLabel" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="firstNameTextField">
-          <Properties>
-            <Property name="columns" type="int" value="10"/>
-            <Property name="name" type="java.lang.String" value="firstNameTextField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="lastNameTextField">
-          <Properties>
-            <Property name="columns" type="int" value="10"/>
-            <Property name="name" type="java.lang.String" value="lastNameTextField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBTextField" name="extraNameTextField">
-          <Properties>
-            <Property name="columns" type="int" value="10"/>
-            <Property name="name" type="java.lang.String" value="extraNameTextField" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="lastNameLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="lastNameLabel.text"/>
-            <Property name="name" type="java.lang.String" value="lastNameLabel" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBLabel" name="extraNameLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="extraNameLabel.text"/>
-            <Property name="name" type="java.lang.String" value="extraNameLabel" noResource="true"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Component class="com.cosmos.acacia.gui.EntityFormButtonPanel" name="entityFormButtonPanel">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="entityFormButtonPanel" noResource="true"/>
-      </Properties>
-    </Component>
-    <Container class="com.cosmos.swingb.JBPanel" name="jBPanel2">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Classifiers">
-              <Property name="titleX" resourceKey="jBPanel2.border.title"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-        <Property name="name" type="java.lang.String" value="jBPanel2" noResource="true"/>
-      </Properties>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="0"/>
-        <Property name="rows" type="int" value="2"/>
-      </Layout>
-      <SubComponents>
-        <Component class="com.cosmos.swingb.JBCheckBox" name="customerCheckBox">
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="0"/>
+            <Property name="rows" type="int" value="2"/>
+          </Layout>
+          <SubComponents>
+            <Component class="com.cosmos.swingb.JBCheckBox" name="customerCheckBox">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="customerCheckBox.text"/>
+                <Property name="name" type="java.lang.String" value="customerCheckBox" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBCheckBox" name="supplierCheckBox">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="supplierCheckBox.text"/>
+                <Property name="name" type="java.lang.String" value="supplierCheckBox" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBCheckBox" name="producerCheckBox">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="producerCheckBox.text"/>
+                <Property name="name" type="java.lang.String" value="producerCheckBox" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBCheckBox" name="shippingAgentCheckBox">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="shippingAgentCheckBox.text"/>
+                <Property name="name" type="java.lang.String" value="shippingAgentCheckBox" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBCheckBox" name="courierCheckBox">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="courierCheckBox.text"/>
+                <Property name="name" type="java.lang.String" value="courierCheckBox" noResource="true"/>
+              </Properties>
+            </Component>
+            <Component class="com.cosmos.swingb.JBCheckBox" name="bankCheckBox">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="bankCheckBox.text"/>
+                <Property name="name" type="java.lang.String" value="bankCheckBox" noResource="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="defaultCurrencyComboBox">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="customerCheckBox.text"/>
-            <Property name="name" type="java.lang.String" value="customerCheckBox" noResource="true"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="defaultCurrencyComboBox" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.swingb.JBCheckBox" name="supplierCheckBox">
+        <Component class="com.cosmos.swingb.JBLabel" name="defaultCurrencyLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="supplierCheckBox.text"/>
-            <Property name="name" type="java.lang.String" value="supplierCheckBox" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBCheckBox" name="producerCheckBox">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="producerCheckBox.text"/>
-            <Property name="name" type="java.lang.String" value="producerCheckBox" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBCheckBox" name="shippingAgentCheckBox">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="shippingAgentCheckBox.text"/>
-            <Property name="name" type="java.lang.String" value="shippingAgentCheckBox" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBCheckBox" name="courierCheckBox">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="courierCheckBox.text"/>
-            <Property name="name" type="java.lang.String" value="courierCheckBox" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="com.cosmos.swingb.JBCheckBox" name="bankCheckBox">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="bankCheckBox.text"/>
-            <Property name="name" type="java.lang.String" value="bankCheckBox" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="defaultCurrencyLabel.text"/>
+            <Property name="name" type="java.lang.String" value="defaultCurrencyLabel" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

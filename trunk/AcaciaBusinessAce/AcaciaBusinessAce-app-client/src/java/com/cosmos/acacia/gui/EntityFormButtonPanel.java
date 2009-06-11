@@ -12,10 +12,6 @@ import java.awt.FlowLayout;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
-import org.jdesktop.beansbinding.AbstractBindingListener;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 
 import com.cosmos.swingb.JBButton;
 

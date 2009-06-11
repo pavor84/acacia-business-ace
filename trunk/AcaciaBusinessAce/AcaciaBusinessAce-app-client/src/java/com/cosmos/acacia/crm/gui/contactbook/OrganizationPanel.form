@@ -7,6 +7,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -28,7 +29,7 @@
                       <Component id="registrationDetailsPanel" max="32767" attributes="0"/>
                   </Group>
                   <Component id="descriptionPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="entityFormButtonPanel" alignment="1" pref="761" max="32767" attributes="0"/>
+                  <Component id="entityFormButtonPanel" alignment="1" pref="802" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -39,7 +40,7 @@
           <Group type="102" alignment="0" max="-2" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="registrationDetailsPanel" linkSize="2" alignment="3" min="-2" pref="167" max="-2" attributes="0"/>
+                  <Component id="registrationDetailsPanel" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="generalInfoPanel" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -71,7 +72,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="725" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="766" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -121,12 +122,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="745" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="790" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="190" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="174" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -165,11 +166,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="shareCapitalTextField" pref="181" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="currencyComboBox" min="-2" pref="73" max="-2" attributes="0"/>
+                          <Component id="shareCapitalCurrencyComboBox" min="-2" pref="73" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="nicknameTextField" alignment="0" pref="260" max="32767" attributes="0"/>
-                      <Component id="nameTextField" alignment="0" pref="260" max="32767" attributes="0"/>
-                      <Component id="vatNumberTextField" alignment="1" pref="260" max="32767" attributes="0"/>
+                      <Component id="nicknameTextField" alignment="0" pref="261" max="32767" attributes="0"/>
+                      <Component id="nameTextField" alignment="0" pref="261" max="32767" attributes="0"/>
+                      <Component id="vatNumberTextField" alignment="1" pref="261" max="32767" attributes="0"/>
                       <Component id="organizationTypeComboBox" alignment="1" min="-2" pref="259" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -197,14 +198,14 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="shareCapitalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="shareCapitalTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="currencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="shareCapitalCurrencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="vatNumberLabel" min="-2" max="-2" attributes="0"/>
                       <Component id="vatNumberTextField" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="13" max="32767" attributes="0"/>
+                  <EmptySpace pref="29" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -277,7 +278,7 @@
             <Property name="name" type="java.lang.String" value="organizationTypeComboBox" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="currencyComboBox">
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="shareCapitalCurrencyComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
@@ -287,7 +288,7 @@
                 <StringItem index="3" value="Item 4"/>
               </StringArray>
             </Property>
-            <Property name="name" type="java.lang.String" value="currencyComboBox" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="shareCapitalCurrencyComboBox" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -307,17 +308,21 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="registrationDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="registeringOrganizationLabel" alignment="0" max="32767" attributes="1"/>
-                      <Component id="uniqueIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="administrationAddressLabel" alignment="0" max="32767" attributes="1"/>
-                      <Component id="registrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="registrationDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="registeringOrganizationLabel" alignment="0" max="32767" attributes="1"/>
+                          <Component id="uniqueIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="administrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                          <Component id="registrationAddressLabel" alignment="0" max="32767" attributes="1"/>
+                      </Group>
+                      <Component id="defaultCurrencyLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="defaultCurrencyComboBox" alignment="1" pref="229" max="32767" attributes="0"/>
                       <Component id="uniqueIdTextField" alignment="1" pref="229" max="32767" attributes="0"/>
                       <Component id="registeringOrganizationLookup" alignment="0" pref="229" max="32767" attributes="0"/>
                       <Component id="administrativeAddressLookup" alignment="1" pref="229" max="32767" attributes="0"/>
@@ -337,25 +342,29 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="registrationAddressLabel" pref="22" max="32767" attributes="1"/>
-                      <Component id="registrationAddressLookup" alignment="1" max="32767" attributes="1"/>
+                      <Component id="registrationAddressLabel" pref="23" max="32767" attributes="1"/>
+                      <Component id="registrationAddressLookup" alignment="1" pref="23" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="administrationAddressLabel" pref="22" max="32767" attributes="1"/>
-                      <Component id="administrativeAddressLookup" alignment="0" max="32767" attributes="1"/>
+                      <Component id="administrationAddressLabel" pref="23" max="32767" attributes="1"/>
+                      <Component id="administrativeAddressLookup" alignment="0" pref="23" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="registeringOrganizationLabel" pref="22" max="32767" attributes="1"/>
-                      <Component id="registeringOrganizationLookup" pref="22" max="32767" attributes="1"/>
+                      <Component id="registeringOrganizationLabel" pref="23" max="32767" attributes="1"/>
+                      <Component id="registeringOrganizationLookup" pref="23" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="uniqueIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="uniqueIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="defaultCurrencyComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="defaultCurrencyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -415,6 +424,25 @@
         <Component class="com.cosmos.acacia.gui.AcaciaLookup" name="registrationAddressLookup">
           <Properties>
             <Property name="name" type="java.lang.String" value="registrationAddressLookup" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="com.cosmos.acacia.gui.AcaciaComboBox" name="defaultCurrencyComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+            <Property name="name" type="java.lang.String" value="defaultCurrencyComboBox" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="defaultCurrencyLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="defaultCurrencyLabel.text"/>
+            <Property name="name" type="java.lang.String" value="defaultCurrencyLabel" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
