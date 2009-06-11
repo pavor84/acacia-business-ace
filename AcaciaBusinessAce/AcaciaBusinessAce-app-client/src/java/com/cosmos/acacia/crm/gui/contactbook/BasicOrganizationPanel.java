@@ -13,13 +13,16 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import com.cosmos.acacia.crm.bl.contactbook.OrganizationsListRemote;
 import com.cosmos.acacia.crm.data.BasicOrganization;
 import com.cosmos.acacia.crm.data.Classifier;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.awt.BorderLayout;
 import java.math.BigInteger;
+import java.util.List;
 import javax.ejb.EJB;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -30,11 +33,9 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author Miro
  */
 public class BasicOrganizationPanel
-        extends BaseEntityPanel
-{
+        extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(BasicOrganizationPanel.class);
-
     @EJB
     private static OrganizationsListRemote formSession;
 
@@ -46,13 +47,12 @@ public class BasicOrganizationPanel
     }
 
     public BasicOrganizationPanel() {
-        super((BigInteger)null);
+        super((BigInteger) null);
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -66,6 +66,7 @@ public class BasicOrganizationPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mainPanel = new javax.swing.JPanel();
         organizationNameLabel = new com.cosmos.swingb.JBLabel();
         organizationNameTextField = new com.cosmos.swingb.JBTextField();
         nicknameTextField = new com.cosmos.swingb.JBTextField();
@@ -82,7 +83,7 @@ public class BasicOrganizationPanel
         postalAddressScrollPane = new javax.swing.JScrollPane();
         postalAddressTextPane = new com.cosmos.swingb.JBTextPane();
         cityLabel = new com.cosmos.swingb.JBLabel();
-        jBPanel1 = new com.cosmos.swingb.JBPanel();
+        contactPersonPanel = new com.cosmos.swingb.JBPanel();
         secondNameTextField = new com.cosmos.swingb.JBTextField();
         secondNameLabel = new com.cosmos.swingb.JBLabel();
         firstNameLabel = new com.cosmos.swingb.JBLabel();
@@ -91,16 +92,20 @@ public class BasicOrganizationPanel
         extraNameTextField = new com.cosmos.swingb.JBTextField();
         lastNameLabel = new com.cosmos.swingb.JBLabel();
         extraNameLabel = new com.cosmos.swingb.JBLabel();
-        entityFormButtonPanel = new com.cosmos.acacia.gui.EntityFormButtonPanel();
-        jBPanel2 = new com.cosmos.swingb.JBPanel();
+        classifiersPanel = new com.cosmos.swingb.JBPanel();
         customerCheckBox = new com.cosmos.swingb.JBCheckBox();
         supplierCheckBox = new com.cosmos.swingb.JBCheckBox();
         producerCheckBox = new com.cosmos.swingb.JBCheckBox();
         shippingAgentCheckBox = new com.cosmos.swingb.JBCheckBox();
         courierCheckBox = new com.cosmos.swingb.JBCheckBox();
         bankCheckBox = new com.cosmos.swingb.JBCheckBox();
+        defaultCurrencyComboBox = new com.cosmos.acacia.gui.AcaciaComboBox();
+        defaultCurrencyLabel = new com.cosmos.swingb.JBLabel();
 
         setName("Form"); // NOI18N
+        setLayout(new java.awt.BorderLayout());
+
+        mainPanel.setName("mainPanel"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(com.cosmos.acacia.crm.gui.AcaciaApplication.class).getContext().getResourceMap(BasicOrganizationPanel.class);
         organizationNameLabel.setText(resourceMap.getString("organizationNameLabel.text")); // NOI18N
@@ -159,15 +164,15 @@ public class BasicOrganizationPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registrationAddressPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(registrationAddressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(postalAddressPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                    .addComponent(postalAddressPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                     .addGroup(registrationAddressPanelLayout.createSequentialGroup()
                         .addComponent(cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cityComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                        .addComponent(cityComboList, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(postalCodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postalCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(postalCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         registrationAddressPanelLayout.setVerticalGroup(
@@ -180,12 +185,12 @@ public class BasicOrganizationPanel
                     .addComponent(cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cityComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(postalAddressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                .addComponent(postalAddressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jBPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel1.border.title"))); // NOI18N
-        jBPanel1.setName("jBPanel1"); // NOI18N
+        contactPersonPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("contactPersonPanel.border.title"))); // NOI18N
+        contactPersonPanel.setName("contactPersonPanel"); // NOI18N
 
         secondNameTextField.setColumns(10);
         secondNameTextField.setName("secondNameTextField"); // NOI18N
@@ -211,40 +216,40 @@ public class BasicOrganizationPanel
         extraNameLabel.setText(resourceMap.getString("extraNameLabel.text")); // NOI18N
         extraNameLabel.setName("extraNameLabel"); // NOI18N
 
-        javax.swing.GroupLayout jBPanel1Layout = new javax.swing.GroupLayout(jBPanel1);
-        jBPanel1.setLayout(jBPanel1Layout);
-        jBPanel1Layout.setHorizontalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout contactPersonPanelLayout = new javax.swing.GroupLayout(contactPersonPanel);
+        contactPersonPanel.setLayout(contactPersonPanelLayout);
+        contactPersonPanelLayout.setHorizontalGroup(
+            contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contactPersonPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(firstNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lastNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lastNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lastNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                     .addComponent(firstNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(secondNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(extraNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(extraNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(secondNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                .addGroup(contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(extraNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                    .addComponent(secondNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jBPanel1Layout.setVerticalGroup(
-            jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jBPanel1Layout.createSequentialGroup()
+        contactPersonPanelLayout.setVerticalGroup(
+            contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contactPersonPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(secondNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(firstNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(secondNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jBPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(contactPersonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(extraNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lastNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(extraNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,110 +257,120 @@ public class BasicOrganizationPanel
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
-
-        jBPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jBPanel2.border.title"))); // NOI18N
-        jBPanel2.setName("jBPanel2"); // NOI18N
-        jBPanel2.setLayout(new java.awt.GridLayout(2, 0));
+        classifiersPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("classifiersPanel.border.title"))); // NOI18N
+        classifiersPanel.setName("classifiersPanel"); // NOI18N
+        classifiersPanel.setLayout(new java.awt.GridLayout(2, 0));
 
         customerCheckBox.setText(resourceMap.getString("customerCheckBox.text")); // NOI18N
         customerCheckBox.setName("customerCheckBox"); // NOI18N
-        jBPanel2.add(customerCheckBox);
+        classifiersPanel.add(customerCheckBox);
 
         supplierCheckBox.setText(resourceMap.getString("supplierCheckBox.text")); // NOI18N
         supplierCheckBox.setName("supplierCheckBox"); // NOI18N
-        jBPanel2.add(supplierCheckBox);
+        classifiersPanel.add(supplierCheckBox);
 
         producerCheckBox.setText(resourceMap.getString("producerCheckBox.text")); // NOI18N
         producerCheckBox.setName("producerCheckBox"); // NOI18N
-        jBPanel2.add(producerCheckBox);
+        classifiersPanel.add(producerCheckBox);
 
         shippingAgentCheckBox.setText(resourceMap.getString("shippingAgentCheckBox.text")); // NOI18N
         shippingAgentCheckBox.setName("shippingAgentCheckBox"); // NOI18N
-        jBPanel2.add(shippingAgentCheckBox);
+        classifiersPanel.add(shippingAgentCheckBox);
 
         courierCheckBox.setText(resourceMap.getString("courierCheckBox.text")); // NOI18N
         courierCheckBox.setName("courierCheckBox"); // NOI18N
-        jBPanel2.add(courierCheckBox);
+        classifiersPanel.add(courierCheckBox);
 
         bankCheckBox.setText(resourceMap.getString("bankCheckBox.text")); // NOI18N
         bankCheckBox.setName("bankCheckBox"); // NOI18N
-        jBPanel2.add(bankCheckBox);
+        classifiersPanel.add(bankCheckBox);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        defaultCurrencyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        defaultCurrencyComboBox.setName("defaultCurrencyComboBox"); // NOI18N
+
+        defaultCurrencyLabel.setText(resourceMap.getString("defaultCurrencyLabel.text")); // NOI18N
+        defaultCurrencyLabel.setName("defaultCurrencyLabel"); // NOI18N
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(classifiersPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                     .addComponent(registrationAddressPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(contactPersonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(organizationNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(vatNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(vatNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(defaultCurrencyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(organizationNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                            .addComponent(vatNumberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(organizationNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                            .addComponent(vatNumberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                            .addComponent(defaultCurrencyComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                                 .addComponent(nicknameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
                                 .addComponent(uniqueIdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(uniqueIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
+                                .addComponent(uniqueIdTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(organizationNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nicknameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(organizationNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(vatNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(uniqueIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(uniqueIdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(vatNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(defaultCurrencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(defaultCurrencyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(registrationAddressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(contactPersonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(entityFormButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(classifiersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        add(mainPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBCheckBox bankCheckBox;
     private com.cosmos.acacia.gui.AcaciaComboList cityComboList;
     private com.cosmos.swingb.JBLabel cityLabel;
+    private com.cosmos.swingb.JBPanel classifiersPanel;
+    private com.cosmos.swingb.JBPanel contactPersonPanel;
     private com.cosmos.swingb.JBCheckBox courierCheckBox;
     private com.cosmos.swingb.JBCheckBox customerCheckBox;
-    private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
+    private com.cosmos.acacia.gui.AcaciaComboBox defaultCurrencyComboBox;
+    private com.cosmos.swingb.JBLabel defaultCurrencyLabel;
     private com.cosmos.swingb.JBLabel extraNameLabel;
     private com.cosmos.swingb.JBTextField extraNameTextField;
     private com.cosmos.swingb.JBLabel firstNameLabel;
     private com.cosmos.swingb.JBTextField firstNameTextField;
-    private com.cosmos.swingb.JBPanel jBPanel1;
-    private com.cosmos.swingb.JBPanel jBPanel2;
     private com.cosmos.swingb.JBLabel lastNameLabel;
     private com.cosmos.swingb.JBTextField lastNameTextField;
+    private javax.swing.JPanel mainPanel;
     private com.cosmos.swingb.JBLabel nicknameLabel;
     private com.cosmos.swingb.JBTextField nicknameTextField;
     private com.cosmos.swingb.JBLabel organizationNameLabel;
@@ -376,24 +391,28 @@ public class BasicOrganizationPanel
     private com.cosmos.swingb.JBLabel vatNumberLabel;
     private com.cosmos.swingb.JBTextField vatNumberTextField;
     // End of variables declaration//GEN-END:variables
-
-
     private Classifier classifier;
     private BasicOrganization basicOrganization;
     private BindingGroup bindingGroup;
     private CitiesListPanel citiesListPanel;
+    private EntityFormButtonPanel entityFormButtonPanel;
 
     @Override
     public void performSave(boolean closeAfter) {
         Organization organization = getFormSession().saveBasicOrganization(basicOrganization);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(organization);
-        if(closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override
     public BindingGroup getBindingGroup() {
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
         return bindingGroup;
     }
 
@@ -404,116 +423,128 @@ public class BasicOrganizationPanel
 
     @Override
     public EntityFormButtonPanel getButtonPanel() {
+        if (entityFormButtonPanel == null) {
+            entityFormButtonPanel = new EntityFormButtonPanel();
+            entityFormButtonPanel.setName("entityFormButtonPanel"); // NOI18N
+        }
+
         return entityFormButtonPanel;
     }
 
     @Override
     protected void initData() {
         log.info("initData().parentDataObjectId: " + getParentDataObjectId());
+        add(getButtonPanel(), BorderLayout.SOUTH);
 
-        basicOrganization = new BasicOrganization();
+        basicOrganization = getFormSession().newBasicOrganization();
+        BindingGroup bg = getBindingGroup();
 
         initClassifier();
-
-        if (bindingGroup == null)
-            bindingGroup = new BindingGroup();
 
         EntityProperties entityProps = getFormSession().getBasicOrganizationEntityProperties();
         PropertyDetails propDetails;
 
         propDetails = entityProps.getPropertyDetails("organizationName");
-        organizationNameTextField.bind(bindingGroup, basicOrganization, propDetails);
+        organizationNameTextField.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("nickname");
-        nicknameTextField.bind(bindingGroup, basicOrganization, propDetails);
+        nicknameTextField.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("vatNumber");
-        vatNumberTextField.bind(bindingGroup, basicOrganization, propDetails);
+        vatNumberTextField.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("uniqueIdentifierCode");
-        uniqueIdTextField.bind(bindingGroup, basicOrganization, propDetails);
+        uniqueIdTextField.bind(bg, basicOrganization, propDetails);
+
+        defaultCurrencyComboBox.bind(bg,
+                getCurrencies(),
+                basicOrganization,
+                entityProps.getPropertyDetails("defaultCurrency"));
+
 
         // City
-        if(citiesListPanel == null)
+        if (citiesListPanel == null) {
             citiesListPanel = new CitiesListPanel();
+        }
         propDetails = entityProps.getPropertyDetails("city");
-        cityComboList.bind(bindingGroup, citiesListPanel, basicOrganization,
+        cityComboList.bind(bg, citiesListPanel, basicOrganization,
                 propDetails, "${cityName}", UpdateStrategy.READ_WRITE);
 
         // PostalCode
         propDetails = entityProps.getPropertyDetails("postalCode");
-        postalCodeTextField.bind(bindingGroup, basicOrganization, propDetails);
+        postalCodeTextField.bind(bg, basicOrganization, propDetails);
 
         // PostalAddress
         propDetails = entityProps.getPropertyDetails("postalAddress");
-        postalAddressTextPane.bind(bindingGroup, basicOrganization, propDetails);
+        postalAddressTextPane.bind(bg, basicOrganization, propDetails);
 
         // FirstName
         propDetails = entityProps.getPropertyDetails("firstName");
-        firstNameTextField.bind(bindingGroup, basicOrganization, propDetails);
+        firstNameTextField.bind(bg, basicOrganization, propDetails);
 
         // SecondName
         propDetails = entityProps.getPropertyDetails("secondName");
-        secondNameTextField.bind(bindingGroup, basicOrganization, propDetails);
+        secondNameTextField.bind(bg, basicOrganization, propDetails);
 
         // LastName
         propDetails = entityProps.getPropertyDetails("lastName");
-        lastNameTextField.bind(bindingGroup, basicOrganization, propDetails);
+        lastNameTextField.bind(bg, basicOrganization, propDetails);
 
         // ExtraName
         propDetails = entityProps.getPropertyDetails("extraName");
-        extraNameTextField.bind(bindingGroup, basicOrganization, propDetails);
+        extraNameTextField.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("customer");
-        customerCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+        customerCheckBox.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("supplier");
-        supplierCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+        supplierCheckBox.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("producer");
-        producerCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+        producerCheckBox.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("shippingAgent");
-        shippingAgentCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+        shippingAgentCheckBox.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("courier");
-        courierCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+        courierCheckBox.bind(bg, basicOrganization, propDetails);
 
         propDetails = entityProps.getPropertyDetails("bank");
-        bankCheckBox.bind(bindingGroup, basicOrganization, propDetails);
+        bankCheckBox.bind(bg, basicOrganization, propDetails);
 
-        bindingGroup.bind();
+        bg.bind();
     }
 
     private void initClassifier() {
-        if(classifier == null)
+        if (classifier == null) {
             return;
+        }
 
         String classifierCode = classifier.getClassifierCode();
-        if(classifierCode.equals(Classifier.Customer.getClassifierCode()))
+        if (classifierCode.equals(Classifier.Customer.getClassifierCode())) {
             basicOrganization.setCustomer(true);
-        else if(classifierCode.equals(Classifier.Supplier.getClassifierCode()))
+        } else if (classifierCode.equals(Classifier.Supplier.getClassifierCode())) {
             basicOrganization.setSupplier(true);
-        else if(classifierCode.equals(Classifier.Producer.getClassifierCode()))
+        } else if (classifierCode.equals(Classifier.Producer.getClassifierCode())) {
             basicOrganization.setProducer(true);
-        else if(classifierCode.equals(Classifier.ShippingAgent.getClassifierCode()))
+        } else if (classifierCode.equals(Classifier.ShippingAgent.getClassifierCode())) {
             basicOrganization.setShippingAgent(true);
-        else if(classifierCode.equals(Classifier.Courier.getClassifierCode()))
+        } else if (classifierCode.equals(Classifier.Courier.getClassifierCode())) {
             basicOrganization.setCourier(true);
-        else if(classifierCode.equals(Classifier.Bank.getClassifierCode()))
+        } else if (classifierCode.equals(Classifier.Bank.getClassifierCode())) {
             basicOrganization.setBank(true);
+        }
     }
 
-    protected OrganizationsListRemote getFormSession()
-    {
-        if(formSession == null)
-        {
-            try
-            {
+    private List<DbResource> getCurrencies() {
+        return getFormSession().getCurrencies();
+    }
+
+    protected OrganizationsListRemote getFormSession() {
+        if (formSession == null) {
+            try {
                 formSession = getBean(OrganizationsListRemote.class);
-            }
-            catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }

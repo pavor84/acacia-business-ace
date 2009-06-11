@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.gui;
 
 import java.util.List;
@@ -29,34 +28,33 @@ public class AcaciaComboBox extends JBComboBox {
     @SuppressWarnings("unchecked")
     @Override
     public JComboBoxBinding bind(BindingGroup bindingGroup, List data, Object beanEntity,
-                                 PropertyDetails propertyDetails, UpdateStrategy updateStrategy) {
+            PropertyDetails propertyDetails, UpdateStrategy updateStrategy) {
         AcaciaToStringConverter resourceToStringConverter = createToStringConverter(propertyDetails);
-        
+
         AutoCompleteDecorator.decorate(this, resourceToStringConverter);
         setConverter(resourceToStringConverter);
         return super.bind(bindingGroup, data, beanEntity, propertyDetails,
-            AutoBinding.UpdateStrategy.READ_WRITE);
+                AutoBinding.UpdateStrategy.READ_WRITE);
     }
-    
+
     private AcaciaToStringConverter createToStringConverter(PropertyDetails propertyDetails) {
         String customElProperty = propertyDetails.getCustomDisplay();
-        if ( customElProperty==null )
+        if (customElProperty == null) {
             return new AcaciaToStringConverter();
-        else{
+        } else {
             //cut the first part of all properties, since it is the name of the property in the entity object.
-            customElProperty = customElProperty.replaceAll(propertyDetails.getPropertyName()+".", "");
+            customElProperty = customElProperty.replaceAll(propertyDetails.getPropertyName() + ".", "");
             return new AcaciaToStringConverter(customElProperty);
         }
     }
 
-   @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
+            PropertyDetails propertyDetails) {
         AcaciaToStringConverter resourceToStringConverter = createToStringConverter(propertyDetails);
         AutoCompleteDecorator.decorate(this, resourceToStringConverter);
         setConverter(resourceToStringConverter);
@@ -69,8 +67,7 @@ public class AcaciaComboBox extends JBComboBox {
             List data,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            ObjectToStringConverter converter)
-    {
+            ObjectToStringConverter converter) {
         AutoCompleteDecorator.decorate(this, converter);
         setConverter(converter);
         return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
