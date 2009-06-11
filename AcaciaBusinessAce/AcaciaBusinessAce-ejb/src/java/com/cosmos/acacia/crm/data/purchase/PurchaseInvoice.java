@@ -7,14 +7,22 @@ package com.cosmos.acacia.crm.data.purchase;
 import com.cosmos.acacia.annotation.BorderType;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
+import com.cosmos.acacia.annotation.EntityLogic;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Logic;
+import com.cosmos.acacia.annotation.LogicUnitType;
+import com.cosmos.acacia.annotation.OperationRow;
+import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
+import com.cosmos.acacia.annotation.Unit;
+import com.cosmos.acacia.annotation.UnitType;
+import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
@@ -124,7 +132,27 @@ import javax.persistence.TemporalType;
             parentContainerName="primaryInfo"
         )
     },
-    serviceClass=PurchaseServiceRemote.class
+    serviceClass=PurchaseServiceRemote.class,
+    logic=@Logic(
+        entityLogic=@EntityLogic(
+            units={
+                @Unit(
+                    unitType=UnitType.Variable,
+                    logicUnitType=LogicUnitType.Verification,
+                    operations={
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="entity.documentCurrency",
+                                with="entity.supplier.defaultCurrency",
+                                condition="onChange(entity.supplier)"
+                            )
+                        )
+                    }
+                )
+            }
+        )
+    )
 )
 public class PurchaseInvoice extends BusinessDocument implements Serializable {
 
@@ -239,22 +267,24 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private String deliveryNote;
 
-    @Column(name = "total_quantity", precision = 19, scale = 4)
-    @Property(title="Total Quantity",
-        editable=false,
-        readOnly=true,
+    @JoinColumn(name = "document_currency_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Currency",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.Currency"
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName="finalValues",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Total Quantity:"
+                text="Currency:"
             ),
             secondComponent=@Component(
-                componentClass=JBDecimalField.class
+                componentClass=JBComboBox.class
             )
         )
     )
-    private BigDecimal totalQuantity;
+    private DbResource documentCurrency;
 
     @Column(name = "total_net_amount", precision = 19, scale = 4)
     @Property(title="Total Net Amount",
@@ -273,6 +303,23 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     )
     private BigDecimal totalNetAmount;
 
+    @Column(name = "total_quantity", precision = 19, scale = 4)
+    @Property(title="Total Quantity",
+        editable=false,
+        readOnly=true,
+        formComponentPair=@FormComponentPair(
+            parentContainerName="finalValues",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Total Quantity:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
+    private BigDecimal totalQuantity;
+
     @Column(name = "total_tax", precision = 19, scale = 4)
     @Property(title="Total Tax",
         editable=false,
@@ -281,8 +328,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
             parentContainerName="finalValues",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Total Tax:",
-                componentConstraints="skip 2"
+                text="Total Tax:"
             ),
             secondComponent=@Component(
                 componentClass=JBDecimalField.class
@@ -504,4 +550,11 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
         this.paymentTerms = paymentTerms;
     }
 
+    public DbResource getDocumentCurrency() {
+        return documentCurrency;
+    }
+
+    public void setDocumentCurrency(DbResource documentCurrency) {
+        this.documentCurrency = documentCurrency;
+    }
 }
