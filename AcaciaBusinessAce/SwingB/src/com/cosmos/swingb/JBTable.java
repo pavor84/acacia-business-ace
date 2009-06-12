@@ -624,7 +624,7 @@ public class JBTable
             column.setCellRenderer(getBeanResourceCellRenderer(propertyDetails));
     }
 
-    protected TableColumnExt getColumn(PropertyDetails propertyDetails) {
+    public TableColumnExt getColumn(PropertyDetails propertyDetails) {
         TableColumnExt column;
         String propertyName = propertyDetails.getPropertyName();
         try {
