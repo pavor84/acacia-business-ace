@@ -21,9 +21,9 @@ public interface EntityService {
 
     <E, I> I newItem(E entity, Class<I> itemClass);
 
-    <E> List<E> getEntities(Class<E> entityClass);
+    <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters);
 
-    <E, I> List<I> getEntityItems(E entity, Class<I> itemClass);
+    <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters);
 
     <E> E save(E entity);
 
@@ -51,11 +51,11 @@ public interface EntityService {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public List getEntities(Class entityClass) {
+        public List getEntities(Class entityClass, Object... extraParameters) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public List getEntityItems(Object entity, Class itemClass) {
+        public List getEntityItems(Object entity, Class itemClass, Object... extraParameters) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
