@@ -3,7 +3,6 @@
  *
  * Created on Събота, 2008, Март 15, 21:49
  */
-
 package com.cosmos.acacia.gui;
 
 import java.awt.Component;
@@ -59,11 +58,15 @@ import javax.swing.JComponent;
  * @author  Miro
  */
 public abstract class AbstractTablePanel
-    extends AcaciaPanel
-    implements SelectableListDialog
-{
+        extends AcaciaPanel
+        implements SelectableListDialog {
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
+
+    protected AbstractTablePanel(Object[] parameters) {
+        this.parameters = parameters;
+        init();
+    }
 
     protected AbstractTablePanel(Class entityClass) {
         this(null, entityClass);
@@ -80,7 +83,7 @@ public abstract class AbstractTablePanel
     }
 
     public AbstractTablePanel() {
-        this((BigInteger)null);
+        this((BigInteger) null);
     }
 
     /** Creates new form AbstractTablePanel */
@@ -102,13 +105,11 @@ public abstract class AbstractTablePanel
         initComponents();
         initData();
 
-        dataTable.addMouseListener(new MouseAdapter()
-        {
+        dataTable.addMouseListener(new MouseAdapter() {
+
             @Override
-            public void mouseClicked(MouseEvent event)
-            {
-                if (event.getClickCount() == 2)
-                {
+            public void mouseClicked(MouseEvent event) {
+                if (event.getClickCount() == 2) {
                     performDefaultDoubleClickAction();
                 }
             }
@@ -248,8 +249,6 @@ public abstract class AbstractTablePanel
 private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyPressed
     onKeyCommand(evt);
 }//GEN-LAST:event_onKeyPressed
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel buttonsPanel;
     private com.cosmos.swingb.JBButton classifyButton;
@@ -265,33 +264,26 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private com.cosmos.swingb.JBButton specialFunctionalityButton;
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
-
-
     private JBPanel parentPanel;
     private Map<Button, JBButton> buttonsMap;
-
     private boolean editable = true;
     private boolean visibilitySetChanged = false;
-
     private Object selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
     private boolean allowClassifierChange;
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
-
     private Class entityClass;
-
+    protected Object[] parameters;
     /**
      * 
      */
     private boolean packAllColumns = true;
-
     /**
      * Before applying a classifier filter, the default fetched data
      * is saved, so that it can be reverted to
      */
     private List defaultData;
-
     /**
      * When a row is selected a check is performed against it to decide where it can be modified/viewed or neither.
      * If it can be modified, this is set to false.
@@ -299,7 +291,6 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * If neither, it doesn't matter what this is set to, because the button is disabled.
      */
     private boolean viewRowState = false;
-
     /**
      * A boolean indicating whether the close action shoul be
      * triggered after the Unselect button is pressed
@@ -311,8 +302,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Override
-    protected void initData()
-    {
+    protected void initData() {
+        JComponent topComponent;
+        if ((topComponent = getTopComponent()) != null) {
+            add(topComponent, BorderLayout.PAGE_START);
+        }
+
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         size.width = (size.width * 2) / 3;
         size.height = (size.height * 2) / 3;
@@ -332,17 +327,21 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         setEnabled(Button.Special, false);
         setEnabled(Button.Classify, false);
 
-        if(selectedRowObject != null)
+        if (selectedRowObject != null) {
             dataTable.setSelectedRowObject(selectedRowObject);
+        }
 
         addListSelectionListener(dataTable);
     }
 
     @Override
     public void invalidate() {
-        if(packAllColumns) {
+        if (packAllColumns) {
             packAllColumns = false;
-            getDataTable().packAll();
+            AcaciaTable table;
+            if((table = getDataTable()) != null) {
+                table.packAll();
+            }
         }
         super.invalidate();
     }
@@ -356,25 +355,22 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     public void setSelectedRowObject(Object selectedRowObject) {
         this.selectedRowObject = selectedRowObject;
         AcaciaTable table = getDataTable();
-        if(selectedRowObject != null)
-        {
+        if (selectedRowObject != null) {
             table.setSelectedRowObject(selectedRowObject);
-        }
-        else
-        {
+        } else {
             unselect();
         }
     }
 
-    protected void setTopComponent(JComponent component) {
-        add(component, BorderLayout.PAGE_START);
+    protected JComponent getTopComponent() {
+        return null;
     }
 
     /**
      * A getter for subclasses to use
      * @return JScrollPane
      */
-    protected JScrollPane getDataScrollPane(){
+    protected JScrollPane getDataScrollPane() {
         return dataScrollPane;
     }
 
@@ -382,12 +378,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * A getter for subclasses to use
      * @return JScrollPane
      */
-    protected JBPanel getButtonsPanel(){
+    protected JBPanel getButtonsPanel() {
         return buttonsPanel;
     }
 
     public void addColumn(int orderPosition, String propertyName, String columnName,
-                           String customELDisplay, EntityProperties entityProperties) {
+            String customELDisplay, EntityProperties entityProperties) {
         PropertyDetails pd = new PropertyDetails(propertyName, columnName, null);
         pd.setCustomDisplay(customELDisplay);
         pd.setOrderPosition(orderPosition);
@@ -407,44 +403,38 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     public void setCustomDisplay(List<PropertyDetails> propertyDetails, String propertyName, String customDisplay) {
         for (PropertyDetails pd : propertyDetails) {
-            if ( pd.getPropertyName().equals(propertyName)){
+            if (pd.getPropertyName().equals(propertyName)) {
                 pd.setCustomDisplay(customDisplay);
                 break;
             }
         }
     }
 
-    public AcaciaTable getDataTable()
-    {
+    public AcaciaTable getDataTable() {
         return dataTable;
     }
 
     @Override
-    public List getListData()
-    {
+    public List getListData() {
         return getDataTable().getData();
     }
 
     @Override
-    public void setVisibleSelectButtons(boolean visible)
-    {
+    public void setVisibleSelectButtons(boolean visible) {
         setVisible(Button.Select, visible);
         setVisible(Button.Unselect, visible);
         visibilitySetChanged = true;
     }
 
     @Override
-    public void setEditable(boolean editable)
-    {
+    public void setEditable(boolean editable) {
         this.editable = editable;
     }
 
     @Override
-    public boolean isEditable()
-    {
+    public boolean isEditable() {
         return editable;
     }
-
 
     /**
      *
@@ -468,7 +458,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param rowObject
      * @return newRowObject
      */
-    protected void viewRow(Object rowObject){};
+    protected void viewRow(Object rowObject) {
+    }
+
+    ;
 
     /**
      * Implement this method for adding new rows
@@ -477,22 +470,19 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     protected abstract Object newRow();
 
-    public boolean canCreate()
-    {
+    public boolean canCreate() {
         return true;
     }
 
-    public boolean canModify(Object rowObject)
-    {
+    public boolean canModify(Object rowObject) {
         return true;
     }
 
-    public boolean canDelete(Object rowObject)
-    {
+    public boolean canDelete(Object rowObject) {
         return true;
     }
 
-    public boolean canView(Object rowObject){
+    public boolean canView(Object rowObject) {
         return true;
     }
 
@@ -504,16 +494,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return true;
     }
 
-    protected void addListSelectionListener(AcaciaTable table)
-    {
+    protected void addListSelectionListener(AcaciaTable table) {
         new TableSelectionListener(table);
     }
 
-    public javax.swing.Action getAction(Button button)
-    {
+    public javax.swing.Action getAction(Button button) {
         ApplicationActionMap actionMap = getApplicationActionMap();
-        if(actionMap != null && button != null)
-        {
+        if (actionMap != null && button != null) {
             return actionMap.get(button.getActionName());
         }
 
@@ -525,9 +512,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     public void setSelected(Button button, boolean enabled) {
-        ApplicationAction action = (ApplicationAction)getAction(button);
-        if(action != null)
-        {
+        ApplicationAction action = (ApplicationAction) getAction(button);
+        if (action != null) {
             action.setSelected(enabled);
         } else {
             getButtonsMap().get(button).setEnabled(enabled);
@@ -538,8 +524,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * Sets the button as visible and hides all other buttons (!).
      * @param button
      */
-    public void setVisible(Button button)
-    {
+    public void setVisible(Button button) {
         setVisible(EnumSet.of(button));
     }
 
@@ -547,37 +532,34 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * Sets the passed buttons as visible, (!) but hides all other buttons.
      * @param buttons
      */
-    public void setVisible(Set<Button> buttons)
-    {
+    public void setVisible(Set<Button> buttons) {
         Map<Button, JBButton> bm = getButtonsMap();
-        for(Button button : bm.keySet())
-        {
+        for (Button button : bm.keySet()) {
             JButton jb = bm.get(button);
             jb.setVisible(buttons.contains(button));
         }
     }
 
-    public void setVisible(Button button, boolean visible)
-    {
-        if (visible)
+    public void setVisible(Button button, boolean visible) {
+        if (visible) {
             visibilitySetChanged = true;
+        }
 
         getButtonsMap().get(button).setVisible(visible);
     }
 
-    public boolean isVisible(Button button)
-    {
+    public boolean isVisible(Button button) {
         return getButtonsMap().get(button).isVisible();
     }
 
     protected JBButton getButton(Button button) {
         JBButton jButton;
-        if((jButton = getButtonsMap().get(button)) != null)
+        if ((jButton = getButtonsMap().get(button)) != null) {
             return jButton;
+        }
 
         throw new IllegalArgumentException("Unknown or unsupported Button enumeration: " + button);
     }
-
 
     /**
      * Sets the visible buttons:
@@ -587,36 +569,35 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      *
      * @param visibleButtons
      */
-    public void setVisibleButtons(int visibleButtons){
-        for (ButtonVisibility bv: ButtonVisibility.values())
-        {
-            if ((bv.getVisibilityIndex() & visibleButtons) != 0)
+    public void setVisibleButtons(int visibleButtons) {
+        for (ButtonVisibility bv : ButtonVisibility.values()) {
+            if ((bv.getVisibilityIndex() & visibleButtons) != 0) {
                 setVisible(bv.getButton(), true);
-            else
+            } else {
                 setVisible(bv.getButton(), false);
+            }
         }
     }
 
     /*public void setButtonsTextVisibility(boolean visible){
-        selectButton.setToolTipText(selectButton.getText());
-        selectButton.setText("");
+    selectButton.setToolTipText(selectButton.getText());
+    selectButton.setText("");
 
-        newButton.setToolTipText(newButton.getText());
-        newButton.setText("");
+    newButton.setToolTipText(newButton.getText());
+    newButton.setText("");
 
-        modifyButton.setToolTipText(modifyButton.getText());
-        modifyButton.setText("");
+    modifyButton.setToolTipText(modifyButton.getText());
+    modifyButton.setText("");
 
-        deleteButton.setToolTipText(deleteButton.getText());
-        deleteButton.setText("");
+    deleteButton.setToolTipText(deleteButton.getText());
+    deleteButton.setText("");
 
-        refreshButton.setToolTipText(refreshButton.getText());
-        refreshButton.setText("");
+    refreshButton.setToolTipText(refreshButton.getText());
+    refreshButton.setText("");
 
-        closeButton.setToolTipText(closeButton.getText());
-        closeButton.setText("");
+    closeButton.setToolTipText(closeButton.getText());
+    closeButton.setText("");
     }*/
-
     @Action
     public void selectAction() {
         selectedRowObject = dataTable.getSelectedRowObject();
@@ -636,10 +617,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         unselect();
     }
 
-    protected void unselect()
-    {
-        if(dataTable != null)
+    protected void unselect() {
+        if (dataTable != null) {
             dataTable.getSelectionModel().clearSelection();
+        }
 
         if (closeAfterUnselect) {
             setDialogResponse(DialogResponse.SELECT);
@@ -652,15 +633,15 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @Action
     public void newAction() {
         Object newRowObject = newRow();
-        if(newRowObject != null)
-        {
+        if (newRowObject != null) {
             // Classify the new object if needed
             classifyObject(newRowObject);
             // This check fix the JTree issue when the selected node is ROOT node
             // where the selection is unselected and as result the refresh DataTable
             // is invoked and the new row is already in the table.
-            if(dataTable.getRowIndex(newRowObject) == -1)
+            if (dataTable.getRowIndex(newRowObject) == -1) {
                 addTableObject(newRowObject);
+            }
             fireAdd(newRowObject);
         }
     }
@@ -675,19 +656,16 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @Action
     public void modifyAction() {
         Object rowObject = dataTable.getSelectedRowObject();
-        if(rowObject != null)
-        {
-            if(rowObject instanceof DataObjectBean)
-            {
-                rowObject = ((DataObjectBean)rowObject).clone();
+        if (rowObject != null) {
+            if (rowObject instanceof DataObjectBean) {
+                rowObject = ((DataObjectBean) rowObject).clone();
             }
 
-            if ( viewRowState )
+            if (viewRowState) {
                 viewRow(rowObject);
-            else{
+            } else {
                 Object newRowObject = modifyRow(rowObject);
-                if(newRowObject != null)
-                {
+                if (newRowObject != null) {
                     replaceTableObject(newRowObject);
                     fireModify(newRowObject);
                 }
@@ -703,10 +681,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     public void deleteAction() {
         Object rowObject = dataTable.getSelectedRowObject();
 
-        if ( showDeleteConfirmation(getResourceMap().getString("deleteAction.ConfirmDialog.message")) ){
+        if (showDeleteConfirmation(getResourceMap().getString("deleteAction.ConfirmDialog.message"))) {
             try {
-                if(deleteRow(rowObject))
-                {
+                if (deleteRow(rowObject)) {
                     dataTable.removeSelectedRow();
                     fireDelete(rowObject);
                 }
@@ -728,33 +705,34 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param the name of the table
      * @return the message
      */
-    protected String formTableReferencedMessage(String table)
-    {
+    protected String formTableReferencedMessage(String table) {
         String message = getResourceMap().getString("deleteAction.err.referenced");
         String tableUserfriendly =
-            getResourceMap().getString("table.userfriendlyname."+table);
+                getResourceMap().getString("table.userfriendlyname." + table);
         String result = null;
-        if ( tableUserfriendly==null )
+        if (tableUserfriendly == null) {
             result = message + " " + table.replace('_', ' ');
-        else
+        } else {
             result = message + " " + tableUserfriendly;
+        }
         return result;
     }
 
-
     protected void classifyObject(Object object) {
-        if (!(object instanceof DataObjectBean))
+        if (!(object instanceof DataObjectBean)) {
             return;
+        }
 
-        if (getClassifier() == null)
+        if (getClassifier() == null) {
             return;
+        }
 
         DataObject dataObject = ((DataObjectBean) object).getDataObject();
 
         getClassifiersManager().classifyDataObject(dataObject, getClassifier());
     }
 
-    protected boolean showDeleteConfirmation(String message){
+    protected boolean showDeleteConfirmation(String message) {
         ResourceMap resource = getResourceMap();
         String title = resource.getString("deleteAction.ConfirmDialog.title");
         Icon icon = resource.getImageIcon("deleteAction.ConfirmDialog.icon");
@@ -765,13 +743,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 icon);
-        if(JOptionPane.YES_OPTION == result)
-        {
+        if (JOptionPane.YES_OPTION == result) {
             return true;
         }
         return false;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Action
     public Task refreshAction() {
@@ -786,7 +763,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         log.info("classifyAction");
         if (getDataTable().getSelectedRowObject() != null) {
             ClassifyObjectPanel cop = new ClassifyObjectPanel(
-                ((DataObjectBean)getDataTable().getSelectedRowObject()).getDataObject());
+                    ((DataObjectBean) getDataTable().getSelectedRowObject()).getDataObject());
             cop.showDialog();
         }
     }
@@ -812,15 +789,15 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Override
-    public DialogResponse showDialog(Component parentComponent)
-    {
-        if ( !visibilitySetChanged )
+    public DialogResponse showDialog(Component parentComponent) {
+        if (!visibilitySetChanged) {
             setVisibleSelectButtons(true);
+        }
         return super.showDialog(parentComponent);
     }
 
-    public enum Button
-    {
+    public enum Button {
+
         Select("selectAction"),
         Unselect("unselectAction"),
         Classify("classifyAction"),
@@ -832,34 +809,28 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Special("specialAction"),
         Filter("filterAction");
 
-
-        private Button(String actionName)
-        {
+        private Button(String actionName) {
             this.actionName = actionName;
         }
-
         private String actionName;
 
         public String getActionName() {
             return actionName;
         }
-
         public static final Set<Button> NewModifyDelete = // 2, 4, 8 (14)
-            EnumSet.of(New, Modify, Delete);
+                EnumSet.of(New, Modify, Delete);
         public static final Set<Button> NewModifyDeleteUnselect = // 2, 4, 8, 64
-            EnumSet.of(New, Modify, Delete, Unselect);
+                EnumSet.of(New, Modify, Delete, Unselect);
         public static final Set<Button> NewModifyDeleteRefresh = // 2, 4, 8, 16
-            EnumSet.of(New, Modify, Delete, Refresh);
+                EnumSet.of(New, Modify, Delete, Refresh);
         public static final Set<Button> DeleteRefresh = // 8, 16
-            EnumSet.of(Delete, Refresh);
+                EnumSet.of(Delete, Refresh);
         public static final Set<Button> SpecialModify = // 256, 4
-            EnumSet.of(Special, Modify);
+                EnumSet.of(Special, Modify);
     };
 
-    public Map<Button, JBButton> getButtonsMap()
-    {
-        if(buttonsMap == null)
-        {
+    public Map<Button, JBButton> getButtonsMap() {
+        if (buttonsMap == null) {
             buttonsMap = new EnumMap<Button, JBButton>(Button.class);
             buttonsMap.put(Button.Select, selectButton);
             buttonsMap.put(Button.New, newButton);
@@ -880,8 +851,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * Enumeration for visibility indices of buttons, used for the bitwise
      * operation in setVisibleButtons
      */
-    public enum ButtonVisibility
-    {
+    public enum ButtonVisibility {
+
         Select(1, Button.Select),
         New(2, Button.New),
         Modify(4, Button.Modify),
@@ -893,74 +864,66 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         Special(256, Button.Special),
         Filter(512, Button.Filter);
 
-        ButtonVisibility(int visibilityIndex, Button button)
-        {
+        ButtonVisibility(int visibilityIndex, Button button) {
             this.visibilityIndex = visibilityIndex;
             this.button = button;
         }
         private int visibilityIndex;
         private Button button;
 
-        public int getVisibilityIndex()
-        {
+        public int getVisibilityIndex() {
             return visibilityIndex;
         }
 
-        public Button getButton()
-        {
+        public Button getButton() {
             return button;
         }
     }
 
     public class TableSelectionListener
-        implements ListSelectionListener
-    {
+            implements ListSelectionListener {
+
         private AcaciaTable table;
 
-        public TableSelectionListener(AcaciaTable table)
-        {
+        public TableSelectionListener(AcaciaTable table) {
             table.addListSelectionListener(this);
             this.table = table;
         }
 
         @Override
         public void valueChanged(ListSelectionEvent event) {
-            if(!event.getValueIsAdjusting())
-            {
-                ListSelectionModel selectionModel = (ListSelectionModel)event.getSource();
-                if(selectionModel.isSelectionEmpty())
-                {
+            if (!event.getValueIsAdjusting()) {
+                ListSelectionModel selectionModel = (ListSelectionModel) event.getSource();
+                if (selectionModel.isSelectionEmpty()) {
                     setEnabled(Button.Modify, false);
                     setEnabled(Button.Delete, false);
                     setEnabled(Button.Select, false);
                     setEnabled(Button.Unselect, false);
                     setEnabled(Button.Classify, false);
 
-                    if ( !specialButtonAlwaysEnabled )
+                    if (!specialButtonAlwaysEnabled) {
                         setEnabled(Button.Special, false);
-                }
-                else
-                {
+                    }
+                } else {
                     Object selectedObject = table.getSelectedRowObject();
                     //the list is edit-able and the row is modifiable - show modify button
-                    if ( isEditable() && canModify(selectedObject) ){
+                    if (isEditable() && canModify(selectedObject)) {
                         viewRowState = false;
                         setEnabled(Button.Modify, true);
                         modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
-                    }
-                    //the list is edit-able but not the row is not modifiable
-                    else if ( isEditable() ){
+                    } //the list is edit-able but not the row is not modifiable
+                    else if (isEditable()) {
                         //the row is not view-able - disable the button
-                        if ( !canView(selectedObject) ){
+                        if (!canView(selectedObject)) {
                             setEnabled(Button.Modify, false);
-                        //the row is view-able - show the view button instead of modify
-                        }else{
+                            //the row is view-able - show the view button instead of modify
+                        } else {
                             viewRowState = true;
                             setEnabled(Button.Modify, true);
                             modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
                         }
-                    //the list is not edit-able, but the row is view-able - so show the view button
-                    }else if ( canView(selectedObject) ){
+                        //the list is not edit-able, but the row is view-able - so show the view button
+                    } else if (canView(selectedObject)) {
                         viewRowState = true;
                         setEnabled(Button.Modify, true);
                         modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
@@ -979,10 +942,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     public class RefreshActionTask
-        extends Task<Object, Void>
-    {
-        RefreshActionTask(Application app)
-        {
+            extends Task<Object, Void> {
+
+        RefreshActionTask(Application app) {
             // Runs on the EDT.  Copy GUI state that
             // doInBackground() depends on from parameters
             // to RefreshActionTask fields, here.
@@ -991,8 +953,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
 
         @Override
-        protected Object doInBackground()
-        {
+        protected Object doInBackground() {
             log.info("doInBackground().begin");
             // Your Task's code here.  This method runs
             // on a background thread, so don't reference
@@ -1003,17 +964,14 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
 
         @Override
-        protected void succeeded(Object result)
-        {
+        protected void succeeded(Object result) {
             log.info("succeeded(Result:" + result + ")");
             // Runs on the EDT.  Update the GUI based on
             // the result computed by doInBackground().
         }
     }
 
-
-    public void addTableModificationListener(TableModificationListener listener)
-    {
+    public void addTableModificationListener(TableModificationListener listener) {
         tableModificationListeners.add(listener);
     }
 
@@ -1023,40 +981,31 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    public Set<TableModificationListener> getTableModificationListeners()
-    {
+    public Set<TableModificationListener> getTableModificationListeners() {
         return tableModificationListeners;
     }
 
-    protected void fireAdd(Object row)
-    {
+    protected void fireAdd(Object row) {
         log.info("fireAdd called with " + row);
-        for (TableModificationListener listener: tableModificationListeners)
-        {
+        for (TableModificationListener listener : tableModificationListeners) {
             listener.rowAdded(row);
         }
     }
 
-    protected void fireModify(Object row)
-    {
+    protected void fireModify(Object row) {
         log.info("fireModify called with " + row);
-        for (TableModificationListener listener: tableModificationListeners)
-        {
+        for (TableModificationListener listener : tableModificationListeners) {
             listener.rowModified(row);
         }
     }
 
-    protected void fireDelete(Object row)
-    {
+    protected void fireDelete(Object row) {
         log.info("fireDelete called with " + row);
-        for (TableModificationListener listener: tableModificationListeners)
-        {
+        for (TableModificationListener listener : tableModificationListeners) {
             listener.rowDeleted(row);
         }
     }
-
     private List<TablePanelListener> tablePanelListeners = new ArrayList<TablePanelListener>();
-
     /**
      * There are two behaviors of the special button:
      * 1) always enabled - no matter if there is selected row or not, the button is always active
@@ -1070,7 +1019,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * Add new listener
      * @param listener
      */
-    public void addTablePanelListener(TablePanelListener listener){
+    public void addTablePanelListener(TablePanelListener listener) {
         tablePanelListeners.add(listener);
     }
 
@@ -1101,22 +1050,23 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         setClassifier(classifier, false);
     }
 
-
     public void setClassifier(Classifier classifier, boolean allowChange) {
         if (this.classifier == null || allowClassifierChange) {
             allowClassifierChange = allowChange;
             this.classifier = classifier;
             filterByClassifier();
         }
-        if (!allowClassifierChange)
+        if (!allowClassifierChange) {
             setEnabled(Button.Filter, false);
+        }
     }
 
     protected void filterByClassifier() {
         if (getClassifier() != null) {
             //Saving the default data, so that we can revert to it next
-            if (defaultData == null)
+            if (defaultData == null) {
                 defaultData = new ArrayList(dataTable.getData());
+            }
 
             List<Object> data = dataTable.getData();
             List<Object> dataMirror = new LinkedList<Object>(data);
@@ -1124,8 +1074,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             List<DataObject> dataObjects = getClassifiersManager().getDataObjects(classifier);
             int i = 0;
             for (Object obj : data) {
-                if (!(obj instanceof DataObjectBean))
+                if (!(obj instanceof DataObjectBean)) {
                     continue;
+                }
 
                 DataObject currentDataObject = ((DataObjectBean) obj).getDataObject();
 
@@ -1140,16 +1091,18 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
             setTitle(getTitle() + " (" + classifier.getClassifierName() + ")");
         } else {
-            if (defaultData != null)
+            if (defaultData != null) {
                 dataTable.setData(defaultData);
+            }
         }
     }
 
     protected void performDefaultDoubleClickAction() {
-        if (isVisible(Button.Select))
+        if (isVisible(Button.Select)) {
             selectAction();
-        else
+        } else {
             modifyAction();
+        }
     }
 
     public void setParentDataObjectToAssociatedTables(BigInteger parentDataObjectId) {
@@ -1165,12 +1118,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    public void onKeyCommand(KeyEvent evt){
+    public void onKeyCommand(KeyEvent evt) {
         if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_N) {
             newAction();
-        } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_D){
+        } else if (evt.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK && evt.getKeyCode() == KeyEvent.VK_D) {
             deleteAction();
-        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE ){
+        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             closeAction();
         }
     }
@@ -1191,10 +1144,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      *
      * @param alwaysEnabled - if you set it to true, then behavior 1) will take place
      */
-    public void setSpecialButtonBehavior(boolean alwaysEnabled){
+    public void setSpecialButtonBehavior(boolean alwaysEnabled) {
         this.specialButtonAlwaysEnabled = alwaysEnabled;
-        if ( alwaysEnabled )
+        if (alwaysEnabled) {
             setEnabled(Button.Special, true);
+        }
     }
 
     /**
@@ -1210,13 +1164,14 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * In read-only state, Classify, Modify and Delete operation are not permitted (therefore the respective buttons are hidden).
      * The method calls also {@link #setEditable()}.
      */
-    public void setReadonly(boolean readonly){
+    public void setReadonly(boolean readonly) {
         setEditable(!readonly);
         viewRowState = true;
-        if ( readonly )
+        if (readonly) {
             modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
-        else
+        } else {
             modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
+        }
         setVisible(Button.Classify, !readonly);
         setVisible(Button.Delete, !readonly);
         setVisible(Button.New, !readonly);
@@ -1237,9 +1192,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             panel = new ClassifiersListPanel(null, null);
         }
 
-        panel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex()
-                | ButtonVisibility.Unselect.getVisibilityIndex()
-                | ButtonVisibility.Close.getVisibilityIndex());
+        panel.setVisibleButtons(ButtonVisibility.Select.getVisibilityIndex() | ButtonVisibility.Unselect.getVisibilityIndex() | ButtonVisibility.Close.getVisibilityIndex());
 
         panel.setCloseAfterUnselect(true);
         panel.setSelectedRowObject(getClassifier());
@@ -1266,8 +1219,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     @Deprecated
     @Override
     public Object getSelectedValue() {
-        if (super.getSelectedValue() != null)
+        if (super.getSelectedValue() != null) {
             return super.getSelectedValue();
+        }
 
         return getSelectedRowObject();
     }

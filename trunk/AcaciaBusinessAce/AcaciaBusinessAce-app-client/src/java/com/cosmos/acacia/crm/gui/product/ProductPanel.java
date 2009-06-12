@@ -21,7 +21,6 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.BindingGroup;

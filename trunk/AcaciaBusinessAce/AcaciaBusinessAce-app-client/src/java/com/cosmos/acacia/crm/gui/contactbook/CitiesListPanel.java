@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 
+import javax.swing.JComponent;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
 
@@ -71,8 +72,6 @@ public class CitiesListPanel extends AbstractTablePanel {
     }
 
     protected void postInitData() {
-        setTopComponent(getCountryPanel());
-
         citiesBindingGroup = new BindingGroup();
         AcaciaTable citiesTable = getDataTable();
         JTableBinding tableBinding = citiesTable.bind(citiesBindingGroup, getCities(), getCityEntityProperties());
@@ -82,7 +81,8 @@ public class CitiesListPanel extends AbstractTablePanel {
         citiesTable.setEditable(false);
     }
 
-    protected JBPanel getCountryPanel() {
+    @Override
+    protected JComponent getTopComponent() {
         if(countryPanel == null) {
             countryPanel = new JBPanel();
             countryPanel.setLayout(new BorderLayout());

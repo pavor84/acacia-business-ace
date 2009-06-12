@@ -59,6 +59,7 @@ import com.cosmos.acacia.crm.gui.contactbook.PersonPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
+import com.cosmos.acacia.crm.gui.currency.CurrencyExchangeRateListPanel;
 import com.cosmos.acacia.crm.gui.deliverycertificates.DeliveryCertificatesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
 import com.cosmos.acacia.crm.gui.payment.PaymentMatchingPanel;
@@ -90,6 +91,8 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 /**
  * The application's main frame.
@@ -497,6 +500,12 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void currencyExchangeRatesAction() {
+        CurrencyExchangeRateListPanel listPanel = new CurrencyExchangeRateListPanel();
+        listPanel.showFrame();
+    }
+
+    @Action
     public void classifiersAction() {
         ClassifiersListPanel classifiers = new ClassifiersListPanel(null, null);
         classifiers.showFrame();
@@ -662,7 +671,7 @@ public class AcaciaApplicationView extends FrameView {
 
         JBMenu classifiersMenu = new JBMenu();
 
-        JBMenu adminMenu = new JBMenu();
+        JBMenu toolsMenu = new JBMenu();
         JBMenuItem usersListMenuItem = new JBMenuItem();
         JBMenuItem userGroupsMenuItem = new JBMenuItem();
 
@@ -953,8 +962,15 @@ public class AcaciaApplicationView extends FrameView {
 
         /* End of contact book menu items */
 
+        /**
+         * Tools menu
+         */
+        toolsMenu.setName("toolsMenu");
+        toolsMenu.setText(resourceMap.getString("toolsMenu.text"));
+        toolsMenu.setMnemonic('T');
 
-        /* Admin menu */
+        /* Admin menu item */
+        JMenu adminMenu = new JMenu();
         adminMenu.setName("adminMenu");
         adminMenu.setText(resourceMap.getString("adminMenu.text"));
         adminMenu.setMnemonic('D');
@@ -964,8 +980,14 @@ public class AcaciaApplicationView extends FrameView {
 
         userGroupsMenuItem.setAction(actionMap.get("userGroupsListAction"));
         adminMenu.add(userGroupsMenuItem);
+        toolsMenu.add(adminMenu);
 
-        menuBar.add(adminMenu);
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("currencyExchangeRatesAction"));
+        menuItem.setMnemonic('x');
+        toolsMenu.add(menuItem);
+
+        menuBar.add(toolsMenu);
         /* End of admin menu */
 
         /* Warehouse menu items */

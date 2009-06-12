@@ -17,6 +17,7 @@ import javax.ejb.EJB;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
+import javax.swing.JComponent;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -208,9 +209,6 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
 
         super.initData();
 
-
-        setTopComponent(getTopPanel());
-
         bindingGroup = new BindingGroup();
         AcaciaTable citiesTable = getDataTable();
         JTableBinding tableBinding = 
@@ -223,7 +221,8 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
         initialized = true;
     }
 
-    protected JBPanel getTopPanel() {
+    @Override
+    protected JComponent getTopComponent() {
         if (topPanel == null) {
             topPanel = new JBPanel();
             topPanel.setLayout(new BorderLayout());

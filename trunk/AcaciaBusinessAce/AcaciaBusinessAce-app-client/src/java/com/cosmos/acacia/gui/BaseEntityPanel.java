@@ -51,6 +51,12 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     protected DialogResponse modifiedResponse = null;
     private EntityBindingListener entityBindingListener;
     private boolean editable = true;
+    protected Object[] parameters;
+
+    public BaseEntityPanel(Object[] parameters) {
+        this.parameters = parameters;
+        initConstructor();
+    }
 
     protected BaseEntityPanel(DataObjectBean dataObjectBean) {
         super(dataObjectBean);
