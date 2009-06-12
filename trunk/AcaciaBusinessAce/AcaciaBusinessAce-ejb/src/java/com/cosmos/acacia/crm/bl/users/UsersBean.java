@@ -56,10 +56,14 @@ import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
+import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
+import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -94,7 +98,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     private PersonValidatorLocal personValidator;
 
     @EJB
-    private AcaciaSessionLocal acaciaSessionLocal;
+    private AcaciaSessionLocal session;
 
     @EJB
     private CallbackLocal callbackHandler;
@@ -143,7 +147,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 user.setNextActionAfterLogin(CHANGE_PASSWORD);
             }
             if (!passwordChange)
-                return acaciaSessionLocal.login(user);
+                return session.login(user);
 
             return null;
         } catch (NoResultException ex){
@@ -392,9 +396,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 UserOrganization uo = em.find(UserOrganization.class,
                         new UserOrganizationPK(user.getId(), organization.getId()));
                 if (uo.isUserActive()){
-                    acaciaSessionLocal.setOrganization(organization);
-                    acaciaSessionLocal.setBranch(uo.getBranch());
-                    acaciaSessionLocal.setPerson(user.getPerson());
+                    session.setOrganization(organization);
+                    session.setBranch(uo.getBranch());
+                    session.setPerson(user.getPerson());
 
                 }
                 else
@@ -443,7 +447,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @Override
     public List<Organization> getOrganizationsList(User user) {
         if (user == null)
-            user = acaciaSessionLocal.getUser();
+            user = session.getUser();
 
         Query q = em.createNamedQuery("UserOrganization.findByUser");
         q.setParameter("user", user);
@@ -524,7 +528,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         try {
             passwordChange = true;
 
-            User user = acaciaSessionLocal.getUser();
+            User user = session.getUser();
             // try to login; if the old pass is incorrect, exception will be thrown
             login(user.getUserName(), oldPassword);
 
@@ -567,7 +571,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public void joinOrganization(Organization organization, Address branch) {
-        User user = acaciaSessionLocal.getUser();
+        User user = session.getUser();
         if (user != null && organization != null) {
             UserOrganization uo = new UserOrganization();
             UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
@@ -580,7 +584,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public void leaveOrganization(Organization organization) {
-        User user = acaciaSessionLocal.getUser();
+        User user = session.getUser();
         List<Organization> list = getOrganizationsList(user);
         if (list != null && list.size() == 1)
             throw new ValidationException("Leave.impossible");
@@ -597,17 +601,17 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public void setOrganization(Organization organization) {
-        User user = acaciaSessionLocal.getUser();
+        User user = session.getUser();
         if (user != null) {
-            if (acaciaSessionLocal.getOrganization() == null)
-                acaciaSessionLocal.setOrganization(organization);
+            if (session.getOrganization() == null)
+                session.setOrganization(organization);
 
             if (organization != null) {
                 UserOrganization uo = getUserOrganization(user, organization);
                 if (uo.isUserActive() && uo.getOrganization().isActive()){
-                    acaciaSessionLocal.setOrganization(organization);
-                    acaciaSessionLocal.setBranch(uo.getBranch());
-                    acaciaSessionLocal.setPerson(user.getPerson());
+                    session.setOrganization(organization);
+                    session.setBranch(uo.getBranch());
+                    session.setPerson(user.getPerson());
                 } else {
                     throw new ValidationException("Login.account.inactive");
                 }
@@ -669,7 +673,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         try {
             User u = (User) q.getSingleResult();
-            return getUserOrganization(u, acaciaSessionLocal.getOrganization());
+            return getUserOrganization(u, session.getOrganization());
         } catch (Exception ex) {
             return null;
         }
@@ -724,12 +728,29 @@ public class UsersBean implements UsersRemote, UsersLocal {
                 log.info("New Classifier '" + entity + "' was added.");
             }
         }
+
+        initCurrency();
+    }
+
+    private void initCurrency() {
+        CurrencyExchangeRatePK cerPK = new CurrencyExchangeRatePK(
+                session.getOrganization().getId(),
+                new Date(99, 6, 5),
+                Currency.Euro.getDbResource().getResourceId(),
+                Currency.Leva.getDbResource().getResourceId());
+        CurrencyExchangeRate cer = em.find(CurrencyExchangeRate.class, cerPK);
+        if(cer == null) {
+            cer = new CurrencyExchangeRate(cerPK);
+            cer.setExchangeRate(BigDecimal.valueOf(195583, 5));
+            cer.setFixedExchangeRate(true);
+            em.persist(cer);
+        }
     }
 
     @Override
     public UserGroup getUserGroupByPositionType() {
-        UserOrganization uo = getUserOrganization(acaciaSessionLocal.getUser(),
-                acaciaSessionLocal.getOrganization());
+        UserOrganization uo = getUserOrganization(session.getUser(),
+                session.getOrganization());
         
         UserGroup group = null;
         Address branch = uo.getBranch();
