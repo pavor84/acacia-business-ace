@@ -30,6 +30,7 @@ public class JXNumericField extends JXPanel {//JFormattedTextField {
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL64;
     public static final String WRONG_NUMBER_FORMAT = "The value MUST be Number instace.";
     public static final String DEFAULT_PATTERN = "#,##0.0#;-#,##0.0#";
+    public static final String CURRENCY_EXCHANGE_RATE_PATTERN = "#,##0.00000#;-#,##0.00000#";
     private JFormattedTextField numericField;
     private Component prefixComponent;
     private Component suffixComponent;
