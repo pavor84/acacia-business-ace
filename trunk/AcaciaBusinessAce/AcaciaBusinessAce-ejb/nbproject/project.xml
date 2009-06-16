@@ -46,9 +46,9 @@
             <included-library>file.reference.jdbc2_0-stdext.jar</included-library>
             <included-library>file.reference.jtidy-r8-20060801.jar</included-library>
             <included-library>reference.SwingB.jar</included-library>
-            <included-library>file.reference.swingx-2008_01_20.jar</included-library>
             <included-library>file.reference.miglayout-3.7-swing.jar</included-library>
             <included-library>file.reference.postgresql-8.3-604.jdbc4.jar</included-library>
+            <included-library>file.reference.swingx-cvs-2009-06-16-patched.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
