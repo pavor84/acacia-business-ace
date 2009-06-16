@@ -35,6 +35,8 @@ public class AcaciaUtils
 {
     private static final Logger logger = Logger.getLogger(AcaciaUtils.class);
 
+    public static final String DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm:ss";
+
     private static Locale locale;
 
     private static NumberFormat decimalFormat;

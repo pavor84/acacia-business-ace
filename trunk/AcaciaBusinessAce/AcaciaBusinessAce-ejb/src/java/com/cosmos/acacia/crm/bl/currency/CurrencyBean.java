@@ -11,10 +11,9 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -117,7 +116,37 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
 
     @Override
     public <E> E save(E entity) {
+        if(entity instanceof CurrencyExchangeRate) {
+            return (E)saveCurrencyExchangeRate((CurrencyExchangeRate)entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private CurrencyExchangeRate saveCurrencyExchangeRate(CurrencyExchangeRate currencyExchangeRate) {
+        Query q = em.createNamedQuery(CurrencyExchangeRate.UPDATE_BY_VALIDITY_AND_CURRENCY);
+        q.setParameter("organizationId", session.getOrganization().getId());
+        Date validityDate = currencyExchangeRate.getValidFrom();
+        q.setParameter("validFrom", validityDate);
+        q.setParameter("fromCurrencyId", currencyExchangeRate.getFromCurrency().getResourceId());
+        q.setParameter("toCurrencyId", currencyExchangeRate.getToCurrency().getResourceId());
+        q.setParameter("validUntil", validityDate);
+        q.setParameter("validUntilDate", new Date(validityDate.getTime() - 1));
+        q.executeUpdate();
+
+        if(currencyExchangeRate.getValidUntil() == null && !currencyExchangeRate.isFixedExchangeRate()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(validityDate);
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
+            calendar.set(Calendar.MILLISECOND, 999);
+            currencyExchangeRate.setValidUntil(calendar.getTime());
+        }
+
+        esm.persist(em, currencyExchangeRate);
+
+        return currencyExchangeRate;
     }
 
     @Override
@@ -132,6 +161,10 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
 
     @Override
     public <E> void delete(E entity) {
+        if(entity instanceof CurrencyExchangeRate) {
+            esm.remove(em, entity);
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -142,6 +175,6 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
 
     @Override
     public List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return esm.getResources(em, enumClass, enumCategoryClasses);
     }
 }

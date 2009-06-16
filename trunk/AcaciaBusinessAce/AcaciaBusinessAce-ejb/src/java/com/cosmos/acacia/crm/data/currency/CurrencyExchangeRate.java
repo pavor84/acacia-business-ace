@@ -47,6 +47,17 @@ import javax.persistence.Transient;
                 "  c.currencyExchangeRatePK.organizationId = :organizationId" +
                 "  and c.currencyExchangeRatePK.validFrom <= :validFrom" +
                 "  and (c.validUntil >= :validUntil or c.validUntil is null)"
+    ),
+    @NamedQuery(
+        name = CurrencyExchangeRate.UPDATE_BY_VALIDITY_AND_CURRENCY,
+        query = "update CurrencyExchangeRate t1" +
+                " set validUntil = :validUntilDate" +
+                " WHERE" +
+                "  t1.currencyExchangeRatePK.organizationId = :organizationId" +
+                "  and t1.currencyExchangeRatePK.validFrom <= :validFrom" +
+                "  and t1.currencyExchangeRatePK.fromCurrencyId = :fromCurrencyId" +
+                "  and t1.currencyExchangeRatePK.toCurrencyId = :toCurrencyId" +
+                "  and (t1.validUntil >= :validUntil or t1.validUntil is null)"
     )
 })
 public class CurrencyExchangeRate implements Serializable {
@@ -57,6 +68,8 @@ public class CurrencyExchangeRate implements Serializable {
             "CurrencyExchangeRate.findByValidityAndCurrency";
     public static final String FIND_ALL_BY_VALIDITY =
             "CurrencyExchangeRate.findAllByValidity";
+    public static final String UPDATE_BY_VALIDITY_AND_CURRENCY =
+            "CurrencyExchangeRate.updateByValidityAndCurrency";
 
     @EmbeddedId
     protected CurrencyExchangeRatePK currencyExchangeRatePK;
@@ -135,7 +148,7 @@ public class CurrencyExchangeRate implements Serializable {
         this.exchangeRate = exchangeRate;
     }
 
-    public boolean getFixedExchangeRate() {
+    public boolean isFixedExchangeRate() {
         return fixedExchangeRate;
     }
 
