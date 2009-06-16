@@ -22,7 +22,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -36,12 +35,13 @@ import org.jdesktop.swingx.table.TableColumnExt;
  */
 public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
 
+    @EJB
+    private static CurrencyRemote formSession;
+    //
     private JBPanel controlPanel;
     private JBLabel ratesForDateLabel;
     private JBDatePicker ratesForDateDatePicker;
     //
-    @EJB
-    private static CurrencyRemote formSession;
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
 
