@@ -5,6 +5,7 @@
 package com.cosmos.acacia.crm.gui.currency;
 
 import com.cosmos.acacia.crm.bl.currency.CurrencyRemote;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -26,9 +27,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.BorderFactory;
-import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
-import javax.swing.table.TableCellRenderer;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -57,8 +56,28 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         super(new Object[] {ratesForDate});
     }
 
+    public CurrencyExchangeRateListPanel(Date rateForDate, DbResource fromCurrency, DbResource toCurrency) {
+        super(new Object[] {rateForDate, fromCurrency, toCurrency});
+    }
+
     public CurrencyExchangeRateListPanel() {
         this(new Date());
+    }
+
+    public DbResource getFromCurrency() {
+        if(parameters == null || parameters.length < 2) {
+            return null;
+        }
+
+        return (DbResource)parameters[1];
+    }
+
+    public DbResource getToCurrency() {
+        if(parameters == null || parameters.length < 3) {
+            return null;
+        }
+
+        return (DbResource)parameters[2];
     }
 
     public Date getRatesForDate() {
@@ -118,6 +137,9 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         setVisible(Button.Delete, false);
         setVisible(Button.Classify, false);
         setVisible(Button.Modify, false);
+        if(getFromCurrency() != null && getToCurrency() != null) {
+            setVisible(Button.Select, true);
+        }
 
         BindingGroup bg = getBindingGroup();
         AcaciaTable dataTable = getDataTable();

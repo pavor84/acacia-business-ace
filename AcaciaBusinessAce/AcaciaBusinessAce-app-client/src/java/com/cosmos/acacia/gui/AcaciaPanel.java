@@ -4,9 +4,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.io.File;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
@@ -39,7 +36,6 @@ import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.app.SessionFacadeRemote;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersRemote;
 import com.cosmos.acacia.crm.bl.impl.EnumResourceRemote;
 import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
@@ -57,6 +53,7 @@ import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
@@ -245,19 +242,7 @@ public class AcaciaPanel
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> remoteInterface, boolean checkPermissions) {
-        try {
-            InitialContext ctx = new InitialContext();
-            T bean = (T) ctx.lookup(remoteInterface.getName());
-            InvocationHandler handler = new RemoteBeanInvocationHandler(bean, checkPermissions);
-
-            T proxy = (T) Proxy.newProxyInstance(AcaciaPanel.class.getClassLoader(),
-                    new Class[]{remoteInterface}, handler);
-
-            return proxy;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
+        return ServiceManager.getRemoteService(remoteInterface, checkPermissions);
     }
 
     @SuppressWarnings("unchecked")
@@ -268,35 +253,6 @@ public class AcaciaPanel
             return bean;
         } catch (NamingException ex) {
             return null;
-        }
-    }
-
-    static class RemoteBeanInvocationHandler<E> implements InvocationHandler {
-
-        private E bean;
-        private SessionFacadeRemote sessionFacade;
-        private boolean checkPermissions = true;
-
-        public RemoteBeanInvocationHandler(E bean, boolean checkPermissions) {
-            this.bean = bean;
-            this.checkPermissions = checkPermissions;
-            try {
-                sessionFacade = InitialContext.doLookup(SessionFacadeRemote.class.getName());
-            } catch (NamingException ex) {
-                ex.printStackTrace();
-                //log.error("", ex);
-            }
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            //log.info("Method called: " + method.getName() + " on bean: " + bean);
-            return sessionFacade.call(
-                    bean,
-                    method.getName(),
-                    args,
-                    method.getParameterTypes(),
-                    AcaciaApplication.getSessionId(), checkPermissions);
         }
     }
 
