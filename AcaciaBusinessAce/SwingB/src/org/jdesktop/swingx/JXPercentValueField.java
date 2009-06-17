@@ -5,6 +5,8 @@
 
 package org.jdesktop.swingx;
 
+import org.jdesktop.swingx.text.TextEvent;
+import org.jdesktop.swingx.text.TextListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.math.BigDecimal;

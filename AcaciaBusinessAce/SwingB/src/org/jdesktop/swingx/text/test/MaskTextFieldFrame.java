@@ -9,7 +9,7 @@
  * Created on 2009-2-11, 8:13:02
  */
 
-package org.jdesktop.swingx.test;
+package org.jdesktop.swingx.text.test;
 
 import org.jdesktop.swingx.JXMaskTextField;
 

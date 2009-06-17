@@ -4,6 +4,8 @@
  */
 package org.jdesktop.swingx;
 
+import org.jdesktop.swingx.text.TextEvent;
+import org.jdesktop.swingx.text.TextListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.math.BigDecimal;

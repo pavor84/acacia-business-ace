@@ -9,7 +9,7 @@
  * Created on 2009-2-22, 10:28:42
  */
 
-package org.jdesktop.swingx.test;
+package org.jdesktop.swingx.text.test;
 
 import java.math.BigDecimal;
 import org.jdesktop.swingx.JXPercentValueField;
