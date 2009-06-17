@@ -11,7 +11,6 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,13 +83,13 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     }
 
     @Override
-    public Object newEntity(Class entityClass) {
+    public <E> E newEntity(Class<E> entityClass) {
         if(CurrencyExchangeRate.class == entityClass) {
             CurrencyExchangeRatePK cerPK = new CurrencyExchangeRatePK();
             cerPK.setOrganizationId(session.getOrganization().getId());
             CurrencyExchangeRate cer = new CurrencyExchangeRate(cerPK);
             cer.setToCurrency(session.getOrganization().getDefaultCurrency());
-            return cer;
+            return (E)cer;
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
