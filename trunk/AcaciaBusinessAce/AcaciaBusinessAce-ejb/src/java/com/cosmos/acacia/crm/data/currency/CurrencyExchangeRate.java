@@ -43,9 +43,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
                 "  and c.currencyExchangeRatePK.fromCurrencyId = :fromCurrencyId" +
                 "  and c.currencyExchangeRatePK.toCurrencyId = :toCurrencyId" +
                 "  and (c.validUntil >= :validUntil or c.validUntil is null)" +
-                " order by c.currencyExchangeRatePK.fromCurrencyId," +
-                "  c.currencyExchangeRatePK.toCurrencyId," +
-                "  c.currencyExchangeRatePK.validFrom",
+                " order by" +
+                "  c.currencyExchangeRatePK.validFrom," +
+                "  c.currencyExchangeRatePK.fromCurrencyId," +
+                "  c.currencyExchangeRatePK.toCurrencyId",
         hints={
             @QueryHint(name="org.hibernate.cacheable", value="true")
         }
@@ -56,7 +57,24 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
                 " WHERE" +
                 "  c.currencyExchangeRatePK.organizationId = :organizationId" +
                 "  and c.currencyExchangeRatePK.validFrom <= :validFrom" +
-                "  and (c.validUntil >= :validUntil or c.validUntil is null)",
+                "  and (c.validUntil >= :validUntil or c.validUntil is null)" +
+                " order by" +
+                "  c.currencyExchangeRatePK.validFrom," +
+                "  c.currencyExchangeRatePK.fromCurrencyId," +
+                "  c.currencyExchangeRatePK.toCurrencyId",
+        hints={
+            @QueryHint(name="org.hibernate.cacheable", value="true")
+        }
+    ),
+    @NamedQuery(
+        name = CurrencyExchangeRate.FIND_ALL,
+        query = "SELECT c FROM CurrencyExchangeRate c" +
+                " WHERE" +
+                "  c.currencyExchangeRatePK.organizationId = :organizationId" +
+                " order by" +
+                "  c.currencyExchangeRatePK.validFrom," +
+                "  c.currencyExchangeRatePK.fromCurrencyId," +
+                "  c.currencyExchangeRatePK.toCurrencyId",
         hints={
             @QueryHint(name="org.hibernate.cacheable", value="true")
         }
@@ -80,6 +98,8 @@ public class CurrencyExchangeRate implements Serializable {
             "CurrencyExchangeRate.findByValidityAndCurrency";
     public static final String FIND_ALL_BY_VALIDITY =
             "CurrencyExchangeRate.findAllByValidity";
+    public static final String FIND_ALL =
+            "CurrencyExchangeRate.findAll";
     public static final String UPDATE_BY_VALIDITY_AND_CURRENCY =
             "CurrencyExchangeRate.updateByValidityAndCurrency";
 

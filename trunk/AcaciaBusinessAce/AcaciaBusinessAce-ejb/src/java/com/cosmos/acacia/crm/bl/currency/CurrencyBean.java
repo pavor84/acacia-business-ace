@@ -41,10 +41,15 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     private AcaciaSessionLocal session;
 
     private List<CurrencyExchangeRate> getCurrencyExchangeRates(Date ratesForDate) {
-        Query q = em.createNamedQuery(CurrencyExchangeRate.FIND_ALL_BY_VALIDITY);
+        Query q;
+        if(ratesForDate != null) {
+            q = em.createNamedQuery(CurrencyExchangeRate.FIND_ALL_BY_VALIDITY);
+            q.setParameter("validFrom", ratesForDate);
+            q.setParameter("validUntil", ratesForDate);
+        } else {
+            q = em.createNamedQuery(CurrencyExchangeRate.FIND_ALL);
+        }
         q.setParameter("organizationId", session.getOrganization().getId());
-        q.setParameter("validFrom", ratesForDate);
-        q.setParameter("validUntil", ratesForDate);
         return new ArrayList<CurrencyExchangeRate>(q.getResultList());
     }
 
@@ -101,13 +106,6 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
         if(CurrencyExchangeRate.class == entityClass) {
             if(extraParameters.length < 1) {
                 throw new IllegalArgumentException("The ratesForDate parameter is required.");
-            }
-            if(extraParameters[0] == null) {
-                throw new IllegalArgumentException("The first parameter of Date type can not be NULL.");
-            }
-            if(!(extraParameters[0] instanceof Date)) {
-                throw new IllegalArgumentException("The first parameter MUST be from Date type:" +
-                        extraParameters[0]);
             }
 
             return getCurrencyExchangeRates((Date)extraParameters[0]);
