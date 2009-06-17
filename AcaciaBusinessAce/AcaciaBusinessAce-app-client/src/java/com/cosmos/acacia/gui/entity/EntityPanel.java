@@ -428,9 +428,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         try {
             entity = getEntityService().save(entity);
             //entity = getEntityService().confirm(entity);
-            setDialogResponse(DialogResponse.SAVE);
-            setSelectedValue(entity);
             if (closeAfter) {
+                setDialogResponse(DialogResponse.SAVE);
+                setSelectedValue(entity);
                 close();
             } else {
                 rebind();
