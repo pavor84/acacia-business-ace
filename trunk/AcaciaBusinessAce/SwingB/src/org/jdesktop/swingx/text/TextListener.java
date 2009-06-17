@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.jdesktop.swingx;
+package org.jdesktop.swingx.text;
 
 import java.util.EventListener;
 
