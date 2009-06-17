@@ -9,6 +9,7 @@ import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
@@ -34,6 +35,11 @@ public class JBDatePicker
         extends JXDatePicker
         implements Validatable, EntityBinder {
 
+    public static final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
+    public static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
+    public static final String DEFAULT_DATE_TIME_FORMAT =
+            DEFAULT_DATE_FORMAT + " " + DEFAULT_TIME_FORMAT;
+
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
@@ -42,6 +48,14 @@ public class JBDatePicker
     private String propertyName;
     private Object beanEntity;
     private DateFormat dateFormat;
+
+    public JBDatePicker() {
+        init();
+    }
+
+    protected void init() {
+        setDateFormat(new SimpleDateFormat(DEFAULT_DATE_FORMAT));
+    }
 
     @Override
     public Binding bind(BindingGroup bindingGroup,

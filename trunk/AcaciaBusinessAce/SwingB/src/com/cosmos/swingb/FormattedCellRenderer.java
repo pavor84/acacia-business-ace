@@ -6,6 +6,7 @@ package com.cosmos.swingb;
 
 import java.text.Format;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -14,87 +15,68 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author Miro
  */
 public class FormattedCellRenderer
-    extends DefaultTableCellRenderer
-{
+        extends DefaultTableCellRenderer {
+
     protected Format format;
     protected String nullText;
     protected String invalidText;
 
-    public FormattedCellRenderer(Format format)
-    {
+    public FormattedCellRenderer(Format format) {
         this(format, "");
     }
 
-    public FormattedCellRenderer(Format format, String nullText)
-    {
+    public FormattedCellRenderer(Format format, String nullText) {
         this(format, nullText, "");
     }
 
     public FormattedCellRenderer(
-        Format format,
-        String nullText,
-        String invalidText)
-    {
+            Format format,
+            String nullText,
+            String invalidText) {
         this.format = format;
         this.nullText = nullText;
         this.invalidText = invalidText;
-        if(format instanceof NumberFormat)
-        {
+        if (format instanceof NumberFormat) {
             setHorizontalAlignment(JTextField.RIGHT);
         }
     }
 
-    public void setFormat(Format format)
-    {
+    public void setFormat(Format format) {
         this.format = format;
     }
 
-    public Format getFormat()
-    {
+    public Format getFormat() {
         return format;
     }
 
-    public void setNullText(String nullText)
-    {
+    public void setNullText(String nullText) {
         this.nullText = (nullText != null ? nullText : this.nullText);
     }
 
-    public String getNullText()
-    {
+    public String getNullText() {
         return nullText;
     }
 
-    public void setInvalidText(String invalidText)
-    {
+    public void setInvalidText(String invalidText) {
         this.invalidText = (invalidText != null ? invalidText : this.invalidText);
     }
 
-    public String getInvalidText()
-    {
+    public String getInvalidText() {
         return invalidText;
     }
 
     @Override
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         String text;
-        try
-        {
-            if(value == null)
-            {
+        try {
+            if (value == null) {
                 text = nullText;
-            }
-            else if(format == null)
-            {
+            } else if (format == null) {
                 text = value.toString();
-            }
-            else
-            {
+            } else {
                 text = format.format(value);
             }
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             text = invalidText;
         }
         setText(text);
