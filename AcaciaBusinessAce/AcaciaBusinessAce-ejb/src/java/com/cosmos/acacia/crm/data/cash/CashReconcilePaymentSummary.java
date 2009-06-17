@@ -36,7 +36,8 @@ import com.cosmos.acacia.crm.data.DbResource;
             "  e.cashReconcile.id = :cashReconcile ")
 })
 public class CashReconcilePaymentSummary implements Serializable{
-    public static final String NQ_FIND_FOR_RECONCILE = "findForReconcile";
+    public static final String NQ_FIND_FOR_RECONCILE =
+            "CashReconcilePaymentSummary.findForReconcile";
 
     @Id
     @SequenceGenerator(name="CashReconcilePaymentSummaryGen", sequenceName="cash_recon_pay_summary_seq", allocationSize=1)

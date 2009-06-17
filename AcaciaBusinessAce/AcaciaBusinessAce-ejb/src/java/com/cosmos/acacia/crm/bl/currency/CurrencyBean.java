@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.jdesktop.swingx.calendar.CalendarUtils;
 
 /**
  *
@@ -48,6 +50,10 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
 
     @Override
     public CurrencyExchangeRate getCurrencyExchangeRate(Date rateForDate, DbResource fromCurrency, DbResource toCurrency) {
+        if(fromCurrency.equals(toCurrency)) {
+            return new CurrencyExchangeRate(session.getOrganization().getId(), rateForDate, fromCurrency);
+        }
+
         Query q = em.createNamedQuery(CurrencyExchangeRate.FIND_BY_VALIDITY_AND_CURRENCY);
         q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("validFrom", rateForDate);
@@ -78,6 +84,7 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
             CurrencyExchangeRatePK cerPK = new CurrencyExchangeRatePK();
             cerPK.setOrganizationId(session.getOrganization().getId());
             CurrencyExchangeRate cer = new CurrencyExchangeRate(cerPK);
+            cer.setToCurrency(session.getOrganization().getDefaultCurrency());
             return cer;
         }
 
@@ -124,23 +131,25 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     }
 
     private CurrencyExchangeRate saveCurrencyExchangeRate(CurrencyExchangeRate currencyExchangeRate) {
+        DbResource fromCurrency = currencyExchangeRate.getFromCurrency();
+        DbResource toCurrency = currencyExchangeRate.getToCurrency();
+        if(fromCurrency.equals(toCurrency)) {
+            throw new RuntimeException("Illegal operation. From and To currency are equals: " + fromCurrency);
+        }
+
         Query q = em.createNamedQuery(CurrencyExchangeRate.UPDATE_BY_VALIDITY_AND_CURRENCY);
         q.setParameter("organizationId", session.getOrganization().getId());
-        Date validityDate = currencyExchangeRate.getValidFrom();
-        q.setParameter("validFrom", validityDate);
-        q.setParameter("fromCurrencyId", currencyExchangeRate.getFromCurrency().getResourceId());
-        q.setParameter("toCurrencyId", currencyExchangeRate.getToCurrency().getResourceId());
-        q.setParameter("validUntil", validityDate);
-        q.setParameter("validUntilDate", new Date(validityDate.getTime() - 1));
+        Date validFrom = currencyExchangeRate.getValidFrom();
+        q.setParameter("fromCurrencyId", fromCurrency.getResourceId());
+        q.setParameter("toCurrencyId", toCurrency.getResourceId());
+        q.setParameter("validUntil", validFrom);
+        q.setParameter("validUntilDate", new Date(validFrom.getTime() - 1));
         q.executeUpdate();
 
         if(currencyExchangeRate.getValidUntil() == null && !currencyExchangeRate.isFixedExchangeRate()) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(validityDate);
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 59);
-            calendar.set(Calendar.SECOND, 59);
-            calendar.set(Calendar.MILLISECOND, 999);
+            calendar.setTime(validFrom);
+            CalendarUtils.endOfDay(calendar);
             currencyExchangeRate.setValidUntil(calendar.getTime());
         }
 
@@ -163,6 +172,7 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     public <E> void delete(E entity) {
         if(entity instanceof CurrencyExchangeRate) {
             esm.remove(em, entity);
+            return;
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
