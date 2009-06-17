@@ -18,16 +18,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  *
  * @author Miro
  */
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "currency_exchange_rates", catalog = "acacia", schema = "public")
 @NamedQueries({
     @NamedQuery(
@@ -38,7 +42,13 @@ import javax.persistence.Transient;
                 "  and c.currencyExchangeRatePK.validFrom <= :validFrom" +
                 "  and c.currencyExchangeRatePK.fromCurrencyId = :fromCurrencyId" +
                 "  and c.currencyExchangeRatePK.toCurrencyId = :toCurrencyId" +
-                "  and (c.validUntil >= :validUntil or c.validUntil is null)"
+                "  and (c.validUntil >= :validUntil or c.validUntil is null)" +
+                " order by c.currencyExchangeRatePK.fromCurrencyId," +
+                "  c.currencyExchangeRatePK.toCurrencyId," +
+                "  c.currencyExchangeRatePK.validFrom",
+        hints={
+            @QueryHint(name="org.hibernate.cacheable", value="true")
+        }
     ),
     @NamedQuery(
         name = CurrencyExchangeRate.FIND_ALL_BY_VALIDITY,
@@ -46,7 +56,10 @@ import javax.persistence.Transient;
                 " WHERE" +
                 "  c.currencyExchangeRatePK.organizationId = :organizationId" +
                 "  and c.currencyExchangeRatePK.validFrom <= :validFrom" +
-                "  and (c.validUntil >= :validUntil or c.validUntil is null)"
+                "  and (c.validUntil >= :validUntil or c.validUntil is null)",
+        hints={
+            @QueryHint(name="org.hibernate.cacheable", value="true")
+        }
     ),
     @NamedQuery(
         name = CurrencyExchangeRate.UPDATE_BY_VALIDITY_AND_CURRENCY,
@@ -54,7 +67,6 @@ import javax.persistence.Transient;
                 " set validUntil = :validUntilDate" +
                 " WHERE" +
                 "  t1.currencyExchangeRatePK.organizationId = :organizationId" +
-                "  and t1.currencyExchangeRatePK.validFrom <= :validFrom" +
                 "  and t1.currencyExchangeRatePK.fromCurrencyId = :fromCurrencyId" +
                 "  and t1.currencyExchangeRatePK.toCurrencyId = :toCurrencyId" +
                 "  and (t1.validUntil >= :validUntil or t1.validUntil is null)"
@@ -118,6 +130,15 @@ public class CurrencyExchangeRate implements Serializable {
 
     public CurrencyExchangeRate(BigInteger organizationId, Date validFrom, int fromCurrencyId, int toCurrencyId) {
         this.currencyExchangeRatePK = new CurrencyExchangeRatePK(organizationId, validFrom, fromCurrencyId, toCurrencyId);
+    }
+
+    public CurrencyExchangeRate(BigInteger organizationId, Date validFrom, DbResource currency) {
+        getCurrencyExchangeRatePK().setOrganizationId(organizationId);
+        setValidFrom(validFrom);
+        setFromCurrency(currency);
+        setToCurrency(currency);
+        setExchangeRate(BigDecimal.ONE);
+        setFixedExchangeRate(true);
     }
 
     public CurrencyExchangeRatePK getCurrencyExchangeRatePK() {
@@ -219,7 +240,11 @@ public class CurrencyExchangeRate implements Serializable {
 
     @Override
     public String toString() {
-        return "CurrencyExchangeRate[currencyExchangeRatePK=" + currencyExchangeRatePK + "]";
+        return "CurrencyExchangeRate[pk=" + currencyExchangeRatePK +
+                ", exchangeRate=" + exchangeRate +
+                ", fixedExchangeRate=" + fixedExchangeRate +
+                ", validUntil=" + validUntil +
+                "]";
     }
 
 
