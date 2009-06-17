@@ -38,6 +38,7 @@ import com.cosmos.swingb.listeners.ComboListEventListener;
 import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -93,6 +94,11 @@ public class JBComboBox
             setEnabled(false);
             return null;
         }
+
+        if (converter == null) {
+            converter = new BeanResourceToStringConverter(getApplication());
+        }
+        AutoCompleteDecorator.decorate(this, converter);
 
         if (!(data instanceof ObservableList)) {
             observableData = ObservableCollections.observableList(data);
