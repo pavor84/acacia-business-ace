@@ -10,23 +10,31 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.FormattedCellRenderer;
 import com.cosmos.swingb.JBDatePicker;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.BorderFactory;
+import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
+import javax.swing.table.TableCellRenderer;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingx.calendar.DefaultDateSelectionModel;
 import org.jdesktop.swingx.table.TableColumnExt;
 
 /**
@@ -65,13 +73,15 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         if(parameters == null || parameters.length == 0) {
             parameters = new Object[1];
         }
-
         parameters[0] = ratesForDate;
+
+        refreshAction().run();
     }
 
     @Override
     protected boolean deleteRow(Object rowObject) {
-        return false;
+        getFormSession().delete(rowObject);
+        return true;
     }
 
     @Override
@@ -85,13 +95,18 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
 
     @Override
     protected Object newRow() {
-        editRow(getFormSession().newEntity(CurrencyExchangeRate.class));
-        return null;
+        CurrencyExchangeRate cer = getFormSession().newEntity(CurrencyExchangeRate.class);
+        cer.setValidFrom(getRatesForDate());
+        return editRow(cer);
     }
 
     protected Object editRow(CurrencyExchangeRate currencyExchangeRate) {
         CurrencyExchangeRatePanel panel = new CurrencyExchangeRatePanel(currencyExchangeRate);
-        panel.showDialog(this);
+        if (DialogResponse.SAVE.equals(panel.showDialog(this))) {
+            Task task = new RefreshTask(getApplication());
+            task.run();
+            return panel.getSelectedValue();
+        }
 
         return null;
     }
@@ -100,6 +115,10 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
     protected void initData() {
         super.initData();
 
+        setVisible(Button.Delete, false);
+        setVisible(Button.Classify, false);
+        setVisible(Button.Modify, false);
+
         BindingGroup bg = getBindingGroup();
         AcaciaTable dataTable = getDataTable();
 
@@ -107,13 +126,25 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         JTableBinding tableBinding = dataTable.bind(bg, getCurrencyExchangeRates(), ep, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
-        DecimalFormat decimalFormat = new DecimalFormat(JBDecimalField.CURRENCY_EXCHANGE_RATE_PATTERN);
-        FormattedCellRenderer cellRenderer = new FormattedCellRenderer(decimalFormat);
-        PropertyDetails propDetails = ep.getPropertyDetails("exchangeRate");
+        DateFormat dateFormat = new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT);
+        FormattedCellRenderer cellRenderer = new FormattedCellRenderer(dateFormat);
+        PropertyDetails propDetails = ep.getPropertyDetails("validFrom");
         TableColumnExt columnExt = dataTable.getColumn(propDetails);
         columnExt.setCellRenderer(cellRenderer);
 
+        propDetails = ep.getPropertyDetails("validUntil");
+        columnExt = dataTable.getColumn(propDetails);
+        columnExt.setCellRenderer(cellRenderer);
+
+        DecimalFormat decimalFormat = new DecimalFormat(JBDecimalField.CURRENCY_EXCHANGE_RATE_PATTERN);
+        cellRenderer = new FormattedCellRenderer(decimalFormat);
+        propDetails = ep.getPropertyDetails("exchangeRate");
+        columnExt = dataTable.getColumn(propDetails);
+        columnExt.setCellRenderer(cellRenderer);
+
         bg.bind();
+
+        dataTable.packAll();
     }
 
     protected List<CurrencyExchangeRate> getCurrencyExchangeRates() {
@@ -133,8 +164,18 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
             controlPanel.add(ratesForDateLabel, BorderLayout.WEST);
 
             ratesForDateDatePicker = new JBDatePicker();
+            ratesForDateDatePicker.setDateFormat(new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT));
             ratesForDateDatePicker.setName("ratesForDateDatePicker");
+            ratesForDateDatePicker.getMonthView().setSelectionModel(new DefaultDateSelectionModel());
+            ratesForDateDatePicker.setDate(getRatesForDate());
             controlPanel.add(ratesForDateDatePicker, BorderLayout.CENTER);
+            ratesForDateDatePicker.addPropertyChangeListener("date", new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent event) {
+                    setRatesForDate(ratesForDateDatePicker.getDate());
+                }
+            });
         }
 
         return controlPanel;
@@ -142,22 +183,8 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
 
     @Override
     public Task refreshAction() {
-        log.debug("refreshAction");
-        Task result = new RefreshTask(getApplication());
-        fireTableRefreshed();
-        return result;
+        return new RefreshTask(getApplication());
     }
-
-//    protected void refreshTable() {
-//        AcaciaTable dataTable = getDataTable();
-//        Object selectedRowObject = dataTable.getSelectedRowObject();
-//        List dataList = dataTable.getData();
-//        dataList.clear();
-//        dataList.addAll(getCurrencyExchangeRates());
-//        if(selectedRowObject != null && dataList.contains(selectedRowObject)) {
-//            dataTable.setSelectedRowObject(selectedRowObject);
-//        }
-//    }
 
     protected BindingGroup getBindingGroup() {
         if(bindingGroup == null) {
@@ -187,11 +214,9 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         return formSession;
     }
 
-    public class RefreshTask
-        extends Task<Object, Void>
-    {
-        RefreshTask(Application app)
-        {
+    public class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask(Application app) {
             // Runs on the EDT.  Copy GUI state that
             // doInBackground() depends on from parameters
             // to RefreshActionTask fields, here.
@@ -200,9 +225,8 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         }
 
         @Override
-        protected Object doInBackground()
-        {
-            log.info("doInBackground().begin");
+        protected Object doInBackground() {
+            log.debug("doInBackground().begin");
             // Your Task's code here.  This method runs
             // on a background thread, so don't reference
             // the Swing GUI from here.
@@ -210,18 +234,20 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
             Object selectedRowObject = dataTable.getSelectedRowObject();
             List dataList = dataTable.getData();
             dataList.clear();
-            dataList.addAll(getCurrencyExchangeRates());
+            List<CurrencyExchangeRate> currencyExchangeRates = getCurrencyExchangeRates();
+            dataList.addAll(currencyExchangeRates);
             if(selectedRowObject != null && dataList.contains(selectedRowObject)) {
                 dataTable.setSelectedRowObject(selectedRowObject);
             }
-            log.info("doInBackground().end");
-            return null;  // return your result
+            dataTable.packAll();
+            fireTableRefreshed();
+            log.debug("doInBackground().end");
+            return currencyExchangeRates;  // return your result
         }
 
         @Override
-        protected void succeeded(Object result)
-        {
-            log.info("succeeded(Result:" + result + ")");
+        protected void succeeded(Object result) {
+            log.debug("succeeded(Result:" + result + ")");
             // Runs on the EDT.  Update the GUI based on
             // the result computed by doInBackground().
         }

@@ -10,7 +10,6 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
-import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -70,6 +69,7 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
     protected void init() {
         initComponents();
         super.init();
+        initValidUntil();
     }
 
     public CurrencyExchangeRate getCurrencyExchangeRate() {
@@ -90,12 +90,17 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        CurrencyExchangeRate cer = getFormSession().save(getCurrencyExchangeRate());
-        setCurrencyExchangeRate(cer);
-        setDialogResponse(DialogResponse.SAVE);
-        setSelectedValue(cer);
-        if (closeAfter) {
-            close();
+        CurrencyExchangeRate cer = getCurrencyExchangeRate();
+        try {
+            cer = getFormSession().save(cer);
+            setCurrencyExchangeRate(cer);
+            if (closeAfter) {
+                setDialogResponse(DialogResponse.SAVE);
+                setSelectedValue(cer);
+                close();
+            }
+        } catch (Exception ex) {
+            handleException("entity: " + cer, ex);
         }
     }
 
@@ -211,31 +216,25 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
         CurrencyExchangeRate cer = getCurrencyExchangeRate();
 
         PropertyDetails pd = ep.getPropertyDetails("fixedExchangeRate");
-        fixedExchangeRateCheckBox.bind(bg, cer, pd);
-
-        pd = ep.getPropertyDetails("validFrom");
-        validFromDatePicker.bind(bg, cer, pd, new SimpleDateFormat(AcaciaUtils.DEFAULT_DATE_TIME_FORMAT)).addBindingListener(new AbstractBindingListener() {
+        fixedExchangeRateCheckBox.bind(bg, cer, pd).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
-                CurrencyExchangeRate cer = getCurrencyExchangeRate();
-                Date validFrom;
-                if((validFrom = cer.getValidFrom()) == null) {
-                    return;
-                }
+                fixedExchangeRateChanged();
+            }
+        });
 
-                Date validUntil;
-                if((validUntil = cer.getValidUntil()) == null || validUntil.getTime() <= validFrom.getTime()) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(validFrom);
-                    CalendarUtils.endOfDay(calendar);
-                    validUntilDatePicker.setDate(calendar.getTime());
-                }
+        pd = ep.getPropertyDetails("validFrom");
+        validFromDatePicker.bind(bg, cer, pd, new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT)).addBindingListener(new AbstractBindingListener() {
+
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                initValidUntil();
             }
         });
 
         pd = ep.getPropertyDetails("validUntil");
-        validUntilDatePicker.bind(bg, cer, pd, new SimpleDateFormat(AcaciaUtils.DEFAULT_DATE_TIME_FORMAT));
+        validUntilDatePicker.bind(bg, cer, pd, new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT));
 
         List<DbResource> currencies = getCurrencies();
         pd = ep.getPropertyDetails("fromCurrency");
@@ -248,6 +247,34 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
         exchangeRateDecimalField.bind(bg, cer, pd);
 
         bg.bind();
+    }
+
+    private void fixedExchangeRateChanged() {
+        CurrencyExchangeRate cer = getCurrencyExchangeRate();
+        if(cer.isFixedExchangeRate()) {
+            if(cer.getValidUntil() != null) {
+                validUntilDatePicker.setDate(null);
+            }
+        } else {
+            initValidUntil();
+        }
+    }
+
+    private void initValidUntil() {
+        CurrencyExchangeRate cer = getCurrencyExchangeRate();
+        Date validFrom;
+        if((validFrom = cer.getValidFrom()) == null) {
+            return;
+        }
+
+        Date validUntil;
+        if((validUntil = cer.getValidUntil()) == null && !cer.isFixedExchangeRate()
+                || validUntil != null && validUntil.getTime() <= validFrom.getTime()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(validFrom);
+            CalendarUtils.endOfDay(calendar);
+            validUntilDatePicker.setDate(calendar.getTime());
+        }
     }
 
     protected List<DbResource> getCurrencies() {
