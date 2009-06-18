@@ -5,6 +5,7 @@
 package com.cosmos.impl.acacia.service;
 
 import com.cosmos.acacia.crm.bl.currency.CurrencyRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.gui.currency.CurrencyExchangeRateListPanel;
@@ -25,6 +26,11 @@ public class CurrencyServiceImpl implements CurrencyRemote {
 
     @Override
     public CurrencyExchangeRate getCurrencyExchangeRate(Date rateForDate, DbResource fromCurrency, DbResource toCurrency) {
+        if(fromCurrency.equals(toCurrency)) {
+            return new CurrencyExchangeRate(
+                    LocalSession.instance().getOrganization().getId(), rateForDate, fromCurrency);
+        }
+
         CurrencyExchangeRateListPanel listPanel;
         CurrencyExchangeRate cer;
         while((cer = currencyService.getCurrencyExchangeRate(rateForDate, fromCurrency, toCurrency)) == null) {

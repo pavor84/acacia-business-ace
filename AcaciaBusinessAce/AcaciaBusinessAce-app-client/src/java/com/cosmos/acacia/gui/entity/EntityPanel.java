@@ -630,9 +630,15 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
             return null;
         }
 
-        CurrencyRemote currencyService = (CurrencyRemote)ServiceManager.getService("currency");
-        CurrencyExchangeRate cer = currencyService.getCurrencyExchangeRate(rateForDate, fromCurrency, toCurrency);
-        return amount.multiply(cer.getExchangeRate(), MathContext.DECIMAL64);
+        BigDecimal exchangeRate;
+        if(fromCurrency.equals(toCurrency)) {
+            exchangeRate = BigDecimal.ONE;
+        } else {
+            CurrencyRemote currencyService = (CurrencyRemote)ServiceManager.getService("currency");
+            CurrencyExchangeRate cer = currencyService.getCurrencyExchangeRate(rateForDate, fromCurrency, toCurrency);
+            exchangeRate = cer.getExchangeRate();
+        }
+        return amount.multiply(exchangeRate, MathContext.DECIMAL64);
     }
 
     public static Date now() {
