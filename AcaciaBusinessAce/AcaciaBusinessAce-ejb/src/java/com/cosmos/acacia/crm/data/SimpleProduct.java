@@ -873,6 +873,6 @@ public class SimpleProduct extends Product implements Serializable
     }
 
     @Override
-    public void setSalePrice(BigDecimal salePrice) {
+    public void setSalesPrice(BigDecimal salePrice) {
     }
 }

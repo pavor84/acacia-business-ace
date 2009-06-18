@@ -127,7 +127,7 @@ public abstract class Product
     }
 
     public abstract BigDecimal getSalesPrice();
-    public abstract void setSalePrice(BigDecimal salesPrice);
+    public abstract void setSalesPrice(BigDecimal salesPrice);
 
     public String getProductCode() {
         return productCode;
