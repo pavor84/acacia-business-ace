@@ -141,16 +141,8 @@ import javax.persistence.Transient;
                         @OperationRow(
                             operationType=OperationType.Update,
                             update=@UpdateOperation(
-                                variable="entity.currency",
-                                with="entity.product.currency",
-                                condition="onChange(entity.product)"
-                            )
-                        ),
-                        @OperationRow(
-                            operationType=OperationType.Update,
-                            update=@UpdateOperation(
                                 variable="entity.receivedPrice",
-                                with="entity.product.salesPrice",
+                                with="convertAmount(entity.product.salesPrice, now(), entity.product.currency, entity.invoice.documentCurrency)",
                                 condition="onChange(entity.product)"
                             )
                         )
@@ -230,41 +222,6 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     private DbResource measureUnit;
 
     @Basic(optional = false)
-    @Column(name = "received_quantity", nullable = false, precision = 19, scale = 4)
-    @Property(title="Quantity",
-        formComponentPair=@FormComponentPair(
-            parentContainerName="itemDetails",
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Quantity:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBDecimalField.class
-            )
-        )
-    )
-    private BigDecimal receivedQuantity;
-
-    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id", nullable = false)
-    @ManyToOne(optional = false)
-    @Property(title="Currency",
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.enums.Currency"
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName="itemDetails",
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Currency:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboBox.class
-            )
-        )
-    )
-    private DbResource currency;
-
-    @Basic(optional = false)
     @Column(name = "received_price", nullable = false, precision = 19, scale = 4)
     @Property(title="Unit Price",
         formComponentPair=@FormComponentPair(
@@ -296,6 +253,22 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     private BigDecimal taxValue;
 
     @Basic(optional = false)
+    @Column(name = "received_quantity", nullable = false, precision = 19, scale = 4)
+    @Property(title="Quantity",
+        formComponentPair=@FormComponentPair(
+            parentContainerName="itemDetails",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Quantity:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDecimalField.class
+            )
+        )
+    )
+    private BigDecimal receivedQuantity;
+
+    @Basic(optional = false)
     @Column(name = "extended_price", nullable = false, precision = 19, scale = 4)
     @Property(title="Extended Price",
         editable=false,
@@ -304,7 +277,8 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
             parentContainerName="itemDetails",
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Ext. Price:"
+                text="Ext. Price:",
+                componentConstraints="skip 2"
             ),
             secondComponent=@Component(
                 componentClass=JBDecimalField.class
@@ -420,10 +394,12 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
         this.customsTariffNumber = customsTariffNumber;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
@@ -478,14 +454,6 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
 
     public void setMeasureUnit(DbResource measureUnit) {
         this.measureUnit = measureUnit;
-    }
-
-    public DbResource getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(DbResource currency) {
-        this.currency = currency;
     }
 
     @Override

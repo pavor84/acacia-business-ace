@@ -91,7 +91,7 @@ public class ProductAssembler
                 product.addComplexProductItem(cpi);
                 logger.info("assemble(Map), addComplexProductItem: " + cpi + ", to ComplexProduct: " + product);
                 productPrice = productPrice.add(cpi.getItemPrice());
-                product.setSalePrice(productPrice);
+                product.setSalesPrice(productPrice);
                 fireComplexProductItemAdded(product, cpi);
             }
         }

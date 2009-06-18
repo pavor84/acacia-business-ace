@@ -71,7 +71,7 @@ public class ComplexProduct extends Product implements Serializable {
     }
 
     @Override
-    public void setSalePrice(BigDecimal salesPrice) {
+    public void setSalesPrice(BigDecimal salesPrice) {
         firePropertyChange("salePrice", this.salesPrice, salesPrice);
         this.salesPrice = salesPrice;
     }
