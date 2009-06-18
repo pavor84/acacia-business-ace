@@ -12,10 +12,7 @@ import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
-import com.cosmos.acacia.crm.bl.currency.CurrencyRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
@@ -37,13 +34,8 @@ import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.util.BeanUtils;
 import com.cosmos.util.BooleanUtils;
 import java.awt.BorderLayout;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,11 +50,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.DefaultELContext;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.el.ELContext;
-import org.jdesktop.el.impl.lang.FunctionMapperImpl;
 import org.jdesktop.swingx.JXNumericField;
 
 /**
@@ -349,17 +339,17 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         Class<? extends SelectableListDialog> cls;
         try {
             if ((cls = (Class<? extends SelectableListDialog>) getSelectableListDialogClass(propertyDetails)) != null) {
-                List<PropertyDetail> parameters;
-                if ((parameters = propertyDetails.getSelectableListDialogConstructorParameters()) == null || parameters.size() == 0) {
+                List<PropertyDetail> params;
+                if ((params = propertyDetails.getSelectableListDialogConstructorParameters()) == null || params.size() == 0) {
                     return cls.newInstance();
                 }
 
-                addDependenciesByParameters(jComponent.getName(), parameters);
-                Class[] parameterTypes = getParameterTypes(parameters, entityProps);
-                Object[] parameterValues = getParameters(parameters);
+                addDependenciesByParameters(jComponent.getName(), params);
+                Class[] parameterTypes = getParameterTypes(params, entityProps);
+                Object[] parameterValues = getParameters(params);
                 SelectableListDialog listDialog = (SelectableListDialog) ConstructorUtils.invokeConstructor(cls, parameterValues, parameterTypes);
                 PropertyChangeHandler handler = getPropertyChangeHandler();
-                handler.addPropertyBean(parameters, listDialog, jComponent);
+                handler.addPropertyBean(params, listDialog, jComponent);
 
                 return listDialog;
             }
