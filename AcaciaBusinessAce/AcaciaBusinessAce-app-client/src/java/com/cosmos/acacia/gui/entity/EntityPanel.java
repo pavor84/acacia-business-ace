@@ -12,12 +12,16 @@ import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
+import com.cosmos.acacia.crm.bl.currency.CurrencyRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetail;
@@ -33,10 +37,12 @@ import com.cosmos.util.BeanUtils;
 import com.cosmos.util.BooleanUtils;
 import java.awt.BorderLayout;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +57,11 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.DefaultELContext;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
+import org.jdesktop.el.ELContext;
+import org.jdesktop.el.impl.lang.FunctionMapperImpl;
 import org.jdesktop.swingx.JXNumericField;
 
 /**
@@ -70,6 +79,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
     private Map<String, PropertyDependencies> propertyDependenciesMap;
+    private ELContext elContext;
 
     public EntityPanel(AbstractEntityListPanel entityListPanel, E entity) {
         super(entity);
@@ -225,7 +235,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     public void updateVariable(String variable, String expression) {
-        ELProperty elProperty = ELProperty.create("${" + expression + "}");
+        ELProperty elProperty = create("${" + expression + "}");
         Object value = elProperty.getValue(this);
         setProperty(variable, value);
     }
@@ -608,5 +618,55 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     protected List<Unit> getUnits(UnitType unitType) {
         return entityFormProcessor.getEntityLogicUnits(unitType);
+    }
+
+    public Object getService(String serviceName) {
+        return ServiceManager.getService(serviceName);
+    }
+
+    public static BigDecimal convertAmount(BigDecimal amount, Date rateForDate,
+            DbResource fromCurrency, DbResource toCurrency) {
+        if(amount == null || rateForDate == null || fromCurrency == null || toCurrency == null) {
+            return null;
+        }
+
+        CurrencyRemote currencyService = (CurrencyRemote)ServiceManager.getService("currency");
+        CurrencyExchangeRate cer = currencyService.getCurrencyExchangeRate(rateForDate, fromCurrency, toCurrency);
+        return amount.multiply(cer.getExchangeRate(), MathContext.DECIMAL64);
+    }
+
+    public static Date now() {
+        return new Timestamp(System.currentTimeMillis());
+    }
+
+    protected ELProperty create(String expression) {
+        return ELProperty.create(getELContext(), expression);
+    }
+
+    protected ELContext getELContext() {
+        if(elContext == null) {
+            elContext = new DefaultELContext();
+            FunctionMapperImpl functionMapper = (FunctionMapperImpl)elContext.getFunctionMapper();
+            String prefix = "";
+            String localName = "convertAmount";
+            Method method;
+            try {
+                method = this.getClass().getMethod(localName,
+                        BigDecimal.class, Date.class, DbResource.class, DbResource.class);
+            } catch(Exception ex) {
+                throw new EntityPanelException(ex);
+            }
+            functionMapper.addFunction(prefix, localName, method);
+
+            localName = "now";
+            try {
+                method = this.getClass().getMethod(localName);
+            } catch(Exception ex) {
+                throw new EntityPanelException(ex);
+            }
+            functionMapper.addFunction(prefix, localName, method);
+        }
+
+        return elContext;
     }
 }

@@ -28,6 +28,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -116,6 +117,12 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
     protected Object newRow() {
         CurrencyExchangeRate cer = getFormSession().newEntity(CurrencyExchangeRate.class);
         cer.setValidFrom(getRatesForDate());
+        DbResource fromCurrency;
+        DbResource toCurrency;
+        if((fromCurrency = getFromCurrency()) != null && (toCurrency = getToCurrency()) != null) {
+            cer.setFromCurrency(fromCurrency);
+            cer.setToCurrency(toCurrency);
+        }
         return editRow(cer);
     }
 
@@ -137,7 +144,10 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         setVisible(Button.Delete, false);
         setVisible(Button.Classify, false);
         setVisible(Button.Modify, false);
-        if(getFromCurrency() != null && getToCurrency() != null) {
+
+        DbResource fromCurrency = getFromCurrency();
+        DbResource toCurrency = getToCurrency();
+        if(fromCurrency != null && toCurrency != null) {
             setVisible(Button.Select, true);
         }
 
@@ -167,6 +177,16 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         bg.bind();
 
         dataTable.packAll();
+
+        if(fromCurrency != null && toCurrency != null) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    newAction();
+                }
+            });
+        }
     }
 
     protected List<CurrencyExchangeRate> getCurrencyExchangeRates() {
