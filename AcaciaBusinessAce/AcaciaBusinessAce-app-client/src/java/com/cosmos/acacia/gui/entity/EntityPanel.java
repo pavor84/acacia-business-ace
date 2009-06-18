@@ -22,6 +22,7 @@ import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.service.ServiceManager;
+import com.cosmos.acacia.util.SystemUtils;
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetail;
@@ -624,53 +625,13 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         return ServiceManager.getService(serviceName);
     }
 
-    public static BigDecimal convertAmount(BigDecimal amount, Date rateForDate,
-            DbResource fromCurrency, DbResource toCurrency) {
-        if(amount == null || rateForDate == null || fromCurrency == null || toCurrency == null) {
-            return null;
-        }
-
-        BigDecimal exchangeRate;
-        if(fromCurrency.equals(toCurrency)) {
-            exchangeRate = BigDecimal.ONE;
-        } else {
-            CurrencyRemote currencyService = (CurrencyRemote)ServiceManager.getService("currency");
-            CurrencyExchangeRate cer = currencyService.getCurrencyExchangeRate(rateForDate, fromCurrency, toCurrency);
-            exchangeRate = cer.getExchangeRate();
-        }
-        return amount.multiply(exchangeRate, MathContext.DECIMAL64);
-    }
-
-    public static Date now() {
-        return new Timestamp(System.currentTimeMillis());
-    }
-
     protected ELProperty create(String expression) {
         return ELProperty.create(getELContext(), expression);
     }
 
     protected ELContext getELContext() {
         if(elContext == null) {
-            elContext = new DefaultELContext();
-            FunctionMapperImpl functionMapper = (FunctionMapperImpl)elContext.getFunctionMapper();
-            String prefix = "";
-            String localName = "convertAmount";
-            Method method;
-            try {
-                method = this.getClass().getMethod(localName,
-                        BigDecimal.class, Date.class, DbResource.class, DbResource.class);
-            } catch(Exception ex) {
-                throw new EntityPanelException(ex);
-            }
-            functionMapper.addFunction(prefix, localName, method);
-
-            localName = "now";
-            try {
-                method = this.getClass().getMethod(localName);
-            } catch(Exception ex) {
-                throw new EntityPanelException(ex);
-            }
-            functionMapper.addFunction(prefix, localName, method);
+            elContext = SystemUtils.createELContext();
         }
 
         return elContext;

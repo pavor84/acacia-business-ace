@@ -12,7 +12,7 @@ import com.cosmos.impl.acacia.service.ServiceManagerImpl;
  */
 public class ServiceManager {
 
-    private static InheritableThreadLocal<ServiceManagerImpl> instance =
+    private static final InheritableThreadLocal<ServiceManagerImpl> instance =
             new InheritableThreadLocal<ServiceManagerImpl>();
 
     public static ServiceManagerImpl getInstance() {
