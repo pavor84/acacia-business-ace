@@ -11,12 +11,12 @@ import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
+import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.util.BooleanUtils;
@@ -299,4 +299,8 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     public abstract boolean isDetailEntity();
+
+    public Object getService(String serviceName) {
+        return ServiceManager.getService(serviceName);
+    }
 }
