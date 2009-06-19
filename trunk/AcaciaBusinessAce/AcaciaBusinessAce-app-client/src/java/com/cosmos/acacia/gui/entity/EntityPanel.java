@@ -50,6 +50,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.DefaultELContext;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.el.ELContext;
@@ -621,7 +622,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     protected ELContext getELContext() {
         if(elContext == null) {
-            elContext = SystemUtils.createELContext();
+            ELContext systemELContext = SystemUtils.getSystemELContext();
+            elContext = new DefaultELContext(systemELContext);
         }
 
         return elContext;
