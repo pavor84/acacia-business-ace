@@ -58,6 +58,7 @@ import com.cosmos.acacia.crm.data.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
+import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -730,6 +731,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
 
         initCurrency();
+        initExpressions();
     }
 
     private void initCurrency() {
@@ -744,6 +746,18 @@ public class UsersBean implements UsersRemote, UsersLocal {
             cer.setExchangeRate(BigDecimal.valueOf(195583, 5));
             cer.setFixedExchangeRate(true);
             em.persist(cer);
+        }
+    }
+
+    private void initExpressions() {
+        Class beanClass = PurchaseInvoiceItem.class;
+        String propertyName = "receivedPrice";
+        if(session.getExpression(beanClass, propertyName) == null) {
+            session.saveExpression(beanClass, propertyName, PurchaseInvoiceItem.RECEIVED_PRICE_CALCULATION_EXPRESSION);
+        }
+        propertyName = "extendedPrice";
+        if(session.getExpression(beanClass, propertyName) == null) {
+            session.saveExpression(beanClass, propertyName, PurchaseInvoiceItem.EXTENDED_PRICE_CALCULATION_EXPRESSION);
         }
     }
 
