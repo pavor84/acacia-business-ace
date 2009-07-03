@@ -52,6 +52,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JComponent;
+import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  *
@@ -275,6 +276,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
     private Class entityClass;
     protected Object[] parameters;
+    private DataMode dataMode;
+    private BindingGroup bindingGroup;
     /**
      * 
      */
@@ -299,6 +302,23 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     protected JBPanel getParentPanel() {
         return parentPanel;
+    }
+
+    public final BindingGroup getBindingGroup() {
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
+    }
+
+    protected void reinit() {
+        if(bindingGroup != null) {
+            getBindingGroup().unbind();
+            bindingGroup = null;
+        }
+
+        initData();
     }
 
     @Override
@@ -436,6 +456,29 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return editable;
     }
 
+    public void initDataMode(DataMode dataMode) {
+        if(DataMode.Query.equals(dataMode)) {
+            setReadonly();
+        }
+    }
+
+    public void setDataMode(DataMode dataMode) {
+        this.dataMode = dataMode;
+        reinit();
+    }
+
+    public DataMode getDataMode() {
+        if(dataMode == null) {
+            dataMode = DataMode.Modify;
+        }
+
+        return dataMode;
+    }
+
+    public boolean isQueryMode() {
+        return DataMode.Query.equals(getDataMode());
+    }
+
     /**
      *
      * @param rowObject
@@ -471,14 +514,26 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     protected abstract Object newRow();
 
     public boolean canCreate() {
+        if(isQueryMode()) {
+            return false;
+        }
+
         return true;
     }
 
     public boolean canModify(Object rowObject) {
+        if(isQueryMode()) {
+            return false;
+        }
+
         return true;
     }
 
     public boolean canDelete(Object rowObject) {
+        if(isQueryMode()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -894,7 +949,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         public void valueChanged(ListSelectionEvent event) {
             if (!event.getValueIsAdjusting()) {
                 ListSelectionModel selectionModel = (ListSelectionModel) event.getSource();
-                if (selectionModel.isSelectionEmpty()) {
+                boolean selectionEmpty = selectionModel.isSelectionEmpty();
+                if (selectionEmpty) {
                     setEnabled(Button.Modify, false);
                     setEnabled(Button.Delete, false);
                     setEnabled(Button.Select, false);
@@ -906,38 +962,54 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     }
                 } else {
                     Object selectedObject = table.getSelectedRowObject();
-                    //the list is edit-able and the row is modifiable - show modify button
-                    if (isEditable() && canModify(selectedObject)) {
-                        viewRowState = false;
-                        setEnabled(Button.Modify, true);
-                        modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
-                    } //the list is edit-able but not the row is not modifiable
-                    else if (isEditable()) {
-                        //the row is not view-able - disable the button
-                        if (!canView(selectedObject)) {
-                            setEnabled(Button.Modify, false);
-                            //the row is view-able - show the view button instead of modify
-                        } else {
-                            viewRowState = true;
-                            setEnabled(Button.Modify, true);
-                            modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
-                        }
-                        //the list is not edit-able, but the row is view-able - so show the view button
-                    } else if (canView(selectedObject)) {
-                        viewRowState = true;
-                        setEnabled(Button.Modify, true);
-                        modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
+                    if(isQueryMode()) {
+                        initQueryMode(selectedObject);
+                    } else {
+                        initModifyMode(selectedObject);
                     }
-                    setEnabled(Button.Delete, canDelete(selectedObject));
+
                     setEnabled(Button.Select, canSelect(selectedObject));
                     setEnabled(Button.Unselect, true);
                     setEnabled(Button.Special, canSpecial(selectedObject));
                     setEnabled(Button.Classify, true);
+                    selectedRowObject = null;
                 }
-                setEnabled(Button.New, canCreate());
-                selectedRowObject = null;
+
                 fireSelectionChanged();
             }
+        }
+
+        protected void initQueryMode(Object selectedObject) {
+            if (!canView(selectedObject)) {
+                setEnabled(Button.Modify, false);
+                //the row is view-able - show the view button instead of modify
+            } else {
+                enableViewButton();
+            }
+        }
+
+        protected void enableViewButton() {
+            viewRowState = true;
+            setEnabled(Button.Modify, true);
+            modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
+        }
+
+        protected void initModifyMode(Object selectedObject) {
+            //the list is edit-able and the row is modifiable - show modify button
+            if(isEditable()) {
+                if (canModify(selectedObject)) {
+                    viewRowState = false;
+                    setEnabled(Button.Modify, true);
+                    modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
+                } else {
+                    initQueryMode(selectedObject);
+                }
+            } else if (canView(selectedObject)) {
+                enableViewButton();
+            }
+
+            setEnabled(Button.Delete, canDelete(selectedObject));
+            setEnabled(Button.New, canCreate());
         }
     }
 
@@ -1130,7 +1202,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     @Action
     public void specialAction() {
-        System.out.println("Special");
+        System.out.println("specialAction");
     }
 
     public void setSpecialCaption(String key) {
@@ -1227,7 +1299,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Override
-    protected List getEntities() {
+    public List getEntities() {
         return getListData();
     }
 }

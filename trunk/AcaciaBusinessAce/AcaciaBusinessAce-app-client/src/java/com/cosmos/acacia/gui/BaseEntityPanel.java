@@ -391,7 +391,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected List getEntities() {
+    public List getEntities() {
         List entities = new ArrayList(1);
         entities.add(getEntity());
         return entities;

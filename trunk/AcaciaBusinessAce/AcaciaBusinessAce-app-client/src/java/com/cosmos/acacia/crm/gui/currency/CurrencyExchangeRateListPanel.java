@@ -228,14 +228,6 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         return new RefreshTask(getApplication());
     }
 
-    protected BindingGroup getBindingGroup() {
-        if(bindingGroup == null) {
-            bindingGroup = new BindingGroup();
-        }
-
-        return bindingGroup;
-    }
-
     protected EntityProperties getEntityProperties() {
         if(entityProperties == null) {
             entityProperties = getFormSession().getEntityProperties(CurrencyExchangeRate.class);

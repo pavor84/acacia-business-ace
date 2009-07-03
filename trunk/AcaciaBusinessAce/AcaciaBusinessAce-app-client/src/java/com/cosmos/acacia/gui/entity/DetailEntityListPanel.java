@@ -29,24 +29,21 @@ public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjec
     }
 
     @Override
-    protected List<E> getEntities() {
+    public List<I> getEntities() {
         E mainEntity;
         if ((mainEntity = getMainEntity()) != null && mainEntity.getId() != null) {
             return getEntityService().getEntityItems(mainEntity, getEntityClass());
         }
 
-        return new ArrayList<E>();
+        return new ArrayList<I>();
     }
 
     @Override
     protected I newEntity() {
         E mainEntity;
         if((mainEntity = getMainEntity()) != null && mainEntity.getId() == null) {
-            try {
-                mainEntity = getEntityService().save(mainEntity);
-            } catch(Exception ex) {
-                handleException("Save mainEntity: " + mainEntity, ex);
-            }
+            getMainEntityPanel().performSave(false);
+            mainEntity = getMainEntity();
         }
 
         return (I) getEntityService().newItem(mainEntity, getEntityClass());

@@ -10,13 +10,13 @@ import com.cosmos.acacia.crm.data.ProductPercentValue;
 import com.cosmos.acacia.crm.data.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
-import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
+import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPercentField;
@@ -59,7 +59,7 @@ public class ProductPricingPanel extends AcaciaPanel {
     private JBLabel listPriceLabel;
     private JBDecimalField listPriceDecimalField;
     private JBLabel currencyLabel;
-    private AcaciaComboBox currencyComboBox;
+    private JBComboBox currencyComboBox;
     // Row 2
     private JBLabel discountLabel;
     private JBPercentField discountCategoryPercentField;
@@ -137,7 +137,7 @@ public class ProductPricingPanel extends AcaciaPanel {
         listPriceLabel = new JBLabel();
         listPriceDecimalField = new JBDecimalField();
         currencyLabel = new JBLabel();
-        currencyComboBox = new AcaciaComboBox();
+        currencyComboBox = new JBComboBox();
         // Row 2
         discountLabel = new JBLabel();
         discountCategoryPercentField = new JBPercentField();

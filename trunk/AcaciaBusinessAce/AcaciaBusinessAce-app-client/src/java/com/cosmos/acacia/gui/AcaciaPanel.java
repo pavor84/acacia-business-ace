@@ -533,7 +533,7 @@ public class AcaciaPanel
      * @return
      */
     @SuppressWarnings("unchecked")
-    protected List getEntities() {
+    public List getEntities() {
         return new ArrayList();
     }
 
