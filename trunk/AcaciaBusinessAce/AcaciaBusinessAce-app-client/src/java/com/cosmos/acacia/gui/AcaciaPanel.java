@@ -50,6 +50,8 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
+import com.cosmos.acacia.crm.enums.UserRightType;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
@@ -57,6 +59,7 @@ import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
+import java.util.Collections;
 import javax.ejb.EJB;
 
 /**
@@ -595,5 +598,64 @@ public class AcaciaPanel
 
     protected static Classifier getClassifier(String classifierCode) {
         return LocalSession.instance().getClassifier(classifierCode);
+    }
+
+    public Set<SpecialPermission> getCreatePermissions(Object rowObject) {
+        return getPermissions(rowObject, UserRightType.CREATE);
+    }
+
+    public Set<SpecialPermission> getModifyPermissions(Object rowObject) {
+        return getPermissions(rowObject, UserRightType.MODIFY);
+    }
+
+    public Set<SpecialPermission> getDeletePermissions(Object rowObject) {
+        return getPermissions(rowObject, UserRightType.DELETE);
+    }
+
+    public Set<SpecialPermission> getViewPermissions(Object rowObject) {
+        return getPermissions(rowObject, UserRightType.READ);
+    }
+
+    public Set<SpecialPermission> getExecutePermissions(Object rowObject) {
+        return getPermissions(rowObject, UserRightType.EXECUTE);
+    }
+
+    public Set<SpecialPermission> getPermissions(
+            Object anObject,
+            UserRightType rightType) {
+        if(anObject == null) {
+            return Collections.emptySet();
+        }
+
+        if(anObject instanceof DataObjectBean) {
+            return getPermissions((DataObjectBean)anObject, rightType);
+        }
+
+        if(anObject instanceof Class && DataObjectBean.class.isAssignableFrom((Class)anObject)) {
+            return getPermissions((Class)anObject, rightType);
+        }
+
+        return Collections.emptySet();
+    }
+
+    public Set<SpecialPermission> getPermissions(
+            DataObjectBean entity,
+            UserRightType rightType) {
+        DataObject dataObject;
+        if(entity == null || (dataObject = entity.getDataObject()) == null || dataObject.getDataObjectId() == null) {
+            return Collections.emptySet();
+        }
+
+        return getRightsManager().getPermissions(dataObject, rightType);
+    }
+
+    public Set<SpecialPermission> getPermissions(
+            Class<? extends DataObjectBean> entityClass,
+            UserRightType rightType) {
+        if(entityClass == null) {
+            return Collections.emptySet();
+        }
+
+        return getRightsManager().getPermissions(entityClass, rightType);
     }
 }

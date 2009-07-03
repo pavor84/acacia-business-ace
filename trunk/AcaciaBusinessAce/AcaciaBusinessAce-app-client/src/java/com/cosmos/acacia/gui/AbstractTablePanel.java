@@ -38,6 +38,7 @@ import org.jdesktop.application.Task;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -340,6 +341,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             setVisible(Button.Filter, false);
         }
 
+        setEnabled(Button.New, canCreate());
         setEnabled(Button.Select, false);
         setEnabled(Button.Unselect, false);
         setEnabled(Button.Modify, false);
@@ -518,7 +520,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return false;
         }
 
-        return true;
+        Set<SpecialPermission> permissions;
+        if((permissions = getCreatePermissions(getEntityClass())) == null || permissions.size() == 0) {
+            return false;
+        }
+
+        return getRightsManager().isAllowed(permissions);
     }
 
     public boolean canModify(Object rowObject) {
@@ -526,7 +533,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return false;
         }
 
-        return true;
+        Set<SpecialPermission> permissions;
+        if((permissions = getModifyPermissions(rowObject)) == null || permissions.size() == 0) {
+            return false;
+        }
+
+        return getRightsManager().isAllowed(permissions);
     }
 
     public boolean canDelete(Object rowObject) {
@@ -534,11 +546,21 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return false;
         }
 
-        return true;
+        Set<SpecialPermission> permissions;
+        if((permissions = getDeletePermissions(rowObject)) == null || permissions.size() == 0) {
+            return false;
+        }
+
+        return getRightsManager().isAllowed(permissions);
     }
 
     public boolean canView(Object rowObject) {
-        return true;
+        Set<SpecialPermission> permissions;
+        if((permissions = getViewPermissions(rowObject)) == null || permissions.size() == 0) {
+            return false;
+        }
+
+        return getRightsManager().isAllowed(permissions);
     }
 
     public boolean canSelect(Object rowObject) {
