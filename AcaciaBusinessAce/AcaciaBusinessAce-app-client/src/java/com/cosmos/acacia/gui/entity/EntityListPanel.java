@@ -19,7 +19,7 @@ public class EntityListPanel<E extends DataObjectBean> extends AbstractEntityLis
     }
 
     @Override
-    protected List<E> getEntities() {
+    public List<E> getEntities() {
         return getEntityService().getEntities(getEntityClass());
     }
 

@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.gui.DataMode;
 import com.cosmos.acacia.annotation.LogicUnitType;
 import com.cosmos.acacia.annotation.OperationRow;
 import com.cosmos.acacia.annotation.OperationType;
@@ -15,14 +16,17 @@ import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
-import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.util.BeanUtils;
 import com.cosmos.util.BooleanUtils;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.ELProperty;
@@ -36,7 +40,6 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
 
     private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;
-    private BindingGroup bindingGroup;
     private EntityProperties entityProperties;
     private E entity;
 
@@ -49,7 +52,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     protected EntityPanel getMainEntityPanel() {
-        return (EntityPanel)getParentPanel();
+        return (EntityPanel) getParentPanel();
     }
 
     protected EntityFormProcessor getEntityFormProcessor() {
@@ -61,11 +64,11 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     public final E getEntity() {
-        if(entity != null) {
+        if (entity != null) {
             return entity;
         }
 
-        return (E)getDataTable().getSelectedRowObject();
+        return (E) getDataTable().getSelectedRowObject();
     }
 
     public final void setEntity(E entity) {
@@ -77,32 +80,32 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
 
     public void rowChanged(AlterationType alterationType, E oldRowObject, E newRowObject) {
         List<Unit> units;
-        if((units = getUnits(UnitType.Record, LogicUnitType.Suffix)) != null && units.size() > 0) {
-            for(Unit unit : units) {
-                for(OperationRow operationRow : unit.operations()) {
-                    if(!AlterationType.Nothing.equals(alterationType) &&
+        if ((units = getUnits(UnitType.Record, LogicUnitType.Suffix)) != null && units.size() > 0) {
+            for (Unit unit : units) {
+                for (OperationRow operationRow : unit.operations()) {
+                    if (!AlterationType.Nothing.equals(alterationType) &&
                             OperationType.Update.equals(operationRow.operationType())) {
                         UpdateOperation update = operationRow.update();
-                        if(!evaluateBooleanExpression(update.condition())) {
+                        if (!evaluateBooleanExpression(update.condition())) {
                             continue;
                         }
 
                         String variableExpression = update.variable();
                         String withExpression = update.with();
                         try {
-                            if(AlterationType.Create.equals(alterationType)) {
+                            if (AlterationType.Create.equals(alterationType)) {
                                 setEntity(newRowObject);
-                                if(update.incremental()) {
+                                if (update.incremental()) {
                                     withExpression = variableExpression + " + (" + update.with() + ")";
                                 }
-                            } else if(AlterationType.Modify.equals(alterationType)) {
+                            } else if (AlterationType.Modify.equals(alterationType)) {
                                 setEntity(oldRowObject);
-                                if(update.incremental()) {
+                                if (update.incremental()) {
                                     withExpression = variableExpression + " - (" + update.with() + ")";
                                 }
-                            } else if(AlterationType.Delete.equals(alterationType)) {
+                            } else if (AlterationType.Delete.equals(alterationType)) {
                                 setEntity(oldRowObject);
-                                if(update.incremental()) {
+                                if (update.incremental()) {
                                     withExpression = variableExpression + " - (" + update.with() + ")";
                                 }
                             } else {
@@ -110,7 +113,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
                             }
 
                             updateVariable(variableExpression, withExpression);
-                            if(update.incremental() && AlterationType.Modify.equals(alterationType)) {
+                            if (update.incremental() && AlterationType.Modify.equals(alterationType)) {
                                 setEntity(newRowObject);
                                 withExpression = variableExpression + " + (" + update.with() + ")";
                                 updateVariable(variableExpression, withExpression);
@@ -118,7 +121,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
                         } finally {
                             setEntity(null);
                         }
-                        if(variableExpression.startsWith("mainEntity.")) {
+                        if (variableExpression.startsWith("mainEntity.")) {
                             EntityPanel entityPanel = getMainEntityPanel();
                             entityPanel.performSave(false);
                         } else {
@@ -131,7 +134,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     protected boolean evaluateBooleanExpression(String expression) {
-        if(true) {
+        if (true) {
             return true;
         }
 
@@ -157,12 +160,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     protected void setProperty(Object bean, String name, Object value) {
-        try {
-            PropertyUtils.setProperty(bean, name, value);
-        } catch(Exception ex) {
-            throw new EntityPanelException("bean=" + bean +
-                    ", name=" + name + ", value=" + value, ex);
-        }
+        BeanUtils.getInstance().setPropertyValue(bean, name, value);
     }
 
     protected Object getPropertyValue(Object bean, String propertyName) {
@@ -189,10 +187,10 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
 
     @Override
     protected Object modifyRow(Object rowObject) {
-        E oldRowObject = (E)((E) rowObject).clone();
+        E oldRowObject = (E) ((E) rowObject).clone();
         E newRowObject = (E) rowObject;
         rowChanging(AlterationType.Modify, newRowObject);
-        if((newRowObject = editRow(newRowObject)) != null) {
+        if ((newRowObject = editRow(newRowObject, false)) != null) {
             rowChanged(AlterationType.Modify, oldRowObject, newRowObject);
         } else {
             rowChanged(AlterationType.Nothing, oldRowObject, newRowObject);
@@ -204,9 +202,9 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     @Override
     protected Object newRow() {
         E oldRowObject = newEntity();
-        E newRowObject = (E)oldRowObject.clone();
+        E newRowObject = (E) oldRowObject.clone();
         rowChanging(AlterationType.Create, newRowObject);
-        if((newRowObject = editRow(newRowObject)) != null) {
+        if ((newRowObject = editRow(newRowObject, true)) != null) {
             rowChanged(AlterationType.Create, oldRowObject, newRowObject);
         } else {
             rowChanged(AlterationType.Nothing, oldRowObject, newRowObject);
@@ -215,16 +213,38 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
         return newRowObject;
     }
 
-    protected E editRow(E entity) {
+    protected E editRow(E entity, boolean newRow) {
         if (entity != null) {
-            BaseEntityPanel entityPanel = getEntityPanel(entity);
+            EntityPanel entityPanel = getEntityPanel(entity);
             DialogResponse response = entityPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return (E) entityPanel.getSelectedValue();
+            } else {
+                E result;
+                if((result = (E) entityPanel.getSelectedValue()) != null) {
+                    if(newRow) {
+                        return result;
+                    }
+
+                    if(getDataTable().getSelectedRow() >= 0) {
+                        replaceTableObject(result);
+                    }
+                }
             }
         }
 
         return null;
+    }
+
+    @Override
+    protected void viewRow(Object rowObject) {
+        if(rowObject == null) {
+            return;
+        }
+
+        EntityPanel entityPanel = getEntityPanel((E)rowObject);
+        entityPanel.setDataMode(DataMode.Query);
+        entityPanel.showDialog(this);
     }
 
     protected abstract E newEntity();
@@ -237,37 +257,33 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     protected void initData() {
         super.initData();
 
-        bindingGroup = getBindingGroup();
+        BindingGroup bg = getBindingGroup();
         AcaciaTable table = getDataTable();
         JTableBinding tableBinding = table.bind(
-                bindingGroup,
-                getEntities(),
+                bg,
+                new ArrayList(),
                 getEntityProperties(),
                 UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
-        bindingGroup.bind();
+        bg.bind();
 
         String title;
-        if(isDetailEntity()) {
+        if (isDetailEntity()) {
             title = getResourceMap().getString("form.detailEntityList.title");
         } else {
             title = getResourceMap().getString("form.entityList.title");
         }
-        if(title != null && title.trim().length() > 0) {
+        if (title != null && title.trim().length() > 0) {
             setTitle(title);
         }
 
         setVisible(Button.Classify, false);
         setVisible(Button.Close, false);
-    }
 
-    public BindingGroup getBindingGroup() {
-        if (bindingGroup == null) {
-            bindingGroup = new BindingGroup();
-        }
+        initDataMode(getDataMode());
 
-        return bindingGroup;
+        refresh();
     }
 
     protected EntityProperties getEntityProperties() {
@@ -291,7 +307,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     @Override
     public ResourceMap getResourceMap() {
         EntityPanel mainEntityPanel;
-        if((mainEntityPanel = getMainEntityPanel()) != null) {
+        if ((mainEntityPanel = getMainEntityPanel()) != null) {
             return mainEntityPanel.getResourceMap();
         }
 
@@ -302,5 +318,59 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
 
     public Object getService(String serviceName) {
         return ServiceManager.getService(serviceName);
+    }
+
+    @Override
+    public List<E> getEntities() {
+        throw new UnsupportedOperationException("This method MUST be implemented.");
+    }
+
+    @Override
+    public Task refreshAction() {
+        return new RefreshTask(getApplication());
+    }
+
+    public void refresh() {
+        RefreshTask refreshTask = new RefreshTask(getApplication());
+        refreshTask.run();
+    }
+
+    public class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask(Application app) {
+            // Runs on the EDT.  Copy GUI state that
+            // doInBackground() depends on from parameters
+            // to RefreshActionTask fields, here.
+            super(app);
+            log.debug("RefreshActionTask()");
+        }
+
+        @Override
+        protected Object doInBackground() {
+            log.debug("doInBackground().begin");
+            // Your Task's code here.  This method runs
+            // on a background thread, so don't reference
+            // the Swing GUI from here.
+            AcaciaTable dataTable = getDataTable();
+            Object selectedRowObject = dataTable.getSelectedRowObject();
+            List dataList = dataTable.getData();
+            dataList.clear();
+            List entities = getEntities();
+            dataList.addAll(entities);
+            if(selectedRowObject != null && dataList.contains(selectedRowObject)) {
+                dataTable.setSelectedRowObject(selectedRowObject);
+            }
+            dataTable.packAll();
+            fireTableRefreshed();
+            log.debug("doInBackground().end");
+            return entities;  // return your result
+        }
+
+        @Override
+        protected void succeeded(Object result) {
+            log.debug("succeeded(Result:" + result + ")");
+            // Runs on the EDT.  Update the GUI based on
+            // the result computed by doInBackground().
+        }
     }
 }

@@ -9,15 +9,15 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.gui.entity.EntityPanelException;
 import com.cosmos.acacia.service.ServiceManager;
+import com.cosmos.util.MoneyUtils;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.sql.Timestamp;
 import java.util.Date;
 import org.jdesktop.beansbinding.DefaultELContext;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.el.ELContext;
-import org.jdesktop.el.impl.lang.FunctionMapperImpl;
+import org.jdesktop.el.FunctionMapper;
 
 /**
  *
@@ -46,7 +46,7 @@ public class SystemUtils {
 
     public static ELContext createELContext() {
         ELContext context = new DefaultELContext();
-        FunctionMapperImpl functionMapper = (FunctionMapperImpl) context.getFunctionMapper();
+        FunctionMapper functionMapper = context.getFunctionMapper();
         String prefix = "";
         String localName = "convertAmount";
         Method method;
@@ -81,7 +81,8 @@ public class SystemUtils {
 
         CurrencyRemote currencyService = (CurrencyRemote) ServiceManager.getService("currency");
         CurrencyExchangeRate cer = currencyService.getCurrencyExchangeRate(rateForDate, fromCurrency, toCurrency);
-        return amount.multiply(cer.getExchangeRate(), MathContext.DECIMAL64);
+        BigDecimal exchangeRate = cer.getExchangeRate();
+        return MoneyUtils.getInstance().multiply(amount, exchangeRate);
     }
 
     public static Date now() {
