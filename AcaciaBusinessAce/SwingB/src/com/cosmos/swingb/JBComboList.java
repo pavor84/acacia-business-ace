@@ -24,6 +24,7 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -211,7 +212,22 @@ public class JBComboList
             SelectableListDialog selectableListDialog,
             Object beanEntity,
             PropertyDetails propertyDetails) {
-        return bind(bindingGroup, selectableListDialog, beanEntity, propertyDetails, null);
+        return bind(
+                bindingGroup,
+                selectableListDialog,
+                beanEntity,
+                propertyDetails,
+                (ObjectToStringConverter)null);
+    }
+
+    @Override
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            UpdateStrategy updateStrategy) {
+        return bind(bindingGroup, selectableListDialog, beanEntity, propertyDetails, null, updateStrategy);
     }
 
     protected String getExpression(PropertyDetails propertyDetails) {
@@ -263,12 +279,18 @@ public class JBComboList
         this.propertyName = propertyDetails.getPropertyName();
         this.beanEntity = beanEntity;
 
+        String name;
+        if((name = getName()) != null) {
+            name = name + ".ComboBox";
+        }
         comboBoxBinding = SwingBindings.createJComboBoxBinding(
                 updateStrategy,
                 observableData,
-                comboBox);
+                comboBox,
+                name);
         bindingGroup.addBinding(comboBoxBinding);
 
+        name = getName();
         ELProperty displayELProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         binding = Bindings.createAutoBinding(
@@ -276,7 +298,8 @@ public class JBComboList
                 beanEntity,
                 displayELProperty,
                 comboBox,
-                beanProperty);
+                beanProperty,
+                name);
         Validator validator = propertyDetails.getValidator();
         if (validator != null) {
             binding.setValidator(validator);

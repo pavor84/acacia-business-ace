@@ -68,10 +68,12 @@ public class JBCheckBox
         this.beanEntity = beanEntity;
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selected");
-        Binding binding = Bindings.createAutoBinding(updateStrategy,
+        Binding binding = Bindings.createAutoBinding(
+                updateStrategy,
                 beanEntity,
                 elProperty,
-                this, beanProperty);
+                this,
+                beanProperty);
         bindingGroup.addBinding(binding);
         return binding;
     }

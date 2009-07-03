@@ -5,6 +5,7 @@
 package com.cosmos.swingb.binding;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -14,7 +15,16 @@ import org.jdesktop.beansbinding.BindingGroup;
  */
 public interface EntityBinder extends Refreshable {
 
-    Binding bind(BindingGroup bindingGroup, Object beanEntity, PropertyDetails propertyDetails);
+    Binding bind(
+            BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails);
+
+    Binding bind(
+            BindingGroup bindingGroup,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy);
 
     String getPropertyName();
 
