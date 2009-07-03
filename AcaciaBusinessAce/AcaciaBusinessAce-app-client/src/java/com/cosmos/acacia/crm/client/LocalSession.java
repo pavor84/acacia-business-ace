@@ -3,6 +3,7 @@ package com.cosmos.acacia.crm.client;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -176,14 +177,12 @@ public class LocalSession implements AcaciaSessionRemote {
     }
 
     @Override
-    public AcaciaProperties getProperties(BusinessPartner client)
-    {
+    public AcaciaProperties getProperties(BusinessPartner client) {
         return remoteSession.getProperties(client);
     }
 
     @Override
-    public void saveProperties(AcaciaProperties properties)
-    {
+    public void saveProperties(AcaciaProperties properties) {
         remoteSession.saveProperties(properties);
     }
 
@@ -195,5 +194,40 @@ public class LocalSession implements AcaciaSessionRemote {
     @Override
     public ContactPerson getContactPerson() {
         return remoteSession.getContactPerson();
+    }
+
+    @Override
+    public String getExpression(String expressionKey) {
+        return remoteSession.getExpression(expressionKey);
+    }
+
+    @Override
+    public String getExpression(Class beanClass, String propertyName) {
+        return remoteSession.getExpression(beanClass, propertyName);
+    }
+
+    @Override
+    public String getExpression(Object bean, String propertyName) {
+        return remoteSession.getExpression(bean, propertyName);
+    }
+
+    @Override
+    public Expression saveExpression(String expressionKey, String expressionValue) {
+        return remoteSession.saveExpression(expressionKey, expressionValue);
+    }
+
+    @Override
+    public Expression saveExpression(Class beanClass, String propertyName, String expressionValue) {
+        return remoteSession.saveExpression(beanClass, propertyName, expressionValue);
+    }
+
+    @Override
+    public void deleteExpression(String expressionKey) {
+        remoteSession.deleteExpression(expressionKey);
+    }
+
+    @Override
+    public void deleteExpression(Class beanClass, String propertyName) {
+        remoteSession.deleteExpression(beanClass, propertyName);
     }
 }
