@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
@@ -95,5 +96,19 @@ public interface AcaciaSessionRemote {
     boolean isBranchAdministrator();
 
     Classifier getClassifier(String classifierCode);
+
+    String getExpression(String expressionKey);
+
+    String getExpression(Class beanClass, String propertyName);
+
+    String getExpression(Object bean, String propertyName);
+
+    Expression saveExpression(String expressionKey, String expressionValue);
+
+    Expression saveExpression(Class beanClass, String propertyName, String expressionValue);
+
+    void deleteExpression(String expressionKey);
+
+    void deleteExpression(Class beanClass, String propertyName);
 }
 

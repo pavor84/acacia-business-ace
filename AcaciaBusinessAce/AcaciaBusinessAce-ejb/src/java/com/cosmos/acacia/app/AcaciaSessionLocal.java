@@ -1,5 +1,6 @@
 package com.cosmos.acacia.app;
 
+import com.cosmos.acacia.crm.data.Expression;
 import java.util.Set;
 
 import javax.ejb.Local;
@@ -77,4 +78,10 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * @return
      */
     Object get(String key);
+
+    String getExpressionKey(Class beanClass, String propertyName);
+
+    Expression saveExpression(Expression expression);
+
+    void deleteExpression(Expression expression);
 }
