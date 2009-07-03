@@ -6,7 +6,7 @@
 package com.cosmos.util;
 
 import java.util.Arrays;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import org.jdesktop.beansbinding.ELProperty;
 
@@ -16,14 +16,14 @@ import org.jdesktop.beansbinding.ELProperty;
  */
 public class BooleanUtils {
 
-    public static final String[] TRUE_ARRAY = {"true", "yes"};
-    public static final String[] FALSE_ARRAY = {"false", "no"};
+    public static final String[] TRUE_ARRAY = {"Yes", "True"};
+    public static final String[] FALSE_ARRAY = {"No", "False"};
 
-    public static Set<String> TRUE_SET;
-    public static Set<String> FALSE_SET;
-    public static Set<String> BOOLEAN_SET;
+    public static SortedSet<String> TRUE_SET;
+    public static SortedSet<String> FALSE_SET;
+    public static SortedSet<String> BOOLEAN_SET;
 
-    public static Set<String> getTrueSet() {
+    public static SortedSet<String> getTrueSet() {
         if(TRUE_SET == null) {
             TRUE_SET = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
             TRUE_SET.addAll(Arrays.asList(TRUE_ARRAY));
@@ -32,7 +32,7 @@ public class BooleanUtils {
         return TRUE_SET;
     }
 
-    public static Set<String> getFalseSet() {
+    public static SortedSet<String> getFalseSet() {
         if(FALSE_SET == null) {
             FALSE_SET = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
             FALSE_SET.addAll(Arrays.asList(FALSE_ARRAY));
@@ -41,7 +41,7 @@ public class BooleanUtils {
         return FALSE_SET;
     }
 
-    public static Set<String> getBooleanSet() {
+    public static SortedSet<String> getBooleanSet() {
         if(FALSE_SET == null) {
             BOOLEAN_SET = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
             BOOLEAN_SET.addAll(getTrueSet());

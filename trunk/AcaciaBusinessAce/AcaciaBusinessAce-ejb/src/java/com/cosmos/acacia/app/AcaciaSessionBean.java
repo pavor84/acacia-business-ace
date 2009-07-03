@@ -9,6 +9,7 @@ import static com.cosmos.acacia.app.SessionContext.CONTACT_PERSON_KEY;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import com.cosmos.acacia.util.AcaciaPropertiesImpl;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.ejb.EJB;
+import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 
 /**
@@ -327,5 +329,112 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public Classifier getClassifier(String classifierCode) {
         return classifiersManager.getClassifier(classifierCode);
+    }
+
+    @Override
+    public String getExpression(String expressionKey) {
+        if(expressionKey == null) {
+            throw new NullPointerException("The expressionKey can not be null.");
+        }
+
+        Query q = em.createNamedQuery("Expression.findByExpressionKey");
+        q.setParameter("organizationId", getOrganization().getId());
+        q.setParameter("expressionKey", expressionKey);
+        try {
+            Expression expression = (Expression)q.getSingleResult();
+            return expression.getExpressionValue();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getExpression(Class beanClass, String propertyName) {
+        if(propertyName == null) {
+            return null;
+        }
+
+        return getExpression(getExpressionKey(beanClass, propertyName));
+    }
+
+    @Override
+    public String getExpression(Object bean, String propertyName) {
+        if(bean == null || propertyName == null) {
+            return null;
+        }
+
+        return getExpression(bean.getClass(), propertyName);
+    }
+
+    @Override
+    public String getExpressionKey(Class beanClass, String propertyName) {
+        if(propertyName == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if(beanClass != null) {
+            sb.append(beanClass.getName());
+        }
+        sb.append(":").append(propertyName);
+
+        return sb.toString();
+    }
+
+    @Override
+    public Expression saveExpression(Expression expression) {
+        if(expression.getExpressionPK().getOrganizationId() == null) {
+            expression.getExpressionPK().setOrganizationId(getOrganization().getId());
+        }
+        em.persist(expression);
+
+        return expression;
+    }
+
+    @Override
+    public Expression saveExpression(String expressionKey, String expressionValue) {
+        if(expressionKey == null) {
+            throw new NullPointerException("The expressionKey can not be null: expressionValue=" + expressionValue);
+        }
+
+        Expression expression = new Expression(getOrganization().getId(), expressionKey);
+        expression.setExpressionValue(expressionValue);
+        return saveExpression(expression);
+    }
+
+    @Override
+    public Expression saveExpression(Class beanClass, String propertyName, String expressionValue) {
+        String expressionKey;
+        if((expressionKey = getExpressionKey(beanClass, propertyName)) == null) {
+            throw new IllegalArgumentException("The expressionKey can not be null: beanClass=" + beanClass +
+                    ", propertyName=" + propertyName + ", expressionValue=" + expressionValue);
+        }
+
+        return saveExpression(expressionKey, expressionValue);
+    }
+
+    @Override
+    public void deleteExpression(Expression expression) {
+        em.remove(expression);
+    }
+
+    @Override
+    public void deleteExpression(String expressionKey) {
+        if(expressionKey == null) {
+            throw new NullPointerException("The expressionKey can not be null.");
+        }
+
+        deleteExpression(new Expression(getOrganization().getId(), expressionKey));
+    }
+
+    @Override
+    public void deleteExpression(Class beanClass, String propertyName) {
+        String expressionKey;
+        if((expressionKey = getExpressionKey(beanClass, propertyName)) == null) {
+            throw new IllegalArgumentException("The expressionKey can not be null: beanClass=" + beanClass +
+                    ", propertyName=" + propertyName);
+        }
+
+        deleteExpression(expressionKey);
     }
 }
