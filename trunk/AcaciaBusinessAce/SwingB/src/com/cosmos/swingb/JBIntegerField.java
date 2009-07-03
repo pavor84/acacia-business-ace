@@ -122,7 +122,13 @@ public class JBIntegerField extends JXIntegerField
         this.beanEntity = beanEntity;
 
         BeanProperty beanProperty = BeanProperty.create("value");
-        binding = Bindings.createAutoBinding(updateStrategy, beanEntity, elProperty, getNumericField(), beanProperty);
+        binding = Bindings.createAutoBinding(
+                updateStrategy,
+                beanEntity,
+                elProperty,
+                getNumericField(),
+                beanProperty,
+                getName());
         bindingGroup.addBinding(binding);
 
         return binding;

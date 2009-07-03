@@ -83,6 +83,7 @@ public class JBComboBox
         return bind(bindingGroup, data, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy());
     }
 
+    @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
             List data,
@@ -108,12 +109,18 @@ public class JBComboBox
         this.propertyName = propertyDetails.getPropertyName();
         this.beanEntity = beanEntity;
 
+        String name;
+        if((name = getName()) != null) {
+            name = name + ".ComboBox";
+        }
         comboBoxBinding = SwingBindings.createJComboBoxBinding(
                 updateStrategy,
                 observableData,
-                this);
+                this,
+                name);
         bindingGroup.addBinding(comboBoxBinding);
 
+        name = getName();
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         binding = Bindings.createAutoBinding(
@@ -121,7 +128,8 @@ public class JBComboBox
                 beanEntity,
                 elProperty,
                 this,
-                beanProperty);
+                beanProperty,
+                name);
         Validator validator = propertyDetails.getValidator();
         if (validator != null) {
             binding.setValidator(validator);
