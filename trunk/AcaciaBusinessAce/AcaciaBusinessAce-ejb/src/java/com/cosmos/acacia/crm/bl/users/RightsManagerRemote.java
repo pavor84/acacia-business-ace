@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
@@ -12,7 +14,6 @@ import com.cosmos.acacia.crm.enums.UserRightType;
 
 @Remote
 public interface RightsManagerRemote {
-
 
     /**
      * Checks whether the current user has permission on the specified object
@@ -32,7 +33,6 @@ public interface RightsManagerRemote {
      */
     boolean isAllowed(DataObject dataObject,
             SpecialPermission specialPermission);
-
 
     /**
      * Checks whether the current user has the specified special permission.
@@ -70,7 +70,6 @@ public interface RightsManagerRemote {
             DataObject dataObject,
             SpecialPermission specialPermission);
 
-
     /**
      * Setter for rights. Provided for unit testing
      *
@@ -89,4 +88,16 @@ public interface RightsManagerRemote {
      * Clears the stored user rights
      */
     void clearCachedRights();
+
+    Set<SpecialPermission> getPermissions(
+            DataObject dataObject,
+            UserRightType rightType);
+
+    Set<SpecialPermission> getPermissions(
+            DataObjectType dataObjectType,
+            UserRightType rightType);
+
+    Set<SpecialPermission> getPermissions(
+            Class<? extends DataObjectBean> entityClass,
+            UserRightType rightType);
 }

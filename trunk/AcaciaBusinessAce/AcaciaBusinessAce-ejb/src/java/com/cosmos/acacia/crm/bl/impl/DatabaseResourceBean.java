@@ -50,6 +50,7 @@ import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
+import com.cosmos.acacia.crm.enums.UserRightType;
 
 /**
  *
@@ -105,6 +106,7 @@ public class DatabaseResourceBean
             getDbResources(CustomerPaymentType.class);
             getDbResources(DocumentType.class);
             getDbResources(DocumentStatus.class);
+            getDbResources(UserRightType.class);
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }
