@@ -31,6 +31,8 @@ public @interface FormContainer {
 
     RelationshipType relationshipType() default RelationshipType.None;
 
+    String listPanelClassName() default "";
+
     Class entityClass() default void.class;
 
     /**
