@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.bl.users;
 
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.bl.permission.PermissionLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
@@ -17,9 +19,14 @@ import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserRight;
+import com.cosmos.acacia.crm.data.permission.DataObjectPermission;
+import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.enums.UserRightType;
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.TreeSet;
 
 /**
  * The class supports both server-side and client-side invocations
@@ -40,19 +47,21 @@ public class RightsManagerBean
     private static final boolean DEFAULT_EXECUTE_RIGHT = true;
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @EJB
-    UserRightsLocal rightsHelper;
+    private UserRightsLocal rightsService;
 
     @EJB
-    AcaciaSessionLocal session;
+    private AcaciaSessionLocal session;
 
     @EJB
-    UsersLocal usersManager;
+    private UsersLocal usersManager;
+
+    @EJB
+    private PermissionLocal permissionService;
 
     public RightsManagerBean() {
-
     }
 
 
@@ -61,7 +70,6 @@ public class RightsManagerBean
             UserRightType rightType) {
 
         return isAllowed(getUser(), dataObject, rightType);
-
     }
 
     @Override
@@ -69,7 +77,6 @@ public class RightsManagerBean
             SpecialPermission specialPermission) {
 
         return isAllowed(getUser(), dataObject, specialPermission);
-
     }
 
     @Override
@@ -194,7 +201,9 @@ public class RightsManagerBean
     }
 
     @Override
-    public boolean isAllowed(User user, DataObject dataObject,
+    public boolean isAllowed(
+            User user,
+            DataObject dataObject,
             SpecialPermission specialPermission) {
 
         Set<UserRight> rights = fetchRights(user, dataObject, true);
@@ -266,9 +275,12 @@ public class RightsManagerBean
     }
 
     private Set<UserRight> fetchRights(User user, final DataObject dataObject, boolean isSpecial) {
-
-        Set<UserRight> rights = isSpecial
-            ? session.getSpecialPermissions() : session.getGeneralRights();
+        Set<UserRight> rights;
+        if(isSpecial) {
+            rights = session.getSpecialPermissions();
+        } else {
+            rights = session.getGeneralRights();
+        }
 
         if (rights == null) {
             rights = fetchRights(user, isSpecial);
@@ -383,19 +395,19 @@ public class RightsManagerBean
     }
 
     private Set<UserRight> getUserRights(User user) {
-        return rightsHelper.getUserRights(user);
+        return rightsService.getUserRights(user);
     }
 
     private Set<UserRight> getSpecialPermissions(User user) {
-        return rightsHelper.getSpecialPermissions(user);
+        return rightsService.getSpecialPermissions(user);
     }
 
     private Set<UserRight> getUserRights(UserGroup group) {
-        return rightsHelper.getUserRights(group);
+        return rightsService.getUserRights(group);
     }
 
     private Set<UserRight> getSpecialPermissions(UserGroup group) {
-        return rightsHelper.getSpecialPermissions(group);
+        return rightsService.getSpecialPermissions(group);
     }
 
     private UserRight[] toArray(Set<UserRight> set) {
@@ -405,5 +417,73 @@ public class RightsManagerBean
             array[i++] = right;
         }
         return array;
+    }
+
+    @Override
+    public Set<SpecialPermission> getPermissions(DataObject dataObject, UserRightType rightType) {
+        if(dataObject == null) {
+            return Collections.emptySet();
+        }
+
+        Set<DataObjectPermission> doPermissions =
+                permissionService.getDataObjectPermissions(dataObject, rightType);
+
+        TreeSet<SpecialPermission> permissions = new TreeSet<SpecialPermission>();
+        if(doPermissions != null && doPermissions.size() > 0) {
+            for(DataObjectPermission doPermission : doPermissions) {
+                permissions.add((SpecialPermission)doPermission.getUserRightType().getEnumValue());
+            }
+        }
+
+        Set<SpecialPermission> typePermissions;
+        if((typePermissions = getPermissions(dataObject.getDataObjectType(), rightType)) != null
+                && typePermissions.size() > 0) {
+            for(SpecialPermission permission : typePermissions) {
+                if(!permissions.contains(permission)) {
+                    permissions.add(permission);
+                }
+            }
+        }
+
+        if(permissions.size() == 0) {
+            return Collections.emptySet();
+        }
+
+        return EnumSet.copyOf(permissions);
+    }
+
+    @Override
+    public Set<SpecialPermission> getPermissions(DataObjectType dataObjectType, UserRightType rightType) {
+        if(dataObjectType == null) {
+            return Collections.emptySet();
+        }
+
+        return getPermissions(permissionService.getDataObjectTypePermissions(dataObjectType, rightType));
+    }
+
+    @Override
+    public Set<SpecialPermission> getPermissions(Class<? extends DataObjectBean> entityClass, UserRightType rightType) {
+        if(entityClass == null) {
+            return Collections.emptySet();
+        }
+
+        return getPermissions(permissionService.getDataObjectTypePermissions(entityClass, rightType));
+    }
+
+    private Set<SpecialPermission> getPermissions(Set<DataObjectTypePermission> dotPermissions) {
+        if(dotPermissions == null || dotPermissions.size() == 0) {
+            return Collections.emptySet();
+        }
+
+        TreeSet<SpecialPermission> set = new TreeSet<SpecialPermission>();
+        for(DataObjectTypePermission dotPermission : dotPermissions) {
+            set.add((SpecialPermission)dotPermission.getUserRightType().getEnumValue());
+        }
+
+        if(set.size() == 0) {
+            return Collections.emptySet();
+        }
+
+        return EnumSet.copyOf(set);
     }
 }

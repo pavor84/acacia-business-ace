@@ -63,12 +63,16 @@ public enum SpecialPermission implements DatabaseResource {
     Competitor(Category.Sales),
     SalesLiterature(Category.Sales),
     Quote(Category.Sales),
-    Order(Category.Sales),
-    Invoice(Category.Sales),
+    SalesOrder(Category.Sales),
+    SalesInvoice(Category.Sales),
     Territory(Category.Sales),
     OverrideQuotePricing(Category.Sales),
     OverrideOrderPricing(Category.Sales),
     OverrideInvoicePricing(Category.Sales),
+
+    //
+    PurchaseOrder(Category.Supplies),
+    PurchaseInvoice(Category.Supplies),
 
     // Service
     Article(Category.Service),
@@ -137,6 +141,7 @@ public enum SpecialPermission implements DatabaseResource {
         Contacts,
         Marketing,
         Sales,
+        Supplies, //Purchases
         Service,
         BusinessManagement,
         ServiceManagement,

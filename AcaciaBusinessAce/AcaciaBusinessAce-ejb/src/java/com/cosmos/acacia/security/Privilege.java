@@ -294,8 +294,7 @@ public class Privilege
     private Map<AccessRight, AccessLevel> accessRights;
     private Object entityType;
 
-    public Privilege()
-    {
+    public Privilege() {
     }
 
     public Privilege(
