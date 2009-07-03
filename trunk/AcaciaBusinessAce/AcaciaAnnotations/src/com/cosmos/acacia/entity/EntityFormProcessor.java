@@ -149,7 +149,8 @@ public class EntityFormProcessor {
                 }
                 if(parentContainer instanceof JTabbedPane) {
                     String title;
-                    if((title = resourceMap.getString(jContainer.getName() + ".TabConstraints.tabTitle")) == null ||
+                    String name = jContainer.getName();
+                    if((title = resourceMap.getString(name + ".TabConstraints.tabTitle")) == null ||
                             title.trim().length() == 0) {
                         title = formContainer.title();
                     }
@@ -252,6 +253,19 @@ public class EntityFormProcessor {
         }
 
         return set;
+    }
+
+    public JComponent getJComponentByPropertyName(String propertyName, Class<? extends JComponent> componentClass) {
+        Set<JComponent> set = getJComponentsByPropertyName(propertyName);
+        if((set = getJComponentsByPropertyName(propertyName)) != null && set.size() > 0) {
+            for(JComponent jComponent : set) {
+                if(componentClass.isAssignableFrom(jComponent.getClass())) {
+                    return jComponent;
+                }
+            }
+        }
+
+        return null;
     }
 
     protected List<Unit> getUnits(Map<UnitType, List<Unit>> unitsMap, UnitType unitType) {
@@ -439,8 +453,8 @@ public class EntityFormProcessor {
             throw new RuntimeException(ex);
         }
 
-        String containerName;
-        jContainer.setName(containerName = formContainer.name());
+        String containerName = formContainer.name();
+        jContainer.setName(containerName);
 
         Border border;
         if ((border = getBorder(container.componentBorder(), jContainer)) != null) {
@@ -448,10 +462,23 @@ public class EntityFormProcessor {
         }
 
         RelationshipType relationshipType = formContainer.relationshipType();
+        String listPanelClassName;
+        Class listPanelClass;
+        if((listPanelClassName = formContainer.listPanelClassName()).length() > 0) {
+            try {
+                listPanelClass = Class.forName(listPanelClassName);
+            } catch(Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
+            listPanelClass = null;
+        }
+
         Class containerEntityClass;
         if((!RelationshipType.None.equals(relationshipType)) &&
                 (containerEntityClass = formContainer.entityClass()) != void.class) {
-            ContainerEntity containerEntity = new ContainerEntity(jContainer, relationshipType, containerEntityClass);
+            ContainerEntity containerEntity = new ContainerEntity(jContainer, relationshipType,
+                    containerEntityClass, listPanelClass);
             containerEntities.add(containerEntity);
         }
 

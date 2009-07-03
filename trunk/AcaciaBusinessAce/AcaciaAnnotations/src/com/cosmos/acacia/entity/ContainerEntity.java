@@ -16,11 +16,14 @@ public class ContainerEntity {
     private JComponent jContainer;
     private RelationshipType relationshipType;
     private Class entityClass;
+    private Class listPanelClass;
 
-    public ContainerEntity(JComponent jContainer, RelationshipType relationshipType, Class entityClass) {
+    public ContainerEntity(JComponent jContainer, RelationshipType relationshipType,
+            Class entityClass, Class listPanelClass) {
         this.jContainer = jContainer;
         this.relationshipType = relationshipType;
         this.entityClass = entityClass;
+        this.listPanelClass = listPanelClass;
     }
 
     public Class getEntityClass() {
@@ -33,5 +36,9 @@ public class ContainerEntity {
 
     public RelationshipType getRelationshipType() {
         return relationshipType;
+    }
+
+    public Class getListPanelClass() {
+        return listPanelClass;
     }
 }
