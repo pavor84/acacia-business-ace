@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 
 /**
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * @author Bozhidar Bozhanov
  */
 
-public class ClassifiedObjectBean implements Serializable {
+public class ClassifiedObjectBean implements Serializable, CloneableBean<ClassifiedObjectBean> {
 
     @Property(title="Title")
     private String title;
@@ -35,5 +36,14 @@ public class ClassifiedObjectBean implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public ClassifiedObjectBean clone() {
+        try {
+            return (ClassifiedObjectBean)super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -32,7 +33,7 @@ import javax.persistence.Table;
         query = "SELECT p FROM ProductSupplier p" +
                 " where p.product = :product")
 })
-public class ProductSupplier implements Serializable {
+public class ProductSupplier implements Serializable, CloneableBean<ProductSupplier> {
 
     private static final long serialVersionUID = 1L;
 
@@ -279,5 +280,14 @@ public class ProductSupplier implements Serializable {
     @Override
     public String toString() {
         return "ProductSupplier[" + productSupplierPK + "]";
+    }
+
+    @Override
+    public ProductSupplier clone() {
+        try {
+            return (ProductSupplier) super.clone();
+        } catch(CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

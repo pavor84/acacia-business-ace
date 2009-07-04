@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +50,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
         )
     }
 )
-public class DataObjectType implements Serializable {
+public class DataObjectType implements Serializable, CloneableBean<DataObjectType> {
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name="DOTSequenceGenerator", sequenceName="data_object_type_seq", allocationSize=1)
@@ -174,4 +175,12 @@ public class DataObjectType implements Serializable {
                //dataObjectTypeId + "]";
     }
 
+    @Override
+    public DataObjectType clone() {
+        try {
+            return (DataObjectType) super.clone();
+        } catch(CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

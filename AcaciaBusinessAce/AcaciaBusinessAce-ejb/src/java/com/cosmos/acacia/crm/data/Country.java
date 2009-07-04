@@ -10,6 +10,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
+import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,7 +44,7 @@ import javax.persistence.Table;
                 )
 	}
 )
-public class Country implements TextResource, Serializable {
+public class Country implements TextResource, CloneableBean<Country>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -199,4 +200,12 @@ public class Country implements TextResource, Serializable {
         return null;
     }
 
+    @Override
+    public Country clone() {
+        try {
+            return (Country) super.clone();
+        } catch(CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }
