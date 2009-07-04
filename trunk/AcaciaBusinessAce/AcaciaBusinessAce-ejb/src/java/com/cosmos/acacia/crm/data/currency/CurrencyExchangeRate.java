@@ -6,6 +6,7 @@ package com.cosmos.acacia.crm.data.currency;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -90,7 +91,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
                 "  and (t1.validUntil >= :validUntil or t1.validUntil is null)"
     )
 })
-public class CurrencyExchangeRate implements Serializable {
+public class CurrencyExchangeRate implements Serializable, CloneableBean<CurrencyExchangeRate> {
 
     private static final long serialVersionUID = 1L;
     //
@@ -162,7 +163,7 @@ public class CurrencyExchangeRate implements Serializable {
     }
 
     public CurrencyExchangeRatePK getCurrencyExchangeRatePK() {
-        if(currencyExchangeRatePK == null) {
+        if (currencyExchangeRatePK == null) {
             currencyExchangeRatePK = new CurrencyExchangeRatePK();
         }
 
@@ -202,7 +203,7 @@ public class CurrencyExchangeRate implements Serializable {
     }
 
     public void setValidFrom(Date validFrom) {
-        if(validFrom != null) {
+        if (validFrom != null) {
             getCurrencyExchangeRatePK().setValidFrom(validFrom);
         } else {
             getCurrencyExchangeRatePK().setValidFrom(null);
@@ -215,7 +216,7 @@ public class CurrencyExchangeRate implements Serializable {
 
     public void setFromCurrency(DbResource fromCurrency) {
         this.fromCurrency = fromCurrency;
-        if(fromCurrency != null) {
+        if (fromCurrency != null) {
             getCurrencyExchangeRatePK().setFromCurrencyId(fromCurrency.getResourceId());
         } else {
             getCurrencyExchangeRatePK().setFromCurrencyId(0);
@@ -228,7 +229,7 @@ public class CurrencyExchangeRate implements Serializable {
 
     public void setToCurrency(DbResource toCurrency) {
         this.toCurrency = toCurrency;
-        if(toCurrency != null) {
+        if (toCurrency != null) {
             getCurrencyExchangeRatePK().setToCurrencyId(toCurrency.getResourceId());
         } else {
             getCurrencyExchangeRatePK().setToCurrencyId(0);
@@ -237,7 +238,7 @@ public class CurrencyExchangeRate implements Serializable {
 
     @Override
     public int hashCode() {
-        if(currencyExchangeRatePK != null) {
+        if (currencyExchangeRatePK != null) {
             return currencyExchangeRatePK.hashCode();
         } else {
             return 0;
@@ -267,7 +268,12 @@ public class CurrencyExchangeRate implements Serializable {
                 "]";
     }
 
-
-
-
+    @Override
+    public CurrencyExchangeRate clone() {
+        try {
+            return (CurrencyExchangeRate) super.clone();
+        } catch(CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

@@ -53,8 +53,7 @@ import javax.persistence.Table;
              )
         }
 )
-public class PositionType
-        extends DataObjectBean
+public class PositionType extends DataObjectBean
         implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;

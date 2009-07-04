@@ -41,9 +41,8 @@ import javax.persistence.Table;
                     "  and t1.dataObject.deleted = false"
             )
     })
-public class AssemblingMessage
-    extends DataObjectBean
-    implements Serializable, Comparable<AssemblingMessage>
+public class AssemblingMessage extends DataObjectBean
+            implements Serializable, Comparable<AssemblingMessage>
 {
     private static final long serialVersionUID = 1L;
 

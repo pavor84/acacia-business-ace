@@ -5,6 +5,7 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
+import com.cosmos.util.CloneableBean;
 import com.cosmos.util.ImageUtils;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
@@ -21,7 +22,8 @@ import javax.imageio.ImageIO;
  *
  * @author Miro
  */
-public abstract class DataObjectBean implements Cloneable, PropertyChangeNotificationBroadcaster {
+public abstract class DataObjectBean
+        implements CloneableBean<DataObjectBean>, PropertyChangeNotificationBroadcaster {
 
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private URI smallImageURI;
@@ -263,9 +265,9 @@ public abstract class DataObjectBean implements Cloneable, PropertyChangeNotific
     }
 
     @Override
-    public Object clone() {
+    public DataObjectBean clone() {
         try {
-            return super.clone();
+            return (DataObjectBean)super.clone();
         } catch (CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }

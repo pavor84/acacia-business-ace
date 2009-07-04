@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
+import com.cosmos.util.CloneableBean;
 
 
 @Entity
@@ -42,7 +43,7 @@ import com.cosmos.acacia.crm.bl.users.RightsManagerBean;
                 query = "select ur from UserRight ur where ur.userGroup=:userGroup and ur.specialPermission is not null order by dataObjectType,excluded"
         )
 })
-public class UserRight implements Serializable, Comparable<UserRight> {
+public class UserRight implements Serializable, Comparable<UserRight>, CloneableBean<UserRight> {
 
     @Id
     @SequenceGenerator(name="UserRightsSequenceGenerator", sequenceName="user_rights_seq", allocationSize=1)
@@ -324,5 +325,14 @@ public class UserRight implements Serializable, Comparable<UserRight> {
             return -1;
 
         return 1;
+    }
+
+    @Override
+    public UserRight clone() {
+        try {
+            return (UserRight) super.clone();
+        } catch(CloneNotSupportedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
