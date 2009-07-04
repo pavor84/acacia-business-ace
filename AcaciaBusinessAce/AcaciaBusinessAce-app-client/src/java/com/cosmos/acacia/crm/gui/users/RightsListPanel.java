@@ -34,7 +34,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author  Bozhidar Bozhanov
  */
-public class RightsListPanel extends AbstractTablePanel {
+public class RightsListPanel extends AbstractTablePanel<UserRight> {
 
     /** Creates new form OrganizationsListPanel */
     public RightsListPanel(BigInteger parentDataObjectId) {
@@ -167,14 +167,14 @@ public class RightsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(UserRight rowObject) {
         rights.remove(rowObject);
         return true;
     }
 
     @SuppressWarnings("null")
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected UserRight modifyRow(UserRight rowObject) {
         if(rowObject != null && canNestedOperationProceed())
         {
             AcaciaPanel panel = null;
@@ -187,7 +187,7 @@ public class RightsListPanel extends AbstractTablePanel {
             DialogResponse response = panel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return panel.getSelectedValue();
+                return (UserRight) panel.getSelectedValue();
             }
         }
 
@@ -196,7 +196,7 @@ public class RightsListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("null")
     @Override
-    protected Object newRow() {
+    protected UserRight newRow() {
         if (canNestedOperationProceed()) {
             UserRight right = new UserRight();
             if (user != null)
@@ -272,12 +272,12 @@ public class RightsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(UserRight rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(UserRight rowObject) {
         return true;
     }
 

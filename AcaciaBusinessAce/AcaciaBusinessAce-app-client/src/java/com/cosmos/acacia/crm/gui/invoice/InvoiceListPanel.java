@@ -26,52 +26,53 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class InvoiceListPanel extends AbstractTablePanel {
-    
+public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
+
     private EntityProperties entityProps;
-    
     private InvoiceListRemote formSession;
     private BindingGroup bindingGroup;
-
     private List<Invoice> list;
     private boolean proform;
-    
+
     public InvoiceListPanel(BigInteger parentDataObjectId, boolean proform) {
-        this ( parentDataObjectId, null, proform );
+        this(parentDataObjectId, null, proform);
     }
-    
+
     public InvoiceListPanel(BigInteger parentDataObjectId, List<Invoice> list, boolean proform) {
         super(parentDataObjectId);
         this.list = list;
         this.proform = proform;
         bindComponents();
     }
-    
-    protected void bindComponents(){
+
+    protected void bindComponents() {
         entityProps = getFormSession().getListingEntityProperties();
-        
-        if ( proform )
+
+        if (proform) {
             setTitle(getResourceMap().getString("Form.title.proform"));
-        
+        }
+
         refreshDataTable(entityProps);
-        
+
         setVisible(AbstractTablePanel.Button.Classify, false);
     }
-    
+
     protected InvoiceListRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(InvoiceListRemote.class);
+        }
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
-        
+        }
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -80,8 +81,9 @@ public class InvoiceListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null )
+        if (list == null) {
             list = getFormSession().listInvoices(getParentDataObjectId(), proform);
+        }
         return list;
     }
 
@@ -96,82 +98,81 @@ public class InvoiceListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
-        Invoice i = (Invoice) rowObject;
-        InvoiceStatus status = (InvoiceStatus) i.getStatus().getEnumValue();
-        if ( isInBranch(i) 
-                && (InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status)) )
+    public boolean canDelete(Invoice rowObject) {
+        InvoiceStatus status = (InvoiceStatus) rowObject.getStatus().getEnumValue();
+        if (isInBranch(rowObject) && (InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status))) {
             return true;
+        }
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
-        return isInBranch((Invoice) rowObject);
+    public boolean canModify(Invoice rowObject) {
+        return isInBranch(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deleteInvoice((Invoice)rowObject);
+    protected boolean deleteRow(Invoice rowObject) {
+        getFormSession().deleteInvoice(rowObject);
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        Invoice o = (Invoice) rowObject;
-        return showDetailForm(o, true);
+    protected Invoice modifyRow(Invoice rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected Invoice newRow() {
         Invoice o = getFormSession().newInvoice(getParentDataObjectId());
-        if ( proform )
+        if (proform) {
             o.setProformaInvoice(Boolean.TRUE);
+        }
         return showDetailForm(o, true);
     }
 
-    private Object showDetailForm(Invoice o, boolean editable) {
+    private Invoice showDetailForm(Invoice o, boolean editable) {
         InvoiceForm editPanel = new InvoiceForm(o);
-        if ( !editable )
+        if (!editable) {
             editPanel.setReadonly();
+        }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (Invoice) editPanel.getSelectedValue();
         }
 
         return null;
     }
-    
-    private boolean isInBranch(Invoice invoice){
+
+    private boolean isInBranch(Invoice invoice) {
         Address userBranch = getUserBranch();
-        if ( invoice.getBranch().equals(userBranch) ){
+        if (invoice.getBranch().equals(userBranch)) {
             return true;
-        }else
+        } else {
             return false;
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
-    
+
     @Override
-    protected void viewRow(Object rowObject) {
-        Invoice o = (Invoice) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(Invoice rowObject) {
+        showDetailForm(rowObject, false);
     }
 }

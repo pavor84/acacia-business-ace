@@ -24,7 +24,7 @@ import com.cosmos.swingb.DialogResponse;
  * @version $Id: $
  *
  */
-public class WarehouseListPanel extends AbstractTablePanel {
+public class WarehouseListPanel extends AbstractTablePanel<Warehouse> {
 
     private EntityProperties entityProps;
 
@@ -89,23 +89,23 @@ public class WarehouseListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Warehouse rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Warehouse rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(Warehouse rowObject) {
         try{
-          getFormSession().deleteWarehouse((Warehouse) rowObject);
+          getFormSession().deleteWarehouse(rowObject);
           return true;
         }catch ( Exception e ){
             JOptionPane.showMessageDialog(this,
@@ -119,25 +119,24 @@ public class WarehouseListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        Warehouse w = (Warehouse) rowObject;
-        return onEditEntity(w);
+    protected Warehouse modifyRow(Warehouse rowObject) {
+        return onEditEntity(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected Warehouse newRow() {
         Warehouse w = getFormSession().newWarehouse(getParentDataObjectId());
         return onEditEntity(w);
     }
 
-    private Object onEditEntity(Warehouse w) {
+    private Warehouse onEditEntity(Warehouse w) {
         WarehousePanel editPanel = new WarehousePanel(w);
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return editPanel.getSelectedValue();
+            return (Warehouse) editPanel.getSelectedValue();
         }
 
         return null;

@@ -24,48 +24,47 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class PricelistListPanel extends AbstractTablePanel {
-    
+public class PricelistListPanel extends AbstractTablePanel<Pricelist> {
+
     private EntityProperties entityProps;
-    
     private PricelistRemote formSession;
     private BindingGroup bindingGroup;
-
     private List<Pricelist> list;
-    
-    
+
     public PricelistListPanel(BigInteger parentDataObjectId) {
-        this ( parentDataObjectId, null );
+        this(parentDataObjectId, null);
     }
-    
+
     public PricelistListPanel(BigInteger parentDataObjectId, List<Pricelist> list) {
         super(parentDataObjectId);
         this.setList(list);
         bindComponents();
     }
-    
-    protected void bindComponents(){
+
+    protected void bindComponents() {
         entityProps = getFormSession().getListingEntityProperties();
-        
+
         refreshDataTable(entityProps);
-        
+
         setVisible(AbstractTablePanel.Button.Classify, false);
     }
-    
+
     protected PricelistRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(PricelistRemote.class);
+        }
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
-        
+        }
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -74,8 +73,9 @@ public class PricelistListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null )
+        if (list == null) {
             setList(getFormSession().listPricelists(getParentDataObjectId()));
+        }
         return list;
     }
 
@@ -90,92 +90,91 @@ public class PricelistListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
-        Pricelist object = (Pricelist) rowObject;
-        if ( object.isGeneralPricelist() )
+    public boolean canDelete(Pricelist rowObject) {
+        if (rowObject.isGeneralPricelist()) {
             return false;
+        }
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
-        Pricelist object = (Pricelist) rowObject;
-        if ( object.isGeneralPricelist() )
+    public boolean canModify(Pricelist rowObject) {
+        if (rowObject.isGeneralPricelist()) {
             return false;
+        }
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
-    
+
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(Pricelist rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deletePricelist((Pricelist)rowObject);
+    protected boolean deleteRow(Pricelist rowObject) {
+        getFormSession().deletePricelist(rowObject);
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        Pricelist o = (Pricelist) rowObject;
-        return showDetailForm(o, true);
+    protected Pricelist modifyRow(Pricelist rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
-        if ( canCreate() ){
+    protected Pricelist newRow() {
+        if (canCreate()) {
             Pricelist o = getFormSession().newPricelist(getParentDataObjectId());
-            return showDetailForm(o, true);
-        }else{
+            return (Pricelist) showDetailForm(o, true);
+        } else {
             return null;
         }
     }
 
-    private Object showDetailForm(Pricelist o, boolean editable) {
+    private Pricelist showDetailForm(Pricelist o, boolean editable) {
         PricelistForm editPanel = new PricelistForm(o);
-        if ( !editable )
+        if (!editable) {
             editPanel.setReadonly();
+        }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (Pricelist) editPanel.getSelectedValue();
         }
 
         return null;
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
-    
+
     @Override
-    protected void viewRow(Object rowObject) {
-        Pricelist o = (Pricelist) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(Pricelist rowObject) {
+        showDetailForm(rowObject, false);
     }
 
     public void setList(List<Pricelist> list) {
         this.list = list;
-        if ( list!=null )
+        if (list != null) {
             for (Pricelist pricelist : list) {
-                if ( pricelist.isGeneralPricelist() )
+                if (pricelist.isGeneralPricelist()) {
                     pricelist.setName(getResourceMap().getString("Pricelist.generalPricelist.name"));
+                }
             }
+        }
     }
 }

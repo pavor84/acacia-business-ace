@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.math.BigInteger;
@@ -27,21 +26,18 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author Bozhidar Bozhanov
  */
-public class PassportsListPanel extends AbstractTablePanel {
+public class PassportsListPanel extends AbstractTablePanel<Passport> {
 
     /** Creates new form BankDetailsListPanel */
-    public PassportsListPanel(BigInteger parentDataObjectId)
-    {
+    public PassportsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
     public PassportsListPanel(DataObjectBean parent) {
         super(parent);
     }
-
     @EJB
     private PassportsListRemote formSession;
-
     private BindingGroup passportsBindingGroup;
     private List<Passport> passports;
 
@@ -60,10 +56,8 @@ public class PassportsListPanel extends AbstractTablePanel {
         passportsTable.setEditable(false);
     }
 
-    protected List<Passport> getPassports()
-    {
-        if(passports == null)
-        {
+    protected List<Passport> getPassports() {
+        if (passports == null) {
             passports = getFormSession().getPassports(getParentDataObjectId());
         }
 
@@ -75,8 +69,9 @@ public class PassportsListPanel extends AbstractTablePanel {
     }
 
     protected PassportsListRemote getFormSession() {
-        if(formSession == null)
+        if (formSession == null) {
             formSession = getBean(PassportsListRemote.class);
+        }
 
         return formSession;
     }
@@ -87,16 +82,15 @@ public class PassportsListPanel extends AbstractTablePanel {
 
     @Override
     @Action
-    public void selectAction(){
+    public void selectAction() {
         super.selectAction();
         //
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
-            deletePassport((Passport) rowObject);
+    protected boolean deleteRow(Passport rowObject) {
+        if (rowObject != null) {
+            deletePassport(rowObject);
             return true;
         }
 
@@ -108,8 +102,9 @@ public class PassportsListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (passportsBindingGroup != null)
+        if (passportsBindingGroup != null) {
             passportsBindingGroup.unbind();
+        }
 
         passports = null;
 
@@ -119,14 +114,12 @@ public class PassportsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            PassportPanel passportPanel = new PassportPanel((Passport)rowObject);
+    protected Passport modifyRow(Passport rowObject) {
+        if (rowObject != null) {
+            PassportPanel passportPanel = new PassportPanel(rowObject);
             DialogResponse response = passportPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return passportPanel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (Passport) passportPanel.getSelectedValue();
             }
         }
 
@@ -134,15 +127,13 @@ public class PassportsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
-        if (canNestedOperationProceed())
-        {
+    protected Passport newRow() {
+        if (canNestedOperationProceed()) {
             PassportPanel passportPanel = new PassportPanel(getParentDataObjectId());
 
             DialogResponse response = passportPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return passportPanel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (Passport) passportPanel.getSelectedValue();
             }
         }
         return null;
@@ -154,13 +145,12 @@ public class PassportsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Passport rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Passport rowObject) {
         return true;
     }
-
 }

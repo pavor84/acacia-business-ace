@@ -49,6 +49,7 @@ import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import com.cosmos.util.CloneableBean;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -59,7 +60,7 @@ import org.jdesktop.beansbinding.BindingGroup;
  *
  * @author  Miro
  */
-public abstract class AbstractTablePanel
+public abstract class AbstractTablePanel<E extends CloneableBean>
         extends AcaciaPanel
         implements SelectableListDialog {
 
@@ -270,7 +271,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Map<Button, JBButton> buttonsMap;
     private boolean editable = true;
     private boolean visibilitySetChanged = false;
-    private Object selectedRowObject;
+    private E selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
     private Classifier classifier;
     private boolean allowClassifierChange;
@@ -369,13 +370,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Override
-    public Object getSelectedRowObject() {
+    public E getSelectedRowObject() {
         return selectedRowObject;
     }
 
     @Override
     public void setSelectedRowObject(Object selectedRowObject) {
-        this.selectedRowObject = selectedRowObject;
+        this.selectedRowObject = (E) selectedRowObject;
         AcaciaTable table = getDataTable();
         if (selectedRowObject != null) {
             table.setSelectedRowObject(selectedRowObject);
@@ -437,7 +438,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Override
-    public List getListData() {
+    public List<E> getListData() {
         return getDataTable().getData();
     }
 
@@ -486,7 +487,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param rowObject
      * @return true if the object is delete
      */
-    protected abstract boolean deleteRow(Object rowObject);
+    protected abstract boolean deleteRow(E rowObject);
 
     /**
      * rowObject is the object which have to be modified.
@@ -495,7 +496,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param rowObject
      * @return newRowObject
      */
-    protected abstract Object modifyRow(Object rowObject);
+    protected abstract E modifyRow(E rowObject);
 
     /**
      * Just show detailed view of the object
@@ -503,7 +504,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param rowObject
      * @return newRowObject
      */
-    protected void viewRow(Object rowObject) {
+    protected void viewRow(E rowObject) {
     }
 
     ;
@@ -513,7 +514,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      *
      * @return the new row object
      */
-    protected abstract Object newRow();
+    protected abstract E newRow();
 
     public boolean canCreate() {
         if(isQueryMode()) {
@@ -528,7 +529,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return getRightsManager().isAllowed(permissions);
     }
 
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(E rowObject) {
         if(isQueryMode()) {
             return false;
         }
@@ -541,7 +542,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return getRightsManager().isAllowed(permissions);
     }
 
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(E rowObject) {
         if(isQueryMode()) {
             return false;
         }
@@ -554,20 +555,26 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return getRightsManager().isAllowed(permissions);
     }
 
-    public boolean canView(Object rowObject) {
+    public boolean canView(E rowObject) {
+        Object object;
+        if(rowObject != null) {
+            object = rowObject;
+        } else {
+            object = getEntityClass();
+        }
         Set<SpecialPermission> permissions;
-        if((permissions = getViewPermissions(rowObject)) == null || permissions.size() == 0) {
+        if((permissions = getViewPermissions(object)) == null || permissions.size() == 0) {
             return false;
         }
 
         return getRightsManager().isAllowed(permissions);
     }
 
-    public boolean canSelect(Object rowObject) {
+    public boolean canSelect(E rowObject) {
         return true;
     }
 
-    public boolean canSpecial(Object rowObject) {
+    public boolean canSpecial(E rowObject) {
         return true;
     }
 
@@ -677,7 +684,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }*/
     @Action
     public void selectAction() {
-        selectedRowObject = dataTable.getSelectedRowObject();
+        selectedRowObject = (E) dataTable.getSelectedRowObject();
         setDialogResponse(DialogResponse.SELECT);
         close();
         fireTableSelectAction();
@@ -709,7 +716,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     @Action
     public void newAction() {
-        Object newRowObject = newRow();
+        E newRowObject = newRow();
         if (newRowObject != null) {
             // Classify the new object if needed
             classifyObject(newRowObject);
@@ -723,7 +730,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    protected void addTableObject(Object newRowObject) {
+    protected void addTableObject(E newRowObject) {
         dataTable.addRow(newRowObject);
     }
 
@@ -732,16 +739,14 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      */
     @Action
     public void modifyAction() {
-        Object rowObject = dataTable.getSelectedRowObject();
+        E rowObject = (E) dataTable.getSelectedRowObject();
         if (rowObject != null) {
-            if (rowObject instanceof DataObjectBean) {
-                rowObject = ((DataObjectBean) rowObject).clone();
-            }
+            rowObject = (E) rowObject.clone();
 
             if (viewRowState) {
                 viewRow(rowObject);
             } else {
-                Object newRowObject = modifyRow(rowObject);
+                E newRowObject = modifyRow(rowObject);
                 if (newRowObject != null) {
                     replaceTableObject(newRowObject);
                     fireModify(newRowObject);
@@ -750,13 +755,13 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    protected void replaceTableObject(Object newRowObject) {
+    protected void replaceTableObject(E newRowObject) {
         dataTable.replaceSelectedRow(newRowObject);
     }
 
     @Action
     public void deleteAction() {
-        Object rowObject = dataTable.getSelectedRowObject();
+        E rowObject = (E) dataTable.getSelectedRowObject();
 
         if (showDeleteConfirmation(getResourceMap().getString("deleteAction.ConfirmDialog.message"))) {
             try {
@@ -983,7 +988,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                         setEnabled(Button.Special, false);
                     }
                 } else {
-                    Object selectedObject = table.getSelectedRowObject();
+                    E selectedObject = (E) table.getSelectedRowObject();
                     if(isQueryMode()) {
                         initQueryMode(selectedObject);
                     } else {
@@ -1001,7 +1006,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             }
         }
 
-        protected void initQueryMode(Object selectedObject) {
+        protected void initQueryMode(E selectedObject) {
             if (!canView(selectedObject)) {
                 setEnabled(Button.Modify, false);
                 //the row is view-able - show the view button instead of modify
@@ -1016,7 +1021,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
         }
 
-        protected void initModifyMode(Object selectedObject) {
+        protected void initModifyMode(E selectedObject) {
             //the list is edit-able and the row is modifiable - show modify button
             if(isEditable()) {
                 if (canModify(selectedObject)) {
@@ -1079,21 +1084,21 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         return tableModificationListeners;
     }
 
-    protected void fireAdd(Object row) {
+    protected void fireAdd(E row) {
         log.info("fireAdd called with " + row);
         for (TableModificationListener listener : tableModificationListeners) {
             listener.rowAdded(row);
         }
     }
 
-    protected void fireModify(Object row) {
+    protected void fireModify(E row) {
         log.info("fireModify called with " + row);
         for (TableModificationListener listener : tableModificationListeners) {
             listener.rowModified(row);
         }
     }
 
-    protected void fireDelete(Object row) {
+    protected void fireDelete(E row) {
         log.info("fireDelete called with " + row);
         for (TableModificationListener listener : tableModificationListeners) {
             listener.rowDeleted(row);
@@ -1123,7 +1128,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * Fires row modification event to all listeners.
      * @param newChildren
      */
-    public void updateRowObject(Object rowObject) {
+    public void updateRowObject(E rowObject) {
         dataTable.updateRow(rowObject);
         fireModify(rowObject);
     }
@@ -1321,7 +1326,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     @Override
-    public List getEntities() {
+    public List<E> getEntities() {
         return getListData();
     }
 }

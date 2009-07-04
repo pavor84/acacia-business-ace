@@ -246,7 +246,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
 
     }
 
-    private class CustomerDiscountItemListPanel extends AbstractTablePanel {
+    private class CustomerDiscountItemListPanel extends AbstractTablePanel<CustomerDiscountItem> {
 
         private Boolean includeProduct;
         private BindingGroup bindingGroup;
@@ -319,28 +319,28 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
         }
 
         @Override
-        protected boolean deleteRow(Object rowObject) {
+        protected boolean deleteRow(CustomerDiscountItem rowObject) {
             if(rowObject == null)
                 return false;
 
-            return getFormSession().deleteCustomerDiscountItem((CustomerDiscountItem)rowObject);
+            return getFormSession().deleteCustomerDiscountItem(rowObject);
         }
 
         @Override
-        protected Object modifyRow(Object rowObject) {
+        protected CustomerDiscountItem modifyRow(CustomerDiscountItem rowObject) {
             if(rowObject == null)
                 return null;
 
-            CustomerDiscountItemPanel itemPanel = new CustomerDiscountItemPanel((CustomerDiscountItem)rowObject);
+            CustomerDiscountItemPanel itemPanel = new CustomerDiscountItemPanel(rowObject);
             if(DialogResponse.SAVE.equals(itemPanel.showDialog(this))) {
-                return itemPanel.getSelectedValue();
+                return (CustomerDiscountItem) itemPanel.getSelectedValue();
             }
 
             return null;
         }
 
         @Override
-        protected Object newRow() {
+        protected CustomerDiscountItem newRow() {
             if(includeProduct == null)
                 return null;
 
@@ -352,7 +352,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             includeProduct = null;
             CustomerDiscountItemPanel itemPanel = new CustomerDiscountItemPanel(item);
             if(DialogResponse.SAVE.equals(itemPanel.showDialog(this))) {
-                return itemPanel.getSelectedValue();
+                return (CustomerDiscountItem) itemPanel.getSelectedValue();
             }
 
             return null;

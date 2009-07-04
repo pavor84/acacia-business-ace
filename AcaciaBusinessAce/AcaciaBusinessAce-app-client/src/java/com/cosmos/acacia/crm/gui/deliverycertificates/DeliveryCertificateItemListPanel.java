@@ -18,25 +18,21 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
-public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
-	
-	private static final long serialVersionUID = -4986063572371186468L;
+public class DeliveryCertificateItemListPanel extends AbstractTablePanel<DeliveryCertificateItem> {
 
-	@EJB
+    private static final long serialVersionUID = -4986063572371186468L;
+    @EJB
     private DeliveryCertificatesRemote formSession;
-	
-	public List<DeliveryCertificateItem> items;
-	
-	private BindingGroup bindGroup;
-	
-	private EntityProperties entityProps;
-	AcaciaTable table = null;
-	
-	public DeliveryCertificateItemListPanel(BigInteger parentDataObjectId) {
+    public List<DeliveryCertificateItem> items;
+    private BindingGroup bindGroup;
+    private EntityProperties entityProps;
+    AcaciaTable table = null;
+
+    public DeliveryCertificateItemListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
-	
-	@Override
+
+    @Override
     protected void initData() {
 
         super.initData();
@@ -44,12 +40,13 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
         entityProps = getFormSession().getDeliveryCertificateItemsEntityProperties();
 
         refreshDataTable(entityProps);
-      
+
     }
-	
-	public void refreshDataTable(EntityProperties entityProps) {
-        if (bindGroup != null)
+
+    public void refreshDataTable(EntityProperties entityProps) {
+        if (bindGroup != null) {
             bindGroup.unbind();
+        }
 
         bindGroup = new BindingGroup();
         table = getDataTable();
@@ -58,121 +55,119 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel {
         bindGroup.bind();
         table.setEditable(false);
     }
-	
-	public void refreshList(List<DeliveryCertificateItem> items) {
+
+    public void refreshList(List<DeliveryCertificateItem> items) {
         this.items = items;
         refreshDataTable(entityProps);
     }
-	
-	protected List<DeliveryCertificateItem> getItems() {
-        if ( items ==null ){
-            if ( getParentDataObjectId()!=null ){
-            	List<DeliveryCertificateItem> l = getFormSession().getDeliveryCertificateItems(getParentDataObjectId());
-            	return l;
-            }
-            else{
-            	return new ArrayList<DeliveryCertificateItem>();
+
+    protected List<DeliveryCertificateItem> getItems() {
+        if (items == null) {
+            if (getParentDataObjectId() != null) {
+                List<DeliveryCertificateItem> l = getFormSession().getDeliveryCertificateItems(getParentDataObjectId());
+                return l;
+            } else {
+                return new ArrayList<DeliveryCertificateItem>();
             }
         }
         return items;
     }
-	
-	protected DeliveryCertificatesRemote getFormSession(){
-        if(formSession == null){
+
+    protected DeliveryCertificatesRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(DeliveryCertificatesRemote.class);
         }
 
         return formSession;
     }
-	
-	@Override
-	@Action
-    public void specialAction(){
-		try{
-			DeliveryCertificateItem item = (DeliveryCertificateItem)getDataTable().getSelectedRowObject();
-			BigDecimal quantity = item.getQuantity();
-			
-			//keep the index of the selected item
-			int index = getDataTable().getSelectedRow();
-			
-			//if the quantity is not integer, an exception will be thrown. Some products do not have serial numbers 
-			quantity.intValueExact();
-			
-			if(canNestedOperationProceed()){
-				//ID of the delivery certificate
-				BigInteger deliveryCertificateId = getParentDataObjectId();
-				
-				if(item.getCertificateItemId() == null){
-					//new certificate is just created and get the fully instantiated certificate item (with ID etc)
-					item = getFormSession().getDeliveryCertificateItems(deliveryCertificateId).get(index);
-				}
-				
-				DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(item.getCertificateItemId());
-				panel.showDialog(this);
-			}
-		}
-		catch(ArithmeticException e){
-			//the exception is thrown when quantity has a nonzero fractional part, or will not fit in an int.
-			JOptionPane.showMessageDialog(this, "The selected product do not have serial numbers.");
-		}
+
+    @Override
+    @Action
+    public void specialAction() {
+        try {
+            DeliveryCertificateItem item = (DeliveryCertificateItem) getDataTable().getSelectedRowObject();
+            BigDecimal quantity = item.getQuantity();
+
+            //keep the index of the selected item
+            int index = getDataTable().getSelectedRow();
+
+            //if the quantity is not integer, an exception will be thrown. Some products do not have serial numbers
+            quantity.intValueExact();
+
+            if (canNestedOperationProceed()) {
+                //ID of the delivery certificate
+                BigInteger deliveryCertificateId = getParentDataObjectId();
+
+                if (item.getCertificateItemId() == null) {
+                    //new certificate is just created and get the fully instantiated certificate item (with ID etc)
+                    item = getFormSession().getDeliveryCertificateItems(deliveryCertificateId).get(index);
+                }
+
+                DeliveryCertificateSerialNumbersListPanel panel = new DeliveryCertificateSerialNumbersListPanel(item.getCertificateItemId());
+                panel.showDialog(this);
+            }
+        } catch (ArithmeticException e) {
+            //the exception is thrown when quantity has a nonzero fractional part, or will not fit in an int.
+            JOptionPane.showMessageDialog(this, "The selected product do not have serial numbers.");
+        }
 
     }
-	
-	@Override
-    public boolean canModify(Object rowObject) {
+
+    @Override
+    public boolean canModify(DeliveryCertificateItem rowObject) {
         return getButton(Button.Special).isVisible();
     }
 
-	@Override
-    public boolean canDelete(Object rowObject) {
+    @Override
+    public boolean canDelete(DeliveryCertificateItem rowObject) {
         return true;
     }
-	
-	@Override
+
+    @Override
     public boolean canCreate() {
         return false;
     }
-	
-	@Override
-	protected Object modifyRow(Object rowObject) {
-		
-		//selected index from the list of delivery certificate items
-		int index = getDataTable().getSelectedRow();
-		if (rowObject != null && canNestedOperationProceed()) {
-			DeliveryCertificateItem item = (DeliveryCertificateItem) rowObject;
-			if(item.getCertificateItemId() == null){
-				//new certificate is just created and get the fully instantiated certificate item (with ID etc)
-				item = getFormSession().getDeliveryCertificateItems(getParentDataObjectId()).get(index);
-				item.setParentId(getParentDataObjectId());
-			}
+
+    @Override
+    protected DeliveryCertificateItem modifyRow(DeliveryCertificateItem rowObject) {
+
+        //selected index from the list of delivery certificate items
+        int index = getDataTable().getSelectedRow();
+        if (rowObject != null && canNestedOperationProceed()) {
+            DeliveryCertificateItem item = (DeliveryCertificateItem) rowObject;
+            if (item.getCertificateItemId() == null) {
+                //new certificate is just created and get the fully instantiated certificate item (with ID etc)
+                item = getFormSession().getDeliveryCertificateItems(getParentDataObjectId()).get(index);
+                item.setParentId(getParentDataObjectId());
+            }
             DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm(item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return formPanel.getSelectedValue();
+                return (DeliveryCertificateItem) formPanel.getSelectedValue();
             }
         }
         return null;
-	}
-	
-	@Override
-	protected boolean deleteRow(Object rowObject) {
-		return false;
-	}
-	
-	@Override
-	protected Object newRow() {
-		return null;
-	}
-	
-	@Override
-    protected void viewRow(Object rowObject) {
-		DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm((DeliveryCertificateItem) rowObject);
+    }
+
+    @Override
+    protected boolean deleteRow(DeliveryCertificateItem rowObject) {
+        return false;
+    }
+
+    @Override
+    protected DeliveryCertificateItem newRow() {
+        return null;
+    }
+
+    @Override
+    protected void viewRow(DeliveryCertificateItem rowObject) {
+        DeliveryCertificateItemForm formPanel = new DeliveryCertificateItemForm((DeliveryCertificateItem) rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);
     }
-	
-	@Override
-	public void setReadonly(){
-		getButton(Button.Special).setVisible(false);
-	}
+
+    @Override
+    public void setReadonly() {
+        getButton(Button.Special).setVisible(false);
+    }
 }

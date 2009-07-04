@@ -37,7 +37,7 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class PurchaseOrderItemListPanel extends AbstractTablePanel {
+public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrderItem> {
     
     private PurchaseOrderListRemote formSession = getBean(PurchaseOrderListRemote.class);
     private ProductsListRemote productsListRemote = getBean(ProductsListRemote.class);
@@ -115,9 +115,9 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(PurchaseOrderItem rowObject) {
         if (rowObject != null) {
-            getFormSession().deleteOrderItem((PurchaseOrderItem)rowObject);
+            getFormSession().deleteOrderItem(rowObject);
             return true;
         }
 
@@ -125,27 +125,26 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-
+    protected PurchaseOrderItem modifyRow(PurchaseOrderItem rowObject) {
         if (rowObject != null && isEditable()) {
             PurchaseOrderItemForm formPanel = new PurchaseOrderItemForm((PurchaseOrderItem) rowObject);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return formPanel.getSelectedValue();
+                return (PurchaseOrderItem) formPanel.getSelectedValue();
             }
         }
         return null;
     }
 
     @Override
-    protected Object newRow() { 
+    protected PurchaseOrderItem newRow() {
         if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
             PurchaseOrderItem item = getFormSession().newOrderItem(getParentDataObjectId());
             PurchaseOrderItemForm formPanel = new PurchaseOrderItemForm(item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return formPanel.getSelectedValue();
+                return (PurchaseOrderItem) formPanel.getSelectedValue();
             }
         }
         return null;
@@ -171,17 +170,17 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(PurchaseOrderItem rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(PurchaseOrderItem rowObject) {
         return true;
     }
     
     @Override
-    protected void viewRow(Object rowObject) {
+    protected void viewRow(PurchaseOrderItem rowObject) {
         PurchaseOrderItemForm formPanel = new PurchaseOrderItemForm((PurchaseOrderItem) rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);

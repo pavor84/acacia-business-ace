@@ -22,8 +22,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author  Miro
  */
-public class AssemblingMessageListPanel
-    extends AbstractTablePanel
+public class AssemblingMessageListPanel extends AbstractTablePanel<AssemblingMessage>
 {
     @EJB
     private static AssemblingRemote formSession;
@@ -100,60 +99,48 @@ public class AssemblingMessageListPanel
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject)
-    {
+    protected boolean deleteRow(AssemblingMessage rowObject) {
         if(rowObject == null)
             return false;
 
-        try
-        {
+        try {
             getFormSession().deleteAssemblingMessage((AssemblingMessage)rowObject);
             return true;
-        }
-        catch(Exception ex)
-        {
+        } catch(Exception ex) {
             ex.printStackTrace();
             return false;
         }
     }
 
     @Override
-    protected Object modifyRow(Object rowObject)
-    {
+    protected AssemblingMessage modifyRow(AssemblingMessage rowObject) {
         return editRow((AssemblingMessage)rowObject);
     }
 
     @Override
-    protected Object newRow()
-    {
+    protected AssemblingMessage newRow() {
         return editRow(getFormSession().newAssemblingMessage());
     }
 
-    protected Object editRow(AssemblingMessage message)
-    {
+    protected AssemblingMessage editRow(AssemblingMessage message) {
         if(message != null)
         {
             AssemblingMessagePanel entityPanel = new AssemblingMessagePanel(message);
             DialogResponse response = entityPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return entityPanel.getSelectedValue();
+                return (AssemblingMessage) entityPanel.getSelectedValue();
             }
         }
 
         return null;
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
-            try
-            {
+    protected AssemblingRemote getFormSession() {
+        if(formSession == null) {
+            try {
                 formSession = getBean(AssemblingRemote.class);
-            }
-            catch(Exception ex)
-            {
+            } catch(Exception ex) {
                 throw new RuntimeException(ex);
             }
         }

@@ -135,7 +135,7 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
             return;
         }
 
-        Object rowObject = getDataTable().getSelectedRowObject();
+        ProductCategory rowObject = (ProductCategory) getDataTable().getSelectedRowObject();
 
         List<ProductCategory> withSubCategories = getWithSubCategories((ProductCategory)rowObject);
         boolean result = false;
@@ -171,13 +171,13 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(ProductCategory rowObject) {
         //does nothing - unneeded (not called), because the delete WF logic is changed
         return true;
     }
 
     @Override
-    protected Object newRow()
+    protected ProductCategory newRow()
     {
         ProductCategory category = getFormSession().newProductCategory(null);
         ProductCategory autoParent = null;
@@ -196,13 +196,12 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     }
 
     @Override
-    protected Object onEditEntity(ProductCategory category)
+    protected ProductCategory onEditEntity(ProductCategory category)
     {
         ProductCategoryPanel editPanel = new ProductCategoryPanel(category, getParentDataObjectId());
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if(DialogResponse.SAVE.equals(response)) {
+            return (ProductCategory) editPanel.getSelectedValue();
         }
 
         return null;
@@ -214,12 +213,12 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(ProductCategory rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(ProductCategory rowObject) {
         return true;
     }
 
@@ -244,5 +243,4 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     protected List<ProductCategory> getItems() {
         return getFormSession().getProductsCategories(null);
     }
-
 }

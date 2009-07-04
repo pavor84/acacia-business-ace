@@ -20,25 +20,22 @@ import java.math.BigInteger;
  *
  * @param <E> the entity this form will be used with
  */
-public abstract class AbstractTreeEnabledTablePanel<E>
-    extends AbstractTablePanel
-{
+public abstract class AbstractTreeEnabledTablePanel<E extends DataObjectBean>
+        extends AbstractTablePanel<E> {
 
-    public AbstractTreeEnabledTablePanel(DataObjectBean dataObjectBean)
-    {
+    public AbstractTreeEnabledTablePanel(DataObjectBean dataObjectBean) {
         super(dataObjectBean);
     }
 
-    public AbstractTreeEnabledTablePanel(BigInteger parentDataObjectId)
-    {
+    public AbstractTreeEnabledTablePanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
-
 
     @Override
     protected void initData() {
         super.initData();
         lister = new Lister<E>() {
+
             @Override
             public List<E> getList() {
                 return getItems();
@@ -48,14 +45,11 @@ public abstract class AbstractTreeEnabledTablePanel<E>
 
     protected abstract List<E> getItems();
 
-    protected abstract Object onEditEntity(E entity);
+    protected abstract E onEditEntity(E entity);
 
     public abstract void refreshDataTable();
-    
     private JBTree tree;
-
     private Lister<E> lister;
-
 
     /**
      * This panel may be used in the context of tree control.
@@ -94,66 +88,64 @@ public abstract class AbstractTreeEnabledTablePanel<E>
     @SuppressWarnings("unchecked")
     protected List<E> getWithSubCategories(E rowObject) {
         List<E> result = new ArrayList<E>();
-        if (getTree() != null){
+        if (getTree() != null) {
             DefaultTreeModel m = (DefaultTreeModel) getTree().getModel();
             DefaultMutableTreeNode root = (DefaultMutableTreeNode) m.getRoot();
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) findTreeNodeForUserObject(root, rowObject);
             Enumeration<DefaultMutableTreeNode> nodes = node.depthFirstEnumeration();
-            while ( nodes.hasMoreElements() ){
+            while (nodes.hasMoreElements()) {
                 DefaultMutableTreeNode next = nodes.nextElement();
                 E cat = (E) next.getUserObject();
                 result.add(cat);
             }
-        }else{
+        } else {
             result.add(rowObject);
         }
         return result;
     }
 
     protected TreeNode findTreeNodeForUserObject(DefaultMutableTreeNode current, E searched) {
-        if ( searched.equals(current.getUserObject()) )
-                return current;
+        if (searched.equals(current.getUserObject())) {
+            return current;
+        }
         for (int i = 0; i < current.getChildCount(); i++) {
             TreeNode c = current.getChildAt(i);
             TreeNode r = findTreeNodeForUserObject((DefaultMutableTreeNode) c, searched);
-            if ( r!=null )
+            if (r != null) {
                 return r;
+            }
         }
         return null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Object modifyRow(Object rowObject) {
-        E entity = (E) rowObject;
-        return onEditEntity(entity);
+    protected E modifyRow(E rowObject) {
+        return onEditEntity(rowObject);
     }
-    
-    
-     /**
+
+    /**
      * Forms the error message shown when constraint violation occurs
      *
      * @param the name of the table
      * @return the message
      */
-    protected String getTableReferencedMessage(String cantDeleteMessagePrefix, String table)
-    {
+    protected String getTableReferencedMessage(String cantDeleteMessagePrefix, String table) {
         String message = cantDeleteMessagePrefix;
         String tableUserfriendly =
-            getResourceMap().getString("table.userfriendlyname."+table);
+                getResourceMap().getString("table.userfriendlyname." + table);
         String result = null;
-        if ( tableUserfriendly==null )
+        if (tableUserfriendly == null) {
             result = message + " " + table.replace('_', ' ');
-        else
+        } else {
             result = message + " " + tableUserfriendly;
+        }
         return result;
     }
-    
-    
+
     protected void removeFromTable(List<E> withSubChildren) {
         for (E child : withSubChildren) {
             getDataTable().removeRow(child);
         }
     }
-
 }

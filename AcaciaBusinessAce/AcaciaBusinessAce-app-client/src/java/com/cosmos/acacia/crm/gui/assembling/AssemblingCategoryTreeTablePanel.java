@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.gui.AbstractTreeTablePanel;
@@ -19,72 +18,60 @@ import javax.ejb.EJB;
  * @author Miro
  */
 public class AssemblingCategoryTreeTablePanel
-    extends AbstractTreeTablePanel<AssemblingCategory>
-{
+        extends AbstractTreeTablePanel<AssemblingCategory> {
+
     @EJB
     private static AssemblingRemote formSession;
 
-    public AssemblingCategoryTreeTablePanel()
-    {
+    public AssemblingCategoryTreeTablePanel() {
         this(null);
     }
 
-    public AssemblingCategoryTreeTablePanel(AssemblingCategory assemblingCategory)
-    {
+    public AssemblingCategoryTreeTablePanel(AssemblingCategory assemblingCategory) {
         super(assemblingCategory);
     }
 
     @Override
-    protected List<AssemblingCategory> getChildren(AssemblingCategory parent, boolean allHeirs)
-    {
+    protected List<AssemblingCategory> getChildren(AssemblingCategory parent, boolean allHeirs) {
         return getFormSession().getAssemblingCategories(parent, allHeirs);
     }
 
     @Override
-    protected AssemblingCategory onEditEntity(AssemblingCategory entity)
-    {
+    protected AssemblingCategory onEditEntity(AssemblingCategory entity) {
         AssemblingCategoryPanel editPanel = new AssemblingCategoryPanel(entity);
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return (AssemblingCategory)editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (AssemblingCategory) editPanel.getSelectedValue();
         }
 
         return null;
     }
 
     @Override
-    protected AssemblingCategory newEntity(AssemblingCategory parentEntity)
-    {
+    protected AssemblingCategory newEntity(AssemblingCategory parentEntity) {
         return getFormSession().newAssemblingCategory(parentEntity);
     }
 
     @Override
-    protected boolean deleteRow(AssemblingCategory entity)
-    {
+    protected boolean deleteRow(AssemblingCategory entity) {
         return getFormSession().deleteAssemblingCategory(entity);
     }
 
     @Override
-    protected int getChildCount(DataObjectBean parent)
-    {
-        return getFormSession().getAssemblingCategoryChildCount((AssemblingCategory)parent);
+    protected int getChildCount(AssemblingCategory parent) {
+        return getFormSession().getAssemblingCategoryChildCount(parent);
     }
 
     @Override
-    protected EntityProperties getEntityProperties()
-    {
+    protected EntityProperties getEntityProperties() {
         return getFormSession().getAssemblingCategoryEntityProperties();
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
+    protected AssemblingRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;
     }
-
 }

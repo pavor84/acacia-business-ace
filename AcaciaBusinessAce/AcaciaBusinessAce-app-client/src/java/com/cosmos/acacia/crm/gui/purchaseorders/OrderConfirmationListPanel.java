@@ -24,23 +24,21 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class OrderConfirmationListPanel extends AbstractTablePanel {
-    
+public class OrderConfirmationListPanel extends AbstractTablePanel<OrderConfirmation> {
+
     private EntityProperties entityProps;
-    
     private OrderConfirmationListRemote formSession;
     private BindingGroup bindingGroup;
-
     private List<OrderConfirmation> list;
-    
+
     /**
      * @param pendingConfirmations 
      * @param parentDataObject
      */
     public OrderConfirmationListPanel(BigInteger parentDataObjectId) {
-        this ( parentDataObjectId, null );
+        this(parentDataObjectId, null);
     }
-    
+
     /**
      * @param pendingConfirmations 
      * @param parentDataObject
@@ -50,27 +48,29 @@ public class OrderConfirmationListPanel extends AbstractTablePanel {
         this.list = list;
         bindComponents();
     }
-    
-    protected void bindComponents(){
+
+    protected void bindComponents() {
         entityProps = getFormSession().getListingEntityProperties();
-        
+
         refreshDataTable(entityProps);
     }
-    
+
     protected OrderConfirmationListRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(OrderConfirmationListRemote.class);
+        }
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
-        
+        }
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -79,8 +79,9 @@ public class OrderConfirmationListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null )
+        if (list == null) {
             list = getFormSession().listOrderConfirmations(getParentDataObjectId());
+        }
         return list;
     }
 
@@ -95,75 +96,74 @@ public class OrderConfirmationListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
-        return isInBranch((OrderConfirmation) rowObject);
+    public boolean canDelete(OrderConfirmation rowObject) {
+        return isInBranch(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
-        return isInBranch((OrderConfirmation) rowObject);
+    public boolean canModify(OrderConfirmation rowObject) {
+        return isInBranch(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deleteOrderConfirmation((OrderConfirmation)rowObject);
+    protected boolean deleteRow(OrderConfirmation rowObject) {
+        getFormSession().deleteOrderConfirmation(rowObject);
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        OrderConfirmation o = (OrderConfirmation) rowObject;
-        return showDetailForm(o, true);
+    protected OrderConfirmation modifyRow(OrderConfirmation rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected OrderConfirmation newRow() {
         OrderConfirmation o = getFormSession().newOrderConfirmation(getParentDataObjectId());
         return showDetailForm(o, true);
     }
 
-    private Object showDetailForm(OrderConfirmation o, boolean editable) {
+    private OrderConfirmation showDetailForm(OrderConfirmation o, boolean editable) {
         OrderConfirmationForm editPanel = new OrderConfirmationForm(o);
-        if ( !editable )
+        if (!editable) {
             editPanel.setReadonly();
+        }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (OrderConfirmation) editPanel.getSelectedValue();
         }
 
         return null;
     }
-    
-    private boolean isInBranch(OrderConfirmation confirmation){
+
+    private boolean isInBranch(OrderConfirmation confirmation) {
         Address userBranch = getUserBranch();
-        if ( confirmation.getBranch().equals(userBranch) ){
+        if (confirmation.getBranch().equals(userBranch)) {
             return true;
-        }else
+        } else {
             return false;
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
-    
+
     @Override
-    protected void viewRow(Object rowObject) {
-        OrderConfirmation o = (OrderConfirmation) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(OrderConfirmation rowObject) {
+        showDetailForm(rowObject, false);
     }
 }

@@ -25,7 +25,7 @@ import org.jdesktop.application.Task;
  *
  * @author Bozhidar Bozhanov
  */
-public class AddressListPanel extends AbstractTablePanel {
+public class AddressListPanel extends AbstractTablePanel<Address> {
 
     public AddressListPanel(BusinessPartner businessPartner) {
         this(businessPartner != null ? businessPartner.getId() : null);
@@ -116,9 +116,9 @@ public class AddressListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(Address rowObject) {
         if (rowObject != null) {
-            deleteAddress((Address) rowObject);
+            deleteAddress(rowObject);
             return true;
         }
 
@@ -126,28 +126,28 @@ public class AddressListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected Address modifyRow(Address rowObject) {
 
         if (rowObject != null) {
             AddressPanel addressPanel = new AddressPanel((Address) rowObject);
             addressPanel.setInternal(isInternal);
             DialogResponse response = addressPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return addressPanel.getSelectedValue();
+                return (Address) addressPanel.getSelectedValue();
             }
         }
         return null;
     }
 
     @Override
-    protected Object newRow() {
+    protected Address newRow() {
         if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
             AddressPanel addressPanel = new AddressPanel(getParentDataObjectId());
             addressPanel.setInternal(isInternal);
             DialogResponse response = addressPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return addressPanel.getSelectedValue();
+                return (Address) addressPanel.getSelectedValue();
             }
         }
         return null;
@@ -175,12 +175,12 @@ public class AddressListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Address rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Address rowObject) {
         return true;
     }
 

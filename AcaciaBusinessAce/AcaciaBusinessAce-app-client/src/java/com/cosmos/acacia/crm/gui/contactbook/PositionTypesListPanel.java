@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.math.BigInteger;
@@ -40,18 +39,16 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     protected static Logger log = Logger.getLogger(PositionTypesListPanel.class);
 
     /** Creates new form AddresssListPanel */
-    public PositionTypesListPanel(BigInteger parentDataObjectId, boolean isInternal)
-    {
+    public PositionTypesListPanel(BigInteger parentDataObjectId, boolean isInternal) {
         super(parentDataObjectId);
-        try
-        {
+        try {
             if (getAcaciaSession().getOrganization().getId().equals(parentDataObjectId)) {
                 this.ownerClass = Organization.class;
             } else {
                 DataObject parentDataObject = getParentDataObject();
                 if (parentDataObject != null) {
                     this.ownerClass = Class.forName(
-                        parentDataObject.getDataObjectType().getDataObjectType());
+                            parentDataObject.getDataObjectType().getDataObjectType());
                 }
             }
         } catch (Exception ex) {
@@ -62,16 +59,13 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
         postInitData();
     }
 
-    public PositionTypesListPanel(Class ownerClass, BigInteger parentDataObjectId)
-    {
+    public PositionTypesListPanel(Class ownerClass, BigInteger parentDataObjectId) {
         super(parentDataObjectId);
         this.ownerClass = ownerClass;
         postInitData();
     }
-
     @EJB
     private PositionTypesListRemote formSession;
-
     private BindingGroup positionTypesBindingGroup;
     private List<PositionType> positionTypes;
     private ContactPerson contactPerson;
@@ -79,13 +73,12 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     private boolean isInternal;
 
     @Override
-    protected void initData(){
+    protected void initData() {
 
         super.initData();
     }
 
-    protected void postInitData()
-    {
+    protected void postInitData() {
         positionTypesBindingGroup = new BindingGroup();
         String key = ownerClass == Person.class ? "title.positions.person" : "title.positions.organization";
 
@@ -100,40 +93,37 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
         positionTypesTable.setEditable(false);
         positionTypesBindingGroup.bind();
     }
-    protected List<PositionType> getPositionTypes() throws Exception
-    {
-        if(positionTypes == null) {
+
+    protected List<PositionType> getPositionTypes() throws Exception {
+        if (positionTypes == null) {
 
             if (!isInternal) {
                 positionTypes = getFormSession().getPositionTypes(ownerClass, getOrganizationDataObjectId());
             } else {
-                positionTypes = getFormSession()
-                    .getInternalOrganizationPositionTypes(getOrganizationDataObjectId());
+                positionTypes = getFormSession().getInternalOrganizationPositionTypes(getOrganizationDataObjectId());
             }
         }
 
         return positionTypes;
     }
 
-    protected EntityProperties getPositionTypeEntityProperties()
-    {
+    protected EntityProperties getPositionTypeEntityProperties() {
         return getFormSession().getPositionTypeEntityProperties();
     }
 
-    protected PositionTypesListRemote getFormSession()
-    {
-        if(formSession == null)
+    protected PositionTypesListRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(PositionTypesListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected int deletePositionType(PositionType positionType)
-    {
+    protected int deletePositionType(PositionType positionType) {
         return getFormSession().deletePositionType(positionType);
     }
 
-     public ContactPerson getContactPerson() {
+    public ContactPerson getContactPerson() {
         return contactPerson;
     }
 
@@ -143,45 +133,44 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
 
     @Override
     @Action
-    public void selectAction(){
+    public void selectAction() {
         super.selectAction();
         //
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        if(rowObject != null)
-        {
+    protected boolean deleteRow(PositionType rowObject) {
+        if (rowObject != null) {
             List<PositionType> withSubPositions = null;
-            if (isInternal)
-                withSubPositions = getWithSubCategories((PositionType) rowObject);
+            if (isInternal) {
+                withSubPositions = getWithSubCategories(rowObject);
+            }
 
             try {
                 if (isInternal) {
                     getFormSession().deletePositionTypes(withSubPositions);
                     removeFromTable(withSubPositions);
                 } else {
-                    deletePositionType((PositionType) rowObject);
+                    deletePositionType(rowObject);
                 }
 
                 return true;
-            } catch (Exception e){
+            } catch (Exception e) {
                 ValidationException ve = extractValidationException(e);
                 if (ve != null) {
                     String messagePrefix = null;
-                    if ( withSubPositions.size()>1 ){
+                    if (withSubPositions.size() > 1) {
                         messagePrefix = getResourceMap().getString("TreeItem.err.cantDeleteMany");
-                    }
-                    else{
+                    } else {
                         messagePrefix = getResourceMap().getString("deleteAction.err.referenced");
                     }
 
                     String message = getTableReferencedMessage(messagePrefix, ve.getMessage());
 
                     JOptionPane.showMessageDialog(this,
-                        message,
-                        getResourceMap().getString("ProductCategory.err.cantDeleteTitle"),
-                        JOptionPane.DEFAULT_OPTION);
+                            message,
+                            getResourceMap().getString("ProductCategory.err.cantDeleteTitle"),
+                            JOptionPane.DEFAULT_OPTION);
                 } else {
                     log.error(e);
                 }
@@ -192,17 +181,15 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
+    protected PositionType modifyRow(PositionType rowObject) {
+        if (rowObject != null) {
             PositionTypePanel positionTypePanel =
-                    new PositionTypePanel((PositionType) rowObject, ownerClass);
+                    new PositionTypePanel(rowObject, ownerClass);
             positionTypePanel.setInternal(isInternal);
 
             DialogResponse response = positionTypePanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return positionTypePanel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (PositionType) positionTypePanel.getSelectedValue();
             }
         }
 
@@ -214,8 +201,9 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (positionTypesBindingGroup != null)
+        if (positionTypesBindingGroup != null) {
             positionTypesBindingGroup.unbind();
+        }
 
         refreshDataTable();
 
@@ -223,30 +211,29 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     }
 
     @Override
-    protected Object newRow() {
-        PositionTypePanel positionTypePanel = new PositionTypePanel(getOrganizationDataObjectId(),
-                    ownerClass);
+    protected PositionType newRow() {
+        PositionTypePanel positionTypePanel =
+                new PositionTypePanel(getOrganizationDataObjectId(), ownerClass);
 
         positionTypePanel.setInternal(isInternal);
 
         if (isInternal) {
             PositionType autoParent = null;
             TreePath selection = getTree().getSelectionPath();
-            if(selection != null)
-            {
-                DefaultMutableTreeNode selNode = (DefaultMutableTreeNode)selection.getLastPathComponent();
+            if (selection != null) {
+                DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selection.getLastPathComponent();
                 Object userObject;
-                if((userObject = selNode.getUserObject()) instanceof PositionType)
+                if ((userObject = selNode.getUserObject()) instanceof PositionType) {
                     autoParent = (PositionType) userObject;
+                }
 
                 positionTypePanel.setParentPosition(autoParent);
             }
         }
 
         DialogResponse response = positionTypePanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return positionTypePanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (PositionType) positionTypePanel.getSelectedValue();
         }
         return null;
     }
@@ -257,12 +244,12 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(PositionType rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(PositionType rowObject) {
         return true;
     }
 
@@ -272,7 +259,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     }
 
     @Override
-    protected Object onEditEntity(PositionType entity) {
+    protected PositionType onEditEntity(PositionType entity) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -282,5 +269,4 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
         positionTypes = getLister().getList();
         postInitData();
     }
-
 }

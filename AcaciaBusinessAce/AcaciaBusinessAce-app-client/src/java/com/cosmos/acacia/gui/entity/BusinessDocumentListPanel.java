@@ -39,7 +39,7 @@ public class BusinessDocumentListPanel<E extends BusinessDocument> extends Entit
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(E rowObject) {
         if(!super.canModify(rowObject)) {
             return false;
         }
@@ -48,7 +48,7 @@ public class BusinessDocumentListPanel<E extends BusinessDocument> extends Entit
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(E rowObject) {
         if(!super.canDelete(rowObject)) {
             return false;
         }

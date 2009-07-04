@@ -36,7 +36,7 @@ import org.jdesktop.application.Task;
  *
  * @author  Bozhidar Bozhanov
  */
-public class OrganizationsListPanel extends AbstractTablePanel {
+public class OrganizationsListPanel extends AbstractTablePanel<Organization> {
 
     public OrganizationsListPanel() {
         this(LocalSession.instance().getOrganization().getId());
@@ -190,10 +190,10 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(Organization rowObject) {
         if(rowObject != null)
         {
-            deleteOrganization((Organization) rowObject);
+            deleteOrganization(rowObject);
             return true;
         }
 
@@ -201,17 +201,15 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            OrganizationPanel organizationPanel = new OrganizationPanel((Organization)rowObject);
+    protected Organization modifyRow(Organization rowObject) {
+        if (rowObject != null) {
+            OrganizationPanel organizationPanel = new OrganizationPanel((Organization) rowObject);
             DialogResponse response = organizationPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return organizationPanel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (Organization) organizationPanel.getSelectedValue();
             }
 
-            if(DialogResponse.CLOSE.equals(response)) {
+            if (DialogResponse.CLOSE.equals(response)) {
                 refreshAction();
             }
         }
@@ -220,14 +218,14 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected Organization newRow() {
         if (canNestedOperationProceed()) {
             Classifier classifier =
                     getClassifiersManager().getClassifier(Classifier.Customer.getClassifierCode());
             AcaciaPanel entityPanel = new NewOrganizationDialog(getParentDataObjectId(), classifier);
             DialogResponse response = entityPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response)) {
-                return entityPanel.getSelectedValue();
+                return (Organization) entityPanel.getSelectedValue();
             }
         }
 
@@ -255,7 +253,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Organization rowObject) {
         if ( rowObject instanceof DataObjectBean ){
             DataObjectBean bean = (DataObjectBean) rowObject;
             if (getClassifiersManager().isClassifiedAs(bean, "customer")){
@@ -269,7 +267,7 @@ public class OrganizationsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Organization rowObject) {
         return true;
     }
 }

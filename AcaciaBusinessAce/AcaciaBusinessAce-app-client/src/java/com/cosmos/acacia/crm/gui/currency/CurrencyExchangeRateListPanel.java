@@ -41,7 +41,7 @@ import org.jdesktop.swingx.table.TableColumnExt;
  *
  * @author Miro
  */
-public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
+public class CurrencyExchangeRateListPanel extends AbstractTablePanel<CurrencyExchangeRate> {
 
     @EJB
     private static CurrencyRemote formSession;
@@ -99,22 +99,22 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(CurrencyExchangeRate rowObject) {
         getFormSession().delete(rowObject);
         return true;
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected CurrencyExchangeRate modifyRow(CurrencyExchangeRate rowObject) {
         if(rowObject != null) {
-            return editRow((CurrencyExchangeRate)rowObject);
+            return editRow(rowObject);
         }
 
         return null;
     }
 
     @Override
-    protected Object newRow() {
+    protected CurrencyExchangeRate newRow() {
         CurrencyExchangeRate cer = getFormSession().newEntity(CurrencyExchangeRate.class);
         cer.setValidFrom(getRatesForDate());
         DbResource fromCurrency;
@@ -126,12 +126,12 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel {
         return editRow(cer);
     }
 
-    protected Object editRow(CurrencyExchangeRate currencyExchangeRate) {
+    protected CurrencyExchangeRate editRow(CurrencyExchangeRate currencyExchangeRate) {
         CurrencyExchangeRatePanel panel = new CurrencyExchangeRatePanel(currencyExchangeRate);
         if (DialogResponse.SAVE.equals(panel.showDialog(this))) {
             Task task = new RefreshTask(getApplication());
             task.run();
-            return panel.getSelectedValue();
+            return (CurrencyExchangeRate) panel.getSelectedValue();
         }
 
         return null;

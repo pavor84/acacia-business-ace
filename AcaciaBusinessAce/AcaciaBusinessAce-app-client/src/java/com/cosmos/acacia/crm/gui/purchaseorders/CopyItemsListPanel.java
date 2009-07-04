@@ -22,7 +22,7 @@ import com.cosmos.beansbinding.EntityProperties;
  * @author	Petar Milev
  *
  */
-public class CopyItemsListPanel extends AbstractTablePanel {
+public class CopyItemsListPanel extends AbstractTablePanel<InvoiceItem> {
     
     private BindingGroup bindGroup;
     private List<?> items;
@@ -75,28 +75,28 @@ public class CopyItemsListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(InvoiceItem rowObject) {
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(InvoiceItem rowObject) {
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(InvoiceItem rowObject) {
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected InvoiceItem modifyRow(Object rowObject) {
+    protected InvoiceItem modifyRow(InvoiceItem rowObject) {
         return null;
     }
 

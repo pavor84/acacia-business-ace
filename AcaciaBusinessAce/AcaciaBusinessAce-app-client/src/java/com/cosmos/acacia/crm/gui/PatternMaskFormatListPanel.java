@@ -28,7 +28,7 @@ import com.cosmos.swingb.DialogResponse;
  * @version $Id: $
  *
  */
-public class PatternMaskFormatListPanel extends AbstractTablePanel {
+public class PatternMaskFormatListPanel extends AbstractTablePanel<PatternMaskFormat> {
 
     protected static Logger log = Logger.getLogger(PatternMaskFormatListPanel.class);
 
@@ -90,21 +90,20 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(PatternMaskFormat rowObject) {
         return
-            getFormSession().deletePatternMaskFormat((PatternMaskFormat) rowObject);
+            getFormSession().deletePatternMaskFormat(rowObject);
     }
 
     @Override
-    protected Object modifyRow(Object rowObject)
+    protected PatternMaskFormat modifyRow(PatternMaskFormat rowObject)
     {
         if(rowObject instanceof PatternMaskFormat)
         {
-            PatternMaskFormatPanel panel = new PatternMaskFormatPanel((PatternMaskFormat) rowObject);
+            PatternMaskFormatPanel panel = new PatternMaskFormatPanel(rowObject);
             DialogResponse response = panel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return panel.getSelectedValue();
+            if(DialogResponse.SAVE.equals(response)) {
+                return (PatternMaskFormat) panel.getSelectedValue();
             }
         }
 
@@ -112,14 +111,13 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected PatternMaskFormat newRow() {
         PatternMaskFormat newFormat = getFormSession().newPatternMaskFormat(getParentDataObjectId());
 
         PatternMaskFormatPanel formatPanel = new PatternMaskFormatPanel(newFormat);
         DialogResponse response = formatPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return formatPanel.getSelectedValue();
+        if(DialogResponse.SAVE.equals(response)) {
+            return (PatternMaskFormat) formatPanel.getSelectedValue();
         }
 
         return null;
@@ -131,12 +129,12 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(PatternMaskFormat rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(PatternMaskFormat rowObject) {
         return true;
     }
 

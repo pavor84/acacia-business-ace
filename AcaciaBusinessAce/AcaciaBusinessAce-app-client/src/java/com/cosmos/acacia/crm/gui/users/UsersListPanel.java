@@ -29,7 +29,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author  Bozhidar Bozhanov
  */
-public class UsersListPanel extends AbstractTablePanel {
+public class UsersListPanel extends AbstractTablePanel<User> {
 
     /** Creates new form OrganizationsListPanel */
     public UsersListPanel(BigInteger parentDataObjectId) {
@@ -140,22 +140,20 @@ public class UsersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(User rowObject) {
         return false;
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected User modifyRow(User rowObject) {
         if(rowObject != null)
         {
-            User user = (User)rowObject;
             Organization org = getAcaciaSession().getOrganization();
-            UserOrganization uo = getAdminSession().getUserOrganization(user, org);
+            UserOrganization uo = getAdminSession().getUserOrganization(rowObject, org);
             UserPanel userPanel = new UserPanel(uo);
             DialogResponse response = userPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return userPanel.getSelectedValue();
+            if(DialogResponse.SAVE.equals(response)) {
+                return (User) userPanel.getSelectedValue();
             }
 
             if(DialogResponse.CLOSE.equals(response)) {
@@ -167,7 +165,7 @@ public class UsersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected User newRow() {
            return null;
     }
 
@@ -192,12 +190,12 @@ public class UsersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(User rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(User rowObject) {
         return true;
     }
 }

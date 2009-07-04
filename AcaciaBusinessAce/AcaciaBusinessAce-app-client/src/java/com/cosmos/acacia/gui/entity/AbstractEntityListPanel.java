@@ -36,7 +36,8 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Miro
  */
-public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends AbstractTablePanel {
+public abstract class AbstractEntityListPanel<E extends DataObjectBean>
+        extends AbstractTablePanel<E> {
 
     private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;
@@ -176,7 +177,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(E rowObject) {
         E oldRowObject = (E) rowObject;
         rowChanging(AlterationType.Modify, oldRowObject);
         getEntityService().delete(oldRowObject);
@@ -186,7 +187,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected E modifyRow(E rowObject) {
         E oldRowObject = (E) ((E) rowObject).clone();
         E newRowObject = (E) rowObject;
         rowChanging(AlterationType.Modify, newRowObject);
@@ -200,7 +201,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     @Override
-    protected Object newRow() {
+    protected E newRow() {
         E oldRowObject = newEntity();
         E newRowObject = (E) oldRowObject.clone();
         rowChanging(AlterationType.Create, newRowObject);
@@ -237,12 +238,12 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
     }
 
     @Override
-    protected void viewRow(Object rowObject) {
+    protected void viewRow(E rowObject) {
         if(rowObject == null) {
             return;
         }
 
-        EntityPanel entityPanel = getEntityPanel((E)rowObject);
+        EntityPanel entityPanel = getEntityPanel(rowObject);
         entityPanel.setDataMode(DataMode.Query);
         entityPanel.showDialog(this);
     }
@@ -355,7 +356,12 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean> extends 
             Object selectedRowObject = dataTable.getSelectedRowObject();
             List dataList = dataTable.getData();
             dataList.clear();
-            List entities = getEntities();
+            List<E> entities;
+            if(canView(null)) {
+                entities = getEntities();
+            } else {
+                entities = new ArrayList<E>();
+            }
             dataList.addAll(entities);
             if(selectedRowObject != null && dataList.contains(selectedRowObject)) {
                 dataTable.setSelectedRowObject(selectedRowObject);

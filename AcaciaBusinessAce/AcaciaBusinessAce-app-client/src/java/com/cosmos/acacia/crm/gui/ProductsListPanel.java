@@ -32,7 +32,7 @@ import com.cosmos.swingb.DialogResponse;
  * @author Miro
  */
 public class ProductsListPanel
-        extends AbstractTablePanel {
+        extends AbstractTablePanel<SimpleProduct> {
 
     @EJB
     private ProductsListRemote formSession;
@@ -96,7 +96,8 @@ public class ProductsListPanel
 
     }
 
-    protected boolean deleteRow(Object rowObject) {
+    @Override
+    protected boolean deleteRow(SimpleProduct rowObject) {
         if (rowObject != null) {
             deleteProduct((SimpleProduct) rowObject);
             return true;
@@ -106,13 +107,13 @@ public class ProductsListPanel
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected SimpleProduct modifyRow(SimpleProduct rowObject) {
         if (rowObject != null) {
             //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
-            ProductPanel productPanel = new ProductPanel((SimpleProduct) rowObject);
+            ProductPanel productPanel = new ProductPanel(rowObject);
             DialogResponse response = productPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return productPanel.getSelectedValue();
+                return (SimpleProduct) productPanel.getSelectedValue();
             }
         }
 
@@ -120,20 +121,20 @@ public class ProductsListPanel
     }
 
     @Override
-    protected void viewRow(Object rowObject) {
+    protected void viewRow(SimpleProduct rowObject) {
         if (rowObject != null) {
             //ProductPanel productPanel = new ProductPanel((SimpleProduct)rowObject);
-            ProductPanel productPanel = new ProductPanel((SimpleProduct) rowObject);
+            ProductPanel productPanel = new ProductPanel(rowObject);
             DialogResponse response = productPanel.showDialog(this);
         }
     }
 
     @Override
-    protected Object newRow() {
+    protected SimpleProduct newRow() {
         ProductPanel productPanel = new ProductPanel(getFormSession().newProduct());
         DialogResponse response = productPanel.showDialog(this);
         if (DialogResponse.SAVE.equals(response)) {
-            return productPanel.getSelectedValue();
+            return (SimpleProduct) productPanel.getSelectedValue();
         }
 
         return null;
@@ -145,17 +146,17 @@ public class ProductsListPanel
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(SimpleProduct rowObject) {
         return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(SimpleProduct rowObject) {
         return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
     }
 
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(SimpleProduct rowObject) {
         //return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
         return true;
     }
