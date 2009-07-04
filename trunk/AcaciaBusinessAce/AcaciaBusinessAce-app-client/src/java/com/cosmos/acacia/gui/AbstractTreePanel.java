@@ -8,7 +8,6 @@ package com.cosmos.acacia.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Label;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
@@ -25,7 +24,6 @@ import javax.swing.tree.TreePath;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
-import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.tree.AbstractDynamicTreeNode;
 import com.cosmos.swingb.tree.DynamicTreeModel;
 

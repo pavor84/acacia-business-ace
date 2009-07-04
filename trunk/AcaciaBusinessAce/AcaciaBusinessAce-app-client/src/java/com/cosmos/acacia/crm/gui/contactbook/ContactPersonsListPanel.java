@@ -16,7 +16,6 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.ContactPerson;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -27,7 +26,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author Bozhidar Bozhanov
  */
-public class ContactPersonsListPanel extends AbstractTablePanel {
+public class ContactPersonsListPanel extends AbstractTablePanel<ContactPerson> {
 
     public ContactPersonsListPanel(Address address) {
         this(address != null ? address.getId() : (BigInteger)null);
@@ -109,9 +108,9 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(ContactPerson rowObject) {
         if (rowObject != null) {
-            deleteContactPerson((ContactPerson) rowObject);
+            deleteContactPerson(rowObject);
             return true;
         }
 
@@ -119,13 +118,13 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected ContactPerson modifyRow(ContactPerson rowObject) {
         if (rowObject != null) {
             ContactPersonPanel contactPersonPanel = new ContactPersonPanel((ContactPerson) rowObject);
             contactPersonPanel.setInternal(isInternal);
             DialogResponse response = contactPersonPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return contactPersonPanel.getSelectedValue();
+                return (ContactPerson) contactPersonPanel.getSelectedValue();
             }
         }
 
@@ -149,7 +148,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected ContactPerson newRow() {
         log.info("Internal : " + isInternal);
         if (canNestedOperationProceed()) {
             ContactPersonPanel contactPersonPanel = new ContactPersonPanel(getParentDataObjectId());
@@ -157,7 +156,7 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
 
             DialogResponse response = contactPersonPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return contactPersonPanel.getSelectedValue();
+                return (ContactPerson) contactPersonPanel.getSelectedValue();
             }
         }
         return null;
@@ -169,12 +168,12 @@ public class ContactPersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(ContactPerson rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(ContactPerson rowObject) {
         return true;
     }
 

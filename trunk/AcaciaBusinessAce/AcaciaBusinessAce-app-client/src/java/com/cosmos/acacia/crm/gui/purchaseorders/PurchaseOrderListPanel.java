@@ -25,13 +25,11 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class PurchaseOrderListPanel extends AbstractTablePanel {
-    
+public class PurchaseOrderListPanel extends AbstractTablePanel<PurchaseOrder> {
+
     private EntityProperties entityProps;
-    
     private PurchaseOrderListRemote formSession;
     private BindingGroup bindingGroup;
-
     private List<PurchaseOrder> list;
 
     public PurchaseOrderListPanel() {
@@ -45,7 +43,7 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     public PurchaseOrderListPanel(BigInteger parentDataObjectId) {
         this(parentDataObjectId, null);
     }
-    
+
     /**
      * @param pendingOrders 
      * @param parentDataObject
@@ -55,27 +53,29 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
         this.list = pendingOrders;
         bindComponents();
     }
-    
-    protected void bindComponents(){
+
+    protected void bindComponents() {
         entityProps = getFormSession().getListingEntityProperties();
-        
+
         refreshDataTable(entityProps);
     }
-    
+
     protected PurchaseOrderListRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(PurchaseOrderListRemote.class);
+        }
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
-        
+        }
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -84,8 +84,9 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null )
+        if (list == null) {
             list = getFormSession().getPurchaseOrders();
+        }
         return list;
     }
 
@@ -96,78 +97,78 @@ public class PurchaseOrderListPanel extends AbstractTablePanel {
     public boolean canCreate() {
         return true;
     }
-    
-    private boolean isInBranch(PurchaseOrder order){
+
+    private boolean isInBranch(PurchaseOrder order) {
         Address userBranch = getUserBranch();
-        if ( order.getBranch().equals(userBranch) ){
+        if (order.getBranch().equals(userBranch)) {
             return true;
-        }else
+        } else {
             return false;
+        }
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
-        return isInBranch((PurchaseOrder) rowObject);
+    public boolean canDelete(PurchaseOrder rowObject) {
+        return isInBranch(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
-        return isInBranch((PurchaseOrder) rowObject);
+    public boolean canModify(PurchaseOrder rowObject) {
+        return isInBranch(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deletePurchaseOrder((PurchaseOrder)rowObject);
+    protected boolean deleteRow(PurchaseOrder rowObject) {
+        getFormSession().deletePurchaseOrder(rowObject);
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        PurchaseOrder o = (PurchaseOrder) rowObject;
-        return showDetailsForm(o, true);
+    protected PurchaseOrder modifyRow(PurchaseOrder rowObject) {
+        return showDetailsForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected PurchaseOrder newRow() {
         PurchaseOrder o = getFormSession().newPurchaseOrder();
         return showDetailsForm(o, true);
     }
 
-    private Object showDetailsForm(PurchaseOrder o, boolean editable) {
+    private PurchaseOrder showDetailsForm(PurchaseOrder o, boolean editable) {
         PurchaseOrderForm editPanel = new PurchaseOrderForm(o);
-        if ( !editable )
+        if (!editable) {
             editPanel.setReadonly();
+        }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (PurchaseOrder) editPanel.getSelectedValue();
         }
 
         return null;
     }
-    
+
     @Override
-    protected void viewRow(Object rowObject) {
-        showDetailsForm((PurchaseOrder) rowObject, false);
+    protected void viewRow(PurchaseOrder rowObject) {
+        showDetailsForm(rowObject, false);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
 }

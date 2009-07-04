@@ -49,7 +49,7 @@ import com.cosmos.swingb.JBPanel;
  *
  * @author Miro
  */
-public class BusinessPartnersListPanel extends AbstractTablePanel {
+public class BusinessPartnersListPanel extends AbstractTablePanel<BusinessPartner> {
 
     private static final Logger LOGGER = Logger.getLogger(BusinessPartnersListPanel.class);
 
@@ -86,9 +86,9 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(BusinessPartner rowObject) {
         if (rowObject != null) {
-            getFormSession().deleteBusinessPartner((BusinessPartner) rowObject);
+            getFormSession().deleteBusinessPartner(rowObject);
             return true;
         }
 
@@ -96,7 +96,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected BusinessPartner modifyRow(BusinessPartner rowObject) {
         if (rowObject != null) {
             BaseEntityPanel formPanel = null;
             DialogResponse response = null;
@@ -111,7 +111,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
             }
 
             if (DialogResponse.SAVE.equals(response)) {
-                return formPanel.getSelectedValue();
+                return (BusinessPartner)formPanel.getSelectedValue();
             }
         }
 
@@ -119,7 +119,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected BusinessPartner newRow() {
         if (canNestedOperationProceed()) {
             BusinessPartnerTypeChooser partnerSelectForm = new BusinessPartnerTypeChooser();
             DialogResponse resp = partnerSelectForm.showDialog(getButton(Button.New));
@@ -157,7 +157,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canSpecial(Object rowObject) {
+    public boolean canSpecial(BusinessPartner rowObject) {
         if (rowObject != null) {
             BusinessPartner businessPartner = (BusinessPartner)rowObject;
             if (getClassifiersManager().isClassifiedAs(businessPartner, getCustomerClassifier())) {

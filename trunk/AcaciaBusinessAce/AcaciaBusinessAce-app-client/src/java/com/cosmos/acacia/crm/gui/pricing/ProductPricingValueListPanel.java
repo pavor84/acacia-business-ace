@@ -24,7 +24,7 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class ProductPricingValueListPanel extends AbstractTablePanel {
+public class ProductPricingValueListPanel extends AbstractTablePanel<ProductPercentValue> {
     
     private EntityProperties entityProps;
     
@@ -93,54 +93,53 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(ProductPercentValue rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(ProductPercentValue rowObject) {
         return true;
     }
     
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(ProductPercentValue rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deleteProductPricingValue((ProductPercentValue)rowObject);
+    protected boolean deleteRow(ProductPercentValue rowObject) {
+        getFormSession().deleteProductPricingValue(rowObject);
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        ProductPercentValue o = (ProductPercentValue) rowObject;
-        return showDetailForm(o, true);
+    protected ProductPercentValue modifyRow(ProductPercentValue rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected ProductPercentValue newRow() {
         ProductPercentValue o = getFormSession().newProductPricingValue(getParentDataObjectId(), type);
         return showDetailForm(o, true);
     }
 
-    private Object showDetailForm(ProductPercentValue o, boolean editable) {
+    private ProductPercentValue showDetailForm(ProductPercentValue o, boolean editable) {
         ProductPricingValueForm editPanel = new ProductPricingValueForm(o);
         if ( !editable )
             editPanel.setReadonly();
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return editPanel.getSelectedValue();
+            return (ProductPercentValue) editPanel.getSelectedValue();
         }
 
         return null;
@@ -158,8 +157,7 @@ public class ProductPricingValueListPanel extends AbstractTablePanel {
     }
     
     @Override
-    protected void viewRow(Object rowObject) {
-        ProductPercentValue o = (ProductPercentValue) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(ProductPercentValue rowObject) {
+        showDetailForm(rowObject, false);
     }
 }

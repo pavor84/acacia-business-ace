@@ -26,7 +26,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author Bozhidar Bozhanov
  */
-public class CountriesListPanel extends AbstractTablePanel {
+public class CountriesListPanel extends AbstractTablePanel<Country> {
 
     /** Creates new form AddresssListPanel */
     public CountriesListPanel()
@@ -102,10 +102,9 @@ public class CountriesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
-            deleteCountry((Country) rowObject);
+    protected boolean deleteRow(Country rowObject) {
+        if (rowObject != null) {
+            deleteCountry(rowObject);
             return true;
         }
 
@@ -128,7 +127,7 @@ public class CountriesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected Country modifyRow(Country rowObject) {
         if(rowObject != null)
         {
             CountryPanel countryPanel =
@@ -136,7 +135,7 @@ public class CountriesListPanel extends AbstractTablePanel {
             DialogResponse response = countryPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return countryPanel.getSelectedValue();
+                return (Country) countryPanel.getSelectedValue();
             }
         }
 
@@ -144,13 +143,13 @@ public class CountriesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected Country newRow() {
         CountryPanel countryPanel = new CountryPanel();
 
         DialogResponse response = countryPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return countryPanel.getSelectedValue();
+            return (Country) countryPanel.getSelectedValue();
         }
         return null;
     }
@@ -161,13 +160,12 @@ public class CountriesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Country rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Country rowObject) {
         return true;
     }
-
 }

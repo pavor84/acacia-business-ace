@@ -32,7 +32,7 @@ import com.cosmos.swingb.JBColumn;
  * @author	Petar Milev
  *
  */
-public class BanknoteQuantityListPanel extends AbstractTablePanel {
+public class BanknoteQuantityListPanel extends AbstractTablePanel<BanknoteQuantity> {
     
     private EntityProperties entityProps;
     
@@ -142,26 +142,26 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(BanknoteQuantity rowObject) {
         return true;
     }
     
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(BanknoteQuantity rowObject) {
         return true;
     }
     
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(BanknoteQuantity rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(BanknoteQuantity rowObject) {
         getFormSession().deleteBanknoteQuantity((BanknoteQuantity)rowObject);
         return true;
     }
@@ -178,15 +178,14 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        BanknoteQuantity o = (BanknoteQuantity) rowObject;
-        return showDetailForm(o, true);
+    protected BanknoteQuantity modifyRow(BanknoteQuantity rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected BanknoteQuantity newRow() {
         if ( canCreate() ){
             if (canNestedOperationProceed()) {
                 BanknoteQuantity o = getFormSession().newBanknoteQuantity(getParentDataObjectId());
@@ -198,14 +197,14 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel {
         }
     }
 
-    private Object showDetailForm(BanknoteQuantity o, boolean editable) {
+    private BanknoteQuantity showDetailForm(BanknoteQuantity o, boolean editable) {
         BanknoteQuantityForm editPanel = new BanknoteQuantityForm(o, parent);
         if ( !editable )
             editPanel.setReadonly();
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return editPanel.getSelectedValue();
+            return (BanknoteQuantity) editPanel.getSelectedValue();
         }
 
         return null;
@@ -222,9 +221,8 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel {
     }
     
     @Override
-    protected void viewRow(Object rowObject) {
-        BanknoteQuantity o = (BanknoteQuantity) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(BanknoteQuantity rowObject) {
+        showDetailForm(rowObject, false);
     }
     
     public void refreshList(List<BanknoteQuantity> list){
@@ -256,7 +254,7 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel {
     }
     
     @Override
-    protected void addTableObject(Object newRowObject) {
+    protected void addTableObject(BanknoteQuantity newRowObject) {
         Comparator c = new BanknoteComparator();
         List objects = getDataTable().getData();
         int idx = 0;
@@ -271,7 +269,7 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel {
     }
     
     @Override
-    protected void replaceTableObject(Object newRowObject) {
+    protected void replaceTableObject(BanknoteQuantity newRowObject) {
         getDataTable().removeSelectedRow();
         addTableObject(newRowObject);
         getDataTable().setSelectedRowObject(newRowObject);

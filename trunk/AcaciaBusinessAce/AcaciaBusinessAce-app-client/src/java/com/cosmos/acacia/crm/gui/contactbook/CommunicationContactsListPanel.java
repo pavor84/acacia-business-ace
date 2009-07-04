@@ -27,7 +27,7 @@ import org.jdesktop.application.Task;
  *
  * @author Bozhidar Bozhanov
  */
-public class CommunicationContactsListPanel extends AbstractTablePanel {
+public class CommunicationContactsListPanel extends AbstractTablePanel<CommunicationContact> {
 
     /** Creates new form AddresssListPanel */
     public CommunicationContactsListPanel(BigInteger parentDataObjectId)
@@ -101,10 +101,10 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(CommunicationContact rowObject) {
          if(rowObject != null)
         {
-            deleteCommunicationContact((CommunicationContact) rowObject);
+            deleteCommunicationContact(rowObject);
             return true;
         }
 
@@ -127,15 +127,13 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
+    protected CommunicationContact modifyRow(CommunicationContact rowObject) {
+        if(rowObject != null) {
             CommunicationContactPanel communicationContactPanel =
                     new CommunicationContactPanel((CommunicationContact) rowObject);
             DialogResponse response = communicationContactPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return communicationContactPanel.getSelectedValue();
+            if(DialogResponse.SAVE.equals(response)) {
+                return (CommunicationContact) communicationContactPanel.getSelectedValue();
             }
         }
 
@@ -143,7 +141,7 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected CommunicationContact newRow() {
         if (canNestedOperationProceed())
         {
             CommunicationContactPanel communicationContactPanel = new CommunicationContactPanel(getParentDataObjectId(),
@@ -152,7 +150,7 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
             DialogResponse response = communicationContactPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return communicationContactPanel.getSelectedValue();
+                return (CommunicationContact) communicationContactPanel.getSelectedValue();
             }
         }
         return null;
@@ -164,12 +162,12 @@ public class CommunicationContactsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(CommunicationContact rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(CommunicationContact rowObject) {
         return true;
     }
 

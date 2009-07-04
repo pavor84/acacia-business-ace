@@ -32,7 +32,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author  Bozhidar Bozhanov
  */
-public class PersonsListPanel extends AbstractTablePanel {
+public class PersonsListPanel extends AbstractTablePanel<Person> {
 
     public PersonsListPanel() {
         this(LocalSession.instance().getOrganization().getId());
@@ -131,9 +131,9 @@ public class PersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(Person rowObject) {
         if (rowObject != null) {
-            deletePerson((Person) rowObject);
+            deletePerson(rowObject);
             return true;
         }
 
@@ -141,12 +141,12 @@ public class PersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected Person modifyRow(Person rowObject) {
         if (rowObject != null) {
             PersonPanel personPanel = new PersonPanel((Person) rowObject);
             DialogResponse response = personPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return personPanel.getSelectedValue();
+                return (Person) personPanel.getSelectedValue();
             }
         }
 
@@ -154,11 +154,11 @@ public class PersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected Person newRow() {
         PersonPanel personPanel = new PersonPanel(getParentDataObjectId());
         DialogResponse response = personPanel.showDialog(this);
         if (DialogResponse.SAVE.equals(response)) {
-            return personPanel.getSelectedValue();
+            return (Person) personPanel.getSelectedValue();
         }
 
         return null;
@@ -186,7 +186,7 @@ public class PersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Person rowObject) {
         if (rowObject instanceof DataObjectBean) {
             DataObjectBean bean = (DataObjectBean) rowObject;
             if (getClassifiersManager().isClassifiedAs(bean, "customer")) {
@@ -200,7 +200,7 @@ public class PersonsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Person rowObject) {
         return true;
     }
 }

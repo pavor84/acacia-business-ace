@@ -36,17 +36,15 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
  *
  * @author Bozhidar Bozhanov
  */
-public class CitiesListPanel extends AbstractTablePanel {
+public class CitiesListPanel extends AbstractTablePanel<City> {
 
     /** Creates new form AddresssListPanel */
-    public CitiesListPanel()
-    {
+    public CitiesListPanel() {
         super();
         postInitData();
     }
 
-    public CitiesListPanel(Country country)
-    {
+    public CitiesListPanel(Country country) {
         super();
         this.country = country;
         postInitData();
@@ -174,10 +172,9 @@ public class CitiesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
-            deleteCity((City) rowObject);
+    protected boolean deleteRow(City rowObject) {
+        if (rowObject != null) {
+            deleteCity(rowObject);
             return true;
         }
 
@@ -185,15 +182,12 @@ public class CitiesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            CityPanel cityPanel =
-                    new CityPanel((City) rowObject);
+    protected City modifyRow(City rowObject) {
+        if(rowObject != null) {
+            CityPanel cityPanel = new CityPanel(rowObject);
             DialogResponse response = cityPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return cityPanel.getSelectedValue();
+            if(DialogResponse.SAVE.equals(response)) {
+                return (City) cityPanel.getSelectedValue();
             }
         }
 
@@ -214,17 +208,17 @@ public class CitiesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected City newRow() {
         CityPanel cityPanel = null;
-        if (country != null)
+        if (country != null) {
             cityPanel = new CityPanel(country);
-        else
+        } else {
             cityPanel = new CityPanel();
+        }
 
         DialogResponse response = cityPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return cityPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (City) cityPanel.getSelectedValue();
         }
         return null;
     }
@@ -235,13 +229,12 @@ public class CitiesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(City rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(City rowObject) {
         return true;
     }
-
 }

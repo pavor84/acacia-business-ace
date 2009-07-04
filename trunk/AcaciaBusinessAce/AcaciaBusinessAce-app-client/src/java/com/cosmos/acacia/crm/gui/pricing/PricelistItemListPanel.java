@@ -34,24 +34,19 @@ import com.cosmos.swingb.DialogResponse;
  * Created	:	12.01.2009
  * @author	Petar Milev
  */
-public class PricelistItemListPanel extends AbstractTablePanel {
-    
+public class PricelistItemListPanel extends AbstractTablePanel<PricelistItem> {
+
     private EntityProperties entityProps;
-    
     private PricelistRemote formSession;
     private BindingGroup bindingGroup;
-    
     private ProductsListRemote productsListRemote = getBean(ProductsListRemote.class);
-    
     private Pricelist pricelist;
-
     private List<PricelistItem> list;
-    
-    
+
     public PricelistItemListPanel(Pricelist pricelist) {
-        this ( pricelist, null );
+        this(pricelist, null);
     }
-    
+
     public PricelistItemListPanel(Pricelist pricelist, List<PricelistItem> list) {
         super(pricelist.getPricelistId());
         this.list = list;
@@ -59,7 +54,7 @@ public class PricelistItemListPanel extends AbstractTablePanel {
         bindComponents();
         initComponentsCustom();
     }
-    
+
     private void initComponentsCustom() {
         setSpecialButtonBehavior(true);
         getButton(Button.New).setText(getResourceMap().getString("button.includeCategory"));
@@ -67,6 +62,7 @@ public class PricelistItemListPanel extends AbstractTablePanel {
         getButton(Button.Special).setText(getResourceMap().getString("button.includeProducts"));
         getButton(Button.Special).setToolTipText(getResourceMap().getString("button.includeProducts.tooltip"));
         getButton(Button.Special).addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 onIncludeProducts();
             }
@@ -76,9 +72,10 @@ public class PricelistItemListPanel extends AbstractTablePanel {
         setVisible(Button.New, !generalPricelist);
         setVisible(Button.Close, false);
         setVisible(Button.Refresh, false);
-        
-        if ( !getRightsManager().isAllowed(SpecialPermission.ProductPricing) )
+
+        if (!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
             setReadonly();
+        }
     }
 
     protected void onIncludeCategory() {
@@ -86,14 +83,14 @@ public class PricelistItemListPanel extends AbstractTablePanel {
             ProductCategoriesTreePanel categoriesPanel = new ProductCategoriesTreePanel(getOrganizationDataObjectId());
             categoriesPanel.getShowAllHeirsCheckBox().setText(getResourceMap().getString("button.includeHeirs"));
             DialogResponse resp = categoriesPanel.showDialog(this);
-            if ( DialogResponse.SELECT.equals(resp)){
+            if (DialogResponse.SELECT.equals(resp)) {
                 ProductCategory category = (ProductCategory) categoriesPanel.getSelectedRowObject();
-                if ( category!=null ){
+                if (category != null) {
                     boolean includeHeirs = categoriesPanel.getShowAllHeirs();
                     List<SimpleProduct> selected = productsListRemote.getProductsForCategory(category.getId(), includeHeirs);
-                    if ( selected!=null && selected.size()>0 ){
+                    if (selected != null && selected.size() > 0) {
                         showPricelistItemForm(selected);
-                    }else{
+                    } else {
                         showMessageDialog("message.noProductsInCategory");
                     }
                 }
@@ -106,9 +103,9 @@ public class PricelistItemListPanel extends AbstractTablePanel {
             ProductsListPanel productPanel = new ProductsListPanel(getOrganizationDataObjectId());
             productPanel.getDataTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             DialogResponse resp = productPanel.showDialog(this);
-            if ( DialogResponse.SELECT.equals(resp)){
+            if (DialogResponse.SELECT.equals(resp)) {
                 List<SimpleProduct> selected = productPanel.getDataTable().getSelectedRowObjects();
-                if ( selected!=null && selected.size()>0 ){
+                if (selected != null && selected.size() > 0) {
                     showPricelistItemForm(selected);
                 }
             }
@@ -118,19 +115,19 @@ public class PricelistItemListPanel extends AbstractTablePanel {
     private void showPricelistItemForm(List<SimpleProduct> products) {
         PricelistItemForm itemsForm = new PricelistItemForm(products, pricelist, this.getListData());
         DialogResponse dr = itemsForm.showDialog(this);
-        if ( DialogResponse.SAVE.equals(dr) ){
+        if (DialogResponse.SAVE.equals(dr)) {
             List<PricelistItem> items = itemsForm.getSelectedValues();
             for (PricelistItem pricelistItem : items) {
                 addOrdUpdateRow(pricelistItem);
             }
         }
     }
-    
+
     private void addOrdUpdateRow(PricelistItem pricelistItem) {
         int idx = 0;
         List<PricelistItem> items = getDataTable().getData();
         for (PricelistItem i : items) {
-            if ( PricelistItemForm.compare(i.getProduct(), pricelistItem.getProduct())>0 ){
+            if (PricelistItemForm.compare(i.getProduct(), pricelistItem.getProduct()) > 0) {
                 break;
             }
             idx++;
@@ -138,28 +135,30 @@ public class PricelistItemListPanel extends AbstractTablePanel {
         getDataTable().addOrUpdateRow(pricelistItem, idx);
     }
 
-    protected void bindComponents(){
+    protected void bindComponents() {
         entityProps = getFormSession().getItemsListEntityProperties();
-        
+
         refreshDataTable(entityProps);
-        
+
         setVisible(AbstractTablePanel.Button.Classify, false);
     }
-    
+
     protected PricelistRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(PricelistRemote.class);
+        }
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
-        
+        }
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -168,13 +167,14 @@ public class PricelistItemListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null ){
-            if ( getParentDataObjectId()!=null )
+        if (list == null) {
+            if (getParentDataObjectId() != null) {
                 list = getFormSession().getPricelistItems(getParentDataObjectId());
-            else
+            } else {
                 list = new ArrayList<PricelistItem>();
+            }
         }
-            
+
         return list;
     }
 
@@ -183,99 +183,101 @@ public class PricelistItemListPanel extends AbstractTablePanel {
      */
     @Override
     public boolean canCreate() {
-        if ( pricelist.isGeneralPricelist() )
+        if (pricelist.isGeneralPricelist()) {
             return false;
+        }
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
-        if ( pricelist.isGeneralPricelist() )
+    public boolean canDelete(PricelistItem rowObject) {
+        if (pricelist.isGeneralPricelist()) {
             return false;
+        }
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
-        if ( pricelist.isGeneralPricelist() )
+    public boolean canModify(PricelistItem rowObject) {
+        if (pricelist.isGeneralPricelist()) {
             return false;
+        }
         return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
     }
-    
+
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(PricelistItem rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deletePricelistItem((PricelistItem)rowObject);
+    protected boolean deleteRow(PricelistItem rowObject) {
+        getFormSession().deletePricelistItem(rowObject);
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        PricelistItem o = (PricelistItem) rowObject;
-        return showDetailForm(o, true);
+    protected PricelistItem modifyRow(PricelistItem rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
+    @Override
     @Action
     public void newAction() {
         onIncludeCategory();
     }
 
-    private Object showDetailForm(PricelistItem o, boolean editable) {
+    private PricelistItem showDetailForm(PricelistItem o, boolean editable) {
         PricelistItemForm editPanel = new PricelistItemForm(o, pricelist, getListData());
-        if ( !editable )
+        if (!editable) {
             editPanel.setReadonly();
+        }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (PricelistItem) editPanel.getSelectedValue();
         }
 
         return null;
     }
-    
+
     @Override
     public void setReadonly(boolean readonly) {
         super.setReadonly(readonly);
         getButton(Button.Special).setVisible(!readonly);
         getButton(Button.New).setVisible(!readonly);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
-    }
-    
-    @Override
-    protected void viewRow(Object rowObject) {
-        PricelistItem o = (PricelistItem) rowObject;
-        showDetailForm(o, false);
     }
 
     @Override
-    protected Object newRow() {
+    protected void viewRow(PricelistItem rowObject) {
+        showDetailForm(rowObject, false);
+    }
+
+    @Override
+    protected PricelistItem newRow() {
         throw new UnsupportedOperationException("New operation is specific, and should be performed outside this method");
     }
 
     public void setPricelist(Pricelist pricelist) {
-        this.pricelist=pricelist;
+        this.pricelist = pricelist;
     }
 }

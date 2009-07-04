@@ -26,7 +26,7 @@ import com.cosmos.beansbinding.EntityProperties;
  *
  * @author Bozhidar Bozhanov
  */
-public class DataObjectTypesListPanel extends AbstractTablePanel {
+public class DataObjectTypesListPanel extends AbstractTablePanel<DataObjectType> {
 
     /** Creates new form DataObjectTypesListPanel */
     public DataObjectTypesListPanel()
@@ -117,10 +117,10 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(DataObjectType rowObject) {
          if(rowObject != null)
         {
-            deleteDataObjectType((DataObjectType) rowObject);
+            deleteDataObjectType(rowObject);
             return true;
         }
 
@@ -128,7 +128,7 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected DataObjectType modifyRow(DataObjectType rowObject) {
        return null;
     }
 
@@ -148,7 +148,7 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected DataObjectType newRow() {
         return null;
     }
 
@@ -158,12 +158,12 @@ public class DataObjectTypesListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(DataObjectType rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(DataObjectType rowObject) {
         return true;
     }
 

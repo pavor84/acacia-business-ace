@@ -25,7 +25,7 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class CashReconcileListPanel extends AbstractTablePanel {
+public class CashReconcileListPanel extends AbstractTablePanel<CashReconcile> {
     
     private EntityProperties entityProps;
     
@@ -96,32 +96,31 @@ public class CashReconcileListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(CashReconcile rowObject) {
         return isDraft(rowObject);
     }
     
-    protected boolean isDraft(Object rowObject){
-        CashReconcile entity = (CashReconcile) rowObject;
-        return DocumentStatus.Draft.equals(entity.getDocumentStatus().getEnumValue());
+    protected boolean isDraft(CashReconcile rowObject){
+        return DocumentStatus.Draft.equals(rowObject.getDocumentStatus().getEnumValue());
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(CashReconcile rowObject) {
         return isDraft(rowObject);
     }
     
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(CashReconcile rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deleteCashReconcile((CashReconcile)rowObject);
+    protected boolean deleteRow(CashReconcile rowObject) {
+        getFormSession().deleteCashReconcile(rowObject);
         return true;
     }
     
@@ -137,15 +136,14 @@ public class CashReconcileListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        CashReconcile o = (CashReconcile) rowObject;
-        return showDetailForm(o, true);
+    protected CashReconcile modifyRow(CashReconcile rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected CashReconcile newRow() {
         if ( canCreate() ){
             CashReconcile o = getFormSession().newCashReconcile(getParentDataObjectId());
             return showDetailForm(o, true);
@@ -154,14 +152,14 @@ public class CashReconcileListPanel extends AbstractTablePanel {
         }
     }
 
-    private Object showDetailForm(CashReconcile o, boolean editable) {
+    private CashReconcile showDetailForm(CashReconcile o, boolean editable) {
         CashReconcileForm editPanel = new CashReconcileForm(o);
         if ( !editable )
             editPanel.setReadonly();
         DialogResponse response = editPanel.showDialog(this);
         if(DialogResponse.SAVE.equals(response))
         {
-            return editPanel.getSelectedValue();
+            return (CashReconcile) editPanel.getSelectedValue();
         }
 
         return null;
@@ -178,9 +176,8 @@ public class CashReconcileListPanel extends AbstractTablePanel {
     }
     
     @Override
-    protected void viewRow(Object rowObject) {
-        CashReconcile o = (CashReconcile) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(CashReconcile rowObject) {
+        showDetailForm(rowObject, false);
     }
     
     public void refreshList(List<CashReconcile> list){

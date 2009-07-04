@@ -28,7 +28,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author Bozhidar Bozhanov
  */
-public class ClassifiersListPanel extends AbstractTablePanel {
+public class ClassifiersListPanel extends AbstractTablePanel<Classifier> {
 
     /** Creates new form ClassifiersListPanel */
     public ClassifiersListPanel(DataObject dataObject)
@@ -132,10 +132,10 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(Classifier rowObject) {
          if(rowObject != null)
         {
-            deleteClassifier((Classifier) rowObject);
+            deleteClassifier(rowObject);
             return true;
         }
 
@@ -143,19 +143,19 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected Classifier modifyRow(Classifier rowObject) {
         if(rowObject != null)
         {
             boolean allowCafdModifications = dataObjectType == null;
 
             ClassifierPanel classifierPanel = new ClassifierPanel(
-                    (Classifier)rowObject,
+                    rowObject,
                     allowCafdModifications);
 
             DialogResponse response = classifierPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return classifierPanel.getSelectedValue();
+                return (Classifier) classifierPanel.getSelectedValue();
             }
         }
 
@@ -178,7 +178,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected Classifier newRow() {
         if (canNestedOperationProceed())
         {
             ClassifierPanel classifierPanel = null;
@@ -190,7 +190,7 @@ public class ClassifiersListPanel extends AbstractTablePanel {
             DialogResponse response = classifierPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response))
             {
-                return classifierPanel.getSelectedValue();
+                return (Classifier) classifierPanel.getSelectedValue();
             }
         }
 
@@ -203,21 +203,20 @@ public class ClassifiersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(Classifier rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(Classifier rowObject) {
         if(isSystemAdministrator())
             return true;
 
-        Classifier classifier = (Classifier)rowObject;
+        Classifier classifier = rowObject;
         ClassifierGroup classifierGroup = classifier.getClassifierGroup();
         if(classifierGroup.getIsSystemGroup())
             return false;
 
         return true;
     }
-
 }

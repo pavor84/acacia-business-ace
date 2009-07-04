@@ -25,23 +25,17 @@ import com.cosmos.swingb.DialogResponse;
  * @version $Id: $
  *
  */
-public class WarehouseProductListPanel extends AbstractTablePanel {
+public class WarehouseProductListPanel extends AbstractTablePanel<WarehouseProduct> {
 
     private EntityProperties entityProps;
-
     @EJB
     private WarehouseListRemote formSession;
     private BindingGroup bindingGroup;
-
     //the current warehouse in which context the list of products is shown
     private Warehouse warehouse;
-
     private boolean readonly;
-
     private List<WarehouseProduct> list;
-
     private boolean allowDetailsView = true;
-
     private boolean showSummaryProducts = false;
 
     /**
@@ -65,7 +59,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
      * Otherwise the same as WarehouseProductListPanel().
      * @param b
      */
-    public WarehouseProductListPanel(BigInteger parentId, boolean showSummaryProducts){
+    public WarehouseProductListPanel(BigInteger parentId, boolean showSummaryProducts) {
         super(parentId);
         this.showSummaryProducts = showSummaryProducts;
         customInit();
@@ -76,19 +70,19 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
 
         //free quantity column - add it by hand since it's synthetic value
         addColumn(25, "freeQuantity", getResourceMap().getString("WarehouseProduct.freeQuantity.columnName"),
-            "${freeQuantity}", entityProps);
+                "${freeQuantity}", entityProps);
         //min quantity column - add it by hand since it's synthetic value
         addColumn(26, "prefferedMinQuantity", getResourceMap().getString("WarehouseProduct.minQuantity.columnName"),
-            "${prefferedMinQuantity}", entityProps);
+                "${prefferedMinQuantity}", entityProps);
         //max quantity column - add it by hand since it's synthetic value
         addColumn(27, "prefferedMaxQuantity", getResourceMap().getString("WarehouseProduct.maxQuantity.columnName"),
-            "${prefferedMaxQuantity}", entityProps);
+                "${prefferedMaxQuantity}", entityProps);
         //default quantity column - add it by hand since it's synthetic value
         addColumn(28, "prefferedDefaultQuantity", getResourceMap().getString("WarehouseProduct.defaultQuantity.columnName"),
-            "${prefferedDefaultQuantity}", entityProps);
+                "${prefferedDefaultQuantity}", entityProps);
 
         //remove the columns that doesn't have summary meaning if this is set to true
-        if ( showSummaryProducts ){
+        if (showSummaryProducts) {
             entityProps.removePropertyDetails("warehouse");
             entityProps.removePropertyDetails("notes");
             entityProps.removePropertyDetails("deliveryTime");
@@ -104,16 +98,18 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     }
 
     protected WarehouseListRemote getFormSession() {
-        if (formSession == null)
+        if (formSession == null) {
             formSession = getBean(WarehouseListRemote.class);
+        }
 
         return formSession;
     }
 
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
+        }
 
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
@@ -126,20 +122,22 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null ){
-            if (warehouse==null)
+        if (list == null) {
+            if (warehouse == null) {
                 list = getFormSession().listWarehouseProducts(getParentDataObjectId());
-            else
+            } else {
                 list = getFormSession().listWarehouseProducts(warehouse);
+            }
         }
 
         return list;
     }
 
     @SuppressWarnings("unchecked")
-    public void refreshList(List newList){
-        if ( newList==null )
+    public void refreshList(List newList) {
+        if (newList == null) {
             throw new IllegalStateException("Null parameter is illegal!");
+        }
 
         list = newList;
         refreshDataTable(entityProps);
@@ -156,16 +154,17 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(WarehouseProduct rowObject) {
         return !readonly;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
-        if ( readonly && allowDetailsView==false )
+    public boolean canModify(WarehouseProduct rowObject) {
+        if (readonly && allowDetailsView == false) {
             return false;
+        }
 
         return true;
     }
@@ -173,15 +172,15 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        try{
-          getFormSession().deleteWarehouseProduct((WarehouseProduct) rowObject);
-          return true;
-        }catch ( Exception e ){
+    protected boolean deleteRow(WarehouseProduct rowObject) {
+        try {
+            getFormSession().deleteWarehouseProduct((WarehouseProduct) rowObject);
+            return true;
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                getResourceMap().getString("WarehouseListPanel.err.cantDelete"),
-                getResourceMap().getString("WarehouseListPanel.err.cantDeleteTitle"),
-                JOptionPane.DEFAULT_OPTION);
+                    getResourceMap().getString("WarehouseListPanel.err.cantDelete"),
+                    getResourceMap().getString("WarehouseListPanel.err.cantDeleteTitle"),
+                    JOptionPane.DEFAULT_OPTION);
             return false;
         }
     }
@@ -189,28 +188,26 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        WarehouseProduct wp = (WarehouseProduct) rowObject;
-        return onEditEntity(wp, false);
+    protected WarehouseProduct modifyRow(WarehouseProduct rowObject) {
+        return onEditEntity(rowObject, false);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
+    protected WarehouseProduct newRow() {
         WarehouseProduct wp = getFormSession().newWarehouseProduct(getParentDataObjectId(), warehouse);
         return onEditEntity(wp, false);
     }
 
-    private Object onEditEntity(WarehouseProduct wp, boolean readonlyMode) {
+    private WarehouseProduct onEditEntity(WarehouseProduct wp, boolean readonlyMode) {
         WarehouseProductPanel editPanel = new WarehouseProductPanel(wp, getParentDataObjectId());
-        if ( readonlyMode ){
+        if (readonlyMode) {
             editPanel.setReadonlyMode(readonlyMode);
         }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getEntity();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (WarehouseProduct) editPanel.getEntity();
         }
 
         return null;
@@ -227,9 +224,8 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected void viewRow(Object rowObject) {
-        WarehouseProduct wp = (WarehouseProduct) rowObject;
-        onEditEntity(wp, true);
+    protected void viewRow(WarehouseProduct rowObject) {
+        onEditEntity(rowObject, true);
     }
 
     /**
@@ -242,7 +238,7 @@ public class WarehouseProductListPanel extends AbstractTablePanel {
         }
 
         this.allowDetailsView = allowDetailsView;
-        if ( allowDetailsView ){
+        if (allowDetailsView) {
             setVisible(Button.Modify, true);
             getButton(Button.Modify).setText(getResourceMap().getString("button.view"));
         }

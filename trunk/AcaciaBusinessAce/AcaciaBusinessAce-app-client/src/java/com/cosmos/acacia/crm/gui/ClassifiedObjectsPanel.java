@@ -122,7 +122,7 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
         });
     }
 
-    class ClassifiedObjectBeansListPanel extends AbstractTablePanel {
+    class ClassifiedObjectBeansListPanel extends AbstractTablePanel<ClassifiedObjectBean> {
         BindingGroup objectsBindingGroup;
 
         public ClassifiedObjectBeansListPanel(BigInteger parentId) {
@@ -153,17 +153,17 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
         }
 
         @Override
-        protected boolean deleteRow(Object rowObject) {
+        protected boolean deleteRow(ClassifiedObjectBean rowObject) {
             throw new UnsupportedOperationException("Not supported.");
         }
 
         @Override
-        protected Object modifyRow(Object rowObject) {
+        protected ClassifiedObjectBean modifyRow(ClassifiedObjectBean rowObject) {
             throw new UnsupportedOperationException("Not supported.");
         }
 
         @Override
-        protected Object newRow() {
+        protected ClassifiedObjectBean newRow() {
             throw new UnsupportedOperationException("Not supported.");
         }
 
@@ -173,12 +173,12 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
         }
 
         @Override
-        public boolean canModify(Object rowObject) {
+        public boolean canModify(ClassifiedObjectBean rowObject) {
             return false;
         }
 
         @Override
-        public boolean canDelete(Object rowObject) {
+        public boolean canDelete(ClassifiedObjectBean rowObject) {
             return false;
         }
     }

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.users;
 
 import java.math.BigInteger;
@@ -26,21 +25,18 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author Bozhidar Bozhanov
  */
-public class UserGroupsListPanel extends AbstractTablePanel {
+public class UserGroupsListPanel extends AbstractTablePanel<UserGroup> {
 
     /** Creates new form BankDetailsListPanel */
-    public UserGroupsListPanel(BigInteger parentDataObjectId)
-    {
+    public UserGroupsListPanel(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
     public UserGroupsListPanel(DataObjectBean parent) {
         super(parent);
     }
-
     @EJB
     private UserRightsRemote formSession;
-
     private BindingGroup userGroupsBindingGroup;
     private List<UserGroup> userGroups;
 
@@ -59,47 +55,41 @@ public class UserGroupsListPanel extends AbstractTablePanel {
         userGroupsTable.setEditable(false);
     }
 
-    protected List<UserGroup> getUserGroups()
-    {
-        if(userGroups == null)
-        {
+    protected List<UserGroup> getUserGroups() {
+        if (userGroups == null) {
             userGroups = getFormSession().getUserGroups(getParentDataObjectId());
         }
 
         return userGroups;
     }
 
-    protected EntityProperties getUserGroupEntityProperties()
-    {
+    protected EntityProperties getUserGroupEntityProperties() {
         return getFormSession().getUserGroupEntityProperties();
     }
 
-    protected UserRightsRemote getFormSession()
-    {
-        if(formSession == null) {
+    protected UserRightsRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(UserRightsRemote.class);
         }
 
         return formSession;
     }
 
-    protected int deleteUserGroup(UserGroup userGroup)
-    {
+    protected int deleteUserGroup(UserGroup userGroup) {
         return getFormSession().deleteUserGroup(userGroup);
     }
 
     @Override
     @Action
-    public void selectAction(){
+    public void selectAction() {
         super.selectAction();
         //
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
-         if(rowObject != null)
-        {
-            deleteUserGroup((UserGroup) rowObject);
+    protected boolean deleteRow(UserGroup rowObject) {
+        if (rowObject != null) {
+            deleteUserGroup(rowObject);
             return true;
         }
 
@@ -111,8 +101,9 @@ public class UserGroupsListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (userGroupsBindingGroup != null)
+        if (userGroupsBindingGroup != null) {
             userGroupsBindingGroup.unbind();
+        }
 
         userGroups = null;
 
@@ -122,14 +113,12 @@ public class UserGroupsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-        if(rowObject != null)
-        {
-            UserGroupPanel userGroupPanel = new UserGroupPanel((UserGroup)rowObject);
+    protected UserGroup modifyRow(UserGroup rowObject) {
+        if (rowObject != null) {
+            UserGroupPanel userGroupPanel = new UserGroupPanel((UserGroup) rowObject);
             DialogResponse response = userGroupPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return userGroupPanel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (UserGroup) userGroupPanel.getSelectedValue();
             }
         }
 
@@ -137,15 +126,13 @@ public class UserGroupsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
-        if (canNestedOperationProceed())
-        {
+    protected UserGroup newRow() {
+        if (canNestedOperationProceed()) {
             UserGroupPanel userGroupPanel = new UserGroupPanel(getParentDataObjectId());
 
             DialogResponse response = userGroupPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return userGroupPanel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (UserGroup) userGroupPanel.getSelectedValue();
             }
         }
         return null;
@@ -157,13 +144,12 @@ public class UserGroupsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(UserGroup rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(UserGroup rowObject) {
         return true;
     }
-
 }

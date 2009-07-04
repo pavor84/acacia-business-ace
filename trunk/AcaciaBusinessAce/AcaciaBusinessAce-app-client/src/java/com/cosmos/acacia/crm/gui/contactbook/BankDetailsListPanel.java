@@ -26,7 +26,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author Bozhidar Bozhanov
  */
-public class BankDetailsListPanel extends AbstractTablePanel {
+public class BankDetailsListPanel extends AbstractTablePanel<BankDetail> {
 
     public BankDetailsListPanel(Address address) {
         this(address != null ? address.getId() : null);
@@ -105,9 +105,9 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(BankDetail rowObject) {
         if (rowObject != null) {
-            deleteBankDetail((BankDetail) rowObject);
+            deleteBankDetail(rowObject);
             return true;
         }
 
@@ -115,12 +115,12 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected BankDetail modifyRow(BankDetail rowObject) {
         if (rowObject != null) {
             BankDetailPanel bankDetailPanel = new BankDetailPanel((BankDetail) rowObject);
             DialogResponse response = bankDetailPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return bankDetailPanel.getSelectedValue();
+                return (BankDetail) bankDetailPanel.getSelectedValue();
             }
         }
 
@@ -144,13 +144,13 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object newRow() {
+    protected BankDetail newRow() {
         if (canNestedOperationProceed()) {
             BankDetailPanel bankDetailPanel = new BankDetailPanel(getParentDataObjectId());
 
             DialogResponse response = bankDetailPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return bankDetailPanel.getSelectedValue();
+                return (BankDetail) bankDetailPanel.getSelectedValue();
             }
         }
 
@@ -163,12 +163,12 @@ public class BankDetailsListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(BankDetail rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(BankDetail rowObject) {
         return true;
     }
 }

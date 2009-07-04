@@ -25,53 +25,54 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class CustomerPaymentListPanel extends AbstractTablePanel {
-    
+public class CustomerPaymentListPanel extends AbstractTablePanel<CustomerPayment> {
+
     private EntityProperties entityProps;
-    
     private CustomerPaymentRemote formSession;
     private BindingGroup bindingGroup;
-    
     private List<CustomerPayment> list;
-    
+
     public CustomerPaymentListPanel(BigInteger parentDataObjectId) {
-        this ( parentDataObjectId, null );
+        this(parentDataObjectId, null);
     }
-    
+
     public CustomerPaymentListPanel(BigInteger parentDataObjectId, List<CustomerPayment> list) {
         this(parentDataObjectId, list, null);
     }
-    
+
     public CustomerPaymentListPanel(BigInteger parentDataObjectId, List<CustomerPayment> list, EntityProperties entProperties) {
         super(parentDataObjectId);
         this.entityProps = entProperties;
-        this.list=list;
+        this.list = list;
         bindComponents();
     }
-    
-    protected void bindComponents(){
-        if ( entityProps==null )
+
+    protected void bindComponents() {
+        if (entityProps == null) {
             entityProps = getFormSession().getListingEntityProperties();
-        
+        }
+
         refreshDataTable(entityProps);
-        
+
         setVisible(AbstractTablePanel.Button.Classify, false);
     }
-    
+
     protected CustomerPaymentRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(CustomerPaymentRemote.class);
+        }
         return formSession;
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void refreshDataTable(EntityProperties entProps){
-        if ( bindingGroup!=null )
+    private void refreshDataTable(EntityProperties entProps) {
+        if (bindingGroup != null) {
             bindingGroup.unbind();
-        
+        }
+
         bindingGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
-        
+
         JTableBinding tableBinding = table.bind(bindingGroup, getList(), entProps, UpdateStrategy.READ);
         tableBinding.setEditable(false);
 
@@ -80,8 +81,9 @@ public class CustomerPaymentListPanel extends AbstractTablePanel {
 
     @SuppressWarnings("unchecked")
     private List getList() {
-        if ( list==null )
+        if (list == null) {
             list = getFormSession().listCustomerPayments(getParentDataObjectId());
+        }
         return list;
     }
 
@@ -96,35 +98,34 @@ public class CustomerPaymentListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(CustomerPayment rowObject) {
         return isOpen(rowObject);
     }
-    
-    protected boolean isOpen(Object rowObject){
-        CustomerPayment entity = (CustomerPayment) rowObject;
-        return CustomerPaymentStatus.Open.equals(entity.getStatus().getEnumValue());
+
+    protected boolean isOpen(CustomerPayment rowObject) {
+        return CustomerPaymentStatus.Open.equals(rowObject.getStatus().getEnumValue());
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(CustomerPayment rowObject) {
         return isOpen(rowObject);
     }
-    
+
     @Override
-    public boolean canView(Object rowObject) {
+    public boolean canView(CustomerPayment rowObject) {
         return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Object rowObject) {
-        getFormSession().deleteCustomerPayment((CustomerPayment)rowObject);
+    protected boolean deleteRow(CustomerPayment rowObject) {
+        getFormSession().deleteCustomerPayment((CustomerPayment) rowObject);
         return true;
     }
-    
+
     @Override
     public void modifyAction() {
         super.modifyAction();
@@ -137,53 +138,51 @@ public class CustomerPaymentListPanel extends AbstractTablePanel {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Object modifyRow(Object rowObject) {
-        CustomerPayment o = (CustomerPayment) rowObject;
-        return showDetailForm(o, true);
+    protected CustomerPayment modifyRow(CustomerPayment rowObject) {
+        return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Object newRow() {
-        if ( canCreate() ){
+    protected CustomerPayment newRow() {
+        if (canCreate()) {
             CustomerPayment o = getFormSession().newCustomerPayment(getParentDataObjectId());
-            return showDetailForm(o, true);
-        }else{
+            return (CustomerPayment) showDetailForm(o, true);
+        } else {
             return null;
         }
     }
 
-    private Object showDetailForm(CustomerPayment o, boolean editable) {
+    private CustomerPayment showDetailForm(CustomerPayment o, boolean editable) {
         CustomerPaymentForm editPanel = new CustomerPaymentForm(o);
-        if ( !editable )
+        if (!editable) {
             editPanel.setReadonly();
+        }
         DialogResponse response = editPanel.showDialog(this);
-        if(DialogResponse.SAVE.equals(response))
-        {
-            return editPanel.getSelectedValue();
+        if (DialogResponse.SAVE.equals(response)) {
+            return (CustomerPayment) editPanel.getSelectedValue();
         }
 
         return null;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public Task refreshAction() {
         Task t = super.refreshAction();
-         
+
         refreshDataTable(entityProps);
-        
+
         return t;
     }
-    
+
     @Override
-    protected void viewRow(Object rowObject) {
-        CustomerPayment o = (CustomerPayment) rowObject;
-        showDetailForm(o, false);
+    protected void viewRow(CustomerPayment rowObject) {
+        showDetailForm(rowObject, false);
     }
-    
-    public void refreshList(List<CustomerPayment> list){
+
+    public void refreshList(List<CustomerPayment> list) {
         this.list = list;
         refreshDataTable(entityProps);
     }

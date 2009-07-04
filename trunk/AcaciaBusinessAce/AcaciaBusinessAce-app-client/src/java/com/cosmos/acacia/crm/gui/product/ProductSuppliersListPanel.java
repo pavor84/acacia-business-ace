@@ -21,7 +21,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Miro
  */
-public class ProductSuppliersListPanel extends AbstractTablePanel {
+public class ProductSuppliersListPanel extends AbstractTablePanel<ProductSupplier> {
 
     private BindingGroup bindingGroup;
     private EntityProperties productSuppliersEntityProperties;
@@ -56,17 +56,17 @@ public class ProductSuppliersListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(ProductSupplier rowObject) {
         return formSession.deleteProductSupplier((ProductSupplier) rowObject);
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
+    protected ProductSupplier modifyRow(ProductSupplier rowObject) {
         return editRow((ProductSupplier) rowObject);
     }
 
     @Override
-    protected Object newRow() {
+    protected ProductSupplier newRow() {
         return editRow(formSession.newProductSupplier(product));
     }
 

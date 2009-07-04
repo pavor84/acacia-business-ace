@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
 import java.math.BigInteger;
@@ -28,7 +27,7 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class OrderConfirmationItemListPanel extends AbstractTablePanel {
+public class OrderConfirmationItemListPanel extends AbstractTablePanel<OrderConfirmationItem> {
 
     /** Creates new form AddresssListPanel */
     public OrderConfirmationItemListPanel(BigInteger parentDataObjectId) {
@@ -38,14 +37,10 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
     public OrderConfirmationItemListPanel(DataObjectBean parent) {
         super(parent);
     }
-
     @EJB
     private OrderConfirmationListRemote formSession;
-
     private BindingGroup bindGroup;
-
     private List<OrderConfirmationItem> items;
-
     private EntityProperties entityProps;
 
     @Override
@@ -62,8 +57,9 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
     }
 
     protected void refreshDataTable(EntityProperties entityProps) {
-        if (bindGroup != null)
+        if (bindGroup != null) {
             bindGroup.unbind();
+        }
 
         bindGroup = new BindingGroup();
         AcaciaTable table = getDataTable();
@@ -74,25 +70,27 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
     }
 
     protected List<OrderConfirmationItem> getItems() {
-        if ( items==null ){
-            if ( getParentDataObjectId()!=null )
+        if (items == null) {
+            if (getParentDataObjectId() != null) {
                 return getFormSession().getOrderItems(getParentDataObjectId());
-            else
+            } else {
                 return new ArrayList<OrderConfirmationItem>();
+            }
         }
         return items;
     }
 
     protected OrderConfirmationListRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(OrderConfirmationListRemote.class);
+        }
         return formSession;
     }
 
     @Override
-    protected boolean deleteRow(Object rowObject) {
+    protected boolean deleteRow(OrderConfirmationItem rowObject) {
         if (rowObject != null) {
-            getFormSession().deleteOrderItem((OrderConfirmationItem)rowObject);
+            getFormSession().deleteOrderItem(rowObject);
             return true;
         }
 
@@ -100,27 +98,26 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
     }
 
     @Override
-    protected Object modifyRow(Object rowObject) {
-
+    protected OrderConfirmationItem modifyRow(OrderConfirmationItem rowObject) {
         if (rowObject != null && isEditable()) {
-            OrderConfirmationItemForm formPanel = new OrderConfirmationItemForm((OrderConfirmationItem) rowObject);
+            OrderConfirmationItemForm formPanel = new OrderConfirmationItemForm(rowObject);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return formPanel.getSelectedValue();
+                return (OrderConfirmationItem) formPanel.getSelectedValue();
             }
         }
         return null;
     }
 
     @Override
-    protected Object newRow() { 
+    protected OrderConfirmationItem newRow() {
         if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
             OrderConfirmationItem item = getFormSession().newOrderItem(getParentDataObjectId());
             OrderConfirmationItemForm formPanel = new OrderConfirmationItemForm(item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return formPanel.getSelectedValue();
+                return (OrderConfirmationItem) formPanel.getSelectedValue();
             }
         }
         return null;
@@ -131,8 +128,9 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (bindGroup != null)
+        if (bindGroup != null) {
             bindGroup.unbind();
+        }
 
         initData();
 
@@ -145,21 +143,21 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
     }
 
     @Override
-    public boolean canModify(Object rowObject) {
+    public boolean canModify(OrderConfirmationItem rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(Object rowObject) {
+    public boolean canDelete(OrderConfirmationItem rowObject) {
         return true;
     }
 
     public void refreshList(List<OrderConfirmationItem> items) {
         this.items = items;
-        
+
         refreshDataTable(entityProps);
     }
-    
+
     /**
      * Makes the list panel as read-only.
      * This means that all buttons for modify operations will be hidden
@@ -168,9 +166,9 @@ public class OrderConfirmationItemListPanel extends AbstractTablePanel {
         super.setReadonly();
         getButton(Button.Special).setVisible(false);
     }
-    
+
     @Override
-    protected void viewRow(Object rowObject) {
+    protected void viewRow(OrderConfirmationItem rowObject) {
         OrderConfirmationItemForm formPanel = new OrderConfirmationItemForm((OrderConfirmationItem) rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);
