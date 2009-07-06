@@ -7,10 +7,10 @@ import javax.ejb.Remote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 
 @Remote
 public interface RightsManagerRemote {
@@ -22,7 +22,7 @@ public interface RightsManagerRemote {
      * @param rightType
      * @return true if the user is allowed, false otherwise
      */
-    boolean isAllowed(DataObject dataObject, UserRightType rightType);
+    boolean isAllowed(DataObject dataObject, AccessRight rightType);
 
     /**
      * Checks whether the current user has the specified special permission.
@@ -54,7 +54,7 @@ public interface RightsManagerRemote {
      * @param rightType
      * @return true if the user is allowed, false otherwise
      */
-    boolean isAllowed(User user, DataObject dataObject, UserRightType rightType);
+    boolean isAllowed(User user, DataObject dataObject, AccessRight rightType);
 
     /**
      * Checks whether the user has the specified special permission.
@@ -75,14 +75,14 @@ public interface RightsManagerRemote {
      *
      * @param rights
      */
-    void setGeneralRights(Set<UserRight> rights);
+    void setGeneralRights(Set<Right> rights);
 
     /**
      * Setter for rights. Provided for unit testing
      *
      * @param rights
      */
-    void setSpecialRights(Set<UserRight> rights);
+    void setSpecialRights(Set<Right> rights);
 
     /**
      * Clears the stored user rights
@@ -91,13 +91,13 @@ public interface RightsManagerRemote {
 
     Set<SpecialPermission> getPermissions(
             DataObject dataObject,
-            UserRightType rightType);
+            AccessRight rightType);
 
     Set<SpecialPermission> getPermissions(
             DataObjectType dataObjectType,
-            UserRightType rightType);
+            AccessRight rightType);
 
     Set<SpecialPermission> getPermissions(
             Class<? extends DataObjectBean> entityClass,
-            UserRightType rightType);
+            AccessRight rightType);
 }

@@ -45,12 +45,14 @@ import com.cosmos.acacia.crm.enums.OrganizationType;
 import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.acacia.crm.enums.PaymentTerm;
 import com.cosmos.acacia.crm.enums.PaymentType;
+import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.ProductColor;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
+import com.cosmos.acacia.security.AccessRight;
 
 /**
  *
@@ -106,7 +108,9 @@ public class DatabaseResourceBean
             getDbResources(CustomerPaymentType.class);
             getDbResources(DocumentType.class);
             getDbResources(DocumentStatus.class);
-            getDbResources(UserRightType.class);
+            getDbResources(AccessRight.class);
+            getDbResources(PermissionCategory.class);
+            getDbResources(AccessRight.class);
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }

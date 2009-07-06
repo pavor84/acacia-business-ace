@@ -13,46 +13,62 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import javax.persistence.Basic;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "user_groups")
+@Table(name = "user_groups", catalog = "acacia", schema = "public",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "user_group_name"})
+})
 @NamedQueries({
-        @NamedQuery(
-                 name = "UserGroup.findByParentDataObjectAndDeleted",
-                 query = "select ug from UserGroup ug where ug.dataObject.parentDataObjectId = :parentDataObjectId and ug.dataObject.deleted = :deleted"
-             ),
-        @NamedQuery
-            (
-            name = "UserGroup.findByParentDataObjectIsNullAndDeleted",
-            query = "select ug from UserGroup ug where ug.dataObject.parentDataObjectId is null and ug.dataObject.deleted = :deleted"
-            )
+    @NamedQuery(
+        name = UserGroup.NQ_FIND_ALL,
+        query = "select ug from UserGroup ug" +
+                " where" +
+                "  ug.organizationId = :organizationId" +
+                "  and ug.dataObject.deleted = :deleted"
+    )
 })
 public class UserGroup extends DataObjectBean implements Serializable {
 
+    protected static final String CLASS_NAME = "UserGroup";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+
     @Id
+    @Basic(optional = false)
     @Column(name = "user_group_id", nullable = false)
     @Property(title="User Group ID", visible=false, hidden=true)
     private BigInteger userGroupId;
 
-    @Column(name = "name", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "user_group_name", nullable = false, length = 50)
     @Property(title="Group name", propertyValidator=@PropertyValidator(
         validationType=ValidationType.LENGTH, minLength=3, maxLength=50))
     private String name;
 
-    @JoinColumn(name = "user_group_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
-    private DataObject dataObject;
-
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
-
-    @Column(name = "description")
+    @Column(name = "description", length = 2147483647)
     @Property(title="Description")
     private String description;
-            
+
+    @JoinColumn(name = "user_group_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private DataObject dataObject;
+
+    @Basic(optional = false)
+    @Column(name = "organization_id", nullable = false)
+    @Property(title="Organization Id", editable=false, readOnly=true, visible=false, hidden=true)
+    private BigInteger organizationId;
+
+    public UserGroup() {
+    }
+
+    public UserGroup(BigInteger userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+
     public BigInteger getUserGroupId() {
         return userGroupId;
     }
@@ -69,14 +85,33 @@ public class UserGroup extends DataObjectBean implements Serializable {
         this.name = name;
     }
 
+    public BigInteger getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(BigInteger organizationId) {
+        this.organizationId = organizationId;
+        super.setParentId(organizationId);
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        return getOrganizationId();
+    }
+
+    @Override
+    public void setParentId(BigInteger parentId) {
+        setOrganizationId(parentId);
+    }
+
     @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
     @Override
-    public BigInteger getId() {
-        return getUserGroupId();
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
     }
 
     @Override
@@ -85,24 +120,13 @@ public class UserGroup extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getParentId() {
-        return parentId;
-    }
-
-    @Override
-    public void setDataObject(DataObject dataObject) {
-        this.dataObject = dataObject;
-
-    }
-
-    @Override
     public void setId(BigInteger id) {
         setUserGroupId(id);
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
-        this.parentId = parentId;
+    public BigInteger getId() {
+        return getUserGroupId();
     }
 
     public String getDescription() {
@@ -115,27 +139,24 @@ public class UserGroup extends DataObjectBean implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((userGroupId == null) ? 0 : userGroupId.hashCode());
-        return result;
+        if(userGroupId != null) {
+            return userGroupId.hashCode();
+        }
+
+        return 0;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UserGroup)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        UserGroup other = (UserGroup) object;
+        if ((userGroupId == null && other.userGroupId != null)
+                || (userGroupId != null && !userGroupId.equals(other.userGroupId))) {
             return false;
-        final UserGroup other = (UserGroup) obj;
-        if (userGroupId == null) {
-            if (other.userGroupId != null)
-                return false;
-        } else if (!userGroupId.equals(other.userGroupId))
-            return false;
+        }
         return true;
     }
 }

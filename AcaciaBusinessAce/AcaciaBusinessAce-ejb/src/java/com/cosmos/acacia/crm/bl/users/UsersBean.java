@@ -732,6 +732,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         initCurrency();
         initExpressions();
+        initUserGroupsAndRights();
     }
 
     private void initCurrency() {
@@ -759,6 +760,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
         if(session.getExpression(beanClass, propertyName) == null) {
             session.saveExpression(beanClass, propertyName, PurchaseInvoiceItem.EXTENDED_PRICE_CALCULATION_EXPRESSION);
         }
+    }
+
+    private void initUserGroupsAndRights() {
     }
 
     @Override

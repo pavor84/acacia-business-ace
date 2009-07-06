@@ -27,6 +27,7 @@ import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.acacia.crm.validation.ValidationException;
@@ -287,6 +288,9 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                 entityProperties.addEntityProperties(createEntityProperties(entityClass));
             } else if (Product.class.isAssignableFrom(entityClass)) {
                 entityProperties = createEntityProperties(Product.class);
+                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+            } else if (Right.class.isAssignableFrom(entityClass)) {
+                entityProperties = createEntityProperties(Right.class);
                 entityProperties.addEntityProperties(createEntityProperties(entityClass));
             } else {
                 entityProperties = createEntityProperties(entityClass);

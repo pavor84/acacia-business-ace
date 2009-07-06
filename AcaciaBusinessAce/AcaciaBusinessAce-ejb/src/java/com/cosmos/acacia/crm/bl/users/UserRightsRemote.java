@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.bl.users;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
@@ -11,14 +10,13 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
-import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.beansbinding.EntityProperties;
 
 @Remote
 public interface UserRightsRemote {
-
 
     /**
      * Gets the list of user groups for the specified parentId
@@ -26,7 +24,7 @@ public interface UserRightsRemote {
      * @param parentId
      * @return the list
      */
-    List<UserGroup> getUserGroups(BigInteger parentId);
+    List<UserGroup> getUserGroups();
 
     /**
      * Persists the specified user group
@@ -42,7 +40,7 @@ public interface UserRightsRemote {
      * @param parentId
      * @return the new user group
      */
-    UserGroup newUserGroup(BigInteger parentId);
+    UserGroup newUserGroup();
 
     /**
      * Deletes a user group
@@ -59,7 +57,6 @@ public interface UserRightsRemote {
      */
     EntityProperties getUserGroupEntityProperties();
 
-
     /**
      * Gets the entity properties of UserRight
      *
@@ -67,7 +64,7 @@ public interface UserRightsRemote {
      */
     EntityProperties getUserRightEntityProperties();
 
-
+    EntityProperties getUserGroupRightEntityProperties();
 
     /**
      * Assigns a specified user group to a position type
@@ -91,7 +88,7 @@ public interface UserRightsRemote {
      * @param rights
      * @param user
      */
-    void assignRightsToUser(Set<UserRight> rights, User user);
+    void assignRightsToUser(Set<Right> rights, User user);
 
     /**
      * Assigns a set of general rights to a group
@@ -99,7 +96,7 @@ public interface UserRightsRemote {
      * @param rights
      * @param group
      */
-    void assignRightsToGroup(Set<UserRight> rights, UserGroup group);
+    void assignRightsToGroup(Set<Right> rights, UserGroup group);
 
     /**
      * Assigns a set of specific rights to a user
@@ -107,9 +104,7 @@ public interface UserRightsRemote {
      * @param permissions
      * @param user
      */
-    void assignSpecialPermissionsToUser(
-            Set<UserRight> permissions,
-            User user);
+    void assignSpecialPermissionsToUser(Set<Right> permissions, User user);
 
     /**
      * Assigns a set of specific rights to a group
@@ -117,10 +112,7 @@ public interface UserRightsRemote {
      * @param permissions
      * @param group
      */
-    void assignSpecialPermissionsToGroup(
-            Set<UserRight> permissions,
-            UserGroup group);
-
+    void assignSpecialPermissionsToGroup(Set<Right> permissions, UserGroup group);
 
     /**
      * Removes a set of rights.
@@ -128,8 +120,11 @@ public interface UserRightsRemote {
      * @param rights
      * @param user
      */
-    void removeRights(Set<UserRight> rights);
+    void removeRights(Set<Right> rights);
 
+    Right newRight(User user);
+
+    Right newRight(UserGroup userGroup);
 
     /**
      * Lists the general rights for a user
@@ -137,7 +132,7 @@ public interface UserRightsRemote {
      * @param user
      * @return the set of rights
      */
-    Set<UserRight> getUserRights(User user);
+    Set<Right> getRights(User user);
 
     /**
      * Lists the general rights for a user group
@@ -145,7 +140,7 @@ public interface UserRightsRemote {
      * @param userGroup
      * @return the set of rights
      */
-    Set<UserRight> getUserRights(UserGroup userGroup);
+    Set<Right> getRights(UserGroup userGroup);
 
     /**
      * Lists the special permissions (specific rights) for a user
@@ -153,7 +148,7 @@ public interface UserRightsRemote {
      * @param user
      * @return the set of rights
      */
-    Set<UserRight> getSpecialPermissions(User user);
+    Set<Right> getSpecialPermissions(User user);
 
     /**
      * Lists the special permissions (specific rights) for a user group
@@ -161,7 +156,7 @@ public interface UserRightsRemote {
      * @param userGroup
      * @return the set of rights
      */
-    Set<UserRight> getSpecialPermissions(UserGroup userGroup);
+    Set<Right> getSpecialPermissions(UserGroup userGroup);
 
     /**
      * Lists data object types

@@ -24,7 +24,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 
 /**
  * Pseudo-singleton class for managing permissions
@@ -78,14 +78,14 @@ public class PermissionsManager implements PermissionsManagerLocal {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
-                return manager.isAllowed(tmpDataObject, UserRightType.CREATE);
+                return manager.isAllowed(tmpDataObject, AccessRight.Create);
         }
 
         if (isModifyMethod(method)) {
             if (args[0] instanceof DataObjectBean) {
                 return manager.isAllowed(
                     ((DataObjectBean) args[0]).getDataObject(),
-                    UserRightType.MODIFY);
+                    AccessRight.Modify);
             }
         }
 
@@ -93,7 +93,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
             if (args[0] instanceof DataObjectBean) {
                 return manager.isAllowed(
                     ((DataObjectBean) args[0]).getDataObject(),
-                    UserRightType.DELETE);
+                    AccessRight.Delete);
             }
         }
 
@@ -101,14 +101,14 @@ public class PermissionsManager implements PermissionsManagerLocal {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
-                return manager.isAllowed(tmpDataObject, UserRightType.READ);
+                return manager.isAllowed(tmpDataObject, AccessRight.Read);
         }
 
         if (isExecuteMethod(method)) {
             DataObject tmpDataObject = new DataObject();
             tmpDataObject.setDataObjectType(getDataObjectType(method.getReturnType()));
             if (tmpDataObject.getDataObjectType() != null)
-                return manager.isAllowed(tmpDataObject, UserRightType.EXECUTE);
+                return manager.isAllowed(tmpDataObject, AccessRight.Execute);
         }
 
         return true;
@@ -155,9 +155,9 @@ public class PermissionsManager implements PermissionsManagerLocal {
             if (allowed)
                 allowed = manager.isAllowed(
                      dob.getDataObject(),
-                     UserRightType.READ) || manager.isAllowed(
+                     AccessRight.Read) || manager.isAllowed(
                              dob.getDataObject(),
-                             UserRightType.EXECUTE);
+                             AccessRight.Execute);
         }
         return allowed;
     }
@@ -200,10 +200,10 @@ public class PermissionsManager implements PermissionsManagerLocal {
                         tmpCollection.remove(obj);
                     } else if (!manager.isAllowed(
                             dob.getDataObject(),
-                            UserRightType.READ)
+                            AccessRight.Read)
                             || !manager.isAllowed(
                                     dob.getDataObject(),
-                                    UserRightType.EXECUTE)) {
+                                    AccessRight.Execute)) {
 
                         tmpCollection.remove(obj);
                     }

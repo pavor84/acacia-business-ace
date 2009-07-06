@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.permission.DataObjectPermission;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 import java.math.BigInteger;
 import java.util.Set;
 import javax.ejb.Local;
@@ -31,7 +31,7 @@ public interface PermissionLocal {
 
     Set<DataObjectPermission> getDataObjectPermissions(DataObject dataObject);
 
-    Set<DataObjectPermission> getDataObjectPermissions(DataObject dataObject, UserRightType userRightType);
+    Set<DataObjectPermission> getDataObjectPermissions(DataObject dataObject, AccessRight userRightType);
 
     DataObjectTypePermission newDataObjectTypePermission();
 
@@ -45,7 +45,7 @@ public interface PermissionLocal {
 
     Set<DataObjectTypePermission> getDataObjectTypePermissions(Class<? extends DataObjectBean> entityClass);
 
-    Set<DataObjectTypePermission> getDataObjectTypePermissions(DataObjectType dataObjectType, UserRightType userRightType);
+    Set<DataObjectTypePermission> getDataObjectTypePermissions(DataObjectType dataObjectType, AccessRight userRightType);
 
-    Set<DataObjectTypePermission> getDataObjectTypePermissions(Class<? extends DataObjectBean> entityClass, UserRightType userRightType);
+    Set<DataObjectTypePermission> getDataObjectTypePermissions(Class<? extends DataObjectBean> entityClass, AccessRight userRightType);
 }
