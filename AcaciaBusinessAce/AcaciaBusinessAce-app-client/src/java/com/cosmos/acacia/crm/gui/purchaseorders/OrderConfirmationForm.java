@@ -63,7 +63,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     
     private EntityProperties entProps;
 
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     
     private OrderConfirmationListRemote formSession = getBean(OrderConfirmationListRemote.class);
     
@@ -559,7 +559,11 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -583,10 +587,12 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         if (closeAfter)
             close();
         else{
-            bindGroup.unbind();
-            for (Binding binding : bindGroup.getBindings()) {
-                bindGroup.removeBinding(binding);
+            BindingGroup bg = getBindingGroup();
+            bg.unbind();
+            for (Binding binding : bg.getBindings()) {
+                bg.removeBinding(binding);
             }
+            bindingGroup = null;
             initData();
             getButtonPanel().setSaveActionState(this);
         }
@@ -598,8 +604,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         if ( entProps==null )
             entProps = getFormSession().getDetailEntityProperties();
         
-        if ( bindGroup==null )
-            bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
         
         //branch
         //branchField.bind(bindGroup, entity, entProps.getPropertyDetails("branch"));
@@ -607,10 +612,10 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             branchField.setText(entity.getBranch().getAddressName());
         
         //document number
-        documentNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("documentNumber"));
+        documentNumberField.bind(bg, entity, entProps.getPropertyDetails("documentNumber"));
         
         //doc date
-        documentDateField.bind(bindGroup, entity, entProps.getPropertyDetails("documentDate"), AcaciaUtils.getShortDateFormat());
+        documentDateField.bind(bg, entity, entProps.getPropertyDetails("documentDate"), AcaciaUtils.getShortDateFormat());
         
         //clear explicitly any items
         supplierContactField.setModel(new DefaultComboBoxModel());
@@ -619,7 +624,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
         BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel(classifier);
         supplierField.bind(
-            bindGroup,
+            bg,
             listPanel,
             entity,
             entProps.getPropertyDetails("supplier"),
@@ -639,12 +644,12 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         }
         
         //supplier contact
-        supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), 
+        supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(),
             entity, entProps.getPropertyDetails("supplierContact"));
         onSelectSupplier();
         
         //doc type
-        documentTypeField.bind(bindGroup, getDocumentTypes(), entity, entProps.getPropertyDetails("documentType"));
+        documentTypeField.bind(bg, getDocumentTypes(), entity, entProps.getPropertyDetails("documentType"));
         documentTypeField.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -655,13 +660,13 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         }, true);
         
         //currency
-        currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
         
         //variable for re-use
         Binding amountsBinding = null;
         
         //invoice sub value
-        amountsBinding = invoiceSubValueField.bind(bindGroup, entity, entProps.getPropertyDetails("invoiceSubValue"), getDecimalFormat());
+        amountsBinding = invoiceSubValueField.bind(bg, entity, entProps.getPropertyDetails("invoiceSubValue"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -683,7 +688,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //vat 
-        amountsBinding = vatPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("vat"), getDecimalFormat());
+        amountsBinding = vatPercentField.bind(bg, entity, entProps.getPropertyDetails("vat"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -692,7 +697,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //discount value 
-        amountsBinding = discountAmountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"), getDecimalFormat());
+        amountsBinding = discountAmountField.bind(bg, entity, entProps.getPropertyDetails("discountAmount"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -708,7 +713,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //discount percent
-        amountsBinding = discountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
+        amountsBinding = discountPercentField.bind(bg, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -724,7 +729,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //transport price
-        amountsBinding = transportPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("transportationPrice"), getDecimalFormat());
+        amountsBinding = transportPriceField.bind(bg, entity, entProps.getPropertyDetails("transportationPrice"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -733,11 +738,11 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //total value
-        totalValueField.bind(bindGroup, entity, entProps.getPropertyDetails("totalValue"), getDecimalFormat());
+        totalValueField.bind(bg, entity, entProps.getPropertyDetails("totalValue"), getDecimalFormat());
         totalValueField.setEditable(true);
         
         //ship week
-        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"), getIntegerFormat())
+        shipWeekField.bind(bg, entity, entProps.getPropertyDetails("shipWeek"), getIntegerFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -746,7 +751,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //ship date from
-        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
+        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -755,7 +760,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //ship date to
-        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
+        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -764,9 +769,9 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //notes
-        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
         
-        bindGroup.bind();
+        bg.bind();
     }
     
     protected void calculateShipWeek(boolean contentValid, boolean fromDateChanged, boolean event) {
@@ -987,8 +992,9 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     }
     
     protected void onSelectSupplier() {
-        bindGroup.removeBinding(supplierContactBinding);
-        supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
+        BindingGroup bg = getBindingGroup();
+        bg.removeBinding(supplierContactBinding);
+        supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
         supplierContactBinding.bind();
         
         //auto select if one choice is available

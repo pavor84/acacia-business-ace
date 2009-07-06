@@ -90,7 +90,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     JBButton deliverButton = null;
     JBButton refreshButton = null;
     
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private Binding recipientNameBinding;
     private Binding recipientBranchNameBinding;
     private Binding recipientContactNameBinding;
@@ -152,14 +152,18 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            bindingGroup.unbind();
             initData();
         }
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -174,9 +178,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 
     @Override
     protected void initData() {
-        if(bindGroup == null){
-            bindGroup = new BindingGroup();
-        }
+        BindingGroup bg = getBindingGroup();
         
         if(entity == null){
             entity = getFormSession().newDeliveryCertificate(getParentDataObjectId());
@@ -187,9 +189,9 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         EntityProperties assignmentProps = getFormSession().getDeliveryCertificateAssignmentEntityProperties(); 
         
         //Base Properties Panel
-        numberTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateNumber"));
-        creationDatePicker.bind(bindGroup, entity, entityProps.getPropertyDetails("deliveryCertificateDate"),AcaciaUtils.getShortDateFormat());
-        Binding binding1 = reasonComboBox.bind(bindGroup, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
+        numberTextField.bind(bg, entity, entityProps.getPropertyDetails("deliveryCertificateNumber"));
+        creationDatePicker.bind(bg, entity, entityProps.getPropertyDetails("deliveryCertificateDate"),AcaciaUtils.getShortDateFormat());
+        Binding binding1 = reasonComboBox.bind(bg, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
 //        reasonComboBox.addItemListener(new ItemListener(){
 //			@Override
 //			public void itemStateChanged(ItemEvent item) {
@@ -221,32 +223,32 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                     return onChooseAssignment();
                 }
 
-            }, bindGroup,
+            }, bg,
             assignment,
             assignmentProps.getPropertyDetails("documentNumber"),
             UpdateStrategy.READ_WRITE);
         
         //Creator Panel
-        creatorNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorName"));
-        creatorOrganizationTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorOrganizationName"));
-        creatorBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("creatorBranchName"));
+        creatorNameTextField.bind(bg, entity, entityProps.getPropertyDetails("creatorName"));
+        creatorOrganizationTextField.bind(bg, entity, entityProps.getPropertyDetails("creatorOrganizationName"));
+        creatorBranchTextField.bind(bg, entity, entityProps.getPropertyDetails("creatorBranchName"));
         
         //Recipient Panel
-        recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
-        recipientBranchNameBinding = recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
+        recipientNameBinding = recipientNameTextField.bind(bg, entity, entityProps.getPropertyDetails("recipientName"));
+        recipientBranchNameBinding = recipientBranchTextField.bind(bg, entity, entityProps.getPropertyDetails("recipientBranchName"));
         recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
             new AcaciaLookupProvider(){
                 @Override
                 public Object showSelectionControl(){
                     return onChooseRecipientContactPerson();
                 }
-            }, bindGroup,
+            }, bg,
             entity,        
             entityProps.getPropertyDetails("recipientContact"),
             UpdateStrategy.READ_WRITE);
                 
         //Delivery Type Panel
-        deliveryTypeComboBox.bind(bindGroup, getFormSession().getDeliveryTypes(), entity, entityProps.getPropertyDetails("deliveryCertificateMethodType"));
+        deliveryTypeComboBox.bind(bg, getFormSession().getDeliveryTypes(), entity, entityProps.getPropertyDetails("deliveryCertificateMethodType"));
         deliveryTypeComboBox.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -269,7 +271,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 public Object showSelectionControl() {
                     return onChooseForwarder();
                 }
-            }, bindGroup,
+            }, bg,
             entity,
             entityProps.getPropertyDetails("forwarder"),
             "${organizationName}",
@@ -280,7 +282,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                         return onChooseForwarderBranch();
                     }
                 }, 
-                bindGroup, 
+                bg,
                 entity, 
                 entityProps.getPropertyDetails("forwarderBranch"),
                 "${addressName}",      
@@ -290,7 +292,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 public Object showSelectionControl(){
                     return onChooseForwarderContactPerson();
                 }
-            }, bindGroup,
+            }, bg,
             entity,        
             entityProps.getPropertyDetails("forwarderContact"),
             "${displayName}",
@@ -300,7 +302,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	       	this.setReadonly();
 	    }
            
-        bindGroup.bind();
+        bg.bind();
          
     }
     
@@ -349,13 +351,13 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	            bindDeliveryCertificateItems(selectedDocument.getInvoiceId());
 	            
 	            //populate the components with new values.
-	            bindGroup.removeBinding(recipientNameBinding);
-	            recipientNameBinding = recipientNameTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientName"));
+	            bindingGroup.removeBinding(recipientNameBinding);
+	            recipientNameBinding = recipientNameTextField.bind(bindingGroup, entity, entityProps.getPropertyDetails("recipientName"));
 	            recipientNameBinding.bind();
-	            bindGroup.removeBinding(recipientBranchNameBinding);
-	            recipientBranchNameBinding = recipientBranchTextField.bind(bindGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
+	            bindingGroup.removeBinding(recipientBranchNameBinding);
+	            recipientBranchNameBinding = recipientBranchTextField.bind(bindingGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
 	            recipientBranchNameBinding.bind();
-	            bindGroup.removeBinding(recipientContactNameBinding);
+	            bindingGroup.removeBinding(recipientContactNameBinding);
 	            recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
 	                new AcaciaLookupProvider(){
 	                    @Override
@@ -363,7 +365,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	                        return onChooseRecipientContactPerson();
 	                    }
 	                },  
-	                bindGroup,
+	                bindingGroup,
 	                entity,        
 	                entityProps.getPropertyDetails("recipientContact"),
 	                "${contact.displayName}",

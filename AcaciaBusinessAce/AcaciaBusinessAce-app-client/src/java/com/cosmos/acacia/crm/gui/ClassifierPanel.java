@@ -6,7 +6,6 @@ import java.awt.event.ItemListener;
 import java.math.BigInteger;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -250,7 +249,7 @@ public class ClassifierPanel extends BaseEntityPanel {
 
     private EntityProperties entityProps;
 
-    private BindingGroup classifierBindingGroup;
+    private BindingGroup bindingGroup;
     private Classifier classifier;
     private DataObjectTypesListPanel dataObjectTypesTable;
     private boolean isNew;
@@ -270,15 +269,14 @@ public class ClassifierPanel extends BaseEntityPanel {
             isSystemGroup = classifier.getClassifierGroup().getIsSystemGroup();
         }
 
-        if (classifierBindingGroup == null)
-            classifierBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         entityProps = getClassifierEntityProperties();
 
-        codeTextField.bind(classifierBindingGroup, classifier, entityProps.getPropertyDetails("classifierCode"));
-        nameTextField.bind(classifierBindingGroup, classifier, entityProps.getPropertyDetails("classifierName"));
-        groupComboBox.bind(classifierBindingGroup, getClassifierGroups(), classifier, entityProps.getPropertyDetails("classifierGroup"));
-        descriptionTextPane.bind(classifierBindingGroup, classifier, entityProps.getPropertyDetails("description"));
+        codeTextField.bind(bg, classifier, entityProps.getPropertyDetails("classifierCode"));
+        nameTextField.bind(bg, classifier, entityProps.getPropertyDetails("classifierName"));
+        groupComboBox.bind(bg, getClassifierGroups(), classifier, entityProps.getPropertyDetails("classifierGroup"));
+        descriptionTextPane.bind(bg, classifier, entityProps.getPropertyDetails("description"));
 
         dataObjectTypesTable = new DataObjectTypesListPanel(null, classifier);
         //dataObjectTypesTable.setVisibleButtons(8 + 16);
@@ -302,7 +300,7 @@ public class ClassifierPanel extends BaseEntityPanel {
 
         });
 
-        classifierBindingGroup.bind();
+        bg.bind();
 
 //        // Bypassing a strange bug
 //        for (BindingListener l : classifierBindingGroup.getBindingListeners()) {
@@ -358,7 +356,11 @@ public class ClassifierPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return classifierBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -374,7 +376,8 @@ public class ClassifierPanel extends BaseEntityPanel {
             close();
         } else {
             dataObjectTypesPanel.remove(dataObjectTypesTable);
-            classifierBindingGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }

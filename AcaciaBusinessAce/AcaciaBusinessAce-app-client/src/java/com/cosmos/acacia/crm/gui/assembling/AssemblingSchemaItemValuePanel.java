@@ -3,7 +3,6 @@
  *
  * Created on Неделя, 2008, Юни 15, 23:59
  */
-
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
@@ -28,33 +27,28 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Miro
  */
 public class AssemblingSchemaItemValuePanel
-    extends BaseEntityPanel
-{
+        extends BaseEntityPanel {
+
     @EJB
     private static AssemblingRemote formSession;
-
     private AssemblingSchemaItemValue entity;
     private EntityProperties entityProps;
     private BindingGroup bindingGroup;
 
-
     /** Creates new form AssemblingSchemaItemValuePanel */
-    public AssemblingSchemaItemValuePanel()
-    {
-        super((BigInteger)null);
+    public AssemblingSchemaItemValuePanel() {
+        super((BigInteger) null);
         initComponents();
     }
 
-    public AssemblingSchemaItemValuePanel(AssemblingSchemaItemValue itemValue)
-    {
+    public AssemblingSchemaItemValuePanel(AssemblingSchemaItemValue itemValue) {
         super(itemValue.getParentId());
         this.entity = itemValue;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -207,8 +201,6 @@ public class AssemblingSchemaItemValuePanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel constraintsPanel;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
@@ -226,65 +218,63 @@ public class AssemblingSchemaItemValuePanel
     private com.cosmos.swingb.JBButton selectProductOrSchemaButton;
     // End of variables declaration//GEN-END:variables
 
-
     @Override
-    protected void initData()
-    {
+    protected void initData() {
         entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
         PropertyDetails propDetails;
 
-        bindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         // propDetails = entityProps.getPropertyDetails("virtualProduct");
         // productOrSchemaTextField.bind(bindingGroup, entity, propDetails);
         VirtualProduct virtualProduct = entity.getVirtualProduct();
-        if(virtualProduct != null)
+        if (virtualProduct != null) {
             productOrSchemaTextField.setText(virtualProduct.getProductName());
+        }
 
         propDetails = entityProps.getPropertyDetails("minConstraint");
-        minValueTextField.bind(bindingGroup, entity, propDetails);
+        minValueTextField.bind(bg, entity, propDetails);
 
         propDetails = entityProps.getPropertyDetails("maxConstraint");
-        maxValueTextField.bind(bindingGroup, entity, propDetails);
+        maxValueTextField.bind(bg, entity, propDetails);
 
         propDetails = entityProps.getPropertyDetails("quantity");
-        quantityTextField.bind(bindingGroup, entity, propDetails);
+        quantityTextField.bind(bg, entity, propDetails);
 
-        bindingGroup.bind();
+        bg.bind();
     }
 
     @Override
-    public EntityFormButtonPanel getButtonPanel()
-    {
+    public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
 
     @Override
-    public BindingGroup getBindingGroup()
-    {
+    public BindingGroup getBindingGroup() {
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
         return bindingGroup;
     }
 
     @Override
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return entity;
     }
 
     @Override
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         entity = getFormSession().saveItemValue(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if(closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
+    protected AssemblingRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AssemblingRemote.class);
         }
 
@@ -292,45 +282,36 @@ public class AssemblingSchemaItemValuePanel
     }
 
     @Action
-    public void productOrSchemaSelectAction()
-    {
+    public void productOrSchemaSelectAction() {
         VirtualProduct virtualProduct = entity.getVirtualProduct();
-        if(virtualProduct == null)
-        {
+        if (virtualProduct == null) {
             VirtualProductSelectionPanel selectionPanel = new VirtualProductSelectionPanel(entity);
             DialogResponse response = selectionPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
-            {
-                virtualProduct = (VirtualProduct)selectionPanel.getSelectedValue();
+            if (DialogResponse.SELECT.equals(response)) {
+                virtualProduct = (VirtualProduct) selectionPanel.getSelectedValue();
                 System.out.println("productOrSchemaSelectAction.virtualProduct: " + virtualProduct);
                 entity.setVirtualProduct(virtualProduct);
                 productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
-        }
-        else if(virtualProduct instanceof AssemblingSchema)
-        {
-            AssemblingSchema assemblingSchema = (AssemblingSchema)virtualProduct;
+        } else if (virtualProduct instanceof AssemblingSchema) {
+            AssemblingSchema assemblingSchema = (AssemblingSchema) virtualProduct;
             AssemblingSchemasPanel asPanel = new AssemblingSchemasPanel(
-                AssemblingSchemasPanel.Mode.AssemblingSchemaSelect,
-                assemblingSchema);
+                    AssemblingSchemasPanel.Mode.AssemblingSchemaSelect,
+                    assemblingSchema);
             DialogResponse response = asPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
-            {
-                virtualProduct = assemblingSchema = (AssemblingSchema)asPanel.getSelectedRowObject();
+            if (DialogResponse.SELECT.equals(response)) {
+                virtualProduct = assemblingSchema = (AssemblingSchema) asPanel.getSelectedRowObject();
                 entity.setVirtualProduct(assemblingSchema);
                 productOrSchemaTextField.setText(virtualProduct.getProductName());
             }
-        }
-        else if(virtualProduct instanceof RealProduct)
-        {
-            RealProduct realProduct = (RealProduct)virtualProduct;
+        } else if (virtualProduct instanceof RealProduct) {
+            RealProduct realProduct = (RealProduct) virtualProduct;
             SimpleProduct simpleProduct = realProduct.getSimpleProduct();
             ProductsListPanel productsPanel = new ProductsListPanel(simpleProduct.getParentId());
             productsPanel.setSelectedRowObject(simpleProduct);
             DialogResponse response = productsPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
-            {
-                simpleProduct = (SimpleProduct)productsPanel.getSelectedRowObject();
+            if (DialogResponse.SELECT.equals(response)) {
+                simpleProduct = (SimpleProduct) productsPanel.getSelectedRowObject();
                 virtualProduct = realProduct = getFormSession().getRealProduct(simpleProduct);
                 entity.setVirtualProduct(realProduct);
                 productOrSchemaTextField.setText(virtualProduct.getProductName());

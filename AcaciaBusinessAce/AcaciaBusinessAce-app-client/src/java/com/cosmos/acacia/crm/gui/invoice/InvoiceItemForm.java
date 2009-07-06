@@ -3,7 +3,6 @@
  *
  * Created on Сряда, 2008, Август 20, 15:07
  */
-
 package com.cosmos.acacia.crm.gui.invoice;
 
 import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
@@ -350,8 +349,6 @@ public class InvoiceItemForm extends BaseEntityPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBButton clearProductButton;
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel1;
@@ -387,18 +384,21 @@ public class InvoiceItemForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBFormattedTextField unitPriceField;
     private com.cosmos.acacia.gui.AcaciaComboList warehouseForShipField;
     // End of variables declaration//GEN-END:variables
-
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private InvoiceListRemote formSession;
     private EntityProperties entProps;
     private ProductsListRemote productListRemote = getBean(ProductsListRemote.class);
     private boolean updatingShipDates;
     private Date lastShipDateFrom;
     private static Date lastShipDateTo;
-    
+
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -419,74 +419,76 @@ public class InvoiceItemForm extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
 
     private InvoiceListRemote getFormSession() {
-        if ( formSession==null )
+        if (formSession == null) {
             formSession = getBean(InvoiceListRemote.class);
+        }
         return formSession;
     }
-
     boolean updatingAmounts = false;
     ButtonGroup productTypeGroup = null;
-    
+
     @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
         entProps = getFormSession().getItemDetailEntityProperties();
-        
+
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(measureUnitField, resourceToStringConverter);
-        
-        bindGroup = new BindingGroup();
-        
+
+        BindingGroup bg = getBindingGroup();
+
         //auto set the dates if the item is new
-        if ( entity.getId()==null && (lastShipDateTo!=null || lastShipDateFrom!=null) ){
+        if (entity.getId() == null && (lastShipDateTo != null || lastShipDateFrom != null)) {
             entity.setShipDateFrom(lastShipDateFrom);
             entity.setShipDateTo(lastShipDateTo);
         }
-        
+
         //product
-        bindProductField( entity.getProduct() instanceof ComplexProduct );
-        
+        bindProductField(entity.getProduct() instanceof ComplexProduct);
+
         //measure unit 
-        bindMeasureUnitField(new ArrayList(),null);
-        
+        bindMeasureUnitField(new ArrayList(), null);
+
         //ordered quantity
-        Binding orderedQtyBinding = orderedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), AcaciaUtils.getDecimalFormat());
-        
+        Binding orderedQtyBinding = orderedQtyField.bind(bg, entity, entProps.getPropertyDetails("orderedQuantity"), AcaciaUtils.getDecimalFormat());
+
         orderedQtyBinding.addBindingListener(new AbstractBindingListener() {
+
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
                 updatePriceFields();
             }
         });
-        
+
         //shipped quantity
-        shippedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("shippedQuantity"), getDecimalFormat());
-        
+        shippedQtyField.bind(bg, entity, entProps.getPropertyDetails("shippedQuantity"), getDecimalFormat());
+
         //returned quantity
-        returnedQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("returnedQuantity"), getDecimalFormat());
-        
+        returnedQtyField.bind(bg, entity, entProps.getPropertyDetails("returnedQuantity"), getDecimalFormat());
+
         //unit price
 //        Binding unitPriceBinding = 
-        unitPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
+        unitPriceField.bind(bg, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
 //        unitPriceBinding.addBindingListener(new AbstractBindingListener() {
 //            @Override
 //            public void targetChanged(Binding binding, PropertyStateEvent event) {
 //                updateExtendedPrice(binding.isContentValid());
 //            }
 //        });
-        
+
         //extended price
-        extendedPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
-        
+        extendedPriceField.bind(bg, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
+
         //variable for re-use
 //        Binding amountsBinding = null;
-        
+
         //discount value 
 //        amountsBinding = totalItemDiscountValueField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"));
 //        amountsBinding.addBindingListener(new AbstractBindingListener() {
@@ -501,7 +503,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
 //                }
 //            }
 //        });
-        
+
         //discount percent
 //        amountsBinding = totalItemDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
 //        amountsBinding.addBindingListener(new AbstractBindingListener() {
@@ -516,72 +518,73 @@ public class InvoiceItemForm extends BaseEntityPanel {
 //                }
 //            }
 //        });
-        
+
         //ship week
-        shipWeekField.bind(bindGroup, entity, entProps.getPropertyDetails("shipWeek"))
-            .addBindingListener(new AbstractBindingListener() {
-                @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    calculateShipDates(binding.isContentValid());
-                }
-            });
-        
+        shipWeekField.bind(bg, entity, entProps.getPropertyDetails("shipWeek")).addBindingListener(new AbstractBindingListener() {
+
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                calculateShipDates(binding.isContentValid());
+            }
+        });
+
         //ship date from
-        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
-            .addBindingListener(new AbstractBindingListener() {
-                @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    calculateShipWeek(binding.isContentValid(), true, true);
-                }
-            });
-        
+        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
+
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                calculateShipWeek(binding.isContentValid(), true, true);
+            }
+        });
+
         //ship date to
-        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
-            .addBindingListener(new AbstractBindingListener() {
-                @Override
-                public void targetChanged(Binding binding, PropertyStateEvent event) {
-                    calculateShipWeek(binding.isContentValid(), false, true);
-                }
-            });
-        
+        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
+
+            @Override
+            public void targetChanged(Binding binding, PropertyStateEvent event) {
+                calculateShipWeek(binding.isContentValid(), false, true);
+            }
+        });
+
         //warehouse
         PropertyDetails pd = entProps.getPropertyDetails("warehouse");
         WarehouseListPanel warehouseListPanel = new WarehouseListPanel(getOrganizationDataObjectId());
         warehouseForShipField.bind(
-            bindGroup, 
-            warehouseListPanel,
-            entity,
-            pd,
-            "${address.addressName}",
-            UpdateStrategy.READ_WRITE);
-        
+                bg,
+                warehouseListPanel,
+                entity,
+                pd,
+                "${address.addressName}",
+                UpdateStrategy.READ_WRITE);
+
         //notes
-        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
-        
+        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+
         //product description
-        productDescriptionField.bind(bindGroup, entity, entProps.getPropertyDetails("productDescription"));
-        
+        productDescriptionField.bind(bg, entity, entProps.getPropertyDetails("productDescription"));
+
         productDetailsButton.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 onComplexProductDetails();
             }
         });
-        
-        bindGroup.bind(); 
-        
+
+        bg.bind();
+
         calculateShipWeek(true, true, false);
         updateUnitLabel();
         product = entity.getProduct();
         onSelectProduct();
         updatePriceFields();
     }
-    
+
     protected void onComplexProductDetails() {
-        ComplexProductDetailsPanel detailsPanel = new ComplexProductDetailsPanel((ComplexProduct)product);
+        ComplexProductDetailsPanel detailsPanel = new ComplexProductDetailsPanel((ComplexProduct) product);
         detailsPanel.showDialog(this);
     }
-    
+
     @Override
     public void setReadonly() {
         super.setReadonly();
@@ -589,149 +592,141 @@ public class InvoiceItemForm extends BaseEntityPanel {
         selectProductOrSchemaButton.setEnabled(false);
         warehouseForShipField.setEnabled(false);
     }
-
     @SuppressWarnings("unchecked")
     private Binding measureUnitBinding = null;
-    
+
     private void bindMeasureUnitField(List<DbResource> mUnits, DbResource selectedUnit) {
-        if ( measureUnitBinding!=null ){
+        BindingGroup bg = getBindingGroup();
+
+        if (measureUnitBinding != null) {
             measureUnitBinding.unbind();
-            bindGroup.removeBinding(measureUnitBinding);
+            bg.removeBinding(measureUnitBinding);
         }
-        measureUnitBinding = measureUnitField.bind(bindGroup, mUnits, entity, entProps.getPropertyDetails("measureUnit"));
+        measureUnitBinding = measureUnitField.bind(bg, mUnits, entity, entProps.getPropertyDetails("measureUnit"));
         measureUnitBinding.bind();
-        if ( selectedUnit!=null && mUnits.contains(selectedUnit) )
+        if (selectedUnit != null && mUnits.contains(selectedUnit)) {
             measureUnitField.setSelectedItem(selectedUnit);
+        }
         measureUnitField.addItemListener(new ItemListener() {
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 updatePriceFields();
             }
         }, true);
     }
-
     @SuppressWarnings("unchecked")
     Binding productFieldBinding = null;
-    
+
     /**
      * @param complex - false if the field represents simple products, true if complex
      */
     private void bindProductField(boolean complex) {
-        
     }
-    
     private Product product;
-    
+
     @Action
-    public void productOrSchemaSelectAction()
-    {
-        if(product == null)
-        {
+    public void productOrSchemaSelectAction() {
+        if (product == null) {
             ComplexProductSelectionPanel selectionPanel = new ComplexProductSelectionPanel(getOrganizationDataObjectId());
             DialogResponse response = selectionPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
-            {
-                product = (Product)selectionPanel.getSelectedValue();
+            if (DialogResponse.SELECT.equals(response)) {
+                product = (Product) selectionPanel.getSelectedValue();
                 onSelectProduct();
             }
-        }
-        else if(product instanceof ComplexProduct)
-        {
+        } else if (product instanceof ComplexProduct) {
             ProductAssemblerPanel asPanel = new ProductAssemblerPanel();
             DialogResponse response = asPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
-            {
-                product = (ComplexProduct)asPanel.getSelectedValue();
+            if (DialogResponse.SELECT.equals(response)) {
+                product = (ComplexProduct) asPanel.getSelectedValue();
                 onSelectProduct();
             }
-        }
-        else if(product instanceof SimpleProduct)
-        {
+        } else if (product instanceof SimpleProduct) {
             SimpleProduct simpleProduct = (SimpleProduct) product;
             ProductsListPanel productsPanel = new ProductsListPanel(simpleProduct.getParentId());
             productsPanel.setSelectedRowObject(simpleProduct);
             DialogResponse response = productsPanel.showDialog(this);
-            if(DialogResponse.SELECT.equals(response))
-            {
-                product = (SimpleProduct)productsPanel.getSelectedRowObject();
+            if (DialogResponse.SELECT.equals(response)) {
+                product = (SimpleProduct) productsPanel.getSelectedRowObject();
                 onSelectProduct();
             }
         }
     }
-    
     private ProductPriceSummary productPriceSummary = null;
-    
+
     protected void onSelectProduct() {
         Product p = product;
-        
-        if ( p instanceof SimpleProduct && (productPriceSummary==null || productPriceSummary.getProduct()!=p) ){
+
+        if (p instanceof SimpleProduct && (productPriceSummary == null || productPriceSummary.getProduct() != p)) {
             BigDecimal qtyBig = getEnteredQuantity();
             BigDecimal unitsCount = null;
-            if ( qtyBig!=null )
+            if (qtyBig != null) {
                 unitsCount = getBaseUnitsCount(qtyBig);
-            productPriceSummary = 
-                productListRemote.getProductPriceSummary(parent.getRecipient(), unitsCount, (SimpleProduct)product);
-            
+            }
+            productPriceSummary =
+                    productListRemote.getProductPriceSummary(parent.getRecipient(), unitsCount, (SimpleProduct) product);
+
             entity.setPricelistId(productPriceSummary.getPriceList().getId());
             entity.setPricelistItemId(productPriceSummary.getPriceListItem().getId());
         }
-        
+
 //        WarehouseProduct wp = null;
 //        if ( p instanceof SimpleProduct )
 //            wp = getFormSession().getWarehouseProduct((SimpleProduct) p);
-        
-        if ( p==null ){
+
+        if (p == null) {
             productOrSchemaTextField.setText("");
             entity.setProduct(null);
             entity.setPricelistId(null);
             entity.setPricelistItemId(null);
             productPriceSummary = null;
-        }
-        else{
+        } else {
             String productDisplay = p.getProductName();
-            if ( p instanceof SimpleProduct ){
+            if (p instanceof SimpleProduct) {
                 SimpleProduct sp = (SimpleProduct) p;
-                if  ( sp.getCodeFormatted()!=null && !"".equals(sp.getCodeFormatted().trim()) &&
-                        !sp.getCodeFormatted().equals(sp.getProductName()) )
-                    productDisplay += " ("+sp.getCodeFormatted()+")";
-            }else{
-                if ( p.getProductCode()!=null && !"".equals(p.getProductCode().trim()) &&
-                        !p.getProductCode().equals(p.getProductName()))
-                    productDisplay += " ("+p.getProductCode()+")";
+                if (sp.getCodeFormatted() != null && !"".equals(sp.getCodeFormatted().trim()) &&
+                        !sp.getCodeFormatted().equals(sp.getProductName())) {
+                    productDisplay += " (" + sp.getCodeFormatted() + ")";
+                }
+            } else {
+                if (p.getProductCode() != null && !"".equals(p.getProductCode().trim()) &&
+                        !p.getProductCode().equals(p.getProductName())) {
+                    productDisplay += " (" + p.getProductCode() + ")";
+                }
             }
             productOrSchemaTextField.setText(productDisplay);
             entity.setProduct(p);
         }
-        
+
         //automatically copy description text from product if no such was entered
-        if ( productDescriptionField.getText()==null || "".equals(productDescriptionField.getText().trim() )){
-            if ( p instanceof SimpleProduct )
-                productDescriptionField.setText(((SimpleProduct)p).getDescription());
-            else if ( p instanceof ComplexProduct ){
+        if (productDescriptionField.getText() == null || "".equals(productDescriptionField.getText().trim())) {
+            if (p instanceof SimpleProduct) {
+                productDescriptionField.setText(((SimpleProduct) p).getDescription());
+            } else if (p instanceof ComplexProduct) {
                 ComplexProduct complexProduct = (ComplexProduct) p;
                 productDescriptionField.setText(complexProduct.getAppliedSchema().getDescription());
             }
         }
-        
+
         /*
         //update the unit price
         BigDecimal salePrice = null;
         //get from warehouse product first
         if ( wp!=null )
-            salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(wp);
+        salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(wp);
         //try product if still null
         if ( salePrice==null && p!=null )
-            salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(p);
+        salePrice = (BigDecimal) ELProperty.create("${salePrice}").getValue(p);
         //write the field if price is ok
         if ( salePrice!=null ){
-            unitPriceField.setValue(salePrice);
+        unitPriceField.setValue(salePrice);
         }else{
-            unitPriceField.setValue(null);
+        unitPriceField.setValue(null);
         }*/
-        
+
         updateUnitLabel();
         updateMeasureUnits(p);
-        
+
         productDetailsButton.setEnabled(p instanceof ComplexProduct);
     }
 
@@ -739,22 +734,25 @@ public class InvoiceItemForm extends BaseEntityPanel {
         List<DbResource> possibleUnits = new ArrayList<DbResource>();
         DbResource unitResource = null;
         DbResource selectedUnit = null;
-        if ( product!=null )
+        if (product != null) {
             unitResource = product.getMeasureUnit();
-        if ( unitResource!=null ){
-            MeasurementUnit unit = (MeasurementUnit) unitResource.getEnumValue();
-            EnumSet<MeasurementUnit> unitsFromCategory = 
-                MeasurementUnit.getMeasurementUnitsByCategory(unit.getCategory());
-            for (DbResource unitR : getMeasureUnits()) {
-                if ( unitsFromCategory.contains(unitR.getEnumValue()))
-                    possibleUnits.add(unitR);
-            }
-            if ( entity.getMeasureUnit()==null )
-                selectedUnit = unitResource;
-            else
-                selectedUnit = entity.getMeasureUnit();
         }
-        
+        if (unitResource != null) {
+            MeasurementUnit unit = (MeasurementUnit) unitResource.getEnumValue();
+            EnumSet<MeasurementUnit> unitsFromCategory =
+                    MeasurementUnit.getMeasurementUnitsByCategory(unit.getCategory());
+            for (DbResource unitR : getMeasureUnits()) {
+                if (unitsFromCategory.contains(unitR.getEnumValue())) {
+                    possibleUnits.add(unitR);
+                }
+            }
+            if (entity.getMeasureUnit() == null) {
+                selectedUnit = unitResource;
+            } else {
+                selectedUnit = entity.getMeasureUnit();
+            }
+        }
+
         bindMeasureUnitField(possibleUnits, selectedUnit);
         updatePriceFields();
     }
@@ -763,19 +761,20 @@ public class InvoiceItemForm extends BaseEntityPanel {
         Product p = product;
         String priceLabelDisplay = "";
         //update the unit label
-        if ( p!=null ){
+        if (p != null) {
             int quantityPerPackage = 1;
 //            if ( p instanceof SimpleProduct )
 //                quantityPerPackage = ((SimpleProduct)p).getQuantityPerPackage();
             MeasurementUnit measureUnit = null;
             DbResource unitResource = (DbResource) ELProperty.create("${measureUnit}").getValue(p);
-            if ( unitResource!=null )
+            if (unitResource != null) {
                 measureUnit = (MeasurementUnit) unitResource.getEnumValue();
-            
-            priceLabelDisplay = getResourceMap().getString("unitPriceLabel.measureUnitPrefix") 
-                + " " + quantityPerPackage + " ";
-            if ( measureUnit!=null )
+            }
+
+            priceLabelDisplay = getResourceMap().getString("unitPriceLabel.measureUnitPrefix") + " " + quantityPerPackage + " ";
+            if (measureUnit != null) {
                 priceLabelDisplay += measureUnit.getShortUnitName();
+            }
         }
         forUnitsLabel.setText(priceLabelDisplay);
     }
@@ -821,84 +820,83 @@ public class InvoiceItemForm extends BaseEntityPanel {
 //            totalItemDiscountValueField.setText("");
 //        }
 //    }
-
     protected void calculateShipWeek(boolean contentValid, boolean fromDateChanged, boolean event) {
         //avoid update cycle
-        if ( updatingShipDates )
+        if (updatingShipDates) {
             return;
-        
+        }
+
         updatingShipDates = true;
-        
-        if ( !contentValid ){
+
+        if (!contentValid) {
             shipWeekField.setText("");
-        }else{
+        } else {
 
             Date dateToUse = null;
-            
+
             //if no 'from' date - use the 'to'
-            if ( entity.getShipDateFrom()==null ){
+            if (entity.getShipDateFrom() == null) {
                 dateToUse = entity.getShipDateTo();
-            //otherwise use the 'from'
-            }else{
+                //otherwise use the 'from'
+            } else {
                 dateToUse = entity.getShipDateFrom();
             }
-            
+
             //auto set the 'to' date, if it is NULL or is the same as 'from' date 
-            if ( event && fromDateChanged && entity.getShipDateFrom()!=null && 
-                    (entity.getShipDateTo()==null 
-                    //also if the 'to' date is before 'from' date, overwrite the 'to' with 'from'
-                    || (entity.getShipDateFrom()!=null && entity.getShipDateFrom().after(entity.getShipDateTo()))
-                    //at last if the previous value of 'from' date is the same as the current 'to', then update 'to' also
-                    || (lastShipDateFrom!=null && lastShipDateFrom.equals(entity.getShipDateTo())))){
+            if (event && fromDateChanged && entity.getShipDateFrom() != null &&
+                    (entity.getShipDateTo() == null //also if the 'to' date is before 'from' date, overwrite the 'to' with 'from'
+                    || (entity.getShipDateFrom() != null && entity.getShipDateFrom().after(entity.getShipDateTo())) //at last if the previous value of 'from' date is the same as the current 'to', then update 'to' also
+                    || (lastShipDateFrom != null && lastShipDateFrom.equals(entity.getShipDateTo())))) {
                 shipDateToField.setDate(entity.getShipDateFrom());
             }
-            
-            if ( dateToUse==null ){
+
+            if (dateToUse == null) {
                 shipWeekField.setText("");
-            }else{
+            } else {
                 Calendar c = Calendar.getInstance();
                 c.setTime(dateToUse);
                 Integer week = c.get(Calendar.WEEK_OF_YEAR);
-                shipWeekField.setText(""+week);
+                shipWeekField.setText("" + week);
             }
-            
-            if ( event ){
+
+            if (event) {
                 lastShipDateFrom = entity.getShipDateFrom();
 //                lastShipDateTo = entity.getShipDateTo();
             }
         }
-        
+
         updatingShipDates = false;
     }
 
     protected void calculateShipDates(boolean contentValid) {
-        if ( updatingShipDates )
+        if (updatingShipDates) {
             return;
-        
+        }
+
         updatingShipDates = true;
-        
-        if ( !contentValid || "".equals(shipWeekField.getText())){
+
+        if (!contentValid || "".equals(shipWeekField.getText())) {
             shipDateFromField.setDate(null);
             shipDateToField.setDate(null);
-        }else{
+        } else {
             Integer week = null;
-            
-            try{
+
+            try {
                 week = new Integer(shipWeekField.getText());
-                
+
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.WEEK_OF_YEAR, week);
-                
+
                 shipDateFromField.setDate(c.getTime());
                 c.add(Calendar.DAY_OF_WEEK, 5);
                 shipDateToField.setDate(c.getTime());
-            }catch (NumberFormatException e){
-            }            
+            } catch (NumberFormatException e) {
+            }
         }
-        
+
         lastShipDateFrom = entity.getShipDateFrom();
 //        lastShipDateTo = entity.getShipDateTo();
-        
+
         updatingShipDates = false;
     }
 
@@ -906,30 +904,30 @@ public class InvoiceItemForm extends BaseEntityPanel {
         BigDecimal qty = getEnteredQuantity();
         BigDecimal unitPrice = null;
         BigDecimal extendedPrice = null;
-        if ( productPriceSummary!=null ){
-            try{
-                if ( qty!=null ){
+        if (productPriceSummary != null) {
+            try {
+                if (qty != null) {
                     BigDecimal unitsCount = getBaseUnitsCount(qty);
                     unitPrice = productPriceSummary.getPrice(unitsCount);
                     extendedPrice = unitsCount.multiply(unitPrice, MathContext.DECIMAL64);
-                }else{
+                } else {
                     unitPrice = productPriceSummary.getPrice(new BigDecimal("1"));
                     extendedPrice = null;
                 }
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 //nothing to do
             }
         }
-        
+
         unitPriceField.setValue(unitPrice);
         extendedPriceField.setValue(extendedPrice);
     }
 
     private BigDecimal getEnteredQuantity() {
-        try{
+        try {
             String qty = orderedQtyField.getText();
             return new BigDecimal(qty);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return null;
         }
     }
@@ -938,40 +936,43 @@ public class InvoiceItemForm extends BaseEntityPanel {
         DbResource currentUnitRes = (DbResource) measureUnitField.getSelectedItem();
         DbResource originUnitRes = null;
         Product p = product;
-        if ( p!=null )
+        if (p != null) {
             originUnitRes = p.getMeasureUnit();
-        if ( currentUnitRes==null || originUnitRes==null )
+        }
+        if (currentUnitRes == null || originUnitRes == null) {
             return new BigDecimal("0");
+        }
         MeasurementUnit currentUnit = (MeasurementUnit) currentUnitRes.getEnumValue();
         MeasurementUnit originUnit = (MeasurementUnit) originUnitRes.getEnumValue();
-        
+
         BigDecimal currentQuantity = currentUnit.getCgsUnitValue();
         currentQuantity = currentQuantity.multiply(orderedQuantity);
-        
+
         BigDecimal oneUnitQuantity = originUnit.getCgsUnitValue();
-        
+
         BigDecimal originUnitsCount =
-            currentQuantity.divide(oneUnitQuantity, MathContext.DECIMAL64);
-        
+                currentQuantity.divide(oneUnitQuantity, MathContext.DECIMAL64);
+
         return originUnitsCount;
     }
-
     private List<DbResource> measureUnits = null;
-    private List<DbResource> getMeasureUnits()
-    {
-        if ( measureUnits==null )
+
+    private List<DbResource> getMeasureUnits() {
+        if (measureUnits == null) {
             measureUnits = getProductListRemote().getMeasureUnits();
+        }
         return measureUnits;
     }
 
     private ProductsListRemote getProductListRemote() {
-        if ( productListRemote==null )
+        if (productListRemote == null) {
             productListRemote = getBean(ProductsListRemote.class);
+        }
         return productListRemote;
     }
-    
+
     @Action
-    public void clearProductOrSchema(){
+    public void clearProductOrSchema() {
         product = null;
         onSelectProduct();
     }

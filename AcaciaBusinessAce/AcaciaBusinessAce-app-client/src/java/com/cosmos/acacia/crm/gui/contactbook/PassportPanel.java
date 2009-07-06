@@ -50,12 +50,10 @@ public class PassportPanel extends BaseEntityPanel {
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -197,8 +195,6 @@ public class PassportPanel extends BaseEntityPanel {
                 .addGap(6, 6, 6))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.swingb.JBDatePicker expirationDateDatePicker;
@@ -216,17 +212,12 @@ public class PassportPanel extends BaseEntityPanel {
     private com.cosmos.acacia.gui.AcaciaComboBox passportTypeComboBox;
     private com.cosmos.swingb.JBLabel typeLabel;
     // End of variables declaration//GEN-END:variables
-
     @EJB
     private PassportsListRemote formSession;
-
     private EntityProperties entityProps;
-
-    private BindingGroup passportBindingGroup;
+    private BindingGroup bindingGroup;
     private Passport passport;
-
     private Binding issuerBinding;
-    private Binding issuerBranchBinding;
 
     @Override
     protected void initData() {
@@ -234,38 +225,39 @@ public class PassportPanel extends BaseEntityPanel {
 
         log.info("initData().passport: " + passport);
 
-        if(passport == null)
-        {
+        if (passport == null) {
             passport = getFormSession().newPassport();
         }
 
-        passportBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         entityProps = getPassportEntityProperties();
 
-        numberTextField.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("passportNumber"));
-        otherInfoTextField.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("additionalInfo"));
+        numberTextField.bind(bg, passport, entityProps.getPropertyDetails("passportNumber"));
+        otherInfoTextField.bind(bg, passport, entityProps.getPropertyDetails("additionalInfo"));
 
         PropertyDetails issueDateProperties = entityProps.getPropertyDetails("issueDate");
-        issueDateDatePicker.bind(passportBindingGroup, passport, issueDateProperties, AcaciaUtils.getShortDateFormat());
+        issueDateDatePicker.bind(bg, passport, issueDateProperties, AcaciaUtils.getShortDateFormat());
 
-        expirationDateDatePicker.bind(passportBindingGroup, passport, entityProps.getPropertyDetails("expirationDate"), AcaciaUtils.getShortDateFormat());
+        expirationDateDatePicker.bind(bg, passport, entityProps.getPropertyDetails("expirationDate"), AcaciaUtils.getShortDateFormat());
 
-        passportTypeComboBox.bind(passportBindingGroup, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
+        passportTypeComboBox.bind(bg, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
 
         issuerBinding = issuerLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseIssuer();
-                }
-            }, passportBindingGroup,
-            passport,
-            entityProps.getPropertyDetails("issuer"),
-            "${organizationName}",
-            UpdateStrategy.READ_WRITE);
+
+            @Override
+            public Object showSelectionControl() {
+                return onChooseIssuer();
+            }
+        }, bg,
+                passport,
+                entityProps.getPropertyDetails("issuer"),
+                "${organizationName}",
+                UpdateStrategy.READ_WRITE);
 
 
         issuerBinding.addBindingListener(new AbstractBindingListener() {
+
             @SuppressWarnings("unchecked")
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -273,20 +265,21 @@ public class PassportPanel extends BaseEntityPanel {
             }
         });
 
-        issuerBranchBinding = issuerBranchLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseIssuerBranch();
-                }
-            }, passportBindingGroup,
-            passport,
-            entityProps.getPropertyDetails("issuerBranch"),
-            "${addressName}",
-            UpdateStrategy.READ_WRITE);
+        issuerBranchLookup.bind(new AcaciaLookupProvider() {
+
+            @Override
+            public Object showSelectionControl() {
+                return onChooseIssuerBranch();
+            }
+        }, bg,
+                passport,
+                entityProps.getPropertyDetails("issuerBranch"),
+                "${addressName}",
+                UpdateStrategy.READ_WRITE);
 
         issuerBranchLookup.setEnabled(issuerBinding.isContentValid());
 
-        passportBindingGroup.bind();
+        bg.bind();
     }
 
     protected Object onChooseIssuer() {
@@ -299,11 +292,11 @@ public class PassportPanel extends BaseEntityPanel {
         listPanel.addTableModificationListener(new LookupRecordDeletionListener(oldIssuer, issuerLookup));
 
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             Object selected = listPanel.getSelectedRowObject();
 
 
-            if (selected == null || !selected.equals(oldIssuer)){
+            if (selected == null || !selected.equals(oldIssuer)) {
                 issuerBranchLookup.clearSelectedValue();
             }
 
@@ -313,37 +306,36 @@ public class PassportPanel extends BaseEntityPanel {
         }
     }
 
-     protected Object onChooseIssuerBranch() {
+    protected Object onChooseIssuerBranch() {
         if (!issuerBinding.isContentValid()) {
-             JOptionPane.showMessageDialog(this,
-                getResourceMap().getString("PassportPanel.selectIssuer"),
-                getResourceMap().getString("PassportPanel.selectIssuerTitle"),
-                JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    getResourceMap().getString("PassportPanel.selectIssuer"),
+                    getResourceMap().getString("PassportPanel.selectIssuerTitle"),
+                    JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
         DataObject parent = null;
         try {
             parent =
-                ((Organization) issuerBinding.getSourceProperty()
-                    .getValue(issuerBinding.getSourceObject())).getDataObject();
+                    ((Organization) issuerBinding.getSourceProperty().getValue(issuerBinding.getSourceObject())).getDataObject();
         } catch (NullPointerException ex) {
             // Ignore
         }
 
         AddressListPanel listPanel = new AddressListPanel(parent.getDataObjectId());
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             return listPanel.getSelectedRowObject();
         } else {
             return null;
         }
     }
 
-
     protected PassportsListRemote getFormSession() {
-        if(formSession == null)
+        if (formSession == null) {
             formSession = getBean(PassportsListRemote.class);
+        }
 
         return formSession;
     }
@@ -358,7 +350,11 @@ public class PassportPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return passportBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -367,8 +363,9 @@ public class PassportPanel extends BaseEntityPanel {
         passport = getFormSession().savePassport(passport, getParentDataObjectId());
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(passport);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override

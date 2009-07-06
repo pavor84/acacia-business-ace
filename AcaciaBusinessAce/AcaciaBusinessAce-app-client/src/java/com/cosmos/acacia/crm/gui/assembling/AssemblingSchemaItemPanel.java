@@ -3,7 +3,6 @@
  *
  * Created on Събота, 2008, Юни 14, 17:59
  */
-
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.assembling.Algorithm;
@@ -31,33 +30,28 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author  Miro
  */
 public class AssemblingSchemaItemPanel
-    extends BaseEntityPanel
-{
+        extends BaseEntityPanel {
+
     @EJB
     private static AssemblingRemote formSession;
-
     private AssemblingSchemaItem entity;
     private EntityProperties entityProps;
     private BindingGroup bindingGroup;
 
-
     /** Creates new form AssemblingSchemaItemPanel */
-    public AssemblingSchemaItemPanel()
-    {
-        super((BigInteger)null);
+    public AssemblingSchemaItemPanel() {
+        super((BigInteger) null);
         initComponents();
     }
 
-    public AssemblingSchemaItemPanel(AssemblingSchemaItem schemaItem)
-    {
+    public AssemblingSchemaItemPanel(AssemblingSchemaItem schemaItem) {
         super(schemaItem.getParentId());
         this.entity = schemaItem;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -299,8 +293,6 @@ public class AssemblingSchemaItemPanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBComboBox algorithmComboBox;
     private com.cosmos.swingb.JBLabel algorithmLabel;
@@ -329,14 +321,12 @@ public class AssemblingSchemaItemPanel
     private com.cosmos.swingb.JBPanel schemaPanel;
     // End of variables declaration//GEN-END:variables
 
-
     @Override
-    protected void initData()
-    {
+    protected void initData() {
         entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
         PropertyDetails propDetails;
 
-        bindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         AssemblingSchema as = entity.getAssemblingSchema();
         //schemaCodeTextField
@@ -348,14 +338,14 @@ public class AssemblingSchemaItemPanel
         //messageComboList
         propDetails = entityProps.getPropertyDetails("assemblingMessage");
         AssemblingMessageListPanel listPanel =
-            new AssemblingMessageListPanel();
+                new AssemblingMessageListPanel();
         messageComboList.bind(
-            bindingGroup,
-            listPanel,
-            entity,
-            propDetails,
-            "${messageCode} (${selectionText}/${inputText})",
-            UpdateStrategy.READ_WRITE);
+                bg,
+                listPanel,
+                entity,
+                propDetails,
+                "${messageCode} (${selectionText}/${inputText})",
+                UpdateStrategy.READ_WRITE);
         messageComboList.addItemListener(new MessageItemListener());
 
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
@@ -364,33 +354,33 @@ public class AssemblingSchemaItemPanel
 
         //algorithmComboBox
         propDetails = entityProps.getPropertyDetails("assemblingAlgorithm");
-        algorithmComboBox.bind(bindingGroup, getAlgorithms(), entity, propDetails);
+        algorithmComboBox.bind(bg, getAlgorithms(), entity, propDetails);
 
         //dataTypeComboBox
         propDetails = entityProps.getPropertyDetails("dataType");
-        dataTypeComboBox.bind(bindingGroup, getDataTypes(), entity, propDetails);
+        dataTypeComboBox.bind(bg, getDataTypes(), entity, propDetails);
 
         //minSelectionsTextField
         propDetails = entityProps.getPropertyDetails("minSelections");
-        minSelectionsTextField.bind(bindingGroup, entity, propDetails);
+        minSelectionsTextField.bind(bg, entity, propDetails);
 
         //maxSelectionsTextField
         propDetails = entityProps.getPropertyDetails("maxSelections");
-        maxSelectionsTextField.bind(bindingGroup, entity, propDetails);
+        maxSelectionsTextField.bind(bg, entity, propDetails);
 
         //quantityTextField
         propDetails = entityProps.getPropertyDetails("quantity");
-        quantityTextField.bind(bindingGroup, entity, propDetails);
+        quantityTextField.bind(bg, entity, propDetails);
 
         //defaultValueTextField
         propDetails = entityProps.getPropertyDetails("defaultValue");
-        defaultValueTextField.bind(bindingGroup, entity, propDetails);
+        defaultValueTextField.bind(bg, entity, propDetails);
 
         //descriptionTextPane
         propDetails = entityProps.getPropertyDetails("description");
-        descriptionTextPane.bind(bindingGroup, entity, propDetails);
+        descriptionTextPane.bind(bg, entity, propDetails);
 
-        bindingGroup.bind();
+        bg.bind();
 
         algorithmChanged();
 
@@ -398,112 +388,100 @@ public class AssemblingSchemaItemPanel
     }
 
     @Override
-    public EntityFormButtonPanel getButtonPanel()
-    {
+    public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
 
     @Override
-    public BindingGroup getBindingGroup()
-    {
+    public BindingGroup getBindingGroup() {
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
         return bindingGroup;
     }
 
     @Override
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return entity;
     }
 
     @Override
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         entity = getFormSession().saveSchemaItem(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if(closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
-    private List<DbResource> getAlgorithms()
-    {
+    private List<DbResource> getAlgorithms() {
         return getFormSession().getAlgorithms();
     }
 
-    private List<DbResource> getDataTypes()
-    {
+    private List<DbResource> getDataTypes() {
         return getFormSession().getDataTypes();
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
+    protected AssemblingRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;
     }
 
-    protected Algorithm.Type getAlgorithmType()
-    {
+    protected Algorithm.Type getAlgorithmType() {
         DbResource resource;
-        if((resource = (DbResource)algorithmComboBox.getSelectedItem()) == null)
+        if ((resource = (DbResource) algorithmComboBox.getSelectedItem()) == null) {
             return null;
+        }
 
-        return (Algorithm.Type)resource.getEnumValue();
+        return (Algorithm.Type) resource.getEnumValue();
     }
 
     private class MessageItemListener
-        implements ItemListener
-    {
+            implements ItemListener {
+
         @Override
-        public void itemStateChanged(ItemEvent event)
-        {
-            if(event.getStateChange() > 0x700)
-            {
+        public void itemStateChanged(ItemEvent event) {
+            if (event.getStateChange() > 0x700) {
                 //refreshDataTable(entityProps);
                 //setEnabled(AbstractTablePanel.Button.New, canCreate());
             }
         }
     }
 
-    private void algorithmChanged()
-    {
+    private void algorithmChanged() {
         Algorithm.Type algorithmType;
-        if((algorithmType = getAlgorithmType()) == null)
+        if ((algorithmType = getAlgorithmType()) == null) {
             return;
+        }
 
-        if(Algorithm.Type.SingleSelectionAlgorithms.contains(algorithmType) ||
-            Algorithm.Type.UnconditionalSelection.equals(algorithmType))
-        {
+        if (Algorithm.Type.SingleSelectionAlgorithms.contains(algorithmType) ||
+                Algorithm.Type.UnconditionalSelection.equals(algorithmType)) {
             minSelectionsTextField.setEnabled(false);
             maxSelectionsTextField.setEnabled(false);
-        }
-        else
-        {
+        } else {
             minSelectionsTextField.setEnabled(true);
             maxSelectionsTextField.setEnabled(true);
         }
 
-        if(Algorithm.Type.UnconditionalSelection.equals(algorithmType))
-        {
+        if (Algorithm.Type.UnconditionalSelection.equals(algorithmType)) {
             messageComboList.setEnabled(false);
             defaultValueTextField.setEnabled(false);
-        }
-        else
-        {
+        } else {
             messageComboList.setEnabled(true);
             defaultValueTextField.setEnabled(true);
         }
     }
 
     private class AlgorithmItemListener
-        implements ItemListener
-    {
+            implements ItemListener {
+
         @Override
-        public void itemStateChanged(ItemEvent event)
-        {
+        public void itemStateChanged(ItemEvent event) {
             algorithmChanged();
         }
     }

@@ -17,6 +17,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
@@ -34,7 +35,7 @@ import java.util.Date;
 public class RightsPanel extends BaseEntityPanel {
 
     /** Creates new form RightsPanel */
-    public RightsPanel(UserRight right) {
+    public RightsPanel(Right right) {
         super((BigInteger) null);
         this.right = right;
         init();
@@ -195,35 +196,38 @@ public class RightsPanel extends BaseEntityPanel {
 
 
     private UserRightsRemote formSession;
-    private UserRight right;
-    private BindingGroup rightsBindingGroup;
+    private Right right;
+    private BindingGroup bindingGroup;
 
     @Override
     protected void initData() {
 
-        rightsBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
         EntityProperties entityProps = getFormSession().getUserRightEntityProperties();
 
         AcaciaToStringConverter converter = new AcaciaToStringConverter("${dataObjectType}");
-        dataObjectTypeComboBox.bind(rightsBindingGroup,
+        dataObjectTypeComboBox.bind(bg,
                 getDataObjectTypes(),
                 right,
                 entityProps.getPropertyDetails("dataObjectType"),
                 converter);
         AutoCompleteDecorator.decorate(dataObjectTypeComboBox, converter);
 
-        readCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("read"));
-        createCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("create"));
-        modifyCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("modify"));
-        deleteCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("delete"));
-        executeCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("execute"));
-        
-        excludedCheckBox.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("excluded"));
-        
+        readCheckBox.bind(bg, right, entityProps.getPropertyDetails("read"));
+        createCheckBox.bind(bg, right, entityProps.getPropertyDetails("create"));
+        modifyCheckBox.bind(bg, right, entityProps.getPropertyDetails("modify"));
+        deleteCheckBox.bind(bg, right, entityProps.getPropertyDetails("delete"));
+        executeCheckBox.bind(bg, right, entityProps.getPropertyDetails("execute"));
+
+        excludedCheckBox.bind(bg, right, entityProps.getPropertyDetails("excluded"));
+
         expiresDatePicker.setDate(new Date());
-        expiresDatePicker.bind(rightsBindingGroup, right, entityProps.getPropertyDetails("expires"), AcaciaUtils.getShortDateFormat());
-        
-        rightsBindingGroup.bind();
+        System.out.println(entityProps.getPropertyDetails("expires"));
+        System.out.println("entityProps: " + entityProps);
+        expiresDatePicker.bind(bg, right, entityProps.getPropertyDetails("expires"),
+                AcaciaUtils.getShortDateFormat());
+
+        bg.bind();
 
         AcaciaToStringConverter dobConverter = new AcaciaToStringConverter("${info}");
         dataObjectComboBox.setConverter(dobConverter);
@@ -282,7 +286,11 @@ public class RightsPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return rightsBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

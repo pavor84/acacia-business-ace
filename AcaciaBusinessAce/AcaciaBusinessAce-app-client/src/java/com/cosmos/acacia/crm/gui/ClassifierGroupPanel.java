@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.gui;
 
-
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 
@@ -33,12 +32,10 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -143,8 +140,6 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBLabel codeLabel;
     private com.cosmos.swingb.JBTextField codeTextField;
@@ -156,11 +151,8 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField nameTextField;
     private com.cosmos.swingb.JBCheckBox systemClassifierGroupCheckBox;
     // End of variables declaration//GEN-END:variables
-
-
     private EntityProperties entityProps;
-
-    private BindingGroup classifierGroupBindingGroup;
+    private BindingGroup bindingGroup;
     private ClassifierGroup classifierGroup;
 
     @Override
@@ -170,33 +162,31 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         boolean isNew;
 
         log.info("initData().classifierGroup: " + classifierGroup);
-        if(classifierGroup == null)
-        {
+        if (classifierGroup == null) {
             classifierGroup = getClassifiersManager().newClassifierGroup();
             isNew = true;
         } else {
             isNew = false;
         }
 
-        classifierGroupBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         entityProps = getClassifierGroupEntityProperties();
 
-        codeTextField.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("classifierGroupCode"));
-        nameTextField.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("classifierGroupName"));
-        descriptionTextPane.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("description"));
-        systemClassifierGroupCheckBox.bind(classifierGroupBindingGroup, classifierGroup, entityProps.getPropertyDetails("isSystemGroup"));
+        codeTextField.bind(bg, classifierGroup, entityProps.getPropertyDetails("classifierGroupCode"));
+        nameTextField.bind(bg, classifierGroup, entityProps.getPropertyDetails("classifierGroupName"));
+        descriptionTextPane.bind(bg, classifierGroup, entityProps.getPropertyDetails("description"));
+        systemClassifierGroupCheckBox.bind(bg, classifierGroup, entityProps.getPropertyDetails("isSystemGroup"));
 
-        classifierGroupBindingGroup.bind();
+        bg.bind();
 
-        if(isNew)
-        {
-            if(!isAdministrator()) {
+        if (isNew) {
+            if (!isAdministrator()) {
                 systemClassifierGroupCheckBox.setEnabled(false);
             }
         } else {
             systemClassifierGroupCheckBox.setEnabled(false);
-            if(classifierGroup.getIsSystemGroup()) {
+            if (classifierGroup.getIsSystemGroup()) {
                 codeTextField.setEnabled(false);
             }
         }
@@ -208,7 +198,11 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return classifierGroupBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -217,8 +211,9 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
         classifierGroup = getClassifiersManager().saveClassifierGroup(classifierGroup);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(classifierGroup);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override

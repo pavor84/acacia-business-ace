@@ -51,7 +51,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
@@ -601,28 +601,28 @@ public class AcaciaPanel
     }
 
     public Set<SpecialPermission> getCreatePermissions(Object rowObject) {
-        return getPermissions(rowObject, UserRightType.CREATE);
+        return getPermissions(rowObject, AccessRight.Create);
     }
 
     public Set<SpecialPermission> getModifyPermissions(Object rowObject) {
-        return getPermissions(rowObject, UserRightType.MODIFY);
+        return getPermissions(rowObject, AccessRight.Modify);
     }
 
     public Set<SpecialPermission> getDeletePermissions(Object rowObject) {
-        return getPermissions(rowObject, UserRightType.DELETE);
+        return getPermissions(rowObject, AccessRight.Delete);
     }
 
     public Set<SpecialPermission> getViewPermissions(Object rowObject) {
-        return getPermissions(rowObject, UserRightType.READ);
+        return getPermissions(rowObject, AccessRight.Read);
     }
 
     public Set<SpecialPermission> getExecutePermissions(Object rowObject) {
-        return getPermissions(rowObject, UserRightType.EXECUTE);
+        return getPermissions(rowObject, AccessRight.Execute);
     }
 
     public Set<SpecialPermission> getPermissions(
             Object anObject,
-            UserRightType rightType) {
+            AccessRight rightType) {
         if(anObject == null) {
             return Collections.emptySet();
         }
@@ -640,7 +640,7 @@ public class AcaciaPanel
 
     public Set<SpecialPermission> getPermissions(
             DataObjectBean entity,
-            UserRightType rightType) {
+            AccessRight rightType) {
         DataObject dataObject;
         if(entity == null || (dataObject = entity.getDataObject()) == null || dataObject.getDataObjectId() == null) {
             return Collections.emptySet();
@@ -651,7 +651,7 @@ public class AcaciaPanel
 
     public Set<SpecialPermission> getPermissions(
             Class<? extends DataObjectBean> entityClass,
-            UserRightType rightType) {
+            AccessRight rightType) {
         if(entityClass == null) {
             return Collections.emptySet();
         }

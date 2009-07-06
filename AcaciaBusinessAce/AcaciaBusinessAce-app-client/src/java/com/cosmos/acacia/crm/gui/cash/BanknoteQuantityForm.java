@@ -3,7 +3,6 @@
  *
  * Created on Сряда, 2009, Април 15, 13:15
  */
-
 package com.cosmos.acacia.crm.gui.cash;
 
 import java.awt.Component;
@@ -50,16 +49,14 @@ import com.cosmos.swingb.JBLabel;
  *
  */
 public class BanknoteQuantityForm extends BaseEntityPanel {
-    
+
     private BanknoteQuantity entity;
-    
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private BanknoteQuantityRemote formSession = getBean(BanknoteQuantityRemote.class);
     private EnumResourceRemote enumResourceRemote = getBean(EnumResourceRemote.class);
     private CurrencyNominalRemote currencyNominalManager = getBean(CurrencyNominalRemote.class);
     private EntityProperties entProps;
     private EntityProperties curNominalProps;
-    
     private BigDecimal amount;
     private BigDecimal amountDefCurrency;
 
@@ -206,8 +203,6 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboBox currencyField;
     private com.cosmos.swingb.JBPanel footerPanel;
@@ -221,14 +216,14 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBFormattedTextField totalAmountDefCurField;
     private com.cosmos.swingb.JBFormattedTextField totalAmountField;
     // End of variables declaration//GEN-END:variables
-    
     private EntityFormButtonPanel entityFormButtonPanel;
 
     @Override
     public BindingGroup getBindingGroup() {
-        if ( bindGroup==null )
-            bindGroup = new BindingGroup();
-        return bindGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+        return bindingGroup;
     }
 
     @Override
@@ -250,38 +245,39 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
 
     @Override
     protected void initData() {
-        
-        if (entProps == null)
-            entProps = getFormSession().getDetailEntityProperties();
-        if (curNominalProps == null)
-            curNominalProps = currencyNominalManager.getDetailEntityProperties();
 
-        if (bindGroup == null)
-            bindGroup = new BindingGroup();
+        if (entProps == null) {
+            entProps = getFormSession().getDetailEntityProperties();
+        }
+        if (curNominalProps == null) {
+            curNominalProps = currencyNominalManager.getDetailEntityProperties();
+        }
 
         beforeBind();
         bind();
         afterBind();
     }
-    
+
     private void beforeBind() {
         //labels
-        Currency defaultCurr = (Currency) ((CashReconcile)getMainDataObject()).getCurrency().getEnumValue();
+        Currency defaultCurr = (Currency) ((CashReconcile) getMainDataObject()).getCurrency().getEnumValue();
         String currencyDisplay = defaultCurr.getCode();
         setLabelCurrency(jBLabel5, currencyDisplay);
     }
-    
+
     private void setLabelCurrency(JBLabel label, String currencyDisplay) {
         String text = label.getText();
-        if ( !text.contains("{0}") )
+        if (!text.contains("{0}")) {
             return;
+        }
         text = MessageFormat.format(text, currencyDisplay);
         label.setText(text);
     }
@@ -289,96 +285,100 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
     private void afterBind() {
         totalAmountField.setFormat(AcaciaUtils.getDecimalFormat());
         totalAmountDefCurField.setFormat(AcaciaUtils.getDecimalFormat());
-        
+
         currencyField.addItemListener(new ItemListener() {
+
             public void itemStateChanged(ItemEvent e) {
                 onCurrencySelected();
             }
         }, true);
-        
+
         quantityField.getBinding().addBindingListener(new AbstractBindingListener() {
+
             public void targetChanged(Binding binding, PropertyStateEvent event) {
                 updateAmountFields();
             }
+
             public void syncFailed(Binding binding, SyncFailure failure) {
                 updateAmountFields();
             }
         });
         nominalField.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 updateAmountFields();
             }
         });
-        
+
         updateAmountFields();
     }
 
     protected void onCurrencySelected() {
         bindNominalField();
     }
-    
+
     private static class AlignedListCellRenderer extends DefaultListCellRenderer {
-        
+
         private int align;
-        
+
         public AlignedListCellRenderer(int align) {
             this.align = align;
         }
-     
-        public Component getListCellRendererComponent(JList list, 
-                                                      Object value, 
-                                                      int index, 
-                                                      boolean isSelected, 
-                                                      boolean cellHasFocus) {
+
+        public Component getListCellRendererComponent(JList list,
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus) {
             // DefaultListCellRenderer uses a JLabel as the rendering component:
-            JLabel lbl = (JLabel)super.getListCellRendererComponent(
+            JLabel lbl = (JLabel) super.getListCellRendererComponent(
                     list, value, index, isSelected, cellHasFocus);
             lbl.setHorizontalAlignment(align);
             return lbl;
         }
     }
-    
     private BigDecimal nominal;
     private Currency currency;
-    
+
     private void bindNominalField() {
-        
-        if ( nominalField.getBinding()!=null ){
-            if ( bindGroup.getBindings().contains(nominalField.getBinding()) )
-                bindGroup.removeBinding(nominalField.getBinding());
-            if ( bindGroup.getBindings().contains(nominalField.getComboBoxBinding()) )
-                bindGroup.removeBinding(nominalField.getComboBoxBinding());
+        BindingGroup bg = getBindingGroup();
+
+        if (nominalField.getBinding() != null) {
+            if (bg.getBindings().contains(nominalField.getBinding())) {
+                bg.removeBinding(nominalField.getBinding());
+            }
+            if (bg.getBindings().contains(nominalField.getComboBoxBinding())) {
+                bg.removeBinding(nominalField.getComboBoxBinding());
+            }
         }
-        
+
         // nominal
         curNominalProps.getPropertyDetails("nominal").setEditable(false);
-        nominalField
-            .bind(bindGroup, getNominals(), this, curNominalProps.getPropertyDetails("nominal"))
-                .bind();
+        nominalField.bind(bg, getNominals(), this, curNominalProps.getPropertyDetails("nominal")).bind();
         nominalField.setRenderer(new AlignedListCellRenderer(JLabel.RIGHT));
-        if ( nominals.size()>0 )
+        if (nominals.size() > 0) {
             nominalField.setSelectedIndex(0);
+        }
     }
 
     private void updateAmountFields() {
-        
-        if ( nominalField.getSelectedIndex()>=0 ){
-            try{
+
+        if (nominalField.getSelectedIndex() >= 0) {
+            try {
                 entity.setCurrencyNominal(nominals.get(nominalField.getSelectedIndex()));
-            }catch (IndexOutOfBoundsException o){
+            } catch (IndexOutOfBoundsException o) {
                 entity.setCurrencyNominal(nominals.get(0));
             }
         }
-        
+
         //valid
-        if ( quantityField.getValue()!=null && nominalField.getSelectedItem() instanceof BigDecimal &&
-                currencyField.getSelectedItem() instanceof DbResource ){
+        if (quantityField.getValue() != null && nominalField.getSelectedItem() instanceof BigDecimal &&
+                currencyField.getSelectedItem() instanceof DbResource) {
             totalAmountField.setValue(entity.getAmount());
-            Currency defaultCurr = (Currency) ((CashReconcile)getMainDataObject()).getCurrency().getEnumValue();
+            Currency defaultCurr = (Currency) ((CashReconcile) getMainDataObject()).getCurrency().getEnumValue();
             totalAmountDefCurField.setValue(entity.getAmount(defaultCurr));
-        }
-        //invalid
-        else{
+        } //invalid
+        else {
             totalAmountField.setValue(null);
             totalAmountDefCurField.setValue(null);
         }
@@ -389,39 +389,43 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
      */
     @SuppressWarnings("deprecation")
     protected void bind() {
-        
+        BindingGroup bg = getBindingGroup();
+
         // currency
         curNominalProps.getPropertyDetails("currency").setEditable(false);
-        currencyField.bind(bindGroup, getCurrencies(), entity.getCurrencyNominal(), curNominalProps.getPropertyDetails("currency"));
-        
+        currencyField.bind(bg, getCurrencies(), entity.getCurrencyNominal(), curNominalProps.getPropertyDetails("currency"));
+
         // quantity
-        quantityField.bind(bindGroup, entity, entProps.getPropertyDetails("quantity"), AcaciaUtils.getIntegerFormat());
-        
+        quantityField.bind(bg, entity, entProps.getPropertyDetails("quantity"), AcaciaUtils.getIntegerFormat());
+
         //nominals
         bindNominalField();
-        
-        bindGroup.bind();
+
+        bg.bind();
     }
-    
     private List<CurrencyNominal> nominals = null;
-    
+
     private List<BigDecimal> getNominals() {
         DbResource currency = null;
-        if ( currencyField.getSelectedItem() instanceof String ){
-            if ( entity.getCurrencyNominal()!=null )
+        if (currencyField.getSelectedItem() instanceof String) {
+            if (entity.getCurrencyNominal() != null) {
                 currency = entity.getCurrencyNominal().getCurrency();
-        }else
+            }
+        } else {
             currency = (DbResource) currencyField.getSelectedItem();
-        
-        if ( currency==null )
+        }
+
+        if (currency == null) {
             nominals = new ArrayList<CurrencyNominal>();
-        else
-            nominals= currencyNominalManager.getNominals(
-                (Currency) currency.getEnumValue());
+        } else {
+            nominals = currencyNominalManager.getNominals(
+                    (Currency) currency.getEnumValue());
+        }
         List<BigDecimal> nominalValues = new ArrayList<BigDecimal>();
         for (CurrencyNominal currencyNominal : nominals) {
-            if ( currencyNominal.equals(entity.getCurrencyNominal()))
+            if (currencyNominal.equals(entity.getCurrencyNominal())) {
                 this.nominal = currencyNominal.getNominal();
+            }
             nominalValues.add(currencyNominal.getNominal());
         }
         return nominalValues;
@@ -430,15 +434,16 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
     public void setReadonly() {
         super.setReadonly();
     }
-    
+
     public BanknoteQuantityRemote getFormSession() {
         return formSession;
     }
-    
-    private List<DbResource> currencies; 
+    private List<DbResource> currencies;
+
     private List getCurrencies() {
-        if (currencies == null)
+        if (currencies == null) {
             currencies = enumResourceRemote.getEnumResources(Currency.class);
+        }
         return currencies;
     }
 

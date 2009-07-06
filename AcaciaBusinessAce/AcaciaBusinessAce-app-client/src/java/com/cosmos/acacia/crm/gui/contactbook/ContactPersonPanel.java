@@ -1,19 +1,15 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import javax.ejb.EJB;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -123,10 +119,8 @@ public class ContactPersonPanel extends BaseEntityPanel {
     @EJB
     private AddressesListRemote formSession;
 
-    private BindingGroup contactPersonBindingGroup;
+    private BindingGroup bindingGroup;
     private ContactPerson contactPerson;
-    private Binding typeBinding;
-    private Binding personBinding;
     /** Indicates whether the addresses are internal to the organization */
     private boolean isInternal;
 
@@ -140,27 +134,27 @@ public class ContactPersonPanel extends BaseEntityPanel {
             contactPerson = getFormSession().newContactPerson();
         }
 
-        contactPersonBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getContactPersonEntityProperties();
 
-        typeBinding = typeLookup.bind(new AcaciaLookupProvider() {
+        typeLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
                     return onChooseType();
                 }
-            }, contactPersonBindingGroup,
+            }, bg,
             contactPerson,
             entityProps.getPropertyDetails("positionType"),
             "${positionTypeName}",
             UpdateStrategy.READ_WRITE);
 
-        personBinding = personLookup.bind(new AcaciaLookupProvider() {
+        personLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
                     return onChoosePerson();
                 }
-            }, contactPersonBindingGroup,
+            }, bg,
             contactPerson,
             entityProps.getPropertyDetails("contact"),
             entityProps.getPropertyDetails("contact")
@@ -168,7 +162,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
             UpdateStrategy.READ_WRITE);
 
 
-        contactPersonBindingGroup.bind();
+        bg.bind();
     }
 
     protected Object onChooseType()
@@ -219,17 +213,13 @@ public class ContactPersonPanel extends BaseEntityPanel {
         return getFormSession().getContactPersonEntityProperties();
     }
 
-    private List<Person> getPersons() {
-        return getFormSession().getPersons();
-    }
-
-    private List<PositionType> getPositionTypes() {
-        return getFormSession().getPositionTypes(getParentDataObject(), getOrganizationDataObjectId());
-    }
-
     @Override
     public BindingGroup getBindingGroup() {
-        return contactPersonBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

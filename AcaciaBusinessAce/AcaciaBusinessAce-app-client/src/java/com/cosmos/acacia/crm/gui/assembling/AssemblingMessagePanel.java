@@ -3,7 +3,6 @@
  *
  * Created on Събота, 2008, Септември 27, 23:15
  */
-
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
@@ -22,26 +21,23 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Miro
  */
 public class AssemblingMessagePanel
-    extends BaseEntityPanel
-{
+        extends BaseEntityPanel {
+
     @EJB
     private static AssemblingRemote formSession;
-
     private AssemblingMessage entity;
     private EntityProperties entityProps;
     private BindingGroup bindingGroup;
 
     /** Creates new form AssemblingMessagePanel */
-    public AssemblingMessagePanel(AssemblingMessage message)
-    {
+    public AssemblingMessagePanel(AssemblingMessage message) {
         super(message.getParentId());
         this.entity = message;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -179,8 +175,6 @@ public class AssemblingMessagePanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private javax.swing.JScrollPane descriptionScrollPane;
@@ -201,20 +195,18 @@ public class AssemblingMessagePanel
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         entity = getFormSession().saveAssemblingMessage(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if(closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override
-    public BindingGroup getBindingGroup()
-    {
-        if(bindingGroup == null)
-        {
+    public BindingGroup getBindingGroup() {
+        if (bindingGroup == null) {
             bindingGroup = new BindingGroup();
         }
 
@@ -222,20 +214,17 @@ public class AssemblingMessagePanel
     }
 
     @Override
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return entity;
     }
 
     @Override
-    public EntityFormButtonPanel getButtonPanel()
-    {
+    public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
 
     @Override
-    protected void initData()
-    {
+    protected void initData() {
         entityProps = getFormSession().getAssemblingMessageEntityProperties();
         PropertyDetails propDetails;
 
@@ -272,16 +261,11 @@ public class AssemblingMessagePanel
         bg.bind();
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
-            try
-            {
+    protected AssemblingRemote getFormSession() {
+        if (formSession == null) {
+            try {
                 formSession = getBean(AssemblingRemote.class);
-            }
-            catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }

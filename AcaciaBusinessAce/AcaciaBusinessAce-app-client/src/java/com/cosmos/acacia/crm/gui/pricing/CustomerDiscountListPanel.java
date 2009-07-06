@@ -201,6 +201,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
         private JBTextField customerTextField;
         private JBLabel discountLabel;
         private JBPercentField discountPercentField;
+        private BindingGroup bindingGroup;
 
         public CustomerDiscountPanel() {
             initComponents();
@@ -236,20 +237,26 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
         @Override
         protected void initData() {
             customerTextField.setText(customer.getDisplayName());
-            BindingGroup bindingGroup = new BindingGroup();
+            BindingGroup bg = getBindingGroup();
             CustomerDiscount discount = getCustomerDiscount();
             EntityProperties entityProperties = getFormSession().getCustomerDiscountEntityProperties();
             PropertyDetails propDetails = entityProperties.getPropertyDetails("discountPercent");
-            discountPercentField.bind(bindingGroup, discount, propDetails);
-            bindingGroup.bind();
+            discountPercentField.bind(bg, discount, propDetails);
+            bg.bind();
         }
 
+        public BindingGroup getBindingGroup() {
+            if(bindingGroup == null) {
+                bindingGroup = new BindingGroup();
+            }
+
+            return bindingGroup;
+        }
     }
 
     private class CustomerDiscountItemListPanel extends AbstractTablePanel<CustomerDiscountItem> {
 
         private Boolean includeProduct;
-        private BindingGroup bindingGroup;
 
         public CustomerDiscountItemListPanel() {
         }
@@ -281,17 +288,17 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             CustomerDiscountListPanel.this.addNestedFormListener(this);
 
             EntityProperties entityProps = getFormSession().getCustomerDiscountItemEntityProperties();
-            bindingGroup = new BindingGroup();
+            BindingGroup bg = getBindingGroup();
             AcaciaTable table = getDataTable();
             List<CustomerDiscountItem> items = getFormSession().getCustomerDiscountItems(getCustomerDiscount());
             JTableBinding tableBinding = table.bind(
-                    bindingGroup,
+                    bg,
                     items,
                     entityProps,
                     UpdateStrategy.READ);
             tableBinding.setEditable(false);
 
-            bindingGroup.bind();
+            bg.bind();
         }
 
         @Override

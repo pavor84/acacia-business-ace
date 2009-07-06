@@ -25,7 +25,7 @@ public class ProductPricingValueForm extends BaseEntityPanel {
     
     private ProductPercentValue entity;
     
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private ProductPricingValueRemote formSession = getBean(ProductPricingValueRemote.class);
     private EntityProperties entProps;
     
@@ -128,7 +128,11 @@ public class ProductPricingValueForm extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -150,7 +154,8 @@ public class ProductPricingValueForm extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
@@ -161,10 +166,9 @@ public class ProductPricingValueForm extends BaseEntityPanel {
         if (entProps == null)
             entProps = getFormSession().getDetailEntityProperties();
 
-        if (bindGroup == null)
-            bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
-        bindComponents(bindGroup, entProps);
+        bindComponents(bg, entProps);
     }
     
     /**

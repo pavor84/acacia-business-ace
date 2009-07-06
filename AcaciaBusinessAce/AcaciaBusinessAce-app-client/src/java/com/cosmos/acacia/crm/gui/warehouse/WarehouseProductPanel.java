@@ -46,7 +46,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private WarehouseListRemote formSession;
 
     private WarehouseProduct entity;
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private EntityProperties entProps;
 
     /** Creates new form WarehouseProductPanel */
@@ -461,7 +461,11 @@ public class WarehouseProductPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -481,14 +485,14 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         entProps = getFormSession().getWarehouseProductEntityProperties();
         PropertyDetails propDetails;
 
-        bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
         
         boolean saved = entity.getId()!=null;
 
         //product field
         propDetails = entProps.getPropertyDetails("product");
         ProductsListPanel productListPanel = new ProductsListPanel(getOrganizationDataObjectId());
-        productField.bind(bindGroup, productListPanel, entity, propDetails,
+        productField.bind(bg, productListPanel, entity, propDetails,
             "${productName}", UpdateStrategy.READ_WRITE);
         productField.addItemListener(new ItemListener() {
         
@@ -506,38 +510,38 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         //warehouse
         propDetails = entProps.getPropertyDetails("warehouse");
         WarehouseListPanel warehouseListPanel = new WarehouseListPanel(getOrganizationDataObjectId());
-        warehouseField.bind(bindGroup, warehouseListPanel, entity, propDetails,
+        warehouseField.bind(bg, warehouseListPanel, entity, propDetails,
             "${address.addressName}", UpdateStrategy.READ_WRITE);
 
         //quantityInStock
-        qtyInStockField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityInStock"), getDecimalFormat())
+        qtyInStockField.bind(bg, entity, entProps.getPropertyDetails("quantityInStock"), getDecimalFormat())
             .addBindingListener(new FreeQuantityChangeListener());
         //orderedQuantity
-        qtyOrderedField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
+        qtyOrderedField.bind(bg, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
         //reservedQuantity
-        qtyReservedField.bind(bindGroup, entity, entProps.getPropertyDetails("reservedQuantity"), getDecimalFormat())
+        qtyReservedField.bind(bg, entity, entProps.getPropertyDetails("reservedQuantity"), getDecimalFormat())
             .addBindingListener(new FreeQuantityChangeListener());
         //soldQuantity
-        qtySoldField.bind(bindGroup, entity, entProps.getPropertyDetails("soldQuantity"), getDecimalFormat())
+        qtySoldField.bind(bg, entity, entProps.getPropertyDetails("soldQuantity"), getDecimalFormat())
             .addBindingListener(new FreeQuantityChangeListener());
         //quantityDue
-        qtyDueField.bind(bindGroup, entity, entProps.getPropertyDetails("quantityDue"), getDecimalFormat());
+        qtyDueField.bind(bg, entity, entProps.getPropertyDetails("quantityDue"), getDecimalFormat());
 
         //minimumQuantity
-        minQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("minimumQuantity"), getDecimalFormat());
+        minQtyField.bind(bg, entity, entProps.getPropertyDetails("minimumQuantity"), getDecimalFormat());
         //maximumQuantity
-        maxQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
+        maxQtyField.bind(bg, entity, entProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
         //defaultQuantity
-        defaultQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
+        defaultQtyField.bind(bg, entity, entProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
         //sale price in current form
-        final Binding salesPriceFieldBinding = salesPriceField.bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"), getDecimalFormat());
+        final Binding salesPriceFieldBinding = salesPriceField.bind(bg, entity, entProps.getPropertyDetails("salePrice"), getDecimalFormat());
         salesPriceField.setEditable(false);
 
         pricingPanel = new WarehouseProductPricingPanel();
         //purchase price
-        pricingPanel.getPurchasePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
+        pricingPanel.getPurchasePriceField().bind(bg, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
         //sale price
-        Binding pricingPanelSalesBinding = pricingPanel.getSalePriceField().bind(bindGroup, entity, entProps.getPropertyDetails("salePrice"), getDecimalFormat());
+        Binding pricingPanelSalesBinding = pricingPanel.getSalePriceField().bind(bg, entity, entProps.getPropertyDetails("salePrice"), getDecimalFormat());
         pricingPanelSalesBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -547,13 +551,13 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         });
 
         //delivery time
-        deliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveryTime"), AcaciaUtils.getIntegerFormat());
+        deliveryTimeField.bind(bg, entity, entProps.getPropertyDetails("deliveryTime"), AcaciaUtils.getIntegerFormat());
         
         //ordered delivery time
-        orderedDeliveryTimeField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedDeliveryTime"), AcaciaUtils.getIntegerFormat());
+        orderedDeliveryTimeField.bind(bg, entity, entProps.getPropertyDetails("orderedDeliveryTime"), AcaciaUtils.getIntegerFormat());
 
         //notes
-        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
 
         warehouseField.setEnabled(false);
         qtyInStockField.setEditable(false);
@@ -563,7 +567,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
         defaultFromProductField.setHorizontalAlignment(SwingConstants.TRAILING);
         
 
-        bindGroup.bind();
+        bg.bind();
     }
 
     @SuppressWarnings("unchecked")

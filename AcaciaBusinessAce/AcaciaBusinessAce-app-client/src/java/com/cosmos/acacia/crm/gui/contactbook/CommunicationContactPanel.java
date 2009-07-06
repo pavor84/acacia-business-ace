@@ -40,12 +40,10 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -109,8 +107,6 @@ public class CommunicationContactPanel extends BaseEntityPanel {
                     .addComponent(valueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.EntityFormButtonPanel entityFormButtonPanel;
     private com.cosmos.acacia.gui.AcaciaComboBox typeComboBox;
@@ -118,11 +114,9 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel valueLabel;
     private com.cosmos.swingb.JBTextField valueTextField;
     // End of variables declaration//GEN-END:variables
-
     @EJB
     private AddressesListRemote formSession;
-
-    private BindingGroup communicationContactBindingGroup;
+    private BindingGroup bindingGroup;
     private CommunicationContact communicationContact;
     private ContactPerson contactPerson;
 
@@ -131,42 +125,43 @@ public class CommunicationContactPanel extends BaseEntityPanel {
         setResizable(false);
 
         log.info("initData().communicationContact: " + communicationContact);
-        if(communicationContact == null)
-        {
+        if (communicationContact == null) {
             communicationContact = getFormSession().newCommunicationContact();
         }
 
-        communicationContactBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getCommunicationContactEntityProperties();
 
-        typeComboBox.bind(communicationContactBindingGroup, getCommunicationTypes(), communicationContact, entityProps.getPropertyDetails("communicationType"));
-        valueTextField.bind(communicationContactBindingGroup, communicationContact, entityProps.getPropertyDetails("communicationValue"));
+        typeComboBox.bind(bg, getCommunicationTypes(), communicationContact, entityProps.getPropertyDetails("communicationType"));
+        valueTextField.bind(bg, communicationContact, entityProps.getPropertyDetails("communicationValue"));
 
-        communicationContactBindingGroup.bind();
+        bg.bind();
     }
 
-        protected AddressesListRemote getFormSession()
-    {
-        if(formSession == null)
+    protected AddressesListRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AddressesListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected EntityProperties getCommunicationContactEntityProperties()
-    {
+    protected EntityProperties getCommunicationContactEntityProperties() {
         return getFormSession().getCommunicationContactEntityProperties();
     }
 
-    private List<DbResource> getCommunicationTypes()
-    {
+    private List<DbResource> getCommunicationTypes() {
         return getFormSession().getCommunicationTypes();
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return communicationContactBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -176,8 +171,9 @@ public class CommunicationContactPanel extends BaseEntityPanel {
                 communicationContact, getParentDataObjectId(), contactPerson);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(communicationContact);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override

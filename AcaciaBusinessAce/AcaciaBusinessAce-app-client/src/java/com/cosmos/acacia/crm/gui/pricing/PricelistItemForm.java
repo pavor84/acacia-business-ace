@@ -48,7 +48,7 @@ public class PricelistItemForm extends BaseEntityPanel {
     private Pricelist pricelist;
     private List<PricelistItem> includedItems;
     
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private PricelistRemote formSession = getBean(PricelistRemote.class);
     private EntityProperties entProps;
     
@@ -356,7 +356,11 @@ public class PricelistItemForm extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -394,7 +398,8 @@ public class PricelistItemForm extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
@@ -534,10 +539,9 @@ public class PricelistItemForm extends BaseEntityPanel {
         if (entProps == null)
             entProps = getFormSession().getItemDetailEntityProperties();
 
-        if (bindGroup == null)
-            bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
-        bindComponents(bindGroup, entProps);
+        bindComponents(bg, entProps);
     }
     
     /**

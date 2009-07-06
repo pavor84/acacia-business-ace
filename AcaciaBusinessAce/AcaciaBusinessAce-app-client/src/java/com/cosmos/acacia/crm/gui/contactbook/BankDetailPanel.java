@@ -243,12 +243,11 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     private EntityProperties entityProps;
 
-    private BindingGroup bankDetailBindingGroup;
+    private BindingGroup bindingGroup;
     private BankDetail bankDetail;
 
     private Binding bankBinding;
     private Binding branchBinding;
-    private Binding contactBinding;
 
     @Override
     protected void initData() {
@@ -260,17 +259,17 @@ public class BankDetailPanel extends BaseEntityPanel {
             bankDetail = getFormSession().newBankDetail();
         }
 
-        bankDetailBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         entityProps = getBankDetailEntityProperties();
 
-        ibanTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("iban"));
-        accountTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("bankAccount"));
-        bicTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("bic"));
-        swiftTextField.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("swiftCode"));
-        defaultCheckBox.bind(bankDetailBindingGroup, bankDetail, entityProps.getPropertyDetails("isDefault"));
+        ibanTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("iban"));
+        accountTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("bankAccount"));
+        bicTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("bic"));
+        swiftTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("swiftCode"));
+        defaultCheckBox.bind(bg, bankDetail, entityProps.getPropertyDetails("isDefault"));
 
-        currencyComboBox.bind(bankDetailBindingGroup,
+        currencyComboBox.bind(bg,
                 getCurrencies(),
                 bankDetail,
                 entityProps.getPropertyDetails("currency"));
@@ -280,7 +279,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 public Object showSelectionControl() {
                     return onChooseBank();
                 }
-            }, bankDetailBindingGroup,
+            }, bg,
             bankDetail,
             entityProps.getPropertyDetails("bank"),
             "${organizationName}",
@@ -299,7 +298,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 public Object showSelectionControl() {
                     return onChooseBankBranch();
                 }
-            }, bankDetailBindingGroup,
+            }, bg,
             bankDetail,
             entityProps.getPropertyDetails("bankBranch"),
             "${addressName}",
@@ -313,18 +312,18 @@ public class BankDetailPanel extends BaseEntityPanel {
             }
         });
 
-        contactBinding = contactLookup.bind(new AcaciaLookupProvider() {
+        contactLookup.bind(new AcaciaLookupProvider() {
                 @Override
                 public Object showSelectionControl() {
                     return onChooseContact();
                 }
-            }, bankDetailBindingGroup,
+            }, bg,
             bankDetail,
             entityProps.getPropertyDetails("bankContact"),
             "${firstName} ${secondName} ${lastName}",
             UpdateStrategy.READ_WRITE);
 
-        bankDetailBindingGroup.bind();
+        bg.bind();
     }
 
     protected Object onChooseBank() {
@@ -449,7 +448,11 @@ public class BankDetailPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bankDetailBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

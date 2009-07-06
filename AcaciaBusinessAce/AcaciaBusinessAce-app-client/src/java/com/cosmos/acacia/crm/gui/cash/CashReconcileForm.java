@@ -3,7 +3,6 @@
  *
  * Created on Вторник, 2009, Април 14, 16:01
  */
-
 package com.cosmos.acacia.crm.gui.cash;
 
 import java.math.BigDecimal;
@@ -52,14 +51,12 @@ import com.cosmos.swingb.listeners.TableModificationListener;
  *
  */
 public class CashReconcileForm extends BaseEntityPanel {
-    
+
     private CashReconcile entity;
-    
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private CashReconcileRemote formSession = getBean(CashReconcileRemote.class);
     private PersonsListRemote personManager = getBean(PersonsListRemote.class);
     private EntityProperties entProps;
-    
     private BanknoteQuantityListPanel banknotesPanel;
 
     /** Creates new form */
@@ -79,17 +76,21 @@ public class CashReconcileForm extends BaseEntityPanel {
         //add banknotes panel
         banknotesPanel = new BanknoteQuantityListPanel(entity);
         banknotesPanel.addTableModificationListener(new TableModificationListener() {
+
             public void rowModified(Object row) {
                 updateTotalBanknotes();
             }
+
             public void rowDeleted(Object row) {
                 updateTotalBanknotes();
             }
+
             public void rowAdded(Object row) {
                 updateTotalBanknotes();
             }
         });
         banknotesPanel.addTablePanelListener(new AbstractTablePanelListener() {
+
             @Override
             public void tableRefreshed() {
                 updateTotalBanknotes();
@@ -97,12 +98,12 @@ public class CashReconcileForm extends BaseEntityPanel {
         });
         banknotesPanel.setVisible(Button.Refresh, false);
         banknotesPanel.setVisible(Button.Close, false);
-        
+
         addNestedFormListener(banknotesPanel);
         banknotesTableHolderPanel.add(banknotesPanel);
         totalField.setFormat(AcaciaUtils.getDecimalFormat());
         updateTotalBanknotes();
-        
+
         //add buttons panel
         entityFormButtonPanel = new EntityFormButtonPanel();
         BoxLayout boxLayout = new BoxLayout(footerPanel, BoxLayout.Y_AXIS);
@@ -684,8 +685,6 @@ public class CashReconcileForm extends BaseEntityPanel {
                 .addComponent(footerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaTable acaciaTable2;
     private com.cosmos.swingb.JBFormattedTextField bankExpensesField;
@@ -743,12 +742,13 @@ public class CashReconcileForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel totalLabel;
     // End of variables declaration//GEN-END:variables
     private EntityFormButtonPanel entityFormButtonPanel;
-    
+
     @Override
     public BindingGroup getBindingGroup() {
-        if ( bindGroup==null )
-            bindGroup = new BindingGroup();
-        return bindGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+        return bindingGroup;
     }
 
     @Override
@@ -767,21 +767,23 @@ public class CashReconcileForm extends BaseEntityPanel {
         entity = formSession.saveCashReconcile(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override
     protected void initData() {
-        
-        if (entProps == null)
+
+        if (entProps == null) {
             entProps = getFormSession().getDetailEntityProperties();
+        }
 
         beforeBind();
         bind();
         afterBind();
     }
-    
+
     private void beforeBind() {
         //cashiers list panel
         List<Person> branchCashiers = personManager.getCashiers();
@@ -792,11 +794,12 @@ public class CashReconcileForm extends BaseEntityPanel {
         cashiersPanel.setVisible(Button.Delete, false);
         cashiersPanel.setVisible(Button.Special, false);
         cashiersPanel.setVisible(Button.Classify, false);
-        if ( branchCashiers.size()==1 && entity.getCashier()==null )
+        if (branchCashiers.size() == 1 && entity.getCashier() == null) {
             entity.setCashier(branchCashiers.get(0));
-        
+        }
+
         //labels
-        String currencyDisplay = ((Currency)entity.getCurrency().getEnumValue()).getCode();
+        String currencyDisplay = ((Currency) entity.getCurrency().getEnumValue()).getCode();
         setLabelCurrency(initialCashLabel, currencyDisplay);
         setLabelCurrency(initialBankLabel, currencyDisplay);
         setLabelCurrency(initialBalanceLabel, currencyDisplay);
@@ -810,56 +813,62 @@ public class CashReconcileForm extends BaseEntityPanel {
         setLabelCurrency(periodBankExpensesLabel, currencyDisplay);
         setLabelCurrency(periodExpensesLabel2, currencyDisplay);
         setLabelCurrency(totalLabel, currencyDisplay);
-        
+
         //get payment summaries
         //getPaymentSummaries();
     }
 
     private void setLabelCurrency(JBLabel label, String currencyDisplay) {
         String text = label.getText();
-        if ( !text.contains("{0}") )
+        if (!text.contains("{0}")) {
             return;
+        }
         text = MessageFormat.format(text, currencyDisplay);
         label.setText(text);
     }
 
     private void afterBind() {
         //complete button
-        if ( DocumentStatus.Draft.equals(entity.getDocumentStatus().getEnumValue()) ){
+        if (DocumentStatus.Draft.equals(entity.getDocumentStatus().getEnumValue())) {
             addButton("button.complete", "onCompleteButton");
         }
-        
+
         //revenues table
-        BindingGroup bg = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
         EntityProperties paymentSummaryListProps = getFormSession().getPaymentSummaryListDetails();
         List<CashReconcilePaymentSummary> revenuePayments = entity.getRevenuePayments();
         revenuesTable.bind(bg, revenuePayments, paymentSummaryListProps, UpdateStrategy.READ, getAmtDefaultCurrencyCol(), false);
-        
+
         //expenses table
         List<CashReconcilePaymentSummary> expensesPayments = entity.getExpensesPayments();
-        expensesTable.bind(bg, expensesPayments, 
-            paymentSummaryListProps, UpdateStrategy.READ, getAmtDefaultCurrencyCol(), false);
-        
+        expensesTable.bind(bg, expensesPayments,
+                paymentSummaryListProps, UpdateStrategy.READ, getAmtDefaultCurrencyCol(), false);
+
         bg.bind();
     }
-    
+
     private List<JBColumn> getAmtDefaultCurrencyCol() {
-        final String colName = MessageFormat.format(getResourceMap().getString("column.amountDefaultCurrency"), 
-            ((Currency)entity.getCurrency().getEnumValue()).getCode());
-        JBColumn jc = new JBColumn(){
+        final String colName = MessageFormat.format(getResourceMap().getString("column.amountDefaultCurrency"),
+                ((Currency) entity.getCurrency().getEnumValue()).getCode());
+        JBColumn jc = new JBColumn() {
+
             public String getColumnName() {
                 return colName;
             }
+
             public Class getColumnClass() {
                 return BigDecimal.class;
             }
+
             public Object getValue(Object item) {
                 CashReconcilePaymentSummary payment = (CashReconcilePaymentSummary) item;
-                return Currency.convertAmount((Currency)entity.getCurrency().getEnumValue(),
-                    (Currency)payment.getCurrency().getEnumValue(), payment.getAmount());
+                return Currency.convertAmount((Currency) entity.getCurrency().getEnumValue(),
+                        (Currency) payment.getCurrency().getEnumValue(), payment.getAmount());
             }
+
             public void setValue(Object arg0, Object arg1) {
             }
+
             public int getIndex() {
                 return 3;
             }
@@ -874,25 +883,23 @@ public class CashReconcileForm extends BaseEntityPanel {
 //        result.add(new PropertyDetails("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(),30));
 //        return result;
 //    }
-
     @Action
-    public void onCompleteButton(){
-        if ( showConfirmationDialog(getResourceMap().getString("button.complete.confirm")) ){
+    public void onCompleteButton() {
+        if (showConfirmationDialog(getResourceMap().getString("button.complete.confirm"))) {
             entity = getFormSession().completeCashReconcile(entity);
             setSelectedValue(entity);
             setDialogResponse(DialogResponse.SAVE);
             close();
         }
     }
-    
-    private JBButton addButton(String textKey, String action){
+
+    private JBButton addButton(String textKey, String action) {
         JBButton button = new JBButton();
         button.setAction(getContext().getActionMap(this).get(action));
         button.setText(getResourceMap().getString(textKey));
         entityFormButtonPanel.addButton(button);
         return button;
     }
-    
     private BusinessPartnersListPanel cashiersPanel;
 
     /**
@@ -900,88 +907,91 @@ public class CashReconcileForm extends BaseEntityPanel {
      */
     @SuppressWarnings("deprecation")
     protected void bind() {
-        
+        BindingGroup bg = getBindingGroup();
         //document number
-        documentNumberField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("documentNumber"), UpdateStrategy.READ);
-        
+        documentNumberField.bind(bg, entity, entProps.getPropertyDetails("documentNumber"), UpdateStrategy.READ);
+
         //document date
-        if ( entity.getDocumentDate()!=null )
+        if (entity.getDocumentDate() != null) {
             documentDateField.setText(AcaciaUtils.getDateTimeFormat().format(entity.getDocumentDate()));
-        
+        }
+
         //officer in charge
-        officerInChargeField.initUnbound(new DefaultSelectableListDialog(){
+        officerInChargeField.initUnbound(new DefaultSelectableListDialog() {
+
             @Override
             public List getListData() {
                 return Arrays.asList(new Person[]{entity.getPublisherOfficer()});
             }
         }, "${displayName}");
         officerInChargeField.setSelectedItem(entity.getPublisherOfficer());
-        
+
         //cashier
-        cashierField.bind(getBindingGroup(), cashiersPanel, entity, entProps.getPropertyDetails("cashier"));
-        
+        cashierField.bind(bg, cashiersPanel, entity, entProps.getPropertyDetails("cashier"));
+
         //initial cash
-        initialCashField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("initialCashBalance"), AcaciaUtils.getDecimalFormat());
-        
+        initialCashField.bind(bg, entity, entProps.getPropertyDetails("initialCashBalance"), AcaciaUtils.getDecimalFormat());
+
         //initial bank
-        initialBankField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("initialBankBalance"), AcaciaUtils.getDecimalFormat());
+        initialBankField.bind(bg, entity, entProps.getPropertyDetails("initialBankBalance"), AcaciaUtils.getDecimalFormat());
 
         //initial balance
-        initialBalanceField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("initialBalance"), AcaciaUtils.getDecimalFormat());
-        
+        initialBalanceField.bind(bg, entity, entProps.getPropertyDetails("initialBalance"), AcaciaUtils.getDecimalFormat());
+
         //period revenue
-        preiodRevenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
-        
+        preiodRevenueField.bind(bg, entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
+
         //period expenses
-        periodExpensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
-        
+        periodExpensesField.bind(bg, entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
+
         //end balance
-        endBalanceField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("endBalance"), AcaciaUtils.getDecimalFormat());
-        
+        endBalanceField.bind(bg, entity, entProps.getPropertyDetails("endBalance"), AcaciaUtils.getDecimalFormat());
+
         //notes
-        notesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("notes"));
-        
+        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+
         //period cash revenue
-        cashRevenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodCashRevenue"), AcaciaUtils.getDecimalFormat());
-        
+        cashRevenueField.bind(bg, entity, entProps.getPropertyDetails("periodCashRevenue"), AcaciaUtils.getDecimalFormat());
+
         //period bank revenue
-        bankRevenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodBankRevenue"), AcaciaUtils.getDecimalFormat());
-        
+        bankRevenueField.bind(bg, entity, entProps.getPropertyDetails("periodBankRevenue"), AcaciaUtils.getDecimalFormat());
+
         //period revenue
-        revenueField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
-        
+        revenueField.bind(bg, entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
+
         //period cash expenses
-        cashExpensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodCashExpenses"), AcaciaUtils.getDecimalFormat());
-        
+        cashExpensesField.bind(bg, entity, entProps.getPropertyDetails("periodCashExpenses"), AcaciaUtils.getDecimalFormat());
+
         //period bank expenses
-        bankExpensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodBankExpenses"), AcaciaUtils.getDecimalFormat());
-        
+        bankExpensesField.bind(bg, entity, entProps.getPropertyDetails("periodBankExpenses"), AcaciaUtils.getDecimalFormat());
+
         //period expenses
-        expensesField.bind(getBindingGroup(), entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
-        
+        expensesField.bind(bg, entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
+
         //end balances table
         List<EndBalance> endBalances = getEndBalances();
-        endBalanceTable.bind(getBindingGroup(), endBalances, 
-            new EntityProperties(createEndBalancesColumns()), UpdateStrategy.READ);
-        
-        getBindingGroup().bind();
+        endBalanceTable.bind(bg, endBalances,
+                new EntityProperties(createEndBalancesColumns()), UpdateStrategy.READ);
+
+        bg.bind();
     }
-    
+
     private List<PropertyDetails> createEndBalancesColumns() {
         List<PropertyDetails> result = new ArrayList<PropertyDetails>();
-        result.add(new PropertyDetails("currency.enumValue.code", getResourceMap().getString("column.currency"), String.class.getName(),10));
-        result.add(new PropertyDetails("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(),20));
+        result.add(new PropertyDetails("currency.enumValue.code", getResourceMap().getString("column.currency"), String.class.getName(), 10));
+        result.add(new PropertyDetails("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(), 20));
         String defaultCurrencyTitle = getResourceMap().getString("column.amountDefaultCurrency");
-        if ( defaultCurrencyTitle.contains("{0}"))
-            defaultCurrencyTitle = MessageFormat.format(defaultCurrencyTitle, ((Currency)entity.getCurrency().getEnumValue()).getCode());
-        result.add(new PropertyDetails("amountDefCurrency", defaultCurrencyTitle, BigDecimal.class.getName(),30));
+        if (defaultCurrencyTitle.contains("{0}")) {
+            defaultCurrencyTitle = MessageFormat.format(defaultCurrencyTitle, ((Currency) entity.getCurrency().getEnumValue()).getCode());
+        }
+        result.add(new PropertyDetails("amountDefCurrency", defaultCurrencyTitle, BigDecimal.class.getName(), 30));
         return result;
     }
 
     private List<EndBalance> getEndBalances() {
-        if ( DocumentStatus.Completed.equals(entity.getDocumentStatus().getEnumValue()) ){
+        if (DocumentStatus.Completed.equals(entity.getDocumentStatus().getEnumValue())) {
             return getFormSession().getEndBalances(entity);
-        }else {
+        } else {
             return new ArrayList<EndBalance>();
         }
     }
@@ -989,7 +999,7 @@ public class CashReconcileForm extends BaseEntityPanel {
     public CashReconcileRemote getFormSession() {
         return formSession;
     }
-    
+
     @Override
     public void setReadonly() {
         super.setReadonly();
@@ -997,16 +1007,14 @@ public class CashReconcileForm extends BaseEntityPanel {
         banknotesPanel.setReadonly();
         endBalanceTable.setEnabled(true);
     }
-    
-    protected NestedFormListener createNestedFormListener(final AbstractTablePanel table)
-    {
+
+    protected NestedFormListener createNestedFormListener(final AbstractTablePanel table) {
         final String dialogMessage = getResourceMap().getString("save.confirm");
         NestedFormListener listener = new NestedFormListener() {
 
             @Override
             public boolean actionPerformed() {
-                if (getDataObject() == null || getDataObject().getDataObjectId()==null)
-                {
+                if (getDataObject() == null || getDataObject().getDataObjectId() == null) {
                     int answer = JOptionPane.showConfirmDialog(
                             CashReconcileForm.this, dialogMessage, "", JOptionPane.OK_CANCEL_OPTION);
 
@@ -1016,8 +1024,9 @@ public class CashReconcileForm extends BaseEntityPanel {
                             performSave(false);
 
                             // Checking is special conditions for disabling new window after save are met
-                            if (isSpecialConditionPresent() == true)
+                            if (isSpecialConditionPresent() == true) {
                                 return false;
+                            }
 
                         } catch (Exception ex) {
                             checkForValidationException(ex);

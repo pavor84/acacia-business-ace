@@ -3,7 +3,6 @@
  *
  * Created on Четвъртък, 2009, Март 5, 17:20
  */
-
 package com.cosmos.acacia.crm.gui.payment;
 
 import java.awt.event.ActionEvent;
@@ -58,10 +57,9 @@ import com.cosmos.swingb.JBButton;
  *
  */
 public class CustomerPaymentForm extends BaseEntityPanel {
-    
+
     private CustomerPayment entity;
-    
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private CustomerPaymentRemote formSession = getBean(CustomerPaymentRemote.class);
     private EnumResourceRemote enumResourceRemote = getBean(EnumResourceRemote.class);
     private BusinessPartnersListRemote businessPartnersListRemote = getBean(BusinessPartnersListRemote.class);
@@ -485,8 +483,6 @@ public class CustomerPaymentForm extends BaseEntityPanel {
                 .addComponent(footerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBFormattedTextField amountField;
     private com.cosmos.swingb.JBTextField branchField;
@@ -537,14 +533,16 @@ public class CustomerPaymentForm extends BaseEntityPanel {
     private List<DbResource> statuses;
     private List<DbResource> currencies;
     private List<DbResource> paymentTypes;
-
     private List<BankDetail> bankDetails;
-
     private BankDetailsListRemote bankDetailsListRemote = getBean(BankDetailsListRemote.class);
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -566,110 +564,115 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
 
     @Override
     protected void initData() {
-        
-        if (entProps == null)
-            entProps = getFormSession().getDetailEntityProperties();
 
-        if (bindGroup == null)
-            bindGroup = new BindingGroup();
+        if (entProps == null) {
+            entProps = getFormSession().getDetailEntityProperties();
+        }
 
         beforeBind();
-        bind();
+        bind(getBindingGroup());
         afterBind();
     }
-    
+
     private void beforeBind() {
-        if(customerListPanel == null) {
+        if (customerListPanel == null) {
             Classifier classifier = getClassifier(Classifier.Customer.getClassifierCode());
             customerListPanel = new BusinessPartnersListPanel(classifier);
             customerListPanel.setClassifierVisible(false);
         }
-        
-        if (bankDetails==null){
+
+        if (bankDetails == null) {
             bankDetails = bankDetailsListRemote.getBankDetailsForOrganization(getOrganizationDataObjectId());
         }
-        
-        if ( entity.getId()==null && entity.getCashier()==null )
+
+        if (entity.getId() == null && entity.getCashier() == null) {
             entity.setCashier(getAcaciaSession().getPerson());
+        }
     }
 
     private void afterBind() {
         customerField.getBinding().addBindingListener(new AbstractBindingListener() {
+
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
-                if ( event.getValueChanged() ){
+                if (event.getValueChanged()) {
                     BusinessPartner selected = null;
-                    if ( binding.isContentValid() && customerField.getSelectedItem() instanceof BusinessPartner )
+                    if (binding.isContentValid() && customerField.getSelectedItem() instanceof BusinessPartner) {
                         selected = (BusinessPartner) customerField.getSelectedItem();
+                    }
                     onSelectCustomer(selected);
                 }
             }
         });
-        
+
         // set as read-only if the form was saved before
-        if ( entity.getId()!=null ){
+        if (entity.getId() != null) {
             paymentTypeField.setEnabled(false);
-        }else{
+        } else {
             paymentTypeField.addItemListener(new ItemListener() {
+
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if ( paymentTypeField.getSelectedItem() instanceof DbResource )
+                    if (paymentTypeField.getSelectedItem() instanceof DbResource) {
                         onPaymentTypeChanged((DbResource) paymentTypeField.getSelectedItem());
+                    }
                 }
             }, true);
         }
         onPaymentTypeChanged(entity.getPaymentType());
-        
+
         // cashier
         cashierField.setEnabled(false);
         // payment type
         paymentTypeField.setEditable(false);
-        
+
         //payment return
         paymentReturnField.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 onPaymentReturnChanged();
             }
         });
         onPaymentReturnChanged();
-        
+
         //complete button
-        if ( CustomerPaymentStatus.Open.equals(entity.getStatus().getEnumValue())){
+        if (CustomerPaymentStatus.Open.equals(entity.getStatus().getEnumValue())) {
             addButton("button.complete", "onCompleteButton");
         }
     }
-    
+
     @Action
-    public void onCompleteButton(){
-        if ( showConfirmationDialog(getResourceMap().getString("button.complete.confirm")) ){
+    public void onCompleteButton() {
+        if (showConfirmationDialog(getResourceMap().getString("button.complete.confirm"))) {
             entity = getFormSession().completeCustomerPayment(entity);
             setSelectedValue(entity);
             setDialogResponse(DialogResponse.SAVE);
             close();
         }
     }
-    
+
     protected void onPaymentReturnChanged() {
         boolean paymentReturn = paymentReturnField.isSelected();
         Binding descrBinding = descriptionField.getBinding();
         descrBinding.unbind();
-        if ( paymentReturn ){
+        if (paymentReturn) {
             descrBinding.setValidator(new RequiredValidator());
-        }else{
+        } else {
             descrBinding.setValidator(null);
         }
         descrBinding.bind();
     }
-    
-    private JBButton addButton(String textKey, String action){
+
+    private JBButton addButton(String textKey, String action) {
         JBButton button = new JBButton();
         button.setAction(getContext().getActionMap(this).get(action));
         button.setText(getResourceMap().getString(textKey));
@@ -681,98 +684,105 @@ public class CustomerPaymentForm extends BaseEntityPanel {
      * Just binds all components
      */
     @SuppressWarnings("deprecation")
-    protected void bind() {
-        
+    protected void bind(BindingGroup bg) {
+
         // branch
-        if (entity.getBranch() != null)
+        if (entity.getBranch() != null) {
             branchField.setText(entity.getBranch().getAddressName());
-        
+        }
+
         // document number
-        docNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("documentNumber"));
-        
+        docNumberField.bind(bg, entity, entProps.getPropertyDetails("documentNumber"));
+
         // completion time
-        if ( entity.getCompletionTime()!=null )
+        if (entity.getCompletionTime() != null) {
             completedAtField.setText(AcaciaUtils.getDateTimeFormat().format(entity.getCompletionTime()));
-        
+        }
+
         // completed by
-        if (entity.getCompletor() != null)
+        if (entity.getCompletor() != null) {
             completedByField.setText(entity.getCompletor().getDisplayName());
-        
+        }
+
         // customer
-        customerField.bind(bindGroup, customerListPanel, entity, entProps.getPropertyDetails("customer"),
-            "${displayName}", UpdateStrategy.READ_WRITE);
-        
+        customerField.bind(bg, customerListPanel, entity, entProps.getPropertyDetails("customer"),
+                "${displayName}", UpdateStrategy.READ_WRITE);
+
         // customer contact
         bindCustomerContact(entity.getCustomer());
-        
+
         // status field
-        statusField.bind(bindGroup, getStatuses(), entity, entProps.getPropertyDetails("status"));
-        
+        statusField.bind(bg, getStatuses(), entity, entProps.getPropertyDetails("status"));
+
         // created at
-        createdAtField.bind(bindGroup, entity, entProps.getPropertyDetails("creationTime"), AcaciaUtils.getShortDateFormat());
-        
+        createdAtField.bind(bg, entity, entProps.getPropertyDetails("creationTime"), AcaciaUtils.getShortDateFormat());
+
         // created by
-        if (entity.getCreator() != null)
+        if (entity.getCreator() != null) {
             createdByField.setText(entity.getCreator().getDisplayName());
-        
+        }
+
         // payment type
-        paymentTypeField.bind(bindGroup, getPaymentTypes(), entity, entProps.getPropertyDetails("paymentType"));
-        
+        paymentTypeField.bind(bg, getPaymentTypes(), entity, entProps.getPropertyDetails("paymentType"));
+
         // amount
-        amountField.bind(bindGroup, entity, entProps.getPropertyDetails("amount"), AcaciaUtils.getDecimalFormat());
-        
+        amountField.bind(bg, entity, entProps.getPropertyDetails("amount"), AcaciaUtils.getDecimalFormat());
+
         // currency
-        currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
-        
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+
         // payment account
-        paymentAccountField.bind(bindGroup, bankDetails, entity, entProps.getPropertyDetails("paymentAccount"));
-        
+        paymentAccountField.bind(bg, bankDetails, entity, entProps.getPropertyDetails("paymentAccount"));
+
         // cashier
-        cashierField.bind(bindGroup, Arrays.asList(new Person[]{getAcaciaSession().getPerson()}), entity, entProps.getPropertyDetails("cashier"));
-        
+        cashierField.bind(bg, Arrays.asList(new Person[]{getAcaciaSession().getPerson()}), entity, entProps.getPropertyDetails("cashier"));
+
         // payment return
-        paymentReturnField.bind(bindGroup, entity, entProps.getPropertyDetails("paymentReturn"));
-        
+        paymentReturnField.bind(bg, entity, entProps.getPropertyDetails("paymentReturn"));
+
         // transaction date
-        transactionDateField.bind(bindGroup, entity, entProps.getPropertyDetails("transactionDate"), AcaciaUtils.getShortDateFormat());
-        
+        transactionDateField.bind(bg, entity, entProps.getPropertyDetails("transactionDate"), AcaciaUtils.getShortDateFormat());
+
         // transaction no
-        transactionNoField.bind(bindGroup, entity, entProps.getPropertyDetails("referenceNo"));
-        
+        transactionNoField.bind(bg, entity, entProps.getPropertyDetails("referenceNo"));
+
         // transaction fee
-        transactionFeeField.bind(bindGroup, entity, entProps.getPropertyDetails("transactionFee"));
-        
+        transactionFeeField.bind(bg, entity, entProps.getPropertyDetails("transactionFee"));
+
         // description
-        descriptionField.bind(bindGroup, entity, entProps.getPropertyDetails("description"));
-        
-        bindGroup.bind();
+        descriptionField.bind(bg, entity, entProps.getPropertyDetails("description"));
+
+        bg.bind();
     }
-    
+
     protected void onPaymentTypeChanged(DbResource paymentType) {
         boolean bankPayment = CustomerPaymentType.Bank.equals(paymentType.getEnumValue());
-        
-        if ( bankPayment ){
+        BindingGroup bg = getBindingGroup();
+
+        if (bankPayment) {
             paymentAccountLabel.setText(getResourceMap().getString("label.paymentAccount"));
             transactionNoLabel.setText(getResourceMap().getString("label.transactionNo"));
-            cashierField.removeFromBindingGroup(bindGroup);
-            if ( !bindGroup.getBindings().contains(paymentAccountField.getComboBoxBinding()) )
-                paymentAccountField.addToBindingGroup(bindGroup);
-        }else{
+            cashierField.removeFromBindingGroup(bg);
+            if (!bg.getBindings().contains(paymentAccountField.getComboBoxBinding())) {
+                paymentAccountField.addToBindingGroup(bg);
+            }
+        } else {
             paymentAccountLabel.setText(getResourceMap().getString("label.cashier"));
             transactionNoLabel.setText(getResourceMap().getString("label.cashReceiptNo"));
-            paymentAccountField.removeFromBindingGroup(bindGroup);
-            if ( !bindGroup.getBindings().contains(cashierField.getComboBoxBinding()) )
-                cashierField.addToBindingGroup(bindGroup);
+            paymentAccountField.removeFromBindingGroup(bg);
+            if (!bg.getBindings().contains(cashierField.getComboBoxBinding())) {
+                cashierField.addToBindingGroup(bg);
+            }
         }
         entityFormButtonPanel.setSaveActionState(this);
-        
+
         transactionFeeLabel.setVisible(bankPayment);
         transactionFeeField.setVisible(bankPayment);
         paymentAccountLabel.setVisible(bankPayment);
         paymentAccountField.setVisible(bankPayment);
         cashierField.setVisible(!bankPayment);
         cashierLabel.setVisible(!bankPayment);
-        
+
         //refresh customer contact field
         Object selContact = customerContactField.getSelectedItem();
         customerContactField.getBinding().refresh();
@@ -780,38 +790,43 @@ public class CustomerPaymentForm extends BaseEntityPanel {
     }
 
     private List getPaymentTypes() {
-        if (paymentTypes == null)
+        if (paymentTypes == null) {
             paymentTypes = enumResourceRemote.getEnumResources(CustomerPaymentType.class);
+        }
         return paymentTypes;
     }
 
     private List<DbResource> getStatuses() {
-        if (statuses == null)
+        if (statuses == null) {
             statuses = enumResourceRemote.getEnumResources(CustomerPaymentStatus.class);
+        }
         return statuses;
     }
-    
+
     private List getCurrencies() {
-        if (currencies == null)
+        if (currencies == null) {
             currencies = enumResourceRemote.getEnumResources(Currency.class);
+        }
         return currencies;
     }
 
     protected void onSelectCustomer(BusinessPartner customer) {
+        BindingGroup bg = getBindingGroup();
 
-            if ( bindGroup.getBindings().contains(customerContactBinding) )
-                bindGroup.removeBinding(customerContactBinding);
-            bindCustomerContact(customer);
-            customerContactBinding.bind();
-            
-            // auto select if one choice is available
-            if (customerContactField.getModel().getSize() == 1) {
-                customerContactField.setSelectedIndex(0);
-            }else{
-                customerContactField.setSelectedIndex(-1);
-            }
+        if (bg.getBindings().contains(customerContactBinding)) {
+            bg.removeBinding(customerContactBinding);
+        }
+        bindCustomerContact(customer);
+        customerContactBinding.bind();
+
+        // auto select if one choice is available
+        if (customerContactField.getModel().getSize() == 1) {
+            customerContactField.setSelectedIndex(0);
+        } else {
+            customerContactField.setSelectedIndex(-1);
+        }
     }
-    
+
 //    private void setCustomerContactMandatory() {
 //        BusinessPartner customer = (BusinessPartner) customerField.getSelectedItem();
 //        DbResource paymentType = (DbResource) paymentTypeField.getSelectedItem();
@@ -834,47 +849,50 @@ public class CustomerPaymentForm extends BaseEntityPanel {
 //        }
 //        contactBinding.bind();
 //    }
-    
-    private class CustomerContactValidator extends BaseValidator{
-        
+    private class CustomerContactValidator extends BaseValidator {
+
         public Result validate(Object value) {
             boolean required = false;
-            if ( paymentTypeField.getSelectedItem() instanceof String )
+            if (paymentTypeField.getSelectedItem() instanceof String) {
                 return null;
-            
+            }
+
             DbResource paymentType = (DbResource) paymentTypeField.getSelectedItem();
             BusinessPartner customer = (BusinessPartner) customerField.getSelectedItem();
-            
-            if ( customer instanceof Organization 
-                    && CustomerPaymentType.Cash.equals(paymentType.getEnumValue())){
+
+            if (customer instanceof Organization && CustomerPaymentType.Cash.equals(paymentType.getEnumValue())) {
                 required = true;
             }
-            
-            if ( required && value==null )
+
+            if (required && value == null) {
                 return ValidationError.EmptyValue.getValidatorResult();
-            else
+            } else {
                 return null;
+            }
         }
     }
 
     private void bindCustomerContact(BusinessPartner customer) {
+        BindingGroup bg = getBindingGroup();
+
         List<ContactPerson> customerContacts = null;
         if (customer != null) {
             customerContacts = businessPartnersListRemote.getContactPersons(customer);
-        } else
+        } else {
             customerContacts = new ArrayList<ContactPerson>();
-        
+        }
+
         PropertyDetails pd = entProps.getPropertyDetails("customerContact");
         pd.setValidator(new CustomerContactValidator());
-        customerContactBinding = customerContactField.bind(bindGroup, customerContacts, entity,
-            entProps.getPropertyDetails("customerContact"));
+        customerContactBinding = customerContactField.bind(bg, customerContacts, entity,
+                entProps.getPropertyDetails("customerContact"));
     }
 
     public void setReadonly() {
         super.setReadonly();
         customerField.setEnabled(false);
     }
-    
+
     public CustomerPaymentRemote getFormSession() {
         return formSession;
     }

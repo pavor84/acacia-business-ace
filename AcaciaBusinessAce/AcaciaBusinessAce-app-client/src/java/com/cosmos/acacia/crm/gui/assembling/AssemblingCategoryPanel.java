@@ -3,7 +3,6 @@
  *
  * Created on Сряда, 2008, Юни 4, 21:43
  */
-
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
@@ -24,32 +23,28 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author  Miro
  */
 public class AssemblingCategoryPanel
-    extends BaseEntityPanel
-{
+        extends BaseEntityPanel {
+
     @EJB
     private static AssemblingRemote formSession;
-
     private AssemblingCategory entity;
     private EntityProperties entProps;
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
 
     /** Creates new form AssemblingCategoryPanel */
-    public AssemblingCategoryPanel()
-    {
-        super((BigInteger)null);
+    public AssemblingCategoryPanel() {
+        super((BigInteger) null);
         initComponents();
     }
 
-    public AssemblingCategoryPanel(AssemblingCategory category)
-    {
+    public AssemblingCategoryPanel(AssemblingCategory category) {
         super(category != null ? category.getParentId() : null);
         this.entity = category;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -151,8 +146,6 @@ public class AssemblingCategoryPanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel categoryCodeLabel;
     private com.cosmos.swingb.JBTextField categoryCodeTextField;
@@ -166,76 +159,73 @@ public class AssemblingCategoryPanel
     private com.cosmos.acacia.gui.AcaciaLookup parentCategoryLookup;
     // End of variables declaration//GEN-END:variables
 
-
     @Override
-    protected void initData()
-    {
+    protected void initData() {
         entProps = getFormSession().getAssemblingCategoryEntityProperties();
         PropertyDetails propDetails;
 
-        bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         //parent category
         propDetails = entProps.getPropertyDetails("parentCategory");
-        parentCategoryLookup.bind(new AcaciaLookupProvider()
-            {
-                @Override
-                public Object showSelectionControl()
-                {
-                    return onChooseCategory();
-                }
-            },
-            bindGroup,
-            entity,
-            propDetails,
-            "${categoryName}",
-            UpdateStrategy.READ_WRITE);
+        parentCategoryLookup.bind(new AcaciaLookupProvider() {
+
+            @Override
+            public Object showSelectionControl() {
+                return onChooseCategory();
+            }
+        },
+                bg,
+                entity,
+                propDetails,
+                "${categoryName}",
+                UpdateStrategy.READ_WRITE);
 
         //category code
         propDetails = entProps.getPropertyDetails("categoryCode");
-        categoryCodeTextField.bind(bindGroup, entity, propDetails);
+        categoryCodeTextField.bind(bg, entity, propDetails);
 
         //category name
         propDetails = entProps.getPropertyDetails("categoryName");
-        categoryNameTextField.bind(bindGroup, entity, propDetails);
+        categoryNameTextField.bind(bg, entity, propDetails);
 
         //description
         propDetails = entProps.getPropertyDetails("description");
-        descriptionTextPane.bind(bindGroup, entity, propDetails);
+        descriptionTextPane.bind(bg, entity, propDetails);
 
-        bindGroup.bind();
+        bg.bind();
     }
 
     @Override
-    public EntityFormButtonPanel getButtonPanel()
-    {
+    public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
 
     @Override
-    public BindingGroup getBindingGroup()
-    {
-        return bindGroup;
+    public BindingGroup getBindingGroup() {
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return entity;
     }
 
     @Override
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         entity = getFormSession().saveCategory(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if(closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
-    protected Object onChooseCategory()
-    {
+    protected Object onChooseCategory() {
         /*ProductCategoriesTreePanel panel = new ProductCategoriesTreePanel(null);
         panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Select, true);
         panel.getListPanel().setVisible(com.cosmos.acacia.gui.AbstractTablePanel.Button.Unselect, true);
@@ -245,20 +235,18 @@ public class AssemblingCategoryPanel
 
         if ( DialogResponse.SELECT.equals(dResponse) ){
 
-            ProductCategory category = (ProductCategory)
-                panel.getListPanel().getSelectedRowObject();
+        ProductCategory category = (ProductCategory)
+        panel.getListPanel().getSelectedRowObject();
 
-            return category;
+        return category;
         }else{
-            return null;
+        return null;
         }*/
         return null;
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
+    protected AssemblingRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AssemblingRemote.class);
         }
 
