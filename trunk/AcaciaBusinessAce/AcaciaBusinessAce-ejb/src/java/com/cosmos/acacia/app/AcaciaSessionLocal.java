@@ -7,8 +7,8 @@ import javax.ejb.Local;
 
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.data.UserRight;
 import java.util.UUID;
 
 /**
@@ -43,26 +43,26 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * Sets the general rights
      * @param rights
      */
-    void setGeneralRights(Set<UserRight> rights);
+    void setGeneralRights(Set<Right> rights);
 
     /**
      * Gets the general rights
      * @return
      */
-    Set<UserRight> getGeneralRights();
+    Set<Right> getGeneralRights();
 
 
     /**
      * Sets the special permissions
      * @param rights
      */
-    void setSpecialPermissions(Set<UserRight> rights);
+    void setSpecialPermissions(Set<Right> rights);
 
     /**
      * Gets the special permissions
      * @return
      */
-    Set<UserRight> getSpecialPermissions();
+    Set<Right> getSpecialPermissions();
 
 
     /**

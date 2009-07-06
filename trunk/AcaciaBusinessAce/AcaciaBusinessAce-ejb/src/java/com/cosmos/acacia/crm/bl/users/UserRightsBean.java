@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.bl.users;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,32 +23,29 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
+import com.cosmos.acacia.crm.data.UserGroupRight;
 import com.cosmos.acacia.crm.data.UserOrganization;
 import com.cosmos.acacia.crm.data.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.Iterator;
 
 @Stateless
 public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
 
-
     protected static Logger log = Logger.getLogger(UserRightsBean.class);
-
     @PersistenceContext
     private EntityManager em;
-
     @EJB
     private EntityStoreManagerLocal esm;
-
     @EJB
     private AcaciaSessionLocal session;
-
     @EJB
     private ClassifiersLocal classifiersManager;
-
     @EJB
     private DataObjectTypeLocal dataObjectTypesManager;
 
@@ -61,49 +57,50 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     }
 
     @Override
-    public void assignRightsToGroup(Set<UserRight> rights, UserGroup group) {
-        Set<UserRight> currentRights = getUserRights(group);
+    public void assignRightsToGroup(Set<Right> rights, UserGroup group) {
+        Set<Right> currentRights = getRights(group);
         assignRights(currentRights, rights);
     }
 
     @Override
-    public void assignRightsToUser(Set<UserRight> rights, User user) {
-        Set<UserRight> currentRights = getUserRights(user);
+    public void assignRightsToUser(Set<Right> rights, User user) {
+        Set<Right> currentRights = getRights(user);
         assignRights(currentRights, rights);
     }
 
-    private void assignRights(Set<UserRight> currentRights, Set<UserRight> rights) {
+    private void assignRights(Set<Right> currentRights, Set<Right> rights) {
         // Logic for optimal queries to DB. First remove all existing rights
         // which do not match any of the new set, and then persist only those
         // of the new set, which are not already present in the DB.
 
-        Set<UserRight> currentRightsMirror = new HashSet<UserRight>(currentRights);
-        for (UserRight right : currentRightsMirror) {
+        Iterator<Right> iterator = currentRights.iterator();
+        while(iterator.hasNext()) {
+            Right right = iterator.next();
             if (!rights.contains(right)) {
                 esm.remove(em, right);
-                currentRights.remove(right);
+                iterator.remove();
             }
         }
 
-        for (UserRight right : rights) {
-            if (!currentRights.contains(right))
+        for (Right right : rights) {
+            if (!currentRights.contains(right)) {
                 esm.persist(em, right);
+                currentRights.add(right);
+            }
         }
     }
 
     @Override
     public void assignSpecialPermissionsToGroup(
-            Set<UserRight> permissions, UserGroup group)
-    {
-        Set<UserRight> currentRights = getSpecialPermissions(group);
+            Set<Right> permissions, UserGroup group) {
+        Set<Right> currentRights = getSpecialPermissions(group);
         assignRights(currentRights, permissions);
     }
 
     @Override
     public void assignSpecialPermissionsToUser(
-            Set<UserRight> permissions, User user)
-    {
-        Set<UserRight> currentRights = getSpecialPermissions(user);
+            Set<Right> permissions, User user) {
+        Set<Right> currentRights = getSpecialPermissions(user);
         assignRights(currentRights, permissions);
     }
 
@@ -117,44 +114,68 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     }
 
     @Override
-    public Set<UserRight> getSpecialPermissions(User user) {
-        Query q = em.createNamedQuery("UserRight.findSpecialByUser");
+    public Set<Right> getSpecialPermissions(User user) {
+        Query q = em.createNamedQuery(UserRight.NQ_FIND_BY_USER_AND_PERMISSION_NOT_NULL);
+        q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("user", user);
 
-        return getUserRightsWithInfo(q.getResultList());
+        return getRightsWithInfo(q.getResultList());
     }
 
     @Override
-    public Set<UserRight> getSpecialPermissions(UserGroup userGroup) {
-        Query q = em.createNamedQuery("UserRight.findSpecialByUserGroup");
+    public Set<Right> getSpecialPermissions(UserGroup userGroup) {
+        Query q = em.createNamedQuery(UserGroupRight.NQ_FIND_BY_USER_GROUP_AND_PERMISSION_NOT_NULL);
+        q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("userGroup", userGroup);
 
-        return getUserRightsWithInfo(q.getResultList());
+        return getRightsWithInfo(q.getResultList());
     }
 
     @Override
-    public Set<UserRight> getUserRights(User user) {
-        Query q = em.createNamedQuery("UserRight.findByUser");
+    public Right newRight(User user) {
+        UserRight right = new UserRight();
+        right.setUser(user);
+        return initRight(right);
+    }
+
+    @Override
+    public Right newRight(UserGroup userGroup) {
+        UserGroupRight right = new UserGroupRight();
+        right.setUserGroup(userGroup);
+        return initRight(right);
+    }
+
+    private Right initRight(Right right) {
+        right.setOrganizationId(session.getOrganization().getId());
+        return right;
+    }
+
+    @Override
+    public Set<Right> getRights(User user) {
+        Query q = em.createNamedQuery(UserRight.NQ_FIND_BY_USER_AND_PERMISSION_NULL);
+        q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("user", user);
 
-        return getUserRightsWithInfo(q.getResultList());
+        return getRightsWithInfo(q.getResultList());
     }
 
     @Override
-    public Set<UserRight> getUserRights(UserGroup userGroup) {
-        Query q = em.createNamedQuery("UserRight.findByUserGroup");
+    public Set<Right> getRights(UserGroup userGroup) {
+        Query q = em.createNamedQuery(UserGroupRight.NQ_FIND_BY_USER_GROUP_AND_PERMISSION_NULL);
+        q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("userGroup", userGroup);
 
-        return getUserRightsWithInfo(q.getResultList());
+        return getRightsWithInfo(q.getResultList());
     }
 
     @SuppressWarnings("unchecked")
-    private Set<UserRight> getUserRightsWithInfo(List list) {
-        Set<UserRight> rights = new HashSet<UserRight>(list);
-        for (UserRight right : rights) {
+    private Set<Right> getRightsWithInfo(List list) {
+        Set<Right> rights = new HashSet<Right>(list);
+        for (Right right : rights) {
             DataObjectBean dob = getDataObjectBean(right.getDataObject());
-            if (dob != null)
+            if (dob != null) {
                 right.setObjectInfo(dob.getInfo());
+            }
         }
         return rights;
     }
@@ -168,9 +189,9 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     }
 
     @Override
-    public UserGroup newUserGroup(BigInteger parentId) {
+    public UserGroup newUserGroup() {
         UserGroup group = new UserGroup();
-        group.setParentId(parentId);
+        group.setOrganizationId(session.getOrganization().getId());
         return group;
     }
 
@@ -187,17 +208,9 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<UserGroup> getUserGroups(BigInteger parentId) {
-         Query q;
-        if(parentId != null)
-        {
-            q = em.createNamedQuery("UserGroup.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentId);
-        }
-        else
-        {
-            q = em.createNamedQuery("UserGroup.findByParentDataObjectIsNullAndDeleted");
-        }
+    public List<UserGroup> getUserGroups() {
+        Query q = em.createNamedQuery(UserGroup.NQ_FIND_ALL);
+        q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("deleted", false);
 
         return new ArrayList<UserGroup>(q.getResultList());
@@ -206,6 +219,14 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     @Override
     public EntityProperties getUserRightEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(UserRight.class);
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
+
+        return entityProperties;
+    }
+
+    @Override
+    public EntityProperties getUserGroupRightEntityProperties() {
+        EntityProperties entityProperties = esm.getEntityProperties(UserGroupRight.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;
@@ -227,8 +248,8 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     }
 
     @Override
-    public void removeRights(Set<UserRight> rights) {
-        for (UserRight right : rights) {
+    public void removeRights(Set<Right> rights) {
+        for (Right right : rights) {
             esm.remove(em, right);
         }
     }

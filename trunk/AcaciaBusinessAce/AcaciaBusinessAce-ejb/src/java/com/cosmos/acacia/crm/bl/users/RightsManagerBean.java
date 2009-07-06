@@ -15,14 +15,14 @@ import com.cosmos.acacia.crm.bl.permission.PermissionLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserOrganization;
-import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.data.permission.DataObjectPermission;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -67,7 +67,7 @@ public class RightsManagerBean
 
     @Override
     public boolean isAllowed(DataObject dataObject,
-            UserRightType rightType) {
+            AccessRight rightType) {
 
         return isAllowed(getUser(), dataObject, rightType);
     }
@@ -99,15 +99,15 @@ public class RightsManagerBean
     @Override
     public boolean isAllowed(User user,
             DataObject dataObject,
-            UserRightType rightType) {
+            AccessRight rightType) {
 
-        Set<UserRight> rights = fetchRights(user, dataObject, false);
+        Set<Right> rights = fetchRights(user, dataObject, false);
 
-        Set<UserRight> generalSubset = getRightsSubset(rights, false);
-        Set<UserRight> excludedSubset = getRightsSubset(rights, true);
+        Set<Right> generalSubset = getRightsSubset(rights, false);
+        Set<Right> excludedSubset = getRightsSubset(rights, true);
 
-        UserRight[] generalSubsetArray = toArray(generalSubset);
-        UserRight[] excludedSubsetArray = toArray(excludedSubset);
+        Right[] generalSubsetArray = toArray(generalSubset);
+        Right[] excludedSubsetArray = toArray(excludedSubset);
 
         //Sorting arrays by priority
         Arrays.sort(generalSubsetArray);
@@ -116,15 +116,15 @@ public class RightsManagerBean
         // default behavior : to allow or disallow access
         // when no settings are present
         if (generalSubsetArray.length == 0) {
-            if (rightType == UserRightType.CREATE)
+            if (rightType == AccessRight.Create)
                 return DEFAULT_CREATE_RIGHT;
-            if (rightType == UserRightType.READ)
+            if (rightType == AccessRight.Read)
                 return DEFAULT_READ_RIGHT;
-            if (rightType == UserRightType.MODIFY)
+            if (rightType == AccessRight.Modify)
                 return DEFAULT_MODIFY_RIGHT;
-            if (rightType == UserRightType.DELETE)
+            if (rightType == AccessRight.Delete)
                 return DEFAULT_DELETE_RIGHT;
-            if (rightType == UserRightType.EXECUTE)
+            if (rightType == AccessRight.Execute)
                 return DEFAULT_EXECUTE_RIGHT;
         }
 
@@ -135,67 +135,66 @@ public class RightsManagerBean
 //            }
 //        }
 
-        UserRight highestPriorityRegularRight = generalSubsetArray[0];
-        UserRight highestPriorityExclusionRight = null;
+        Right highestPriorityRegularRight = generalSubsetArray[0];
+        Right highestPriorityExclusionRight = null;
         try {
             highestPriorityExclusionRight = excludedSubsetArray[0];
         } catch (Exception e) {
             //ignore
         }
 
-
-        UserRight highestPriorityRight =
+        Right highestPriorityRight =
                 compareRights(highestPriorityRegularRight, highestPriorityExclusionRight);
 
         // Excluded rights; here canXxx() means that Xxx is excluded
         if (highestPriorityRight.isExcluded()) {
 
-            if (highestPriorityExclusionRight.canCreate())
+            if (highestPriorityExclusionRight.isCreate())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setCreate(generalSubsetArray[1].canCreate());
+                    highestPriorityRight.setCreate(generalSubsetArray[1].isCreate());
                 else
                     highestPriorityRight.setCreate(DEFAULT_CREATE_RIGHT);
 
-            if (highestPriorityExclusionRight.canRead())
+            if (highestPriorityExclusionRight.isRead())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setRead(generalSubsetArray[1].canRead());
+                    highestPriorityRight.setRead(generalSubsetArray[1].isRead());
                 else
                     highestPriorityRight.setRead(DEFAULT_READ_RIGHT);
 
-            if (highestPriorityExclusionRight.canModify())
+            if (highestPriorityExclusionRight.isModify())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setModify(generalSubsetArray[1].canModify());
+                    highestPriorityRight.setModify(generalSubsetArray[1].isModify());
                 else
                     highestPriorityRight.setModify(DEFAULT_MODIFY_RIGHT);
 
-            if (highestPriorityExclusionRight.canDelete())
+            if (highestPriorityExclusionRight.isDelete())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setDelete(generalSubsetArray[1].canDelete());
+                    highestPriorityRight.setDelete(generalSubsetArray[1].isDelete());
                 else
                     highestPriorityRight.setDelete(DEFAULT_DELETE_RIGHT);
 
-            if (highestPriorityExclusionRight.canExecute())
+            if (highestPriorityExclusionRight.isExecute())
                 if (generalSubsetArray.length > 1)
-                    highestPriorityRight.setExecute(generalSubsetArray[1].canDelete());
+                    highestPriorityRight.setExecute(generalSubsetArray[1].isDelete());
                 else
                     highestPriorityRight.setExecute(DEFAULT_DELETE_RIGHT);
         }
 
 
-        if (rightType == UserRightType.READ)
-            return highestPriorityRight.canRead();
+        if (rightType == AccessRight.Read)
+            return highestPriorityRight.isRead();
 
-        if (rightType == UserRightType.CREATE)
-            return highestPriorityRight.canCreate();
+        if (rightType == AccessRight.Create)
+            return highestPriorityRight.isCreate();
 
-        if (rightType == UserRightType.MODIFY)
-            return highestPriorityRight.canModify();
+        if (rightType == AccessRight.Modify)
+            return highestPriorityRight.isModify();
 
-        if (rightType == UserRightType.DELETE)
-            return highestPriorityRight.canDelete();
+        if (rightType == AccessRight.Delete)
+            return highestPriorityRight.isDelete();
 
-        if (rightType == UserRightType.EXECUTE)
-            return highestPriorityRight.canExecute();
+        if (rightType == AccessRight.Execute)
+            return highestPriorityRight.isExecute();
 
         return false;
     }
@@ -206,9 +205,9 @@ public class RightsManagerBean
             DataObject dataObject,
             SpecialPermission specialPermission) {
 
-        Set<UserRight> rights = fetchRights(user, dataObject, true);
+        Set<Right> rights = fetchRights(user, dataObject, true);
 
-        for (UserRight right : rights) {
+        for (Right right : rights) {
             if (specialPermission.matches(right.getSpecialPermission()))
                 return true;
         }
@@ -216,11 +215,11 @@ public class RightsManagerBean
         return false;
     }
 
-    private Set<UserRight> getRightsSubset(Set<UserRight> rights, boolean countExcluded) {
+    private Set<Right> getRightsSubset(Set<Right> rights, boolean countExcluded) {
 
-        Set<UserRight> subset = new HashSet<UserRight>();
+        Set<Right> subset = new HashSet<Right>();
 
-        for (UserRight right : rights) {
+        for (Right right : rights) {
             if (right.isExcluded() ^ countExcluded)
                 continue;
             subset.add(right);
@@ -232,15 +231,23 @@ public class RightsManagerBean
     /**
      * Compares two rights and returns the more concrete one.
      * If the two are equally concrete, the second one is returned.
+     * CREATE INDEX uix_user_rights
+     *  ON user_rights
+     *  USING btree(
+     *   organization_id,
+     *   owner_type_id,
+     *   owner_id,
+     *   data_object_type_id,
+     *   data_object_id,
+     *   permission_category_id,
+     *   special_permission_id);
      *
      * @param right1
      * @param right2
      * @return the more concrete right
      */
-    public static UserRight compareRights(UserRight right1, UserRight right2) {
-
-        UserRight higherPriorityRight = null;
-
+    public static Right compareRights(Right right1, Right right2) {
+        Right higherPriorityRight = null;
         if (right1 == right2)
             return right2;
 
@@ -250,32 +257,15 @@ public class RightsManagerBean
         if (right2 == null)
             return right1;
 
-        if (right1.getUser() != null && right2.getUser() == null) {
-            higherPriorityRight = right1;
-        } else if (right2.getUser() != null && right1.getUser() == null) {
-            higherPriorityRight = right2;
-        } else if (right1.getDataObject() != null && right2.getDataObject() == null){
-            higherPriorityRight = right1;
-        } else if (right2.getDataObject() != null && right1.getDataObject() == null){
-            higherPriorityRight = right2;
+        if(right1.compareTo(right2) > 0) {
+            return right1;
         } else {
-            // checking parent-child relations
-            if (right1.getDataObject().getDataObjectId()
-                    .equals(right2.getDataObject().getParentDataObjectId())) {
-                return right2;
-            } else if (right2.getDataObject().getDataObjectId()
-                    .equals(right1.getDataObject().getParentDataObjectId())) {
-                return right1;
-            } else {
-                higherPriorityRight = right2;
-            }
+            return right2;
         }
-
-        return higherPriorityRight;
     }
 
-    private Set<UserRight> fetchRights(User user, final DataObject dataObject, boolean isSpecial) {
-        Set<UserRight> rights;
+    private Set<Right> fetchRights(User user, final DataObject dataObject, boolean isSpecial) {
+        Set<Right> rights;
         if(isSpecial) {
             rights = session.getSpecialPermissions();
         } else {
@@ -285,9 +275,9 @@ public class RightsManagerBean
         if (rights == null) {
             rights = fetchRights(user, isSpecial);
             if (isSpecial)
-                session.setSpecialPermissions(new HashSet<UserRight>(rights));
+                session.setSpecialPermissions(new HashSet<Right>(rights));
             else
-                session.setGeneralRights(new HashSet<UserRight>(rights));
+                session.setGeneralRights(new HashSet<Right>(rights));
         }
 
 
@@ -295,11 +285,11 @@ public class RightsManagerBean
         // If the set of permissions is empty, do the operation for the parent
         // object, until the parent becomes null
 
-        Set<UserRight> applicableRights = new HashSet<UserRight>();
+        Set<Right> applicableRights = new HashSet<Right>();
         DataObject tmpDataObject = dataObject;
 
         while (applicableRights.size() == 0 && tmpDataObject != null) {
-            for (UserRight right : rights) {
+            for (Right right : rights) {
                 DataObjectType dot;
                 if ((dot = right.getDataObjectType()) == null) {
                     // If neighter type nor object is specified, the right
@@ -328,9 +318,9 @@ public class RightsManagerBean
 
 
     @SuppressWarnings("null")
-    private Set<UserRight> fetchRights(User user, boolean isSpecial) {
+    private Set<Right> fetchRights(User user, boolean isSpecial) {
         // Getting the rights for this specific user, if any
-        Set<UserRight> userSpecificRights = null;
+        Set<Right> userSpecificRights = null;
 
         if (!isSpecial)
             userSpecificRights = getUserRights(user);
@@ -351,7 +341,7 @@ public class RightsManagerBean
         if (group == null)
             group = usersManager.getUserGroupByPositionType();
 
-        Set<UserRight> groupRights = new HashSet<UserRight>();
+        Set<Right> groupRights = new HashSet<Right>();
         if (group != null) {
             if (!isSpecial)
                 groupRights = getUserRights(group);
@@ -360,7 +350,7 @@ public class RightsManagerBean
         }
 
         // Creating a set of all rights for this user
-        Set<UserRight> rights = new HashSet<UserRight>();
+        Set<Right> rights = new HashSet<Right>();
 
         rights.addAll(userSpecificRights);
         rights.addAll(groupRights);
@@ -369,12 +359,12 @@ public class RightsManagerBean
     }
 
     @Override
-    public void setGeneralRights(Set<UserRight> rights) {
+    public void setGeneralRights(Set<Right> rights) {
         session.setGeneralRights(rights);
     }
 
     @Override
-    public void setSpecialRights(Set<UserRight> rights) {
+    public void setSpecialRights(Set<Right> rights) {
     	if (session != null)
 	        session.setSpecialPermissions(rights);
     }
@@ -394,33 +384,28 @@ public class RightsManagerBean
 
     }
 
-    private Set<UserRight> getUserRights(User user) {
-        return rightsService.getUserRights(user);
+    private Set<Right> getUserRights(User user) {
+        return rightsService.getRights(user);
     }
 
-    private Set<UserRight> getSpecialPermissions(User user) {
+    private Set<Right> getSpecialPermissions(User user) {
         return rightsService.getSpecialPermissions(user);
     }
 
-    private Set<UserRight> getUserRights(UserGroup group) {
-        return rightsService.getUserRights(group);
+    private Set<Right> getUserRights(UserGroup group) {
+        return rightsService.getRights(group);
     }
 
-    private Set<UserRight> getSpecialPermissions(UserGroup group) {
+    private Set<Right> getSpecialPermissions(UserGroup group) {
         return rightsService.getSpecialPermissions(group);
     }
 
-    private UserRight[] toArray(Set<UserRight> set) {
-        UserRight[] array = new UserRight[set.size()];
-        int i = 0;
-        for (UserRight right : set) {
-            array[i++] = right;
-        }
-        return array;
+    private Right[] toArray(Set<Right> set) {
+        return set.toArray(new Right[set.size()]);
     }
 
     @Override
-    public Set<SpecialPermission> getPermissions(DataObject dataObject, UserRightType rightType) {
+    public Set<SpecialPermission> getPermissions(DataObject dataObject, AccessRight rightType) {
         if(dataObject == null) {
             return Collections.emptySet();
         }
@@ -453,7 +438,7 @@ public class RightsManagerBean
     }
 
     @Override
-    public Set<SpecialPermission> getPermissions(DataObjectType dataObjectType, UserRightType rightType) {
+    public Set<SpecialPermission> getPermissions(DataObjectType dataObjectType, AccessRight rightType) {
         if(dataObjectType == null) {
             return Collections.emptySet();
         }
@@ -462,7 +447,7 @@ public class RightsManagerBean
     }
 
     @Override
-    public Set<SpecialPermission> getPermissions(Class<? extends DataObjectBean> entityClass, UserRightType rightType) {
+    public Set<SpecialPermission> getPermissions(Class<? extends DataObjectBean> entityClass, AccessRight rightType) {
         if(entityClass == null) {
             return Collections.emptySet();
         }

@@ -27,9 +27,10 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
+import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
@@ -180,23 +181,23 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<UserRight> getGeneralRights() {
-        return (Set<UserRight>) getSession().getValue(SessionContext.GENERAL_RIGHTS_KEY);
+    public Set<Right> getGeneralRights() {
+        return (Set<Right>) getSession().getValue(SessionContext.GENERAL_RIGHTS_KEY);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<UserRight> getSpecialPermissions() {
-        return (Set<UserRight>) getSession().getValue(SessionContext.SPECIAL_PERMISSIONS_KEY);
+    public Set<Right> getSpecialPermissions() {
+        return (Set<Right>) getSession().getValue(SessionContext.SPECIAL_PERMISSIONS_KEY);
     }
 
     @Override
-    public void setGeneralRights(Set<UserRight> rights) {
+    public void setGeneralRights(Set<Right> rights) {
         getSession().setValue(SessionContext.GENERAL_RIGHTS_KEY, rights);
     }
 
     @Override
-    public void setSpecialPermissions(Set<UserRight> rights) {
+    public void setSpecialPermissions(Set<Right> rights) {
         getSession().setValue(SessionContext.SPECIAL_PERMISSIONS_KEY, rights);
     }
 
@@ -308,7 +309,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public boolean isAdministrator() {
-        return rightsManager.isAllowed(SpecialPermission.Category.Administration.getCategorizedPermissions());
+        return rightsManager.isAllowed(PermissionCategory.Administration.getPermissions());
     }
 
     @Override

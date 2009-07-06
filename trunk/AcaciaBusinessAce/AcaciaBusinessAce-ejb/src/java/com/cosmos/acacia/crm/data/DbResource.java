@@ -140,8 +140,7 @@ public class DbResource
     }
 
     @Override
-    public Enum getEnumValue()
-    {
+    public Enum getEnumValue() {
         if(enumValue == null) {
             try {
                 logger.debug("DbResource: " + toString());

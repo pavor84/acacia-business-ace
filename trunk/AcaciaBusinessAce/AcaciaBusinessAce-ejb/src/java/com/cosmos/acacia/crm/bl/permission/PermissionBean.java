@@ -16,7 +16,7 @@ import com.cosmos.acacia.crm.data.permission.DataObjectPermissionPK;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermissionPK;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 import java.math.BigInteger;
 import java.security.AccessControlException;
 import java.util.Set;
@@ -99,7 +99,7 @@ public class PermissionBean implements PermissionLocal {
     }
 
     @Override
-    public Set<DataObjectPermission> getDataObjectPermissions(DataObject dataObject, UserRightType userRightType) {
+    public Set<DataObjectPermission> getDataObjectPermissions(DataObject dataObject, AccessRight userRightType) {
         Query q = em.createNamedQuery(DataObjectPermission.NQ_FIND_BY_DO_AND_URT);
         q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("dataObjectId", dataObject.getDataObjectId());
@@ -160,7 +160,7 @@ public class PermissionBean implements PermissionLocal {
     }
 
     @Override
-    public Set<DataObjectTypePermission> getDataObjectTypePermissions(DataObjectType dataObjectType, UserRightType userRightType) {
+    public Set<DataObjectTypePermission> getDataObjectTypePermissions(DataObjectType dataObjectType, AccessRight userRightType) {
         Query q = em.createNamedQuery(DataObjectTypePermission.NQ_FIND_BY_DOT_AND_URT);
         q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("dataObjectTypeId", dataObjectType.getDataObjectTypeId());
@@ -176,7 +176,7 @@ public class PermissionBean implements PermissionLocal {
 
     @Override
     public Set<DataObjectTypePermission> getDataObjectTypePermissions(
-            Class<? extends DataObjectBean> entityClass, UserRightType userRightType) {
+            Class<? extends DataObjectBean> entityClass, AccessRight userRightType) {
         return getDataObjectTypePermissions(dotService.getDataObjectType(entityClass.getName()), userRightType);
     }
 
