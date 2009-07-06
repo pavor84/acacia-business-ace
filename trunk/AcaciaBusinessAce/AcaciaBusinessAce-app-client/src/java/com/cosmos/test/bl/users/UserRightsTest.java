@@ -15,297 +15,307 @@ import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
+import com.cosmos.acacia.crm.data.UserGroupRight;
 import com.cosmos.acacia.crm.data.UserRight;
-import com.cosmos.acacia.crm.enums.UserRightType;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.test.bl.LoginResult;
 import com.cosmos.test.bl.TestUtils;
 
 public class UserRightsTest {
 
-      private static RightsManagerRemote formSession;
+    private static RightsManagerRemote formSession;
+    private static UserRightsRemote rightsSession;
+    private static User user;
+    private static UserGroup userGroup;
+    private static Organization org;
+    private static Address branch;
 
-      private static UserRightsRemote rightsSession;
+    @BeforeClass
+    public static void setUpClass() {
+        if (formSession == null) {
+            formSession = AcaciaPanel.getBean(RightsManagerRemote.class, false);
+        }
 
-      private static User user;
-      private static UserGroup userGroup;
-      private static Organization org;
-      private static Address branch;
+        rightsSession = AcaciaPanel.getBean(UserRightsRemote.class, false);
 
-      @BeforeClass
-      public static void setUpClass() {
-          if (formSession == null)
-              formSession = AcaciaPanel.getBean(RightsManagerRemote.class, false);
+        LoginResult loginResult = TestUtils.login();
+        user = loginResult.getUser();
+        branch = loginResult.getBranch();
+        org = loginResult.getOrganization();
 
-          rightsSession = AcaciaPanel.getBean(UserRightsRemote.class, false);
+        userGroup = rightsSession.newUserGroup();
+        userGroup.setName(TestUtils.getRandomString(10));
+        userGroup = rightsSession.saveUserGroup(userGroup);
 
-          LoginResult loginResult = TestUtils.login();
-          user = loginResult.getUser();
-          branch = loginResult.getBranch();
-          org = loginResult.getOrganization();
+        rightsSession.assignGroupToUser(userGroup, user);
+    }
 
-          userGroup = rightsSession.newUserGroup(org.getId());
-          userGroup.setName(TestUtils.getRandomString(10));
-          userGroup = rightsSession.saveUserGroup(userGroup);
+    @AfterClass
+    public static void tearDownClass() {
+        TestUtils.clearLogin(user);
 
-          rightsSession.assignGroupToUser(userGroup, user);
-      }
+        if (userGroup != null) {
+            rightsSession.deleteUserGroup(userGroup);
+        }
+    }
 
-      @AfterClass
-      public static void tearDownClass() {
-          TestUtils.clearLogin(user);
+    @Before
+    public void setUp() {
+        rightsSession.assignRightsToGroup(new HashSet<Right>(), userGroup);
+        rightsSession.assignRightsToUser(new HashSet<Right>(), user);
+        formSession.setGeneralRights(null);
+    }
 
-          if (userGroup != null)
-              rightsSession.deleteUserGroup(userGroup);
-      }
+    @Test
+    public void groupWithNoRightUserWithRightTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
+        Right groupRight = createRight(userGroup, null, dob, false);
+        groupRight.setCreate(false);
+        rights.add(groupRight);
+        rightsSession.assignRightsToGroup(rights, userGroup);
 
-      @Before
-      public void setUp() {
-          rightsSession.assignRightsToGroup(new HashSet<UserRight>(), userGroup);
-          rightsSession.assignRightsToUser(new HashSet<UserRight>(), user);
-          formSession.setGeneralRights(null);
-      }
+        Set<Right> rights2 = new HashSet<Right>();
+        Right userRight = createRight(user, null, dob, false);
+        userRight.setCreate(true);
+        rights2.add(userRight);
+        rightsSession.assignRightsToUser(rights2, user);
 
-      @Test
-      public void groupWithNoRightUserWithRightTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
-          UserRight groupRight = createUserRight(null, userGroup, null, dob, false);
-          groupRight.setCreate(false);
-          rights.add(groupRight);
-          rightsSession.assignRightsToGroup(rights, userGroup);
+        Assert.assertTrue(
+                "User is expected to have the specified right, but does not",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          Set<UserRight> rights2 = new HashSet<UserRight>();
-          UserRight userRight = createUserRight(user, null, null, dob, false);
-          userRight.setCreate(true);
-          rights2.add(userRight);
-          rightsSession.assignRightsToUser(rights2, user);
+    @Test
+    public void groupWithRightUserWithNoRightTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
+        Right groupRight = createRight(userGroup, null, dob, false);
+        groupRight.setCreate(true);
+        rights.add(groupRight);
+        rightsSession.assignRightsToGroup(rights, userGroup);
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right, but does not",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+        Set<Right> rights2 = new HashSet<Right>();
+        Right userRight = createRight(user, null, dob, false);
+        userRight.setCreate(false);
+        rights2.add(userRight);
+        rightsSession.assignRightsToUser(rights2, user);
 
+        Assert.assertFalse(
+                "User is expected NOT to have the specified right, but has it",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-      @Test
-      public void groupWithRightUserWithNoRightTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
-          UserRight groupRight = createUserRight(null, userGroup, null, dob, false);
-          groupRight.setCreate(true);
-          rights.add(groupRight);
-          rightsSession.assignRightsToGroup(rights, userGroup);
+    @Test
+    public void groupWithRightUserRightsNotSpecifiedTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
+        Right groupRight = createRight(userGroup, null, dob, false);
+        groupRight.setCreate(true);
+        rights.add(groupRight);
+        rightsSession.assignRightsToGroup(rights, userGroup);
 
-          Set<UserRight> rights2 = new HashSet<UserRight>();
-          UserRight userRight = createUserRight(user, null, null, dob, false);
-          userRight.setCreate(false);
-          rights2.add(userRight);
-          rightsSession.assignRightsToUser(rights2, user);
+        Assert.assertTrue(
+                "User is expected to have the specified right, because a member" +
+                " of a group that has it, but does not",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          Assert.assertFalse(
-                  "User is expected NOT to have the specified right, but has it",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+    @Test
+    public void groupWithRightOnTypeUserWithNoRightOnObjectTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
+        Right groupRight = createRight(userGroup, dob.getDataObjectType(), null, false);
+        groupRight.setCreate(true);
+        rights.add(groupRight);
+        rightsSession.assignRightsToGroup(rights, userGroup);
 
-      @Test
-      public void groupWithRightUserRightsNotSpecifiedTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
-          UserRight groupRight = createUserRight(null, userGroup, null, dob, false);
-          groupRight.setCreate(true);
-          rights.add(groupRight);
-          rightsSession.assignRightsToGroup(rights, userGroup);
+        Set<Right> rights2 = new HashSet<Right>();
+        Right userRight = createRight(user, null, dob, false);
+        userRight.setCreate(false);
+        rights2.add(userRight);
+        rightsSession.assignRightsToUser(rights2, user);
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right, because a member" +
-                  " of a group that has it, but does not",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+        Assert.assertFalse(
+                "User is expected NOT to have the specified right, but has it",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
+    @Test
+    public void groupWithNoRightOnTypeUserWithRightOnObjectTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
+        Right groupRight = createRight(userGroup, dob.getDataObjectType(), null, false);
+        groupRight.setCreate(false);
+        rights.add(groupRight);
+        rightsSession.assignRightsToGroup(rights, userGroup);
 
-      @Test
-      public void groupWithRightOnTypeUserWithNoRightOnObjectTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
-          UserRight groupRight = createUserRight(null, userGroup, dob.getDataObjectType(), null, false);
-          groupRight.setCreate(true);
-          rights.add(groupRight);
-          rightsSession.assignRightsToGroup(rights, userGroup);
+        Set<Right> rights2 = new HashSet<Right>();
+        Right userRight = createRight(user, null, dob, false);
+        userRight.setCreate(true);
+        rights2.add(userRight);
+        rightsSession.assignRightsToUser(rights2, user);
 
-          Set<UserRight> rights2 = new HashSet<UserRight>();
-          UserRight userRight = createUserRight(user, null, null, dob, false);
-          userRight.setCreate(false);
-          rights2.add(userRight);
-          rightsSession.assignRightsToUser(rights2, user);
+        Assert.assertTrue(
+                "User is expected to have the specified right, but does not",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          Assert.assertFalse(
-                  "User is expected NOT to have the specified right, but has it",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+    @Test
+    public void userWithRightOnTypeObjectExcludedTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
 
+        Right userRight = createRight(user, dob.getDataObjectType(), null, false);
+        userRight.setCreate(true);
+        rights.add(userRight);
 
-      @Test
-      public void groupWithNoRightOnTypeUserWithRightOnObjectTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
-          UserRight groupRight = createUserRight(null, userGroup, dob.getDataObjectType(), null, false);
-          groupRight.setCreate(false);
-          rights.add(groupRight);
-          rightsSession.assignRightsToGroup(rights, userGroup);
+        Right userRightExcluded = createRight(user, null, dob, true);
+        userRightExcluded.setCreate(true);
+        rights.add(userRightExcluded);
 
-          Set<UserRight> rights2 = new HashSet<UserRight>();
-          UserRight userRight = createUserRight(user, null, null, dob, false);
-          userRight.setCreate(true);
-          rights2.add(userRight);
-          rightsSession.assignRightsToUser(rights2, user);
+        rightsSession.assignRightsToUser(rights, user);
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right, but does not",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+        Assert.assertTrue(
+                "User is expected to have the specified right" +
+                " (because of exclusion, and falling back to default value)," +
+                " but does not have it",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
+    @Test
+    public void groupWithRightOnTypeObjectForUserExcludedTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = user.getDataObject();
 
-      @Test
-      public void userWithRightOnTypeObjectExcludedTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
+        Right groupRight = createRight(userGroup, dob.getDataObjectType(), null, false);
+        groupRight.setCreate(true);
+        rights.add(groupRight);
 
-          UserRight userRight = createUserRight(user, null, dob.getDataObjectType(), null, false);
-          userRight.setCreate(true);
-          rights.add(userRight);
+        Right userRightExcluded = createRight(user, null, dob, true);
+        userRightExcluded.setCreate(true);
+        rights.add(userRightExcluded);
 
-          UserRight userRightExcluded = createUserRight(user, null, null, dob, true);
-          userRightExcluded.setCreate(true);
-          rights.add(userRightExcluded);
+        rightsSession.assignRightsToUser(rights, user);
 
-          rightsSession.assignRightsToUser(rights, user);
+        Assert.assertTrue(
+                "User is expected to have the specified right" +
+                " (because of exclusion, and falling back to default value)," +
+                " but does not haveit",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right" +
-                  " (because of exclusion, and falling back to default value)," +
-                  " but does not have it",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+    @Test
+    public void userWithRightOnTypeObjectForGroupExcludedTest() {
+        Set<Right> rights = new HashSet<Right>();
 
-      @Test
-      public void groupWithRightOnTypeObjectForUserExcludedTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = user.getDataObject();
+        DataObject dob = branch.getDataObject();
+        DataObject parent = org.getDataObject();
 
-          UserRight groupRight = createUserRight(null, userGroup, dob.getDataObjectType(), null, false);
-          groupRight.setCreate(true);
-          rights.add(groupRight);
+        Right userRight = createRight(user, null, dob, false);
+        userRight.setCreate(true);
+        rights.add(userRight);
 
-          UserRight userRightExcluded = createUserRight(user, null, null, dob, true);
-          userRightExcluded.setCreate(true);
-          rights.add(userRightExcluded);
+        Right parentRight = createRight(user, null, parent, false);
+        userRight.setCreate(false);
+        rights.add(parentRight);
 
-          rightsSession.assignRightsToUser(rights, user);
+        Right userRightExcluded = createRight(user, null, dob, true);
+        userRightExcluded.setCreate(true);
+        rights.add(userRightExcluded);
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right" +
-                  " (because of exclusion, and falling back to default value)," +
-                  " but does not haveit",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+        rightsSession.assignRightsToUser(rights, user);
 
+        Assert.assertFalse(
+                "User is expected NOT to have the specified right," +
+                " becauses the parent is disallowed, but he has it",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-      @Test
-      public void userWithRightOnTypeObjectForGroupExcludedTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
+    @Test
+    public void userWithNoRightOnParentObjectTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = branch.getDataObject();
+        DataObject parent = org.getDataObject();
 
-          DataObject dob = branch.getDataObject();
-          DataObject parent = org.getDataObject();
+        Right userRight = createRight(user, null, parent, false);
+        userRight.setCreate(false);
+        rights.add(userRight);
 
-          UserRight userRight = createUserRight(user, null, null, dob, false);
-          userRight.setCreate(true);
-          rights.add(userRight);
+        rightsSession.assignRightsToUser(rights, user);
 
-          UserRight parentRight = createUserRight(user, null, null, parent, false);
-          userRight.setCreate(false);
-          rights.add(parentRight);
+        Assert.assertFalse(
+                "User is NOT expected to have the specified right" +
+                " (via inheritance), but has it",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          UserRight userRightExcluded = createUserRight(user, null, null, dob, true);
-          userRightExcluded.setCreate(true);
-          rights.add(userRightExcluded);
+    @Test
+    public void groupWithRightOnParentObjectTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = branch.getDataObject();
+        DataObject parent = org.getDataObject();
 
-          rightsSession.assignRightsToUser(rights, user);
+        Right userRight = createRight(userGroup, null, parent, false);
+        userRight.setCreate(true);
+        rights.add(userRight);
 
-          Assert.assertFalse(
-                  "User is expected NOT to have the specified right," +
-                  " becauses the parent is disallowed, but he has it",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+        rightsSession.assignRightsToUser(rights, user);
 
-      @Test
-      public void userWithNoRightOnParentObjectTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = branch.getDataObject();
-          DataObject parent = org.getDataObject();
+        Assert.assertTrue(
+                "User is expected to have the specified right" +
+                " (via inheritance), but does not",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          UserRight userRight = createUserRight(user, null, null, parent, false);
-          userRight.setCreate(false);
-          rights.add(userRight);
+    @Test
+    public void userWithRightOnParentObjectTypeTest() {
+        Set<Right> rights = new HashSet<Right>();
+        DataObject dob = branch.getDataObject();
+        DataObject parent = org.getDataObject();
 
-          rightsSession.assignRightsToUser(rights, user);
+        Right userRight = createRight(user, parent.getDataObjectType(), null, false);
+        userRight.setCreate(true);
+        rights.add(userRight);
 
-          Assert.assertFalse(
-                  "User is NOT expected to have the specified right" +
-                  " (via inheritance), but has it",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+        rightsSession.assignRightsToUser(rights, user);
 
-      @Test
-      public void groupWithRightOnParentObjectTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = branch.getDataObject();
-          DataObject parent = org.getDataObject();
+        Assert.assertTrue(
+                "User is expected to have the specified right" +
+                " (via inheritance), but does not",
+                formSession.isAllowed(user, dob, AccessRight.Create));
+    }
 
-          UserRight userRight = createUserRight(null, userGroup, null, parent, false);
-          userRight.setCreate(true);
-          rights.add(userRight);
+    private Right createRight(User user,
+            DataObjectType dataObjectType,
+            DataObject dataObject,
+            boolean excluded) {
+        UserRight right = new UserRight();
+        right.setUser(user);
+        return createRight(right, dataObjectType, dataObject, excluded);
+    }
 
-          rightsSession.assignRightsToUser(rights, user);
+    private Right createRight(UserGroup group,
+            DataObjectType dataObjectType,
+            DataObject dataObject,
+            boolean excluded) {
+        UserGroupRight right = new UserGroupRight();
+        right.setUserGroup(userGroup);
+        return createRight(right, dataObjectType, dataObject, excluded);
+    }
 
-          Assert.assertTrue(
-                  "User is expected to have the specified right" +
-                  " (via inheritance), but does not",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
+    private Right createRight(Right right,
+            DataObjectType dataObjectType,
+            DataObject dataObject,
+            boolean excluded) {
+        right.setDataObjectType(dataObjectType);
+        right.setDataObject(dataObject);
+        right.setExcluded(excluded);
 
-      @Test
-      public void userWithRightOnParentObjectTypeTest() {
-          Set<UserRight> rights = new HashSet<UserRight>();
-          DataObject dob = branch.getDataObject();
-          DataObject parent = org.getDataObject();
-
-          UserRight userRight = createUserRight(user, null, parent.getDataObjectType(), null, false);
-          userRight.setCreate(true);
-          rights.add(userRight);
-
-          rightsSession.assignRightsToUser(rights, user);
-
-          Assert.assertTrue(
-                  "User is expected to have the specified right" +
-                  " (via inheritance), but does not",
-                  formSession.isAllowed(user, dob, UserRightType.CREATE));
-      }
-
-      private UserRight createUserRight(User user,
-              UserGroup group,
-              DataObjectType dataObjectType,
-              DataObject dataObject,
-              boolean excluded)
-      {
-          UserRight right = new UserRight();
-          right.setUser(user);
-          right.setUserGroup(group);
-          right.setDataObjectType(dataObjectType);
-          right.setDataObject(dataObject);
-          right.setExcluded(excluded);
-
-          return right;
-      }
+        return right;
+    }
 }

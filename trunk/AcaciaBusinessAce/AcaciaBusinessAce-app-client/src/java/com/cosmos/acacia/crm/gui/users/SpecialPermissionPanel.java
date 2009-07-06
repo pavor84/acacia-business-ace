@@ -3,7 +3,6 @@
  *
  * Created on 25 July 2008, 17:36
  */
-
 package com.cosmos.acacia.crm.gui.users;
 
 import java.awt.event.ItemEvent;
@@ -18,6 +17,7 @@ import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.UserRight;
 import com.cosmos.acacia.crm.gui.DataObjectTypesListPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
@@ -34,15 +34,14 @@ import com.cosmos.swingb.DialogResponse;
 public class SpecialPermissionPanel extends BaseEntityPanel {
 
     /** Creates new form RightsPanel */
-    public SpecialPermissionPanel(UserRight right) {
+    public SpecialPermissionPanel(Right right) {
         super((BigInteger) null);
         this.right = right;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -126,7 +125,6 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboBox dataObjectComboBox;
     private com.cosmos.swingb.JBLabel dataObjectLabel;
@@ -136,30 +134,27 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
     private com.cosmos.acacia.gui.AcaciaComboBox permissionComboBox;
     private com.cosmos.swingb.JBLabel permissionLabel;
     // End of variables declaration//GEN-END:variables
-
-
     private UserRightsRemote formSession;
-    private UserRight right;
-    private BindingGroup rightsBindingGroup;
+    private Right right;
+    private BindingGroup bindingGroup;
 
     @Override
     protected void initData() {
-
-        rightsBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
         EntityProperties entityProps = getFormSession().getUserRightEntityProperties();
 
-        permissionComboBox.bind(rightsBindingGroup, getSpecialPermissions(), right, entityProps.getPropertyDetails("specialPermission"));
-        
+        permissionComboBox.bind(bg, getSpecialPermissions(), right, entityProps.getPropertyDetails("specialPermission"));
+
         AcaciaToStringConverter converter = new AcaciaToStringConverter("${dataObjectType}");
         PropertyDetails pDetails = entityProps.getPropertyDetails("dataObjectType");
-        dataObjectTypeComboBox.bind(rightsBindingGroup,
+        dataObjectTypeComboBox.bind(bg,
                 getDataObjectTypes(),
                 right,
                 pDetails,
                 converter);
         AutoCompleteDecorator.decorate(dataObjectTypeComboBox, converter);
 
-        rightsBindingGroup.bind();
+        bg.bind();
 
         AcaciaToStringConverter dobConverter = new AcaciaToStringConverter("${info}");
         dataObjectComboBox.setConverter(dobConverter);
@@ -167,6 +162,7 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
         AutoCompleteDecorator.decorate(dataObjectComboBox, dobConverter);
 
         dataObjectTypeComboBox.addItemListener(new ItemListener() {
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -193,14 +189,16 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
             }
         }
 
-        if (!isPreChosen)
+        if (!isPreChosen) {
             dataObjectComboBox.setSelectedIndex(-1);
+        }
 
     }
 
     protected UserRightsRemote getFormSession() {
-        if (formSession == null)
+        if (formSession == null) {
             formSession = getBean(UserRightsRemote.class);
+        }
 
         return formSession;
     }
@@ -208,10 +206,10 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
     private List<DbResource> getSpecialPermissions() {
         return getFormSession().getSpecialPermissions();
     }
-    
+
     private List<DataObjectBean> getDataObjectBeans(DataObjectType dataObjectType) {
         List<DataObjectBean> dataObjectBeans =
-                            getFormSession().getDataObjectBeans(dataObjectType);
+                getFormSession().getDataObjectBeans(dataObjectType);
 
         return dataObjectBeans;
     }
@@ -222,7 +220,11 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return rightsBindingGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -247,5 +249,4 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
         setDialogResponse(DialogResponse.SAVE);
         close();
     }
-
 }

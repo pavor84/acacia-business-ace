@@ -57,7 +57,7 @@ public class UserGroupsListPanel extends AbstractTablePanel<UserGroup> {
 
     protected List<UserGroup> getUserGroups() {
         if (userGroups == null) {
-            userGroups = getFormSession().getUserGroups(getParentDataObjectId());
+            userGroups = getFormSession().getUserGroups();
         }
 
         return userGroups;

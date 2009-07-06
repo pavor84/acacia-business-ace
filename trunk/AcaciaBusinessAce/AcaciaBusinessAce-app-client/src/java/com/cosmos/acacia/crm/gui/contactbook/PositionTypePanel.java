@@ -157,7 +157,7 @@ public class PositionTypePanel extends BaseEntityPanel {
     @EJB
     private PositionTypesListRemote formSession;
 
-    private BindingGroup positionTypeBindingGroup;
+    private BindingGroup bindingGroup;
     private PositionType positionType;
     private Class ownerClass;
     private boolean isInternal;
@@ -172,18 +172,18 @@ public class PositionTypePanel extends BaseEntityPanel {
             positionType = getFormSession().newPositionType(getOrganizationDataObjectId());
         }
 
-        positionTypeBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getPositionTypeEntityProperties();
 
-        nameTextField.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("positionTypeName"));
-        descriptionTextPane.bind(positionTypeBindingGroup, positionType, entityProps.getPropertyDetails("description"));
+        nameTextField.bind(bg, positionType, entityProps.getPropertyDetails("positionTypeName"));
+        descriptionTextPane.bind(bg, positionType, entityProps.getPropertyDetails("description"));
 
         groupComboList.setEnabled(true);
         UserGroupsListPanel groupsTable = new UserGroupsListPanel(getOrganizationDataObjectId());
-        groupComboList.bind(positionTypeBindingGroup, groupsTable, positionType, entityProps.getPropertyDetails("userGroup"), "${name}");
+        groupComboList.bind(bg, groupsTable, positionType, entityProps.getPropertyDetails("userGroup"), "${name}");
 
-        positionTypeBindingGroup.bind();
+        bg.bind();
     }
 
     protected PositionTypesListRemote getFormSession() {
@@ -201,7 +201,11 @@ public class PositionTypePanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return positionTypeBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

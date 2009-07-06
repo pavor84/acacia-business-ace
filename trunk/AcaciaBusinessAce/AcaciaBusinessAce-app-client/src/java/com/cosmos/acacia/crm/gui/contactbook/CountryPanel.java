@@ -230,7 +230,7 @@ public class CountryPanel extends BaseEntityPanel {
     @EJB
     private LocationsListRemote formSession;
 
-    private BindingGroup countryBindingGroup;
+    private BindingGroup bindingGroup;
     private Country country;
 
     @Override
@@ -243,19 +243,19 @@ public class CountryPanel extends BaseEntityPanel {
             country = getFormSession().newCountry();
         }
 
-        countryBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getCountryEntityProperties();
 
-        currencyComboBox.bind(countryBindingGroup, getCurrencies(), country, entityProps.getPropertyDetails("currency"));
-        nameTextField.bind(countryBindingGroup, country, entityProps.getPropertyDetails("countryName"));
-        phoneCodeTextField.bind(countryBindingGroup, country, entityProps.getPropertyDetails("countryPhoneCode"));
-        a2codeTextField.bind(countryBindingGroup, country, entityProps.getPropertyDetails("countryCodeA2"));
-        a3codeTextField.bind(countryBindingGroup, country, entityProps.getPropertyDetails("countryCodeA3"));
-        n3codeTextField.bind(countryBindingGroup, country, entityProps.getPropertyDetails("countryCodeN3"));
-        descriptionTextPane.bind(countryBindingGroup, country, entityProps.getPropertyDetails("description"));
+        currencyComboBox.bind(bg, getCurrencies(), country, entityProps.getPropertyDetails("currency"));
+        nameTextField.bind(bg, country, entityProps.getPropertyDetails("countryName"));
+        phoneCodeTextField.bind(bg, country, entityProps.getPropertyDetails("countryPhoneCode"));
+        a2codeTextField.bind(bg, country, entityProps.getPropertyDetails("countryCodeA2"));
+        a3codeTextField.bind(bg, country, entityProps.getPropertyDetails("countryCodeA3"));
+        n3codeTextField.bind(bg, country, entityProps.getPropertyDetails("countryCodeN3"));
+        descriptionTextPane.bind(bg, country, entityProps.getPropertyDetails("description"));
 
-        countryBindingGroup.bind();
+        bg.bind();
     }
 
     protected List<DbResource> getCurrencies()
@@ -276,7 +276,11 @@ public class CountryPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return countryBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

@@ -154,9 +154,7 @@ public class UsersListPanel extends AbstractTablePanel<User> {
             DialogResponse response = userPanel.showDialog(this);
             if(DialogResponse.SAVE.equals(response)) {
                 return (User) userPanel.getSelectedValue();
-            }
-
-            if(DialogResponse.CLOSE.equals(response)) {
+            } else if(userPanel.getSelectedValue() != null) {
                 refreshAction();
             }
         }

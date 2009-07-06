@@ -3,7 +3,6 @@
  *
  * Created on Петък, 2008, Май 2, 15:27
  */
-
 package com.cosmos.acacia.crm.gui.warehouse;
 
 import java.awt.event.ItemEvent;
@@ -35,12 +34,9 @@ public class WarehousePanel extends BaseEntityPanel {
 
     @EJB
     private WarehouseListRemote formSession;
-    
     private Warehouse entity;
-
     private EntityProperties entProps;
-
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
 
     /** Creates new form WarehousePanel */
     public WarehousePanel(Warehouse w, DataObject parent) {
@@ -49,13 +45,12 @@ public class WarehousePanel extends BaseEntityPanel {
         init();
     }
 
-    public WarehousePanel(Warehouse w){
-        this(w,null);
+    public WarehousePanel(Warehouse w) {
+        this(w, null);
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -147,13 +142,18 @@ public class WarehousePanel extends BaseEntityPanel {
         entity = getFormSession().saveWarehouse(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if (closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -171,51 +171,52 @@ public class WarehousePanel extends BaseEntityPanel {
         entProps = getFormSession().getWarehouseEntityProperties();
         PropertyDetails propDetails;
 
-        bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         //branch address
         propDetails = entProps.getPropertyDetails("address");
         AddressListPanel addressListPanel = new AddressListPanel(getOrganizationDataObjectId());
         addressListPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
         branchField.bind(
-            bindGroup, 
-            addressListPanel,
-            entity,
-            propDetails,
-            "${addressName}",
-            UpdateStrategy.READ_WRITE);
+                bg,
+                addressListPanel,
+                entity,
+                propDetails,
+                "${addressName}",
+                UpdateStrategy.READ_WRITE);
         branchField.addItemListener(new ItemListener() {
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 bindWarehouseManField(entity.getAddress());
             }
-        },true);
-        
+        }, true);
+
         //warehouse-man
         bindWarehouseManField(entity.getAddress());
 //        propDetails = entProps.getPropertyDetails("warehouseman");
 //        BusinessPartnersListPanel employeeListPanel = BusinessPartnersListPanel.createEmployeesPanel(getOrganizationDataObjectId());
 //        warehousemanField.bind(bindGroup, employeeListPanel, entity, propDetails,
 //            "${firstName} ${lastName}", UpdateStrategy.READ_WRITE);
-        
-        //description
-        descriptionField.bind(bindGroup, entity, entProps.getPropertyDetails("description"));
 
-        bindGroup.bind();
+        //description
+        descriptionField.bind(bg, entity, entProps.getPropertyDetails("description"));
+
+        bg.bind();
     }
-    
     @SuppressWarnings("unchecked")
     Binding warehouseManBinding = null;
-    
+
     protected void bindWarehouseManField(Address address) {
-        
         ContactPersonsListPanel listPanel = new ContactPersonsListPanel(address);
-        
-        if ( bindGroup.getBindings().contains(warehouseManBinding) )
-            bindGroup.removeBinding(warehouseManBinding);
-        
-        warehouseManBinding = warehousemanField.bind(bindGroup, listPanel, entity, entProps.getPropertyDetails("warehouseman"),
-            "${contact.firstName} ${contact.lastName}", UpdateStrategy.READ_WRITE);
+        BindingGroup bg = getBindingGroup();
+
+        if (bg.getBindings().contains(warehouseManBinding)) {
+            bg.removeBinding(warehouseManBinding);
+        }
+
+        warehouseManBinding = warehousemanField.bind(bg, listPanel, entity, entProps.getPropertyDetails("warehouseman"),
+                "${contact.firstName} ${contact.lastName}", UpdateStrategy.READ_WRITE);
         warehouseManBinding.bind();
 
         // auto select if one choice is available
@@ -227,12 +228,12 @@ public class WarehousePanel extends BaseEntityPanel {
     }
 
     protected WarehouseListRemote getFormSession() {
-        if (formSession == null)
+        if (formSession == null) {
             formSession = getBean(WarehouseListRemote.class);
+        }
 
         return formSession;
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboList branchField;
     private com.cosmos.swingb.JBTextPane descriptionField;

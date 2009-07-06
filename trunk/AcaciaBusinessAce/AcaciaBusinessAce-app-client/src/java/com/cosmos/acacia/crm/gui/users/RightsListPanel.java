@@ -2,7 +2,6 @@
  * OrganizationsListPanel.java
  *
  */
-
 package com.cosmos.acacia.crm.gui.users;
 
 import java.math.BigInteger;
@@ -19,6 +18,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.Right;
 import com.cosmos.acacia.crm.data.User;
 import com.cosmos.acacia.crm.data.UserGroup;
 import com.cosmos.acacia.crm.data.UserRight;
@@ -34,7 +34,7 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author  Bozhidar Bozhanov
  */
-public class RightsListPanel extends AbstractTablePanel<UserRight> {
+public class RightsListPanel extends AbstractTablePanel<Right> {
 
     /** Creates new form OrganizationsListPanel */
     public RightsListPanel(BigInteger parentDataObjectId) {
@@ -42,6 +42,7 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
     }
 
     public static enum Type {
+
         GeneralRightsPanel,
         SpecialPermissionsPanel
     }
@@ -59,12 +60,10 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
         this.type = type;
         postInitData();
     }
-
     @EJB
     private UserRightsRemote formSession;
-
     private BindingGroup rightsBindingGroup;
-    private Set<UserRight> rights;
+    private Set<Right> rights;
     private User user;
     private UserGroup userGroup;
     private Type type;
@@ -78,11 +77,10 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
                 ButtonVisibility.Close.getVisibilityIndex());
     }
 
-
     protected void postInitData() {
         rightsBindingGroup = new BindingGroup();
         AcaciaTable usersTable = getDataTable();
-        List<UserRight> initialRights = getRights();
+        List<Right> initialRights = getRights();
 
         usersTable.bind(
                 rightsBindingGroup,
@@ -95,47 +93,50 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
     }
 
     private UserRightsRemote getFormSession() {
-         if(formSession == null)
+        if (formSession == null) {
             formSession = getBean(UserRightsRemote.class, false);
+        }
 
         return formSession;
     }
 
-
-    protected List<UserRight> getRights()
-    {
+    protected List<Right> getRights() {
         if (rights == null) {
-
             if (user != null && user.getId() != null) {
-                if (type == Type.GeneralRightsPanel)
-                    rights = getFormSession().getUserRights(user);
+                if (type == Type.GeneralRightsPanel) {
+                    rights = getFormSession().getRights(user);
+                }
 
-                if (type == Type.SpecialPermissionsPanel)
+                if (type == Type.SpecialPermissionsPanel) {
                     rights = getFormSession().getSpecialPermissions(user);
+                }
             }
-
 
             if (userGroup != null && userGroup.getId() != null) {
-                if (type == Type.GeneralRightsPanel)
-                    rights = getFormSession().getUserRights(userGroup);
+                if (type == Type.GeneralRightsPanel) {
+                    rights = getFormSession().getRights(userGroup);
+                }
 
-                if (type == Type.SpecialPermissionsPanel)
+                if (type == Type.SpecialPermissionsPanel) {
                     rights = getFormSession().getSpecialPermissions(userGroup);
+                }
             }
 
-            if (rights == null)
-                rights = new HashSet<UserRight>();
+            if (rights == null) {
+                rights = new HashSet<Right>();
+            }
 
             List<DataObjectType> dots =
                     DataObjectTypesListPanel.shortenDataObjectTypeNames(getFormSession().getDataObjectTypes());
 
-            for (UserRight right : rights) {
-                if (right.getDataObjectType() != null)
+            for (Right right : rights) {
+                if (right.getDataObjectType() != null) {
                     right.setDataObjectType(dots.get(dots.indexOf(right.getDataObjectType())));
+                }
             }
         }
 
-        return new LinkedList<UserRight>(rights);
+        return new LinkedList<Right>(rights);
     }
 
     /**
@@ -143,18 +144,20 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
      *
      * @return the modified entity properties
      */
-    protected EntityProperties getUserRightEntityProperties()
-    {
+    protected EntityProperties getUserRightEntityProperties() {
         EntityProperties entityProps = getFormSession().getUserRightEntityProperties();
 
-        if (user == null)
+        if (user == null) {
             entityProps.removePropertyDetails("user");
+        }
 
-        if (userGroup == null)
+        if (userGroup == null) {
             entityProps.removePropertyDetails("userGroup");
+        }
 
-        if (type == Type.GeneralRightsPanel)
+        if (type == Type.GeneralRightsPanel) {
             entityProps.removePropertyDetails("specialPermission");
+        }
 
         if (type == Type.SpecialPermissionsPanel) {
             entityProps.removePropertyDetails("read");
@@ -167,27 +170,27 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
     }
 
     @Override
-    protected boolean deleteRow(UserRight rowObject) {
+    protected boolean deleteRow(Right rowObject) {
         rights.remove(rowObject);
         return true;
     }
 
     @SuppressWarnings("null")
     @Override
-    protected UserRight modifyRow(UserRight rowObject) {
-        if(rowObject != null && canNestedOperationProceed())
-        {
+    protected Right modifyRow(Right rowObject) {
+        if (rowObject != null && canNestedOperationProceed()) {
             AcaciaPanel panel = null;
-            if (type == Type.GeneralRightsPanel)
+            if (type == Type.GeneralRightsPanel) {
                 panel = new RightsPanel((UserRight) rowObject);
+            }
 
-            if (type == Type.SpecialPermissionsPanel)
+            if (type == Type.SpecialPermissionsPanel) {
                 panel = new SpecialPermissionPanel((UserRight) rowObject);
+            }
 
             DialogResponse response = panel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return (UserRight) panel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                return (Right) panel.getSelectedValue();
             }
         }
 
@@ -196,27 +199,29 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
 
     @SuppressWarnings("null")
     @Override
-    protected UserRight newRow() {
+    protected Right newRow() {
         if (canNestedOperationProceed()) {
-            UserRight right = new UserRight();
-            if (user != null)
-                right.setUser(user);
-
-            if (userGroup != null)
-                right.setUserGroup(userGroup);
-
+            Right right;
+            if (user != null) {
+                right = getFormSession().newRight(user);
+            } else if (userGroup != null) {
+                right = getFormSession().newRight(userGroup);
+            } else {
+                throw new RuntimeException("Can not create new Right. User or UserGroup must be initialized.");
+            }
 
             AcaciaPanel panel = null;
-            if (type == Type.GeneralRightsPanel)
+            if (type == Type.GeneralRightsPanel) {
                 panel = new RightsPanel(right);
+            }
 
-            if (type == Type.SpecialPermissionsPanel)
+            if (type == Type.SpecialPermissionsPanel) {
                 panel = new SpecialPermissionPanel(right);
+            }
 
             DialogResponse response = panel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                UserRight result  = (UserRight) panel.getSelectedValue();
+            if (DialogResponse.SAVE.equals(response)) {
+                Right result = (Right) panel.getSelectedValue();
 
                 rights.add(result);
                 return right;
@@ -230,8 +235,9 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (rightsBindingGroup!= null)
+        if (rightsBindingGroup != null) {
             rightsBindingGroup.unbind();
+        }
 
         rights = null;
 
@@ -243,27 +249,32 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
     public void flushRights() {
         log.info(rights.size() + " rights flushed");
         if (type == Type.GeneralRightsPanel) {
-            if (user != null)
+            if (user != null) {
                 getFormSession().assignRightsToUser(rights, user);
+            }
 
-            if (userGroup != null)
+            if (userGroup != null) {
                 getFormSession().assignRightsToGroup(rights, userGroup);
+            }
         }
 
         if (type == Type.SpecialPermissionsPanel) {
-            if (user != null)
+            if (user != null) {
                 getFormSession().assignSpecialPermissionsToUser(rights, user);
+            }
 
-            if (userGroup != null)
+            if (userGroup != null) {
                 getFormSession().assignSpecialPermissionsToGroup(rights, userGroup);
+            }
         }
 
         // Clearing the cached rights on the client. They will be fetched
         // the next time they are requested. This only happens if the user
         // is changing his own rights
         // TODO: same for user group
-        if (user != null && user.equals(getAcaciaSession().getUser()))
-                LocalSession.instance().getRightsManager().clearCachedRights();
+        if (user != null && user.equals(getAcaciaSession().getUser())) {
+            LocalSession.instance().getRightsManager().clearCachedRights();
+        }
     }
 
     @Override
@@ -272,12 +283,12 @@ public class RightsListPanel extends AbstractTablePanel<UserRight> {
     }
 
     @Override
-    public boolean canModify(UserRight rowObject) {
+    public boolean canModify(Right rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(UserRight rowObject) {
+    public boolean canDelete(Right rowObject) {
         return true;
     }
 

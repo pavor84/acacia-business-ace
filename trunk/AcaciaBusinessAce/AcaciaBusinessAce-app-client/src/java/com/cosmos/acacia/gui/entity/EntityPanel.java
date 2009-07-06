@@ -154,27 +154,27 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
             if (jComponent instanceof EntityBinder) {
                 if(updateStrategy != null) {
-                    ((EntityBinder) jComponent).bind(bindingGroup, entity, propertyDetails, updateStrategy);
+                    ((EntityBinder) jComponent).bind(bg, entity, propertyDetails, updateStrategy);
                 } else {
-                    ((EntityBinder) jComponent).bind(bindingGroup, entity, propertyDetails);
+                    ((EntityBinder) jComponent).bind(bg, entity, propertyDetails);
                 }
             } else if (jComponent instanceof EntityListBinder) {
                 if(updateStrategy != null) {
-                    ((EntityListBinder) jComponent).bind(bindingGroup,
+                    ((EntityListBinder) jComponent).bind(bg,
                             getSelectableListDialog(propertyDetails, entityProps, jComponent),
                             entity, propertyDetails, updateStrategy);
                 } else {
-                    ((EntityListBinder) jComponent).bind(bindingGroup,
+                    ((EntityListBinder) jComponent).bind(bg,
                             getSelectableListDialog(propertyDetails, entityProps, jComponent),
                             entity, propertyDetails);
                 }
             } else if (jComponent instanceof EnumerationBinder) {
                 List listData = getEntityService().getResources(getSelectableListDialogClass(propertyDetails));
                 if(updateStrategy != null) {
-                    ((EnumerationBinder) jComponent).bind(bindingGroup, listData,
+                    ((EnumerationBinder) jComponent).bind(bg, listData,
                             entity, propertyDetails, updateStrategy);
                 } else {
-                    ((EnumerationBinder) jComponent).bind(bindingGroup, listData,
+                    ((EnumerationBinder) jComponent).bind(bg, listData,
                             entity, propertyDetails);
                 }
             }

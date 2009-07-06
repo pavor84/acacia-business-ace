@@ -3,7 +3,6 @@
  *
  * Created on Вторник, 2008, Юни 10, 21:06
  */
-
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
@@ -27,33 +26,28 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author  Miro
  */
 public class AssemblingSchemaPanel
-    extends BaseEntityPanel
-{
+        extends BaseEntityPanel {
+
     @EJB
     private static AssemblingRemote formSession;
-
     private AssemblingSchema entity;
     private EntityProperties entityProps;
     private BindingGroup bindingGroup;
 
-
     /** Creates new form AssemblingSchemaPanel */
-    public AssemblingSchemaPanel()
-    {
-        super((BigInteger)null);
+    public AssemblingSchemaPanel() {
+        super((BigInteger) null);
         initComponents();
     }
 
-    public AssemblingSchemaPanel(AssemblingSchema schema)
-    {
+    public AssemblingSchemaPanel(AssemblingSchema schema) {
         super(schema.getParentId());
         this.entity = schema;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -183,8 +177,6 @@ public class AssemblingSchemaPanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboList assemblingCategoryComboList;
     private com.cosmos.swingb.JBLabel assemblingCategoryLabel;
@@ -202,102 +194,96 @@ public class AssemblingSchemaPanel
     private com.cosmos.swingb.JBTextField schemaNameTextField;
     // End of variables declaration//GEN-END:variables
 
-
     @Override
-    protected void initData()
-    {
+    protected void initData() {
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(measureUnitComboBox, resourceToStringConverter);
 
         entityProps = getFormSession().getAssemblingSchemaEntityProperties();
         PropertyDetails propDetails;
 
-        bindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         //parent category
         propDetails = entityProps.getPropertyDetails("assemblingCategory");
         AssemblingCategoryTreeTablePanel listPanel =
-            new AssemblingCategoryTreeTablePanel();
+                new AssemblingCategoryTreeTablePanel();
         assemblingCategoryComboList.bind(
-            bindingGroup,
-            listPanel,
-            entity,
-            propDetails,
-            "${categoryName}",
-            UpdateStrategy.READ_WRITE);
+                bg,
+                listPanel,
+                entity,
+                propDetails,
+                "${categoryName}",
+                UpdateStrategy.READ_WRITE);
 
         propDetails = entityProps.getPropertyDetails("measureUnit");
-        measureUnitComboBox.bind(bindingGroup, getMeasureUnits(), entity, propDetails);
+        measureUnitComboBox.bind(bg, getMeasureUnits(), entity, propDetails);
 
         //schema code
         propDetails = entityProps.getPropertyDetails("schemaCode");
-        schemaCodeTextField.bind(bindingGroup, entity, propDetails);
+        schemaCodeTextField.bind(bg, entity, propDetails);
 
         //schema name
         propDetails = entityProps.getPropertyDetails("schemaName");
-        schemaNameTextField.bind(bindingGroup, entity, propDetails);
+        schemaNameTextField.bind(bg, entity, propDetails);
 
         //applicable
         propDetails = entityProps.getPropertyDetails("applicable");
-        isApplicableCheckBox.bind(bindingGroup, entity, propDetails);
+        isApplicableCheckBox.bind(bg, entity, propDetails);
 
         //obsolete
         propDetails = entityProps.getPropertyDetails("obsolete");
-        isObsoleteCheckBox.bind(bindingGroup, entity, propDetails);
+        isObsoleteCheckBox.bind(bg, entity, propDetails);
 
         //description
         propDetails = entityProps.getPropertyDetails("description");
-        descriptionTextPane.bind(bindingGroup, entity, propDetails);
+        descriptionTextPane.bind(bg, entity, propDetails);
 
-        bindingGroup.bind();
+        bg.bind();
     }
 
     @Override
-    public EntityFormButtonPanel getButtonPanel()
-    {
+    public EntityFormButtonPanel getButtonPanel() {
         return entityFormButtonPanel;
     }
 
     @Override
-    public BindingGroup getBindingGroup()
-    {
+    public BindingGroup getBindingGroup() {
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
         return bindingGroup;
     }
 
     @Override
-    public Object getEntity()
-    {
+    public Object getEntity() {
         return entity;
     }
 
     @Override
-    public void performSave(boolean closeAfter)
-    {
+    public void performSave(boolean closeAfter) {
         entity = getFormSession().saveSchema(entity);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(entity);
-        if(closeAfter)
+        if (closeAfter) {
             close();
+        }
     }
 
-    protected Object onChooseCategory()
-    {
+    protected Object onChooseCategory() {
         return null;
     }
 
-    private List<DbResource> getMeasureUnits()
-    {
+    private List<DbResource> getMeasureUnits() {
         return getFormSession().getMeasureUnits();
     }
 
-    protected AssemblingRemote getFormSession()
-    {
-        if(formSession == null)
-        {
+    protected AssemblingRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AssemblingRemote.class);
         }
 
         return formSession;
     }
-
 }

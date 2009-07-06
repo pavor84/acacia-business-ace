@@ -311,7 +311,7 @@ public class AddressPanel extends BaseEntityPanel {
     @EJB
     private AddressesListRemote formSession;
 
-    private BindingGroup addressBindingGroup;
+    private BindingGroup bindingGroup;
     private Address address;
     private CommunicationContactsListPanel communicationContactsTable;
     private ContactPersonsListPanel contactPersonsTable;
@@ -349,16 +349,15 @@ public class AddressPanel extends BaseEntityPanel {
             address = getFormSession().newAddress();
         }
 
-        if (addressBindingGroup == null)
-            addressBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         final EntityProperties entityProps = getAddressEntityProperties();
 
-        addressNameTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("addressName"));
-        postalCodeTextField.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalCode"));
-        postalAddressTextPane.bind(addressBindingGroup, address, entityProps.getPropertyDetails("postalAddress"));
+        addressNameTextField.bind(bg, address, entityProps.getPropertyDetails("addressName"));
+        postalCodeTextField.bind(bg, address, entityProps.getPropertyDetails("postalCode"));
+        postalAddressTextPane.bind(bg, address, entityProps.getPropertyDetails("postalAddress"));
 
-        countryComboBox.bind(addressBindingGroup, getCountries(), address, entityProps.getPropertyDetails("country"));
+        countryComboBox.bind(bg, getCountries(), address, entityProps.getPropertyDetails("country"));
         countryComboBox.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -372,14 +371,14 @@ public class AddressPanel extends BaseEntityPanel {
                 public Object showSelectionControl() {
                     return onChooseCity();
                 }
-            }, addressBindingGroup,
+            }, bg,
             address,
             entityProps.getPropertyDetails("city"),
             "${cityName}",
             UpdateStrategy.READ_WRITE);
 
 
-        descriptionTextPane.bind(addressBindingGroup, address, entityProps.getPropertyDetails("description"));
+        descriptionTextPane.bind(bg, address, entityProps.getPropertyDetails("description"));
 
         BigInteger dataObjectId;
         DataObject dataObject;
@@ -446,7 +445,7 @@ public class AddressPanel extends BaseEntityPanel {
         communicationContactsTable.associateWithTable(contactPersonsTable);
         contactPersonsTable.associateWithTable(bankDetailsTable);
 
-        addressBindingGroup.bind();
+        bg.bind();
 
         if (address.getParentId() == null) {
             int nextAddressNumber = getNewAddressNumber();
@@ -523,7 +522,11 @@ public class AddressPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return addressBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -536,7 +539,8 @@ public class AddressPanel extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            addressBindingGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
 

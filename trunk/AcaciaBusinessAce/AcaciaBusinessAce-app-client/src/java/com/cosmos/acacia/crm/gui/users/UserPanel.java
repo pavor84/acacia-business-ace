@@ -3,12 +3,8 @@
  *
  * Created on 25 June 2008, 20:46
  */
-
 package com.cosmos.acacia.crm.gui.users;
 
-
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -37,17 +33,15 @@ import java.math.BigInteger;
  */
 public class UserPanel extends BaseEntityPanel {
 
-
     /** Creates new form UserPenl */
     public UserPanel(UserOrganization uo) {
-        super((BigInteger)null);
+        super((BigInteger) null);
         this.userOrganization = uo;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -166,7 +160,6 @@ public class UserPanel extends BaseEntityPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboList branchComboList;
     private com.cosmos.swingb.JBLabel branchLabel;
@@ -178,7 +171,6 @@ public class UserPanel extends BaseEntityPanel {
     private com.cosmos.acacia.gui.TableHolderPanel specialPermissionsHolderPanel;
     private com.cosmos.swingb.JBTextField userTextField;
     // End of variables declaration//GEN-END:variables
-
     private BindingGroup bindingGroup;
     private UserOrganization userOrganization;
     private UsersRemote formSession;
@@ -192,12 +184,13 @@ public class UserPanel extends BaseEntityPanel {
         setResizable(false);
 
         // If not 'edit', close
-        if (userOrganization == null)
-           close();
+        if (userOrganization == null) {
+            close();
+        }
 
         branch = userOrganization.getBranch();
 
-        bindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         final EntityProperties entityProps = getFormSession().getUserOrganizationEntityProperties();
         userTextField.setText(userOrganization.getUser().getUserName());
@@ -205,11 +198,11 @@ public class UserPanel extends BaseEntityPanel {
         branchComboList.setEnabled(true);
         AddressListPanel branchesTable = new AddressListPanel(userOrganization.getOrganization().getId());
         branchesTable.setVisible(Button.New, false);
-        branchComboList.bind(bindingGroup, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"));
+        branchComboList.bind(bg, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"));
 
         groupComboList.setEnabled(true);
         UserGroupsListPanel groupsTable = new UserGroupsListPanel(userOrganization.getOrganization().getId());
-        groupComboList.bind(bindingGroup, groupsTable, userOrganization, entityProps.getPropertyDetails("userGroup"), "${name}");
+        groupComboList.bind(bg, groupsTable, userOrganization, entityProps.getPropertyDetails("userGroup"), "${name}");
 
         final boolean isGroupEmpty = userOrganization.getUserGroup() == null;
 
@@ -218,18 +211,17 @@ public class UserPanel extends BaseEntityPanel {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (isGroupEmpty) {
-                   UserGroup positionUserGroup = getFormSession().getUserGroupByPositionType();
-                   if (positionUserGroup != null) {
+                    UserGroup positionUserGroup = getFormSession().getUserGroupByPositionType();
+                    if (positionUserGroup != null) {
                         if (JOptionPane.showConfirmDialog(UserPanel.this,
-                            getResourceMap().getString("override.assign.group",
+                                getResourceMap().getString("override.assign.group",
                                 positionUserGroup.getName()),
-                            getResourceMap().getString("selection.confirm"),
-                            JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
-                        {
+                                getResourceMap().getString("selection.confirm"),
+                                JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
                             groupComboList.setSelectedItem(null);
                             userOrganization.setUserGroup(null);
                         }
-                   }
+                    }
                 }
             }
         });
@@ -242,24 +234,28 @@ public class UserPanel extends BaseEntityPanel {
         specialPermissionsTable.setVisibleButtons(2 + 4 + 8 + 16);
         specialPermissionsHolderPanel.add(specialPermissionsTable);
 
-        bindingGroup.bind();
+        bg.bind();
         userTextField.setEnabled(false);
     }
 
     protected UsersRemote getFormSession() {
         if (formSession == null) {
-             try {
-                 formSession = getBean(UsersRemote.class);
-             } catch(Exception ex) {
-                 ex.printStackTrace();
-             }
+            try {
+                formSession = getBean(UsersRemote.class);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
-         return formSession;
+        return formSession;
     }
 
     @Override
     public BindingGroup getBindingGroup() {
+        if (bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
         return bindingGroup;
     }
 
@@ -281,11 +277,13 @@ public class UserPanel extends BaseEntityPanel {
         rightsTable.setUser(u);
         specialPermissionsTable.setUser(u);
 
-        if (userOrganization.getBranch() != null)
-                u.setBranchName(userOrganization.getBranch().getAddressName());
+        if (userOrganization.getBranch() != null) {
+            u.setBranchName(userOrganization.getBranch().getAddressName());
+        }
 
-        if (!userOrganization.getBranch().equals(branch))
+        if (!userOrganization.getBranch().equals(branch)) {
             getFormSession().changeBranch(u, branch, userOrganization.getBranch());
+        }
 
         u.setActive(userOrganization.isUserActive());
 

@@ -3,9 +3,7 @@
  *
  * Created on 25 June 2008, 20:46
  */
-
 package com.cosmos.acacia.crm.gui.users;
-
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -17,7 +15,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.User;
@@ -35,17 +32,15 @@ import java.math.BigInteger;
  */
 public class RegistrationForm extends BaseEntityPanel {
 
-
     /** Creates new form RegistrationForm */
     public RegistrationForm(String email) {
-        super((BigInteger)null);
+        super((BigInteger) null);
         this.email = email;
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
@@ -240,7 +235,6 @@ public class RegistrationForm extends BaseEntityPanel {
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {branchComboList, organizationComboList, passwordTextField2});
 
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.AcaciaComboList branchComboList;
     private com.cosmos.swingb.JBLabel branchLabel;
@@ -263,32 +257,33 @@ public class RegistrationForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel usernameLabel;
     private com.cosmos.swingb.JBTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
-
-    private BindingGroup userBindingGroup;
+    private BindingGroup bindingGroup;
     private User user;
     private UsersRemote formSession;
     private String email;
 
     @Override
     protected void initData() {
-       setResizable(false);
+        setResizable(false);
 
-       if (user == null)
-           user = getFormSession().createUser();
+        if (user == null) {
+            user = getFormSession().createUser();
+        }
 
-       userBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
-       // Setting the email address to the verified one from the code-verification step
-       user.setEmailAddress(email);
+        // Setting the email address to the verified one from the code-verification step
+        user.setEmailAddress(email);
 
-       EntityProperties entityProps = getFormSession().getUserEntityProperties();
-       usernameTextField.bind(userBindingGroup, user, entityProps.getPropertyDetails("userName"));
-       passwordTextField.bind(userBindingGroup, user, entityProps.getPropertyDetails("userPassword"));
+        EntityProperties entityProps = getFormSession().getUserEntityProperties();
+        usernameTextField.bind(bg, user, entityProps.getPropertyDetails("userName"));
+        passwordTextField.bind(bg, user, entityProps.getPropertyDetails("userPassword"));
 
-       OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
-       organizationComboList.initUnbound(organizationsTable, "${organizationName}");
+        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
+        organizationComboList.initUnbound(organizationsTable, "${organizationName}");
 
-       organizationComboList.addItemListener(new ItemListener() {
+        organizationComboList.addItemListener(new ItemListener() {
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 Organization organization = (Organization) organizationComboList.getSelectedItem();
@@ -303,10 +298,10 @@ public class RegistrationForm extends BaseEntityPanel {
                 branchesTable.setVisible(Button.New, false);
                 branchComboList.initUnbound(branchesTable, "${addressName}");
             }
-       });
-       
-       branchComboList.setEnabled(false);
-       userBindingGroup.bind();
+        });
+
+        branchComboList.setEnabled(false);
+        bg.bind();
     }
 
     @Action
@@ -318,7 +313,7 @@ public class RegistrationForm extends BaseEntityPanel {
                 person.setSecondName(secondNameTextField.getText());
                 person.setLastName(lastNameTextField.getText());
                 person.setExtraName(extraNameTextField.getText());
-                
+
                 getFormSession().signup(user,
                         (Organization) organizationComboList.getSelectedItem(),
                         (Address) branchComboList.getSelectedItem(),
@@ -329,26 +324,30 @@ public class RegistrationForm extends BaseEntityPanel {
             } else {
                 JOptionPane.showMessageDialog(this, getResourceMap().getString("passwords.inconsistent"));
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             checkForValidationException(ex);
         }
     }
 
     protected UsersRemote getFormSession() {
         if (formSession == null) {
-             try {
-                 formSession = getBean(UsersRemote.class);
-             } catch(Exception ex) {
-                 ex.printStackTrace();
-             }
+            try {
+                formSession = getBean(UsersRemote.class);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
-         return formSession;
+        return formSession;
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return userBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -366,5 +365,4 @@ public class RegistrationForm extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         // Not used
     }
-
 }

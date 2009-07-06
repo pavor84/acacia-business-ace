@@ -222,7 +222,7 @@ public class CityPanel extends BaseEntityPanel {
     @EJB
     private LocationsListRemote formSession;
 
-    private BindingGroup cityBindingGroup;
+    private BindingGroup bindingGroup;
     private City city;
 
     @Override
@@ -235,18 +235,18 @@ public class CityPanel extends BaseEntityPanel {
             city = getFormSession().newCity();
         }
 
-        cityBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getCityEntityProperties();
 
-        countryComboBox.bind(cityBindingGroup, getCountries(), city, entityProps.getPropertyDetails("country"));
-        nameTextField.bind(cityBindingGroup, city, entityProps.getPropertyDetails("cityName"));
-        cityCodeTextField.bind(cityBindingGroup, city, entityProps.getPropertyDetails("cityCode"));
-        phoneCodeTextField.bind(cityBindingGroup, city, entityProps.getPropertyDetails("cityPhoneCode"));
-        postalCodeTextField.bind(cityBindingGroup, city, entityProps.getPropertyDetails("postalCode"));
-        descriptionTextPane.bind(cityBindingGroup, city, entityProps.getPropertyDetails("description"));
+        countryComboBox.bind(bg, getCountries(), city, entityProps.getPropertyDetails("country"));
+        nameTextField.bind(bg, city, entityProps.getPropertyDetails("cityName"));
+        cityCodeTextField.bind(bg, city, entityProps.getPropertyDetails("cityCode"));
+        phoneCodeTextField.bind(bg, city, entityProps.getPropertyDetails("cityPhoneCode"));
+        postalCodeTextField.bind(bg, city, entityProps.getPropertyDetails("postalCode"));
+        descriptionTextPane.bind(bg, city, entityProps.getPropertyDetails("description"));
 
-        cityBindingGroup.bind();
+        bg.bind();
     }
 
     protected LocationsListRemote getFormSession() {
@@ -262,7 +262,11 @@ public class CityPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return cityBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

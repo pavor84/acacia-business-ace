@@ -258,14 +258,18 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
     private com.cosmos.swingb.JBDatePicker shipDateFromField;
     private com.cosmos.swingb.JBDatePicker shipDateToField;
     // End of variables declaration//GEN-END:variables
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private PurchaseOrderListRemote formSession;
     private EntityProperties entProps;
     private ProductsListRemote productListRemote;
     
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -286,7 +290,8 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
         if (closeAfter) {
             close();
         } else {
-            bindGroup.unbind();
+            getBindingGroup().unbind();
+            bindingGroup = null;
             initData();
         }
     }
@@ -304,14 +309,14 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
         AcaciaToStringConverter resourceToStringConverter = new AcaciaToStringConverter();
         AutoCompleteDecorator.decorate(measureUnitField, resourceToStringConverter);
         
-        bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
         
         //product
         PropertyDetails pd = entProps.getPropertyDetails("product");
         pd.setRequired(true);
         ProductsListPanel listPanel = new ProductsListPanel(getOrganizationDataObjectId());
         productField.bind(
-            bindGroup, 
+            bg,
             listPanel,
             entity,
             pd,
@@ -324,32 +329,32 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
             }
         }, true);
         
-        measureUnitField.bind(bindGroup, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
+        measureUnitField.bind(bg, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
         //ordered quantity
-        orderedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
+        orderedQuantityField.bind(bg, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
         
         //confirmed quantity
-        confirmedQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("confirmedQuantity"), getDecimalFormat());
+        confirmedQuantityField.bind(bg, entity, entProps.getPropertyDetails("confirmedQuantity"), getDecimalFormat());
         
         //delivered quantity
-        deliveredQuantityField.bind(bindGroup, entity, entProps.getPropertyDetails("deliveredQuantity"), getDecimalFormat());
+        deliveredQuantityField.bind(bg, entity, entProps.getPropertyDetails("deliveredQuantity"), getDecimalFormat());
         
         //purchase price
-        purchasePriceField.bind(bindGroup, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
+        purchasePriceField.bind(bg, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
         
         //currency
-        currencyField.bind(bindGroup, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
         
         //ship date from
-        shipDateFromField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat());
+        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat());
         
         //ship date to
-        shipDateToField.bind(bindGroup, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat());
+        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat());
         
         //notes
-        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
         
-        bindGroup.bind();   
+        bg.bind();
     }
 
     private List<DbResource> getCurrencies() {

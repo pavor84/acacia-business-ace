@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.gui;
 
-
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -30,24 +29,22 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
 
     /** Creates new form ContactPersonPanel */
     public ClassifyObjectPanel(DataObject dataObject) {
-        super((BigInteger)null);
+        super((BigInteger) null);
         dataObjectToBeClassified = dataObject;
         init();
     }
 
     /** Creates new form ContactPersonPanel */
     public ClassifyObjectPanel() {
-        super((BigInteger)null);
+        super((BigInteger) null);
         init();
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -148,8 +145,6 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.acacia.gui.TableHolderPanel appliedClassifiersPanel;
     private com.cosmos.swingb.JBButton applyButton;
@@ -159,10 +154,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel jBLabel1;
     private com.cosmos.swingb.JBButton removeButton;
     // End of variables declaration//GEN-END:variables
-
-
     private DataObject dataObjectToBeClassified;
-
     ClassifiersListPanel classifiersTable;
     ClassifiersListPanel appliedClassifiersTable;
 
@@ -174,16 +166,18 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         entityFormButtonPanel.setVisible(EntityFormButtonPanel.Button.Problems, false);
 
         groupLookup.setLookupProvider(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    groupLookup.setSelectedItem(onChooseGroup());
-                    groupLookup.updateText();
-                    return null;
-                }
-            });
+
+            @Override
+            public Object showSelectionControl() {
+                groupLookup.setSelectedItem(onChooseGroup());
+                groupLookup.updateText();
+                return null;
+            }
+        });
 
         groupLookup.setEnabled(true);
         groupLookup.setListener(new AcaciaLookupListener() {
+
             @Override
             public void valueCleared() {
                 classifiersTable.setParentDataObjectId(null);
@@ -210,12 +204,11 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         classifiersPanel.add(classifiersTable);
     }
 
-
     protected Object onChooseGroup() {
         ClassifierGroupsListPanel listPanel = new ClassifierGroupsListPanel(null);
 
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             ClassifierGroup selected = (ClassifierGroup) listPanel.getSelectedRowObject();
             classifiersTable.setParentDataObjectId(selected.getDataObject().getDataObjectId());
             classifiersTable.setDataObjectType(dataObjectToBeClassified.getDataObjectType());
@@ -233,11 +226,9 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
         return getClassifiersManager().getClassifierGroups();
     }
 
-    protected EntityProperties getClassifiedObjectEntityProperties()
-    {
+    protected EntityProperties getClassifiedObjectEntityProperties() {
         return getClassifiersManager().getClassifiedObjectEntityProperties();
     }
-
 
     @Override
     public BindingGroup getBindingGroup() {
@@ -246,7 +237,6 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-
     }
 
     @Override
@@ -282,7 +272,7 @@ public class ClassifyObjectPanel extends BaseEntityPanel {
 
         @Override
         public void tablePanelClose() {
-           //
+            //
         }
 
         @Override

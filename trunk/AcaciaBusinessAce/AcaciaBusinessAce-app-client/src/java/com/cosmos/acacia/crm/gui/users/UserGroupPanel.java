@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.gui.users;
 
-
 import javax.ejb.EJB;
 
 import org.apache.log4j.Logger;
@@ -41,7 +40,6 @@ public class UserGroupPanel extends BaseEntityPanel {
         initComponents();
         super.init();
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -156,8 +154,6 @@ public class UserGroupPanel extends BaseEntityPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBPanel descriptionPanel;
     private com.cosmos.swingb.JBTextPane descriptionTextPane;
@@ -168,13 +164,10 @@ public class UserGroupPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBTextField nameTextField;
     private com.cosmos.acacia.gui.TableHolderPanel specialPermissionsHolderPanel;
     // End of variables declaration//GEN-END:variables
-
     @EJB
     private UserRightsRemote formSession;
-
     private EntityProperties entityProps;
-
-    private BindingGroup passportBindingGroup;
+    private BindingGroup bindingGroup;
     private UserGroup userGroup;
     private RightsListPanel rightsTable;
     private RightsListPanel specialPermissionsTable;
@@ -185,17 +178,16 @@ public class UserGroupPanel extends BaseEntityPanel {
 
         log.info("initData().userGroup: " + userGroup);
 
-        if(userGroup == null)
-        {
-            userGroup = getFormSession().newUserGroup(getOrganizationDataObjectId());
+        if (userGroup == null) {
+            userGroup = getFormSession().newUserGroup();
         }
 
-        passportBindingGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         entityProps = getUserGroupEntityProperties();
 
-        nameTextField.bind(passportBindingGroup, userGroup, entityProps.getPropertyDetails("name"));
-        descriptionTextPane.bind(passportBindingGroup, userGroup, entityProps.getPropertyDetails("description"));
+        nameTextField.bind(bg, userGroup, entityProps.getPropertyDetails("name"));
+        descriptionTextPane.bind(bg, userGroup, entityProps.getPropertyDetails("description"));
 
         rightsTable = new RightsListPanel(userGroup, RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);
@@ -208,27 +200,28 @@ public class UserGroupPanel extends BaseEntityPanel {
         specialPermissionsHolderPanel.add(specialPermissionsTable);
         addNestedFormListener(specialPermissionsTable);
 
-        passportBindingGroup.bind();
+        bg.bind();
     }
 
-    protected UserRightsRemote getFormSession()
-    {
-        if(formSession == null)
-        {
+    protected UserRightsRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(UserRightsRemote.class);
         }
 
         return formSession;
     }
 
-    protected EntityProperties getUserGroupEntityProperties()
-    {
+    protected EntityProperties getUserGroupEntityProperties() {
         return getFormSession().getUserGroupEntityProperties();
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        return passportBindingGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
     private static final long serialVersionUID = 9082720492408464360L;
 	
     private DeliveryCertificateItem entity;
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private DeliveryCertificatesRemote formSession;
     private EntityProperties entProps;
     private Product product;
@@ -60,9 +60,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
     @Override
     protected void initData() {
     	entProps = getFormSession().getDeliveryCertificateItemDetailsEntityProperties();
-    	if(bindGroup == null){
-    		bindGroup = new BindingGroup();
-    	}
+    	BindingGroup bg = getBindingGroup();
     	
     	productTextField.setText(entity.getProduct().getProductName());
     	productTextField.setEditable(false);
@@ -79,8 +77,8 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
             }
         });
     	
-    	quantityFormattedTextField.bind(bindGroup, entity, entProps.getPropertyDetails("quantity"), getIntegerFormat());
-    	bindGroup.bind();
+    	quantityFormattedTextField.bind(bg, entity, entProps.getPropertyDetails("quantity"), getIntegerFormat());
+    	bg.bind();
     }
     
     protected void onComplexProductDetails() {
@@ -90,7 +88,11 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
     
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
@@ -112,7 +114,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
 	        if (closeAfter) {
 	            close();
 	        } else {
-	            bindGroup.unbind();
+	            bindingGroup.unbind();
 	            initData();
 	        }
         }catch(Exception ex){

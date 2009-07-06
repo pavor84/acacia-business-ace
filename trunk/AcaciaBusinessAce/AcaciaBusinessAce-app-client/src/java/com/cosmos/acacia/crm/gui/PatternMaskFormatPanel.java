@@ -46,7 +46,7 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
         initData();
     }
 
-    private BindingGroup bindGroup;
+    private BindingGroup bindingGroup;
     private PatternMaskFormat format;
 
     /**
@@ -156,26 +156,26 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
 
     @Override
     protected void initData() {
-        bindGroup = new BindingGroup();
+        BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getFormSession().getPatternMaskEntityProperties();
 
-        nameField.bind(bindGroup, format, entityProps.getPropertyDetails("patternName"));
-        formatField.bind(bindGroup, format, entityProps.getPropertyDetails("format"));
-        descriptionField.bind(bindGroup, format, entityProps.getPropertyDetails("description"));
+        nameField.bind(bg, format, entityProps.getPropertyDetails("patternName"));
+        formatField.bind(bg, format, entityProps.getPropertyDetails("format"));
+        descriptionField.bind(bg, format, entityProps.getPropertyDetails("description"));
         if(listPanel == null) {
             Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
             listPanel = new BusinessPartnersListPanel(classifier);
         }
-        ownerField.bind(bindGroup, listPanel, format, entityProps.getPropertyDetails("owner"),
+        ownerField.bind(bg, listPanel, format, entityProps.getPropertyDetails("owner"),
             "${displayName}", UpdateStrategy.READ_WRITE);
         
-        bindGroup.bind();
+        bg.bind();
 
         setSaveActionState();
 
-        if (bindGroup != null) {
-            bindGroup.addBindingListener(new AbstractBindingListener() {
+        if (bg != null) {
+            bg.addBindingListener(new AbstractBindingListener() {
 
                 @SuppressWarnings("unchecked")
                 @Override
@@ -187,7 +187,7 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
     }
 
     protected void setSaveActionState() {
-        setEnabled(Button.Save, bindGroup.isContentValid());
+        setEnabled(Button.Save, getBindingGroup().isContentValid());
     }
 
     public void setEnabled(Button button, boolean enabled) {
@@ -239,7 +239,11 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
 
     @Override
     public BindingGroup getBindingGroup() {
-        return bindGroup;
+        if(bindingGroup == null) {
+            bindingGroup = new BindingGroup();
+        }
+
+        return bindingGroup;
     }
 
     @Override
