@@ -7,22 +7,14 @@ package com.cosmos.acacia.crm.data.purchase;
 import com.cosmos.acacia.annotation.BorderType;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
-import com.cosmos.acacia.annotation.EntityLogic;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
-import com.cosmos.acacia.annotation.Logic;
-import com.cosmos.acacia.annotation.LogicUnitType;
-import com.cosmos.acacia.annotation.OperationRow;
-import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
-import com.cosmos.acacia.annotation.Unit;
-import com.cosmos.acacia.annotation.UnitType;
-import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BankDetail;
@@ -132,7 +124,7 @@ import javax.persistence.TemporalType;
             parentContainerName="primaryInfo"
         )
     },
-    serviceClass=PurchaseServiceRemote.class,
+    serviceClass=PurchaseServiceRemote.class/*,
     logic=@Logic(
         entityLogic=@EntityLogic(
             units={
@@ -145,14 +137,33 @@ import javax.persistence.TemporalType;
                             update=@UpdateOperation(
                                 variable="entity.documentCurrency",
                                 with="entity.supplier.defaultCurrency",
-                                condition="onChange(entity.supplier)"
+                                condition="onEntityChange(entity.supplier)"
+                            )
+                        ),
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="entity.totalNetAmount",
+                                with="entity:itemPriceRecalculation(" +
+                                    "'com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem'," +
+                                    "'receivedPrice'," +
+                                    "'extendedPrice')",
+                                condition="onEntityChange(entity.documentCurrency)"
+                            )
+                        ),
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="entity.totalGrossAmount",
+                                with="entity.totalNetAmount + entity.totalTax",
+                                condition="onEntityChange(entity.totalNetAmount, entity.totalTax)"
                             )
                         )
                     }
                 )
             }
         )
-    )
+    )*/
 )
 public class PurchaseInvoice extends BusinessDocument implements Serializable {
 

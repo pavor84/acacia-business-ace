@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,10 +71,13 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
             q.setParameter("fromCurrencyId", toCurrency.getResourceId());
             q.setParameter("toCurrencyId", fromCurrency.getResourceId());
             try {
-                CurrencyExchangeRate cer = (CurrencyExchangeRate)q.getSingleResult();
+                CurrencyExchangeRate result = (CurrencyExchangeRate)q.getSingleResult();
+                CurrencyExchangeRate cer = new CurrencyExchangeRate();
+                CurrencyExchangeRatePK cerPK = cer.getCurrencyExchangeRatePK();
+                cerPK.setOrganizationId(result.getCurrencyExchangeRatePK().getOrganizationId());
                 cer.setFromCurrency(toCurrency);
                 cer.setToCurrency(fromCurrency);
-                BigDecimal exchangeRate = BigDecimal.ONE.divide(cer.getExchangeRate(), MathContext.DECIMAL64);
+                BigDecimal exchangeRate = BigDecimal.ONE.divide(result.getExchangeRate(), MathContext.DECIMAL64);
                 cer.setExchangeRate(exchangeRate);
                 return cer;
             } catch(NoResultException ex1) {
