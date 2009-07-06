@@ -7,21 +7,12 @@ package com.cosmos.acacia.crm.data.purchase;
 import com.cosmos.acacia.annotation.BorderType;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
-import com.cosmos.acacia.annotation.EntityListLogic;
-import com.cosmos.acacia.annotation.EntityLogic;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Logic;
-import com.cosmos.acacia.annotation.LogicUnitType;
-import com.cosmos.acacia.annotation.OperationRow;
-import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.SelectableList;
-import com.cosmos.acacia.annotation.Unit;
-import com.cosmos.acacia.annotation.UnitType;
-import com.cosmos.acacia.annotation.UpdateOperation;
 import com.cosmos.acacia.crm.bl.purchase.PurchaseServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -80,8 +71,7 @@ import javax.persistence.Transient;
                     borderType=BorderType.TitledBorder, title="Item Details"
                 ),
                 componentConstraints="span, growx"
-            )/*,
-            layout=@Layout(columnsPairs=4)*/
+            )
         ),
         @FormContainer(
             name="orderDetails",
@@ -91,11 +81,10 @@ import javax.persistence.Transient;
                     borderType=BorderType.TitledBorder, title="Order Details"
                 ),
                 componentConstraints="span, growx"
-            )/*,
-            layout=@Layout(columnsPairs=4)*/
+            )
         )
     },
-    serviceClass=PurchaseServiceRemote.class,
+    serviceClass=PurchaseServiceRemote.class/*,
     logic=@Logic(
         entityListLogic=@EntityListLogic(
             units={
@@ -108,6 +97,24 @@ import javax.persistence.Transient;
                             update=@UpdateOperation(
                                 variable="mainEntity.totalQuantity",
                                 with="entity.receivedQuantity",
+                                incremental=true,
+                                condition="taskMode(0, 'CMD')"
+                            )
+                        ),
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="mainEntity.totalNetAmount",
+                                with="entity.extendedPrice",
+                                incremental=true,
+                                condition="taskMode(0, 'CMD')"
+                            )
+                        ),
+                        @OperationRow(
+                            operationType=OperationType.Update,
+                            update=@UpdateOperation(
+                                variable="mainEntity.totalTax",
+                                with="entity.taxValue",
                                 incremental=true,
                                 condition="taskMode(0, 'CMD')"
                             )
@@ -127,7 +134,7 @@ import javax.persistence.Transient;
                             update=@UpdateOperation(
                                 variable="entity.extendedPrice",
                                 with="entity.receivedPrice * entity.receivedQuantity",
-                                condition="onChange(entity.receivedPrice, entity.receivedQuantity)"
+                                condition="onEntityChange(entity.receivedPrice, entity.receivedQuantity)"
                             )
                         ),
                         @OperationRow(
@@ -135,7 +142,7 @@ import javax.persistence.Transient;
                             update=@UpdateOperation(
                                 variable="entity.measureUnit",
                                 with="entity.product.measureUnit",
-                                condition="onChange(entity.product)"
+                                condition="onEntityChange(entity.product)"
                             )
                         ),
                         @OperationRow(
@@ -143,22 +150,26 @@ import javax.persistence.Transient;
                             update=@UpdateOperation(
                                 variable="entity.receivedPrice",
                                 with="convertAmount(entity.product.salesPrice, now(), entity.product.currency, entity.invoice.documentCurrency)",
-                                condition="onChange(entity.product)"
+                                condition="onEntityChange(entity.product)"
                             )
                         )
                     }
                 )
             }
         )
-    )
+    )*/
 )
 public class PurchaseInvoiceItem extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     public static final String NQ_FIND_ALL = "PurchaseInvoiceItem.findAll";
-
-
+    //
+    public static final String RECEIVED_PRICE_CALCULATION_EXPRESSION =
+            "convertAmount(product.salesPrice, now(), product.currency, invoice.documentCurrency)";
+    public static final String EXTENDED_PRICE_CALCULATION_EXPRESSION =
+            "receivedPrice * receivedQuantity";
+    //
     @Id
     @Basic(optional = false)
     @Column(name = "invoice_item_id", nullable = false)
@@ -368,6 +379,10 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
 
     public void setReceivedPrice(BigDecimal receivedPrice) {
         this.receivedPrice = receivedPrice;
+    }
+
+    public String getReceivedPriceCalculationExpression() {
+        return "convertAmount(product.salesPrice, now(), product.currency, invoice.documentCurrency)";
     }
 
     public BigDecimal getExtendedPrice() {

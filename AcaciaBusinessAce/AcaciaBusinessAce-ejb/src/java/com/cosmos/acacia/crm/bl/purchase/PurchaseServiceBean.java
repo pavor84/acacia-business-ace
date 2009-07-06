@@ -11,9 +11,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.crm.enums.DocumentType;
-import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -74,6 +72,10 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     private List<PurchaseInvoiceItem> getPurchaseInvoiceItems(PurchaseInvoice purchaseInvoice) {
+        if(purchaseInvoice == null || purchaseInvoice.getId() == null) {
+            return new ArrayList<PurchaseInvoiceItem>();
+        }
+
         Query q = em.createNamedQuery(PurchaseInvoiceItem.NQ_FIND_ALL);
         q.setParameter("invoice", purchaseInvoice);
         return new ArrayList<PurchaseInvoiceItem>(q.getResultList());
@@ -114,7 +116,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass) {
+    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
         String entityClassName;
         if(PURCHASE_INVOICE_CLASS_NAME.equals(entityClassName = entityClass.getName())) {
             return (List<E>)getPurchaseInvoices();
@@ -124,7 +126,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
         String itemClassName;
         if(PURCHASE_INVOICE_ITEM_CLASS_NAME.equals(itemClassName = itemClass.getName())) {
             return (List<I>)getPurchaseInvoiceItems((PurchaseInvoice)entity);
