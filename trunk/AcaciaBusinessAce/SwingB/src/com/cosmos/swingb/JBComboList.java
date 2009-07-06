@@ -37,7 +37,6 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
@@ -68,7 +67,6 @@ public class JBComboList
     private Object beanEntity;
     private JComboBoxBinding comboBoxBinding;
     private SelectableListDialog selectableListDialog;
-    private ObjectToStringConverter converter;
     private Binding binding;
 
     public JBComboList() {
@@ -267,10 +265,9 @@ public class JBComboList
             return null;
         }
 
-        if (converter == null) {
-            converter = new BeanResourceToStringConverter(getApplication());
+        if(converter != null) {
+            setConverter(converter);
         }
-        AutoCompleteDecorator.decorate(comboBox, converter);
 
         this.selectableListDialog = selectableListDialog;
 
@@ -507,15 +504,8 @@ public class JBComboList
     public void initUnbound(
             SelectableListDialog selectableListDialog,
             ObjectToStringConverter converter) {
-
         comboBox.removeAllItems();
-
-        if (converter == null) {
-            converter = new BeanResourceToStringConverter(getApplication());
-        }
-
-        this.converter = converter;
-
+        setConverter(converter);
         this.selectableListDialog = selectableListDialog;
 
         List data = new ArrayList(selectableListDialog.getListData());
@@ -525,8 +515,6 @@ public class JBComboList
             comboBox.addItem(obj);
         }
         comboBox.setSelectedIndex(-1);
-
-        AutoCompleteDecorator.decorate(comboBox, converter);
     }
 
     public void initUnbound(SelectableListDialog selectableListDialog) {
@@ -534,11 +522,11 @@ public class JBComboList
     }
 
     public ObjectToStringConverter getConverter() {
-        return converter;
+        return comboBox.getConverter();
     }
 
     public void setConverter(ObjectToStringConverter converter) {
-        this.converter = converter;
+        comboBox.setConverter(converter);
     }
 
     public Binding getBinding() {

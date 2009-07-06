@@ -79,6 +79,7 @@ public class JBDatePicker
         return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), dateFormat);
     }
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
