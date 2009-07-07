@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
-import com.cosmos.acacia.crm.data.UserGroup;
+import com.cosmos.acacia.crm.data.users.UserGroup;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;

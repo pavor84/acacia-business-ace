@@ -18,7 +18,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
 
 /**
