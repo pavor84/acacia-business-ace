@@ -7,8 +7,8 @@ import javax.ejb.Remote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.Right;
-import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.users.Right;
+import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessRight;
 

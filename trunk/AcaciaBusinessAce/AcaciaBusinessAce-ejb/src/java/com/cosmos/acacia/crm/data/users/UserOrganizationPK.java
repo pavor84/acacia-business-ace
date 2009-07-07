@@ -1,4 +1,4 @@
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.users;
 
 import java.io.Serializable;
 import java.math.BigInteger;

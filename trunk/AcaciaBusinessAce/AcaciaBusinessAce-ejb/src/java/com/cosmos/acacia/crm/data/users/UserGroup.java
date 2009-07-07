@@ -1,5 +1,7 @@
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.users;
 
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObject;
 import java.io.Serializable;
 import java.math.BigInteger;
 
