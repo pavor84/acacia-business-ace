@@ -2,7 +2,6 @@
  * OrganizationsListPanel.java
  *
  */
-
 package com.cosmos.acacia.crm.gui.users;
 
 import java.math.BigInteger;
@@ -16,8 +15,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.data.UserOrganization;
+import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
@@ -40,10 +39,8 @@ public class UsersListPanel extends AbstractTablePanel<User> {
         super(parentDataObjectId);
         setClassifier(classifier);
     }
-
     @EJB
     private UsersRemote adminSession;
-
     private BindingGroup usersBindingGroup;
     private List<User> users;
     private User ownUser;
@@ -71,17 +68,24 @@ public class UsersListPanel extends AbstractTablePanel<User> {
         setSpecialCaption("activateUser.Action.text");
         setVisible(Button.Special, true);
         addTablePanelListener(new TablePanelListener() {
+
             @Override
             public void selectionRowChanged() {
                 updateButtonCaption();
             }
-            @Override public void tablePanelClose() {
+
+            @Override
+            public void tablePanelClose() {
                 //
             }
-            @Override public void selectAction() {
+
+            @Override
+            public void selectAction() {
                 //
             }
-            @Override public void tableRefreshed() {
+
+            @Override
+            public void tableRefreshed() {
                 //
             }
         });
@@ -101,10 +105,10 @@ public class UsersListPanel extends AbstractTablePanel<User> {
     }
 
     private UsersRemote getAdminSession() {
-         if(adminSession == null) {
+        if (adminSession == null) {
             try {
                 adminSession = getBean(UsersRemote.class);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -115,27 +119,27 @@ public class UsersListPanel extends AbstractTablePanel<User> {
     private void updateButtonCaption() {
         User user = (User) getDataTable().getSelectedRowObject();
         if (user != null) {
-            if (user.isActive())
+            if (user.isActive()) {
                 setSpecialCaption("deactivateUser.Action.text");
-            else
+            } else {
                 setSpecialCaption("activateUser.Action.text");
+            }
 
-            if (user.equals(ownUser))
+            if (user.equals(ownUser)) {
                 setEnabled(Button.Special, false);
+            }
         }
     }
-    protected List<User> getUsers()
-    {
-        if(users == null)
-        {
+
+    protected List<User> getUsers() {
+        if (users == null) {
             users = getAdminSession().getUsers(getParentDataObjectId());
         }
 
         return users;
     }
 
-    protected EntityProperties getUserEntityProperties()
-    {
+    protected EntityProperties getUserEntityProperties() {
         return getAdminSession().getUserEntityProperties();
     }
 
@@ -146,15 +150,14 @@ public class UsersListPanel extends AbstractTablePanel<User> {
 
     @Override
     protected User modifyRow(User rowObject) {
-        if(rowObject != null)
-        {
+        if (rowObject != null) {
             Organization org = getAcaciaSession().getOrganization();
             UserOrganization uo = getAdminSession().getUserOrganization(rowObject, org);
             UserPanel userPanel = new UserPanel(uo);
             DialogResponse response = userPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response)) {
+            if (DialogResponse.SAVE.equals(response)) {
                 return (User) userPanel.getSelectedValue();
-            } else if(userPanel.getSelectedValue() != null) {
+            } else if (userPanel.getSelectedValue() != null) {
                 refreshAction();
             }
         }
@@ -164,7 +167,7 @@ public class UsersListPanel extends AbstractTablePanel<User> {
 
     @Override
     protected User newRow() {
-           return null;
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -172,8 +175,9 @@ public class UsersListPanel extends AbstractTablePanel<User> {
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (usersBindingGroup != null)
+        if (usersBindingGroup != null) {
             usersBindingGroup.unbind();
+        }
 
         users = null;
 

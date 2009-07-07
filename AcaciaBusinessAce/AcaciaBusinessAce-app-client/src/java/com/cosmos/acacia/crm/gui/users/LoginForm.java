@@ -22,7 +22,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
