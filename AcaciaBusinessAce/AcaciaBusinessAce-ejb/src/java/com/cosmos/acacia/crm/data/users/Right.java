@@ -1,5 +1,8 @@
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.users;
 
+import com.cosmos.acacia.crm.data.DataObjectType;
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.annotation.Property;
 import java.io.Serializable;
 import java.util.Date;

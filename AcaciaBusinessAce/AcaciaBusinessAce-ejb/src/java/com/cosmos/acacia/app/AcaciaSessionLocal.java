@@ -7,8 +7,8 @@ import javax.ejb.Local;
 
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.Right;
-import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.users.Right;
+import com.cosmos.acacia.crm.data.users.User;
 import java.util.UUID;
 
 /**

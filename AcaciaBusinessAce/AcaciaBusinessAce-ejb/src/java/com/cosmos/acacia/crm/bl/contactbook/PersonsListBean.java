@@ -26,7 +26,7 @@ import com.cosmos.acacia.crm.data.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Passport;
 import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.User;
+import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;

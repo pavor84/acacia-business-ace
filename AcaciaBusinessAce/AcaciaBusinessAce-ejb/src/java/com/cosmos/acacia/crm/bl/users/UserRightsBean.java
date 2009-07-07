@@ -23,13 +23,13 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.PositionType;
-import com.cosmos.acacia.crm.data.Right;
-import com.cosmos.acacia.crm.data.User;
-import com.cosmos.acacia.crm.data.UserGroup;
-import com.cosmos.acacia.crm.data.UserGroupRight;
-import com.cosmos.acacia.crm.data.UserOrganization;
-import com.cosmos.acacia.crm.data.UserOrganizationPK;
-import com.cosmos.acacia.crm.data.UserRight;
+import com.cosmos.acacia.crm.data.users.Right;
+import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserGroup;
+import com.cosmos.acacia.crm.data.users.UserGroupRight;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.data.users.UserOrganizationPK;
+import com.cosmos.acacia.crm.data.users.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.Iterator;
@@ -118,8 +118,13 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
         Query q = em.createNamedQuery(UserRight.NQ_FIND_BY_USER_AND_PERMISSION_NOT_NULL);
         q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("user", user);
+        System.out.println("user: " + user);
+        System.out.flush();
+        List list = q.getResultList();
+        System.out.println("list: " + list);
+        return getRightsWithInfo(list);
 
-        return getRightsWithInfo(q.getResultList());
+        //return getRightsWithInfo(q.getResultList());
     }
 
     @Override

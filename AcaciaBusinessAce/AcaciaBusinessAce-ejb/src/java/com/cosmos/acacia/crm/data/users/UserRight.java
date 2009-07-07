@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.users;
 
 import com.cosmos.acacia.annotation.Property;
 import javax.persistence.Basic;
