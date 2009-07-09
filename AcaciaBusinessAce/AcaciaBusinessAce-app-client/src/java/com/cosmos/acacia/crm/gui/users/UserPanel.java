@@ -200,6 +200,7 @@ public class UserPanel extends BaseEntityPanel {
         branchesTable.setVisible(Button.New, false);
         branchComboList.bind(bg, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"));
 
+        /*
         groupComboList.setEnabled(true);
         UserGroupsListPanel groupsTable = new UserGroupsListPanel(userOrganization.getOrganization().getId());
         groupComboList.bind(bg, groupsTable, userOrganization, entityProps.getPropertyDetails("userGroup"), "${name}");
@@ -225,6 +226,7 @@ public class UserPanel extends BaseEntityPanel {
                 }
             }
         });
+        */
 
         rightsTable = new RightsListPanel(userOrganization.getUser(), RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);

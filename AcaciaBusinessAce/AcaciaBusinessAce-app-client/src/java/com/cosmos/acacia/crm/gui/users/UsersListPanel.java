@@ -133,7 +133,7 @@ public class UsersListPanel extends AbstractTablePanel<User> {
 
     protected List<User> getUsers() {
         if (users == null) {
-            users = getAdminSession().getUsers(getParentDataObjectId());
+            users = getAdminSession().getUsers(getAcaciaSession().getOrganization());
         }
 
         return users;

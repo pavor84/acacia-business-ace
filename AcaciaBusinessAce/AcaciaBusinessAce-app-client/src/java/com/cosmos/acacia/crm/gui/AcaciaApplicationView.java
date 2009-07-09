@@ -671,7 +671,7 @@ public class AcaciaApplicationView extends FrameView {
 
         JBMenu classifiersMenu = new JBMenu();
 
-        JBMenu toolsMenu = new JBMenu();
+        JBMenu settingsMenu = new JBMenu();
         JBMenuItem usersListMenuItem = new JBMenuItem();
         JBMenuItem userGroupsMenuItem = new JBMenuItem();
 
@@ -965,9 +965,9 @@ public class AcaciaApplicationView extends FrameView {
         /**
          * Tools menu
          */
-        toolsMenu.setName("toolsMenu");
-        toolsMenu.setText(resourceMap.getString("toolsMenu.text"));
-        toolsMenu.setMnemonic('T');
+        settingsMenu.setName("settingsMenu");
+        settingsMenu.setText(resourceMap.getString("settingsMenu.text"));
+        settingsMenu.setMnemonic('T');
 
         /* Admin menu item */
         JMenu adminMenu = new JMenu();
@@ -980,14 +980,14 @@ public class AcaciaApplicationView extends FrameView {
 
         userGroupsMenuItem.setAction(actionMap.get("userGroupsListAction"));
         adminMenu.add(userGroupsMenuItem);
-        toolsMenu.add(adminMenu);
+        settingsMenu.add(adminMenu);
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("currencyExchangeRatesAction"));
         menuItem.setMnemonic('x');
-        toolsMenu.add(menuItem);
+        settingsMenu.add(menuItem);
 
-        menuBar.add(toolsMenu);
+        menuBar.add(settingsMenu);
         /* End of admin menu */
 
         /* Warehouse menu items */
