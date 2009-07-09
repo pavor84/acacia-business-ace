@@ -182,7 +182,7 @@ public class UsersTest implements Serializable {
 
     @Test
     public void getUsersTest() {
-        List<User> list = formSession.getUsers(organization.getId());
+        List<User> list = formSession.getUsers(organization);
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() > 0);
     }
