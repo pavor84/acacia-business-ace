@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.PositionType;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserGroup;
+import com.cosmos.acacia.crm.data.users.UserGroupMember;
 import com.cosmos.beansbinding.EntityProperties;
 
 @Remote
@@ -143,6 +144,12 @@ public interface UserRightsRemote {
     Set<Right> getRights(UserGroup userGroup);
 
     /**
+     * The list of all rights for both users and user groups
+     * @return
+     */
+    Set<Right> getRights();
+
+    /**
      * Lists the special permissions (specific rights) for a user
      *
      * @param user
@@ -187,4 +194,6 @@ public interface UserRightsRemote {
      * @return a list of DbResource
      */
     List<DbResource> getSpecialPermissions();
+
+
 }

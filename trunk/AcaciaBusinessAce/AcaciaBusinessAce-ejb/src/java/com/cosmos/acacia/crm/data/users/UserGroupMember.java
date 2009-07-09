@@ -47,14 +47,21 @@ import javax.persistence.UniqueConstraint;
         query = "SELECT u FROM UserGroupMember u" +
                 " WHERE" +
                 "  u.userGroup = :userGroup"
-    )/*,
+    ),
     @NamedQuery(
         name = UserGroupMember.NQ_IS_USER_MEMBER_OF_USER_GROUP,
-        query = "SELECT EXISTS (SELECT u FROM UserGroupMember u" +
+        query = "SELECT u.userGroupMemberId FROM UserGroupMember u" +
                 " WHERE" +
                 "  u.userGroup = :userGroup" +
-                "  and u.user = :user)"
-    )*/
+                "  and u.user = :user"
+    ),
+    @NamedQuery(
+        name = UserGroupMember.NQ_FIND_BY_USER_AND_USER_GROUP,
+        query = "SELECT u FROM UserGroupMember u" +
+                " WHERE" +
+                "  u.userGroup = :userGroup" +
+                "  and u.user = :user"
+    )
 })
 public class UserGroupMember extends DataObjectBean implements Serializable {
 
@@ -65,6 +72,7 @@ public class UserGroupMember extends DataObjectBean implements Serializable {
     public static final String NQ_FIND_BY_USER = CLASS_NAME + ".findByUser";
     public static final String NQ_FIND_BY_USER_GROUP = CLASS_NAME + ".findByUserGroup";
     public static final String NQ_IS_USER_MEMBER_OF_USER_GROUP = CLASS_NAME + ".isUserMemberOfUserGroup";
+    public static final String NQ_FIND_BY_USER_AND_USER_GROUP = CLASS_NAME + ".findByUserAndUserGroup";
 
     @Id
     @Basic(optional = false)

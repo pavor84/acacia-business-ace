@@ -27,8 +27,6 @@ import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserGroup;
 import com.cosmos.acacia.crm.data.users.UserGroupRight;
-import com.cosmos.acacia.crm.data.users.UserOrganization;
-import com.cosmos.acacia.crm.data.users.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.users.UserRight;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.beansbinding.EntityProperties;
@@ -48,6 +46,8 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
     private ClassifiersLocal classifiersManager;
     @EJB
     private DataObjectTypeLocal dataObjectTypesManager;
+    @EJB
+    private UsersLocal usersService;
 
     @Override
     public void assignGroupToPosition(UserGroup group, PositionType position) {
@@ -106,11 +106,7 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
 
     @Override
     public void assignGroupToUser(UserGroup group, User user) {
-        UserOrganization uo = em.find(UserOrganization.class, new UserOrganizationPK(
-                user.getId(), session.getOrganization().getId()));
-
-        uo.setUserGroup(group);
-        esm.persist(em, uo);
+        usersService.addUserToUserGroup(user, group);
     }
 
     @Override
@@ -169,6 +165,14 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
         Query q = em.createNamedQuery(UserGroupRight.NQ_FIND_BY_USER_GROUP_AND_PERMISSION_NULL);
         q.setParameter("organizationId", session.getOrganization().getId());
         q.setParameter("userGroup", userGroup);
+
+        return getRightsWithInfo(q.getResultList());
+    }
+
+    @Override
+    public Set<Right> getRights() {
+        Query q = em.createNamedQuery(Right.NQ_FIND_ALL);
+        q.setParameter("organizationId", session.getOrganization().getId());
 
         return getRightsWithInfo(q.getResultList());
     }

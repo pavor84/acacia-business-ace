@@ -290,8 +290,10 @@ public class Privilege
     private String privilegeName;
     private PrivilegeCategory privilegeCategory;
     private PrivilegeType privilegeType;
-    private Set<AccessRight> inapplicableRights;
+    //private Set<AccessRight> inapplicableRights;
     private Map<AccessRight, AccessLevel> accessRights;
+
+    private Object entity;
     private Object entityType;
 
     public Privilege() {
@@ -320,13 +322,13 @@ public class Privilege
         this.entityType = entityType;
     }
 
-    public Set<AccessRight> getInapplicableRights() {
+    /*public Set<AccessRight> getInapplicableRights() {
         return inapplicableRights;
     }
 
     public void setInapplicableRights(Set<AccessRight> inapplicableRights) {
         this.inapplicableRights = inapplicableRights;
-    }
+    }*/
 
     public PrivilegeCategory getPrivilegeCategory() {
         return privilegeCategory;

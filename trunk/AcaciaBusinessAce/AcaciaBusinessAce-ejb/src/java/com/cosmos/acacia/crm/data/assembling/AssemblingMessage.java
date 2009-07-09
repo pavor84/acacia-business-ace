@@ -30,20 +30,18 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "assembling_messages")
-@NamedQueries(
-    {
-        @NamedQuery
-            (
-                name = "AssemblingMessage.findByOrganization",
-                query = "select t1 from AssemblingMessage t1" +
-                    " where" +
-                    "  t1.organization = :organization" +
-                    "  and t1.dataObject.deleted = false"
-            )
-    })
+@NamedQueries({
+    @NamedQuery(
+        name = "AssemblingMessage.findByOrganization",
+        query = "select t1 from AssemblingMessage t1" +
+                " where" +
+                "  t1.organization = :organization" +
+                "  and t1.dataObject.deleted = false"
+    )
+})
 public class AssemblingMessage extends DataObjectBean
-            implements Serializable, Comparable<AssemblingMessage>
-{
+        implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -207,13 +205,12 @@ public class AssemblingMessage extends DataObjectBean
         ;
 
         private Unit(
-            String messageCode,
-            String messageLabel,
-            String selectionText,
-            String selectionTitle,
-            String inputText,
-            String inputTitle)
-        {
+                String messageCode,
+                String messageLabel,
+                String selectionText,
+                String selectionTitle,
+                String inputText,
+                String inputTitle) {
             this(messageCode,
                     messageLabel,
                     selectionText,
@@ -224,14 +221,13 @@ public class AssemblingMessage extends DataObjectBean
         }
 
         private Unit(
-            String messageCode,
-            String messageLabel,
-            String selectionText,
-            String selectionTitle,
-            String inputText,
-            String inputTitle,
-            String description)
-        {
+                String messageCode,
+                String messageLabel,
+                String selectionText,
+                String selectionTitle,
+                String inputText,
+                String inputTitle,
+                String description) {
             this.messageCode = messageCode;
             this.messageLabel = messageLabel;
             this.selectionText = selectionText;
@@ -249,8 +245,7 @@ public class AssemblingMessage extends DataObjectBean
         private String inputTitle;
         private String description;
 
-        public void initAssemblingMessage(AssemblingMessage message)
-        {
+        public void initAssemblingMessage(AssemblingMessage message) {
             message.messageCode = messageCode;
             message.messageLabel = messageLabel;
             message.selectionText = selectionText;
@@ -287,196 +282,155 @@ public class AssemblingMessage extends DataObjectBean
         public String getSelectionTitle() {
             return selectionTitle;
         }
-
     }
 
-
-    public AssemblingMessage()
-    {
+    public AssemblingMessage() {
     }
 
-    public AssemblingMessage(BigInteger messageId)
-    {
+    public AssemblingMessage(BigInteger messageId) {
         this.messageId = messageId;
     }
 
-    public AssemblingMessage(BigInteger messageId, String messageCode, String selectionText)
-    {
+    public AssemblingMessage(BigInteger messageId, String messageCode, String selectionText) {
         this.messageId = messageId;
         this.messageCode = messageCode;
         this.selectionText = selectionText;
     }
 
-    public BigInteger getMessageId()
-    {
+    public BigInteger getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(BigInteger messageId)
-    {
+    public void setMessageId(BigInteger messageId) {
         this.messageId = messageId;
     }
 
-    public String getMessageCode()
-    {
+    public String getMessageCode() {
         return messageCode;
     }
 
-    public void setMessageCode(String messageCode)
-    {
+    public void setMessageCode(String messageCode) {
         this.messageCode = messageCode;
     }
 
-    public String getSelectionText()
-    {
+    public String getSelectionText() {
         return selectionText;
     }
 
-    public void setSelectionText(String selectionText)
-    {
+    public void setSelectionText(String selectionText) {
         this.selectionText = selectionText;
     }
 
-    public String getMessageLabel()
-    {
+    public String getMessageLabel() {
         return messageLabel;
     }
 
-    public void setMessageLabel(String messageLabel)
-    {
+    public void setMessageLabel(String messageLabel) {
         this.messageLabel = messageLabel;
     }
 
-    public String getSelectionTitle()
-    {
+    public String getSelectionTitle() {
         return selectionTitle;
     }
 
-    public void setSelectionTitle(String selectionTitle)
-    {
+    public void setSelectionTitle(String selectionTitle) {
         this.selectionTitle = selectionTitle;
     }
 
-    public String getInputText()
-    {
+    public String getInputText() {
         return inputText;
     }
 
-    public void setInputText(String inputText)
-    {
+    public void setInputText(String inputText) {
         this.inputText = inputText;
     }
 
-    public String getInputTitle()
-    {
+    public String getInputTitle() {
         return inputTitle;
     }
 
-    public void setInputTitle(String inputTitle)
-    {
+    public void setInputTitle(String inputTitle) {
         this.inputTitle = inputTitle;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public Organization getOrganization()
-    {
+    public Organization getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Organization organization)
-    {
+    public void setOrganization(Organization organization) {
         this.organization = organization;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int hash = 0;
         hash += (messageId != null ? messageId.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object)
-    {
+    public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if(!(object instanceof AssemblingMessage))
-        {
+        if (!(object instanceof AssemblingMessage)) {
             return false;
         }
         AssemblingMessage other = (AssemblingMessage) object;
-        if((this.messageId == null && other.messageId != null) || (this.messageId != null && !this.messageId.equals(other.messageId)))
-        {
+        if ((this.messageId == null && other.messageId != null) || (this.messageId != null && !this.messageId.equals(other.messageId))) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString()
-    {
-        return "com.cosmos.acacia.crm.data.assembling.AssemblingMessage[messageId=" + messageId +
-            ", code=" + messageCode + "]";
+    public String toString() {
+        return "AssemblingMessage[messageId=" + messageId +
+                ", code=" + messageCode + "]";
     }
 
     @Override
-    public DataObject getDataObject()
-    {
+    public DataObject getDataObject() {
         return dataObject;
     }
 
     @Override
-    public void setDataObject(DataObject dataObject)
-    {
+    public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
     @Override
-    public BigInteger getId()
-    {
+    public BigInteger getId() {
         return getMessageId();
     }
 
     @Override
-    public void setId(BigInteger id)
-    {
+    public void setId(BigInteger id) {
         setMessageId(id);
     }
 
     @Override
-    public BigInteger getParentId()
-    {
-        if(organization == null)
+    public BigInteger getParentId() {
+        if (organization == null) {
             return null;
+        }
 
         return organization.getId();
     }
 
     @Override
-    public void setParentId(BigInteger parentId)
-    {
+    public void setParentId(BigInteger parentId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String getInfo()
-    {
+    public String getInfo() {
         return getMessageCode();
     }
-
-    @Override
-    public int compareTo(AssemblingMessage other)
-    {
-        return messageId.compareTo(other.messageId);
-    }
-
 }

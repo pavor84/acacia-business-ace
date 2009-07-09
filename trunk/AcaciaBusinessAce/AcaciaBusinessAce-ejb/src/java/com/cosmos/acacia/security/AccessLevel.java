@@ -35,8 +35,7 @@ import java.util.Set;
  *
  * @author Miro
  */
-public enum AccessLevel
-{
+public enum AccessLevel {
 
     /**
      * You cannot perform that action on ANY records within that entity – even

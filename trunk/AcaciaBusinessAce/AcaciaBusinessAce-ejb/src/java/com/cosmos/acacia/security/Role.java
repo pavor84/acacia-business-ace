@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.security;
 
 import java.util.List;
@@ -11,8 +10,8 @@ import java.util.List;
  *
  * @author Miro
  */
-public class Role
-{
+public class Role {
+
     private String roleName;
     private Object organization;
     private Object businessUnit;

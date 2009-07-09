@@ -181,7 +181,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     @Override
     public List<Person> getStaff() {
-        List<User> users = usersManager.getUsers(session.getOrganization().getId());
+        List<User> users = usersManager.getUsers(session.getOrganization());
         List<Person> result = new ArrayList<Person>(users.size());
         for (User user : users) {
             Person person = user.getPerson();

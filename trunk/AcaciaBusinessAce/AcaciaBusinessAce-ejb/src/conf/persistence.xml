@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
-  <persistence-unit name="AcaciaPU" transaction-type="JTA">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>jdbc/acaciaDatasourceLocal</jta-data-source>
-    <!--jta-data-source>jdbc/acaciaDatasource</jta-data-source-->
-    <jar-file>AcaciaBusinessLogic.jar</jar-file>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <!--property name="hibernate.hbm2ddl.auto" value="update"/-->
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      <!--property name="hibernate.ejb.event.post-load" value="com.cosmos.acacia.crm.data.AcaciaPostLoadEventListener" />
-      <property name="hibernate.ejb.event.pre-insert" value="com.cosmos.acacia.crm.data.AcaciaPreInsertEventListener" /> 
-      <property name="hibernate.ejb.event.pre-update" value="com.cosmos.acacia.crm.data.AcaciaPreUpdateEventListener" /> 
-      <property name="hibernate.ejb.event.pre-delete" value="com.cosmos.acacia.crm.data.AcaciaPreDeleteEventListener" /-->
-      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
-      <!--property name="hibernate.cache.provider_class" value="org.hibernate.cache.TreeCacheProvider"/-->
-      <!--property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook"/>
-      <property name="hibernate.treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/-->
-      <property name="hibernate.cache.use_second_level_cache" value="true"/>
-      <property name="hibernate.cache.use_query_cache" value="true"/>
-      <!--property name="hibernate.jdbc.use_streams_for_binary" value="true"/-->
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="AcaciaPU" transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>jdbc/acaciaDatasourceLocal</jta-data-source>
+        <mapping-file>META-INF/hibernate.hbm.xml</mapping-file>
+        <!--jta-data-source>jdbc/acaciaDatasource</jta-data-source-->
+        <jar-file>AcaciaBusinessLogic.jar</jar-file>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <!--property name="hibernate.hbm2ddl.auto" value="update"/-->
+            <property name="hibernate.show_sql" value="true"/>
+            <!--property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/-->
+            <property name="hibernate.dialect" value="com.cosmos.persistence.hibernate.dialect.PostgreSQLDialectUUID"/>
+            <!--property name="hibernate.ejb.event.post-load" value="com.cosmos.acacia.crm.data.AcaciaPostLoadEventListener" />
+            <property name="hibernate.ejb.event.pre-insert" value="com.cosmos.acacia.crm.data.AcaciaPreInsertEventListener" />
+            <property name="hibernate.ejb.event.pre-update" value="com.cosmos.acacia.crm.data.AcaciaPreUpdateEventListener" />
+            <property name="hibernate.ejb.event.pre-delete" value="com.cosmos.acacia.crm.data.AcaciaPreDeleteEventListener" /-->
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
+            <!--property name="hibernate.cache.provider_class" value="org.hibernate.cache.TreeCacheProvider"/-->
+            <!--property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook"/>
+            <property name="hibernate.treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/-->
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <!--property name="hibernate.jdbc.use_streams_for_binary" value="true"/-->
+        </properties>
+    </persistence-unit>
 </persistence>

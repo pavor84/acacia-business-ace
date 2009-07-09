@@ -52,12 +52,11 @@ public class DataObject implements Serializable {
 
     @Id
     @Column(name = "data_object_id", nullable = false)
-    @GenericGenerator
-    (
+    //@Type(type="uuid")
+    @GenericGenerator(
         name="DOSequenceGenerator",
-        strategy = "com.cosmos.acacia.persistence.id.GUIDSequenceGenerator",
-        parameters =
-        {
+        strategy = "com.cosmos.persistence.id.UUIDSequenceGenerator",
+        parameters = {
             @Parameter(name = "sequence", value = "xyz_id_sequence")
         }
     )
