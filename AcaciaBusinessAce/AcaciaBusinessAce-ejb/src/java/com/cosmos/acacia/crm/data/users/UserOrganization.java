@@ -58,18 +58,18 @@ public class UserOrganization implements Serializable {
     @Column(name="is_user_active")
     private boolean isUserActive;
 
-    @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
+    /*@JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
     @ManyToOne
     @Property(title="User Group", customDisplay="${userGroup.name}")
-    private UserGroup userGroup;
+    private UserGroup userGroup;*/
 
-    public UserGroup getUserGroup() {
+    /*public UserGroup getUserGroup() {
         return userGroup;
     }
 
     public void setUserGroup(UserGroup userGroup) {
         this.userGroup = userGroup;
-    }
+    }*/
 
     public User getUser() {
         return user;

@@ -23,7 +23,8 @@ import javax.imageio.ImageIO;
  * @author Miro
  */
 public abstract class DataObjectBean
-        implements CloneableBean<DataObjectBean>, PropertyChangeNotificationBroadcaster {
+        implements CloneableBean<DataObjectBean>, PropertyChangeNotificationBroadcaster,
+        Comparable<DataObjectBean> {
 
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private URI smallImageURI;
@@ -271,5 +272,10 @@ public abstract class DataObjectBean
         } catch (CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public int compareTo(DataObjectBean other) {
+        return getId().compareTo(other.getId());
     }
 }

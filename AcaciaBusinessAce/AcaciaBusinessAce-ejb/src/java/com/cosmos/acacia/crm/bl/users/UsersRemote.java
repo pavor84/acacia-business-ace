@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.users.UserGroup;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -163,7 +164,7 @@ public interface UsersRemote {
      * @param parentDataObjectId
      * @return list of users
      */
-    List<User> getUsers(BigInteger parentDataObjectId);
+    List<User> getUsers(Organization organization);
 
     /**
      * Sends a request for the current user to join the specified organization.
@@ -259,4 +260,27 @@ public interface UsersRemote {
      * which is assigned to the current user's person
      */
     UserGroup getUserGroupByPositionType();
+
+    boolean isMemberOf(User user, UserGroup userGroup);
+
+    boolean isMemberOf(UserGroup userGroup);
+
+    /**
+     * Get UserGroups for the specific User
+     * @param user
+     * @return
+     */
+    Set<UserGroup> getUserGroups(User user);
+
+    /**
+     * Get UserGroups for the current/logged User
+     * @return
+     */
+    Set<UserGroup> getUserGroups();
+
+    Set<User> getUsers(UserGroup userGroup);
+
+    boolean addUserToUserGroup(User user, UserGroup userGroup);
+
+    boolean deleteUserFromUserGroup(User user, UserGroup userGroup);
 }

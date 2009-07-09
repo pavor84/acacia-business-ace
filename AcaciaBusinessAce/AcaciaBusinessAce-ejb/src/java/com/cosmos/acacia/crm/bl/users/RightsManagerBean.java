@@ -330,7 +330,7 @@ public class RightsManagerBean
 
 
         // Getting the directly assigned group for this user
-        UserOrganization uo = usersManager.getUserOrganization(user, getOrganization());
+        /*UserOrganization uo = usersManager.getUserOrganization(user, getOrganization());
 
         UserGroup group = uo.getUserGroup();
 
@@ -347,13 +347,13 @@ public class RightsManagerBean
                 groupRights = getUserRights(group);
             else
                 groupRights = getSpecialPermissions(group);
-        }
+        }*/
 
         // Creating a set of all rights for this user
         Set<Right> rights = new HashSet<Right>();
 
         rights.addAll(userSpecificRights);
-        rights.addAll(groupRights);
+        //rights.addAll(groupRights);
 
         return rights;
     }

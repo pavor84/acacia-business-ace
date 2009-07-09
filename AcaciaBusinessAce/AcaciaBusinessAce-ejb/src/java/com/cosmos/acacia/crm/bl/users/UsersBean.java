@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import java.util.Set;
 import javax.crypto.Cipher;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -59,6 +60,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
+import com.cosmos.acacia.crm.data.users.UserGroupMember;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -66,6 +68,9 @@ import com.cosmos.util.Base64Decoder;
 import com.cosmos.util.Base64Encoder;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.UUID;
 
 /**
@@ -544,30 +549,27 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<User> getUsers(BigInteger parentDataObjectId) {
-        List<User> result = null;
-
-        if (parentDataObjectId != null) {
-            Organization o = em.find(Organization.class, parentDataObjectId);
-            Query q = em.createNamedQuery("UserOrganization.findByOrganization");
-            q.setParameter(ORGANIZATION_KEY, o);
-            List<UserOrganization> uoList = q.getResultList();
-            result = new ArrayList<User>(uoList.size());
-            for (UserOrganization uo : uoList) {
-                User u = uo.getUser();
-                if (uo.getBranch() != null)
-                    u.setBranchName(uo.getBranch().getAddressName());
-
-                u.setActive(uo.isUserActive());
-
-                result.add(u);
-            }
-        } else {
+    public List<User> getUsers(Organization organization) {
+        if(organization == null || organization.getId() == null) {
             Query q = em.createNamedQuery("User.findAll");
-            result = new ArrayList<User>(q.getResultList());
+            return new ArrayList<User>(q.getResultList());
         }
 
-        return result;
+        Query q = em.createNamedQuery("UserOrganization.findByOrganization");
+        q.setParameter(ORGANIZATION_KEY, organization);
+        List<UserOrganization> uoList = q.getResultList();
+        List<User> users = new ArrayList<User>(uoList.size());
+        for (UserOrganization userOrganization : uoList) {
+            User user = userOrganization.getUser();
+            if (userOrganization.getBranch() != null) {
+                user.setBranchName(userOrganization.getBranch().getAddressName());
+            }
+
+            user.setActive(userOrganization.isUserActive());
+            users.add(user);
+        }
+
+        return users;
     }
 
     @Override
@@ -794,5 +796,154 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
 
         return group;
+    }
+
+    /**
+     * UserGroupMember
+     * 
+     */
+    
+    @Override
+    public UserGroupMember getUserGroupMember(UserGroup userGroup, User user) {
+        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_BY_USER_AND_USER_GROUP);
+        q.setParameter("userGroup", userGroup);
+        q.setParameter("user", user);
+
+        try {
+            return (UserGroupMember)q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<UserGroupMember> getUserGroupMembers() {
+        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_ALL);
+        q.setParameter("organizationId", session.getOrganization().getId());
+
+        return new ArrayList<UserGroupMember>(q.getResultList());
+    }
+
+    @Override
+    public List<UserGroupMember> getUserGroupMembers(User user) {
+        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_BY_USER);
+        q.setParameter("organizationId", session.getOrganization().getId());
+        q.setParameter("user", user);
+
+        return new ArrayList<UserGroupMember>(q.getResultList());
+    }
+
+    @Override
+    public List<UserGroupMember> getUserGroupMembers(UserGroup userGroup) {
+        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_BY_USER_GROUP);
+        q.setParameter("userGroup", userGroup);
+
+        return new ArrayList<UserGroupMember>(q.getResultList());
+    }
+
+    @Override
+    public boolean isMemberOf(User user, UserGroup userGroup) {
+        Query q = em.createNamedQuery(UserGroupMember.NQ_IS_USER_MEMBER_OF_USER_GROUP);
+        q.setParameter("userGroup", userGroup);
+        q.setParameter("user", user);
+
+        try {
+            q.getSingleResult();
+            return true;
+        } catch(NoResultException ex) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isMemberOf(UserGroup userGroup) {
+        return isMemberOf(session.getUser(), userGroup);
+    }
+
+    @Override
+    public UserGroupMember newUserGroupMember() {
+        return newUserGroupMember(session.getUser());
+    }
+
+    @Override
+    public UserGroupMember newUserGroupMember(User user) {
+        UserGroupMember userGroupMember = new UserGroupMember();
+        userGroupMember.setUser(user);
+        return userGroupMember;
+    }
+
+    @Override
+    public UserGroupMember saveUserGroupMember(UserGroupMember userGroupMember) {
+        if(userGroupMember.getUser() == null) {
+            userGroupMember.setUser(session.getUser());
+        }
+
+        esm.persist(em, userGroupMember);
+
+        return userGroupMember;
+    }
+
+    @Override
+    public void deleteUserGroupMember(UserGroupMember userGroupMember) {
+        esm.remove(em, userGroupMember);
+    }
+
+    @Override
+    public Set<UserGroup> getUserGroups(User user) {
+        List<UserGroupMember> groupMembers;
+        if((groupMembers = getUserGroupMembers(user)) == null || groupMembers.size() == 0) {
+            return Collections.emptySet();
+        }
+
+        TreeSet<UserGroup> userGroups = new TreeSet<UserGroup>();
+        for(UserGroupMember groupMember : groupMembers) {
+            userGroups.add(groupMember.getUserGroup());
+        }
+
+        return userGroups;
+    }
+
+    @Override
+    public Set<UserGroup> getUserGroups() {
+        return getUserGroups(session.getUser());
+    }
+
+    @Override
+    public Set<User> getUsers(UserGroup userGroup) {
+        List<UserGroupMember> groupMembers;
+        if((groupMembers = getUserGroupMembers(userGroup)) == null || groupMembers.size() == 0) {
+            return Collections.emptySet();
+        }
+
+        TreeSet<User> userGroups = new TreeSet<User>();
+        for(UserGroupMember groupMember : groupMembers) {
+            userGroups.add(groupMember.getUser());
+        }
+
+        return userGroups;
+    }
+
+    @Override
+    public boolean addUserToUserGroup(User user, UserGroup userGroup) {
+        UserGroupMember groupMember;
+        if((groupMember = getUserGroupMember(userGroup, user)) != null) {
+            return false;
+        }
+
+        groupMember = newUserGroupMember(user);
+        groupMember.setUserGroup(userGroup);
+        esm.persist(em, groupMember);
+        return true;
+    }
+
+    @Override
+    public boolean deleteUserFromUserGroup(User user, UserGroup userGroup) {
+        UserGroupMember groupMember;
+        if((groupMember = getUserGroupMember(userGroup, user)) == null) {
+            return false;
+        }
+
+        esm.remove(em, groupMember);
+        return true;
     }
 }
