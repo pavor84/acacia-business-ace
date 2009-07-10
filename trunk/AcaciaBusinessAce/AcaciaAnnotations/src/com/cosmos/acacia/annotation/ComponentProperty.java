@@ -17,6 +17,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface ComponentProperty {
 
+    public static final String JTabbedPane_TabPlacement_TOP = "1";
+    public static final String JTabbedPane_TabPlacement_LEFT = "2";
+    public static final String JTabbedPane_TabPlacement_BOTTOM = "3";
+    public static final String JTabbedPane_TabPlacement_RIGHT = "4";
+
     String name();
 
     String value();
