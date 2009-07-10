@@ -397,24 +397,18 @@ public class EntityFormProcessor {
         }
 
         String text;
-        if ((jComponent instanceof JLabel || jComponent instanceof AbstractButton)
-                && (!"".equals(text = component.text()))) {
-            ((JLabel) jComponent).setText(text);
+        if(!"".equals(text = component.text())) {
+            if (jComponent instanceof JLabel) {
+                ((JLabel) jComponent).setText(text);
+            } else if (jComponent instanceof AbstractButton) {
+                ((AbstractButton) jComponent).setText(text);
+            }
         }
 
         String componentName = getComponentName(field, componentClass);
         jComponent.setName(componentName);
 
-        BeanUtils beanUtils = BeanUtils.getInstance();
-        for (ComponentProperty componentProperty : component.componentProperties()) {
-            try {
-                beanUtils.setProperty(jComponent, componentProperty.name(), componentProperty.value());
-            } catch (Exception ex) {
-                throw new EntityFormException("Can not set propery " + componentProperty.name() +
-                        " with value " + componentProperty.value() +
-                        " of " + jComponent, ex);
-            }
-        }
+        initComponentProperties(jComponent, component.componentProperties());
 
         initJComponentResources(jComponent);
 
@@ -428,6 +422,19 @@ public class EntityFormProcessor {
         }
 
         return jComponent;
+    }
+
+    protected void initComponentProperties(JComponent jComponent, ComponentProperty[] componentProperties) {
+        BeanUtils beanUtils = BeanUtils.getInstance();
+        for (ComponentProperty componentProperty : componentProperties) {
+            try {
+                beanUtils.setProperty(jComponent, componentProperty.name(), componentProperty.value());
+            } catch (Exception ex) {
+                throw new EntityFormException("Can not set propery " + componentProperty.name() +
+                        " with value " + componentProperty.value() +
+                        " of " + jComponent, ex);
+            }
+        }
     }
 
     protected void initJComponentResources(JComponent jComponent) {
@@ -493,6 +500,8 @@ public class EntityFormProcessor {
             }
             dependencies.addAll(Arrays.asList(values));
         }
+
+        initComponentProperties(jContainer, container.componentProperties());
 
         if(jContainer instanceof JTabbedPane) {
             return jContainer;
