@@ -28,14 +28,14 @@ import com.cosmos.swingb.DialogResponse;
  *
  * @author  Bozhidar Bozhanov
  */
-public class UsersListPanel extends AbstractTablePanel<User> {
+public class UsersListPanelOld extends AbstractTablePanel<User> {
 
     /** Creates new form OrganizationsListPanel */
-    public UsersListPanel(BigInteger parentDataObjectId) {
+    public UsersListPanelOld(BigInteger parentDataObjectId) {
         super(parentDataObjectId);
     }
 
-    public UsersListPanel(BigInteger parentDataObjectId, Classifier classifier) {
+    public UsersListPanelOld(BigInteger parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         setClassifier(classifier);
     }
@@ -153,7 +153,7 @@ public class UsersListPanel extends AbstractTablePanel<User> {
         if (rowObject != null) {
             Organization org = getAcaciaSession().getOrganization();
             UserOrganization uo = getAdminSession().getUserOrganization(rowObject, org);
-            UserPanel userPanel = new UserPanel(uo);
+            UserPanelOld userPanel = new UserPanelOld(uo);
             DialogResponse response = userPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
                 return (User) userPanel.getSelectedValue();

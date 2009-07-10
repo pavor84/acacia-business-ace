@@ -74,7 +74,8 @@ import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
 import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
-import com.cosmos.acacia.crm.gui.users.UsersListPanel;
+import com.cosmos.acacia.crm.gui.users.UserListPanel;
+import com.cosmos.acacia.crm.gui.users.UsersListPanelOld;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
@@ -518,9 +519,26 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
+    public void systemSettingsAction() {
+    }
+
+    @Action
+    public void businessUnitsAction() {
+    }
+
+    @Action
+    public void securityRolesAction() {
+    }
+
+    @Action
     public void usersListAction() {
-        UsersListPanel panel = new UsersListPanel(getParentId());
+        //UsersListPanelOld panel = new UsersListPanelOld(getParentId());
+        UserListPanel panel = new UserListPanel();
         panel.showFrame();
+    }
+
+    @Action
+    public void teamsAction() {
     }
 
     @Action
@@ -975,12 +993,28 @@ public class AcaciaApplicationView extends FrameView {
         adminMenu.setText(resourceMap.getString("adminMenu.text"));
         adminMenu.setMnemonic('D');
 
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("systemSettingsAction"));
+        adminMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("businessUnitsAction"));
+        adminMenu.add(menuItem);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("securityRolesAction"));
+        adminMenu.add(menuItem);
+
         usersListMenuItem.setAction(actionMap.get("usersListAction"));
         adminMenu.add(usersListMenuItem);
 
         userGroupsMenuItem.setAction(actionMap.get("userGroupsListAction"));
         adminMenu.add(userGroupsMenuItem);
         settingsMenu.add(adminMenu);
+
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("teamsAction"));
+        adminMenu.add(menuItem);
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("currencyExchangeRatesAction"));
