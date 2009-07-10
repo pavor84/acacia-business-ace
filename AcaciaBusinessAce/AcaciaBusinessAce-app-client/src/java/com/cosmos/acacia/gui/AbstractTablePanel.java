@@ -517,6 +517,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     protected abstract E newRow();
 
     public boolean canCreate() {
+        if(true) {
+            return true;
+        }
+
         if(isQueryMode()) {
             return false;
         }
@@ -530,6 +534,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     public boolean canModify(E rowObject) {
+        if(true) {
+            return true;
+        }
+
         if(isQueryMode()) {
             return false;
         }
@@ -543,6 +551,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     public boolean canDelete(E rowObject) {
+        if(true) {
+            return true;
+        }
+
         if(isQueryMode()) {
             return false;
         }
@@ -556,6 +568,10 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     }
 
     public boolean canView(E rowObject) {
+        if(true) {
+            return true;
+        }
+
         Object object;
         if(rowObject != null) {
             object = rowObject;
