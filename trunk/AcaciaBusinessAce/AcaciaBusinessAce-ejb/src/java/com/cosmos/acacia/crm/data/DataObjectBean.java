@@ -89,7 +89,7 @@ public abstract class DataObjectBean
         return null;
     }
 
-    protected DataObject getEntityDataObject() {
+    private DataObject getEntityDataObject() {
         DataObject dataObject;
         if ((dataObject = getDataObject()) == null) {
             dataObject = new DataObject();
@@ -263,6 +263,43 @@ public abstract class DataObjectBean
         } else {
             getEntityDataObject().setMediumImage(null);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()).append("[id=").append(getId()).append("]@");
+        sb.append(Integer.toHexString(super.hashCode()));
+
+        return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        BigInteger id;
+        if((id = getId()) != null) {
+            return id.hashCode();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (object == null || !(object instanceof DataObjectBean)) {
+            return false;
+        }
+        if(!getClass().isAssignableFrom(object.getClass())) {
+            return false;
+        }
+        DataObjectBean other = (DataObjectBean) object;
+        BigInteger thisId = getId();
+        BigInteger otherId = other.getId();
+        if((thisId == null && otherId != null) || (thisId != null && !thisId.equals(otherId))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

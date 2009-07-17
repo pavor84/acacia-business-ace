@@ -4,19 +4,18 @@
  */
 package com.cosmos.acacia.crm.bl.users;
 
-import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.Team;
+import com.cosmos.acacia.crm.data.users.TeamMember;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
-import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.acacia.crm.enums.BusinessUnitType;
+import com.cosmos.acacia.entity.AbstractEntityService;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -24,21 +23,15 @@ import javax.persistence.Query;
  * @author Miro
  */
 @Stateless
-public class UsersServiceBean implements UsersServiceRemote, UsersServiceLocal {
+public class UsersServiceBean extends AbstractEntityService implements UsersServiceRemote, UsersServiceLocal {
 
     public static final String ORGANIZATION_KEY = "organization";
-
-    @PersistenceContext
-    private EntityManager em;
-    //
-    @EJB
-    private EntityStoreManagerLocal esm;
-    //
-    @EJB
-    private AcaciaSessionLocal session;
+    public static final String BUSINESS_UNIT_KEY = "businessUnit";
+    public static final String TEAM_KEY = "team";
+    public static final String USER_KEY = "user";
 
     public List<User> getUsers(Organization organization) {
-        if(organization == null || organization.getId() == null) {
+        if (organization == null || organization.getId() == null) {
             Query q = em.createNamedQuery("User.findAll");
             return new ArrayList<User>(q.getResultList());
         }
@@ -60,24 +53,60 @@ public class UsersServiceBean implements UsersServiceRemote, UsersServiceLocal {
         return users;
     }
 
-    @Override
-    public <E> E newEntity(Class<E> entityClass) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Team> getTeams(DataObjectBean parameter) {
+        Query q;
+        if (parameter instanceof Organization) {
+            q = em.createNamedQuery(Team.NQ_FIND_ALL);
+            q.setParameter(ORGANIZATION_KEY, parameter);
+        } else if (parameter instanceof BusinessUnit) {
+            q = em.createNamedQuery(Team.NQ_FIND_BY_BUSINESS_UNIT);
+            q.setParameter(BUSINESS_UNIT_KEY, parameter);
+        } else {
+            throw new UnsupportedOperationException("Unknown parameter type: " + parameter);
+        }
+
+        return new ArrayList<Team>(q.getResultList());
     }
 
-    @Override
-    public <E, I> I newItem(E entity, Class<I> itemClass) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<BusinessUnit> getBusinessUnits() {
+        Query q = em.createNamedQuery(BusinessUnit.NQ_FIND_ALL);
+        q.setParameter("organization", session.getOrganization());
+
+        return new ArrayList<BusinessUnit>(q.getResultList());
+    }
+
+    public List<BusinessUnit> getBusinessUnits(BusinessUnit parentBusinessUnit) {
+        Query q;
+        if(parentBusinessUnit != null) {
+            q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_PARENT_BUSINESS_UNIT);
+            q.setParameter("parentBusinessUnit", parentBusinessUnit);
+        } else {
+            q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT);
+            q.setParameter("organization", session.getOrganization());
+        }
+
+        return new ArrayList<BusinessUnit>(q.getResultList());
     }
 
     @Override
     public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
-        if(entityClass == User.class) {
-            return (List<E>)getUsers(session.getOrganization());
-        }
+        if (entityClass == User.class) {
+            return (List<E>) getUsers(session.getOrganization());
+        } else if (entityClass == Team.class) {
+            if (extraParameters.length == 0) {
+                return (List<E>) getTeams(session.getOrganization());
+            }
 
-        if(true) {
-            return Collections.emptyList();
+            Object parameter;
+            if ((parameter = extraParameters[0]) instanceof BusinessUnit) {
+                return (List<E>) getTeams((DataObjectBean) parameter);
+            }
+        } else if (entityClass == BusinessUnit.class) {
+            if(extraParameters.length == 0) {
+                return (List<E>) getBusinessUnits();
+            } else {
+                return (List<E>) getBusinessUnits((BusinessUnit) extraParameters[0]);
+            }
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
@@ -85,40 +114,54 @@ public class UsersServiceBean implements UsersServiceRemote, UsersServiceLocal {
 
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
-        if(true) {
-            return Collections.emptyList();
+        if(itemClass == TeamMember.class) {
+            Query q;
+            if(entity instanceof Team) {
+                q = em.createNamedQuery(TeamMember.NQ_FIND_BY_TEAM);
+                q.setParameter(TEAM_KEY, entity);
+            } else if(entity instanceof User) {
+                q = em.createNamedQuery(TeamMember.NQ_FIND_BY_USER);
+                q.setParameter(USER_KEY, entity);
+            } else {
+                throw new UnsupportedOperationException("Not supported parent entity: " + entity);
+            }
+
+            return new ArrayList<I>(q.getResultList());
         }
 
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E> E save(E entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected <E> void initEntity(E entity) {
+        if (entity instanceof Team) {
+            ((Team)entity).setOrganization(session.getOrganization());
+        } else if (entity instanceof BusinessUnit) {
+            BusinessUnit businessUnit = (BusinessUnit)entity;
+            businessUnit.setOrganization(session.getOrganization());
+            if(getBusinessUnits(null).size() == 0) {
+                businessUnit.setRoot(true);
+                businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
+                businessUnit.setBusinessUnitName(session.getOrganization().getOrganizationName());
+                businessUnit.setDivisionName(BusinessUnitType.Administrative.name());
+            }
+        }
     }
 
     @Override
-    public <E> E confirm(E entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public <E> E cancel(E entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public <E> void delete(E entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public <E> EntityProperties getEntityProperties(Class<E> entityClass) {
-        return esm.getEntityProperties(entityClass);
-    }
-
-    @Override
-    public List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
-        return esm.getResources(em, enumClass, enumClass);
+    protected <E> void preSave(E entity) {
+        if (entity instanceof User) {
+            User user = (User) entity;
+        }
+        if (entity instanceof Team) {
+            Team team = (Team) entity;
+            Organization organization;
+            if ((organization = team.getOrganization()) == null || !organization.equals(session.getOrganization())) {
+                team.setOrganization(session.getOrganization());
+            }
+        }
+        if (entity instanceof TeamMember) {
+            TeamMember member = (TeamMember) entity;
+        }
     }
 }

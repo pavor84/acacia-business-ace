@@ -17,8 +17,10 @@ public enum CommunicationType implements DatabaseResource {
 
     Phone("Phone"),
     Mobile("Mobile"),
+    Fax("Fax"),
     ICQ("ICQ"),
-    Skype("Skype");
+    Skype("Skype"),
+    GoogleTalk("GoogleTalk");
 
     private String communicationType;
     private DbResource dbResource;
@@ -31,18 +33,22 @@ public enum CommunicationType implements DatabaseResource {
         return communicationType;
     }
 
+    @Override
     public DbResource getDbResource() {
         return dbResource;
     }
 
+    @Override
     public void setDbResource(DbResource resource) {
         this.dbResource = resource;
     }
 
+    @Override
     public String toShortText() {
         return getCommunicationType();
     }
 
+    @Override
     public String toText() {
         return null;
     }

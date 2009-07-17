@@ -20,7 +20,6 @@ import java.util.Properties;
 import java.util.Set;
 import javax.crypto.Cipher;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
@@ -71,6 +70,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.TreeSet;
 import java.util.UUID;
+import javax.ejb.Stateless;
 
 /**
  * The implementation of handling users (see interface for more info)
