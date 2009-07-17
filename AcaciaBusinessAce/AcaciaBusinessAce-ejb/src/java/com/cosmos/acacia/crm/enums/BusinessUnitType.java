@@ -4,11 +4,13 @@
  */
 package com.cosmos.acacia.crm.enums;
 
+import com.cosmos.acacia.crm.data.DbResource;
+
 /**
  *
  * @author Miro
  */
-public enum BusinessUnitType {
+public enum BusinessUnitType implements DatabaseResource {
 
     /**
      * CEO, Business Manager
@@ -50,4 +52,29 @@ public enum BusinessUnitType {
     Marketing,
 
     Warehouse;
+
+    private BusinessUnitType() {
+    }
+    //
+    private DbResource dbResource;
+
+    @Override
+    public DbResource getDbResource() {
+        return dbResource;
+    }
+
+    @Override
+    public void setDbResource(DbResource resource) {
+        this.dbResource = resource;
+    }
+
+    @Override
+    public String toShortText() {
+        return name();
+    }
+
+    @Override
+    public String toText() {
+        return name();
+    }
 }

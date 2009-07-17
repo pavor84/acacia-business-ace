@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.purchase;
 
+import com.cosmos.acacia.crm.bl.document.business.BusinessDocumentException;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -59,7 +60,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     private PurchaseInvoice confirmPurchaseInvoice(PurchaseInvoice purchaseInvoice) {
         if(purchaseInvoice.getDocumentNumber() != null ||
                 purchaseInvoice.getDocumentDate() != null) {
-            throw new PurchaseInvoiceException("The Purchase Invoice is already completed.");
+            throw new BusinessDocumentException("The Purchase Invoice is already completed.");
         }
 
         esm.setDocumentNumber(em, purchaseInvoice);
