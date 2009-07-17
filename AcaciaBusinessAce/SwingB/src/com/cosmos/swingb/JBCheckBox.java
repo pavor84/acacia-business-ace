@@ -2,11 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.swingb.binding.EntityBinder;
+import com.cosmos.swingb.validation.Validatable;
+import com.cosmos.util.BooleanUtils;
 import javax.swing.JCheckBox;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationActionMap;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -18,34 +25,37 @@ import org.jdesktop.beansbinding.ELProperty;
  *
  * @author Miro
  */
-public class JBCheckBox
-    extends JCheckBox
-{
+public class JBCheckBox extends JCheckBox implements Validatable, EntityBinder {
+
+    private Application application;
+    private ApplicationContext applicationContext;
+    private ApplicationActionMap applicationActionMap;
+    private ResourceMap resourceMap;
+    //
     private String propertyName;
     private Object beanEntity;
+    private Binding binding;
 
 //binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.isComplex}"), complexProductCheckBox, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
+            PropertyDetails propertyDetails) {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        if(propertyDetails == null || propertyDetails.isHiden())
-        {
+            AutoBinding.UpdateStrategy updateStrategy) {
+        if (propertyDetails == null || propertyDetails.isHiden()) {
             //setEditable(false);
             setEnabled(false);
             return null;
         }
-        
-        Binding binding = bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
+
+        bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         //setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
@@ -54,21 +64,19 @@ public class JBCheckBox
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            String propertyName)
-    {
+            String propertyName) {
         return bind(bindingGroup, beanEntity, propertyName, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
+            AutoBinding.UpdateStrategy updateStrategy) {
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selected");
-        Binding binding = Bindings.createAutoBinding(
+        binding = Bindings.createAutoBinding(
                 updateStrategy,
                 beanEntity,
                 elProperty,
@@ -78,11 +86,117 @@ public class JBCheckBox
         return binding;
     }
 
+    @Override
     public String getPropertyName() {
         return propertyName;
     }
 
+    @Override
     public Object getBeanEntity() {
         return beanEntity;
+    }
+
+    @Override
+    public Binding getBinding() {
+        return binding;
+    }
+
+    @Override
+    public void refresh() {
+        setSelected(getPropertyValue());
+    }
+
+    protected boolean getPropertyValue() {
+        return getPropertyValue(beanEntity);
+    }
+
+    protected boolean getPropertyValue(Object beanEntity) {
+        try {
+            Object propertyValue;
+            if ((propertyValue = PropertyUtils.getProperty(beanEntity, propertyName)) != null) {
+                if(propertyValue instanceof Boolean) {
+                    return (Boolean)propertyValue;
+                }
+                return BooleanUtils.parseBoolean(propertyName);
+            }
+
+            return false;
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
+    }
+
+    public Application getApplication() {
+        if (application == null) {
+            application = Application.getInstance();
+        }
+
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
+            Application app = getApplication();
+            if (app != null) {
+                applicationContext = app.getContext();
+            }
+        }
+
+        return applicationContext;
+    }
+
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
+            ApplicationContext context = getContext();
+            if (context != null) {
+                applicationActionMap = context.getActionMap(this);
+            }
+        }
+
+        return applicationActionMap;
+    }
+
+    @Override
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
+            ApplicationContext context = getContext();
+            if (context != null) {
+                resourceMap = context.getResourceMap(this.getClass());
+            }
+        }
+
+        return resourceMap;
+    }
+
+    public void setResourceMap(ResourceMap resourceMap) {
+        this.resourceMap = resourceMap;
+    }
+
+    @Override
+    public void setStyleRequired(String tooltip) {
+        setToolTipText(tooltip);
+        setBackground(getResourceMap().getColor("validation.field.required.background"));
+    }
+
+    @Override
+    public void setStyleInvalid(String tooltip) {
+        setToolTipText(tooltip);
+        setBackground(getResourceMap().getColor("validation.field.invalid.background"));
+    }
+
+    @Override
+    public void setStyleValid() {
+        setToolTipText(null);
+        setBackground(getResourceMap().getColor("validation.field.valid.background"));
+    }
+
+    @Override
+    public void setStyleNormal() {
+        setToolTipText(null);
+        setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
 }
