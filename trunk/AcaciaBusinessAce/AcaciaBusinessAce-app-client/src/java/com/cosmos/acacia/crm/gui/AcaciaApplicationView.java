@@ -70,9 +70,11 @@ import com.cosmos.acacia.crm.gui.purchase.PurchaseInvoiceListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
+import com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
+import com.cosmos.acacia.crm.gui.users.TeamListPanel;
 import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.crm.gui.users.UserListPanel;
 import com.cosmos.acacia.crm.gui.users.UsersListPanelOld;
@@ -524,10 +526,16 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void businessUnitsAction() {
+        BusinessUnitListPanel panel = new BusinessUnitListPanel();
+        panel.showFrame();
     }
 
     @Action
     public void securityRolesAction() {
+    }
+
+    @Action
+    public void privilegeCategoriesAction() {
     }
 
     @Action
@@ -539,6 +547,8 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void teamsAction() {
+        TeamListPanel panel = new TeamListPanel();
+        panel.showFrame();
     }
 
     @Action
@@ -1005,16 +1015,45 @@ public class AcaciaApplicationView extends FrameView {
         menuItem.setAction(actionMap.get("securityRolesAction"));
         adminMenu.add(menuItem);
 
+        menuItem = new JBMenuItem();
+        menuItem.setAction(actionMap.get("privilegeCategoriesAction"));
+        adminMenu.add(menuItem);
+
         usersListMenuItem.setAction(actionMap.get("usersListAction"));
         adminMenu.add(usersListMenuItem);
 
         userGroupsMenuItem.setAction(actionMap.get("userGroupsListAction"));
         adminMenu.add(userGroupsMenuItem);
-        settingsMenu.add(adminMenu);
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("teamsAction"));
         adminMenu.add(menuItem);
+
+        settingsMenu.add(adminMenu);
+
+        JMenu businessManagementMenu = new JMenu();
+        businessManagementMenu.setName("businessManagementMenu");
+        businessManagementMenu.setText(resourceMap.getString("businessManagementMenu.text"));
+
+        settingsMenu.add(businessManagementMenu);
+
+        JMenu customizationMenu = new JMenu();
+        customizationMenu.setName("customizationMenu");
+        customizationMenu.setText(resourceMap.getString("customizationMenu.text"));
+
+        businessManagementMenu.add(customizationMenu);
+
+        JMenu templatesMenu = new JMenu();
+        templatesMenu.setName("templatesMenu");
+        templatesMenu.setText(resourceMap.getString("templatesMenu.text"));
+
+        businessManagementMenu.add(templatesMenu);
+
+        JMenu productsAndPricing = new JMenu();
+        productsAndPricing.setName("productsAndPricing");
+        productsAndPricing.setText(resourceMap.getString("productsAndPricing.text"));
+
+        businessManagementMenu.add(productsAndPricing);
 
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("currencyExchangeRatesAction"));
