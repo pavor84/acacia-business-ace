@@ -1,7 +1,6 @@
 /*
  * DesktopApplication1View.java
  */
-
 package com.cosmos.acacia.crm.gui;
 
 import java.awt.event.ActionEvent;
@@ -77,7 +76,6 @@ import com.cosmos.acacia.crm.gui.users.LoginForm;
 import com.cosmos.acacia.crm.gui.users.TeamListPanel;
 import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.crm.gui.users.UserListPanel;
-import com.cosmos.acacia.crm.gui.users.UsersListPanelOld;
 import com.cosmos.acacia.crm.gui.warehouse.ProductsTotalsPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseListPanel;
 import com.cosmos.acacia.crm.gui.warehouse.WarehouseProductListPanel;
@@ -95,7 +93,6 @@ import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
 /**
  * The application's main frame.
@@ -104,7 +101,6 @@ public class AcaciaApplicationView extends FrameView {
 
     @EJB
     private WarehouseListRemote warehouseBean;
-
     protected static Logger log = Logger.getLogger(AcaciaApplicationView.class);
 
     public AcaciaApplicationView(SingleFrameApplication app) {
@@ -121,13 +117,11 @@ public class AcaciaApplicationView extends FrameView {
         LoginForm loginForm = new LoginForm();
         loginForm.showFrame();
     }
-
     private BigInteger parentId;
     private AcaciaSessionRemote acaciaSession;
 
     private AcaciaSessionRemote getSession() {
-        if (acaciaSession == null)
-        {
+        if (acaciaSession == null) {
             AcaciaSessionRemote.class.getName();
             acaciaSession = AcaciaPanel.getBean(AcaciaSessionRemote.class);
         }
@@ -146,7 +140,8 @@ public class AcaciaApplicationView extends FrameView {
 
         return parentId;
     }
-    public static void setLookAndFeel(){
+
+    public static void setLookAndFeel() {
         try {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
             LiquidLookAndFeel.setShowTableGrids(true);
@@ -178,14 +173,10 @@ public class AcaciaApplicationView extends FrameView {
         setStatusBar(createStatusBar());
         setToolBar(createToolBar());
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
     private JDialog aboutBox;
-
     private boolean saveNeeded;
-
 
     public boolean isSaveNeeded() {
         return saveNeeded;
@@ -198,12 +189,10 @@ public class AcaciaApplicationView extends FrameView {
         }
     }
 
-
     public boolean isRecordSelected() {
         //return masterTable.getSelectedRow() != -1;
         return false;
     }
-
 
     @Action
     public void newRecord() {
@@ -215,7 +204,7 @@ public class AcaciaApplicationView extends FrameView {
         masterTable.setRowSelectionInterval(row, row);
         masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
         setSaveNeeded(true);
-        */
+         */
     }
 
     @Action(enabledProperty = "recordSelected")
@@ -224,15 +213,14 @@ public class AcaciaApplicationView extends FrameView {
         int[] selected = masterTable.getSelectedRows();
         List<desktopapplication1.Products> toRemove = new ArrayList<desktopapplication1.Products>(selected.length);
         for (int idx=0; idx<selected.length; idx++) {
-            desktopapplication1.Products p = list.get(masterTable.convertRowIndexToModel(selected[idx]));
-            toRemove.add(p);
-            entityManager.remove(p);
+        desktopapplication1.Products p = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+        toRemove.add(p);
+        entityManager.remove(p);
         }
         list.removeAll(toRemove);
         setSaveNeeded(true);
-        */
+         */
     }
-
 
     @SuppressWarnings("unchecked")
     @Action(enabledProperty = "saveNeeded")
@@ -242,17 +230,22 @@ public class AcaciaApplicationView extends FrameView {
 
     @SuppressWarnings("unchecked")
     private class SaveTask extends Task {
+
         SaveTask(org.jdesktop.application.Application app) {
             super(app);
         }
-        @Override protected Void doInBackground() {
+
+        @Override
+        protected Void doInBackground() {
             /*
             entityManager.getTransaction().commit();
             entityManager.getTransaction().begin();
-            */
+             */
             return null;
         }
-        @Override protected void finished() {
+
+        @Override
+        protected void finished() {
             setSaveNeeded(false);
         }
     }
@@ -266,42 +259,47 @@ public class AcaciaApplicationView extends FrameView {
     @SuppressWarnings("unchecked")
     @Action
     public Task refresh() {
-       return new RefreshTask(getApplication());
+        return new RefreshTask(getApplication());
     }
 
     @SuppressWarnings("unchecked")
     private class RefreshTask extends Task {
+
         RefreshTask(org.jdesktop.application.Application app) {
             super(app);
         }
-        @Override protected Void doInBackground() {
+
+        @Override
+        protected Void doInBackground() {
             /*
             try {
-                setProgress(0, 0, 4);
-                setMessage("Rolling back the current changes...");
-                setProgress(1, 0, 4);
-                entityManager.getTransaction().rollback();
-                Thread.sleep(1000L); // remove for real app
-                setProgress(2, 0, 4);
+            setProgress(0, 0, 4);
+            setMessage("Rolling back the current changes...");
+            setProgress(1, 0, 4);
+            entityManager.getTransaction().rollback();
+            Thread.sleep(1000L); // remove for real app
+            setProgress(2, 0, 4);
 
-                setMessage("Starting a new transaction...");
-                entityManager.getTransaction().begin();
-                Thread.sleep(500L); // remove for real app
-                setProgress(3, 0, 4);
+            setMessage("Starting a new transaction...");
+            entityManager.getTransaction().begin();
+            Thread.sleep(500L); // remove for real app
+            setProgress(3, 0, 4);
 
-                setMessage("Fetching new data...");
-                java.util.Collection data = query.getResultList();
-                Thread.sleep(1300L); // remove for real app
-                setProgress(4, 0, 4);
+            setMessage("Fetching new data...");
+            java.util.Collection data = query.getResultList();
+            Thread.sleep(1300L); // remove for real app
+            setProgress(4, 0, 4);
 
-                Thread.sleep(150L); // remove for real app
-                list.clear();
-                list.addAll(data);
+            Thread.sleep(150L); // remove for real app
+            list.clear();
+            list.addAll(data);
             } catch(InterruptedException ignore) { }
-            */
+             */
             return null;
         }
-        @Override protected void finished() {
+
+        @Override
+        protected void finished() {
             setMessage("Done.");
             setSaveNeeded(false);
         }
@@ -325,20 +323,20 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void warehouseListAction(){
+    public void warehouseListAction() {
         WarehouseListPanel listPanel = new WarehouseListPanel(getParentId());
         listPanel.showFrame();
     }
-    
+
     @Action
-    public void myWarehouseAction(){
+    public void myWarehouseAction() {
         Warehouse warehouse = warehouseBean.getWarehouseForAddress(getSession().getBranch());
         WarehouseProductListPanel warehouseProductList = new WarehouseProductListPanel(getParentId(), warehouse);
         warehouseProductList.showFrame();
     }
 
     @Action
-    public void productsTotalsAction(){
+    public void productsTotalsAction() {
         ProductsTotalsPanel panel = new ProductsTotalsPanel(getParentId());
         panel.showFrame();
     }
@@ -348,10 +346,8 @@ public class AcaciaApplicationView extends FrameView {
 //        WarehouseProductListPanel listPanel = new WarehouseProductListPanel(null);
 //        listPanel.showFrame();
 //    }
-
     @Action
-    public void deliveryCertificatesAction(ActionEvent e)
-    {
+    public void deliveryCertificatesAction(ActionEvent e) {
         BigInteger warehouseId = new BigInteger(e.getActionCommand());
         log.info("Displaying delivery certificates for warehouse: " + warehouseId);
         DeliveryCertificatesListPanel listPanel = new DeliveryCertificatesListPanel(warehouseId);
@@ -359,87 +355,79 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void receiptCertificatesAction()
-    {
+    public void receiptCertificatesAction() {
     }
 
     @Action
-    public void reportsAction()
-    {
+    public void reportsAction() {
     }
 
     @Action
-    public void patternMaskListAction(){
+    public void patternMaskListAction() {
         PatternMaskFormatListPanel listPanel = new PatternMaskFormatListPanel(getParentId());
         listPanel.showFrame();
     }
 
     @Action
-    public void productCategoriesAction()
-    {
+    public void productCategoriesAction() {
         ProductCategoriesTreePanel productCategories = new ProductCategoriesTreePanel(getParentId());
         productCategories.getListPanel().setVisible(Button.Select, false);
         productCategories.getListPanel().setVisible(Button.Unselect, false);
         productCategories.showFrame();
     }
-    
+
     @Action
-    public void pricelistsAction(){
+    public void pricelistsAction() {
         PricelistListPanel pricelistsPanel = new PricelistListPanel(getParentId());
         pricelistsPanel.showFrame();
     }
 
     @Action
-    public void assemblingCategoriesAction()
-    {
+    public void assemblingCategoriesAction() {
         AssemblingCategoryTreeTablePanel assemblingCategories = new AssemblingCategoryTreeTablePanel(null);
         assemblingCategories.showFrame();
     }
 
     @Action
-    public void assemblingSchemasAction()
-    {
+    public void assemblingSchemasAction() {
         log.debug("assemblingSchemasAction");
         AssemblingSchemasPanel assemblingSchemas = new AssemblingSchemasPanel();
         assemblingSchemas.showFrame();
     }
 
     @Action
-    public void assemblingMessagesAction()
-    {
+    public void assemblingMessagesAction() {
         log.debug("assemblingMessagesAction");
         AssemblingMessageListPanel listPanel = new AssemblingMessageListPanel();
         listPanel.showFrame();
     }
 
     @Action
-    public void productAssemblerAction()
-    {
+    public void productAssemblerAction() {
         JBPanel panel = new ProductAssemblerPanel();
         panel.showFrame();
     }
 
     @Action
-    public void algorithmsAction()
-    {
+    public void algorithmsAction() {
     }
 
     @Action
-    public void personsListAction(){
+    public void personsListAction() {
         log.debug("personsListAction");
         PersonsListPanel personsListPanel = new PersonsListPanel(getParentId());
         personsListPanel.showFrame();
     }
 
     @Action
-    public void staffListAction(){
+    public void staffListAction() {
         log.debug("staffListAction");
         PersonsListPanel personsListPanel = new PersonsListPanel(getParentId(), true);
         personsListPanel.showFrame();
     }
 
     @Action
-    public void editOwnPersonAction(){
+    public void editOwnPersonAction() {
         log.debug("editOwnPersonAction");
         Person person = getSession().getPerson();
         if (person != null) {
@@ -449,48 +437,47 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void organizationsListAction(){
+    public void organizationsListAction() {
         log.debug("organizationsListAction");
         OrganizationsListPanel organizationsListPanel = new OrganizationsListPanel(getParentId());
         organizationsListPanel.showFrame();
     }
 
     @Action
-    public void organizationPositionTypesListAction(){
+    public void organizationPositionTypesListAction() {
         log.debug("organizationPositionTypesListAction");
         PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Organization.class, getParentId());
         positionTypesListPanel.showFrame();
     }
 
     @Action
-    public void organizationInternalHierarchyAction(){
+    public void organizationInternalHierarchyAction() {
         PositionsHierarchyTreePanel panel = new PositionsHierarchyTreePanel(getParentId());
         panel.showFrame();
     }
 
     @Action
-    public void businessPartnersListAction(){
+    public void businessPartnersListAction() {
         BusinessPartnersListPanel listPanel = new BusinessPartnersListPanel();
         listPanel.showFrame();
     }
 
     @Action
-    public void personPositionTypesListAction(){
+    public void personPositionTypesListAction() {
         log.debug("personPositionTypesListAction");
         PositionTypesListPanel positionTypesListPanel = new PositionTypesListPanel(Person.class, getParentId());
         positionTypesListPanel.showFrame();
     }
 
     @Action
-    public void citiesListAction(){
+    public void citiesListAction() {
         log.debug("citiesList");
         CitiesListPanel citiesListPanel = new CitiesListPanel();
         citiesListPanel.showFrame();
     }
 
-
     @Action
-    public void countriesListAction(){
+    public void countriesListAction() {
         log.debug("cointriesList");
         CountriesListPanel countriesListPanel = new CountriesListPanel();
         countriesListPanel.showFrame();
@@ -625,7 +612,6 @@ public class AcaciaApplicationView extends FrameView {
         BranchSelectionPanel panel = new BranchSelectionPanel();
         panel.showFrame();
     }
-
     JBCheckBoxMenuItem viewDataFromAllBranchesMenuItem;
 
     @Action
@@ -633,33 +619,31 @@ public class AcaciaApplicationView extends FrameView {
         LocalSession.instance().setViewDataFromAllBranches(
                 new Boolean(viewDataFromAllBranchesMenuItem.getState()));
     }
-    
+
     @Action
-    public void customerPaymentsAction(){
+    public void customerPaymentsAction() {
         PaymentsReceivablesPanel panel = new PaymentsReceivablesPanel(getParentId());
         panel.showFrame();
     }
-    
+
     @Action
-    public void customerPaymentsMatchingAction(){
+    public void customerPaymentsMatchingAction() {
         PaymentMatchingPanel panel = new PaymentMatchingPanel(getParentId());
         panel.showFrame();
     }
-    
+
     @Action
-    public void cashReconcileAction(){
+    public void cashReconcileAction() {
         CashReconcileListPanel panel = new CashReconcileListPanel(getParentId());
         panel.showFrame();
     }
 
-    private ActionMap getActionMap()
-    {
+    private ActionMap getActionMap() {
         return getContext().getActionMap(this);
     }
 
     // TODO The result of this method must be returned from Server session bean
-    private JBMenuBar createMenuBar()
-    {
+    private JBMenuBar createMenuBar() {
         JBMenuItem menuItem;
 
         JBMenuBar menuBar = new JBMenuBar();
@@ -793,42 +777,42 @@ public class AcaciaApplicationView extends FrameView {
         purchaseMenu.add(menuItem);
 
         menuBar.add(purchaseMenu);
-        
+
         //payments menu
         JBMenu paymentMenu = new JBMenu();
         paymentMenu.setText(resourceMap.getString("paymentMenu.text"));
         paymentMenu.setName("paymentMenu");
         paymentMenu.setMnemonic('M');
         menuBar.add(paymentMenu);
-        
+
         //customer payments item
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("customerPaymentsAction"));
         menuItem.setText(resourceMap.getString("paymentMenu.customerPayments.text"));
         menuItem.setMnemonic('C');
         paymentMenu.add(menuItem);
-        
+
         //payments matching item
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("customerPaymentsMatchingAction"));
         menuItem.setText(resourceMap.getString("paymentMenu.customerPaymentsMatching.text"));
         menuItem.setMnemonic('M');
         paymentMenu.add(menuItem);
-        
+
         //cash management menu
         JBMenu cashManagement = new JBMenu();
         cashManagement.setText(resourceMap.getString("cashManagementMenu.text"));
         cashManagement.setName("cashManagementMenu");
         cashManagement.setMnemonic('G');
         menuBar.add(cashManagement);
-        
+
         //cash matching : cash reconcile item
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("cashReconcileAction"));
         menuItem.setText(resourceMap.getString("cashManagementMenu.cashReconcile.text"));
         menuItem.setMnemonic('R');
         cashManagement.add(menuItem);
-        
+
         reportsMenu.setText(resourceMap.getString("reportsMenu.text")); // NOI18N
         reportsMenu.setName("reportsMenu"); // NOI18N
         reportsMenu.setMnemonic('R');
@@ -849,9 +833,9 @@ public class AcaciaApplicationView extends FrameView {
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("productCategoriesAction")); // NOI18N
         productsMenu.add(menuItem);
-        
+
         productsMenu.addSeparator();
-        
+
         menuItem = new JBMenuItem();
         menuItem.setAction(actionMap.get("pricelistsAction"));
         productsMenu.add(menuItem);
@@ -1067,7 +1051,7 @@ public class AcaciaApplicationView extends FrameView {
         warehousesMenu.setName("warehousesMenu"); // NOI18N
         warehousesMenu.setText(resourceMap.getString("warehousesMenu.text")); // NOI18N
         warehousesMenu.setMnemonic('W');
-        
+
         JBMenuItem myWarehouseItem = new JBMenuItem();
         myWarehouseItem.setAction(actionMap.get("myWarehouseAction"));
         String myWarehouseName = getSession().getBranch().getAddressName();
@@ -1108,21 +1092,19 @@ public class AcaciaApplicationView extends FrameView {
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
-         /* End of Help Menu */
+        /* End of Help Menu */
 
         return menuBar;
     }
 
     // TODO The result of this method must be returned from Server session bean
-    private JBToolBar createToolBar()
-    {
+    private JBToolBar createToolBar() {
         JBToolBar toolBar = new JBToolBar();
         toolBar.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 
-        if(GeneralSettings.isDebug()){
+        if (GeneralSettings.isDebug()) {
             ActionMap actionMap = getActionMap();
-            for(Object key : actionMap.allKeys())
-            {
+            for (Object key : actionMap.allKeys()) {
                 javax.swing.Action action = actionMap.get(key);
                 toolBar.add(action);
             }
@@ -1156,20 +1138,16 @@ public class AcaciaApplicationView extends FrameView {
 
         return toolBar;
     }
-
-
     private JBLabel statusMessageLabel;
     private JBLabel statusAnimationLabel;
     private JBProgressBar progressBar;
-
     private Timer messageTimer;
     private Timer busyIconTimer;
     private Icon idleIcon;
     private Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
 
-    private JBPanel createStatusBar()
-    {
+    private JBPanel createStatusBar() {
         JBPanel statusPanel = new JBPanel();
         JSeparator statusPanelSeparator = new JSeparator();
         statusMessageLabel = new JBLabel();
@@ -1190,43 +1168,26 @@ public class AcaciaApplicationView extends FrameView {
         GroupLayout statusPanelLayout = new GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
-                .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusAnimationLabel)
-                .addContainerGap())
-        );
+                statusPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(statusPanelSeparator, GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE).addGroup(statusPanelLayout.createSequentialGroup().addContainerGap().addComponent(statusMessageLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE).addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(statusAnimationLabel).addContainerGap()));
         statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(statusMessageLabel)
-                    .addComponent(statusAnimationLabel)
-                    .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3))
-        );
+                statusPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(statusPanelLayout.createSequentialGroup().addComponent(statusPanelSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGroup(statusPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(statusMessageLabel).addComponent(statusAnimationLabel).addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addGap(3, 3, 3)));
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-    messageTimer = new Timer(messageTimeout, new ActionListener() {
+        messageTimer = new Timer(messageTimeout, new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
             }
         });
-    messageTimer.setRepeats(false);
+        messageTimer.setRepeats(false);
         int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
         for (int i = 0; i < busyIcons.length; i++) {
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
@@ -1239,6 +1200,7 @@ public class AcaciaApplicationView extends FrameView {
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
                 if ("started".equals(propertyName)) {
@@ -1255,11 +1217,11 @@ public class AcaciaApplicationView extends FrameView {
                     progressBar.setVisible(false);
                     progressBar.setValue(0);
                 } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
+                    String text = (String) (evt.getNewValue());
                     statusMessageLabel.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
+                    int value = (Integer) (evt.getNewValue());
                     progressBar.setVisible(true);
                     progressBar.setIndeterminate(false);
                     progressBar.setValue(value);
@@ -1270,13 +1232,11 @@ public class AcaciaApplicationView extends FrameView {
         return statusPanel;
     }
 
-    private JComponent createMainComponent()
-    {
+    private JComponent createMainComponent() {
         JBDesktopPane desktopPane = new JBDesktopPane();
         desktopPane.setName("desktopPane"); // NOI18N
         return desktopPane;
     }
-
 
     /** NOT IMPLEMENTED
      * This method will dynamically populate DeliveryCertificates menu,
@@ -1285,7 +1245,7 @@ public class AcaciaApplicationView extends FrameView {
      * user has access should be listed in the menu.
      * @return
      */
-    private JComponent createDeliveryCertificatesMenu(){
+    private JComponent createDeliveryCertificatesMenu() {
 
         JBMenu menu = new JBMenu();
         ActionMap actionMap = getActionMap();
@@ -1294,7 +1254,7 @@ public class AcaciaApplicationView extends FrameView {
         menu.setText("DeliveryCertificates");
 
         List<Warehouse> warehouses = getWarehouseBean().listWarehousesByName(getParentId());
-        for(Warehouse w : warehouses){
+        for (Warehouse w : warehouses) {
             JBMenuItem warehouse = new JBMenuItem();
             warehouse.setAction(actionMap.get("deliveryCertificatesAction"));
             warehouse.setText(w.getAddress().getAddressName());
@@ -1305,14 +1265,15 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     protected WarehouseListRemote getWarehouseBean() {
-        if (warehouseBean == null)
-                warehouseBean = AcaciaPanel.getBean(WarehouseListRemote.class);
+        if (warehouseBean == null) {
+            warehouseBean = AcaciaPanel.getBean(WarehouseListRemote.class);
+        }
 
         return warehouseBean;
     }
-
     private RightsManagerRemote rightsManager =
-        AcaciaPanel.getBean(RightsManagerRemote.class, false);
+            AcaciaPanel.getBean(RightsManagerRemote.class, false);
+
     /**
      * Wraps the functionality of special permission checking
      */
