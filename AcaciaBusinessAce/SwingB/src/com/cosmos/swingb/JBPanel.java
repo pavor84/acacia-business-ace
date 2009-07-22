@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
 import com.cosmos.swingb.listeners.NestedFormListener;
@@ -49,10 +48,9 @@ import org.jdesktop.swingx.error.ErrorReporter;
  * @author Miro
  */
 public class JBPanel
-    extends JXPanel
-{
-    private static final Logger logger = Logger.getLogger(JBPanel.class.getName());
+        extends JXPanel {
 
+    private static final Logger logger = Logger.getLogger(JBPanel.class.getName());
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
@@ -65,39 +63,32 @@ public class JBPanel
     private int windowAncestorCount;
     private Dialog.ModalityType modalityType = Dialog.ModalityType.APPLICATION_MODAL;
     private Set<NestedFormListener> nestedFormListeners = new HashSet<NestedFormListener>();
-
     protected JBDialog dialog;
 
-
-    public JBPanel()
-    {     
+    public JBPanel() {
     }
 
-    public JBPanel(LayoutManager layoutManager)
-    {
+    public JBPanel(LayoutManager layoutManager) {
         super(layoutManager);
     }
 
-    protected JFrame getMainFrame()
-    {
+    protected JFrame getMainFrame() {
         JFrame mainFrame = null;
         Application app = getApplication();
-        if(app != null)
-        {
-            if(app instanceof SingleFrameApplication)
-                mainFrame = ((SingleFrameApplication)app).getMainFrame();
+        if (app != null) {
+            if (app instanceof SingleFrameApplication) {
+                mainFrame = ((SingleFrameApplication) app).getMainFrame();
+            }
         }
 
         return mainFrame;
     }
 
-    public void showFrame()
-    {
+    public void showFrame() {
         showFrame(getMainFrame());
     }
 
-    public void showFrame(Component parentComponent)
-    {
+    public void showFrame(Component parentComponent) {
         addContextMenus();
         JBFrame frame = new JBFrame();
         frame.getContentPane().add(this);
@@ -108,7 +99,7 @@ public class JBPanel
         Dimension preferredSize = getPreferredSize();
         maximumSize.width = Math.min(maximumSize.width, preferredSize.width);
         maximumSize.height = Math.min(maximumSize.height, preferredSize.height);
-        if(!maximumSize.equals(preferredSize)) {
+        if (!maximumSize.equals(preferredSize)) {
             setPreferredSize(maximumSize);
             setSize(maximumSize);
             maximumSize = frame.getPreferredSize();
@@ -130,11 +121,10 @@ public class JBPanel
         frame.setTitle(getTitle());
         frame.setLocationRelativeTo(parentComponent);
         frame.setResizable(isResizable());
-        frame.addWindowListener(new WindowAdapter()
-        {
+        frame.addWindowListener(new WindowAdapter() {
+
             @Override
-            public void windowClosed(WindowEvent event)
-            {
+            public void windowClosed(WindowEvent event) {
                 JBPanel.this.windowClosed(event);
             }
         });
@@ -142,13 +132,11 @@ public class JBPanel
         frame.setVisible(true);
     }
 
-    public DialogResponse showDialog()
-    {
+    public DialogResponse showDialog() {
         return showDialog(getMainFrame());
     }
 
-    public DialogResponse showDialog(Component parentComponent)
-    {
+    public DialogResponse showDialog(Component parentComponent) {
         addContextMenus();
         selectedValues = null;
         response = DialogResponse.CLOSE;
@@ -165,7 +153,7 @@ public class JBPanel
         Dimension preferredSize = getPreferredSize();
         maximumSize.width = Math.min(maximumSize.width, preferredSize.width);
         maximumSize.height = Math.min(maximumSize.height, preferredSize.height);
-        if(!maximumSize.equals(preferredSize)) {
+        if (!maximumSize.equals(preferredSize)) {
             setPreferredSize(maximumSize);
             setSize(maximumSize);
             maximumSize = dialog.getPreferredSize();
@@ -185,8 +173,7 @@ public class JBPanel
         }
 
         Dialog.ModalityType modality = getModalityType();
-        if(modality != null)
-        {
+        if (modality != null) {
             dialog.setModalityType(modality);
         }
         dialog.setLocationRelativeTo(parentComponent);
@@ -198,15 +185,14 @@ public class JBPanel
         dialog.dispose();
         dialog = null;
 
-        if(response == null)
+        if (response == null) {
             response = DialogResponse.CLOSE;
+        }
 
         return response;
     }
 
-
-    protected void addContextMenus()
-    {
+    protected void addContextMenus() {
         Component[] components = this.getComponents();
 
         for (Component component : components) {
@@ -216,88 +202,75 @@ public class JBPanel
         }
     }
 
-    protected Window getWindowAncestor(Component parentComponent)
-    {
+    protected Window getWindowAncestor(Component parentComponent) {
         Window window = null;
-        if(parentComponent != null)
-        {
+        if (parentComponent != null) {
             int counter = getWindowAncestorCount();
-            do
-            {
+            do {
                 window = SwingUtilities.getWindowAncestor(parentComponent);
-                if(window == null && parentComponent instanceof Window)
-                    return (Window)parentComponent;
+                if (window == null && parentComponent instanceof Window) {
+                    return (Window) parentComponent;
+                }
                 parentComponent = window;
-            }
-            while(counter-- > 0 && window != null);
+            } while (counter-- > 0 && window != null);
         }
 
-        if(window == null && parentComponent instanceof Window)
-            return (Window)parentComponent;
+        if (window == null && parentComponent instanceof Window) {
+            return (Window) parentComponent;
+        }
 
         return window;
     }
 
-    protected DialogResponse getDialogResponse()
-    {
+    protected DialogResponse getDialogResponse() {
         return response;
     }
 
-    protected void setDialogResponse(DialogResponse response)
-    {
+    protected void setDialogResponse(DialogResponse response) {
         this.response = response;
     }
 
-    public List getSelectedValues()
-    {
+    public List getSelectedValues() {
         return selectedValues;
     }
 
-    protected void setSelectedValues(Object[] selectedValues)
-    {
+    protected void setSelectedValues(Object[] selectedValues) {
         setSelectedValues(Arrays.asList(selectedValues));
     }
 
-    protected void setSelectedValues(List selectedValues)
-    {
+    protected void setSelectedValues(List selectedValues) {
         this.selectedValues = selectedValues;
     }
 
-    public Object getSelectedValue()
-    {
+    public Object getSelectedValue() {
         List values;
-        if((values = getSelectedValues()) != null && values.size() > 0)
+        if ((values = getSelectedValues()) != null && values.size() > 0) {
             return values.get(0);
+        }
 
         return null;
     }
 
-    protected void setSelectedValue(Object selectedValue)
-    {
+    protected void setSelectedValue(Object selectedValue) {
         setSelectedValues(Arrays.asList(selectedValue));
     }
 
-
-    public void close()
-    {
+    public void close() {
         Container container = getMainContainer();
-        if(container != null)
-        {
+        if (container != null) {
             container.setVisible(false);
-            if(container instanceof Window)
-                ((Window)container).dispose();
-            else if(container instanceof JInternalFrame)
-                ((JInternalFrame)container).dispose();
+            if (container instanceof Window) {
+                ((Window) container).dispose();
+            } else if (container instanceof JInternalFrame) {
+                ((JInternalFrame) container).dispose();
+            }
         }
     }
 
-    public String getTitle()
-    {
-        if(title == null)
-        {
+    public String getTitle() {
+        if (title == null) {
             ResourceMap resource = getResourceMap();
-            if(resource != null)
-            {
+            if (resource != null) {
                 title = resource.getString("Form.title");
             }
         }
@@ -309,33 +282,26 @@ public class JBPanel
         this.title = title;
     }
 
-    public Dialog.ModalityType getModalityType()
-    {
+    public Dialog.ModalityType getModalityType() {
         return modalityType;
     }
 
-    public void setModalityType(Dialog.ModalityType modalityType)
-    {
+    public void setModalityType(Dialog.ModalityType modalityType) {
         this.modalityType = modalityType;
     }
 
-    public int getWindowAncestorCount()
-    {
+    public int getWindowAncestorCount() {
         return windowAncestorCount;
     }
 
-    public void setWindowAncestorCount(int windowAncestorCount)
-    {
+    public void setWindowAncestorCount(int windowAncestorCount) {
         this.windowAncestorCount = windowAncestorCount;
     }
 
-    public ApplicationContext getContext()
-    {
-        if(applicationContext == null)
-        {
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
             Application app = getApplication();
-            if(app != null)
-            {
+            if (app != null) {
                 applicationContext = app.getContext();
             }
         }
@@ -343,13 +309,10 @@ public class JBPanel
         return applicationContext;
     }
 
-    public ApplicationActionMap getApplicationActionMap()
-    {
-        if(applicationActionMap == null)
-        {
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 applicationActionMap = context.getActionMap(this);
             }
         }
@@ -357,23 +320,18 @@ public class JBPanel
         return applicationActionMap;
     }
 
-    protected Class getResourceStartClass()
-    {
+    protected Class getResourceStartClass() {
         return this.getClass();
     }
 
-    protected Class getResourceStopClass()
-    {
+    protected Class getResourceStopClass() {
         return this.getClass();
     }
 
-    public ResourceMap getResourceMap()
-    {
-        if(resourceMap == null)
-        {
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 resourceMap = context.getResourceMap(getResourceStartClass(), getResourceStopClass());
             }
         }
@@ -386,8 +344,9 @@ public class JBPanel
     }
 
     public Application getApplication() {
-        if(application == null)
+        if (application == null) {
             application = Application.getInstance();
+        }
 
         return application;
     }
@@ -412,80 +371,73 @@ public class JBPanel
         return mainContainer;
     }
 
-
-    public void windowClosed(WindowEvent event)
-    {
+    public void windowClosed(WindowEvent event) {
         mainContainer = null;
     }
 
-    protected void dialogWindowClosing(WindowEvent event)
-    {
-        JDialog sourceDialog = (JDialog)event.getSource();
+    protected void dialogWindowClosing(WindowEvent event) {
+        JDialog sourceDialog = (JDialog) event.getSource();
         sourceDialog.setVisible(false);
     }
 
     private class DialogWindowAdapter
-        extends WindowAdapter
-    {
+            extends WindowAdapter {
+
         @Override
-        public void windowClosing(WindowEvent event)
-        {
+        public void windowClosing(WindowEvent event) {
             dialogWindowClosing(event);
         }
     }
 
-    public void addNestedFormListener(NestedFormListener listener)
-    {
+    public void addNestedFormListener(NestedFormListener listener) {
         nestedFormListeners.add(listener);
     }
 
-    public Set<NestedFormListener> getNestedFormListeners()
-    {
+    public Set<NestedFormListener> getNestedFormListeners() {
         return nestedFormListeners;
     }
+
     /**
      * Asks all listeners to perform their actions and returns
      * whether all of them allow the nested operation to proceed
      *
      * @return boolean whether the nested operation can proceed
      */
-    public boolean canNestedOperationProceed()
-    {
-        for (NestedFormListener listener: nestedFormListeners)
-        {
-            if (listener.actionPerformed() == false)
+    public boolean canNestedOperationProceed() {
+        for (NestedFormListener listener : nestedFormListeners) {
+            if (listener.actionPerformed() == false) {
                 return false;
+            }
         }
         return true;
     }
 
     /**
-      * getErrorTitle() is used as a quick reference for the
-      * error (for example, it might be used as the
-      * title of an error dialog or as the subject of
-      * an email message).
+     * getErrorTitle() is used as a quick reference for the
+     * error (for example, it might be used as the
+     * title of an error dialog or as the subject of
+     * an email message).
      *  @return May return null.
-      */
-    protected String getErrorTitle(Throwable throwable)
-    {
+     */
+    protected String getErrorTitle(Throwable throwable) {
         return getResourceMap().getString("error.title");
     }
 
     /**
-      * getBasicErrorMessage() is short description of the problem.
+     * getBasicErrorMessage() is short description of the problem.
      *  @return May return null.
-      */
-    protected String getBasicErrorMessage(Throwable throwable)
-    {
-        if(throwable == null)
+     */
+    protected String getBasicErrorMessage(Throwable throwable) {
+        if (throwable == null) {
             return getResourceMap().getString("exception.null");
+        }
 
         Throwable ex = throwable;
         String message;
-        while(ex != null)
-        {
-            if((message = throwable.getMessage()) != null && (message = message.trim()).length() > 0)
+        while (ex != null) {
+            if ((message = throwable.getMessage()) != null && (message = message.trim()).length() > 0) {
                 return message;
+            }
 
             ex = ex.getCause();
         }
@@ -494,16 +446,16 @@ public class JBPanel
     }
 
     /**
-      * getDetailedErrorMessage() is full description of the problem. It is recommended,
-      * though not required, that this String contain HTML
-      * to improve the look and layout of the detailed
-      * error message.
-      * @return May return null.
-      */
-    protected String getDetailedErrorMessage(Throwable throwable)
-    {
-        if(throwable == null)
+     * getDetailedErrorMessage() is full description of the problem. It is recommended,
+     * though not required, that this String contain HTML
+     * to improve the look and layout of the detailed
+     * error message.
+     * @return May return null.
+     */
+    protected String getDetailedErrorMessage(Throwable throwable) {
+        if (throwable == null) {
             return getResourceMap().getString("exception.null");
+        }
 
         StringWriter writer = new StringWriter();
         PrintWriter out = new PrintWriter(writer);
@@ -513,96 +465,88 @@ public class JBPanel
     }
 
     /**
-      * getErrorCategory() is a category name, indicating where in the application
-      * this incident occurred. It is recommended that
-      * this be the same value as you would use when logging.
-      * @return May return null.
-      */
-    protected String getErrorCategory(Throwable throwable)
-    {
+     * getErrorCategory() is a category name, indicating where in the application
+     * this incident occurred. It is recommended that
+     * this be the same value as you would use when logging.
+     * @return May return null.
+     */
+    protected String getErrorCategory(Throwable throwable) {
         return getResourceMap().getString("error.category");
     }
 
     /**
-      * getErrorLevel() is any Level (Level.SEVERE, Level.WARNING, etc).
-      * If null, then the level will be set to SEVERE.
-      */
-    protected Level getErrorLevel(Throwable throwable)
-    {
+     * getErrorLevel() is any Level (Level.SEVERE, Level.WARNING, etc).
+     * If null, then the level will be set to SEVERE.
+     */
+    protected Level getErrorLevel(Throwable throwable) {
         return Level.SEVERE;
     }
 
     /**
-      * getErrorState() is the state of the application at the time the incident occured.
-      * The standard System properties are automatically added to this
-      * state, and thus do not need to be included. This value may be null.
-      * If null, the resulting map will contain only the System properties.
-      * If there is a value in the map with a key that also occurs in the
-      * System properties (for example: sun.java2d.noddraw), then the
-      * developer supplied value will be used. In other words, defined
-      * parameters override standard ones. In addition, the keys
-      * "System.currentTimeMillis" and "isOnEDT" are both defined
-      * automatically.
-      */
-    protected Map<String, String> getErrorState(Throwable throwable)
-    {
+     * getErrorState() is the state of the application at the time the incident occured.
+     * The standard System properties are automatically added to this
+     * state, and thus do not need to be included. This value may be null.
+     * If null, the resulting map will contain only the System properties.
+     * If there is a value in the map with a key that also occurs in the
+     * System properties (for example: sun.java2d.noddraw), then the
+     * developer supplied value will be used. In other words, defined
+     * parameters override standard ones. In addition, the keys
+     * "System.currentTimeMillis" and "isOnEDT" are both defined
+     * automatically.
+     */
+    protected Map<String, String> getErrorState(Throwable throwable) {
         return null;
     }
 
     /**
-      * @param throwable <code>Throwable</code> that can be used as a
-      * source for additional information such as call
-      * stack, thread name, etc. May be null.
-      */
-    protected ErrorInfo getErrorInfo(Throwable throwable)
-    {
+     * @param throwable <code>Throwable</code> that can be used as a
+     * source for additional information such as call
+     * stack, thread name, etc. May be null.
+     */
+    protected ErrorInfo getErrorInfo(Throwable throwable) {
         return new ErrorInfo(
-            getErrorTitle(throwable),
-            getBasicErrorMessage(throwable),
-            getDetailedErrorMessage(throwable),
-            getErrorCategory(throwable),
-            throwable,
-            getErrorLevel(throwable),
-            getErrorState(throwable));
+                getErrorTitle(throwable),
+                getBasicErrorMessage(throwable),
+                getDetailedErrorMessage(throwable),
+                getErrorCategory(throwable),
+                throwable,
+                getErrorLevel(throwable),
+                getErrorState(throwable));
     }
 
-    protected JXErrorPane getErrorPane(ErrorInfo errorInfo)
-    {
+    protected JXErrorPane getErrorPane(ErrorInfo errorInfo) {
         return getErrorPane(errorInfo, null);
     }
 
     protected JXErrorPane getErrorPane(
-        ErrorInfo errorInfo,
-        ErrorReporter errorReporter)
-    {
+            ErrorInfo errorInfo,
+            ErrorReporter errorReporter) {
         JBErrorPane errorPane = new JBErrorPane();
         errorPane.setErrorInfo(errorInfo);
-        if(errorReporter != null)
+        if (errorReporter != null) {
             errorPane.setErrorReporter(errorReporter);
+        }
         return errorPane;
     }
 
-    protected final void handleException(Throwable ex)
-    {
+    protected final void handleException(Throwable ex) {
         handleException(null, ex);
     }
 
-    protected void handleException(String message, Throwable ex)
-    {
+    protected void handleException(String message, Throwable ex) {
         ErrorInfo errorInfo = getErrorInfo(ex);
         logException(errorInfo.getErrorLevel(), message, ex);
         JBErrorPane.showDialog(this, getErrorPane(errorInfo));
     }
 
-    protected void logException(String message, Throwable ex)
-    {
+    protected void logException(String message, Throwable ex) {
         logException(null, message, ex);
     }
 
-    protected void logException(Level level, String message, Throwable ex)
-    {
-        if(level == null)
+    protected void logException(Level level, String message, Throwable ex) {
+        if (level == null) {
             level = Level.SEVERE;
+        }
         logger.log(level, message, ex);
     }
 }
