@@ -4,11 +4,21 @@
  */
 package com.cosmos.acacia.crm.data.users;
 
-import com.cosmos.acacia.crm.data.security.*;
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.security.SecurityRole;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTabbedPane;
+import java.awt.BorderLayout;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,60 +29,112 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author Miro
  */
 @Entity
-@Table(name = "job_titles", catalog = "acacia", schema = "public")
-@NamedQueries({@NamedQuery(name = "JobTitle.findAll", query = "SELECT j FROM JobTitle j"), @NamedQuery(name = "JobTitle.findByJobTitleId", query = "SELECT j FROM JobTitle j WHERE j.jobTitleId = :jobTitleId"), @NamedQuery(name = "JobTitle.findByJobTitle", query = "SELECT j FROM JobTitle j WHERE j.jobTitle = :jobTitle")})
-public class JobTitle implements Serializable {
+@Table(name = "job_titles", catalog = "acacia", schema = "public",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"business_unit_id", "job_title"})}
+)
+@NamedQueries({
+    @NamedQuery(
+        name = JobTitle.NQ_FIND_ALL,
+        query = "SELECT t FROM JobTitle t" +
+                " WHERE" +
+                "  t.businessUnit = :businessUnit"
+    ),
+    @NamedQuery(
+        name = JobTitle.NQ_DELETE_ALL,
+        query = "DELETE FROM JobTitle t" +
+                " WHERE" +
+                "  t.businessUnit = :businessUnit"
+    )
+})
+@Form(
+    mainContainer=@FormContainer(
+        name="mainTabbedPane",
+        container=@Component(
+            componentClass=JBTabbedPane.class
+        )
+    ),
+    formContainers={
+        @FormContainer(
+            name="primaryInfo",
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            )
+        ),
+        @FormContainer(
+            name="notes",
+            title="Notes",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(layoutClass=BorderLayout.class)
+        )
+    },
+    serviceClass=UsersServiceRemote.class
+)
+public class JobTitle extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
+    protected static final String CLASS_NAME = "JobTitle";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_DELETE_ALL = CLASS_NAME + ".deleteAll";
 
     @Id
     @Basic(optional = false)
     @Column(name = "job_title_id", nullable = false, precision = 19, scale = 0)
-    private BigDecimal jobTitleId;
-
-    @Basic(optional = false)
-    @Column(name = "job_title", nullable = false, length = 100)
-    private String jobTitle;
+    private BigInteger jobTitleId;
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
-    private BusinessUnit businessUnitId;
+    private BusinessUnit businessUnit;
+
+    @Basic(optional = false)
+    @Column(name = "job_title", nullable = false, length = 100)
+    @Property(title="Job Title"
+    )
+    private String jobTitle;
+
+    @JoinColumn(name = "functional_hierarchy_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Functional Hierarchy"
+    )
+    private DbResource functionalHierarchy;
+
+    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Security Role"
+    )
+    private SecurityRole securityRole;
 
     @JoinColumn(name = "job_title_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private DataObject dataObject;
 
-    @JoinColumn(name = "functional_hierarchy_id", referencedColumnName = "resource_id", nullable = false)
-    @ManyToOne(optional = false)
-    private DbResource functionalHierarchyId;
-
-    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
-    @ManyToOne(optional = false)
-    private SecurityRole securityRoleId;
-
     public JobTitle() {
     }
 
-    public JobTitle(BigDecimal jobTitleId) {
+    public JobTitle(BigInteger jobTitleId) {
         this.jobTitleId = jobTitleId;
     }
 
-    public JobTitle(BigDecimal jobTitleId, String jobTitle) {
+    public JobTitle(BigInteger jobTitleId, String jobTitle) {
         this.jobTitleId = jobTitleId;
         this.jobTitle = jobTitle;
     }
 
-    public BigDecimal getJobTitleId() {
+    public BigInteger getJobTitleId() {
         return jobTitleId;
     }
 
-    public void setJobTitleId(BigDecimal jobTitleId) {
+    public void setJobTitleId(BigInteger jobTitleId) {
         this.jobTitleId = jobTitleId;
     }
 
@@ -84,60 +146,66 @@ public class JobTitle implements Serializable {
         this.jobTitle = jobTitle;
     }
 
-    public BusinessUnit getBusinessUnitId() {
-        return businessUnitId;
+    public BusinessUnit getBusinessUnit() {
+        return businessUnit;
     }
 
-    public void setBusinessUnitId(BusinessUnit businessUnitId) {
-        this.businessUnitId = businessUnitId;
+    public void setBusinessUnit(BusinessUnit businessUnit) {
+        this.businessUnit = businessUnit;
+        if(businessUnit != null) {
+            setParentId(businessUnit.getBusinessUnitId());
+        } else {
+            setParentId(null);
+        }
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
-    public DbResource getFunctionalHierarchyId() {
-        return functionalHierarchyId;
+    public DbResource getFunctionalHierarchy() {
+        return functionalHierarchy;
     }
 
-    public void setFunctionalHierarchyId(DbResource functionalHierarchyId) {
-        this.functionalHierarchyId = functionalHierarchyId;
+    public void setFunctionalHierarchy(DbResource functionalHierarchy) {
+        this.functionalHierarchy = functionalHierarchy;
     }
 
-    public SecurityRole getSecurityRoleId() {
-        return securityRoleId;
+    public SecurityRole getSecurityRole() {
+        return securityRole;
     }
 
-    public void setSecurityRoleId(SecurityRole securityRoleId) {
-        this.securityRoleId = securityRoleId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (jobTitleId != null ? jobTitleId.hashCode() : 0);
-        return hash;
+    public void setSecurityRole(SecurityRole securityRole) {
+        this.securityRole = securityRole;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof JobTitle)) {
-            return false;
+    public BigInteger getId() {
+        return getJobTitleId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setJobTitleId(id);
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        if(businessUnit != null) {
+            return businessUnit.getBusinessUnitId();
         }
-        JobTitle other = (JobTitle) object;
-        if ((this.jobTitleId == null && other.jobTitleId != null) || (this.jobTitleId != null && !this.jobTitleId.equals(other.jobTitleId))) {
-            return false;
-        }
-        return true;
+
+        return null;
     }
 
     @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.JobTitle[jobTitleId=" + jobTitleId + "]";
+    public String getInfo() {
+        return getJobTitle();
     }
 }

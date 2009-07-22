@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;
 
@@ -176,8 +177,9 @@ public interface AddressesListRemote {
      * @param parentDataObjectId
      * @return a list of communication contacts
      */
-    List<CommunicationContact>
-        getCommunicationContacts(BigInteger parentDataObjectId);
+    List<CommunicationContact> getCommunicationContacts(Address address);
+
+    List<CommunicationContact> getCommunicationContacts(Address address, CommunicationType communicationType);
 
     /**
      * Lists all communication contacts belonging to
@@ -186,8 +188,7 @@ public interface AddressesListRemote {
      * @param contactPerson
      * @return
      */
-    List<CommunicationContact>
-        getCommunicationContacts(ContactPerson contactPerson);
+    List<CommunicationContact> getCommunicationContacts(ContactPerson contactPerson);
 
 
     /**
@@ -202,7 +203,10 @@ public interface AddressesListRemote {
      *
      * @return the newly created CommunicationContact
      */
-    CommunicationContact newCommunicationContact();
+    CommunicationContact newCommunicationContact(
+            Address address,
+            CommunicationType communicationType,
+            ContactPerson contactPerson);
 
     /**
      * Saves a CommunicationContact for specified parent (Address data object)

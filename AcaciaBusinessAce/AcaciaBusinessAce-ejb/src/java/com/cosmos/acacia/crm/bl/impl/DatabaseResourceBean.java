@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
+import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.Currency;
@@ -112,6 +113,7 @@ public class DatabaseResourceBean
             getDbResources(PermissionCategory.class);
             getDbResources(AccessRight.class);
             getDbResources(BusinessUnitType.class);
+            getDbResources(BusinessUnitAddressType.class);
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }

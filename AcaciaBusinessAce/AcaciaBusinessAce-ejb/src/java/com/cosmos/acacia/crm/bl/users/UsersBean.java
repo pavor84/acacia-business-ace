@@ -59,7 +59,10 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
+import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
 import com.cosmos.acacia.crm.data.users.UserGroupMember;
+import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
@@ -114,6 +117,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @EJB
     private ClassifiersLocal classifiersManager;
 
+    @EJB
+    private UsersServiceLocal usersService;
 
     /** Temporary indicator that operations are concerning password change */
     private boolean passwordChange = false;
@@ -733,6 +738,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         initCurrency();
         initExpressions();
+        initBusinessUnits();
         initUserGroupsAndRights();
     }
 
@@ -760,6 +766,29 @@ public class UsersBean implements UsersRemote, UsersLocal {
         propertyName = "extendedPrice";
         if(session.getExpression(beanClass, propertyName) == null) {
             session.saveExpression(beanClass, propertyName, PurchaseInvoiceItem.EXTENDED_PRICE_CALCULATION_EXPRESSION);
+        }
+    }
+
+    private void initBusinessUnits() {
+        List<BusinessUnit> businessUnits;
+        if((businessUnits = usersService.getBusinessUnits(null)) != null && businessUnits.size() > 0) {
+            return;
+        }
+
+        BusinessUnit root = usersService.newEntity(BusinessUnit.class);
+        root = usersService.save(root);
+        BusinessUnitAddress buAddress = usersService.newItem(root, BusinessUnitAddress.class);
+        for(BusinessUnitType buType : BusinessUnitType.values()) {
+            if(BusinessUnitType.Administrative.equals(buType)) {
+                continue;
+            }
+
+            BusinessUnit businessUnit = usersService.newEntity(BusinessUnit.class);
+            businessUnit.setBusinessUnitType(buType.getDbResource());
+            String name = buType.name();
+            businessUnit.setBusinessUnitName(name);
+            businessUnit.setDivisionName(name);
+            usersService.save(businessUnit);
         }
     }
 

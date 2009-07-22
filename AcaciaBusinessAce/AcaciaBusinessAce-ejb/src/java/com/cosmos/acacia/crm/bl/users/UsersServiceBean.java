@@ -5,15 +5,21 @@
 package com.cosmos.acacia.crm.bl.users;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
+import com.cosmos.acacia.crm.data.users.JobTitle;
 import com.cosmos.acacia.crm.data.users.Team;
 import com.cosmos.acacia.crm.data.users.TeamMember;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -29,7 +35,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     public static final String BUSINESS_UNIT_KEY = "businessUnit";
     public static final String TEAM_KEY = "team";
     public static final String USER_KEY = "user";
+    public static final String ADDRESS_TYPE_KEY = "addressType";
 
+    @Override
     public List<User> getUsers(Organization organization) {
         if (organization == null || organization.getId() == null) {
             Query q = em.createNamedQuery("User.findAll");
@@ -53,6 +61,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         return users;
     }
 
+    @Override
     public List<Team> getTeams(DataObjectBean parameter) {
         Query q;
         if (parameter instanceof Organization) {
@@ -68,6 +77,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         return new ArrayList<Team>(q.getResultList());
     }
 
+    @Override
     public List<BusinessUnit> getBusinessUnits() {
         Query q = em.createNamedQuery(BusinessUnit.NQ_FIND_ALL);
         q.setParameter("organization", session.getOrganization());
@@ -75,6 +85,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         return new ArrayList<BusinessUnit>(q.getResultList());
     }
 
+    @Override
     public List<BusinessUnit> getBusinessUnits(BusinessUnit parentBusinessUnit) {
         Query q;
         if(parentBusinessUnit != null) {
@@ -89,7 +100,36 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
+    public List<BusinessUnitAddress> getBusinessUnitAddresses(BusinessUnit businessUnit, Object... extraParameters) {
+        Query q;
+        if(extraParameters.length == 0) {
+            q = em.createNamedQuery(BusinessUnitAddress.NQ_FIND_ALL);
+        } else {
+            Object parameter;
+            if((parameter = extraParameters[0]) instanceof DbResource) {
+                q = em.createNamedQuery(BusinessUnitAddress.NQ_FIND_BY_ADDRESS_TYPE);
+                q.setParameter(ADDRESS_TYPE_KEY, parameter);
+            } else {
+                throw new RuntimeException("Unsuported extra parameter(s): " + parameter);
+            }
+        }
+        q.setParameter(BUSINESS_UNIT_KEY, businessUnit);
+        return new ArrayList<BusinessUnitAddress>(q.getResultList());
+    }
+
+    @Override
+    public List<JobTitle> getJobTitles(BusinessUnit businessUnit, Object... extraParameters) {
+        Query q = em.createNamedQuery(JobTitle.NQ_FIND_ALL);
+        q.setParameter(BUSINESS_UNIT_KEY, businessUnit);
+        return new ArrayList<JobTitle>(q.getResultList());
+    }
+
+    @Override
     public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+        if(!canRead(entityClass, extraParameters)) {
+            return Collections.emptyList();
+        }
+
         if (entityClass == User.class) {
             return (List<E>) getUsers(session.getOrganization());
         } else if (entityClass == Team.class) {
@@ -109,11 +149,16 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             }
         }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet for entityClass=" + entityClass +
+                " and extraParameters=" + Arrays.asList(extraParameters));
     }
 
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+        if(!canRead(entity, itemClass, extraParameters)) {
+            return Collections.emptyList();
+        }
+
         if(itemClass == TeamMember.class) {
             Query q;
             if(entity instanceof Team) {
@@ -127,9 +172,20 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             }
 
             return new ArrayList<I>(q.getResultList());
+        } else if(entity instanceof BusinessUnit) {
+            if(BusinessUnitAddress.class == itemClass) {
+                return (List<I>) getBusinessUnitAddresses((BusinessUnit) entity, extraParameters);
+            } else if(JobTitle.class == itemClass) {
+                return (List<I>) getJobTitles((BusinessUnit) entity, extraParameters);
+            }
+
+            throw new UnsupportedOperationException("Not supported itemClass: " + itemClass +
+                    " for parent entity: " + entity);
         }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet for entity=" + entity +
+                " and itemClass=" + itemClass +
+                " and extraParameters=" + Arrays.asList(extraParameters));
     }
 
     @Override
@@ -139,11 +195,26 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         } else if (entity instanceof BusinessUnit) {
             BusinessUnit businessUnit = (BusinessUnit)entity;
             businessUnit.setOrganization(session.getOrganization());
-            if(getBusinessUnits(null).size() == 0) {
+            List<BusinessUnit> businessUnits;
+            if((businessUnits = getBusinessUnits(null)).size() == 0) {
                 businessUnit.setRoot(true);
                 businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
                 businessUnit.setBusinessUnitName(session.getOrganization().getOrganizationName());
                 businessUnit.setDivisionName(BusinessUnitType.Administrative.name());
+            } else {
+                businessUnit.setParentBusinessUnit(businessUnits.get(0));
+            }
+        }
+    }
+
+    @Override
+    protected <E, I> void initItem(E entity, I item) {
+        if (entity instanceof BusinessUnit) {
+            BusinessUnit businessUnit = (BusinessUnit)entity;
+            if (item instanceof BusinessUnitAddress) {
+                ((BusinessUnitAddress)item).setBusinessUnit(businessUnit);
+            } else if (item instanceof JobTitle) {
+                ((JobTitle)item).setBusinessUnit(businessUnit);
             }
         }
     }
@@ -152,16 +223,77 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     protected <E> void preSave(E entity) {
         if (entity instanceof User) {
             User user = (User) entity;
-        }
-        if (entity instanceof Team) {
+        } else if (entity instanceof Team) {
             Team team = (Team) entity;
             Organization organization;
             if ((organization = team.getOrganization()) == null || !organization.equals(session.getOrganization())) {
                 team.setOrganization(session.getOrganization());
             }
-        }
-        if (entity instanceof TeamMember) {
+        } else if (entity instanceof TeamMember) {
             TeamMember member = (TeamMember) entity;
+        } else if (entity instanceof BusinessUnit) {
+            BusinessUnit businessUnit = (BusinessUnit) entity;
+            preSaveBusinessUnit(businessUnit);
+        }
+    }
+
+    private void preSaveBusinessUnit(BusinessUnit businessUnit) {
+        if(businessUnit.isRoot()) {
+            List<BusinessUnit> businessUnits;
+            if((businessUnits = getBusinessUnits(null)).size() > 0 && !businessUnits.get(0).equals(businessUnit)) {
+                throw new RuntimeException("Only one root business unit is allowed.");
+            }
+            businessUnit.setParentBusinessUnit(null);
+        } else {
+            BusinessUnit parentBusinessUnit;
+            if((parentBusinessUnit = businessUnit.getParentBusinessUnit()) == null) {
+                throw new RuntimeException("The parent business unit can not be null.");
+            } else if(parentBusinessUnit.equals(businessUnit)) {
+                throw new RuntimeException("The parent business unit must be different than the business unit.");
+            }
+        }
+    }
+
+    @Override
+    protected <E> void postSave(E entity) {
+        if (entity instanceof BusinessUnit) {
+            BusinessUnit businessUnit = (BusinessUnit) entity;
+            postSaveBusinessUnit(businessUnit);
+        }
+    }
+
+    private void postSaveBusinessUnit(BusinessUnit businessUnit) {
+        List<BusinessUnitAddress> businessUnitAddresses;
+        DbResource billToType = BusinessUnitAddressType.BillTo.getDbResource();
+        if((businessUnitAddresses = getBusinessUnitAddresses(businessUnit, billToType)) != null &&
+                businessUnitAddresses.size() > 0) {
+            return;
+        }
+
+        BusinessUnitAddress businessUnitAddress = newItem(businessUnit, BusinessUnitAddress.class);
+        businessUnitAddress.setAddressType(billToType);
+        businessUnitAddress.setAddress(session.getBranch());
+        esm.persist(em, businessUnitAddress);
+    }
+
+    @Override
+    protected <E> void preDelete(E entity) {
+        if (entity instanceof BusinessUnit) {
+            preDeleteBusinessUnit((BusinessUnit) entity);
+        }
+    }
+
+    private void preDeleteBusinessUnit(BusinessUnit businessUnit) {
+        if(businessUnit.isRoot()) {
+            throw new RuntimeException("The root business unit can not be deleted.");
+        } else {
+            Query q = em.createNamedQuery(BusinessUnitAddress.NQ_DELETE_ALL);
+            q.setParameter(BUSINESS_UNIT_KEY, businessUnit);
+            q.executeUpdate();
+
+            q = em.createNamedQuery(JobTitle.NQ_DELETE_ALL);
+            q.setParameter(BUSINESS_UNIT_KEY, businessUnit);
+            q.executeUpdate();
         }
     }
 }

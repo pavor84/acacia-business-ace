@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.data.security;
 
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.users.User;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,86 +27,107 @@ import javax.persistence.UniqueConstraint;
  * @author Miro
  */
 @Entity
-@Table(name = "user_security_roles", catalog = "acacia", schema = "public", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "security_role_id"})})
-@NamedQueries({@NamedQuery(name = "UserSecurityRole.findAll", query = "SELECT u FROM UserSecurityRole u"), @NamedQuery(name = "UserSecurityRole.findByUserSecurityRoleId", query = "SELECT u FROM UserSecurityRole u WHERE u.userSecurityRoleId = :userSecurityRoleId")})
-public class UserSecurityRole implements Serializable {
+@Table(name = "user_security_roles", catalog = "acacia", schema = "public",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "security_role_id"})
+})
+@NamedQueries({
+    @NamedQuery(
+        name = "UserSecurityRole.findAll",
+        query = "SELECT u FROM UserSecurityRole u"
+    )
+})
+public class UserSecurityRole extends DataObjectBean implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Basic(optional = false)
     @Column(name = "user_security_role_id", nullable = false, precision = 19, scale = 0)
-    private BigDecimal userSecurityRoleId;
+    private BigInteger userSecurityRoleId;
+
+    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
+    @ManyToOne(optional = false)
+    private SecurityRole securityRole;
+
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @ManyToOne(optional = false)
+    private User user;
+
     @JoinColumn(name = "user_security_role_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private DataObject dataObject;
-    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
-    @ManyToOne(optional = false)
-    private SecurityRole securityRoleId;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
-    @ManyToOne(optional = false)
-    private User userId;
 
     public UserSecurityRole() {
     }
 
-    public UserSecurityRole(BigDecimal userSecurityRoleId) {
+    public UserSecurityRole(BigInteger userSecurityRoleId) {
         this.userSecurityRoleId = userSecurityRoleId;
     }
 
-    public BigDecimal getUserSecurityRoleId() {
+    public BigInteger getUserSecurityRoleId() {
         return userSecurityRoleId;
     }
 
-    public void setUserSecurityRoleId(BigDecimal userSecurityRoleId) {
+    public void setUserSecurityRoleId(BigInteger userSecurityRoleId) {
         this.userSecurityRoleId = userSecurityRoleId;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
-    public SecurityRole getSecurityRoleId() {
-        return securityRoleId;
+    public SecurityRole getSecurityRole() {
+        return securityRole;
     }
 
-    public void setSecurityRoleId(SecurityRole securityRoleId) {
-        this.securityRoleId = securityRoleId;
+    public void setSecurityRole(SecurityRole securityRole) {
+        this.securityRole = securityRole;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (userSecurityRoleId != null ? userSecurityRoleId.hashCode() : 0);
-        return hash;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UserSecurityRole)) {
-            return false;
+    public BigInteger getId() {
+        return getUserSecurityRoleId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setUserSecurityRoleId(id);
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        if(user != null) {
+            return user.getId();
         }
-        UserSecurityRole other = (UserSecurityRole) object;
-        if ((this.userSecurityRoleId == null && other.userSecurityRoleId != null) || (this.userSecurityRoleId != null && !this.userSecurityRoleId.equals(other.userSecurityRoleId))) {
-            return false;
-        }
-        return true;
+
+        return null;
     }
 
     @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.UserSecurityRole[userSecurityRoleId=" + userSecurityRoleId + "]";
-    }
+    public String getInfo() {
+        StringBuilder sb = new StringBuilder();
+        if(user != null) {
+            sb.append(user.getUserName());
+        }
+        sb.append(':');
+        if(securityRole != null) {
+            sb.append(securityRole.getSecurityRoleName());
+        }
 
+        return sb.toString();
+    }
 }

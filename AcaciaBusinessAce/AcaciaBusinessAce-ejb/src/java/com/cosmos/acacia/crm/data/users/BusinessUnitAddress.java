@@ -6,14 +6,21 @@ package com.cosmos.acacia.crm.data.users;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import java.awt.BorderLayout;
@@ -41,8 +48,23 @@ import javax.persistence.UniqueConstraint;
 })
 @NamedQueries({
     @NamedQuery(
-        name = "BusinessUnitAddress.findAll",
-        query = "SELECT b FROM BusinessUnitAddress b"
+        name = BusinessUnitAddress.NQ_FIND_ALL,
+        query = "SELECT t FROM BusinessUnitAddress t" +
+                " WHERE" +
+                "  t.businessUnit = :businessUnit"
+    ),
+    @NamedQuery(
+        name = BusinessUnitAddress.NQ_FIND_BY_ADDRESS_TYPE,
+        query = "SELECT t FROM BusinessUnitAddress t" +
+                " WHERE" +
+                "  t.businessUnit = :businessUnit" +
+                "  and t.addressType = :addressType"
+    ),
+    @NamedQuery(
+        name = BusinessUnitAddress.NQ_DELETE_ALL,
+        query = "DELETE FROM BusinessUnitAddress t" +
+                " WHERE" +
+                "  t.businessUnit = :businessUnit"
     )
 })
 @Form(
@@ -58,8 +80,7 @@ import javax.persistence.UniqueConstraint;
             title="Primary Info",
             container=@Component(
                 componentClass=JBPanel.class
-            ),
-            componentIndex=1
+            )
         ),
         @FormContainer(
             name="notes",
@@ -75,6 +96,11 @@ import javax.persistence.UniqueConstraint;
 public class BusinessUnitAddress extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
+    protected static final String CLASS_NAME = "BusinessUnitAddress";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_ADDRESS_TYPE = CLASS_NAME + ".findByAddressType";
+    public static final String NQ_DELETE_ALL = CLASS_NAME + ".deleteAll";
 
     @Id
     @Basic(optional = false)
@@ -83,27 +109,114 @@ public class BusinessUnitAddress extends DataObjectBean implements Serializable 
 
     @JoinColumn(name = "address_type_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
+    @Property(title="Address Type",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.BusinessUnitAddressType"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="primaryInfo",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Type:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource addressType;
-
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id", nullable = false)
-    @ManyToOne(optional = false)
-    private Address address;
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
     private BusinessUnit businessUnit;
 
-    @JoinColumn(name = "email_id", referencedColumnName = "communication_contact_id")
-    @ManyToOne
-    private CommunicationContact email;
-
-    @JoinColumn(name = "fax_id", referencedColumnName = "communication_contact_id")
-    @ManyToOne
-    private CommunicationContact fax;
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Address",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="primaryInfo",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Address:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
+    private Address address;
 
     @JoinColumn(name = "phone_id", referencedColumnName = "communication_contact_id")
     @ManyToOne
+    @Property(title="Phone",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.CommunicationContactsListPanel",
+            constructorParameters={
+                @PropertyName(getter="address"),
+                @PropertyName(getter="'Phone'", setter="communicationType")
+            }
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="primaryInfo",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Phone:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private CommunicationContact phone;
+
+    @JoinColumn(name = "fax_id", referencedColumnName = "communication_contact_id")
+    @ManyToOne
+    @Property(title="Fax",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.CommunicationContactsListPanel",
+            constructorParameters={
+                @PropertyName(getter="address"),
+                @PropertyName(getter="'Fax'", setter="communicationType")
+            }
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="primaryInfo",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Fax:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
+    private CommunicationContact fax;
+
+    @JoinColumn(name = "email_id", referencedColumnName = "communication_contact_id")
+    @ManyToOne
+    @Property(title="Email",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contactbook.CommunicationContactsListPanel",
+            constructorParameters={
+                @PropertyName(getter="address"),
+                @PropertyName(getter="'Email'", setter="communicationType")
+            }
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName="primaryInfo",
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Email:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
+    private CommunicationContact email;
 
     @JoinColumn(name = "business_unit_address_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)

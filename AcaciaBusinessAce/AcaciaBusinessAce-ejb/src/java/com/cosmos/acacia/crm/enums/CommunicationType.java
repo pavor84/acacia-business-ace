@@ -20,7 +20,8 @@ public enum CommunicationType implements DatabaseResource {
     Fax("Fax"),
     ICQ("ICQ"),
     Skype("Skype"),
-    GoogleTalk("GoogleTalk");
+    GoogleTalk("GoogleTalk"),
+    Email("Email");
 
     private String communicationType;
     private DbResource dbResource;

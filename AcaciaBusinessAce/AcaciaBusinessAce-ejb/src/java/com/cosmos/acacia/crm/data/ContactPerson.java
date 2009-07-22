@@ -64,9 +64,7 @@ import javax.persistence.UniqueConstraint;
         )
     }
 )
-public class ContactPerson
-        extends DataObjectBean
-        implements TextResource, Serializable {
+public class ContactPerson extends DataObjectBean implements TextResource, Serializable {
 
     private static final long serialVersionUID = 1L;
 
