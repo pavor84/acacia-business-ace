@@ -9,7 +9,6 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 
-import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 
@@ -26,16 +25,9 @@ public class CommunicationContactPanel extends BaseEntityPanel {
 
     /** Creates new form CommunicationContactPanel */
     public CommunicationContactPanel(CommunicationContact communicationContact) {
-        super(communicationContact.getDataObject().getParentDataObjectId());
+        super(communicationContact.getParentId());
         this.communicationContact = communicationContact;
         this.contactPerson = communicationContact.getContactPerson();
-        init();
-    }
-
-    /** Creates new form CommunicationContactPanel */
-    public CommunicationContactPanel(BigInteger parentDataObjectId, ContactPerson contactPerson) {
-        super(parentDataObjectId);
-        this.contactPerson = contactPerson;
         init();
     }
 
@@ -125,9 +117,8 @@ public class CommunicationContactPanel extends BaseEntityPanel {
         setResizable(false);
 
         log.info("initData().communicationContact: " + communicationContact);
-        if (communicationContact == null) {
-            communicationContact = getFormSession().newCommunicationContact();
-        }
+
+        boolean enabledCommType = communicationContact.getCommunicationContactId() == null && communicationContact.getCommunicationType() != null;
 
         BindingGroup bg = getBindingGroup();
 
@@ -137,6 +128,10 @@ public class CommunicationContactPanel extends BaseEntityPanel {
         valueTextField.bind(bg, communicationContact, entityProps.getPropertyDetails("communicationValue"));
 
         bg.bind();
+
+        if(enabledCommType) {
+            typeComboBox.setEnabled(false);
+        }
     }
 
     protected AddressesListRemote getFormSession() {

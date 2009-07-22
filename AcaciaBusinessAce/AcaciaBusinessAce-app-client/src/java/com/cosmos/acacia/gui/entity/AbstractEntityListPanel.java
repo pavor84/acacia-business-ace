@@ -19,6 +19,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.util.BeanUtils;
 import com.cosmos.util.BooleanUtils;
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ import org.jdesktop.swingbinding.JTableBinding;
  * @author Miro
  */
 public abstract class AbstractEntityListPanel<E extends DataObjectBean>
-        extends AbstractTablePanel<E> {
+        extends AbstractTablePanel<E>
+        implements Refreshable {
 
     private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;
@@ -331,6 +333,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
         return new RefreshTask(getApplication());
     }
 
+    @Override
     public void refresh() {
         RefreshTask refreshTask = new RefreshTask(getApplication());
         refreshTask.run();
@@ -343,12 +346,12 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
             // doInBackground() depends on from parameters
             // to RefreshActionTask fields, here.
             super(app);
-            log.debug("RefreshActionTask()");
+            debug("RefreshActionTask()");
         }
 
         @Override
         protected Object doInBackground() {
-            log.debug("doInBackground().begin");
+            debug("doInBackground().begin");
             // Your Task's code here.  This method runs
             // on a background thread, so don't reference
             // the Swing GUI from here.
@@ -368,15 +371,59 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
             }
             dataTable.packAll();
             fireTableRefreshed();
-            log.debug("doInBackground().end");
+            debug("doInBackground().end");
             return entities;  // return your result
         }
 
         @Override
         protected void succeeded(Object result) {
-            log.debug("succeeded(Result:" + result + ")");
+            debug("succeeded(Result:" + result + ")");
             // Runs on the EDT.  Update the GUI based on
             // the result computed by doInBackground().
         }
+    }
+
+    protected void info(String message) {
+        //System.out.println(message);
+        log.info(message);
+    }
+
+    protected void info(String message, Throwable exception) {
+        //System.out.println(message);
+        //exception.printStackTrace(System.out);
+        log.info(message, exception);
+    }
+
+    protected void debug(String message) {
+        //System.out.println(message);
+        log.debug(message);
+    }
+
+    protected void debug(String message, Throwable exception) {
+        //System.out.println(message);
+        //exception.printStackTrace(System.out);
+        log.debug(message, exception);
+    }
+
+    protected void error(String message) {
+        //System.out.println(message);
+        log.error(message);
+    }
+
+    protected void error(String message, Throwable exception) {
+        //System.out.println(message);
+        //exception.printStackTrace(System.out);
+        log.error(message, exception);
+    }
+
+    protected void fatal(String message) {
+        //System.out.println(message);
+        log.fatal(message);
+    }
+
+    protected void fatal(String message, Throwable exception) {
+        //System.out.println(message);
+        //exception.printStackTrace(System.out);
+        log.fatal(message, exception);
     }
 }

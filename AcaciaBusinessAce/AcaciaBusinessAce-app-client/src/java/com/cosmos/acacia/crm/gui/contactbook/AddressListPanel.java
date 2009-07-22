@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
+import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.City;
@@ -26,6 +27,10 @@ import org.jdesktop.application.Task;
  * @author Bozhidar Bozhanov
  */
 public class AddressListPanel extends AbstractTablePanel<Address> {
+
+    public AddressListPanel() {
+        this(LocalSession.instance().getOrganization());
+    }
 
     public AddressListPanel(BusinessPartner businessPartner) {
         this(businessPartner != null ? businessPartner.getId() : null);

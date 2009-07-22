@@ -32,5 +32,4 @@ public class BusinessUnitAddressListPanel extends DetailEntityListPanel<Business
             return;
         }
     }
-
 }

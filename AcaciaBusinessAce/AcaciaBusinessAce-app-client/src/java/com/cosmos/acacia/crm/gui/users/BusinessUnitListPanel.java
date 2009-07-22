@@ -22,4 +22,13 @@ public class BusinessUnitListPanel extends EntityListPanel<BusinessUnit> {
     protected EntityPanel getEntityPanel(BusinessUnit entity) {
         return new BusinessUnitPanel(this, entity);
     }
+
+    @Override
+    public boolean canDelete(BusinessUnit rowObject) {
+        if(rowObject.isRoot()) {
+            return false;
+        }
+
+        return super.canDelete(rowObject);
+    }
 }

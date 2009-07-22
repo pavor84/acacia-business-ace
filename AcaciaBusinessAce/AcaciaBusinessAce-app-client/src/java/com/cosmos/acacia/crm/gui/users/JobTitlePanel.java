@@ -5,10 +5,9 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
+import com.cosmos.acacia.crm.data.users.JobTitle;
 import com.cosmos.acacia.gui.entity.AbstractEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
-import java.util.List;
 import javax.swing.JComponent;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 
@@ -16,9 +15,9 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
  *
  * @author Miro
  */
-public class BusinessUnitAddressPanel extends EntityPanel<BusinessUnitAddress> {
+public class JobTitlePanel extends EntityPanel<JobTitle> {
 
-    public BusinessUnitAddressPanel(AbstractEntityListPanel entityListPanel, BusinessUnitAddress entity) {
+    public JobTitlePanel(AbstractEntityListPanel entityListPanel, JobTitle entity) {
         super(entityListPanel, entity);
     }
 
@@ -26,8 +25,4 @@ public class BusinessUnitAddressPanel extends EntityPanel<BusinessUnitAddress> {
     protected void entityChanged(String propertyName, JComponent jComponent, PropertyStateEvent event) {
     }
 
-    @Override
-    protected List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
-        return super.getResources(enumClass, enumCategoryClasses);
-    }
 }

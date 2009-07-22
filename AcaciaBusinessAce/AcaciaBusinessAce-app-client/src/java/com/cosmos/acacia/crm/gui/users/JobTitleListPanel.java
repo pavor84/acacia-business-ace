@@ -5,8 +5,8 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.data.users.Team;
-import com.cosmos.acacia.crm.data.users.TeamMember;
+import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.JobTitle;
 import com.cosmos.acacia.gui.entity.AlterationType;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
@@ -15,21 +15,22 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
  *
  * @author Miro
  */
-public class TeamMemberListPanel extends DetailEntityListPanel<Team, TeamMember> {
+public class JobTitleListPanel extends DetailEntityListPanel<BusinessUnit, JobTitle> {
 
-    public TeamMemberListPanel(EntityPanel<Team> mainEntityPanel, Class<TeamMember> itemEntityClass) {
+    public JobTitleListPanel(EntityPanel<BusinessUnit> mainEntityPanel, Class<JobTitle> itemEntityClass) {
         super(mainEntityPanel, itemEntityClass);
     }
 
     @Override
-    protected EntityPanel getEntityPanel(TeamMember entity) {
-        return new TeamMemberPanel(this, entity);
+    protected EntityPanel getEntityPanel(JobTitle entity) {
+        return new JobTitlePanel(this, entity);
     }
 
     @Override
-    public void rowChanged(AlterationType alterationType, TeamMember oldRowObject, TeamMember newRowObject) {
+    public void rowChanged(AlterationType alterationType, JobTitle oldRowObject, JobTitle newRowObject) {
         if(AlterationType.Nothing.equals(alterationType)) {
             return;
         }
     }
+
 }

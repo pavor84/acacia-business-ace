@@ -38,12 +38,16 @@ public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjec
         return new ArrayList<I>();
     }
 
+    protected E saveMainEntity() {
+        getMainEntityPanel().performSave(false);
+        return getMainEntity();
+    }
+
     @Override
     protected I newEntity() {
         E mainEntity;
         if((mainEntity = getMainEntity()) != null && mainEntity.getId() == null) {
-            getMainEntityPanel().performSave(false);
-            mainEntity = getMainEntity();
+            mainEntity = saveMainEntity();
         }
 
         return (I) getEntityService().newItem(mainEntity, getEntityClass());

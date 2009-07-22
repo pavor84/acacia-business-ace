@@ -3,7 +3,6 @@
  *
  * Created on 29 March 2008, 09:05
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.Component;
@@ -60,12 +59,10 @@ public class AddressPanel extends BaseEntityPanel {
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         initComponents();
         super.init();
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -285,8 +282,6 @@ public class AddressPanel extends BaseEntityPanel {
                 .addGap(686, 686, 686))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBTextField addressNameTextField;
     private com.cosmos.swingb.JBPanel addressPanel;
@@ -307,10 +302,8 @@ public class AddressPanel extends BaseEntityPanel {
     private com.cosmos.swingb.JBLabel postalCodeLabel;
     private com.cosmos.swingb.JBTextField postalCodeTextField;
     // End of variables declaration//GEN-END:variables
-
     @EJB
     private AddressesListRemote formSession;
-
     private BindingGroup bindingGroup;
     private Address address;
     private CommunicationContactsListPanel communicationContactsTable;
@@ -325,13 +318,13 @@ public class AddressPanel extends BaseEntityPanel {
     protected void initData() {
         setResizable(true);
 
-      String defaultAddressName = "";
-      String defaultMainAddressName = "";
-      if (getParentDataObject() != null){
+        String defaultAddressName = "";
+        String defaultMainAddressName = "";
+        if (getParentDataObject() != null) {
             String parentObjectType = getParentDataObject().getDataObjectType().getDataObjectType();
             ResourceMap resourceMap = getResourceMap();
 
-            if (parentObjectType.indexOf("Person") != -1){
+            if (parentObjectType.indexOf("Person") != -1) {
                 setTitle(resourceMap.getString("address.text"));
                 defaultMainAddressName = resourceMap.getString("defaultMainAddress");
                 defaultAddressName = resourceMap.getString("defaultAddress");
@@ -343,9 +336,8 @@ public class AddressPanel extends BaseEntityPanel {
             }
         }
 
-      log.info("initData().address: " + address);
-        if(address == null)
-        {
+        log.info("initData().address: " + address);
+        if (address == null) {
             address = getFormSession().newAddress();
         }
 
@@ -358,7 +350,8 @@ public class AddressPanel extends BaseEntityPanel {
         postalAddressTextPane.bind(bg, address, entityProps.getPropertyDetails("postalAddress"));
 
         countryComboBox.bind(bg, getCountries(), address, entityProps.getPropertyDetails("country"));
-        countryComboBox.addActionListener(new ActionListener(){
+        countryComboBox.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 country = (Country) countryComboBox.getSelectedItem();
@@ -367,44 +360,46 @@ public class AddressPanel extends BaseEntityPanel {
         });
 
         cityBinding = cityLookup.bind(new AcaciaLookupProvider() {
-                @Override
-                public Object showSelectionControl() {
-                    return onChooseCity();
-                }
-            }, bg,
-            address,
-            entityProps.getPropertyDetails("city"),
-            "${cityName}",
-            UpdateStrategy.READ_WRITE);
+
+            @Override
+            public Object showSelectionControl() {
+                return onChooseCity();
+            }
+        }, bg,
+                address,
+                entityProps.getPropertyDetails("city"),
+                "${cityName}",
+                UpdateStrategy.READ_WRITE);
 
 
         descriptionTextPane.bind(bg, address, entityProps.getPropertyDetails("description"));
 
         BigInteger dataObjectId;
         DataObject dataObject;
-        if(address != null && (dataObject = address.getDataObject()) != null)
+        if (address != null && (dataObject = address.getDataObject()) != null) {
             dataObjectId = dataObject.getDataObjectId();
-        else
+        } else {
             dataObjectId = null;
+        }
         contactPersonsTable = new ContactPersonsListPanel(dataObjectId);
         //contactPersonsTable.setVisibleButtons(2 + 4 + 8 + 64);
         contactPersonsTable.setVisible(AbstractTablePanel.Button.NewModifyDeleteUnselect);
-        contactPersonsTable.getDataTable().addListSelectionListener(new ListSelectionListener(){
+        contactPersonsTable.getDataTable().addListSelectionListener(new ListSelectionListener() {
+
             public void valueChanged(ListSelectionEvent event) {
-                if(!event.getValueIsAdjusting()) {
+                if (!event.getValueIsAdjusting()) {
                     ListSelectionModel selectionModel = (ListSelectionModel) event.getSource();
                     if (selectionModel.isSelectionEmpty()) {
-                        updateCommunicationContacts(getDataObject().getDataObjectId());
+                        updateCommunicationContacts(address);
                     } else {
-                        ContactPerson contactPerson = (ContactPerson)
-                                contactPersonsTable.getDataTable().getSelectedRowObject();
+                        ContactPerson contactPerson = (ContactPerson) contactPersonsTable.getDataTable().getSelectedRowObject();
                         updateCommunicationContacts(contactPerson);
                     }
                 }
             }
-
         });
         contactPersonsTable.addTableModificationListener(new TableModificationListener() {
+
             public void rowDeleted(Object row) {
                 updateCommunicationContacts((ContactPerson) row);
                 contactPersonsTable.unselectAction();
@@ -422,7 +417,7 @@ public class AddressPanel extends BaseEntityPanel {
 
         contactPersonsPanel.add(contactPersonsTable);
 
-        communicationContactsTable = new CommunicationContactsListPanel(dataObjectId);
+        communicationContactsTable = new CommunicationContactsListPanel(address);
         //communicationContactsTable.setVisibleButtons(2 + 4 + 8);
         communicationContactsTable.setVisible(AbstractTablePanel.Button.NewModifyDelete);
 
@@ -449,80 +444,77 @@ public class AddressPanel extends BaseEntityPanel {
 
         if (address.getParentId() == null) {
             int nextAddressNumber = getNewAddressNumber();
-            if (nextAddressNumber == 0)
+            if (nextAddressNumber == 0) {
                 addressNameTextField.setText(defaultMainAddressName);
-            else
+            } else {
                 addressNameTextField.setText(defaultAddressName + " " + nextAddressNumber);
+            }
         }
     }
 
-     protected Object onChooseCity() {
+    protected Object onChooseCity() {
 
         CitiesListPanel listPanel = new CitiesListPanel(country);
 
         log.info("Displaying cities for country: " + country);
 
         DialogResponse dResponse = listPanel.showDialog(this);
-        if ( DialogResponse.SELECT.equals(dResponse) ){
+        if (DialogResponse.SELECT.equals(dResponse)) {
             City selectedCity = (City) listPanel.getSelectedRowObject();
-            if (countryComboBox.getSelectedItem() == null)
+            if (countryComboBox.getSelectedItem() == null) {
                 countryComboBox.setSelectedItem(selectedCity.getCountry());
+            }
 
             return selectedCity;
         }
         return null;
     }
 
-    private void updateCommunicationContacts(BigInteger parentId)
-    {
-        List<CommunicationContact> communicationContacts =
-                getFormSession().getCommunicationContacts(parentId);
+    private void updateCommunicationContacts(Address address) {
+        List<CommunicationContact> communicationContacts = getFormSession().getCommunicationContacts(address);
         communicationContactsTable.setContactPerson(null);
         updateCommunicationContactsTable(communicationContacts);
     }
 
     private int getNewAddressNumber() {
         List<Address> addresses = getFormSession().getAddresses(getParentDataObjectId());
-        if (addresses == null)
+        if (addresses == null) {
             return 0;
+        }
 
         return addresses.size();
     }
 
-    private void updateCommunicationContacts(ContactPerson contactPerson)
-    {
+    private void updateCommunicationContacts(ContactPerson contactPerson) {
         List<CommunicationContact> communicationContacts =
                 getFormSession().getCommunicationContacts(contactPerson);
         communicationContactsTable.setContactPerson(contactPerson);
         updateCommunicationContactsTable(communicationContacts);
     }
 
-    private void updateCommunicationContactsTable(List<CommunicationContact> data)
-    {
+    private void updateCommunicationContactsTable(List<CommunicationContact> data) {
         communicationContactsTable.getDataTable().setData(data);
     }
 
-    protected AddressesListRemote getFormSession()
-    {
-        if(formSession == null)
+    protected AddressesListRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AddressesListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected EntityProperties getAddressEntityProperties()
-    {
+    protected EntityProperties getAddressEntityProperties() {
         return getFormSession().getAddressEntityProperties();
     }
 
-    private List<Country> getCountries()
-    {
+    private List<Country> getCountries() {
         return getFormSession().getCountries();
     }
 
     @Override
     public BindingGroup getBindingGroup() {
-        if(bindingGroup == null) {
+        if (bindingGroup == null) {
             bindingGroup = new BindingGroup();
         }
 
