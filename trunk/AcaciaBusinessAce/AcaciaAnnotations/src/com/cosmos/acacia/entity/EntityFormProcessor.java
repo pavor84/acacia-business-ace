@@ -255,12 +255,12 @@ public class EntityFormProcessor {
         return set;
     }
 
-    public JComponent getJComponentByPropertyName(String propertyName, Class<? extends JComponent> componentClass) {
+    public <C extends JComponent> C getJComponentByPropertyName(String propertyName, Class<C> componentClass) {
         Set<JComponent> set = getJComponentsByPropertyName(propertyName);
         if((set = getJComponentsByPropertyName(propertyName)) != null && set.size() > 0) {
             for(JComponent jComponent : set) {
                 if(componentClass.isAssignableFrom(jComponent.getClass())) {
-                    return jComponent;
+                    return (C) jComponent;
                 }
             }
         }
