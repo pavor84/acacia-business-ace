@@ -69,6 +69,8 @@ import com.cosmos.acacia.crm.gui.purchase.PurchaseInvoiceListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrderConfirmationListPanel;
 import com.cosmos.acacia.crm.gui.purchaseorders.OrdersMatchingForm;
 import com.cosmos.acacia.crm.gui.purchaseorders.PurchaseOrderListPanel;
+import com.cosmos.acacia.crm.gui.security.PrivilegeCategoryListPanel;
+import com.cosmos.acacia.crm.gui.security.SecurityRoleListPanel;
 import com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel;
 import com.cosmos.acacia.crm.gui.users.JoinOrganizationForm;
 import com.cosmos.acacia.crm.gui.users.LeaveOrganizationForm;
@@ -519,10 +521,14 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void securityRolesAction() {
+        SecurityRoleListPanel panel = new SecurityRoleListPanel();
+        panel.showFrame();
     }
 
     @Action
     public void privilegeCategoriesAction() {
+        PrivilegeCategoryListPanel panel = new PrivilegeCategoryListPanel();
+        panel.showFrame();
     }
 
     @Action

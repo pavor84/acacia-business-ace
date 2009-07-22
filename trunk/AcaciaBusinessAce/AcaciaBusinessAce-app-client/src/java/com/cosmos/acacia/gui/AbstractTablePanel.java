@@ -41,7 +41,6 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
-import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -786,12 +785,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
                     fireDelete(rowObject);
                 }
             } catch (Exception ex) {
-                ValidationException ve = extractValidationException(ex);
-                if (ve != null) {
-                    JOptionPane.showMessageDialog(this, formTableReferencedMessage(ve.getMessage()));
-                } else {
-                    log.error(ex);
-                }
+                handleException(ex);
             }
 
         }

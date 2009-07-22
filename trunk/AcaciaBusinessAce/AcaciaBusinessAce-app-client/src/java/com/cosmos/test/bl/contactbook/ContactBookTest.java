@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Organization;
 import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.test.bl.TestUtils;
@@ -141,10 +142,9 @@ public class ContactBookTest {
         contactPerson.setDataObject(addressDataObject);
 
         contactPerson = addressFormSession.saveContactPerson(contactPerson, addressDataObject.getDataObjectId());
-        CommunicationContact communicationContact = addressFormSession.newCommunicationContact();
-        communicationContact.setCommunicationType(addressFormSession.getCommunicationTypes().get(0));
+        CommunicationContact communicationContact = addressFormSession.newCommunicationContact(
+                address, CommunicationType.Phone, contactPerson);
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
-
         communicationContact = addressFormSession.saveCommunicationContact(communicationContact, addressDataObject.getDataObjectId(), contactPerson);
 
         // Modifying the entries

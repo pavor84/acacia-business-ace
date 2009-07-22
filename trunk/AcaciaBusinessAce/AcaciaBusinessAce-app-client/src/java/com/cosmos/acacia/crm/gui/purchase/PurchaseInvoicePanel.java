@@ -53,7 +53,7 @@ public class PurchaseInvoicePanel extends BusinessDocumentPanel<PurchaseInvoice>
 
     protected void supplierPropertyChanged() {
         BusinessPartner supplier = getEntity().getSupplier();
-        JBComboBox comboBox = (JBComboBox)getJComponentByPropertyName(DOCUMENT_CURRENCY_PROPERTY_NAME, JBComboBox.class);
+        JBComboBox comboBox = getJComponentByPropertyName(DOCUMENT_CURRENCY_PROPERTY_NAME, JBComboBox.class);
         if(supplier != null) {
             comboBox.setSelectedItem(supplier.getDefaultCurrency());
         } else {

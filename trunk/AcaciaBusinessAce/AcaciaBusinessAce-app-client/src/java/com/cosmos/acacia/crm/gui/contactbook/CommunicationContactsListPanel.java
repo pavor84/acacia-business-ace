@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.util.List;
@@ -10,11 +9,12 @@ import java.util.List;
 import javax.ejb.EJB;
 
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
+import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.CommunicationContact;
 import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -29,18 +29,36 @@ import org.jdesktop.application.Task;
  */
 public class CommunicationContactsListPanel extends AbstractTablePanel<CommunicationContact> {
 
-    /** Creates new form AddresssListPanel */
-    public CommunicationContactsListPanel(BigInteger parentDataObjectId)
-    {
-        super(parentDataObjectId);
+    public CommunicationContactsListPanel(Address address) {
+        this(address, null);
     }
 
+    public CommunicationContactsListPanel(Address address, CommunicationType communicationType) {
+        super(new Object[] {address, communicationType});
+    }
+    //
     @EJB
     private AddressesListRemote formSession;
-
-    private BindingGroup communicationContactsBindingGroup;
-    private List<CommunicationContact> communicationContacts;
+    private BindingGroup bindingGroup;
     private ContactPerson contactPerson;
+
+    public Address getAddress() {
+        return (Address)parameters[0];
+    }
+
+    public void setAddress(Address address) {
+        parameters[0] = address;
+        refreshAction();
+    }
+
+    public CommunicationType getCommunicationType() {
+        return (CommunicationType)parameters[1];
+    }
+
+    public void setCommunicationType(CommunicationType communicationType) {
+        parameters[1] = communicationType;
+        refreshAction();
+    }
 
     @Override
     protected void initData() {
@@ -48,44 +66,36 @@ public class CommunicationContactsListPanel extends AbstractTablePanel<Communica
         super.initData();
 
         setVisible(Button.Select, false);
-        communicationContactsBindingGroup = new BindingGroup();
+        bindingGroup = new BindingGroup();
         AcaciaTable communicationContactsTable = getDataTable();
-        JTableBinding tableBinding = communicationContactsTable.bind(communicationContactsBindingGroup, getCommunicationContacts(), getCommunicationContactEntityProperties());
+        communicationContactsTable.bind(bindingGroup, getCommunicationContacts(), getCommunicationContactEntityProperties());
 
-        communicationContactsBindingGroup.bind();
+        bindingGroup.bind();
 
         communicationContactsTable.setEditable(false);
     }
 
-    protected List<CommunicationContact> getCommunicationContacts()
-    {
-        if(communicationContacts == null)
-        {
-            communicationContacts = getFormSession().getCommunicationContacts(getParentDataObjectId());
-        }
-
-        return communicationContacts;
+    protected List<CommunicationContact> getCommunicationContacts() {
+        return getFormSession().getCommunicationContacts(getAddress(), getCommunicationType());
     }
 
-    protected EntityProperties getCommunicationContactEntityProperties()
-    {
+    protected EntityProperties getCommunicationContactEntityProperties() {
         return getFormSession().getCommunicationContactEntityProperties();
     }
 
-    protected AddressesListRemote getFormSession()
-    {
-        if(formSession == null)
+    protected AddressesListRemote getFormSession() {
+        if (formSession == null) {
             formSession = getBean(AddressesListRemote.class);
+        }
 
         return formSession;
     }
 
-    protected int deleteCommunicationContact(CommunicationContact communicationContact)
-    {
+    protected int deleteCommunicationContact(CommunicationContact communicationContact) {
         return getFormSession().deleteCommunicationContact(communicationContact);
     }
 
-     public ContactPerson getContactPerson() {
+    public ContactPerson getContactPerson() {
         return contactPerson;
     }
 
@@ -95,15 +105,14 @@ public class CommunicationContactsListPanel extends AbstractTablePanel<Communica
 
     @Override
     @Action
-    public void selectAction(){
+    public void selectAction() {
         super.selectAction();
         //
     }
 
     @Override
     protected boolean deleteRow(CommunicationContact rowObject) {
-         if(rowObject != null)
-        {
+        if (rowObject != null) {
             deleteCommunicationContact(rowObject);
             return true;
         }
@@ -116,10 +125,10 @@ public class CommunicationContactsListPanel extends AbstractTablePanel<Communica
     public Task refreshAction() {
         Task t = super.refreshAction();
 
-        if (communicationContactsBindingGroup != null)
-            communicationContactsBindingGroup.unbind();
-
-        communicationContacts = null;
+        if (bindingGroup != null) {
+            bindingGroup.unbind();
+            bindingGroup = null;
+        }
 
         initData();
 
@@ -128,13 +137,8 @@ public class CommunicationContactsListPanel extends AbstractTablePanel<Communica
 
     @Override
     protected CommunicationContact modifyRow(CommunicationContact rowObject) {
-        if(rowObject != null) {
-            CommunicationContactPanel communicationContactPanel =
-                    new CommunicationContactPanel((CommunicationContact) rowObject);
-            DialogResponse response = communicationContactPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response)) {
-                return (CommunicationContact) communicationContactPanel.getSelectedValue();
-            }
+        if (rowObject != null) {
+            return editRow((CommunicationContact) rowObject);
         }
 
         return null;
@@ -142,33 +146,22 @@ public class CommunicationContactsListPanel extends AbstractTablePanel<Communica
 
     @Override
     protected CommunicationContact newRow() {
-        if (canNestedOperationProceed())
-        {
-            CommunicationContactPanel communicationContactPanel = new CommunicationContactPanel(getParentDataObjectId(),
-                        getContactPerson());
-
-            DialogResponse response = communicationContactPanel.showDialog(this);
-            if(DialogResponse.SAVE.equals(response))
-            {
-                return (CommunicationContact) communicationContactPanel.getSelectedValue();
-            }
+        if (canNestedOperationProceed()) {
+            CommunicationContact communicationContact =
+                    getFormSession().newCommunicationContact(getAddress(), getCommunicationType(), getContactPerson());
+            return editRow(communicationContact);
         }
+
         return null;
     }
 
-    @Override
-    public boolean canCreate() {
-        return true;
-    }
+    protected CommunicationContact editRow(CommunicationContact communicationContact) {
+        CommunicationContactPanel panel = new CommunicationContactPanel(communicationContact);
+        DialogResponse response = panel.showDialog(this);
+        if (DialogResponse.SAVE.equals(response)) {
+            return (CommunicationContact) panel.getSelectedValue();
+        }
 
-    @Override
-    public boolean canModify(CommunicationContact rowObject) {
-        return true;
+        return null;
     }
-
-    @Override
-    public boolean canDelete(CommunicationContact rowObject) {
-        return true;
-    }
-
 }

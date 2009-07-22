@@ -66,8 +66,7 @@ import javax.ejb.EJB;
  *
  * @author miro
  */
-public class AcaciaPanel
-        extends JBPanel {
+public class AcaciaPanel extends JBPanel {
     //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
 
     @EJB

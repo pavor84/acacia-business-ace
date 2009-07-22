@@ -48,6 +48,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import org.apache.commons.beanutils.ConstructorUtils;
+import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -169,7 +170,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                             entity, propertyDetails);
                 }
             } else if (jComponent instanceof EnumerationBinder) {
-                List listData = getEntityService().getResources(getSelectableListDialogClass(propertyDetails));
+                List listData = getResources(getSelectableListDialogClass(propertyDetails));
                 if(updateStrategy != null) {
                     ((EnumerationBinder) jComponent).bind(bg, listData,
                             entity, propertyDetails, updateStrategy);
@@ -185,6 +186,10 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         validateForm();
 
         initDataMode(getDataMode());
+    }
+
+    protected List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
+        return getEntityService().getResources(enumClass, enumCategoryClasses);
     }
 
     public void initDataMode(DataMode dataMode) {
@@ -375,6 +380,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         for(String propertyName : pdMap.keySet()) {
             boolean ready = true;
             for(String pn : pdMap.get(propertyName).getDependencies()) {
+                if(isConstantParameter(pn)) {
+                    continue;
+                }
                 if(getPropertyValue(pn) == null) {
                     ready = false;
                     break;
@@ -428,8 +436,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 }
 
                 addDependenciesByParameters(jComponent.getName(), params);
-                Class[] parameterTypes = getParameterTypes(params, entityProps);
-                Object[] parameterValues = getParameters(params);
+                Class[] parameterTypes = getParameterTypes(params, entityProps, cls);
+                Object[] parameterValues = getParameters(params, parameterTypes);
                 SelectableListDialog listDialog = (SelectableListDialog) ConstructorUtils.invokeConstructor(cls, parameterValues, parameterTypes);
                 PropertyChangeHandler handler = getPropertyChangeHandler();
                 handler.addPropertyBean(params, listDialog, jComponent);
@@ -464,27 +472,85 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         return jComponent;
     }
 
-    protected Object[] getParameters(List<PropertyDetail> parameters) {
+    protected Object[] getParameters(List<PropertyDetail> parameters, Class[] parameterTypes) {
         int size;
         Object[] parameterValues = new Object[size = parameters.size()];
+        ConvertUtilsBean convertUtils = BeanUtils.getInstance().getConvertUtils();
         for (int i = 0; i < size; i++) {
-            String parameterName = parameters.get(i).getGetter();
-            parameterValues[i] = getPropertyValue(parameterName);
+            PropertyDetail pd = parameters.get(i);
+            String getter = pd.getGetter();
+            if(isConstantParameter(getter)) {
+                parameterValues[i] = convertUtils.convert(normalizeConstant(getter), parameterTypes[i]);
+            } else {
+                parameterValues[i] = getPropertyValue(getter);
+            }
         }
 
         return parameterValues;
     }
 
-    protected Class[] getParameterTypes(List<PropertyDetail> parameters, EntityProperties entityProps) {
+    protected String normalizeConstant(String constant) {
+        int length = constant.length();
+        int beginIndex = 0;
+        char ch;
+        while(beginIndex < length && ((ch = constant.charAt(beginIndex)) == '\'' || ch == '"')) {
+            beginIndex++;
+        }
+        ch = '\'';
+        int endIndex = length - 1;
+        while(endIndex > beginIndex && ((ch = constant.charAt(endIndex)) == '\'' || ch == '"')) {
+            endIndex--;
+        }
+        if(ch != '\'' && ch != '"') {
+            endIndex++;
+        }
+        return constant.substring(beginIndex, endIndex);
+    }
+
+    protected boolean isConstantParameter(String parameter) {
+        return parameter.startsWith("'") || parameter.startsWith("\"");
+    }
+
+    protected Class[] getParameterTypes(
+            List<PropertyDetail> parameters,
+            EntityProperties entityProps,
+            Class<? extends SelectableListDialog> cls) {
         int size;
         Class[] parameterTypes = new Class[size = parameters.size()];
         for (int i = 0; i < size; i++) {
-            String parameterName = parameters.get(i).getGetter();
-            PropertyDetails propertyDetails = entityProps.getPropertyDetails(parameterName);
-            if (propertyDetails == null) {
-                throw new EntityPanelException("Missing PropertyDetails with name '" + parameterName + "'");
+            PropertyDetail pd = parameters.get(i);
+            String getter = pd.getGetter().trim();
+            if(isConstantParameter(getter)) {
+                String setter;
+                if((setter = pd.getSetter().trim()).length() == 0) {
+                    throw new EntityPanelException("The setter is required when the getter (" + getter + ") is constant.");
+                }
+                String methodName = "set" + Character.toUpperCase(setter.charAt(0)) + setter.substring(1);
+                Method method = null;
+                Class[] paramTypes = null;
+                try {
+                    for(Method m : cls.getMethods()) {
+                        if(methodName.equals(m.getName()) && (paramTypes = m.getParameterTypes()).length == 1) {
+                            method = m;
+                            break;
+                        }
+                    }
+                } catch(Exception ex) {
+                    throw new EntityPanelException("Missing method with name " + methodName +
+                            " in class " + cls, ex);
+                }
+                if(method == null || paramTypes == null || paramTypes.length != 1) {
+                    throw new EntityPanelException("Missing method with name " + methodName +
+                            " in class " + cls);
+                }
+                parameterTypes[i] = paramTypes[0];
+            } else {
+                PropertyDetails propertyDetails = entityProps.getPropertyDetails(getter);
+                if (propertyDetails == null) {
+                    throw new EntityPanelException("Missing PropertyDetails with name '" + getter + "'");
+                }
+                parameterTypes[i] = propertyDetails.getPropertyClass();
             }
-            parameterTypes[i] = propertyDetails.getPropertyClass();
         }
 
         return parameterTypes;
@@ -696,7 +762,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         return getEntityFormProcessor().getJComponentsByPropertyName(propertyName);
     }
 
-    public JComponent getJComponentByPropertyName(String propertyName, Class<? extends JComponent> componentClass) {
+    public <C extends JComponent> C getJComponentByPropertyName(String propertyName, Class<C> componentClass) {
         return getEntityFormProcessor().getJComponentByPropertyName(propertyName, componentClass);
     }
 
