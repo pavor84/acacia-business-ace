@@ -5,10 +5,20 @@
 
 package com.cosmos.acacia.crm.data.security;
 
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTabbedPane;
+import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -58,6 +68,42 @@ import javax.persistence.UniqueConstraint;
                 " ORDER BY p.privilegeCategory.categoryName, p.privilegeName"
     )
 })
+@Form(
+    mainContainer=@FormContainer(
+        name="mainTabbedPane",
+        container=@Component(
+            componentClass=JBTabbedPane.class
+        )
+    ),
+    formContainers={
+        @FormContainer(
+            name="primaryInfo",
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            )
+        ),
+        @FormContainer(
+            name="roleList",
+            title="Roles",
+            depends={"<entityForm>"},
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=PrivilegeRole.class
+        ),
+        @FormContainer(
+            name="notes",
+            title="Notes",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(layoutClass=BorderLayout.class)
+        )
+    },
+    serviceClass=SecurityServiceRemote.class
+)
 public abstract class Privilege extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -76,9 +122,9 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
     @Column(name = "privilege_id", nullable = false, precision = 19, scale = 0)
     private BigInteger privilegeId;
 
-    @Basic(optional = false)
-    @Column(name = "privilege_name", nullable = false, length = 100)
-    private String privilegeName;
+    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
+    @ManyToOne(optional = false)
+    private SecurityRole securityRole;
 
     @Basic(optional = false)
     @Column(name = "discriminator_id", nullable = false, length = 4, insertable=false, updatable=false)
@@ -86,15 +132,21 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "privilege_category_id", referencedColumnName = "privilege_category_id", nullable = false)
     @ManyToOne(optional = false)
+    @Property(title="Privilege Category"
+    )
     private PrivilegeCategory privilegeCategory;
+
+    @Basic(optional = false)
+    @Column(name = "privilege_name", nullable = false, length = 100)
+    @Property(title="Privilege Name"
+    )
+    private String privilegeName;
 
     @Column(name = "expires")
     @Temporal(TemporalType.TIMESTAMP)
+    @Property(title="Expires"
+    )
     private Date expires;
-
-    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
-    @ManyToOne(optional = false)
-    private SecurityRole securityRole;
 
     @JoinColumn(name = "privilege_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)

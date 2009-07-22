@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.bl.contactbook;
 
 import java.math.BigInteger;
@@ -45,45 +44,34 @@ import javax.persistence.NoResultException;
 public class AddressesListBean implements AddressesListRemote, AddressesListLocal {
 
     protected static Logger log = Logger.getLogger(AddressesListBean.class);
-
     @PersistenceContext
     private EntityManager em;
-
     @EJB
     private EntityStoreManagerLocal esm;
-
     @EJB
     private LocationsListLocal locationsManager;
-
     @EJB
     private PersonsListLocal personManager;
-
     @EJB
     private AddressValidatorLocal addressValidator;
-
     @EJB
     private ContactPersonValidatorLocal contactPersonValidator;
-
     @EJB
     private CommunicationContactValidatorLocal communicationContactValidator;
-
     @EJB
     private PositionTypesListLocal positionTypesManager;
 
 //    @EJB
 //    private UserRightsLocal groupsManager;
-
 //    @EJB
 //    private UsersLocal usersManager;
-
     /**
      * A method for listing all existing countries
      *
      * @param parent
      * @return the country-list
      */
-    public List<Country> getCountries()
-    {
+    public List<Country> getCountries() {
         return locationsManager.getCountries();
     }
 
@@ -93,8 +81,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
      * @param parent
      * @return the city-list
      */
-    public List<City> getCities()
-    {
+    public List<City> getCities() {
         return locationsManager.getCities();
     }
 
@@ -127,42 +114,45 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     public List<Address> getAddresses(BigInteger parentId) {
-       return locationsManager.getAddresses(parentId);
+        return locationsManager.getAddresses(parentId);
     }
 
     public EntityProperties getAddressEntityProperties() {
-       return locationsManager.getAddressEntityProperties();
+        return locationsManager.getAddressEntityProperties();
     }
 
-    @SuppressWarnings("unchecked")
-    public List<CommunicationContact> getCommunicationContacts(BigInteger parentId) {
+    @Override
+    public List<CommunicationContact> getCommunicationContacts(Address address) {
+        return getCommunicationContacts(address, null);
+    }
+
+    @Override
+    public List<CommunicationContact> getCommunicationContacts(Address address, CommunicationType communicationType) {
+        if (address == null || address.getAddressId() == null) {
+            return new ArrayList<CommunicationContact>();
+        }
+
         Query q;
-        if(parentId != null)
-        {
-            q = em.createNamedQuery("CommunicationContact.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentId);
+        if (communicationType == null) {
+            q = em.createNamedQuery(CommunicationContact.NQ_FIND_ALL);
+        } else {
+            q = em.createNamedQuery(CommunicationContact.NQ_FIND_BY_COMMUNICATION_TYPE);
+            q.setParameter("communicationType", communicationType.getDbResource());
         }
-        else
-        {
-            q = em.createNamedQuery("CommunicationContact.findByParentDataObjectIsNullAndDeleted");
-        }
+        q.setParameter("parentId", address.getAddressId());
         q.setParameter("deleted", false);
 
         return new ArrayList<CommunicationContact>(q.getResultList());
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public List<CommunicationContact> getCommunicationContacts(ContactPerson contactPerson) {
-        Query q;
-        if(contactPerson != null)
-        {
-            q = em.createNamedQuery("CommunicationContact.findByContactPerson");
-            q.setParameter("contactPerson", contactPerson);
+        if (contactPerson == null || contactPerson.getContactPersonId() == null) {
+            return new ArrayList<CommunicationContact>();
         }
-        else
-        {
-            q = em.createNamedQuery("CommunicationContact.findByParentDataObjectIsNullAndDeleted");
-        }
+
+        Query q = em.createNamedQuery(CommunicationContact.NQ_FIND_BY_CONTACT_PERSON);
+        q.setParameter("contactPerson", contactPerson);
         q.setParameter("deleted", false);
 
         return new ArrayList<CommunicationContact>(q.getResultList());
@@ -171,13 +161,10 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     @SuppressWarnings("unchecked")
     public List<ContactPerson> getContactPersons(BigInteger parentId) {
         Query q;
-        if(parentId != null)
-        {
+        if (parentId != null) {
             q = em.createNamedQuery("ContactPerson.findByParentDataObjectAndDeleted");
             q.setParameter("parentDataObjectId", parentId);
-        }
-        else
-        {
+        } else {
             q = em.createNamedQuery("ContactPerson.findByParentDataObjectIsNullAndDeleted");
         }
         q.setParameter("deleted", false);
@@ -189,7 +176,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @Override
     public ContactPerson getContactPerson(Address address, Person person) {
-        if(address == null || address.getId() == null || person == null || person.getId() == null) {
+        if (address == null || address.getId() == null || person == null || person.getId() == null) {
             return null;
         }
 
@@ -197,8 +184,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         q.setParameter("addressId", address.getAddressId());
         q.setParameter("person", person);
         try {
-            return (ContactPerson)q.getSingleResult();
-        } catch(NoResultException ex) {
+            return (ContactPerson) q.getSingleResult();
+        } catch (NoResultException ex) {
             return null;
         }
     }
@@ -239,25 +226,32 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @Override
-    public CommunicationContact newCommunicationContact() {
-        return new CommunicationContact();
+    public CommunicationContact newCommunicationContact(
+            Address address,
+            CommunicationType communicationType,
+            ContactPerson contactPerson) {
+        CommunicationContact communicationContact = new CommunicationContact();
+        communicationContact.setParentId(address.getAddressId());
+        if(communicationType != null) {
+            communicationContact.setCommunicationType(communicationType.getDbResource());
+        }
+        communicationContact.setContactPerson(contactPerson);
+        return communicationContact;
     }
 
     @Override
     public ContactPerson newContactPerson() {
-       return new ContactPerson();
+        return new ContactPerson();
     }
 
     @Override
     public CommunicationContact saveCommunicationContact(
             CommunicationContact communicationContact,
             BigInteger parentDataObjectId,
-            ContactPerson contactPerson)
-    {
+            ContactPerson contactPerson) {
 
         communicationContact.setContactPerson(contactPerson);
-        if (parentDataObjectId != null)
-        {
+        if (parentDataObjectId != null) {
             communicationContact.setParentId(parentDataObjectId);
         }
 
@@ -271,7 +265,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     public ContactPerson saveContactPerson(ContactPerson contactPerson, BigInteger parentDataObjectId) {
 
         //if (parentDataObjectId != contactPerson.getParentId())
-            contactPerson.setParentId(parentDataObjectId);
+        contactPerson.setParentId(parentDataObjectId);
 
         contactPersonValidator.validate(contactPerson);
 
@@ -289,16 +283,15 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         }
     }
 
-   @SuppressWarnings("unchecked")
-   public List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentId) {
-       try {
+    @SuppressWarnings("unchecked")
+    public List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentId) {
+        try {
             return positionTypesManager.getPositionTypes(ownerClass, parentId);
-       } catch (Exception ex) {
-           ex.printStackTrace();
-           return new LinkedList<PositionType>();
-       }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new LinkedList<PositionType>();
+        }
     }
-
 
     public List<Person> getPersons() {
         return personManager.getPersons(null);
@@ -308,8 +301,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return CommunicationType.getDbResources();
     }
 
-    public List<City> getCities(Country country)
-    {
+    public List<City> getCities(Country country) {
         return locationsManager.getCities(country);
     }
 }

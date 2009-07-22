@@ -28,43 +28,53 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "communication_contacts")
-@NamedQueries(
-    {
-        @NamedQuery
-             (
-                 name = "CommunicationContact.findByParentDataObjectAndDeleted",
-                 query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObjectId = :parentDataObjectId and cc.dataObject.deleted = :deleted"
-             ),
-       @NamedQuery
-            (
-                name = "CommunicationContact.findByParentDataObjectIsNullAndDeleted",
-                query = "select cc from CommunicationContact cc where cc.dataObject.parentDataObjectId is null and cc.dataObject.deleted = :deleted"
-             ),
-        @NamedQuery
-             (
-                 name = "CommunicationContact.findByContactPerson",
-                 query = "select cc from CommunicationContact cc where cc.contactPerson = :contactPerson and cc.dataObject.deleted = :deleted"
-             ),
-        @NamedQuery
-            (
-                name = "CommunicationContact.findByTypeAndContactPersonAndParentDataObject",
-                query = "select cc from CommunicationContact cc where " +
-                        "cc.communicationType = :communicationType and " +
-                        "cc.contactPerson = :contactPerson and " +
-                        "cc.dataObject.parentDataObjectId = :parentDataObjectId"
-            )
-    }
-)
+@NamedQueries({
+    @NamedQuery(
+        name = CommunicationContact.NQ_FIND_ALL,
+        query = "select cc from CommunicationContact cc" +
+                " where" +
+                "  cc.parentId = :parentId" +
+                "  and cc.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = CommunicationContact.NQ_FIND_BY_COMMUNICATION_TYPE,
+        query = "select cc from CommunicationContact cc" +
+                " where" +
+                "  cc.parentId = :parentId" +
+                "  and cc.communicationType = :communicationType" +
+                "  and cc.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = CommunicationContact.NQ_FIND_BY_CONTACT_PERSON,
+        query = "select cc from CommunicationContact cc" +
+                " where" +
+                "  cc.contactPerson = :contactPerson" +
+                "  and cc.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = "CommunicationContact.findByTypeAndContactPersonAndParentDataObject",
+        query = "select cc from CommunicationContact cc" +
+                " where " +
+                "  cc.communicationType = :communicationType" +
+                "  and cc.contactPerson = :contactPerson" +
+                "  and cc.dataObject.parentDataObjectId = :parentDataObjectId"
+    )
+})
 public class CommunicationContact extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
+    protected static final String CLASS_NAME = "CommunicationContact";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_COMMUNICATION_TYPE = CLASS_NAME + ".findByCommunicationType";
+    public static final String NQ_FIND_BY_CONTACT_PERSON = CLASS_NAME + ".findByContactPerson";
 
     @Id
     @Column(name = "communication_contact_id", nullable = false)
     @Property(title="Communication Contact Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger communicationContactId;
 
-    @Column(name = "parent_id")
+    @Column(name = "address_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private BigInteger parentId;
 
@@ -127,6 +137,7 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     @Override
     public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
+        super.setParentId(parentId);
     }
 
     @Override

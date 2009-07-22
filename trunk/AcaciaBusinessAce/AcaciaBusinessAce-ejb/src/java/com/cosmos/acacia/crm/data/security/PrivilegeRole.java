@@ -2,13 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.data.security;
 
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTabbedPane;
+import java.awt.BorderLayout;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,97 +35,153 @@ import javax.persistence.UniqueConstraint;
  * @author Miro
  */
 @Entity
-@Table(name = "privilege_roles", catalog = "acacia", schema = "public", uniqueConstraints = {@UniqueConstraint(columnNames = {"privilege_id", "access_right_id"})})
-@NamedQueries({@NamedQuery(name = "PrivilegeRole.findAll", query = "SELECT p FROM PrivilegeRole p"), @NamedQuery(name = "PrivilegeRole.findByPrivilegeRoleId", query = "SELECT p FROM PrivilegeRole p WHERE p.privilegeRoleId = :privilegeRoleId")})
-public class PrivilegeRole implements Serializable {
+@Table(name = "privilege_roles", catalog = "acacia", schema = "public",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"privilege_id", "access_right_id"})
+})
+@NamedQueries({
+    @NamedQuery(
+        name = "PrivilegeRole.findAll",
+        query = "SELECT p FROM PrivilegeRole p"
+    )
+})
+@Form(
+    mainContainer=@FormContainer(
+        name="mainTabbedPane",
+        container=@Component(
+            componentClass=JBTabbedPane.class
+        )
+    ),
+    formContainers={
+        @FormContainer(
+            name="primaryInfo",
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            )
+        ),
+        @FormContainer(
+            name="notes",
+            title="Notes",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(layoutClass=BorderLayout.class)
+        )
+    },
+    serviceClass=SecurityServiceRemote.class
+)
+public class PrivilegeRole extends DataObjectBean implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Basic(optional = false)
     @Column(name = "privilege_role_id", nullable = false, precision = 19, scale = 0)
-    private BigDecimal privilegeRoleId;
+    private BigInteger privilegeRoleId;
+
+    @JoinColumn(name = "privilege_id", referencedColumnName = "privilege_id", nullable = false)
+    @ManyToOne(optional = false)
+    private Privilege privilege;
+
+    @JoinColumn(name = "access_right_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Access Right"
+    )
+    private DbResource accessRight;
+
+    @JoinColumn(name = "access_level_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Access Level"
+    )
+    private DbResource accessLevel;
+
     @JoinColumn(name = "privilege_role_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private DataObject dataObject;
-    @JoinColumn(name = "privilege_id", referencedColumnName = "privilege_id", nullable = false)
-    @ManyToOne(optional = false)
-    private Privilege privilegeId;
-    @JoinColumn(name = "access_level_id", referencedColumnName = "resource_id", nullable = false)
-    @ManyToOne(optional = false)
-    private DbResource accessLevelId;
-    @JoinColumn(name = "access_right_id", referencedColumnName = "resource_id", nullable = false)
-    @ManyToOne(optional = false)
-    private DbResource accessRightId;
 
     public PrivilegeRole() {
     }
 
-    public PrivilegeRole(BigDecimal privilegeRoleId) {
+    public PrivilegeRole(BigInteger privilegeRoleId) {
         this.privilegeRoleId = privilegeRoleId;
     }
 
-    public BigDecimal getPrivilegeRoleId() {
+    public BigInteger getPrivilegeRoleId() {
         return privilegeRoleId;
     }
 
-    public void setPrivilegeRoleId(BigDecimal privilegeRoleId) {
+    public void setPrivilegeRoleId(BigInteger privilegeRoleId) {
         this.privilegeRoleId = privilegeRoleId;
     }
 
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
+    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
-    public Privilege getPrivilegeId() {
-        return privilegeId;
+    public Privilege getPrivilege() {
+        return privilege;
     }
 
-    public void setPrivilegeId(Privilege privilegeId) {
-        this.privilegeId = privilegeId;
+    public void setPrivilege(Privilege privilege) {
+        this.privilege = privilege;
     }
 
-    public DbResource getAccessLevelId() {
-        return accessLevelId;
+    public DbResource getAccessLevel() {
+        return accessLevel;
     }
 
-    public void setAccessLevelId(DbResource accessLevelId) {
-        this.accessLevelId = accessLevelId;
+    public void setAccessLevel(DbResource accessLevel) {
+        this.accessLevel = accessLevel;
     }
 
-    public DbResource getAccessRightId() {
-        return accessRightId;
+    public DbResource getAccessRight() {
+        return accessRight;
     }
 
-    public void setAccessRightId(DbResource accessRightId) {
-        this.accessRightId = accessRightId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (privilegeRoleId != null ? privilegeRoleId.hashCode() : 0);
-        return hash;
+    public void setAccessRight(DbResource accessRight) {
+        this.accessRight = accessRight;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PrivilegeRole)) {
-            return false;
+    public BigInteger getId() {
+        return getPrivilegeRoleId();
+    }
+
+    @Override
+    public void setId(BigInteger id) {
+        setPrivilegeRoleId(id);
+    }
+
+    @Override
+    public BigInteger getParentId() {
+        if(privilege != null) {
+            return privilege.getPrivilegeId();
         }
-        PrivilegeRole other = (PrivilegeRole) object;
-        if ((this.privilegeRoleId == null && other.privilegeRoleId != null) || (this.privilegeRoleId != null && !this.privilegeRoleId.equals(other.privilegeRoleId))) {
-            return false;
-        }
-        return true;
+
+        return null;
     }
 
     @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.PrivilegeRole[privilegeRoleId=" + privilegeRoleId + "]";
-    }
+    public String getInfo() {
+        StringBuilder sb = new StringBuilder();
+        if(privilege != null) {
+            sb.append(privilege.getPrivilegeName());
+        }
+        sb.append(":");
+        if(accessRight != null) {
+            sb.append(accessRight.getEnumName());
+        }
+        sb.append(":");
+        if(accessLevel != null) {
+            sb.append(accessLevel.getEnumName());
+        }
 
+        return sb.toString();
+    }
 }

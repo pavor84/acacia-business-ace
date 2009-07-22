@@ -4,10 +4,20 @@
  */
 package com.cosmos.acacia.crm.data.security;
 
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTabbedPane;
+import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -46,6 +56,42 @@ import javax.persistence.UniqueConstraint;
                 " ORDER BY t.securityRoleName"
     )
 })
+@Form(
+    mainContainer=@FormContainer(
+        name="mainTabbedPane",
+        container=@Component(
+            componentClass=JBTabbedPane.class
+        )
+    ),
+    formContainers={
+        @FormContainer(
+            name="primaryInfo",
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            )
+        ),
+        @FormContainer(
+            name="privilegeList",
+            title="Privileges",
+            depends={"<entityForm>"},
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=Privilege.class
+        ),
+        @FormContainer(
+            name="notes",
+            title="Notes",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(layoutClass=BorderLayout.class)
+        )
+    },
+    serviceClass=SecurityServiceRemote.class
+)
 public class SecurityRole extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,13 +101,17 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     @Column(name = "security_role_id", nullable = false, precision = 19, scale = 0)
     private BigInteger securityRoleId;
 
-    @Basic(optional = false)
-    @Column(name = "security_role_name", nullable = false, length = 100)
-    private String securityRoleName;
-
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
+    @Property(title="Business Unit"
+    )
     private BusinessUnit businessUnit;
+
+    @Basic(optional = false)
+    @Column(name = "security_role_name", nullable = false, length = 100)
+    @Property(title="Role Name"
+    )
+    private String securityRoleName;
 
     @JoinColumn(name = "organization_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)

@@ -11,6 +11,7 @@ import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
@@ -48,8 +49,8 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "business_units", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "business_unit_name"})
-})
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "business_unit_name"})}
+)
 @NamedQueries({
     @NamedQuery(
         name = BusinessUnit.NQ_FIND_ALL,
@@ -98,6 +99,16 @@ import javax.persistence.UniqueConstraint;
             ),
             relationshipType=RelationshipType.OneToMany,
             entityClass=BusinessUnitAddress.class
+        ),
+        @FormContainer(
+            name="jobTitleList",
+            title="Job Titles",
+            depends={"<entityForm>"},
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=JobTitle.class
         ),
         @FormContainer(
             name="notes",
@@ -176,6 +187,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @JoinColumn(name = "parent_business_unit_id", referencedColumnName = "business_unit_id")
     @ManyToOne
     @Property(title="Parent",
+        propertyValidator=@PropertyValidator(required=true),
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel"
         ),
