@@ -35,7 +35,7 @@ public interface EntityService {
 
     <E> EntityProperties getEntityProperties(Class<E> entityClass);
 
-    List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses);
+    List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers);
 
     public static final class NullEntityService implements EntityService {
 
@@ -79,7 +79,7 @@ public interface EntityService {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
+        public List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
