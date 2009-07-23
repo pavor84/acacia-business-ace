@@ -52,10 +52,17 @@ public class BeansBindingHelper {
     protected static Logger log = Logger.getLogger(BeansBindingHelper.class);
 
     public static EntityProperties createEntityProperties(Class entityClass, boolean checkExportable) {
+        return createEntityProperties(entityClass, entityClass, checkExportable);
+    }
+
+    public static EntityProperties createEntityProperties(
+            Class superClass,
+            Class entityClass,
+            boolean checkExportable) {
         EntityProperties entityProperties = new EntityProperties(entityClass);
 
         boolean isEntity = false;
-        for (Annotation annotation : entityClass.getDeclaredAnnotations()) {
+        for (Annotation annotation : superClass.getDeclaredAnnotations()) {
             if (annotation.annotationType().equals(Entity.class)) {
                 isEntity = true;
             } else if (annotation.annotationType().equals(Table.class)) {
@@ -73,7 +80,7 @@ public class BeansBindingHelper {
         }
 
         int orderPosition = 0;
-        Field[] fields = entityClass.getDeclaredFields();
+        Field[] fields = superClass.getDeclaredFields();
         List<PropertyDetails> properties = new ArrayList<PropertyDetails>(fields.length);
         for (Field field : fields) {
             PropertyDetails detailsForField = createPropertyDetails(
@@ -124,7 +131,11 @@ public class BeansBindingHelper {
     }
 
     public static EntityProperties createEntityProperties(Class entityClass) {
-        return createEntityProperties(entityClass, false);
+        return createEntityProperties(entityClass, entityClass);
+    }
+
+    public static EntityProperties createEntityProperties(Class superClass, Class entityClass) {
+        return createEntityProperties(superClass, entityClass, false);
     }
 
     /**
