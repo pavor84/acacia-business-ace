@@ -9,7 +9,6 @@ import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.RelationshipType;
@@ -24,10 +23,7 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
-import com.cosmos.swingb.JBTextPane;
-import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -40,7 +36,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -75,21 +70,7 @@ import javax.persistence.UniqueConstraint;
     )
 })
 @Form(
-    mainContainer=@FormContainer(
-        name="mainTabbedPane",
-        container=@Component(
-            componentClass=JBTabbedPane.class
-        )
-    ),
     formContainers={
-        @FormContainer(
-            name="primaryInfo",
-            title="Primary Info",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            componentIndex=1
-        ),
         @FormContainer(
             name="addressList",
             title="Addresses",
@@ -109,14 +90,6 @@ import javax.persistence.UniqueConstraint;
             ),
             relationshipType=RelationshipType.OneToMany,
             entityClass=JobTitle.class
-        ),
-        @FormContainer(
-            name="notes",
-            title="Notes",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            layout=@Layout(layoutClass=BorderLayout.class)
         )
     },
     serviceClass=UsersServiceRemote.class
@@ -250,19 +223,6 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
         )
     )
     private String webSite;
-
-    @Transient
-    @Property(title="Notes",
-        formComponent=@FormComponent(
-            component=@Component(
-                componentClass=JBTextPane.class,
-                componentConstraints=BorderLayout.CENTER,
-                scrollable=true
-            ),
-            parentContainerName="notes"
-        )
-    )
-    private String notes;
 
     @JoinColumn(name = "organization_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)

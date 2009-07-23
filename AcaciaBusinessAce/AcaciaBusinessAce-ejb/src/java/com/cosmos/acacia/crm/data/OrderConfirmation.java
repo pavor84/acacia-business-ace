@@ -133,10 +133,6 @@ public class OrderConfirmation extends DataObjectBean implements Serializable {
     @Column(name = "total_value", nullable = false)
     private BigDecimal totalValue;
     
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-    
     @Property(title="Ship Week", propertyValidator=@PropertyValidator(validationType=ValidationType.NUMBER_RANGE, minValue=0, maxValue=53))
     @Column(name = "ship_week")
     private Integer shipWeek;
@@ -344,14 +340,6 @@ public class OrderConfirmation extends DataObjectBean implements Serializable {
 
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public Integer getShipWeek() {

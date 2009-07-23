@@ -15,9 +15,7 @@ import java.util.List;
  *
  * @author miro
  */
-public enum ProductColor
-    implements DatabaseResource
-{
+public enum ProductColor implements DatabaseResource {
 
     BlackDesktopComputer("Black", Color.black, Category.DesktopComputer),
     SilverDesktopComputer("Silver", Color.lightGray, Category.DesktopComputer),
@@ -35,8 +33,7 @@ public enum ProductColor
     private ProductColor(
             String colorName,
             Color color,
-            Category category)
-    {
+            Category category) {
         this(colorName, color, category, null, null);
     }
 
@@ -45,8 +42,7 @@ public enum ProductColor
             Color color,
             Category category,
             String notes,
-            String description)
-    {
+            String description) {
         this.colorName = colorName;
         this.color = color;
         this.category = category;
@@ -89,13 +85,11 @@ public enum ProductColor
         this.dbResource = dbResource;
     }
 
-    public String toShortText()
-    {
+    public String toShortText() {
         return getColorName();
     }
 
-    public String toText()
-    {
+    public String toText() {
         return null;
     }
 
@@ -107,17 +101,13 @@ public enum ProductColor
 
 
     private static EnumMap<Category, EnumSet<ProductColor>> productColorsByCategory;
-    public static EnumSet<ProductColor> getProductColorsByCategory(Category category)
-    {
-        if(productColorsByCategory == null)
-        {
+    public static EnumSet<ProductColor> getProductColorsByCategory(Category category) {
+        if(productColorsByCategory == null) {
             EnumMap<Category, List<ProductColor>> enumsByCategory = new EnumMap<Category, List<ProductColor>>(Category.class);
-            for(ProductColor productColor : ProductColor.values())
-            {
+            for(ProductColor productColor : ProductColor.values()) {
                 Category key = productColor.getCategory();
                 List<ProductColor> enums = enumsByCategory.get(key);
-                if(enums == null)
-                {
+                if(enums == null) {
                     enums = new ArrayList<ProductColor>();
                     enumsByCategory.put(key, enums);
                 }
@@ -125,8 +115,7 @@ public enum ProductColor
             }
 
             productColorsByCategory = new EnumMap<Category, EnumSet<ProductColor>>(Category.class);
-            for(Category key : enumsByCategory.keySet())
-            {
+            for(Category key : enumsByCategory.keySet()) {
                 productColorsByCategory.put(key, EnumSet.copyOf(enumsByCategory.get(key)));
             }
         }
@@ -135,19 +124,15 @@ public enum ProductColor
     }
 
     private static EnumMap<Category, List<DbResource>> dbResourcesByCategory;
-    public static List<DbResource> getDbResourcesByCategory(Category category)
-    {
-        if(dbResourcesByCategory == null)
-        {
+    public static List<DbResource> getDbResourcesByCategory(Category category) {
+        if(dbResourcesByCategory == null) {
             dbResourcesByCategory = new EnumMap<ProductColor.Category, List<DbResource>>(Category.class);
             getProductColorsByCategory(Category.DesktopComputer);
 
-            for(Category key : productColorsByCategory.keySet())
-            {
+            for(Category key : productColorsByCategory.keySet()) {
                 EnumSet<ProductColor> measureUnits = productColorsByCategory.get(key);
                 List<DbResource> resources = new ArrayList<DbResource>(measureUnits.size());
-                for(ProductColor measureUnit : measureUnits)
-                {
+                for(ProductColor measureUnit : measureUnits) {
                     resources.add(measureUnit.getDbResource());
                 }
 
@@ -159,14 +144,11 @@ public enum ProductColor
     }
 
     private static List<DbResource> dbResources;
-    public static List<DbResource> getDbResources()
-    {
-        if(dbResources == null)
-        {
+    public static List<DbResource> getDbResources() {
+        if(dbResources == null) {
             dbResources = new ArrayList<DbResource>(ProductColor.values().length);
 
-            for(ProductColor unit : ProductColor.values())
-            {
+            for(ProductColor unit : ProductColor.values()) {
                 dbResources.add(unit.getDbResource());
             }
         }

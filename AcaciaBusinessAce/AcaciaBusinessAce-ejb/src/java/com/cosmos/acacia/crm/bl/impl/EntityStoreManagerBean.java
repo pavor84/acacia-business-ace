@@ -40,7 +40,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import static com.cosmos.beansbinding.BeansBindingHelper.createEntityProperties;
 
 /**
  *
@@ -281,29 +280,48 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         String entityClassName = entityClass.getName();
         EntityProperties entityProperties = entityPropertiesMap.get(entityClassName);
         if (entityProperties == null) {
+            if(DataObjectBean.class.isAssignableFrom(entityClass)) {
+                entityProperties = createEntityProperties(entityProperties, DataObjectBean.class, entityClass);
+            }
+
             if (BusinessPartner.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(BusinessPartner.class);
-                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+                entityProperties = createEntityProperties(entityProperties, BusinessPartner.class, entityClass);
+                entityProperties = createEntityProperties(entityProperties, entityClass);
             } else if (BusinessDocument.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(BusinessDocument.class);
-                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+                entityProperties = createEntityProperties(entityProperties, BusinessDocument.class, entityClass);
+                entityProperties = createEntityProperties(entityProperties, entityClass);
             } else if (Product.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(Product.class);
-                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+                entityProperties = createEntityProperties(entityProperties, Product.class, entityClass);
+                entityProperties = createEntityProperties(entityProperties, entityClass);
             } else if (Right.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(Right.class);
-                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+                entityProperties = createEntityProperties(entityProperties, Right.class, entityClass);
+                entityProperties = createEntityProperties(entityProperties, entityClass);
             } else if (Privilege.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(Privilege.class);
-                entityProperties.addEntityProperties(createEntityProperties(entityClass));
+                entityProperties = createEntityProperties(entityProperties, Privilege.class, entityClass);
+                entityProperties = createEntityProperties(entityProperties, entityClass);
             } else {
-                entityProperties = createEntityProperties(entityClass);
+                entityProperties = createEntityProperties(entityProperties, entityClass);
             }
 
             entityPropertiesMap.put(entityClassName, entityProperties);
         }
 
         return (EntityProperties) entityProperties.clone();
+    }
+
+    private EntityProperties createEntityProperties(EntityProperties entityProperties, Class entityClass) {
+        return createEntityProperties(entityProperties, entityClass, entityClass);
+    }
+
+    private EntityProperties createEntityProperties(EntityProperties entityProperties,
+            Class superClass, Class entityClass) {
+        if(entityProperties == null) {
+            entityProperties = BeansBindingHelper.createEntityProperties(superClass, entityClass);
+        } else {
+            entityProperties.addEntityProperties(BeansBindingHelper.createEntityProperties(superClass, entityClass));
+        }
+
+        return entityProperties;
     }
 
     @SuppressWarnings("unchecked")

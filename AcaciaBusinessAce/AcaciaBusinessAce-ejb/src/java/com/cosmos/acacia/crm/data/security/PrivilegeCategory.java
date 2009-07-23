@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.crm.data.security;
 
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -40,6 +42,9 @@ import javax.persistence.UniqueConstraint;
                 " ORDER BY p.categoryName"
     )
 })
+@Form(
+    serviceClass=SecurityServiceRemote.class
+)
 public class PrivilegeCategory extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;

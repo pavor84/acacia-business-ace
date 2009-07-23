@@ -205,10 +205,6 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date lastDeliveryTime;
 
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-
     @JoinColumn(name = "purchase_order_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -412,14 +408,6 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     public void setSupplier(BusinessPartner supplier) {
         this.supplier = supplier;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public Date getCreationTime() {

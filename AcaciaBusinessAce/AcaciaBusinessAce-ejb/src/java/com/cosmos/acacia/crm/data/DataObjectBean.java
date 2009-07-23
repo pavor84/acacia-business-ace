@@ -4,9 +4,19 @@
  */
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponent;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.Property;
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTabbedPane;
+import com.cosmos.swingb.JBTextPane;
 import com.cosmos.util.CloneableBean;
 import com.cosmos.util.ImageUtils;
+import java.awt.BorderLayout;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -17,20 +27,64 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.persistence.Transient;
 
 /**
  *
  * @author Miro
  */
-public abstract class DataObjectBean
-        implements CloneableBean<DataObjectBean>, PropertyChangeNotificationBroadcaster,
-        Comparable<DataObjectBean> {
+@Form(
+    mainContainer=@FormContainer(
+        name=DataObjectBean.MAIN_TABBED_PANE,
+        container=@Component(
+            componentClass=JBTabbedPane.class
+        )
+    ),
+    formContainers={
+        @FormContainer(
+            name=DataObjectBean.PRIMARY_INFO,
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            componentIndex=1
+        ),
+        @FormContainer(
+            name=DataObjectBean.NOTES,
+            title="Notes",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(layoutClass=BorderLayout.class),
+            componentIndex=Integer.MAX_VALUE
+        )
+    }
+)
+public abstract class DataObjectBean implements CloneableBean<DataObjectBean>,
+        PropertyChangeNotificationBroadcaster, Comparable<DataObjectBean> {
+
+    public static final String MAIN_TABBED_PANE = "mainTabbedPane";
+    public static final String PRIMARY_INFO = "primaryInfo";
+    public static final String NOTES = "notes";
 
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private URI smallImageURI;
     private Image smallImage;
     private URI mediumImageURI;
     private Image mediumImage;
+    //
+    @Transient
+    @Property(title="Notes",
+        formComponent=@FormComponent(
+            component=@Component(
+                componentClass=JBTextPane.class,
+                componentConstraints=BorderLayout.CENTER,
+                scrollable=true
+            ),
+            parentContainerName="notes"
+        ), index=Integer.MAX_VALUE
+    )
+    private String notes;
 
     public abstract DataObject getDataObject();
 
@@ -49,10 +103,12 @@ public abstract class DataObjectBean
 
     public abstract String getInfo();
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
 
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }

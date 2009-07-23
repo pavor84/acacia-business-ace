@@ -8,10 +8,8 @@ package com.cosmos.acacia.crm.data.users;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentProperty;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.crm.data.Person;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -43,8 +41,6 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
-import com.cosmos.swingb.JBTextPane;
-import java.awt.BorderLayout;
 import javax.persistence.Transient;
 
 /**
@@ -85,7 +81,7 @@ import javax.persistence.Transient;
 })
 @Form(
     mainContainer=@FormContainer(
-        name="mainTabbedPane",
+        name=DataObjectBean.MAIN_TABBED_PANE,
         container=@Component(
             componentClass=JBTabbedPane.class,
             componentProperties={
@@ -95,57 +91,49 @@ import javax.persistence.Transient;
     ),
     formContainers={
         @FormContainer(
-            name="information",
-            title="Information",
+            name=DataObjectBean.PRIMARY_INFO,
+            title="Primary Info",
             container=@Component(
                 componentClass=JBTabbedPane.class
-            )
+            ),
+            componentIndex=1
         ),
         @FormContainer(
-            name="roles",
+            name=User.ROLES,
             title="Roles",
             container=@Component(
                 componentClass=JBTabbedPane.class
             )
         ),
         @FormContainer(
-            name="groups",
+            name=User.GROUPS,
             title="Groups",
             container=@Component(
                 componentClass=JBTabbedPane.class
             )
         ),
         @FormContainer(
-            name="workHours",
+            name=User.WORK_HOURS,
             title="Work Hours",
             container=@Component(
                 componentClass=JBTabbedPane.class
             )
         ),
         @FormContainer(
-            name="informationGeneral",
+            name=User.INFO_GENERAL,
             title="General",
             container=@Component(
                 componentClass=JBPanel.class
             ),
-            parentContainerName="information"
+            parentContainerName=DataObjectBean.PRIMARY_INFO
         ),
         @FormContainer(
-            name="informationAddresses",
+            name=User.INFO_ADDRESSES,
             title="Addresses",
             container=@Component(
                 componentClass=JBPanel.class
             ),
-            parentContainerName="information"
-        ),
-        @FormContainer(
-            name="informationNotes",
-            title="Notes",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            layout=@Layout(layoutClass=BorderLayout.class),
-            parentContainerName="information"
+            parentContainerName=DataObjectBean.PRIMARY_INFO
         )
     },
     serviceClass=UsersServiceRemote.class
@@ -153,6 +141,12 @@ import javax.persistence.Transient;
 public class User extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
+    public static final String INFO_GENERAL = "informationGeneral";
+    public static final String INFO_ADDRESSES = "informationAddresses";
+    public static final String WORK_HOURS = "workHours";
+    public static final String GROUPS = "groups";
+    public static final String ROLES = "roles";
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -168,7 +162,7 @@ public class User extends DataObjectBean implements Serializable {
         editable=false,
         readOnly=true,
         formComponentPair=@FormComponentPair(
-            parentContainerName="informationGeneral",
+            parentContainerName=INFO_GENERAL,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Username:"
@@ -192,7 +186,7 @@ public class User extends DataObjectBean implements Serializable {
             className="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
         ),
         formComponentPair=@FormComponentPair(
-            parentContainerName="informationGeneral",
+            parentContainerName=INFO_GENERAL,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Person:"
@@ -207,7 +201,7 @@ public class User extends DataObjectBean implements Serializable {
     @Column(name = "email_address", nullable = false)
     @Property(title="Email address",
         formComponentPair=@FormComponentPair(
-            parentContainerName="informationGeneral",
+            parentContainerName=INFO_GENERAL,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Email:"
@@ -222,7 +216,7 @@ public class User extends DataObjectBean implements Serializable {
     @Column(name = "user_password", nullable = false)
     @Property(title="Password",
         formComponentPair=@FormComponentPair(
-            parentContainerName="informationGeneral",
+            parentContainerName=INFO_GENERAL,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Password:"
@@ -242,7 +236,7 @@ public class User extends DataObjectBean implements Serializable {
     @ManyToOne
     @Property(title="Manager",
         formComponentPair=@FormComponentPair(
-            parentContainerName="informationGeneral",
+            parentContainerName=INFO_GENERAL,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Manager:"
@@ -313,19 +307,6 @@ public class User extends DataObjectBean implements Serializable {
     @ManyToOne
     @Property(title="Creator", customDisplay="${creator.userName}")
     private User creator;
-
-    @Transient
-    @Property(title="Notes",
-        formComponent=@FormComponent(
-            parentContainerName="informationNotes",
-            component=@Component(
-                componentClass=JBTextPane.class,
-                componentConstraints=BorderLayout.CENTER,
-                scrollable=true
-            )
-        )
-    )
-    private String notes;
 
     @JoinColumn(name = "user_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
