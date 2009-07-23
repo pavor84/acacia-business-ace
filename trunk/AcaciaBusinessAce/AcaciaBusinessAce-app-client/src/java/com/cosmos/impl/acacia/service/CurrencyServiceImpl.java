@@ -88,7 +88,7 @@ public class CurrencyServiceImpl implements CurrencyRemote {
     }
 
     @Override
-    public List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
-        return currencyService.getResources(enumClass, enumCategoryClasses);
+    public List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
+        return currencyService.getResources(enumClass, categoryClassifiers);
     }
 }
