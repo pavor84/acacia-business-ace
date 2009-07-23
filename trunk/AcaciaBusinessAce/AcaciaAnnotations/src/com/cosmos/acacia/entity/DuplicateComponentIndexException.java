@@ -40,7 +40,7 @@ public class DuplicateComponentIndexException extends EntityFormException {
     public String toString() {
         if(message == null) {
             StringBuilder sb = new StringBuilder();
-            sb.append("index=").append(componentIndex);
+            sb.append("Duplicate component index=").append(componentIndex);
             sb.append("; firstContainerName=").append(firstFormContainer.name());
             sb.append("; secondContainerName=").append(secondFormContainer.name());
 

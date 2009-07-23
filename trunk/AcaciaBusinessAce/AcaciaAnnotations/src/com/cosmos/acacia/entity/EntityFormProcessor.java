@@ -65,7 +65,8 @@ public class EntityFormProcessor {
     private static final String ACACIA_ANNOTATION_PREFIX =
             "com.cosmos.acacia.annotation.";
     private static final String FORM_ANNOTATION_CLASS_NAME = Form.class.getName();
-    private static final int INITIAL_VALUE = 1000000000;
+    public static final int INITIAL_INDEX_VALUE = 0x1FFFFFFF;
+    public static final int CUSTOM_INDEX_VALUE = 0x3FFFFFFF;
     //
     private Class entityClass;
     private ResourceMap resourceMap;
@@ -758,19 +759,23 @@ public class EntityFormProcessor {
 
     private List<FormContainer> getAnnotations(List<Form> forms) {
         Map<Integer, FormContainer> map = new TreeMap<Integer, FormContainer>();
-        int counter = INITIAL_VALUE;
+        int counter = INITIAL_INDEX_VALUE;
         for (Form form : forms) {
             for (FormContainer formContainer : form.formContainers()) {
                 int index;
                 if ((index = formContainer.componentIndex()) < 0) {
                     map.put(++counter, formContainer);
                 } else {
+                    
                     if(map.containsKey(index)) {
-                        throw new DuplicateComponentIndexException(index,
-                                map.get(index),
-                                formContainer);
+                        if(!formContainer.name().equals(map.get(index).name())) {
+                            throw new DuplicateComponentIndexException(index,
+                                    map.get(index),
+                                    formContainer);
+                        }
+                    } else {
+                        map.put(index, formContainer);
                     }
-                    map.put(index, formContainer);
                 }
             }
         }
@@ -779,7 +784,7 @@ public class EntityFormProcessor {
     }
 
     private List<Field> getAnnotatedFields(Class entityClass) {
-        int counter = INITIAL_VALUE;
+        int counter = INITIAL_INDEX_VALUE;
         Map<StringIntegerComparator, Field> map = new TreeMap<StringIntegerComparator, Field>();
         do {
             Field[] declaredFields = entityClass.getDeclaredFields();
@@ -825,7 +830,7 @@ public class EntityFormProcessor {
             return Collections.emptyList();
         }
 
-        int counter = INITIAL_VALUE;
+        int counter = INITIAL_INDEX_VALUE;
         Map<Integer, Annotation> map = new TreeMap<Integer, Annotation>();
         for (Annotation annotation : declaredAnnotations) {
             if (annotation.annotationType().getName().startsWith(ACACIA_ANNOTATION_PREFIX)) {
