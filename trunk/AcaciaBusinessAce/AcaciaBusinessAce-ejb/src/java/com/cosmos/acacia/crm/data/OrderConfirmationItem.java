@@ -109,11 +109,7 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
     @Column(name = "ship_date_to")
     @Temporal(TemporalType.DATE)
     private Date shipDateTo;
-    
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-    
+
     @JoinColumn(name = "confirmation_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -262,14 +258,6 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
         this.shipDateTo = shipDateTo;
     }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-    
     /**
      * This is a synthetic method. Calculates and returns the quantity that is not yet matched against an purchase order item.
      * This value is exactly: (confirmedQuantity-matchedQuantity)

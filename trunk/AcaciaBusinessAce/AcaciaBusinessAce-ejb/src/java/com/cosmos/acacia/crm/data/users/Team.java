@@ -64,24 +64,7 @@ uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "team_n
     )
 })
 @Form(
-    mainContainer=@FormContainer(
-        name="mainTabbedPane",
-        container=@Component(
-            componentClass=JBTabbedPane.class/*,
-            componentProperties={
-                @ComponentProperty(name="tabPlacement", value=ComponentProperty.JTabbedPane_TabPlacement_LEFT)
-            }*/
-        )
-    ),
     formContainers={
-        @FormContainer(
-            name="primaryInfo",
-            title="Primary Info",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            componentIndex=1
-        ),
         @FormContainer(
             name="memberList",
             title="Members",
@@ -91,14 +74,6 @@ uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "team_n
             ),
             relationshipType=RelationshipType.OneToMany,
             entityClass=TeamMember.class
-        ),
-        @FormContainer(
-            name="notes",
-            title="Notes",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            layout=@Layout(layoutClass=BorderLayout.class)
         )
     },
     serviceClass=UsersServiceRemote.class
@@ -169,19 +144,6 @@ public class Team extends DataObjectBean implements Serializable {
         )
     )
     private DbResource status;
-
-    @Transient
-    @Property(title="Notes",
-        formComponent=@FormComponent(
-            component=@Component(
-                componentClass=JBTextPane.class,
-                componentConstraints=BorderLayout.CENTER,
-                scrollable=true
-            ),
-            parentContainerName="notes"
-        )
-    )
-    private String notes;
 
     @JoinColumn(name = "organization_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)

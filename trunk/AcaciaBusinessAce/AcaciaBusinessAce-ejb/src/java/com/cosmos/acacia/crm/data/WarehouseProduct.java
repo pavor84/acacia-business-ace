@@ -153,10 +153,6 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     private Integer orderedDeliveryTime;
 
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-    
     @JoinColumn(name = "warehouse_product_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
@@ -264,14 +260,6 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
             freeQuantity = freeQuantity.subtract(soldQuantity);
 
         return freeQuantity;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public SimpleProduct getProduct() {

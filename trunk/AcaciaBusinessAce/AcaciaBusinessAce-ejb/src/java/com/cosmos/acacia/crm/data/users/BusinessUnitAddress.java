@@ -68,29 +68,6 @@ import javax.persistence.UniqueConstraint;
     )
 })
 @Form(
-    mainContainer=@FormContainer(
-        name="mainTabbedPane",
-        container=@Component(
-            componentClass=JBTabbedPane.class
-        )
-    ),
-    formContainers={
-        @FormContainer(
-            name="primaryInfo",
-            title="Primary Info",
-            container=@Component(
-                componentClass=JBPanel.class
-            )
-        ),
-        @FormContainer(
-            name="notes",
-            title="Notes",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            layout=@Layout(layoutClass=BorderLayout.class)
-        )
-    },
     serviceClass=UsersServiceRemote.class
 )
 public class BusinessUnitAddress extends DataObjectBean implements Serializable {

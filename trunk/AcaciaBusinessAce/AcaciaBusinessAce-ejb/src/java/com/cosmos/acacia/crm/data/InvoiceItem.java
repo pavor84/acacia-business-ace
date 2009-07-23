@@ -137,10 +137,6 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Property(title="Warehouse", customDisplay="${warehouse.address.addressName}", propertyValidator=@PropertyValidator(required=true) )
     private Warehouse warehouse;
 
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-
     @Column(name = "product_description")
     @Property(title="Product Description")
     private String productDescription;
@@ -326,14 +322,6 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     public void setDiscountAmount(BigDecimal discountAmount) {
         this.discountAmount = discountAmount;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public Product getProduct() {

@@ -58,30 +58,6 @@ import javax.persistence.UniqueConstraint;
     )
 })
 @Form(
-    mainContainer=@FormContainer(
-        name="mainTabbedPane",
-        container=@Component(
-            componentClass=JBTabbedPane.class
-        )
-    ),
-    formContainers={
-        @FormContainer(
-            name="primaryInfo",
-            title="Primary Info",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            componentIndex=1
-        ),
-        @FormContainer(
-            name="notes",
-            title="Notes",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            layout=@Layout(layoutClass=BorderLayout.class)
-        )
-    },
     serviceClass=UsersServiceRemote.class
 )
 public class TeamMember extends DataObjectBean implements Serializable {
@@ -111,19 +87,6 @@ public class TeamMember extends DataObjectBean implements Serializable {
     @ManyToOne(optional = false)
     @Property(title="Status")
     private DbResource status;
-
-    @Transient
-    @Property(title="Notes",
-        formComponent=@FormComponent(
-            component=@Component(
-                componentClass=JBTextPane.class,
-                componentConstraints=BorderLayout.CENTER,
-                scrollable=true
-            ),
-            parentContainerName="notes"
-        )
-    )
-    private String notes;
 
     @JoinColumn(name = "team_member_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)

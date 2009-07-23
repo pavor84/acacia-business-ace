@@ -69,20 +69,7 @@ import javax.persistence.UniqueConstraint;
     )
 })
 @Form(
-    mainContainer=@FormContainer(
-        name="mainTabbedPane",
-        container=@Component(
-            componentClass=JBTabbedPane.class
-        )
-    ),
     formContainers={
-        @FormContainer(
-            name="primaryInfo",
-            title="Primary Info",
-            container=@Component(
-                componentClass=JBPanel.class
-            )
-        ),
         @FormContainer(
             name="roleList",
             title="Roles",
@@ -92,14 +79,6 @@ import javax.persistence.UniqueConstraint;
             ),
             relationshipType=RelationshipType.OneToMany,
             entityClass=PrivilegeRole.class
-        ),
-        @FormContainer(
-            name="notes",
-            title="Notes",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            layout=@Layout(layoutClass=BorderLayout.class)
         )
     },
     serviceClass=SecurityServiceRemote.class

@@ -414,10 +414,6 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date shipDateTo;
     
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-    
     @Column(name = "vat_condition_notes")
     @Property(title="Vat Condition Notes")
     private String vatConditionNotes;
@@ -819,14 +815,6 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public String getVatConditionNotes() {

@@ -116,10 +116,6 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date shipDateTo;
 
-    @Column(name = "notes")
-    @Property(title="Notes")
-    private String notes;
-
     @Transient
     @Property(title="Total", exportable=true, reportColumnWidth=16)
     private BigDecimal total;
@@ -254,14 +250,6 @@ public class PurchaseOrderItem extends DataObjectBean implements Serializable {
 
     public void setShipDateFrom(Date shipDateFrom) {
         this.shipDateFrom = shipDateFrom;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     @Override
