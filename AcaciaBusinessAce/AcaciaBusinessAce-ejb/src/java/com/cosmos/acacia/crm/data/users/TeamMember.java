@@ -6,19 +6,17 @@ package com.cosmos.acacia.crm.data.users;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
-import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.PropertyName;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
-import com.cosmos.swingb.JBTextPane;
-import java.awt.BorderLayout;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -31,7 +29,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -80,12 +77,43 @@ public class TeamMember extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="User")
+    @Property(title="User",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.users.UserListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="User:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private User user;
 
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Status")
+    @Property(title="Status",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.AccountStatus",
+            constructorParameters={
+                @PropertyName(getter="class")
+            }
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Status:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource status;
 
     @JoinColumn(name = "team_member_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
+import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
@@ -61,25 +61,19 @@ import com.cosmos.acacia.security.AccessRight;
  */
 @Stateless
 public class DatabaseResourceBean
-    implements DatabaseResourceLocal
-{
+        implements DatabaseResourceLocal {
 
     private static boolean initialized = false;
-
     private static Map<String, EnumClass> enumClassMap;
     private static Map<Enum, Map<String, DbResource>> dbResourceMap;
-    
     @EJB
     private CurrencyNominalLocal currencyNominalManager;
-
     @PersistenceContext
     private EntityManager em;
 
-
     @Override
     public synchronized void initDatabaseResource() {
-        if(!initialized)
-        {
+        if (!initialized) {
             System.out.println("initDatabaseResource()");
             getDbResources(Gender.class);
             getDbResources(MeasurementUnit.class);
@@ -114,23 +108,23 @@ public class DatabaseResourceBean
             getDbResources(AccessRight.class);
             getDbResources(BusinessUnitType.class);
             getDbResources(BusinessUnitAddressType.class);
+            getDbResources(AccountStatus.class);
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }
     }
 
-    public List<DbResource> getDbResources(Class<? extends DatabaseResource> dbResourceClass)
-    {
+    public List<DbResource> getDbResources(Class<? extends DatabaseResource> dbResourceClass) {
         DatabaseResource[] dbResourcesArray = dbResourceClass.getEnumConstants();
         int size;
-        if(dbResourcesArray == null || (size = dbResourcesArray.length) == 0)
+        if (dbResourcesArray == null || (size = dbResourcesArray.length) == 0) {
             return Collections.<DbResource>emptyList();
+        }
 
         List<DbResource> dbResources = new ArrayList<DbResource>(size);
 
-        for(DatabaseResource dbr : dbResourcesArray)
-        {
-            Enum enumValue = (Enum)dbr;
+        for (DatabaseResource dbr : dbResourcesArray) {
+            Enum enumValue = (Enum) dbr;
             DbResource resource = getDbResource(enumValue);
             dbr.setDbResource(resource);
             dbResources.add(resource);
@@ -139,31 +133,22 @@ public class DatabaseResourceBean
         return dbResources;
     }
 
-
     // Add business logic below. (Right-click in editor and choose
     // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
-
-
-    private EnumClass getEnumClass(Enum dbEnum)
-    {
-        if(enumClassMap == null)
-        {
+    private EnumClass getEnumClass(Enum dbEnum) {
+        if (enumClassMap == null) {
             enumClassMap = new HashMap<String, EnumClass>();
         }
 
         String className = dbEnum.getClass().getName();
         EnumClass enumClass = enumClassMap.get(className);
-        if(enumClass == null)
-        {
+        if (enumClass == null) {
             System.out.println("Enum Class Name: " + className);
             Query q = em.createNamedQuery("EnumClass.findByEnumClassName");
             q.setParameter("enumClassName", className);
-            try
-            {
-                enumClass = (EnumClass)q.getSingleResult();
-            }
-            catch(NoResultException ex)
-            {
+            try {
+                enumClass = (EnumClass) q.getSingleResult();
+            } catch (NoResultException ex) {
                 enumClass = new EnumClass();
                 enumClass.setEnumClassName(className);
                 em.persist(enumClass);
@@ -175,33 +160,26 @@ public class DatabaseResourceBean
         return enumClass;
     }
 
-    private DbResource getDbResource(Enum dbEnum)
-    {
-        if(dbResourceMap == null)
-        {
+    private DbResource getDbResource(Enum dbEnum) {
+        if (dbResourceMap == null) {
             dbResourceMap = new HashMap<Enum, Map<String, DbResource>>();
         }
 
         Map<String, DbResource> enumMap = dbResourceMap.get(dbEnum);
-        if(enumMap == null)
-        {
+        if (enumMap == null) {
             enumMap = new HashMap<String, DbResource>(dbEnum.getClass().getEnumConstants().length);
         }
 
         String enumName = dbEnum.name();
         DbResource dbResource = enumMap.get(enumName);
-        if(dbResource == null)
-        {
+        if (dbResource == null) {
             EnumClass enumClass = getEnumClass(dbEnum);
             Query q = em.createNamedQuery("DbResource.findByEnumClassAndName");
             q.setParameter("enumClass", enumClass);
             q.setParameter("enumName", enumName);
-            try
-            {
-                dbResource = (DbResource)q.getSingleResult();
-            }
-            catch(NoResultException ex)
-            {
+            try {
+                dbResource = (DbResource) q.getSingleResult();
+            } catch (NoResultException ex) {
                 dbResource = new DbResource();
                 dbResource.setEnumClass(enumClass);
                 dbResource.setEnumName(enumName);

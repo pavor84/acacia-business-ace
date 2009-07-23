@@ -11,7 +11,6 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -185,7 +184,7 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     }
 
     @Override
-    public List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
-        return esm.getResources(em, enumClass, enumCategoryClasses);
+    public List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
+        return esm.getResources(em, enumClass, categoryClassifiers);
     }
 }

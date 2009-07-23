@@ -57,5 +57,5 @@ public interface EntityStoreManagerLocal
     void setDocumentNumber(EntityManager em, BusinessDocument documentEntity);
     <D extends BusinessDocument> D newBusinessDocument(DocumentType documentType);
 
-    List<DbResource> getResources(EntityManager em, Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses);
+    List<DbResource> getResources(EntityManager em, Class<? extends Enum> enumClass, Object... categoryClassifiers);
 }

@@ -6,11 +6,10 @@ package com.cosmos.acacia.crm.data.users;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
@@ -22,10 +21,7 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
-import com.cosmos.swingb.JBTextPane;
-import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -38,7 +34,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -95,7 +90,7 @@ public class Team extends DataObjectBean implements Serializable {
     @Column(name = "team_name", nullable = false, length = 50)
     @Property(title="Team Name",
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Team Name:"
@@ -114,7 +109,7 @@ public class Team extends DataObjectBean implements Serializable {
             className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel"
         ),
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Business Unit:"
@@ -130,10 +125,13 @@ public class Team extends DataObjectBean implements Serializable {
     @ManyToOne(optional = false)
     @Property(title="Status",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.enums.Currency"
+            className="com.cosmos.acacia.crm.enums.AccountStatus",
+            constructorParameters={
+                @PropertyName(getter="class")
+            }
         ),
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Status:"
