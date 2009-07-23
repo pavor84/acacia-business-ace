@@ -69,6 +69,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     //
     private static final String ON_ENTITY_CHANGE_FUNCTION = "onEntityChange";
     private static final String ENTITY_PREFIX = "entity.";
+    private static final Object[] EMPTY_ARRAY = new Object[0];
     //
     private AbstractEntityListPanel entityListPanel;
     private E entity;
@@ -170,7 +171,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                             entity, propertyDetails);
                 }
             } else if (jComponent instanceof EnumerationBinder) {
-                List listData = getResources(getSelectableListDialogClass(propertyDetails));
+                List listData = getResources(getSelectableListDialogClass(propertyDetails),
+                        getParameters(propertyDetails));
                 if(updateStrategy != null) {
                     ((EnumerationBinder) jComponent).bind(bg, listData,
                             entity, propertyDetails, updateStrategy);
@@ -188,8 +190,24 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         initDataMode(getDataMode());
     }
 
-    protected List getResources(Class<? extends Enum> enumClass, Class<? extends Enum>... enumCategoryClasses) {
-        return getEntityService().getResources(enumClass, enumCategoryClasses);
+    protected Object[] getParameters(PropertyDetails propertyDetails) {
+        int size;
+        List<PropertyDetail> pdList;
+        if((pdList = propertyDetails.getSelectableListDialogConstructorParameters()) == null || (size = pdList.size()) == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        Object[] params = new Object[size];
+        for(int i = 0; i < size; i++) {
+            PropertyDetail pd = pdList.get(i);
+            params[i] = getPropertyValue(pd.getGetter());
+        }
+
+        return params;
+    }
+
+    protected List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
+        return getEntityService().getResources(enumClass, categoryClassifiers);
     }
 
     public void initDataMode(DataMode dataMode) {
