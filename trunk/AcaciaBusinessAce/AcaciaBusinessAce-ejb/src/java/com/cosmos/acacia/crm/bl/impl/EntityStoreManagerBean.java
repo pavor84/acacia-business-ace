@@ -29,8 +29,10 @@ import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.Product;
 import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.users.Right;
+import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
+import com.cosmos.acacia.crm.enums.EnumClassifier;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
@@ -420,7 +422,24 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
     @Override
     public List<DbResource> getResources(EntityManager em, Class<? extends Enum> cls,
-            Class<? extends Enum>... enumCategoryClasses) {
+            Object... categoryClassifiers) {
+        Enum[] enumConstants = cls.getEnumConstants();
+        Enum firstItem = enumConstants[0];
+        if(firstItem instanceof EnumClassifier) {
+            List<? extends DatabaseResource> list = ((EnumClassifier)firstItem).getEnums(categoryClassifiers);
+            List<DbResource> resources = new ArrayList<DbResource>(list.size());
+            for(DatabaseResource item : list) {
+                resources.add(item.getDbResource());
+            }
+            return resources;
+        } else if(firstItem instanceof DatabaseResource) {
+            List<DbResource> resources = new ArrayList<DbResource>(enumConstants.length);
+            for(Enum item : enumConstants) {
+                resources.add(((DatabaseResource)item).getDbResource());
+            }
+            return resources;
+        }
+
         Query q = em.createNamedQuery("EnumClass.findByEnumClassName");
         q.setParameter("enumClassName", cls.getName());
         EnumClass enumClass = (EnumClass)q.getSingleResult();
