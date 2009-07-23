@@ -82,6 +82,10 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
     }
 
     public void rowChanged(AlterationType alterationType, E oldRowObject, E newRowObject) {
+        if(true) {
+            return;
+        }
+
         List<Unit> units;
         if ((units = getUnits(UnitType.Record, LogicUnitType.Suffix)) != null && units.size() > 0) {
             for (Unit unit : units) {
