@@ -47,6 +47,7 @@ public enum AccountStatus implements DatabaseResource, EnumClassifier<AccountSta
     public String toText() {
         return name();
     }
+
     private static TreeMap<String, List<AccountStatus>> enumsMap = new TreeMap<String, List<AccountStatus>>();
 
     @Override

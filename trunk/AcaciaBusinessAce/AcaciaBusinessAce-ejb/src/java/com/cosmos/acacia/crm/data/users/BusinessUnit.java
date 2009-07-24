@@ -114,7 +114,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
         editable=false,
         readOnly=true,
         formComponent=@FormComponent(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             component=@Component(
                 componentClass=JBCheckBox.class,
                 text="Root",
@@ -128,7 +128,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Column(name = "is_disabled", nullable = false)
     @Property(title="Disabled",
         formComponent=@FormComponent(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             component=@Component(
                 componentClass=JBCheckBox.class,
                 text="Disabled",
@@ -145,7 +145,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
             className="com.cosmos.acacia.crm.enums.BusinessUnitType"
         ),
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Type:"
@@ -165,7 +165,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
             className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel"
         ),
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Parent:"
@@ -181,7 +181,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Column(name = "business_unit_name", nullable = false, length = 100)
     @Property(title="Name",
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Name:"
@@ -196,7 +196,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Column(name = "division_name", length = 100)
     @Property(title="Division",
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Division:"
@@ -211,7 +211,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Column(name = "web_site", length = 255)
     @Property(title="Web Site",
         formComponentPair=@FormComponentPair(
-            parentContainerName="primaryInfo",
+            parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
                 text="Web Site:"

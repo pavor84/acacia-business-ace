@@ -6,18 +6,20 @@ package com.cosmos.acacia.crm.data.security;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
-import java.awt.BorderLayout;
+import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -49,7 +51,7 @@ import javax.persistence.UniqueConstraint;
                 " ORDER BY t.businessUnit.businessUnitName, t.securityRoleName"
     ),
     @NamedQuery(
-        name = "SecurityRole.findAllByBusinessUnit",
+        name = "SecurityRole.findByBusinessUnit",
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.businessUnit = :businessUnit" +
@@ -74,6 +76,10 @@ import javax.persistence.UniqueConstraint;
 public class SecurityRole extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
+    protected static final String CLASS_NAME = "SecurityRole";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_BUSINESS_UNIT = CLASS_NAME + ".findByBusinessUnit";
 
     @Id
     @Basic(optional = false)
@@ -82,13 +88,36 @@ public class SecurityRole extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Business Unit"
+    @Property(title="Business Unit",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Business Unit:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
     )
     private BusinessUnit businessUnit;
 
     @Basic(optional = false)
     @Column(name = "security_role_name", nullable = false, length = 100)
-    @Property(title="Role Name"
+    @Property(title="Name",
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Name:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
     )
     private String securityRoleName;
 

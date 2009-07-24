@@ -7,8 +7,6 @@ package com.cosmos.acacia.crm.data.users;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
-import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.SelectableList;
@@ -21,9 +19,6 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
-import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
-import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -84,6 +79,10 @@ public class BusinessUnitAddress extends DataObjectBean implements Serializable 
     @Column(name = "business_unit_address_id", nullable = false, precision = 19, scale = 0)
     private BigInteger businessUnitAddressId;
 
+    @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
+    @ManyToOne(optional = false)
+    private BusinessUnit businessUnit;
+
     @JoinColumn(name = "address_type_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Address Type",
@@ -102,10 +101,6 @@ public class BusinessUnitAddress extends DataObjectBean implements Serializable 
         )
     )
     private DbResource addressType;
-
-    @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
-    @ManyToOne(optional = false)
-    private BusinessUnit businessUnit;
 
     @JoinColumn(name = "address_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne(optional = false)
