@@ -70,17 +70,14 @@ public abstract class AbstractTablePanel<E extends CloneableBean>
         init();
     }
 
-    protected AbstractTablePanel(Class entityClass) {
-        this(null, entityClass);
-    }
-
     protected AbstractTablePanel(JBPanel parentPanel) {
         this(parentPanel, null);
     }
 
-    protected AbstractTablePanel(JBPanel parentPanel, Class entityClass) {
+    protected AbstractTablePanel(JBPanel parentPanel, Class entityClass, Object... parameters) {
         this.parentPanel = parentPanel;
         this.entityClass = entityClass;
+        this.parameters = parameters;
         init();
     }
 

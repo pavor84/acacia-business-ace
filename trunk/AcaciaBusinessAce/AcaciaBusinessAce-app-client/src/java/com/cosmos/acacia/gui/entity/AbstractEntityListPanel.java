@@ -46,12 +46,12 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
     private EntityProperties entityProperties;
     private E entity;
 
-    protected AbstractEntityListPanel(Class<E> entityClass) {
-        super(entityClass);
+    protected AbstractEntityListPanel(Class<E> entityClass, Object... parameters) {
+        super(null, entityClass, parameters);
     }
 
-    protected AbstractEntityListPanel(EntityPanel mainEntityPanel, Class<E> itemEntityClass) {
-        super(mainEntityPanel, itemEntityClass);
+    protected AbstractEntityListPanel(EntityPanel mainEntityPanel, Class<E> itemEntityClass, Object... parameters) {
+        super(mainEntityPanel, itemEntityClass, parameters);
     }
 
     protected EntityPanel getMainEntityPanel() {

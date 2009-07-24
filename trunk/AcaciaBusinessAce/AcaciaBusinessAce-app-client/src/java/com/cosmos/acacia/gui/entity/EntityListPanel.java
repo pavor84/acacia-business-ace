@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class EntityListPanel<E extends DataObjectBean> extends AbstractEntityListPanel<E> {
 
-    public EntityListPanel(Class<E> entityClass) {
-        super(entityClass);
+    public EntityListPanel(Class<E> entityClass, Object... parameters) {
+        super(entityClass, parameters);
     }
 
     @Override

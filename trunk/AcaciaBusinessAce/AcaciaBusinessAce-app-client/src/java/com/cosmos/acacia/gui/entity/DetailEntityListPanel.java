@@ -16,8 +16,8 @@ import java.util.List;
 public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjectBean>
         extends AbstractEntityListPanel<I> {
 
-    public DetailEntityListPanel(EntityPanel<E> mainEntityPanel, Class<I> itemEntityClass) {
-        super(mainEntityPanel, itemEntityClass);
+    public DetailEntityListPanel(EntityPanel<E> mainEntityPanel, Class<I> itemEntityClass, Object... parameters) {
+        super(mainEntityPanel, itemEntityClass, parameters);
     }
 
     public E getMainEntity() {

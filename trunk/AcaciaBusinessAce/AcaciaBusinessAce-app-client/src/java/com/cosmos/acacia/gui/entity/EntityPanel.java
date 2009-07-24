@@ -181,7 +181,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                             entity, propertyDetails);
                 }
             } else {
-                System.out.println("Unknown binder for jComponent: " + jComponent);
+                if(!(jComponent instanceof JScrollPane)) {
+                    System.out.println("Unknown binder for jComponent: " + jComponent);
+                }
             }
         }
 
