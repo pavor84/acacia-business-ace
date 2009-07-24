@@ -399,4 +399,28 @@ public class PropertyDetails implements Cloneable, Serializable {
     public void setReportColumnWidth(byte reportColumnWidth) {
         this.reportColumnWidth = reportColumnWidth;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PropertyDetails other = (PropertyDetails) obj;
+        if ((propertyName == null) ? (other.propertyName != null) : !propertyName.equals(other.propertyName)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        if(propertyName != null) {
+            return propertyName.hashCode();
+        }
+
+        return 0;
+    }
 }
