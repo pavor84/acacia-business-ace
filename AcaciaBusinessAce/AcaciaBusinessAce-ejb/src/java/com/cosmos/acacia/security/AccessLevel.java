@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.security;
 
+import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.enums.DatabaseResource;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -35,7 +37,7 @@ import java.util.Set;
  *
  * @author Miro
  */
-public enum AccessLevel {
+public enum AccessLevel implements DatabaseResource {
 
     /**
      * You cannot perform that action on ANY records within that entity – even
@@ -103,6 +105,31 @@ public enum AccessLevel {
     System,
     ;
 
+    private AccessLevel() {
+    }
+
     public static final Set<AccessLevel> PropertyLevels =
             EnumSet.of(Client, User, BusinessUnit, ParentChildBusinessUnit, Organization);
+
+    private DbResource dbResource;
+
+    @Override
+    public DbResource getDbResource() {
+        return dbResource;
+    }
+
+    @Override
+    public void setDbResource(DbResource dbResource) {
+        this.dbResource = dbResource;
+    }
+
+    @Override
+    public String toShortText() {
+        return name();
+    }
+
+    @Override
+    public String toText() {
+        return name();
+    }
 }
