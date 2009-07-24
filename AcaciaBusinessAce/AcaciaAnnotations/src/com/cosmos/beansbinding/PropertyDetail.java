@@ -35,10 +35,7 @@ public class PropertyDetail implements Serializable, Comparator<PropertyDetail>,
     }
 
     public String getSetter() {
-        if(setter != null)
-            return setter;
-
-        return getter;
+        return setter;
     }
 
     public void setSetter(String setter) {
