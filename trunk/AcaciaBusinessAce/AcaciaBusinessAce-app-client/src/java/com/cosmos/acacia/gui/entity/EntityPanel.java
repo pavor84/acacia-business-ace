@@ -36,6 +36,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -171,6 +172,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                             entity, propertyDetails);
                 }
             } else if (jComponent instanceof EnumerationBinder) {
+                System.out.println("jComponent: " + jComponent);
+                System.out.println("propertyName: " + propertyName + ": " + propertyDetails);
                 List listData = getResources(getSelectableListDialogClass(propertyDetails),
                         getParameters(propertyDetails));
                 if(updateStrategy != null) {
@@ -217,6 +220,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     protected List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
+        System.out.println("getResources(" + enumClass + ", " + Arrays.asList(parameters) + ")");
         return getEntityService().getResources(enumClass, categoryClassifiers);
     }
 
