@@ -38,6 +38,7 @@ import com.cosmos.acacia.crm.enums.DeliveryType;
 import com.cosmos.acacia.crm.enums.DocumentDeliveryMethod;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
+import com.cosmos.acacia.crm.enums.FunctionalHierarchy;
 import com.cosmos.acacia.crm.enums.Gender;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.enums.InvoiceType;
@@ -113,6 +114,7 @@ public class DatabaseResourceBean
             getDbResources(BusinessUnitType.class);
             getDbResources(BusinessUnitAddressType.class);
             getDbResources(AccountStatus.class);
+            getDbResources(FunctionalHierarchy.class);
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }

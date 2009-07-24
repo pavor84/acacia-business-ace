@@ -9,6 +9,7 @@ import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
+import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.security.PrivilegeType;
 import java.util.ArrayList;
@@ -26,9 +27,19 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
 
     public static final String PK_ORGANIZATION = "organization";
     public static final String PK_PRIVILEGE_TYPE = "privilegeType";
+    public static final String PK_BUSINESS_UNIT = "businessUnit";
 
-    public List<SecurityRole> getSecurityRoles() {
-        return new ArrayList<SecurityRole>();
+    public List<SecurityRole> getSecurityRoles(BusinessUnit businessUnit) {
+        Query q;
+        if(businessUnit != null) {
+            q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_BUSINESS_UNIT);
+            q.setParameter(PK_BUSINESS_UNIT, businessUnit);
+        } else {
+            q = em.createNamedQuery(SecurityRole.NQ_FIND_ALL);
+            q.setParameter(PK_ORGANIZATION, session.getOrganization());
+        }
+
+        return new ArrayList<SecurityRole>(q.getResultList());
     }
 
     public List<PrivilegeCategory> getPrivilegeCategories(PrivilegeType privilegeType) {
@@ -58,7 +69,11 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         }
 
         if(SecurityRole.class == entityClass) {
-            return (List<E>) getSecurityRoles();
+            if(extraParameters.length == 0) {
+                return (List<E>) getSecurityRoles(null);
+            } else {
+                return (List<E>) getSecurityRoles((BusinessUnit) extraParameters[0]);
+            }
         } else if(PrivilegeCategory.class == entityClass) {
             if(extraParameters.length == 0) {
                 return (List<E>) getPrivilegeCategories(null);
@@ -90,6 +105,9 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         if(entity instanceof PrivilegeCategory) {
             PrivilegeCategory category = (PrivilegeCategory) entity;
             category.setOrganization(session.getOrganization());
+        } else if(entity instanceof SecurityRole) {
+            SecurityRole securityRole = (SecurityRole) entity;
+            securityRole.setOrganization(session.getOrganization());
         }
     }
 }
