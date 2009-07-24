@@ -180,6 +180,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                     ((EnumerationBinder) jComponent).bind(bg, listData,
                             entity, propertyDetails);
                 }
+            } else {
+                System.out.println("Unknown binder for jComponent: " + jComponent);
             }
         }
 
@@ -200,7 +202,13 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         Object[] params = new Object[size];
         for(int i = 0; i < size; i++) {
             PropertyDetail pd = pdList.get(i);
-            params[i] = getPropertyValue(pd.getGetter());
+            Object bean = getPropertyValue(this, pd.getGetter());
+            String setter;
+            if((setter = pd.getSetter()) != null && setter.length() > 0) {
+                params[i] = getPropertyValue(bean, setter);
+            } else {
+                params[i] = bean;
+            }
         }
 
         return params;
