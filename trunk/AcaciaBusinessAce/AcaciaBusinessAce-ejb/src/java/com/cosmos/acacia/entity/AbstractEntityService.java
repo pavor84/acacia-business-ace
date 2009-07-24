@@ -68,6 +68,19 @@ public abstract class AbstractEntityService implements EntityService {
     }
 
     @Override
+    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+        throw new UnsupportedOperationException("Not supported operation for entityClass=" + entityClass +
+                " with parameters " + Arrays.asList(extraParameters));
+    }
+
+    @Override
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+        throw new UnsupportedOperationException("Not supported operation for itemClass=" + itemClass +
+                " for entity=" + entity +
+                " with parameters " + Arrays.asList(extraParameters));
+    }
+
+    @Override
     public <E> E newEntity(Class<E> entityClass) {
         E entity;
         try {

@@ -7,18 +7,21 @@ package com.cosmos.acacia.crm.data.security;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBDatePicker;
+import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
-import java.awt.BorderLayout;
+import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -38,6 +41,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -101,31 +105,84 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
     @Column(name = "privilege_id", nullable = false, precision = 19, scale = 0)
     private BigInteger privilegeId;
 
-    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
-    @ManyToOne(optional = false)
-    private SecurityRole securityRole;
-
     @Basic(optional = false)
     @Column(name = "discriminator_id", nullable = false, length = 4, insertable=false, updatable=false)
     private String discriminatorId;
 
+    @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Security Role")
+    private SecurityRole securityRole;
+
     @JoinColumn(name = "privilege_category_id", referencedColumnName = "privilege_category_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Privilege Category"
+    @Property(title="Category",
+        index=10,
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.security.PrivilegeCategoryListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Category:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
     )
     private PrivilegeCategory privilegeCategory;
 
     @Basic(optional = false)
     @Column(name = "privilege_name", nullable = false, length = 100)
-    @Property(title="Privilege Name"
+    @Property(title="Name",
+        index=20,
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Name:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
     )
     private String privilegeName;
 
     @Column(name = "expires")
     @Temporal(TemporalType.TIMESTAMP)
-    @Property(title="Expires"
+    @Property(title="Expires",
+        index=30,
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Expires:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBDatePicker.class
+            )
+        )
     )
     private Date expires;
+
+    @Transient
+    @Property(title="Entity")
+    private DataObject entityDataObject;
+
+    @Transient
+    @Property(title="Entity Type")
+    private DataObjectType entityDataObjectType;
+
+    @Transient
+    @Property(title="Permission Category")
+    private DbResource permissionCategory;
+
+    @Transient
+    @Property(title="Permission")
+    private DbResource specialPermission;
 
     @JoinColumn(name = "privilege_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
