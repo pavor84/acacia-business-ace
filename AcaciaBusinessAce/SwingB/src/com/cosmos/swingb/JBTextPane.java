@@ -2,12 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.resource.BeanResource;
+import com.cosmos.resource.EnumResource;
+import com.cosmos.resource.TextResource;
+import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import javax.swing.JTextPane;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
@@ -24,48 +28,44 @@ import org.jdesktop.beansbinding.Validator;
  *
  * @author Miro
  */
-public class JBTextPane
-    extends JTextPane
-    implements Validatable
-{
+public class JBTextPane extends JTextPane
+        implements Validatable, EntityBinder {
+
     private Application application;
     private ApplicationContext applicationContext;
     private ApplicationActionMap applicationActionMap;
     private ResourceMap resourceMap;
-
     private String propertyName;
     private Object beanEntity;
     private Binding binding;
+    private BeanResource beanResource;
 
-
+    @Override
     public Binding bind(
             BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
-    {
+            PropertyDetails propertyDetails) {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
+    @Override
     public Binding bind(
             BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
-        if(propertyDetails == null || propertyDetails.isHiden())
-        {
+            AutoBinding.UpdateStrategy updateStrategy) {
+        if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);
             setEnabled(false);
             return null;
         }
-        
+
         bind(bindingGroup, beanEntity, propertyDetails.getPropertyName(), updateStrategy);
         setEditable(propertyDetails.isEditable());
         setEnabled(!propertyDetails.isReadOnly());
 
         Validator validator = propertyDetails.getValidator();
-        if(validator != null)
-        {
+        if (validator != null) {
             binding.setValidator(validator);
         }
         binding.addBindingListener(new BindingValidationListener(this));
@@ -76,8 +76,7 @@ public class JBTextPane
     private Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             String propertyName,
-            AutoBinding.UpdateStrategy updateStrategy)
-    {
+            AutoBinding.UpdateStrategy updateStrategy) {
         this.propertyName = propertyName;
         this.beanEntity = beanEntity;
 
@@ -89,41 +88,44 @@ public class JBTextPane
         return binding;
     }
 
+    @Override
     public String getPropertyName() {
         return propertyName;
     }
 
+    @Override
     public Object getBeanEntity() {
         return beanEntity;
     }
 
+    @Override
     public void setStyleRequired(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.required.background"));
     }
 
+    @Override
     public void setStyleInvalid(String tooltip) {
         setToolTipText(tooltip);
         setBackground(getResourceMap().getColor("validation.field.invalid.background"));
     }
 
+    @Override
     public void setStyleValid() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.valid.background"));
     }
 
+    @Override
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
     }
 
-    public ApplicationContext getContext()
-    {
-        if(applicationContext == null)
-        {
+    public ApplicationContext getContext() {
+        if (applicationContext == null) {
             Application app = getApplication();
-            if(app != null)
-            {
+            if (app != null) {
                 applicationContext = app.getContext();
             }
         }
@@ -131,13 +133,10 @@ public class JBTextPane
         return applicationContext;
     }
 
-    public ApplicationActionMap getApplicationActionMap()
-    {
-        if(applicationActionMap == null)
-        {
+    public ApplicationActionMap getApplicationActionMap() {
+        if (applicationActionMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 applicationActionMap = context.getActionMap(this);
             }
         }
@@ -145,13 +144,11 @@ public class JBTextPane
         return applicationActionMap;
     }
 
-    public ResourceMap getResourceMap()
-    {
-        if(resourceMap == null)
-        {
+    @Override
+    public ResourceMap getResourceMap() {
+        if (resourceMap == null) {
             ApplicationContext context = getContext();
-            if(context != null)
-            {
+            if (context != null) {
                 resourceMap = context.getResourceMap(this.getClass());
             }
         }
@@ -164,8 +161,9 @@ public class JBTextPane
     }
 
     public Application getApplication() {
-        if(application == null)
+        if (application == null) {
             application = Application.getInstance();
+        }
 
         return application;
     }
@@ -174,8 +172,44 @@ public class JBTextPane
         this.application = application;
     }
 
+    @Override
     public Binding getBinding() {
         return binding;
     }
 
+    @Override
+    public void refresh() {
+        setText(getPropertyValue());
+    }
+
+    protected String getPropertyValue() {
+        return getPropertyValue(beanEntity);
+    }
+
+    protected String getPropertyValue(Object beanEntity) {
+        try {
+            Object propertyValue;
+            if ((propertyValue = PropertyUtils.getProperty(beanEntity, propertyName)) != null) {
+                if(propertyValue instanceof EnumResource) {
+                    return getBeanResource().getName((EnumResource)propertyValue);
+                } else if(propertyValue instanceof TextResource) {
+                    return getBeanResource().getName((TextResource)propertyValue);
+                } else {
+                    return String.valueOf(propertyValue);
+                }
+            }
+
+            return null;
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
+    }
+
+    protected BeanResource getBeanResource() {
+        if(beanResource == null) {
+            beanResource = new BeanResource(getApplication());
+        }
+
+        return beanResource;
+    }
 }
