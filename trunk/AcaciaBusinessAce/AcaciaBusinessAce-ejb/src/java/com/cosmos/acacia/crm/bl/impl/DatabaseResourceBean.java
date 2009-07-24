@@ -53,7 +53,9 @@ import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
+import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
+import com.cosmos.acacia.security.PrivilegeType;
 
 /**
  *
@@ -106,6 +108,8 @@ public class DatabaseResourceBean
             getDbResources(AccessRight.class);
             getDbResources(PermissionCategory.class);
             getDbResources(AccessRight.class);
+            getDbResources(AccessLevel.class);
+            getDbResources(PrivilegeType.class);
             getDbResources(BusinessUnitType.class);
             getDbResources(BusinessUnitAddressType.class);
             getDbResources(AccountStatus.class);

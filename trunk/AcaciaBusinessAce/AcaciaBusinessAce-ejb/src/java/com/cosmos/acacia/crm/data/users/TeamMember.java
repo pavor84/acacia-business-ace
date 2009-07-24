@@ -100,7 +100,7 @@ public class TeamMember extends DataObjectBean implements Serializable {
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.enums.AccountStatus",
             constructorParameters={
-                @PropertyName(getter="class")
+                @PropertyName(getter="entity", setter="class")
             }
         ),
         formComponentPair=@FormComponentPair(

@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.users.Team;
 import com.cosmos.acacia.crm.data.users.TeamMember;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.entity.AbstractEntityService;
@@ -191,7 +192,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     @Override
     protected <E> void initEntity(E entity) {
         if (entity instanceof Team) {
-            ((Team)entity).setOrganization(session.getOrganization());
+            Team team = (Team) entity;
+            team.setOrganization(session.getOrganization());
+            team.setStatus(AccountStatus.Enabled.getDbResource());
         } else if (entity instanceof BusinessUnit) {
             BusinessUnit businessUnit = (BusinessUnit)entity;
             businessUnit.setOrganization(session.getOrganization());
@@ -215,6 +218,11 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
                 ((BusinessUnitAddress)item).setBusinessUnit(businessUnit);
             } else if (item instanceof JobTitle) {
                 ((JobTitle)item).setBusinessUnit(businessUnit);
+            }
+        } else if(entity instanceof Team) {
+            if(item instanceof TeamMember) {
+                TeamMember member = (TeamMember) item;
+                member.setStatus(AccountStatus.Enabled.getDbResource());
             }
         }
     }
