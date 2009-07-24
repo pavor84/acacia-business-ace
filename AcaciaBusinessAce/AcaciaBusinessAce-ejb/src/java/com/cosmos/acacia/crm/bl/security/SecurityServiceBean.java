@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.security;
 
-import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.security.PermissionCategoryPrivilege;
 import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
@@ -28,6 +28,8 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     public static final String PK_ORGANIZATION = "organization";
     public static final String PK_PRIVILEGE_TYPE = "privilegeType";
     public static final String PK_BUSINESS_UNIT = "businessUnit";
+    public static final String PK_SECURITY_ROLE = "securityRole";
+    public static final String PK_EXPIRES = "expires";
 
     public List<SecurityRole> getSecurityRoles(BusinessUnit businessUnit) {
         Query q;
@@ -54,8 +56,10 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         return new ArrayList<PrivilegeCategory>(q.getResultList());
     }
 
-    public List<Privilege> getPrivileges(SecurityRole securityRole) {
-        return new ArrayList<Privilege>();
+    public List<Privilege> getPrivileges(SecurityRole securityRole, Class<? extends Privilege> itemClass) {
+        Query q = em.createNamedQuery(Privilege.NQ_FIND_ALL);
+        q.setParameter(PK_SECURITY_ROLE, securityRole);
+        return new ArrayList<Privilege>(q.getResultList());
     }
 
     public List<PrivilegeRole> getPrivilegeRoles(Privilege privilege) {
@@ -82,7 +86,7 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
             }
         }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        return super.getEntities(entityClass, extraParameters);
     }
 
     @Override
@@ -91,13 +95,13 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
             return Collections.emptyList();
         }
 
-        if(Privilege.class == itemClass) {
-            return (List<I>) getPrivileges((SecurityRole) entity);
+        if(Privilege.class.isAssignableFrom(itemClass)) {
+            return (List<I>) getPrivileges((SecurityRole) entity, (Class<? extends Privilege>)itemClass);
         } else if(PrivilegeRole.class == itemClass) {
             return (List<I>) getPrivilegeRoles((Privilege) entity);
         }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        return super.getEntityItems(entity, itemClass, extraParameters);
     }
 
     @Override
@@ -109,5 +113,9 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
             SecurityRole securityRole = (SecurityRole) entity;
             securityRole.setOrganization(session.getOrganization());
         }
+    }
+
+    @Override
+    protected <E, I> void initItem(E entity, I item) {
     }
 }

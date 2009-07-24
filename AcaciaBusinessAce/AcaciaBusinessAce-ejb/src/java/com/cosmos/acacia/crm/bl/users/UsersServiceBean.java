@@ -150,8 +150,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             }
         }
 
-        throw new UnsupportedOperationException("Not supported yet for entityClass=" + entityClass +
-                " and extraParameters=" + Arrays.asList(extraParameters));
+        return super.getEntities(entityClass, extraParameters);
     }
 
     @Override
@@ -179,14 +178,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             } else if(JobTitle.class == itemClass) {
                 return (List<I>) getJobTitles((BusinessUnit) entity, extraParameters);
             }
-
-            throw new UnsupportedOperationException("Not supported itemClass: " + itemClass +
-                    " for parent entity: " + entity);
         }
 
-        throw new UnsupportedOperationException("Not supported yet for entity=" + entity +
-                " and itemClass=" + itemClass +
-                " and extraParameters=" + Arrays.asList(extraParameters));
+        return super.getEntityItems(entity, itemClass, extraParameters);
     }
 
     @Override

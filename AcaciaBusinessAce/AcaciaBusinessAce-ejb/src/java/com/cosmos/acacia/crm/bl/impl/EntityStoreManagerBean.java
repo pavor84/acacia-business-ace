@@ -38,6 +38,7 @@ import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -423,6 +424,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     @Override
     public List<DbResource> getResources(EntityManager em, Class<? extends Enum> cls,
             Object... categoryClassifiers) {
+        System.out.println("cls: " + cls + ": " + Arrays.asList(categoryClassifiers));
         Enum[] enumConstants = cls.getEnumConstants();
         Enum firstItem = enumConstants[0];
         if(firstItem instanceof EnumClassifier) {

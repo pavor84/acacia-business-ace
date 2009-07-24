@@ -5,7 +5,13 @@
 
 package com.cosmos.acacia.crm.data.security;
 
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.FormComponentPair;
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.DiscriminatorValue;
@@ -23,6 +29,21 @@ public class PermissionCategoryPrivilege extends Privilege implements Serializab
 
     @JoinColumn(name = "permission_category_id", referencedColumnName = "resource_id")
     @ManyToOne(optional = false)
+    @Property(title="Permission Category",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.PermissionCategory"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Permission Category:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
     private DbResource permissionCategory;
 
     public PermissionCategoryPrivilege(BigInteger privilegeId) {
