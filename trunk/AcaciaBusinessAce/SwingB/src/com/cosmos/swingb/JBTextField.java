@@ -31,8 +31,7 @@ import org.jdesktop.beansbinding.Validator;
  *
  * @author Miro
  */
-public class JBTextField
-        extends JTextField
+public class JBTextField extends JTextField
         implements Validatable, EntityBinder, PropertyChangeListener {
 
     private Application application;
