@@ -298,6 +298,64 @@ public class PropertyDetails implements Cloneable, Serializable {
         this.validator = validator;
     }
 
+    public void merge(PropertyDetails master) {
+        if(master.propertyTitle != null) {
+            propertyTitle = master.propertyTitle;
+        }
+        if(master.propertyClass != null) {
+            propertyClass = master.propertyClass;
+        }
+        if(master.propertyClassName != null) {
+            propertyClassName = master.propertyClassName;
+        }
+        readOnly = master.readOnly;
+        editable = master.editable;
+        visible = master.visible;
+        hiden = master.hiden;
+        required = master.required;
+        percent = master.percent;
+        if(master.formatter != null) {
+            formatter = master.formatter;
+        }
+        if(master.formatPattern != null) {
+            formatPattern = master.formatPattern;
+        }
+        if(master.sourceUnreadableValue != null) {
+            sourceUnreadableValue = master.sourceUnreadableValue;
+        }
+        if(master.columnName != null) {
+            columnName = master.columnName;
+        }
+        if(master.orderPosition > 0) {
+            orderPosition = master.orderPosition;
+        }
+        if(master.validator != null) {
+            validator = master.validator;
+        }
+        if(master.resourceDisplayInTable != null) {
+            resourceDisplayInTable = master.resourceDisplayInTable;
+        }
+        exportable = master.exportable;
+        reportColumnWidth = master.reportColumnWidth;
+        maxTableColumnWidth = master.maxTableColumnWidth;
+        if(master.customDisplay != null) {
+            customDisplay = master.customDisplay;
+        }
+        showOnly = master.showOnly;
+        if(master.updateStrategy != null) {
+            updateStrategy = master.updateStrategy;
+        }
+        if(master.selectableListDialogClassName != null) {
+            selectableListDialogClassName = master.selectableListDialogClassName;
+        }
+        if(master.selectableListDialogConstructorParameters != null) {
+            selectableListDialogConstructorParameters = master.selectableListDialogConstructorParameters;
+        }
+        if(master.propertyDetailsDependencies != null) {
+            propertyDetailsDependencies = master.propertyDetailsDependencies;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

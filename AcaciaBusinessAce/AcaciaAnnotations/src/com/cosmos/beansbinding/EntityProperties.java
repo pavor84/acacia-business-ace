@@ -110,6 +110,9 @@ public class EntityProperties implements Cloneable, Serializable {
             String propName = propDetails.getPropertyName();
             if (!beanProperties.containsKey(propName)) {
                 beanProperties.put(propName, propDetails);
+            } else {
+                PropertyDetails superPD = beanProperties.get(propName);
+                superPD.merge(propDetails);
             }
         }
     }
