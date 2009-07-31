@@ -109,7 +109,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
         )
     }
 )
-public abstract class BusinessDocument extends DataObjectBean implements Serializable {
+public abstract class BusinessDocument extends DataObjectBean implements StatusEnabledDocument, Serializable {
 
     private static final long serialVersionUID = 1L;
     //
@@ -313,10 +313,12 @@ public abstract class BusinessDocument extends DataObjectBean implements Seriali
         this.documentNumber = documentNumber;
     }
 
+    @Override
     public DbResource getDocumentStatus() {
         return documentStatus;
     }
 
+    @Override
     public void setDocumentStatus(DbResource documentStatus) {
         this.documentStatus = documentStatus;
     }
