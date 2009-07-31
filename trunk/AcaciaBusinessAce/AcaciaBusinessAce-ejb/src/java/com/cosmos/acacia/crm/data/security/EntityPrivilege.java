@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.data.security;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.data.DataObject;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -24,7 +25,8 @@ public class EntityPrivilege extends Privilege implements Serializable {
 
     @JoinColumn(name = "data_object_id", referencedColumnName = "data_object_id")
     @ManyToOne(optional = false)
-    @Property(title="Entity"
+    @Property(title="Entity",
+        propertyValidator=@PropertyValidator(required=true)
     )
     private DataObject entityDataObject;
 

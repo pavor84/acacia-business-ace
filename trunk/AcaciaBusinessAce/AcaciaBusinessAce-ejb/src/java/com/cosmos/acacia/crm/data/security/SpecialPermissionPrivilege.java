@@ -8,6 +8,7 @@ package com.cosmos.acacia.crm.data.security;
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.swingb.JBComboBox;
@@ -30,6 +31,7 @@ public class SpecialPermissionPrivilege extends Privilege implements Serializabl
     @JoinColumn(name = "special_permission_id", referencedColumnName = "resource_id")
     @ManyToOne(optional = false)
     @Property(title="Permission",
+        propertyValidator=@PropertyValidator(required=true),
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.enums.SpecialPermission"
         ),
