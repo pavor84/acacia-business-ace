@@ -10,8 +10,6 @@ import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
-import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
 
 /**
  *
@@ -32,15 +30,5 @@ public class PrivilegeListPanel extends DetailEntityListPanel<SecurityRole, Priv
     protected Class getEntityClass() {
         //return super.getEntityClass();
         return PermissionCategoryPrivilege.class;
-    }
-
-    @Override
-    protected EntityProperties getEntityProperties() {
-        EntityProperties entityProps = super.getEntityProperties();
-        for(PropertyDetails pd : entityProps.getValues()) {
-            System.out.println(pd);
-        }
-
-        return entityProps;
     }
 }
