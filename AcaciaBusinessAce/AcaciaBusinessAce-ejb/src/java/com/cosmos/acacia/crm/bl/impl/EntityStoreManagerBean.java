@@ -424,7 +424,6 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     @Override
     public List<DbResource> getResources(EntityManager em, Class<? extends Enum> cls,
             Object... categoryClassifiers) {
-        System.out.println("cls: " + cls + ": " + Arrays.asList(categoryClassifiers));
         Enum[] enumConstants = cls.getEnumConstants();
         Enum firstItem = enumConstants[0];
         if(firstItem instanceof EnumClassifier) {
