@@ -208,7 +208,11 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
 
     @Override
     protected E newRow() {
-        E oldRowObject = newEntity();
+        E oldRowObject;
+        if((oldRowObject = newEntity()) == null) {
+            return null;
+        }
+
         E newRowObject = (E) oldRowObject.clone();
         rowChanging(AlterationType.Create, newRowObject);
         if ((newRowObject = editRow(newRowObject, true)) != null) {
@@ -254,7 +258,11 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
         entityPanel.showDialog(this);
     }
 
-    protected abstract E newEntity();
+    protected E newEntity() {
+        return newEntity(getEntityClass());
+    }
+
+    protected abstract E newEntity(Class<E> entityClass);
 
     protected EntityPanel getEntityPanel(E entity) {
         return new EntityPanel(this, entity);

@@ -24,8 +24,12 @@ public class EntityListPanel<E extends DataObjectBean> extends AbstractEntityLis
     }
 
     @Override
-    protected E newEntity() {
-        return (E) getEntityService().newEntity(getEntityClass());
+    protected E newEntity(Class<E> entityClass) {
+        if(entityClass == null) {
+            return null;
+        }
+
+        return (E) getEntityService().newEntity(entityClass);
     }
 
     public List<DbResource> getResources(Class<? extends Enum> enumClass) {
