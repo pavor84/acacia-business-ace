@@ -5,11 +5,12 @@
 
 package com.cosmos.acacia.crm.gui.security;
 
-import com.cosmos.acacia.crm.data.security.PermissionCategoryPrivilege;
 import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
+import com.cosmos.swingb.DialogResponse;
+import com.cosmos.swingb.item.OptionalItem;
 
 /**
  *
@@ -27,8 +28,13 @@ public class PrivilegeListPanel extends DetailEntityListPanel<SecurityRole, Priv
     }
 
     @Override
-    protected Class getEntityClass() {
-        //return super.getEntityClass();
-        return PermissionCategoryPrivilege.class;
+    protected Privilege newEntity() {
+        PrivilegeTypeSelectionDialog selectionDialog = new PrivilegeTypeSelectionDialog();
+        if(DialogResponse.SELECT.equals(selectionDialog.showDialog())) {
+            OptionalItem item = (OptionalItem) selectionDialog.getSelectedValue();
+            return newEntity((Class) item.getItemValue());
+        }
+
+        return newEntity(null);
     }
 }
