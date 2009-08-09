@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.List;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
@@ -101,6 +102,10 @@ public class ItemSelectionDialog extends JBPanel {
             radioButton.setActionCommand(itemName);
             buttonGroup.add(radioButton);
             itemsPanel.add(radioButton);
+        }
+        ButtonModel buttonModel;
+        if((buttonModel = buttonGroup.getSelection()) == null || !buttonModel.isSelected()) {
+            buttonGroup.getElements().nextElement().setSelected(true);
         }
 
         return itemsPanel;
