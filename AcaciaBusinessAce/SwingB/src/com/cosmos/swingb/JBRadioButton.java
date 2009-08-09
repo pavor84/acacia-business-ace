@@ -6,6 +6,7 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import javax.swing.Icon;
 import javax.swing.JRadioButton;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -23,6 +24,13 @@ public class JBRadioButton
 {
     private String propertyName;
     private Object beanEntity;
+
+    public JBRadioButton() {
+    }
+
+    public JBRadioButton(String text, Icon icon, boolean selected) {
+        super(text, icon, selected);
+    }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,

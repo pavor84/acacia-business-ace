@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -309,11 +310,19 @@ public class JBPanel
         return applicationContext;
     }
 
+    public Class getActionsClass() {
+        return this.getClass();
+    }
+
+    public Object getActionsObject() {
+        return this;
+    }
+
     public ApplicationActionMap getApplicationActionMap() {
         if (applicationActionMap == null) {
             ApplicationContext context = getContext();
             if (context != null) {
-                applicationActionMap = context.getActionMap(this);
+                applicationActionMap = context.getActionMap(getActionsClass(), getActionsObject());
             }
         }
 
@@ -357,6 +366,18 @@ public class JBPanel
 
     protected String getResourceString(String key) {
         return getResourceMap().getString(key);
+    }
+
+    protected Icon getResourceIcon(String key) {
+        return getResourceMap().getIcon(key);
+    }
+
+    protected Boolean getResourceBoolean(String key) {
+        return getResourceMap().getBoolean(key);
+    }
+
+    protected Integer getResourceInteger(String key) {
+        return getResourceMap().getInteger(key);
     }
 
     public boolean isResizable() {

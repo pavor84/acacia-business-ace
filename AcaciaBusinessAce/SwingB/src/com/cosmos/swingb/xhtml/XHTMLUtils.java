@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
 import org.xhtmlrenderer.simple.FSScrollPane;
 import org.xhtmlrenderer.simple.XHTMLPanel;
 import org.xhtmlrenderer.simple.extend.XhtmlNamespaceHandler;
@@ -86,7 +85,7 @@ public class XHTMLUtils {
 
     public static FSScrollPane getXHTMLScrollPane(
             String xhtmlSource,
-            int width, int height) {
+            Integer width, Integer height) {
         return getXHTMLScrollPane(getHTMLPanel(xhtmlSource), width, height);
     }
 
@@ -100,11 +99,13 @@ public class XHTMLUtils {
 
     public static FSScrollPane getXHTMLScrollPane(
             XHTMLPanel panel,
-            int width, int height) {
-        Dimension size = new Dimension(width, height);
+            Integer width, Integer height) {
         FSScrollPane scrollPane = new FSScrollPane(panel);
-        scrollPane.setMinimumSize(size);
-        scrollPane.setPreferredSize(size);
+        if(width != null && height != null) {
+            Dimension size = new Dimension(width, height);
+            scrollPane.setMinimumSize(size);
+            scrollPane.setPreferredSize(size);
+        }
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
