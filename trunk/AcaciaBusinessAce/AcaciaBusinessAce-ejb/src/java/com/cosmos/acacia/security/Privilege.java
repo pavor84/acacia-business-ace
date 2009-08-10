@@ -5,8 +5,8 @@
 
 package com.cosmos.acacia.security;
 
+import com.cosmos.acacia.crm.enums.BusinessActivity;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -16,279 +16,279 @@ public class Privilege
 {
     // Contacts
     public static final Privilege Contact =
-            new Privilege("Contact", PrivilegeCategory.Contacts);
+            new Privilege("Contact", BusinessActivity.Contacts);
 
     public static final Privilege Organization =
-            new Privilege("Organization", PrivilegeCategory.Contacts);
+            new Privilege("Organization", BusinessActivity.Contacts);
 
     public static final Privilege Person =
-            new Privilege("Person", PrivilegeCategory.Contacts);
+            new Privilege("Person", BusinessActivity.Contacts);
 
     // Core Records
     // Account - Organization
     // Contact - Personal Contact
     public static final Privilege Lead =
-            new Privilege("Lead", PrivilegeCategory.CoreRecords);
+            new Privilege("Lead", BusinessActivity.CoreRecords);
 
     public static final Privilege Opportunity =
-            new Privilege("Opportunity", PrivilegeCategory.CoreRecords);
+            new Privilege("Opportunity", BusinessActivity.CoreRecords);
 
     public static final Privilege Activity =
-            new Privilege("Activity", PrivilegeCategory.CoreRecords);
+            new Privilege("Activity", BusinessActivity.CoreRecords);
 
     public static final Privilege Note =
-            new Privilege("Note", PrivilegeCategory.CoreRecords);
+            new Privilege("Note", BusinessActivity.CoreRecords);
 
     public static final Privilege EmailTemplate =
-            new Privilege("EmailTemplate", PrivilegeCategory.CoreRecords);
+            new Privilege("EmailTemplate", BusinessActivity.CoreRecords);
 
     public static final Privilege Announcement =
-            new Privilege("Announcement", PrivilegeCategory.CoreRecords);
+            new Privilege("Announcement", BusinessActivity.CoreRecords);
 
     public static final Privilege Subject =
-            new Privilege("Subject", PrivilegeCategory.CoreRecords);
+            new Privilege("Subject", BusinessActivity.CoreRecords);
 
     public static final Privilege Queue =
-            new Privilege("Queue", PrivilegeCategory.CoreRecords);
+            new Privilege("Queue", BusinessActivity.CoreRecords);
 
     public static final Privilege SavedView =
-            new Privilege("SavedView", PrivilegeCategory.CoreRecords);
+            new Privilege("SavedView", BusinessActivity.CoreRecords);
 
     public static final Privilege Report =
-            new Privilege("Report", PrivilegeCategory.CoreRecords);
+            new Privilege("Report", BusinessActivity.CoreRecords);
 
     public static final Privilege DuplicateDetectionRule =
-            new Privilege("DuplicateDetectionRule", PrivilegeCategory.CoreRecords);
+            new Privilege("DuplicateDetectionRule", BusinessActivity.CoreRecords);
 
     public static final Privilege DataImport =
-            new Privilege("DataImport", PrivilegeCategory.CoreRecords);
+            new Privilege("DataImport", BusinessActivity.CoreRecords);
 
     public static final Privilege DataExport =
-            new Privilege("DataExport", PrivilegeCategory.CoreRecords);
+            new Privilege("DataExport", BusinessActivity.CoreRecords);
 
     public static final Privilege DataMap =
-            new Privilege("DataMap", PrivilegeCategory.CoreRecords);
+            new Privilege("DataMap", BusinessActivity.CoreRecords);
 
     public static final Privilege OpportunityRelationship =
-            new Privilege("OpportunityRelationship", PrivilegeCategory.CoreRecords);
+            new Privilege("OpportunityRelationship", BusinessActivity.CoreRecords);
 
     public static final Privilege RelationshipRole =
-            new Privilege("RelationshipRole", PrivilegeCategory.CoreRecords);
+            new Privilege("RelationshipRole", BusinessActivity.CoreRecords);
 
     public static final Privilege CustomerRelationship =
-            new Privilege("CustomerRelationship", PrivilegeCategory.CoreRecords);
+            new Privilege("CustomerRelationship", BusinessActivity.CoreRecords);
 
     public static final Privilege PublishEmailTemplate =
-            new Privilege("PublishEmailTemplate", PrivilegeCategory.CoreRecords);
+            new Privilege("PublishEmailTemplate", BusinessActivity.CoreRecords);
 
     public static final Privilege AddReportingServicesReports =
-            new Privilege("AddReportingServicesReports", PrivilegeCategory.CoreRecords);
+            new Privilege("AddReportingServicesReports", BusinessActivity.CoreRecords);
 
     public static final Privilege PublishReports =
-            new Privilege("PublishReports", PrivilegeCategory.CoreRecords);
+            new Privilege("PublishReports", BusinessActivity.CoreRecords);
 
     public static final Privilege PublishDuplicateDetectionRules =
-            new Privilege("PublishDuplicateDetectionRules", PrivilegeCategory.CoreRecords);
+            new Privilege("PublishDuplicateDetectionRules", BusinessActivity.CoreRecords);
 
     // Marketing
     public static final Privilege MarketingList =
-            new Privilege("MarketingList", PrivilegeCategory.Marketing);
+            new Privilege("MarketingList", BusinessActivity.Marketing);
 
     public static final Privilege Campaign =
-            new Privilege("Campaign", PrivilegeCategory.Sales);
+            new Privilege("Campaign", BusinessActivity.Sales);
 
     public static final Privilege CreateQuickCampaign =
-            new Privilege("CreateQuickCampaign", PrivilegeCategory.Sales);
+            new Privilege("CreateQuickCampaign", BusinessActivity.Sales);
 
     // Sales
     public static final Privilege Product =
-            new Privilege("Product", PrivilegeCategory.Sales);
+            new Privilege("Product", BusinessActivity.Sales);
 
     public static final Privilege ProductPricing =
-            new Privilege("ProductPricing", PrivilegeCategory.Sales);
+            new Privilege("ProductPricing", BusinessActivity.Sales);
 
     public static final Privilege Competitor =
-            new Privilege("Competitor", PrivilegeCategory.Sales);
+            new Privilege("Competitor", BusinessActivity.Sales);
 
     public static final Privilege SalesLiterature =
-            new Privilege("SalesLiterature", PrivilegeCategory.Sales);
+            new Privilege("SalesLiterature", BusinessActivity.Sales);
 
     public static final Privilege Quote =
-            new Privilege("Quote", PrivilegeCategory.Sales);
+            new Privilege("Quote", BusinessActivity.Sales);
 
     public static final Privilege Order =
-            new Privilege("Order", PrivilegeCategory.Sales);
+            new Privilege("Order", BusinessActivity.Sales);
 
     public static final Privilege Invoice =
-            new Privilege("Invoice", PrivilegeCategory.Sales);
+            new Privilege("Invoice", BusinessActivity.Sales);
 
     public static final Privilege Territory =
-            new Privilege("Territory", PrivilegeCategory.Sales);
+            new Privilege("Territory", BusinessActivity.Sales);
 
     public static final Privilege OverrideQuotePricing =
-            new Privilege("OverrideQuotePricing", PrivilegeCategory.Sales);
+            new Privilege("OverrideQuotePricing", BusinessActivity.Sales);
 
     public static final Privilege OverrideOrderPricing =
-            new Privilege("OverrideOrderPricing", PrivilegeCategory.Sales);
+            new Privilege("OverrideOrderPricing", BusinessActivity.Sales);
 
     public static final Privilege OverrideInvoicePricing =
-            new Privilege("OverrideInvoicePricing", PrivilegeCategory.Sales);
+            new Privilege("OverrideInvoicePricing", BusinessActivity.Sales);
 
     // Service
     public static final Privilege Article =
-            new Privilege("Article", PrivilegeCategory.Service);
+            new Privilege("Article", BusinessActivity.Service);
 
     public static final Privilege ArticleTemplate =
-            new Privilege("ArticleTemplate", PrivilegeCategory.Service);
+            new Privilege("ArticleTemplate", BusinessActivity.Service);
 
     public static final Privilege Case =
-            new Privilege("Case", PrivilegeCategory.Service);
+            new Privilege("Case", BusinessActivity.Service);
 
     public static final Privilege Contract =
-            new Privilege("Contract", PrivilegeCategory.Service);
+            new Privilege("Contract", BusinessActivity.Service);
 
     public static final Privilege ContractTemplate =
-            new Privilege("ContractTemplate", PrivilegeCategory.Service);
+            new Privilege("ContractTemplate", BusinessActivity.Service);
 
     public static final Privilege PublishArticles =
-            new Privilege("PublishArticles", PrivilegeCategory.Service);
+            new Privilege("PublishArticles", BusinessActivity.Service);
 
     // Business Management
     public static final Privilege OrganizationSettings =
-            new Privilege("OrganizationSettings", PrivilegeCategory.BusinessManagement);
+            new Privilege("OrganizationSettings", BusinessActivity.BusinessManagement);
 
     public static final Privilege BusinessUnit =
-            new Privilege("BusinessUnit", PrivilegeCategory.BusinessManagement);
+            new Privilege("BusinessUnit", BusinessActivity.BusinessManagement);
 
     public static final Privilege User =
-            new Privilege("User", PrivilegeCategory.BusinessManagement);
+            new Privilege("User", BusinessActivity.BusinessManagement);
 
     public static final Privilege UserSettings =
-            new Privilege("UserSettings", PrivilegeCategory.BusinessManagement);
+            new Privilege("UserSettings", BusinessActivity.BusinessManagement);
 
     public static final Privilege Team =
-            new Privilege("Team", PrivilegeCategory.BusinessManagement);
+            new Privilege("Team", BusinessActivity.BusinessManagement);
 
     public static final Privilege Role =
-            new Privilege("Role", PrivilegeCategory.BusinessManagement);
+            new Privilege("Role", BusinessActivity.BusinessManagement);
 
     public static final Privilege License =
-            new Privilege("License", PrivilegeCategory.BusinessManagement);
+            new Privilege("License", BusinessActivity.BusinessManagement);
 
     public static final Privilege Currency =
-            new Privilege("Currency", PrivilegeCategory.BusinessManagement);
+            new Privilege("Currency", BusinessActivity.BusinessManagement);
 
     public static final Privilege AssignRole =
-            new Privilege("AssignRole", PrivilegeCategory.BusinessManagement);
+            new Privilege("AssignRole", BusinessActivity.BusinessManagement);
 
     public static final Privilege AssignTerritoryToUser =
-            new Privilege("AssignTerritoryToUser", PrivilegeCategory.BusinessManagement);
+            new Privilege("AssignTerritoryToUser", BusinessActivity.BusinessManagement);
 
     public static final Privilege BulkEdit =
-            new Privilege("BulkEdit", PrivilegeCategory.BusinessManagement);
+            new Privilege("BulkEdit", BusinessActivity.BusinessManagement);
 
     public static final Privilege GoMobile =
-            new Privilege("GoMobile", PrivilegeCategory.BusinessManagement);
+            new Privilege("GoMobile", BusinessActivity.BusinessManagement);
 
     public static final Privilege Print =
-            new Privilege("Print", PrivilegeCategory.BusinessManagement);
+            new Privilege("Print", BusinessActivity.BusinessManagement);
 
     public static final Privilege Export =
-            new Privilege("Export", PrivilegeCategory.BusinessManagement);
+            new Privilege("Export", BusinessActivity.BusinessManagement);
 
     public static final Privilege Merge =
-            new Privilege("Merge", PrivilegeCategory.BusinessManagement);
+            new Privilege("Merge", BusinessActivity.BusinessManagement);
 
     public static final Privilege GoOffline =
-            new Privilege("GoOffline", PrivilegeCategory.BusinessManagement);
+            new Privilege("GoOffline", BusinessActivity.BusinessManagement);
 
     public static final Privilege AddressBook =
-            new Privilege("AddressBook", PrivilegeCategory.BusinessManagement);
+            new Privilege("AddressBook", BusinessActivity.BusinessManagement);
 
     public static final Privilege UpdateBusinessClosures =
-            new Privilege("UpdateBusinessClosures", PrivilegeCategory.BusinessManagement);
+            new Privilege("UpdateBusinessClosures", BusinessActivity.BusinessManagement);
 
     public static final Privilege SendEmailAsAnotherUser =
-            new Privilege("SendEmailAsAnotherUser", PrivilegeCategory.BusinessManagement);
+            new Privilege("SendEmailAsAnotherUser", BusinessActivity.BusinessManagement);
 
     public static final Privilege LanguageSettings =
-            new Privilege("LanguageSettings", PrivilegeCategory.BusinessManagement);
+            new Privilege("LanguageSettings", BusinessActivity.BusinessManagement);
 
     public static final Privilege SendInvitation =
-            new Privilege("SendInvitation", PrivilegeCategory.BusinessManagement);
+            new Privilege("SendInvitation", BusinessActivity.BusinessManagement);
 
     // Service Management
     public static final Privilege Calendar =
-            new Privilege("Calendar", PrivilegeCategory.ServiceManagement);
+            new Privilege("Calendar", BusinessActivity.ServiceManagement);
 
     public static final Privilege MyWorkHours =
-            new Privilege("MyWorkHours", PrivilegeCategory.ServiceManagement);
+            new Privilege("MyWorkHours", BusinessActivity.ServiceManagement);
 
     public static final Privilege Service =
-            new Privilege("Service", PrivilegeCategory.ServiceManagement);
+            new Privilege("Service", BusinessActivity.ServiceManagement);
 
     public static final Privilege FacilityEquipment =
-            new Privilege("FacilityEquipment", PrivilegeCategory.ServiceManagement);
+            new Privilege("FacilityEquipment", BusinessActivity.ServiceManagement);
 
     public static final Privilege Site =
-            new Privilege("Site", PrivilegeCategory.ServiceManagement);
+            new Privilege("Site", BusinessActivity.ServiceManagement);
 
     public static final Privilege SearchAvailability =
-            new Privilege("SearchAvailability", PrivilegeCategory.ServiceManagement);
+            new Privilege("SearchAvailability", BusinessActivity.ServiceManagement);
 
     public static final Privilege BrowseAvailability =
-            new Privilege("BrowseAvailability", PrivilegeCategory.ServiceManagement);
+            new Privilege("BrowseAvailability", BusinessActivity.ServiceManagement);
 
     // Customization
     public static final Privilege Entity =
-            new Privilege("Entity", PrivilegeCategory.Customization);
+            new Privilege("Entity", BusinessActivity.Customization);
 
     public static final Privilege EntityAttribute =
-            new Privilege("EntityAttribute", PrivilegeCategory.Customization);
+            new Privilege("EntityAttribute", BusinessActivity.Customization);
 
     public static final Privilege EntityOperation =
-            new Privilege("EntityOperation", PrivilegeCategory.Customization);
+            new Privilege("EntityOperation", BusinessActivity.Customization);
 
     public static final Privilege EntityNotification =
-            new Privilege("EntityNotification", PrivilegeCategory.Customization);
+            new Privilege("EntityNotification", BusinessActivity.Customization);
 
     public static final Privilege Relationship =
-            new Privilege("Relationship", PrivilegeCategory.Customization);
+            new Privilege("Relationship", BusinessActivity.Customization);
 
     public static final Privilege Form =
-            new Privilege("Form", PrivilegeCategory.Customization);
+            new Privilege("Form", BusinessActivity.Customization);
 
     public static final Privilege View =
-            new Privilege("View", PrivilegeCategory.Customization);
+            new Privilege("View", BusinessActivity.Customization);
 
     public static final Privilege Workflow =
-            new Privilege("Workflow", PrivilegeCategory.Customization);
+            new Privilege("Workflow", BusinessActivity.Customization);
 
     public static final Privilege SystemJob =
-            new Privilege("SystemJob", PrivilegeCategory.Customization);
+            new Privilege("SystemJob", BusinessActivity.Customization);
 
     // ISV - Independent Software Vendor. A company (or organization) that
     // builds and sells products (as opposed to a Systems Integrator (SI)
     // who implements products)
     public static final Privilege ISVExtensions =
-            new Privilege("ISVExtensions", PrivilegeCategory.Customization);
+            new Privilege("ISVExtensions", BusinessActivity.Customization);
 
     public static final Privilege ExecuteWorkflowJob =
-            new Privilege("ExecuteWorkflowJob", PrivilegeCategory.Customization);
+            new Privilege("ExecuteWorkflowJob", BusinessActivity.Customization);
 
     public static final Privilege ExportCustomization =
-            new Privilege("ExportCustomization", PrivilegeCategory.Customization);
+            new Privilege("ExportCustomization", BusinessActivity.Customization);
 
     public static final Privilege ImportCustomization =
-            new Privilege("ImportCustomization", PrivilegeCategory.Customization);
+            new Privilege("ImportCustomization", BusinessActivity.Customization);
 
     public static final Privilege PublishCustomization =
-            new Privilege("PublishCustomization", PrivilegeCategory.Customization);
+            new Privilege("PublishCustomization", BusinessActivity.Customization);
 
 
     private Role role;
     private String privilegeName;
-    private PrivilegeCategory privilegeCategory;
+    private BusinessActivity privilegeCategory;
     private PrivilegeType privilegeType;
     //private Set<AccessRight> inapplicableRights;
     private Map<AccessRight, AccessLevel> accessRights;
@@ -301,7 +301,7 @@ public class Privilege
 
     public Privilege(
             String privilegeName,
-            PrivilegeCategory privilegeCategory)
+            BusinessActivity privilegeCategory)
     {
         this.privilegeCategory = privilegeCategory;
     }
@@ -330,11 +330,11 @@ public class Privilege
         this.inapplicableRights = inapplicableRights;
     }*/
 
-    public PrivilegeCategory getPrivilegeCategory() {
+    public BusinessActivity getPrivilegeCategory() {
         return privilegeCategory;
     }
 
-    public void setPrivilegeCategory(PrivilegeCategory privilegeCategory) {
+    public void setPrivilegeCategory(BusinessActivity privilegeCategory) {
         this.privilegeCategory = privilegeCategory;
     }
 
