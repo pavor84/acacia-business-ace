@@ -4,13 +4,24 @@
  */
 package com.cosmos.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 /**
  *
  * @author miro
  */
 public class ClassHelper {
+
+    private static final char EXTENSION_SEPARATOR = '.';
 
     public static Class getClass(String className) {
         if ("boolean".equals(className)) {
@@ -72,5 +83,159 @@ public class ClassHelper {
         result += "\n}";
 
         return result;
+    }
+
+    public static Set<Class<?>> getClasses(String packageName)
+            throws IOException, ClassNotFoundException {
+        return getClasses(packageName, false, null);
+    }
+
+    public static Set<Class<?>> getClasses(String packageName, Class assignableFrom)
+            throws IOException, ClassNotFoundException {
+        return getClasses(packageName, false, assignableFrom);
+    }
+
+    public static Set<Class<?>> getClasses(String packageName, boolean includeSubDirs)
+            throws IOException, ClassNotFoundException {
+        return getClasses(packageName, includeSubDirs, null);
+    }
+
+    public static Set<Class<?>> getClasses(String packageName, boolean includeSubDirs, Class assignableFrom)
+            throws IOException, ClassNotFoundException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        return getClasses(loader, packageName, includeSubDirs, assignableFrom);
+    }
+
+    public static Set<Class<?>> getClasses(
+            ClassLoader loader,
+            String packageName,
+            boolean includeSubDirs,
+            Class assignableFrom)
+            throws IOException, ClassNotFoundException {
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        String path = packageName.replace('.', '/');
+        Enumeration<URL> resources = loader.getResources(path);
+        if (resources != null) {
+            while (resources.hasMoreElements()) {
+                String filePath = resources.nextElement().getFile();
+                // WINDOWS HACK
+                if (filePath.indexOf("%20") > 0) {
+                    filePath = filePath.replaceAll("%20", " ");
+                }
+                if (filePath != null) {
+                    if ((filePath.indexOf("!") > 0) & (filePath.indexOf(".jar") > 0)) {
+                        String jarPath = filePath.substring(0, filePath.indexOf("!")).substring(filePath.indexOf(":") + 1);
+                        // WINDOWS HACK
+                        if (jarPath.indexOf(":") >= 0) {
+                            jarPath = jarPath.substring(1);
+                        }
+                        classes.addAll(getFromJARFile(jarPath, path, includeSubDirs, assignableFrom));
+                    } else {
+                        classes.addAll(getFromDirectory(new File(filePath), packageName, includeSubDirs, assignableFrom));
+                    }
+                }
+            }
+        }
+        return classes;
+    }
+
+    private static Set<Class<?>> getFromDirectory(
+            File directory,
+            String packageName,
+            boolean includeSubDirs,
+            Class assignableFrom)
+            throws ClassNotFoundException {
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        if (directory.exists()) {
+            for (File file : directory.listFiles()) {
+                String fileName = file.getName();
+                if(file.isDirectory()) {
+                    if(includeSubDirs) {
+                        if(packageName != null && packageName.length() > 0) {
+                            fileName = packageName + "." + fileName;
+                        }
+                        classes.addAll(getFromDirectory(
+                                file, fileName, includeSubDirs, assignableFrom));
+                    }
+                } else if (fileName.endsWith(".class")) {
+                    String name;
+                    if(packageName != null && packageName.length() > 0) {
+                        name = packageName + '.' + stripFilenameExtension(fileName);
+                    } else {
+                        name = stripFilenameExtension(fileName);
+                    }
+                    try {
+                        Class<?> clazz = Class.forName(name);
+                        if(assignableFrom == null || (assignableFrom != null && assignableFrom.isAssignableFrom(clazz))) {
+                            classes.add(clazz);
+                        }
+                    } catch(Throwable ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+        return classes;
+    }
+
+    private static Set<Class<?>> getFromJARFile(
+            String jar,
+            String pathName,
+            boolean includeSubDirs,
+            Class assignableFrom)
+            throws IOException, ClassNotFoundException {
+        String packageName = pathName.replace('/', '.');
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        JarInputStream jarFile = new JarInputStream(new FileInputStream(jar));
+        JarEntry jarEntry;
+        do {
+            jarEntry = jarFile.getNextJarEntry();
+            if (jarEntry != null) {
+                String className = jarEntry.getName();
+                if(jarEntry.isDirectory()) {
+                    if(includeSubDirs) {
+                        //System.out.println("jarEntry: " + jarEntry);
+                        //System.out.println("className: " + className);
+                        //classes.addAll(getFromJARFile(file, packageName + "." + fileName, includeSubDirs));
+                    }
+                } else if (className.endsWith(".class")) {
+                    className = stripFilenameExtension(className);
+                    if (className.startsWith(pathName)) {
+                        Class cls;
+                        try {
+                            cls = Class.forName(className.replace('/', '.'));
+                            if(assignableFrom == null || (assignableFrom != null && assignableFrom.isAssignableFrom(cls))) {
+                                if(includeSubDirs) {
+                                    classes.add(cls);
+                                } else if(packageName.equals(cls.getPackage().getName())) {
+                                    classes.add(cls);
+                                }
+                            }
+                        } catch(Throwable ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } while (jarEntry != null);
+        return classes;
+    }
+
+    /**
+     * Strip the filename extension from the given path, e.g. "mypath/myfile.txt" -> "mypath/myfile".
+     * @param path - the file path (may be null)
+     * @return the path with stripped filename extension, or null if none
+     */
+    public static String stripFilenameExtension(String path) {
+        if(path == null) {
+            return null;
+        }
+
+        int index;
+        if((index = path.lastIndexOf(EXTENSION_SEPARATOR)) >= 0) {
+            return path.substring(0, index);
+        }
+
+        return path;
     }
 }
