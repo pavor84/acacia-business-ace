@@ -19,9 +19,11 @@ import javax.persistence.Query;
 
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.enums.AccountStatus;
+import com.cosmos.acacia.crm.enums.BusinessActivity;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
@@ -57,14 +59,14 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
+import com.cosmos.util.ClassHelper;
 
 /**
  *
  * @author miro
  */
 @Stateless
-public class DatabaseResourceBean
-        implements DatabaseResourceLocal {
+public class DatabaseResourceBean implements DatabaseResourceLocal {
 
     private static boolean initialized = false;
     private static Map<String, EnumClass> enumClassMap;
@@ -111,6 +113,7 @@ public class DatabaseResourceBean
             getDbResources(AccessRight.class);
             getDbResources(AccessLevel.class);
             getDbResources(PrivilegeType.class);
+            getDbResources(BusinessActivity.class);
             getDbResources(BusinessUnitType.class);
             getDbResources(BusinessUnitAddressType.class);
             getDbResources(AccountStatus.class);
@@ -196,5 +199,16 @@ public class DatabaseResourceBean
         }
 
         return dbResource;
+    }
+
+    @Override
+    public void initPrivileges() {
+        try {
+            for(Class cls : ClassHelper.getClasses("", true, DataObjectBean.class)) {
+                System.out.println(cls);
+            }
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

@@ -15,4 +15,6 @@ import javax.ejb.Local;
 public interface DatabaseResourceLocal
 {
     void initDatabaseResource();
+
+    void initPrivileges();
 }
