@@ -12,9 +12,40 @@ import com.cosmos.acacia.crm.data.DbResource;
  */
 public enum BusinessActivity implements DatabaseResource {
 
+    /**
+     * CEO, Business Manager
+     * System Administrator
+     * System Customizer
+     */
+    Administration,
+
+    /**
+     *
+     */
+    Finance,
+
+    /**
+     * CSR Manager
+     * Customer Service Representative
+     * Schedule Manager
+     * Scheduler
+     */
+    CustomerService,
     CoreRecords,
     Contacts,
+
+    /**
+     * Vice President of Marketing
+     * Marketing Manager
+     * Marketing Professional
+     */
     Marketing,
+
+    /**
+     * Vice President of Sales
+     * Sales Manager
+     * Salesperson
+     */
     Sales,
     Supply,
     Warehouse,

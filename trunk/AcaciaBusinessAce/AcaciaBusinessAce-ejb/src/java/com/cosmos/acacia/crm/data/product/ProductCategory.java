@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.product;
 
+import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
@@ -60,10 +61,7 @@ import javax.persistence.Table;
                 query = "select p from ProductCategory p where p.dataObject.deleted = false and p.parentCategory.productCategoryId in (:parentIds)"
             )
 })
-public class ProductCategory
-    extends DataObjectBean
-    implements Serializable, TextResource
-{
+public class ProductCategory extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
 

@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data.purchase;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;

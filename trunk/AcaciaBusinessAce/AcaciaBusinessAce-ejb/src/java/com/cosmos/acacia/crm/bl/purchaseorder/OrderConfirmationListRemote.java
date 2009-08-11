@@ -14,7 +14,7 @@ import com.cosmos.acacia.crm.data.OrderConfirmation;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;

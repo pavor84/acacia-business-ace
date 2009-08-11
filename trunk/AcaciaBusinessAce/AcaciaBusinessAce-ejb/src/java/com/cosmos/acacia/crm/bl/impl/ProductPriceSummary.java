@@ -11,7 +11,7 @@ import java.util.Map;
 
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.data.PricelistItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscount;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 

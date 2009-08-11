@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.crm.data.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationUtil;
 

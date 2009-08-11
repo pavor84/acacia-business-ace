@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;

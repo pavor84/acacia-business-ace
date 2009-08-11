@@ -18,7 +18,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
 import com.cosmos.swingb.JBComboBox;

@@ -6,8 +6,8 @@ package com.cosmos.acacia.crm.data.customer;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.product.Product;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.DiscriminatorValue;

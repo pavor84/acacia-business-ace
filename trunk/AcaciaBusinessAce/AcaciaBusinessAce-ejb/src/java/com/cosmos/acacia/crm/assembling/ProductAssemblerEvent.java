@@ -5,8 +5,8 @@
 
 package com.cosmos.acacia.crm.assembling;
 
-import com.cosmos.acacia.crm.data.ComplexProduct;
-import com.cosmos.acacia.crm.data.ComplexProductItem;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import java.io.Serializable;
 import java.util.EventObject;
 

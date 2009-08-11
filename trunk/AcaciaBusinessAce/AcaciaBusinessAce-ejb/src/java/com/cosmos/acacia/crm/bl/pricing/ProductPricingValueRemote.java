@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.ProductPercentValue;
-import com.cosmos.acacia.crm.data.ProductPercentValue.Type;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue.Type;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

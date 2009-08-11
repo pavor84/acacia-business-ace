@@ -5,8 +5,8 @@
 
 package com.cosmos.acacia.crm.data.assembling;
 
-import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

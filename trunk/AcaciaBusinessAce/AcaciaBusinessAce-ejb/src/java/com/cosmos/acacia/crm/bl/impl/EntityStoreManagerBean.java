@@ -26,7 +26,7 @@ import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
 import com.cosmos.acacia.crm.data.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.enums.DatabaseResource;

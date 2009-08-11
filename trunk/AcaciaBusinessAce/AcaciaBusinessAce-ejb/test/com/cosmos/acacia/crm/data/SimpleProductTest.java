@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import org.junit.After;

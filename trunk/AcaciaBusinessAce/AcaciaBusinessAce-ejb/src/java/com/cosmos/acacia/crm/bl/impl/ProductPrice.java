@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.data.PricelistItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 
 /**
  * Created	:	10.02.2009

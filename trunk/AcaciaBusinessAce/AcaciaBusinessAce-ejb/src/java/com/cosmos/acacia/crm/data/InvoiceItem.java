@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
