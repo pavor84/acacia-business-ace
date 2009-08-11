@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItemValue;
 import com.cosmos.acacia.crm.data.assembling.RealProduct;

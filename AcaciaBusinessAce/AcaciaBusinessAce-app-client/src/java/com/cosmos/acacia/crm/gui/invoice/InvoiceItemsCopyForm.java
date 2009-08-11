@@ -32,7 +32,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import com.cosmos.acacia.crm.data.InvoiceItemLink;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.gui.purchaseorders.CopyItemsListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;

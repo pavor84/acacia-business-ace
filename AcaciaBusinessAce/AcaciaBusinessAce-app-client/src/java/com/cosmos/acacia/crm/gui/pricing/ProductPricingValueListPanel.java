@@ -12,7 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.pricing.ProductPricingValueRemote;
-import com.cosmos.acacia.crm.data.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;

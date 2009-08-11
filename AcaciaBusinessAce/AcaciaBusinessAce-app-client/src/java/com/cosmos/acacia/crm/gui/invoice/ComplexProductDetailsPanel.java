@@ -9,7 +9,7 @@ import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTreeTable;

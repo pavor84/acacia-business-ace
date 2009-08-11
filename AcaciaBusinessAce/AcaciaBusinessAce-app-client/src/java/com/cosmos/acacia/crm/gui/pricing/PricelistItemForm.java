@@ -25,7 +25,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
 import com.cosmos.acacia.crm.data.Pricelist;
 import com.cosmos.acacia.crm.data.PricelistItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.pricing.ExistingProductDialog.Response;
 import com.cosmos.acacia.gui.BaseEntityPanel;

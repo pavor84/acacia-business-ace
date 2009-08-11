@@ -12,7 +12,7 @@ import java.util.List;
 import javax.ejb.EJB;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;

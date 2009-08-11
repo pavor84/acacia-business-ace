@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.purchase;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.gui.entity.AbstractEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;

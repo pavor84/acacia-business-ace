@@ -6,14 +6,14 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import com.cosmos.acacia.crm.data.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaPercentValueField;

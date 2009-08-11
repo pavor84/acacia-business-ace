@@ -5,9 +5,9 @@
 package com.cosmos.acacia.crm.gui.product;
 
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.ProductCategory;
-import com.cosmos.acacia.crm.data.ProductPercentValue;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;

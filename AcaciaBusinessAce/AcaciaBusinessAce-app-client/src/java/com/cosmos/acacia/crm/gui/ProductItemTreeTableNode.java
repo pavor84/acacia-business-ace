@@ -6,13 +6,13 @@
 package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.bl.assembling.ProductItemService;
-import com.cosmos.acacia.crm.data.ComplexProduct;
-import com.cosmos.acacia.crm.data.ComplexProductItem;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
-import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.Product;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

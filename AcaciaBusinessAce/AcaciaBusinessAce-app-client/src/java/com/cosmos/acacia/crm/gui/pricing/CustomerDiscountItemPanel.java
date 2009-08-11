@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.pricing;
 
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByProduct;

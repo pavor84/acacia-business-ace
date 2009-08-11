@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.product;
 
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
