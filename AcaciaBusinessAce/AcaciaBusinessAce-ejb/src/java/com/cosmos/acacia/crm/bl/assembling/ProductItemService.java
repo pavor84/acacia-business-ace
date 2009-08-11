@@ -6,8 +6,8 @@
 package com.cosmos.acacia.crm.bl.assembling;
 
 import com.cosmos.acacia.crm.assembling.ProductAssemblerService;
-import com.cosmos.acacia.crm.data.ComplexProduct;
-import com.cosmos.acacia.crm.data.ComplexProductItem;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
 import java.util.List;

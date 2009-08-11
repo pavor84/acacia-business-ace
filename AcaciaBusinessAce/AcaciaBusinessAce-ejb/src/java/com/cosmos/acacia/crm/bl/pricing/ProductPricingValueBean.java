@@ -12,8 +12,8 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.ProductPercentValue;
-import com.cosmos.acacia.crm.data.ProductPercentValue.Type;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue.Type;
 import com.cosmos.acacia.crm.validation.impl.ProductPricingValueValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
 

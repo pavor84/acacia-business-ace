@@ -5,8 +5,8 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
 import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.product.Product;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscount;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;

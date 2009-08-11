@@ -7,7 +7,7 @@ import javax.ejb.Local;
 import com.cosmos.acacia.crm.data.Address;
 import com.cosmos.acacia.crm.data.Invoice;
 import com.cosmos.acacia.crm.data.InvoiceItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.WarehouseProduct;
 
 /**

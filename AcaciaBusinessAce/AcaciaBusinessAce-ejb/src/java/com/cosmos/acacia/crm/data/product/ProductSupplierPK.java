@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.product;
 
 import java.io.Serializable;
 import java.math.BigInteger;

@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.validation.impl;
 
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 import static com.cosmos.acacia.crm.validation.ValidationUtil.*;

@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.product;
 
+import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -61,10 +62,8 @@ import javax.persistence.UniqueConstraint;
                         " and p.dataObject.deleted = :deleted"
             )
     })
-public abstract class Product
-    extends DataObjectBean
-    implements Serializable
-{
+public abstract class Product extends DataObjectBean implements Serializable {
+
     private static final long serialVersionUID = 1L;
     public static final String DISCRIMINATOR_COMPLEX_PRODUCT = "C";
     public static final String DISCRIMINATOR_SIMPLE_PRODUCT = "S";
