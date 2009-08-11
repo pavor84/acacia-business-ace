@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.assembling.AlgorithmException;
 import com.cosmos.acacia.crm.assembling.ProductAssembler;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.data.assembling.AssemblingSchema;

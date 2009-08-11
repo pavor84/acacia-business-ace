@@ -19,10 +19,10 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.data.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.Product;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.Product;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.gui.ProductPanel;
 import com.cosmos.acacia.crm.gui.invoice.ComplexProductDetailsPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;

@@ -8,8 +8,8 @@ package com.cosmos.acacia.crm.gui.assembling;
 
 import com.cosmos.acacia.crm.gui.ProductItemTreeTableNode;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
-import com.cosmos.acacia.crm.data.ComplexProduct;
-import com.cosmos.acacia.crm.data.Product;
+import com.cosmos.acacia.crm.data.product.ComplexProduct;
+import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.JBTreeTable;
 import java.awt.event.ItemEvent;

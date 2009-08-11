@@ -25,7 +25,7 @@ import com.cosmos.acacia.crm.data.OrderConfirmation;
 import com.cosmos.acacia.crm.data.OrderConfirmationItem;
 import com.cosmos.acacia.crm.data.PurchaseOrder;
 import com.cosmos.acacia.crm.data.PurchaseOrderItem;
-import com.cosmos.acacia.crm.data.SimpleProduct;
+import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.ButtonVisibility;
 import com.cosmos.swingb.DialogResponse;

@@ -9,7 +9,7 @@ package com.cosmos.acacia.crm.gui.pricing;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.pricing.ProductPricingValueRemote;
-import com.cosmos.acacia.crm.data.ProductPercentValue;
+import com.cosmos.acacia.crm.data.product.ProductPercentValue;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;

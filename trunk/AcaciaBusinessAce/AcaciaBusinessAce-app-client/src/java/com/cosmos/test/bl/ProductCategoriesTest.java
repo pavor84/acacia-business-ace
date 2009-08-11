@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListBean;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
-import com.cosmos.acacia.crm.data.ProductCategory;
+import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
