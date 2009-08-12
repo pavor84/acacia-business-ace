@@ -16,8 +16,8 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
-import com.cosmos.acacia.crm.data.Pricelist;
-import com.cosmos.acacia.crm.data.PricelistItem;
+import com.cosmos.acacia.crm.data.sales.Pricelist;
+import com.cosmos.acacia.crm.data.sales.PricelistItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.SpecialPermission;

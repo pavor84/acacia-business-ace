@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.enums;
 
-import com.cosmos.acacia.crm.data.BusinessDocument;
+import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import java.util.ArrayList;

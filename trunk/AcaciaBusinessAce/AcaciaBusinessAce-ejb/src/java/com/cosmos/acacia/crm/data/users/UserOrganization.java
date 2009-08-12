@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.data.users;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import java.io.Serializable;
 
 import javax.persistence.Column;

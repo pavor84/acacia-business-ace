@@ -60,6 +60,9 @@ import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import com.cosmos.util.ClassHelper;
+import java.lang.reflect.Modifier;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  *
@@ -204,8 +207,26 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     @Override
     public void initPrivileges() {
         try {
-            for(Class cls : ClassHelper.getClasses("", true, DataObjectBean.class)) {
-                System.out.println(cls);
+            TreeMap<String, TreeSet<String>> classesMap = new TreeMap<String, TreeSet<String>>();
+            for(Class cls : ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class)) {
+                if(Modifier.isAbstract(cls.getModifiers())) {
+                    continue;
+                }
+
+                String pkg = cls.getPackage().getName();
+                TreeSet<String> classes;
+                if((classes = classesMap.get(pkg)) == null) {
+                    classes = new TreeSet<String>();
+                    classesMap.put(pkg, classes);
+                }
+                classes.add(cls.getSimpleName());
+            }
+
+            for(String pkg : classesMap.keySet()) {
+                System.out.println(pkg);
+                for(String clsName : classesMap.get(pkg)) {
+                    System.out.println("\t " + clsName);
+                }
             }
         } catch(Exception ex) {
             throw new RuntimeException(ex);

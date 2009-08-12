@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.data.predicates;
 import org.apache.commons.collections.Predicate;
 import org.apache.log4j.Logger;
 
-import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.data.sales.Invoice;
 import com.cosmos.acacia.crm.enums.DeliveryStatus;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 

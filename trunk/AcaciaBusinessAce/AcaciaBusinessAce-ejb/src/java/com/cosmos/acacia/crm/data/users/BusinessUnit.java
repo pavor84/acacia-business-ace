@@ -17,7 +17,7 @@ import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;

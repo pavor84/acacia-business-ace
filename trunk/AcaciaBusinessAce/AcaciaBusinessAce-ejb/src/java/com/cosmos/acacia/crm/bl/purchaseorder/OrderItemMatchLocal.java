@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.bl.purchaseorder;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.OrderItemMatch;
+import com.cosmos.acacia.crm.data.purchase.OrderItemMatch;
 
 /**
  * 

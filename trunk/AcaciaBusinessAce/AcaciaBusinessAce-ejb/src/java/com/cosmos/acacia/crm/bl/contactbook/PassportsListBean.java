@@ -20,7 +20,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Passport;
+import com.cosmos.acacia.crm.data.contacts.Passport;
 import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;

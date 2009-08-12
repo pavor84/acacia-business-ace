@@ -7,9 +7,9 @@ import java.util.Map;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

@@ -4,7 +4,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.cosmos.acacia.crm.data.PurchaseOrder;
+import com.cosmos.acacia.crm.data.purchase.PurchaseOrder;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**

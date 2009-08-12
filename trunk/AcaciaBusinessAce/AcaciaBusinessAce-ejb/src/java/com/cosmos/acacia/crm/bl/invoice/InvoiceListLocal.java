@@ -4,11 +4,11 @@ import java.math.BigInteger;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Invoice;
-import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.InvoiceItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 
 /**
  * 

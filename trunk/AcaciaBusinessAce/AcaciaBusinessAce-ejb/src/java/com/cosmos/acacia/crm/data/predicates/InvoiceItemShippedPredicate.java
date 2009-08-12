@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.data.predicates;
 
 import java.math.BigDecimal;
 import org.apache.commons.collections.Predicate;
-import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.InvoiceItem;
 
 /**
  * Evaluate to true if all Ordered Quantities for an Invoice Item are shipped (Ordered == Shipped)

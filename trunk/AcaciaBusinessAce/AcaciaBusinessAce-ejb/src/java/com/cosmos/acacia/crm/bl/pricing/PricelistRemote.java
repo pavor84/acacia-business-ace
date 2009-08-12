@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.Pricelist;
-import com.cosmos.acacia.crm.data.PricelistItem;
+import com.cosmos.acacia.crm.data.sales.Pricelist;
+import com.cosmos.acacia.crm.data.sales.PricelistItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

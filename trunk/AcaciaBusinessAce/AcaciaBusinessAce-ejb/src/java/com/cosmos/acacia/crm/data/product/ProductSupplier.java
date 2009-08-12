@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.crm.data.product;
 
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.annotation.Property;

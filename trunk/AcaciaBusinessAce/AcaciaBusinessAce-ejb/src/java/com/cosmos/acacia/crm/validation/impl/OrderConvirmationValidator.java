@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.ejb.Stateless;
 
-import com.cosmos.acacia.crm.data.OrderConfirmation;
+import com.cosmos.acacia.crm.data.purchase.OrderConfirmation;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**

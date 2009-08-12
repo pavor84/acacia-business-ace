@@ -7,9 +7,9 @@ import java.util.Locale;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.callback.CallbackHandler;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserGroup;
 import com.cosmos.acacia.crm.data.users.UserOrganization;

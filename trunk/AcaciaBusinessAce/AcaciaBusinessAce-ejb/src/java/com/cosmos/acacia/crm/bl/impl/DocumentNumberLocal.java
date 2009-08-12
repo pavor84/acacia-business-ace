@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import javax.ejb.Local;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 
 /**

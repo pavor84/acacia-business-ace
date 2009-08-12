@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook.validation;
 
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import javax.ejb.Local;
 
 import com.cosmos.acacia.crm.validation.EntityValidator;

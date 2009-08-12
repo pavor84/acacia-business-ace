@@ -6,8 +6,8 @@ package com.cosmos.acacia.crm.bl.impl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import com.cosmos.acacia.crm.data.Pricelist;
-import com.cosmos.acacia.crm.data.PricelistItem;
+import com.cosmos.acacia.crm.data.sales.Pricelist;
+import com.cosmos.acacia.crm.data.sales.PricelistItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 
 /**

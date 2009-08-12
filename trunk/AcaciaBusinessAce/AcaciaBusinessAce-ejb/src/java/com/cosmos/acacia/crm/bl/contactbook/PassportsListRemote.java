@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Passport;
+import com.cosmos.acacia.crm.data.contacts.Passport;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

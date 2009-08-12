@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.bl.contactbook.validation;
 
 import static com.cosmos.acacia.crm.validation.ValidationUtil.checkUnique;
 
-import com.cosmos.acacia.crm.data.Passport;
+import com.cosmos.acacia.crm.data.contacts.Passport;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

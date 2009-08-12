@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.security.auth.callback.Callback;
 
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 
 public class OrganizationCallback
     implements Callback, Serializable {

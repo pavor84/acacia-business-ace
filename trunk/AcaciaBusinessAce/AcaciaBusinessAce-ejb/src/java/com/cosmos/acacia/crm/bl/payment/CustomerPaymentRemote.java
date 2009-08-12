@@ -8,7 +8,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.CustomerPaymentMatch;
-import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.data.sales.Invoice;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.validation.impl;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.OrderConfirmation;
+import com.cosmos.acacia.crm.data.purchase.OrderConfirmation;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 
 /**

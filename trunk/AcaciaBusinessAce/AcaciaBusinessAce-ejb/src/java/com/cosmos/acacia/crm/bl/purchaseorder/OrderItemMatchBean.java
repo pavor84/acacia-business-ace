@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.OrderItemMatch;
+import com.cosmos.acacia.crm.data.purchase.OrderItemMatch;
 
 /**
  * Created	:	04.05.2008

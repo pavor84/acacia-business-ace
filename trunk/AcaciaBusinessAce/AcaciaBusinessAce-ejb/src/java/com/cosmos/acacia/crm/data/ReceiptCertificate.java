@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.warehouse.Warehouse;
+import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
