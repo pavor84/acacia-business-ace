@@ -22,7 +22,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import com.cosmos.acacia.crm.bl.cash.CashReconcileRemote;
 import com.cosmos.acacia.crm.bl.cash.EndBalance;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.cash.CashReconcile;
 import com.cosmos.acacia.crm.data.cash.CashReconcilePaymentSummary;
 import com.cosmos.acacia.crm.enums.Currency;

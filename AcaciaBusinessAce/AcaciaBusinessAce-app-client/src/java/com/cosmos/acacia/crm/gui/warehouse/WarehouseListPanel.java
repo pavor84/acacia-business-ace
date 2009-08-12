@@ -12,7 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
-import com.cosmos.acacia.crm.data.Warehouse;
+import com.cosmos.acacia.crm.data.warehouse.Warehouse;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;

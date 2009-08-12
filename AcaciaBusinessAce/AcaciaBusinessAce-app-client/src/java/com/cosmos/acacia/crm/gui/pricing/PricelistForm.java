@@ -9,7 +9,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.EnumResourceRemote;
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
-import com.cosmos.acacia.crm.data.Pricelist;
+import com.cosmos.acacia.crm.data.sales.Pricelist;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;

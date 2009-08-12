@@ -1,8 +1,8 @@
 package com.cosmos.acacia.crm.client;
 
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.math.BigInteger;
@@ -13,11 +13,11 @@ import java.util.Map;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.DeferredListServerRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
-import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
 

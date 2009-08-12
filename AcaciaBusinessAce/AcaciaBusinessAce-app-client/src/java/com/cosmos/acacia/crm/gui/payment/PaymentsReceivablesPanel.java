@@ -17,9 +17,9 @@ import java.util.Map;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.CustomerPayment;
-import com.cosmos.acacia.crm.data.Invoice;
+import com.cosmos.acacia.crm.data.sales.Invoice;
 import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;

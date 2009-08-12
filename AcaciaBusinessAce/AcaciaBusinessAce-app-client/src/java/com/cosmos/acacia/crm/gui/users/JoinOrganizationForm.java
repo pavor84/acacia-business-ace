@@ -7,8 +7,8 @@
 package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;

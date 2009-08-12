@@ -44,7 +44,7 @@ import com.cosmos.acacia.crm.bl.reports.ReportsTools;
 import com.cosmos.acacia.crm.bl.reports.ReportsToolsRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
-import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;

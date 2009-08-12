@@ -12,7 +12,7 @@ import java.util.List;
 import javax.ejb.EJB;
 
 import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.gui.AbstractTreeEnabledTablePanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseTreePanel;

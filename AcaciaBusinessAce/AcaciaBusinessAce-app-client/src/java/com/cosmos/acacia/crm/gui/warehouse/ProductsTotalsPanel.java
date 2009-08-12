@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 
 import com.cosmos.acacia.crm.bl.impl.WarehouseListRemote;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.TablePanelListener;

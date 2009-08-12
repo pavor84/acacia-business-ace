@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.gui.product;
 
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.PatternMaskFormat;
+import com.cosmos.acacia.crm.data.product.PatternMaskFormat;
 import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;

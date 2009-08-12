@@ -23,11 +23,11 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.CommunicationContact;
-import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.Country;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;

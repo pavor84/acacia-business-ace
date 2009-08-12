@@ -11,7 +11,7 @@ import com.cosmos.acacia.crm.assembling.ProductAssemblerEvent;
 import com.cosmos.acacia.crm.assembling.ProductAssemblerListener;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DbResource;

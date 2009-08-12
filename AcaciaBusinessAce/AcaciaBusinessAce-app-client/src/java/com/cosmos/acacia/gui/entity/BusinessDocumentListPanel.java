@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.gui.entity;
 
-import com.cosmos.acacia.crm.data.BusinessDocument;
+import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;

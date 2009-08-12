@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
-import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 

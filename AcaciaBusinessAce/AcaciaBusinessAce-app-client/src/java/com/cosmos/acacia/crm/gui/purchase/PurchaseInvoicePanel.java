@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.purchase;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;

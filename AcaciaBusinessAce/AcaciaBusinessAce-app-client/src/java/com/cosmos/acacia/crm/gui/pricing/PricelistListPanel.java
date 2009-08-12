@@ -12,7 +12,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
-import com.cosmos.acacia.crm.data.Pricelist;
+import com.cosmos.acacia.crm.data.sales.Pricelist;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;

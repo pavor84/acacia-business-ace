@@ -12,8 +12,8 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.OrderConfirmationListRemote;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.OrderConfirmation;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.purchase.OrderConfirmation;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;

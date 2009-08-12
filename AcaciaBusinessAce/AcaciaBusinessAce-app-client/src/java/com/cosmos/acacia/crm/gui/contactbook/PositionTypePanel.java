@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.contactbook.PositionTypesListRemote;
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.gui.users.UserGroupsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
