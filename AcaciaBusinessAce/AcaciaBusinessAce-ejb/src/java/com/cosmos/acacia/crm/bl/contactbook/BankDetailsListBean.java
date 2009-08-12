@@ -17,12 +17,12 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.BankDetail;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;

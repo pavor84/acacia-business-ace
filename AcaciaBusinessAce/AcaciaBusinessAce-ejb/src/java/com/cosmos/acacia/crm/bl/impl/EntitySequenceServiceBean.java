@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;

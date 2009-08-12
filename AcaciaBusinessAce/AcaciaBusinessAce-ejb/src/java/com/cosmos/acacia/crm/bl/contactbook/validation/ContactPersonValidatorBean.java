@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**

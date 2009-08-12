@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

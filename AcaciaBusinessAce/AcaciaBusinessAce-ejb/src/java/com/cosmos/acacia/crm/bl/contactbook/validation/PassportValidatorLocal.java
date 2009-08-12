@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook.validation;
 
-import com.cosmos.acacia.crm.data.Passport;
+import com.cosmos.acacia.crm.data.contacts.Passport;
 import javax.ejb.Local;
 
 import com.cosmos.acacia.crm.validation.EntityValidator;

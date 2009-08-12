@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.CommunicationContact;
-import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.Country;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigInteger;

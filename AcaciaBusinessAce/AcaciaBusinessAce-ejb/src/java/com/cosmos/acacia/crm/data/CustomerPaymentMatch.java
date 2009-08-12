@@ -3,6 +3,7 @@
  */
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.sales.Invoice;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;

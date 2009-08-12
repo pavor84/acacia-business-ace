@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BasicOrganization;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.BasicOrganization;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.bl.reports;
 
 import java.io.Serializable;
 
-import com.cosmos.acacia.crm.data.Passport;
+import com.cosmos.acacia.crm.data.contacts.Passport;
 
 public class PrintableDocumentHeader implements Serializable {
 

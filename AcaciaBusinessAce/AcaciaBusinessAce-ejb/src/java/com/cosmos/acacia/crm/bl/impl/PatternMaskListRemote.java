@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.PatternMaskFormat;
+import com.cosmos.acacia.crm.data.product.PatternMaskFormat;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

@@ -8,13 +8,13 @@ import javax.ejb.Stateless;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.contactbook.BankDetailsListRemote;
 import com.cosmos.acacia.crm.bl.contactbook.PassportsListLocal;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BankDetail;
-import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Passport;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.BankDetail;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Passport;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.PassportType;
 
 @Stateless

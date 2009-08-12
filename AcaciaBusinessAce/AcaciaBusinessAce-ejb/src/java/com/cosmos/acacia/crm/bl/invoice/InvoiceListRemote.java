@@ -7,16 +7,16 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.BusinessPartner;
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Invoice;
-import com.cosmos.acacia.crm.data.InvoiceItem;
-import com.cosmos.acacia.crm.data.InvoiceItemLink;
+import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.InvoiceItemLink;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
-import com.cosmos.acacia.crm.data.Warehouse;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.warehouse.Warehouse;
+import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;

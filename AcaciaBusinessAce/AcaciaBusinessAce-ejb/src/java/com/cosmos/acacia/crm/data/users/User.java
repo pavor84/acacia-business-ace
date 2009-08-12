@@ -10,7 +10,7 @@ import com.cosmos.acacia.annotation.ComponentProperty;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObject;
 import java.io.Serializable;

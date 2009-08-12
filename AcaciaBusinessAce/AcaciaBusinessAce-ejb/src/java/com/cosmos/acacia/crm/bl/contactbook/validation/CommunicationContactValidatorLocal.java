@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.bl.contactbook.validation;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.CommunicationContact;
+import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 
 /**

@@ -5,7 +5,7 @@
 package com.cosmos.acacia.crm.bl.users;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
 import com.cosmos.acacia.crm.data.users.JobTitle;

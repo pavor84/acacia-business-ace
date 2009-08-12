@@ -6,7 +6,7 @@ package com.cosmos.acacia.crm.data.customer;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.io.Serializable;

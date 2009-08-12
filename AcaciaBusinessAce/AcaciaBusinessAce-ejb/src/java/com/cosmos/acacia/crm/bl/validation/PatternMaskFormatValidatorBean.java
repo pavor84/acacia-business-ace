@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import com.cosmos.acacia.crm.data.PatternMaskFormat;
+import com.cosmos.acacia.crm.data.product.PatternMaskFormat;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**

@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListLocal;
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.InvoiceItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 @Stateless

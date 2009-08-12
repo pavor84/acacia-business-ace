@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.cosmos.acacia.crm.data.Warehouse;
+import com.cosmos.acacia.crm.data.warehouse.Warehouse;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 /**

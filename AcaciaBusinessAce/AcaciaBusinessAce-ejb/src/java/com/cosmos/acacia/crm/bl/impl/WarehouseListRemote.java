@@ -6,10 +6,10 @@ import java.util.Map;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.Warehouse;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.warehouse.Warehouse;
+import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

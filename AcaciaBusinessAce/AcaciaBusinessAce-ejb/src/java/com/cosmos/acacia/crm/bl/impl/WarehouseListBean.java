@@ -18,12 +18,12 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.ContactPerson;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
-import com.cosmos.acacia.crm.data.Warehouse;
-import com.cosmos.acacia.crm.data.WarehouseProduct;
+import com.cosmos.acacia.crm.data.warehouse.Warehouse;
+import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 import com.cosmos.acacia.crm.validation.impl.WarehouseProductValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.WarehouseValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;

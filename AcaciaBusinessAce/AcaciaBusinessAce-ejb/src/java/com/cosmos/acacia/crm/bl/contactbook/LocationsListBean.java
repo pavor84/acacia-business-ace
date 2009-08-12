@@ -21,9 +21,9 @@ import com.cosmos.acacia.crm.bl.contactbook.validation.CityValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntitySequenceServiceLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.City;
-import com.cosmos.acacia.crm.data.Country;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 

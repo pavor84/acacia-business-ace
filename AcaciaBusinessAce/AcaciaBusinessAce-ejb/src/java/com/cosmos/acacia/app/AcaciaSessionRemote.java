@@ -5,15 +5,15 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.Address;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Expression;
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.util.AcaciaProperties;
 

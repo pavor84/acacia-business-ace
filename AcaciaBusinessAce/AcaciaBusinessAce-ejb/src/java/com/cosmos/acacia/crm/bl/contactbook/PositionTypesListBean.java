@@ -20,9 +20,9 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.PositionTypeValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.Organization;
-import com.cosmos.acacia.crm.data.Person;
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

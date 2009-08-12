@@ -14,8 +14,8 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.BanknoteQuantity;
-import com.cosmos.acacia.crm.data.CurrencyNominal;
+import com.cosmos.acacia.crm.data.cash.BanknoteQuantity;
+import com.cosmos.acacia.crm.data.cash.CurrencyNominal;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.validation.impl.BanknoteQuantityValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;

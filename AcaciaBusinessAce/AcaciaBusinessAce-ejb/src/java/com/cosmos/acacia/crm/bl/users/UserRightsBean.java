@@ -22,7 +22,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.PositionType;
+import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserGroup;

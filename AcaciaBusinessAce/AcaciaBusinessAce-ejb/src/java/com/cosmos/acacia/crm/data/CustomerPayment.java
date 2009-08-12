@@ -1,5 +1,10 @@
 package com.cosmos.acacia.crm.data;
 
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
+import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.contacts.BankDetail;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;

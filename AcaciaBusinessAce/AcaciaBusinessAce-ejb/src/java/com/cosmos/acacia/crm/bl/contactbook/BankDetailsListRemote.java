@@ -10,9 +10,9 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.BankDetail;
+import com.cosmos.acacia.crm.data.contacts.BankDetail;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.Person;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

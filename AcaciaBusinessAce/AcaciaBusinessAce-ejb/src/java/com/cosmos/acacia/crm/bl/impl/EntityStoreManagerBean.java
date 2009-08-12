@@ -17,13 +17,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.data.Address;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.data.BusinessDocument;
-import com.cosmos.acacia.crm.data.BusinessDocumentStatusLog;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.document.BusinessDocument;
+import com.cosmos.acacia.crm.data.document.BusinessDocumentStatusLog;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.product.Product;

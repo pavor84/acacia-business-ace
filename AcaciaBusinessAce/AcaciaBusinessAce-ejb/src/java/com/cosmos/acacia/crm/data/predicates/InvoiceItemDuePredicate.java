@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.apache.commons.collections.Predicate;
 
-import com.cosmos.acacia.crm.data.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.InvoiceItem;
 
 /**
  * Evaluate to true if all available (Ordered-Shipped) Quantities are Due Quantities
