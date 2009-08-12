@@ -21,10 +21,10 @@ import javax.swing.event.ListSelectionListener;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.OrderConfirmationListRemote;
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
-import com.cosmos.acacia.crm.data.OrderConfirmation;
-import com.cosmos.acacia.crm.data.OrderConfirmationItem;
-import com.cosmos.acacia.crm.data.PurchaseOrder;
-import com.cosmos.acacia.crm.data.PurchaseOrderItem;
+import com.cosmos.acacia.crm.data.purchase.OrderConfirmation;
+import com.cosmos.acacia.crm.data.purchase.OrderConfirmationItem;
+import com.cosmos.acacia.crm.data.purchase.PurchaseOrder;
+import com.cosmos.acacia.crm.data.purchase.PurchaseOrderItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.ButtonVisibility;

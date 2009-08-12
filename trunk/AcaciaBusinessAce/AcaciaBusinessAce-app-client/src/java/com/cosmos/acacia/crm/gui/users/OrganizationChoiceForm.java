@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;

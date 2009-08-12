@@ -27,7 +27,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.purchaseorder.OrderConfirmationListRemote;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.OrderConfirmationItem;
+import com.cosmos.acacia.crm.data.purchase.OrderConfirmationItem;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;

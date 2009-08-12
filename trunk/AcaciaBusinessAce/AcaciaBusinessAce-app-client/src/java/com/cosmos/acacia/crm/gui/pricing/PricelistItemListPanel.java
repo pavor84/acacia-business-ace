@@ -18,8 +18,8 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
-import com.cosmos.acacia.crm.data.Pricelist;
-import com.cosmos.acacia.crm.data.PricelistItem;
+import com.cosmos.acacia.crm.data.sales.Pricelist;
+import com.cosmos.acacia.crm.data.sales.PricelistItem;
 import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.SpecialPermission;

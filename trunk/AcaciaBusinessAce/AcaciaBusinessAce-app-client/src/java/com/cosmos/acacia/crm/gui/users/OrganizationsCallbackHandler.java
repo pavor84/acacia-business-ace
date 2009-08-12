@@ -5,7 +5,7 @@ import java.util.List;
 import com.cosmos.acacia.callback.CallbackTransportObject;
 import com.cosmos.acacia.callback.Callbackable;
 import com.cosmos.acacia.crm.bl.users.UsersBean;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.swingb.DialogResponse;
 
 public class OrganizationsCallbackHandler implements Callbackable {

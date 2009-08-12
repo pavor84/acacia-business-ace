@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.Organization;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.swingb.DialogResponse;

@@ -12,7 +12,7 @@
 package com.cosmos.acacia.crm.gui.pricing;
 
 import com.cosmos.acacia.crm.bl.pricing.CustomerDiscountRemote;
-import com.cosmos.acacia.crm.data.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscount;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItem;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
