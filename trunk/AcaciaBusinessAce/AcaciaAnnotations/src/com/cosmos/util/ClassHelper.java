@@ -90,9 +90,9 @@ public class ClassHelper {
         return getClasses(packageName, false, null);
     }
 
-    public static Set<Class<?>> getClasses(String packageName, Class assignableFrom)
+    public static Set<Class<?>> getClasses(String packageName, Class baseClass)
             throws IOException, ClassNotFoundException {
-        return getClasses(packageName, false, assignableFrom);
+        return getClasses(packageName, false, baseClass);
     }
 
     public static Set<Class<?>> getClasses(String packageName, boolean includeSubDirs)
@@ -100,17 +100,17 @@ public class ClassHelper {
         return getClasses(packageName, includeSubDirs, null);
     }
 
-    public static Set<Class<?>> getClasses(String packageName, boolean includeSubDirs, Class assignableFrom)
+    public static Set<Class<?>> getClasses(String packageName, boolean includeSubDirs, Class baseClass)
             throws IOException, ClassNotFoundException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        return getClasses(loader, packageName, includeSubDirs, assignableFrom);
+        return getClasses(loader, packageName, includeSubDirs, baseClass);
     }
 
     public static Set<Class<?>> getClasses(
             ClassLoader loader,
             String packageName,
             boolean includeSubDirs,
-            Class assignableFrom)
+            Class baseClass)
             throws IOException, ClassNotFoundException {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         String path = packageName.replace('.', '/');
@@ -129,9 +129,9 @@ public class ClassHelper {
                         if (jarPath.indexOf(":") >= 0) {
                             jarPath = jarPath.substring(1);
                         }
-                        classes.addAll(getFromJARFile(jarPath, path, includeSubDirs, assignableFrom));
+                        classes.addAll(getFromJARFile(jarPath, path, includeSubDirs, baseClass));
                     } else {
-                        classes.addAll(getFromDirectory(new File(filePath), packageName, includeSubDirs, assignableFrom));
+                        classes.addAll(getFromDirectory(new File(filePath), packageName, includeSubDirs, baseClass));
                     }
                 }
             }
@@ -143,7 +143,7 @@ public class ClassHelper {
             File directory,
             String packageName,
             boolean includeSubDirs,
-            Class assignableFrom)
+            Class baseClass)
             throws ClassNotFoundException {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         if (directory.exists()) {
@@ -155,7 +155,7 @@ public class ClassHelper {
                             fileName = packageName + "." + fileName;
                         }
                         classes.addAll(getFromDirectory(
-                                file, fileName, includeSubDirs, assignableFrom));
+                                file, fileName, includeSubDirs, baseClass));
                     }
                 } else if (fileName.endsWith(".class")) {
                     String name;
@@ -166,7 +166,7 @@ public class ClassHelper {
                     }
                     try {
                         Class<?> clazz = Class.forName(name);
-                        if(assignableFrom == null || (assignableFrom != null && assignableFrom.isAssignableFrom(clazz))) {
+                        if(baseClass == null || (baseClass != null && baseClass.isAssignableFrom(clazz))) {
                             classes.add(clazz);
                         }
                     } catch(Throwable ex) {
@@ -182,7 +182,7 @@ public class ClassHelper {
             String jar,
             String pathName,
             boolean includeSubDirs,
-            Class assignableFrom)
+            Class baseClass)
             throws IOException, ClassNotFoundException {
         String packageName = pathName.replace('/', '.');
         Set<Class<?>> classes = new HashSet<Class<?>>();
@@ -204,7 +204,7 @@ public class ClassHelper {
                         Class cls;
                         try {
                             cls = Class.forName(className.replace('/', '.'));
-                            if(assignableFrom == null || (assignableFrom != null && assignableFrom.isAssignableFrom(cls))) {
+                            if(baseClass == null || (baseClass != null && baseClass.isAssignableFrom(cls))) {
                                 if(includeSubDirs) {
                                     classes.add(cls);
                                 } else if(packageName.equals(cls.getPackage().getName())) {
