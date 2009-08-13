@@ -15,6 +15,9 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+// org.springframework.core.io.support.PathMatchingResourcePatternResolver
+// PathMatchingResourcePatternResolver scanner = new PathMatchingResourcePatternResolver();
+// Resource[] resources = scanner.getResources("classpath*:com/neshto/**/*.class");
 /**
  *
  * @author miro
@@ -170,6 +173,7 @@ public class ClassHelper {
                             classes.add(clazz);
                         }
                     } catch(Throwable ex) {
+                        System.out.println("Problem with class " + name + ": " + ex.getMessage());
                         ex.printStackTrace();
                     }
                 }
@@ -203,7 +207,8 @@ public class ClassHelper {
                     if (className.startsWith(pathName)) {
                         Class cls;
                         try {
-                            cls = Class.forName(className.replace('/', '.'));
+                            className = className.replace('/', '.');
+                            cls = Class.forName(className);
                             if(baseClass == null || (baseClass != null && baseClass.isAssignableFrom(cls))) {
                                 if(includeSubDirs) {
                                     classes.add(cls);
@@ -212,6 +217,7 @@ public class ClassHelper {
                                 }
                             }
                         } catch(Throwable ex) {
+                            System.out.println("Problem with class " + className + ": " + ex.getMessage());
                             ex.printStackTrace();
                         }
                     }
