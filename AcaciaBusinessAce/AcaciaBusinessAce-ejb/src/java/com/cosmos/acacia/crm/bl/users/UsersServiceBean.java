@@ -19,7 +19,6 @@ import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
