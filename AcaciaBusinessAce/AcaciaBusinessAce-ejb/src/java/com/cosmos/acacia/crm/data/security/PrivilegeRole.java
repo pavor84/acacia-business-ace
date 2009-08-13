@@ -6,16 +6,16 @@ package com.cosmos.acacia.crm.data.security;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormContainer;
-import com.cosmos.acacia.annotation.Layout;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
+import com.cosmos.acacia.crm.data.ChildEntityBean;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.swingb.JBPanel;
-import com.cosmos.swingb.JBTabbedPane;
-import java.awt.BorderLayout;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -40,16 +40,22 @@ import javax.persistence.UniqueConstraint;
 })
 @NamedQueries({
     @NamedQuery(
-        name = "PrivilegeRole.findAll",
-        query = "SELECT p FROM PrivilegeRole p"
+        name = PrivilegeRole.NQ_FIND_ALL,
+        query = "SELECT t FROM PrivilegeRole t" +
+                " WHERE" +
+                "  t.privilege = :privilege" +
+                " ORDER BY t.accessRight"
     )
 })
 @Form(
     serviceClass=SecurityServiceRemote.class
 )
-public class PrivilegeRole extends DataObjectBean implements Serializable {
+public class PrivilegeRole extends DataObjectBean implements Serializable, ChildEntityBean<Privilege> {
 
     private static final long serialVersionUID = 1L;
+    //
+    protected static final String CLASS_NAME = "PrivilegeRole";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
 
     @Id
     @Basic(optional = false)
@@ -62,13 +68,39 @@ public class PrivilegeRole extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "access_right_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Access Right"
+    @Property(title="Access Right",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.security.AccessRight"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Access Right:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
     )
     private DbResource accessRight;
 
     @JoinColumn(name = "access_level_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Access Level"
+    @Property(title="Access Level",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.security.AccessLevel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Access Level:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
     )
     private DbResource accessLevel;
 
@@ -160,5 +192,15 @@ public class PrivilegeRole extends DataObjectBean implements Serializable {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public Privilege getParentEntity() {
+        return getPrivilege();
+    }
+
+    @Override
+    public void setParentEntity(Privilege parentEntity) {
+        setPrivilege(parentEntity);
     }
 }

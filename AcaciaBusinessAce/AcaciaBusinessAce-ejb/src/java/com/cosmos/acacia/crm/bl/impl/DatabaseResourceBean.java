@@ -205,7 +205,10 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     }
 
     @Override
-    public void initPrivileges() {
+    public void initSecurityAccess() {
+
+        // Check for Supervisor user
+
         try {
             TreeMap<String, TreeSet<String>> classesMap = new TreeMap<String, TreeSet<String>>();
             for(Class cls : ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class)) {

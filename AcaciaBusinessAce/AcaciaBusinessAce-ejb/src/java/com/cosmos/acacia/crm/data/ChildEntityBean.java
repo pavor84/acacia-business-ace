@@ -9,9 +9,9 @@ package com.cosmos.acacia.crm.data;
  *
  * @author Miro
  */
-public abstract class ChildEntityBean extends DataObjectBean {
+public interface ChildEntityBean<P> {
 
-    public abstract DataObjectBean getParentEntity();
+    P getParentEntity();
 
-    public abstract void setParentEntity(DataObjectBean parentEntity);
+    void setParentEntity(P parentEntity);
 }

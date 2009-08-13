@@ -16,5 +16,5 @@ public interface DatabaseResourceLocal
 {
     void initDatabaseResource();
 
-    void initPrivileges();
+    void initSecurityAccess();
 }
