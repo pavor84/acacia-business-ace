@@ -106,19 +106,32 @@ public abstract class AbstractEntityService implements EntityService {
         if(item instanceof ChildEntityBean && entity instanceof DataObjectBean) {
             ((ChildEntityBean)item).setParentEntity((DataObjectBean)entity);
         } else {
-            Class entityClass = entity.getClass();
-            String entityClassName = "set" + entityClass.getSimpleName();
-            try {
-                Method method = itemClass.getMethod(entityClassName, entityClass);
-                method.invoke(item, entity);
-            } catch(Exception ex) {
-                ex.printStackTrace();
+            Method method;
+            if((method = getMethod(itemClass, entity.getClass())) != null) {
+                try {
+                    method.invoke(item, entity);
+                } catch(Exception ex) {
+                    throw new RuntimeException("method=" + method + ", item=" + item + ", entity=" + entity, ex);
+                }
             }
         }
 
         initItem(entity, item);
 
         return item;
+    }
+
+    protected Method getMethod(Class itemClass, Class entityClass) {
+        while(entityClass != null && entityClass != Object.class) {
+            String entityClassName = "set" + entityClass.getSimpleName();
+            try {
+                return itemClass.getMethod(entityClassName, entityClass);
+            } catch(Exception ex) {
+                entityClass = entityClass.getSuperclass();
+            }
+        }
+
+        return null;
     }
 
     @Override

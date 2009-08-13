@@ -4,16 +4,18 @@
  */
 package com.cosmos.acacia.crm.bl.security;
 
-import com.cosmos.acacia.crm.data.security.PermissionCategoryPrivilege;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.entity.AbstractEntityService;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -26,6 +28,7 @@ import javax.persistence.Query;
 public class SecurityServiceBean extends AbstractEntityService implements SecurityServiceRemote, SecurityServiceLocal {
 
     public static final String PK_ORGANIZATION = "organization";
+    public static final String PK_PRIVILEGE = "privilege";
     public static final String PK_PRIVILEGE_TYPE = "privilegeType";
     public static final String PK_BUSINESS_UNIT = "businessUnit";
     public static final String PK_SECURITY_ROLE = "securityRole";
@@ -63,7 +66,9 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     }
 
     public List<PrivilegeRole> getPrivilegeRoles(Privilege privilege) {
-        return new ArrayList<PrivilegeRole>();
+        Query q = em.createNamedQuery(PrivilegeRole.NQ_FIND_ALL);
+        q.setParameter(PK_PRIVILEGE, privilege);
+        return new ArrayList<PrivilegeRole>(q.getResultList());
     }
 
     @Override
@@ -117,5 +122,37 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
 
     @Override
     protected <E, I> void initItem(E entity, I item) {
+    }
+
+    @Override
+    public List<DbResource> getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
+        if(AccessRight.class == enumClass) {
+            List<DbResource> resources = super.getResources(enumClass);
+            PrivilegeRole privilegeRole = (PrivilegeRole)categoryClassifiers[0];
+            return getAccessRights(resources, privilegeRole);
+        }
+
+        return super.getResources(enumClass, categoryClassifiers);
+    }
+
+    private List<DbResource> getAccessRights(List<DbResource> resources, PrivilegeRole privilegeRole) {
+        List<PrivilegeRole> privilegeRoles = getPrivilegeRoles(privilegeRole.getPrivilege());
+        int size;
+        if((size = privilegeRoles.size()) == 0 || (size == 1 && privilegeRoles.contains(privilegeRole))) {
+            return resources;
+        }
+        privilegeRoles.remove(privilegeRole);
+        List<DbResource> usedResources = new ArrayList<DbResource>(size);
+        for(PrivilegeRole pr : privilegeRoles) {
+            usedResources.add(pr.getAccessRight());
+        }
+        Iterator<DbResource> iterator = resources.iterator();
+        while(iterator.hasNext()) {
+            if(usedResources.contains(iterator.next())) {
+                iterator.remove();
+            }
+        }
+
+        return resources;
     }
 }
