@@ -15,7 +15,6 @@ import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -137,22 +136,18 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
 
     private List<DbResource> getAccessRights(List<DbResource> resources, PrivilegeRole privilegeRole) {
         List<PrivilegeRole> privilegeRoles = getPrivilegeRoles(privilegeRole.getPrivilege());
+
         int size;
         if((size = privilegeRoles.size()) == 0 || (size == 1 && privilegeRoles.contains(privilegeRole))) {
             return resources;
         }
+
         privilegeRoles.remove(privilegeRole);
         List<DbResource> usedResources = new ArrayList<DbResource>(size);
         for(PrivilegeRole pr : privilegeRoles) {
             usedResources.add(pr.getAccessRight());
         }
-        Iterator<DbResource> iterator = resources.iterator();
-        while(iterator.hasNext()) {
-            if(usedResources.contains(iterator.next())) {
-                iterator.remove();
-            }
-        }
 
-        return resources;
+        return getUnusedItems(resources, usedResources);
     }
 }

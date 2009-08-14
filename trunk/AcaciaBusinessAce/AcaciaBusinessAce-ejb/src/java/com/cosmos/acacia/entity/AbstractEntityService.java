@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.persistence.EntityManager;
@@ -192,5 +193,20 @@ public abstract class AbstractEntityService implements EntityService {
     @Override
     public List<DbResource> getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
         return esm.getResources(em, enumClass, categoryClassifiers);
+    }
+
+    protected List getUnusedItems(List items, List usedItems) {
+        if(usedItems == null || usedItems.size() == 0) {
+            return items;
+        }
+
+        Iterator iterator = items.iterator();
+        while(iterator.hasNext()) {
+            if(usedItems.contains(iterator.next())) {
+                iterator.remove();
+            }
+        }
+
+        return items;
     }
 }
