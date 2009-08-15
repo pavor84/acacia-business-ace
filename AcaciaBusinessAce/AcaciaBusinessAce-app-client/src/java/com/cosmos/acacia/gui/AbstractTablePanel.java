@@ -969,8 +969,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    public class TableSelectionListener
-            implements ListSelectionListener {
+    public class TableSelectionListener implements ListSelectionListener {
 
         private AcaciaTable table;
 
@@ -984,71 +983,82 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             if (!event.getValueIsAdjusting()) {
                 ListSelectionModel selectionModel = (ListSelectionModel) event.getSource();
                 boolean selectionEmpty = selectionModel.isSelectionEmpty();
-                if (selectionEmpty) {
-                    setEnabled(Button.Modify, false);
-                    setEnabled(Button.Delete, false);
-                    setEnabled(Button.Select, false);
-                    setEnabled(Button.Unselect, false);
-                    setEnabled(Button.Classify, false);
-
-                    if (!specialButtonAlwaysEnabled) {
-                        setEnabled(Button.Special, false);
-                    }
+                if(selectionEmpty) {
+                    refreshButtons(null);
                 } else {
-                    E selectedObject = (E) table.getSelectedRowObject();
-                    if(isQueryMode()) {
-                        initQueryMode(selectedObject);
-                    } else {
-                        initModifyMode(selectedObject);
-                    }
-
-                    setEnabled(Button.Select, canSelect(selectedObject));
-                    setEnabled(Button.Unselect, true);
-                    setEnabled(Button.Special, canSpecial(selectedObject));
-                    setEnabled(Button.Classify, true);
-                    selectedRowObject = null;
+                    refreshButtons((E) table.getSelectedRowObject());
                 }
 
                 fireSelectionChanged();
             }
         }
+    }
 
-        protected void initQueryMode(E selectedObject) {
-            if (!canView(selectedObject)) {
-                setEnabled(Button.Modify, false);
-                //the row is view-able - show the view button instead of modify
-            } else {
-                enableViewButton();
-            }
-        }
-
-        protected void enableViewButton() {
-            viewRowState = true;
-            setEnabled(Button.Modify, true);
-            modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
-        }
-
-        protected void initModifyMode(E selectedObject) {
-            //the list is edit-able and the row is modifiable - show modify button
-            if(isEditable()) {
-                if (canModify(selectedObject)) {
-                    viewRowState = false;
-                    setEnabled(Button.Modify, true);
-                    modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
-                } else {
-                    initQueryMode(selectedObject);
-                }
-            } else if (canView(selectedObject)) {
-                enableViewButton();
-            }
-
-            setEnabled(Button.Delete, canDelete(selectedObject));
-            setEnabled(Button.New, canCreate());
+    protected void initQueryMode(E selectedObject) {
+        if (!canView(selectedObject)) {
+            setEnabled(Button.Modify, false);
+            //the row is view-able - show the view button instead of modify
+        } else {
+            enableViewButton();
         }
     }
 
-    public class RefreshActionTask
-            extends Task<Object, Void> {
+    protected void enableViewButton() {
+        viewRowState = true;
+        setEnabled(Button.Modify, true);
+        modifyButton.setText(getResourceMap().getString("modifyButton.viewAction"));
+    }
+
+    protected void initModifyMode(E selectedObject) {
+        //the list is edit-able and the row is modifiable - show modify button
+        if(isEditable()) {
+            if (canModify(selectedObject)) {
+                viewRowState = false;
+                setEnabled(Button.Modify, true);
+                modifyButton.setText(getResourceMap().getString("modifyAction.Action.text"));
+            } else {
+                initQueryMode(selectedObject);
+            }
+        } else if (canView(selectedObject)) {
+            enableViewButton();
+        }
+
+        setEnabled(Button.Delete, canDelete(selectedObject));
+        setEnabled(Button.New, canCreate());
+    }
+
+    protected void refreshButtons() {
+        refreshButtons((E) getDataTable().getSelectedRowObject());
+    }
+
+    protected void refreshButtons(E selectedObject) {
+        if (selectedObject == null) {
+            setEnabled(Button.New, canCreate());
+            setEnabled(Button.Modify, false);
+            setEnabled(Button.Delete, false);
+            setEnabled(Button.Select, false);
+            setEnabled(Button.Unselect, false);
+            setEnabled(Button.Classify, false);
+
+            if (!specialButtonAlwaysEnabled) {
+                setEnabled(Button.Special, false);
+            }
+        } else {
+            if(isQueryMode()) {
+                initQueryMode(selectedObject);
+            } else {
+                initModifyMode(selectedObject);
+            }
+
+            setEnabled(Button.Select, canSelect(selectedObject));
+            setEnabled(Button.Unselect, true);
+            setEnabled(Button.Special, canSpecial(selectedObject));
+            setEnabled(Button.Classify, true);
+            selectedRowObject = null;
+        }
+    }
+
+    public class RefreshActionTask extends Task<Object, Void> {
 
         RefreshActionTask(Application app) {
             // Runs on the EDT.  Copy GUI state that
@@ -1096,6 +1106,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         for (TableModificationListener listener : tableModificationListeners) {
             listener.rowAdded(row);
         }
+        refreshButtons();
     }
 
     protected void fireModify(E row) {
@@ -1103,6 +1114,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         for (TableModificationListener listener : tableModificationListeners) {
             listener.rowModified(row);
         }
+        refreshButtons();
     }
 
     protected void fireDelete(E row) {
@@ -1110,7 +1122,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         for (TableModificationListener listener : tableModificationListeners) {
             listener.rowDeleted(row);
         }
+        refreshButtons();
     }
+
     private List<TablePanelListener> tablePanelListeners = new ArrayList<TablePanelListener>();
     /**
      * There are two behaviors of the special button:
