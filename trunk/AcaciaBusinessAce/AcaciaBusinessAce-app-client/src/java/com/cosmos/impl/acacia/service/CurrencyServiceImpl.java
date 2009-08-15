@@ -9,6 +9,7 @@ import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.gui.currency.CurrencyExchangeRateListPanel;
+import com.cosmos.acacia.entity.Operation;
 import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.Date;
@@ -90,5 +91,10 @@ public class CurrencyServiceImpl implements CurrencyRemote {
     @Override
     public List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
         return currencyService.getResources(enumClass, categoryClassifiers);
+    }
+
+    @Override
+    public <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters) {
+        return true;
     }
 }
