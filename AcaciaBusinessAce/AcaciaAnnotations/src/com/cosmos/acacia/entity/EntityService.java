@@ -16,7 +16,7 @@ import java.util.List;
  * @author Miro
  */
 public interface EntityService {
-
+    
     <E> E newEntity(Class<E> entityClass);
 
     <E, I> I newItem(E entity, Class<I> itemClass);
@@ -24,6 +24,8 @@ public interface EntityService {
     <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters);
 
     <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters);
+
+    <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters);
 
     <E> E save(E entity);
 
@@ -80,6 +82,10 @@ public interface EntityService {
         }
 
         public List getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
