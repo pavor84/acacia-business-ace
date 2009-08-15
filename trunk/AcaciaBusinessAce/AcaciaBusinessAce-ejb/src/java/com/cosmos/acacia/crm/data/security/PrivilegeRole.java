@@ -45,6 +45,12 @@ import javax.persistence.UniqueConstraint;
                 " WHERE" +
                 "  t.privilege = :privilege" +
                 " ORDER BY t.accessRight"
+    ),
+    @NamedQuery(
+        name = PrivilegeRole.NQ_COUNT_ROLES,
+        query = "SELECT count(t) FROM PrivilegeRole t" +
+                " WHERE" +
+                "  t.privilege = :privilege"
     )
 })
 @Form(
@@ -56,6 +62,7 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
     //
     protected static final String CLASS_NAME = "PrivilegeRole";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_COUNT_ROLES = CLASS_NAME + ".countRoles";
 
     @Id
     @Basic(optional = false)

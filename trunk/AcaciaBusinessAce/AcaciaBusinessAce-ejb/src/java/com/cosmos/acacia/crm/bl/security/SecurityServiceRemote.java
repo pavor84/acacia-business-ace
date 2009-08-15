@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.security;
 
+import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.entity.EntityService;
 import javax.ejb.Remote;
 
