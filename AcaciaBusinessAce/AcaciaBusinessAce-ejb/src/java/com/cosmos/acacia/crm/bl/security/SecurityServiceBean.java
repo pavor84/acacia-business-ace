@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.entity.AbstractEntityService;
+import com.cosmos.acacia.entity.Operation;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     public static final String PK_BUSINESS_UNIT = "businessUnit";
     public static final String PK_SECURITY_ROLE = "securityRole";
     public static final String PK_EXPIRES = "expires";
+    //
+    public static final int ACCESS_RIGHT_COUNT = AccessRight.values().length;
 
     public List<SecurityRole> getSecurityRoles(BusinessUnit businessUnit) {
         Query q;
@@ -70,9 +73,15 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         return new ArrayList<PrivilegeRole>(q.getResultList());
     }
 
+    public Long countPrivilegeRoles(Privilege privilege) {
+        Query q = em.createNamedQuery(PrivilegeRole.NQ_COUNT_ROLES);
+        q.setParameter(PK_PRIVILEGE, privilege);
+        return (Long)q.getSingleResult();
+    }
+
     @Override
     public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
-        if(!canRead(entityClass, extraParameters)) {
+        if(!canDo(Operation.Read, null, entityClass, extraParameters)) {
             return Collections.emptyList();
         }
 
@@ -95,7 +104,7 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
 
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
-        if(!canRead(entity, itemClass, extraParameters)) {
+        if(!canDo(Operation.Read, entity, itemClass, extraParameters)) {
             return Collections.emptyList();
         }
 
@@ -149,5 +158,15 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         }
 
         return getUnusedItems(resources, usedResources);
+    }
+
+    @Override
+    public <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters) {
+        boolean canDo = super.canDo(operation, entity, itemClass, extraParameters);
+        if(canDo && Operation.Create.equals(operation) && entity instanceof Privilege && PrivilegeRole.class == itemClass) {
+            return countPrivilegeRoles((Privilege) entity) < ACCESS_RIGHT_COUNT;
+        }
+
+        return canDo;
     }
 }

@@ -12,6 +12,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseInvoiceItem;
 import com.cosmos.acacia.crm.enums.DocumentType;
+import com.cosmos.acacia.entity.Operation;
 import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,5 +183,10 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     @Override
     public List<DbResource> getResources(Class<? extends Enum> enumClass, Object... categoryClassifiers) {
         return esm.getResources(em, enumClass, categoryClassifiers);
+    }
+
+    @Override
+    public <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters) {
+        return true;
     }
 }

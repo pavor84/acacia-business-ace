@@ -18,6 +18,7 @@ import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.entity.AbstractEntityService;
+import com.cosmos.acacia.entity.Operation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -126,7 +127,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
 
     @Override
     public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
-        if(!canRead(entityClass, extraParameters)) {
+        if(!canDo(Operation.Read, null, entityClass, extraParameters)) {
             return Collections.emptyList();
         }
 
@@ -154,7 +155,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
 
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
-        if(!canRead(entity, itemClass, extraParameters)) {
+        if(!canDo(Operation.Read, entity, itemClass, extraParameters)) {
             return Collections.emptyList();
         }
 

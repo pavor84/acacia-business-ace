@@ -60,11 +60,8 @@ public abstract class AbstractEntityService implements EntityService {
     protected <E> void postDelete(E entity) {
     }
 
-    protected <E> boolean canRead(Class<E> entityClass, Object... extraParameters) {
-        return true;
-    }
-
-    protected <E, I> boolean canRead(E entity, Class<I> itemClass, Object... extraParameters) {
+    @Override
+    public <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters) {
         return true;
     }
 
