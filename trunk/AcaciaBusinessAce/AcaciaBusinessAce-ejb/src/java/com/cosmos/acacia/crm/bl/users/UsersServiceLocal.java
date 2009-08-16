@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
 import com.cosmos.acacia.crm.data.users.JobTitle;
 import com.cosmos.acacia.crm.data.users.Team;
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -24,6 +25,8 @@ public interface UsersServiceLocal extends UsersServiceRemote {
     List<User> getUsers(Organization organization);
 
     List<Team> getTeams(DataObjectBean parameter);
+
+    List<UserSecurityRole> getUserSecurityRoles(User user);
 
     List<BusinessUnit> getBusinessUnits();
 

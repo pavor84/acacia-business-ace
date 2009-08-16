@@ -10,6 +10,8 @@ import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
 import com.cosmos.acacia.security.AccessRight;
@@ -31,22 +33,38 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     public static final String PK_PRIVILEGE = "privilege";
     public static final String PK_PRIVILEGE_TYPE = "privilegeType";
     public static final String PK_BUSINESS_UNIT = "businessUnit";
+    public static final String PK_USER = "user";
     public static final String PK_SECURITY_ROLE = "securityRole";
     public static final String PK_EXPIRES = "expires";
     //
     public static final int ACCESS_RIGHT_COUNT = AccessRight.values().length;
 
-    public List<SecurityRole> getSecurityRoles(BusinessUnit businessUnit) {
-        Query q;
-        if(businessUnit != null) {
-            q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_BUSINESS_UNIT);
-            q.setParameter(PK_BUSINESS_UNIT, businessUnit);
-        } else {
-            q = em.createNamedQuery(SecurityRole.NQ_FIND_ALL);
-            q.setParameter(PK_ORGANIZATION, session.getOrganization());
-        }
+    public List<SecurityRole> getSecurityRoles() {
+        Query q = em.createNamedQuery(SecurityRole.NQ_FIND_ALL);
+        q.setParameter(PK_ORGANIZATION, session.getOrganization());
 
         return new ArrayList<SecurityRole>(q.getResultList());
+    }
+
+    public List<SecurityRole> getSecurityRoles(BusinessUnit businessUnit) {
+        Query q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_BUSINESS_UNIT);
+        q.setParameter(PK_BUSINESS_UNIT, businessUnit);
+
+        return new ArrayList<SecurityRole>(q.getResultList());
+    }
+
+    public List<SecurityRole> getSecurityRoles(User user, UserSecurityRole userSecurityRole) {
+        Query q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_USER);
+        q.setParameter(PK_ORGANIZATION, session.getOrganization());
+        q.setParameter(PK_USER, user);
+        List<SecurityRole> securityRoles = new ArrayList<SecurityRole>(q.getResultList());
+        SecurityRole securityRole;
+        if(userSecurityRole != null && (securityRole = userSecurityRole.getSecurityRole()) != null
+                && !securityRoles.contains(securityRole)) {
+            securityRoles.add(0, securityRole);
+        }
+
+        return securityRoles;
     }
 
     public List<PrivilegeCategory> getPrivilegeCategories(PrivilegeType privilegeType) {
@@ -86,10 +104,13 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         }
 
         if(SecurityRole.class == entityClass) {
+            Object parameter;
             if(extraParameters.length == 0) {
-                return (List<E>) getSecurityRoles(null);
-            } else {
-                return (List<E>) getSecurityRoles((BusinessUnit) extraParameters[0]);
+                return (List<E>) getSecurityRoles();
+            } else if((parameter = extraParameters[0]) instanceof BusinessUnit) {
+                return (List<E>) getSecurityRoles((BusinessUnit) parameter);
+            } else if(parameter instanceof User) {
+                return (List<E>) getSecurityRoles((User) parameter, (UserSecurityRole) extraParameters[1]);
             }
         } else if(PrivilegeCategory.class == entityClass) {
             if(extraParameters.length == 0) {

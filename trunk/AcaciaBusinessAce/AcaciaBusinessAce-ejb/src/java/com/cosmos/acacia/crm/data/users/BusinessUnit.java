@@ -74,7 +74,7 @@ import javax.persistence.UniqueConstraint;
         @FormContainer(
             name="addressList",
             title="Addresses",
-            depends={"<entityForm>"},
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
@@ -84,7 +84,7 @@ import javax.persistence.UniqueConstraint;
         @FormContainer(
             name="jobTitleList",
             title="Job Titles",
-            depends={"<entityForm>"},
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),

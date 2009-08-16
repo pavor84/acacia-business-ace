@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.users.Team;
 import com.cosmos.acacia.crm.data.users.TeamMember;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
@@ -79,9 +80,17 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
+    public List<UserSecurityRole> getUserSecurityRoles(User user) {
+        Query q = em.createNamedQuery(UserSecurityRole.NQ_FIND_ALL);
+        q.setParameter(USER_KEY, user);
+
+        return new ArrayList<UserSecurityRole>(q.getResultList());
+    }
+
+    @Override
     public List<BusinessUnit> getBusinessUnits() {
         Query q = em.createNamedQuery(BusinessUnit.NQ_FIND_ALL);
-        q.setParameter("organization", session.getOrganization());
+        q.setParameter(ORGANIZATION_KEY, session.getOrganization());
 
         return new ArrayList<BusinessUnit>(q.getResultList());
     }
@@ -94,7 +103,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             q.setParameter("parentBusinessUnit", parentBusinessUnit);
         } else {
             q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT);
-            q.setParameter("organization", session.getOrganization());
+            q.setParameter(ORGANIZATION_KEY, session.getOrganization());
         }
 
         return new ArrayList<BusinessUnit>(q.getResultList());
@@ -177,6 +186,10 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
                 return (List<I>) getBusinessUnitAddresses((BusinessUnit) entity, extraParameters);
             } else if(JobTitle.class == itemClass) {
                 return (List<I>) getJobTitles((BusinessUnit) entity, extraParameters);
+            }
+        } else if(entity instanceof User) {
+            if(UserSecurityRole.class == itemClass) {
+                return (List<I>) getUserSecurityRoles((User) entity);
             }
         }
 

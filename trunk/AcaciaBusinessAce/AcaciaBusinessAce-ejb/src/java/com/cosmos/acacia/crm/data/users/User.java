@@ -32,6 +32,7 @@ import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
@@ -101,9 +102,12 @@ import javax.persistence.Transient;
         @FormContainer(
             name=User.ROLES,
             title="Roles",
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
-                componentClass=JBTabbedPane.class
-            )
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=UserSecurityRole.class
         ),
         @FormContainer(
             name=User.GROUPS,

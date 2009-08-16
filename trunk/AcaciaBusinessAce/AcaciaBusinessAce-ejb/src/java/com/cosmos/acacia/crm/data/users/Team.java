@@ -63,7 +63,7 @@ uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "team_n
         @FormContainer(
             name="memberList",
             title="Members",
-            depends={"<entityForm>"},
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
