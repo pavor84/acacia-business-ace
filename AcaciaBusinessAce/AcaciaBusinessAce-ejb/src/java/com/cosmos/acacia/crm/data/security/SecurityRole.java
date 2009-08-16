@@ -44,17 +44,29 @@ import javax.persistence.UniqueConstraint;
 })
 @NamedQueries({
     @NamedQuery(
-        name = "SecurityRole.findAll",
+        name = SecurityRole.NQ_FIND_ALL,
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.organization = :organization" +
                 " ORDER BY t.businessUnit.businessUnitName, t.securityRoleName"
     ),
     @NamedQuery(
-        name = "SecurityRole.findByBusinessUnit",
+        name = SecurityRole.NQ_FIND_BY_BUSINESS_UNIT,
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.businessUnit = :businessUnit" +
+                " ORDER BY t.securityRoleName"
+    ),
+    @NamedQuery(
+        name = SecurityRole.NQ_FIND_BY_USER,
+        query = "SELECT t FROM SecurityRole t" +
+                " WHERE" +
+                "  t.organization = :organization" +
+                "  and t.securityRoleId not in (" +
+                "   SELECT t1.securityRole.securityRoleId FROM UserSecurityRole t1" +
+                "    WHERE" +
+                "     t1.user = :user" +
+                "  )" +
                 " ORDER BY t.securityRoleName"
     )
 })
@@ -63,7 +75,7 @@ import javax.persistence.UniqueConstraint;
         @FormContainer(
             name="privilegeList",
             title="Privileges",
-            depends={"<entityForm>"},
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
@@ -80,6 +92,7 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     protected static final String CLASS_NAME = "SecurityRole";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_BY_BUSINESS_UNIT = CLASS_NAME + ".findByBusinessUnit";
+    public static final String NQ_FIND_BY_USER = CLASS_NAME + ".findByUser";
 
     @Id
     @Basic(optional = false)

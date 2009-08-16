@@ -69,7 +69,7 @@ import javax.persistence.TemporalType;
         @FormContainer(
             name="itemList",
             title="Item List",
-            depends={"<entityForm>"},
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
