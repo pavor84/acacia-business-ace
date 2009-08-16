@@ -6,6 +6,8 @@ package com.cosmos.acacia.crm.gui.security;
 
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 import java.util.List;
@@ -24,6 +26,10 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
         super(SecurityRole.class, businessUnit);
     }
 
+    public SecurityRoleListPanel(User user, UserSecurityRole userSecurityRole) {
+        super(SecurityRole.class, user, userSecurityRole);
+    }
+
     @Override
     protected EntityPanel getEntityPanel(SecurityRole entity) {
         BusinessUnit businessUnit;
@@ -38,15 +44,19 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
     @Override
     public List<SecurityRole> getEntities() {
         BusinessUnit businessUnit;
+        User user;
+        Class entityClass = getEntityClass();
         if((businessUnit = getBusinessUnit()) != null) {
-            return getEntityService().getEntities(getEntityClass(), businessUnit);
+            return getEntityService().getEntities(entityClass, businessUnit);
+        } else if((user = getUser()) != null) {
+            return getEntityService().getEntities(entityClass, user, getUserSecurityRole());
         } else {
-            return getEntityService().getEntities(getEntityClass());
+            return getEntityService().getEntities(entityClass);
         }
     }
 
     public BusinessUnit getBusinessUnit() {
-        if(parameters != null && parameters.length > 0) {
+        if(parameters != null && parameters.length > 0 && parameters[0] instanceof BusinessUnit) {
             return (BusinessUnit) parameters[0];
         }
 
@@ -58,6 +68,38 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
             parameters = new Object[1];
         }
         parameters[0] = businessUnit;
+        refresh();
+    }
+
+    public User getUser() {
+        if(parameters != null && parameters.length > 0 && parameters[0] instanceof User) {
+            return (User) parameters[0];
+        }
+
+        return null;
+    }
+
+    public void setUser(User user) {
+        if(parameters == null) {
+            parameters = new Object[1];
+        }
+        parameters[0] = user;
+        refresh();
+    }
+
+    public UserSecurityRole getUserSecurityRole() {
+        if(parameters != null && parameters.length > 1 && parameters[1] instanceof UserSecurityRole) {
+            return (UserSecurityRole) parameters[1];
+        }
+
+        return null;
+    }
+
+    public void setUserSecurityRole(UserSecurityRole userSecurityRole) {
+        if(parameters == null) {
+            parameters = new Object[2];
+        }
+        parameters[1] = userSecurityRole;
         refresh();
     }
 }

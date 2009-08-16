@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.gui.DataMode;
 import com.cosmos.acacia.annotation.LogicUnitType;
 import com.cosmos.acacia.annotation.Property;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -181,7 +183,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                             entity, propertyDetails);
                 }
             } else {
-                if(!(jComponent instanceof JScrollPane)) {
+                if(!(jComponent instanceof JScrollPane || jComponent instanceof JButton)) {
                     System.out.println("Unknown binder for jComponent: " + jComponent);
                 }
             }
@@ -204,7 +206,13 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         Object[] params = new Object[size];
         for(int i = 0; i < size; i++) {
             PropertyDetail pd = pdList.get(i);
-            Object bean = getPropertyValue(this, pd.getGetter());
+            String getter = pd.getGetter();
+            Object bean;
+            if(isExpressionLanguage(getter)) {
+                bean = getPropertyValue(getter);
+            } else {
+                bean = getPropertyValue(this, getter);
+            }
             String setter;
             if((setter = pd.getSetter()) != null && setter.length() > 0) {
                 params[i] = getPropertyValue(bean, setter);
@@ -423,7 +431,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         Map<String, Set<String>> cdMap = getContainerDependenciesMap();
         for(String containerName : cdMap.keySet()) {
             for(String dependency : cdMap.get(containerName)) {
-                if(Property.ENTITY_FORM_NAME.equals(dependency)) {
+                if(FormContainer.DEPENDS_ENTITY_FORM.equals(dependency)) {
                     JComponent container = getContainer(containerName);
                     JComponent parentContainer = (JComponent)container.getParent();
                     boolean ready = getBindingGroup().isContentValid();
@@ -535,6 +543,10 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         return constant.substring(beginIndex, endIndex);
     }
 
+    protected boolean isExpressionLanguage(String parameter) {
+        return parameter.startsWith("${") || parameter.startsWith("#{");
+    }
+
     protected boolean isConstantParameter(String parameter) {
         return parameter.startsWith("'") || parameter.startsWith("\"");
     }
@@ -548,7 +560,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         for (int i = 0; i < size; i++) {
             PropertyDetail pd = parameters.get(i);
             String getter = pd.getGetter().trim();
-            if(isConstantParameter(getter)) {
+            if(isExpressionLanguage(getter)) {
+                parameterTypes[i] = getPropertyValue(getter).getClass();
+            } else if(isConstantParameter(getter)) {
                 String setter;
                 if((setter = pd.getSetter().trim()).length() == 0) {
                     throw new EntityPanelException("The setter is required when the getter (" + getter + ") is constant.");
@@ -585,6 +599,11 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     protected Object getPropertyValue(String propertyName) {
+        if(isExpressionLanguage(propertyName)) {
+            ELProperty elProperty = create(propertyName);
+            return elProperty.getValue(this);
+        }
+
         return getPropertyValue(entity, propertyName);
     }
 
