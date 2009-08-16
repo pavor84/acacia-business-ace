@@ -81,7 +81,7 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
 
     public void setUser(User user) {
         if(parameters == null) {
-            parameters = new Object[1];
+            parameters = new Object[2];
         }
         parameters[0] = user;
         refresh();
