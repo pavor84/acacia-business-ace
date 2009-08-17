@@ -193,6 +193,10 @@ public class EntityFormButtonPanel extends AcaciaPanel {
     }
 
     public void setSaveActionState(BaseEntityPanel parent) {
+        if(baseEntityPanel == null) {
+            return;
+        }
+
         boolean isContentValid = baseEntityPanel.isContentValid();
         setEnabled(Button.Save, isContentValid);
         setEnabled(Button.Problems, !isContentValid);

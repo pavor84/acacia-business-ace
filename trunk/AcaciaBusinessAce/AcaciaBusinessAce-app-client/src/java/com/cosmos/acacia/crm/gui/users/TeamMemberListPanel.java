@@ -7,7 +7,6 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.crm.data.users.Team;
 import com.cosmos.acacia.crm.data.users.TeamMember;
-import com.cosmos.acacia.gui.entity.AlterationType;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 
@@ -24,12 +23,5 @@ public class TeamMemberListPanel extends DetailEntityListPanel<Team, TeamMember>
     @Override
     protected EntityPanel getEntityPanel(TeamMember entity) {
         return new TeamMemberPanel(this, entity);
-    }
-
-    @Override
-    public void rowChanged(AlterationType alterationType, TeamMember oldRowObject, TeamMember newRowObject) {
-        if(AlterationType.Nothing.equals(alterationType)) {
-            return;
-        }
     }
 }

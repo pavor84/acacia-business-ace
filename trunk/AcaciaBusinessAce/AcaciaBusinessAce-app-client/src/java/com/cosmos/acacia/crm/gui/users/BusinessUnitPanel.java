@@ -12,9 +12,6 @@ import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBTextField;
-import java.util.List;
-import javax.swing.JComponent;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 
 /**
  *
@@ -47,10 +44,6 @@ public class BusinessUnitPanel extends EntityPanel<BusinessUnit> {
             getJComponentByPropertyName(BUSINESS_UNIT_NAME_PROPERTY_NAME, JBTextField.class).setEnabled(false);
             getJComponentByPropertyName(DIVISION_NAME_PROPERTY_NAME, JBTextField.class).setEnabled(false);
         }
-    }
-
-    @Override
-    protected void entityChanged(String propertyName, JComponent jComponent, PropertyStateEvent event) {
     }
 
     @Override
