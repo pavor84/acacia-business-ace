@@ -24,6 +24,8 @@ public interface UsersServiceLocal extends UsersServiceRemote {
 
     List<User> getUsers(Organization organization);
 
+    List<User> getPossibleManagers(User user);
+
     List<Team> getTeams(DataObjectBean parameter);
 
     List<UserSecurityRole> getUserSecurityRoles(User user);

@@ -31,6 +31,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
@@ -236,9 +237,58 @@ public class User extends DataObjectBean implements Serializable {
     )
     private String userPassword;
 
+    @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id")//, nullable = false)
+    @ManyToOne//(optional = false)
+    @Property(title="Business Unit",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=INFO_GENERAL,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Business Unit:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
+    private BusinessUnit businessUnit;
+
+    @JoinColumn(name = "job_title_id", referencedColumnName = "job_title_id")
+    @ManyToOne
+    @Property(title="Job Title",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.users.JobTitleListPanel",
+            constructorParameters={
+                @PropertyName(getter="${this}")
+            }
+        ),
+        depends={"businessUnit"},
+        formComponentPair=@FormComponentPair(
+            parentContainerName=INFO_GENERAL,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Job Title:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
+    private JobTitle jobTitle;
+
     @JoinColumn(name = "manager_id", referencedColumnName = "user_id")
     @ManyToOne
     @Property(title="Manager",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.users.UserListPanel",
+            constructorParameters={
+                @PropertyName(getter="${entity}", setter="user")
+            }
+        ),
+        depends={"jobTitle"},
         formComponentPair=@FormComponentPair(
             parentContainerName=INFO_GENERAL,
             firstComponent=@Component(
@@ -496,6 +546,14 @@ public class User extends DataObjectBean implements Serializable {
         this.creator = creator;
     }
 
+    public BusinessUnit getBusinessUnit() {
+        return businessUnit;
+    }
+
+    public void setBusinessUnit(BusinessUnit businessUnit) {
+        this.businessUnit = businessUnit;
+    }
+
     public User getManager() {
         return manager;
     }
@@ -504,30 +562,21 @@ public class User extends DataObjectBean implements Serializable {
         this.manager = manager;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
-        return hash;
+    public JobTitle getJobTitle() {
+        return jobTitle;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
-            return false;
-        }
-        User other = (User) object;
-        if ((this.userId == null && other.userId != null) ||
-            (this.userId != null && !this.userId.equals(other.userId))) {
-            return false;
-        }
-        return true;
+    public void setJobTitle(JobTitle jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.User[userId=" + userId + ", username=" + userName + ", email=" + emailAddress + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append("; username=").append(userName);
+        sb.append(", email=").append(emailAddress);
+        return sb.toString();
     }
 
     @Override
