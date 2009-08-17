@@ -258,4 +258,9 @@ public class JBTextField extends JTextField
             validate(beanEntity);
         }
     }
+
+    @Override
+    public void clear() {
+        setText(null);
+    }
 }

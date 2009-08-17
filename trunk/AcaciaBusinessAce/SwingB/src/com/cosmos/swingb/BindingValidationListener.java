@@ -11,13 +11,13 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
  * @author Bozhidar Bozhanov
  */
 public class BindingValidationListener extends AbstractBindingListener {
-    
+
     Validatable validatable;
-    
+
     public BindingValidationListener(Validatable validatable) {
         this.validatable = validatable;
     }
-    
+
     @Override
     public void bindingBecameBound(Binding binding) {
         validate(binding);
@@ -28,32 +28,30 @@ public class BindingValidationListener extends AbstractBindingListener {
         validate(binding);
     }
 
-    public void validate(Binding binding)
-    {
+    public void validate(Binding binding) {
         boolean required = false;
         String tooltip = null;
         BaseValidator validator = (BaseValidator) binding.getValidator();
-        if(validator != null)
-        {
+        if (validator != null) {
             tooltip = validator.getTooltip();
-            if (tooltip != null)
+            if (tooltip != null) {
                 tooltip = validatable.getResourceMap().getString(tooltip);
+            }
             required = validator.isRequired();
         }
 
-        if(!binding.isContentValid())
-        {
-            if(required)
+        if (!binding.isContentValid()) {
+            if (required) {
                 validatable.setStyleRequired(tooltip);
-            else
+            } else {
                 validatable.setStyleInvalid(tooltip);
-        }
-        else
-        {
-            if(required)
+            }
+        } else {
+            if (required) {
                 validatable.setStyleValid();
-            else
+            } else {
                 validatable.setStyleNormal();
+            }
         }
     }
 }

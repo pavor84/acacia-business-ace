@@ -212,4 +212,9 @@ public class JBTextPane extends JTextPane
 
         return beanResource;
     }
+
+    @Override
+    public void clear() {
+        setText(null);
+    }
 }

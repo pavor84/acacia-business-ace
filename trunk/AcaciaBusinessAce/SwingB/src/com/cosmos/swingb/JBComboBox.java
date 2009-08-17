@@ -44,9 +44,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *
  * @author Miro
  */
-public class JBComboBox
-        extends JComboBox
-        implements Validatable, EnumerationBinder {
+public class JBComboBox extends JComboBox implements Validatable, EnumerationBinder {
 
     public static final String SELECTED_ITEM = "selectedItem";
     private Application application;
@@ -255,14 +253,6 @@ public class JBComboBox
         getEditor().getEditorComponent().removeKeyListener(listener);
     }
 
-    private class JBComboBoxEditor
-            extends BasicComboBoxEditor {
-
-        public JBComboBoxEditor() {
-            super();
-            getEditorComponent().addMouseListener(new JBContextMenuCreaetor());
-        }
-    }
     /** Handling coversions */
     private ObjectToStringConverter converter;
     @SuppressWarnings("unchecked")
@@ -274,23 +264,6 @@ public class JBComboBox
 
     public void setConverter(ObjectToStringConverter converter) {
         this.converter = converter;
-    }
-
-    class CustomCellRenderer extends BeanListCellRenderer {
-
-        public CustomCellRenderer() {
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList list,
-                Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            if (getConverter() != null) {
-                value = getConverter().getPreferredStringForItem(value);
-            }
-
-            return super.getListCellRendererComponent(list, value,
-                    index, isSelected, cellHasFocus);
-        }
     }
 
     public void addItemListener(ItemListener listener, boolean ignoreSelectEvents) {
@@ -374,5 +347,35 @@ public class JBComboBox
     @Override
     public void refresh() {
         setSelectedItem(getPropertyValue());
+    }
+
+    @Override
+    public void clear() {
+        setSelectedItem(null);
+    }
+
+    private class JBComboBoxEditor extends BasicComboBoxEditor {
+
+        public JBComboBoxEditor() {
+            super();
+            getEditorComponent().addMouseListener(new JBContextMenuCreaetor());
+        }
+    }
+
+    class CustomCellRenderer extends BeanListCellRenderer {
+
+        public CustomCellRenderer() {
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList list,
+                Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (getConverter() != null) {
+                value = getConverter().getPreferredStringForItem(value);
+            }
+
+            return super.getListCellRendererComponent(list, value,
+                    index, isSelected, cellHasFocus);
+        }
     }
 }
