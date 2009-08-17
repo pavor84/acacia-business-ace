@@ -20,16 +20,4 @@ public class TeamMemberPanel extends EntityPanel<TeamMember> {
     public TeamMemberPanel(AbstractEntityListPanel entityListPanel, TeamMember entity) {
         super(entityListPanel, entity);
     }
-
-    @Override
-    protected void entityChanged(String propertyName, JComponent jComponent, PropertyStateEvent event) {
-//        if(RECEIVED_PRICE_PROPERTY_NAME.equals(propertyName)) {
-//            receivedPricePropertyChanged();
-//        } else if(RECEIVED_QUANTITY_PROPERTY_NAME.equals(propertyName)) {
-//            receivedQuantityPropertyChanged();
-//        } else if(PRODUCT_PROPERTY_NAME.equals(propertyName)) {
-//            productPropertyChanged();
-//        }
-    }
-
 }

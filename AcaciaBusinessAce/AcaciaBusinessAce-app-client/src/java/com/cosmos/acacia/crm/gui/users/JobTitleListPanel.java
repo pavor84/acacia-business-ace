@@ -5,9 +5,8 @@
 
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.users.JobTitle;
-import com.cosmos.acacia.gui.entity.AlterationType;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 
@@ -15,9 +14,17 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
  *
  * @author Miro
  */
-public class JobTitleListPanel extends DetailEntityListPanel<BusinessUnit, JobTitle> {
+public class JobTitleListPanel extends DetailEntityListPanel<DataObjectBean, JobTitle> {
 
-    public JobTitleListPanel(EntityPanel<BusinessUnit> mainEntityPanel, Class<JobTitle> itemEntityClass) {
+    /*public JobTitleListPanel(BusinessUnit businessUnit) {
+        this(new BusinessUnitListPanel().getEntityPanel(businessUnit), JobTitle.class);
+    }*/
+
+    public JobTitleListPanel(EntityPanel<DataObjectBean> mainEntityPanel) {
+        this(mainEntityPanel, JobTitle.class);
+    }
+
+    public JobTitleListPanel(EntityPanel<DataObjectBean> mainEntityPanel, Class<JobTitle> itemEntityClass) {
         super(mainEntityPanel, itemEntityClass);
     }
 
@@ -27,10 +34,14 @@ public class JobTitleListPanel extends DetailEntityListPanel<BusinessUnit, JobTi
     }
 
     @Override
-    public void rowChanged(AlterationType alterationType, JobTitle oldRowObject, JobTitle newRowObject) {
-        if(AlterationType.Nothing.equals(alterationType)) {
-            return;
+    public DataObjectBean getMainEntity() {
+        EntityPanel mainEntityPanel;
+        if((mainEntityPanel = getMainEntityPanel()) instanceof BusinessUnitPanel) {
+            return super.getMainEntity();
+        } else if(mainEntityPanel instanceof UserPanel) {
+            return ((UserPanel) mainEntityPanel).getEntity().getBusinessUnit();
         }
-    }
 
+        throw new UnsupportedOperationException("Unsupported mainEntityPanel=" + mainEntityPanel);
+    }
 }

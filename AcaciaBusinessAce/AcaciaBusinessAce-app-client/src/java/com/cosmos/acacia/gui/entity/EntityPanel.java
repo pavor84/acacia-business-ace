@@ -26,6 +26,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.SelectableListDialog;
+import com.cosmos.swingb.binding.Clearable;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.swingb.binding.EnumerationBinder;
@@ -37,6 +38,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -425,7 +427,11 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 }
             }
 
-            getJComponent(propertyName).setEnabled(ready);
+            JComponent jComponent = getJComponent(propertyName);
+            jComponent.setEnabled(ready);
+            if(!ready && jComponent instanceof Clearable) {
+                ((Clearable) jComponent).clear();
+            }
         }
 
         Map<String, Set<String>> cdMap = getContainerDependenciesMap();
@@ -463,7 +469,9 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     protected SelectableListDialog getSelectableListDialog(PropertyDetails propertyDetails,
             EntityProperties entityProps, JComponent jComponent) {
-        Class<? extends SelectableListDialog> cls;
+        Class<? extends SelectableListDialog> cls = null;
+        Class[] parameterTypes = null;
+        Object[] parameterValues = null;
         try {
             if ((cls = (Class<? extends SelectableListDialog>) getSelectableListDialogClass(propertyDetails)) != null) {
                 List<PropertyDetail> params;
@@ -472,8 +480,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 }
 
                 addDependenciesByParameters(jComponent.getName(), params);
-                Class[] parameterTypes = getParameterTypes(params, entityProps, cls);
-                Object[] parameterValues = getParameters(params, parameterTypes);
+                parameterTypes = getParameterTypes(params, entityProps, cls);
+                parameterValues = getParameters(params, parameterTypes);
                 SelectableListDialog listDialog = (SelectableListDialog) ConstructorUtils.invokeConstructor(cls, parameterValues, parameterTypes);
                 PropertyChangeHandler handler = getPropertyChangeHandler();
                 handler.addPropertyBean(params, listDialog, jComponent);
@@ -481,10 +489,21 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                 return listDialog;
             }
         } catch (Exception ex) {
-            throw new EntityPanelException("propertyDetails: " + propertyDetails, ex);
+            throw new EntityPanelException("propertyDetails: " + propertyDetails +
+                    ", cls: " + cls +
+                    ", parameterValues: " + asList(parameterValues) +
+                    ", parameterTypes: " + asList(parameterTypes), ex);
         }
 
         return new EntityListPanel(propertyDetails.getPropertyClass());
+    }
+
+    protected <T> List<T> asList(T... values) {
+        if(values == null || values.length == 0) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(values);
     }
 
     protected String getJComponentName(JComponent jComponent) {
@@ -598,10 +617,18 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
         return parameterTypes;
     }
 
+    protected Object getELPropertyValue(String expression) {
+            if(expression.endsWith("{this}")) {
+                return this;
+            }
+
+            ELProperty elProperty = create(expression);
+            return elProperty.getValue(this);
+    }
+
     protected Object getPropertyValue(String propertyName) {
         if(isExpressionLanguage(propertyName)) {
-            ELProperty elProperty = create(propertyName);
-            return elProperty.getValue(this);
+            return getELPropertyValue(propertyName);
         }
 
         return getPropertyValue(entity, propertyName);
