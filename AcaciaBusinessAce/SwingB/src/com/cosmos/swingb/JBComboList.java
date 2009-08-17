@@ -180,30 +180,6 @@ public class JBComboList
         }
     }
 
-    private class ComboListItemListener
-            implements ItemListener {
-
-        @Override
-        public void itemStateChanged(ItemEvent event) {
-            if (isEnabled()) {
-                setEnabledUnselectButton(comboBox.getSelectedItem() != null);
-            } else {
-                setEnabledUnselectButton(false);
-            }
-        }
-    }
-
-    /*
-    public JComboBoxBinding bind(
-    BindingGroup bindingGroup,
-    List data,
-    Object beanEntity,
-    PropertyDetails propertyDetails,
-    ObjectToStringConverter converter)
-    {
-    AutoCompleteDecorator.decorate(this, converter);
-    return super.bind(bindingGroup, data, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
-    }*/
     @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
@@ -301,12 +277,9 @@ public class JBComboList
         if (validator != null) {
             binding.setValidator(validator);
         }
-        binding.addBindingListener(new BindingValidationListener(this));
+        binding.addBindingListener(new ComboListBindingValidationListener(this, propertyDetails));
 
         bindingGroup.addBinding(binding);
-
-        setEditable(propertyDetails.isEditable());
-        setEnabled(!propertyDetails.isReadOnly());
 
         return comboBoxBinding;
     }
@@ -316,6 +289,10 @@ public class JBComboList
     }
 
     protected void setEnabledUnselectButton(boolean enabled) {
+        if("businessUnitJBComboList".equals(getName())) {
+            System.out.println("setEnabledUnselectButton(" + enabled + ").selectedItem=" + comboBox.getSelectedItem());
+            //new Throwable().printStackTrace();
+        }
         if (comboBox.getSelectedItem() == null) {
             unselectButton.setEnabled(false);
         } else {
@@ -325,6 +302,9 @@ public class JBComboList
 
     @Override
     public void setEnabled(boolean enabled) {
+        if("businessUnitJBComboList".equals(getName())) {
+            System.out.println("setEnabled(" + enabled + ")");
+        }
         super.setEnabled(enabled);
         comboBox.setEnabled(enabled);
         setEnabledUnselectButton(enabled);
@@ -544,6 +524,23 @@ public class JBComboList
 
             if(selectedItem != null && listData.contains(selectedItem)) {
                 comboBox.setSelectedItem(selectedItem);
+            }
+        }
+    }
+
+    @Override
+    public void clear() {
+        setSelectedItem(null);
+    }
+
+    private class ComboListItemListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent event) {
+            if (isEnabled()) {
+                setEnabledUnselectButton(comboBox.getSelectedItem() != null);
+            } else {
+                setEnabledUnselectButton(false);
             }
         }
     }

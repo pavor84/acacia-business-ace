@@ -14,7 +14,7 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
  *
  * @author Miro
  */
-public interface EntityListBinder extends Refreshable {
+public interface EntityListBinder extends Refreshable, Clearable {
 
     JComboBoxBinding bind(BindingGroup bindingGroup, SelectableListDialog selectableListDialog,
             Object beanEntity, PropertyDetails propertyDetails);

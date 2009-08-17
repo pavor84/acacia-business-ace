@@ -250,4 +250,9 @@ public class JBIntegerField extends JXIntegerField
     private void validate(Object beanEntity) {
         setValue(getPropertyValue(beanEntity));
     }
+
+    @Override
+    public void clear() {
+        setValue(null);
+    }
 }

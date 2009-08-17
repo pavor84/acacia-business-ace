@@ -251,4 +251,9 @@ public class JBDecimalField extends JXDecimalField
     private void validate(Object beanEntity) {
         setValue(getPropertyValue(beanEntity));
     }
+
+    @Override
+    public void clear() {
+        setValue(null);
+    }
 }

@@ -31,9 +31,7 @@ import org.jdesktop.swingx.JXDatePicker;
  *
  * @author Miro
  */
-public class JBDatePicker
-        extends JXDatePicker
-        implements Validatable, EntityBinder {
+public class JBDatePicker extends JXDatePicker implements Validatable, EntityBinder {
 
     public static final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
     public static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
@@ -245,5 +243,10 @@ public class JBDatePicker
         JFormattedTextField editor = getEditor();
         editor.setBackground(color);
         setEditor(editor);
+    }
+
+    @Override
+    public void clear() {
+        setDate(null);
     }
 }

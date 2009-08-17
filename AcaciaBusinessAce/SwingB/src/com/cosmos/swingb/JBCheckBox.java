@@ -8,6 +8,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import com.cosmos.util.BooleanUtils;
+import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
@@ -198,5 +199,10 @@ public class JBCheckBox extends JCheckBox implements Validatable, EntityBinder {
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
+    }
+
+    @Override
+    public void clear() {
+        setSelected(false);
     }
 }

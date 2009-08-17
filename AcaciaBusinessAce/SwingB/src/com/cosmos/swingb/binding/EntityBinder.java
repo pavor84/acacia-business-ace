@@ -13,7 +13,7 @@ import org.jdesktop.beansbinding.BindingGroup;
  *
  * @author Miro
  */
-public interface EntityBinder extends Refreshable {
+public interface EntityBinder extends Refreshable, Clearable {
 
     Binding bind(
             BindingGroup bindingGroup,
