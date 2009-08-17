@@ -64,6 +64,11 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
+    public List<User> getPossibleManagers(User user) {
+        return new ArrayList<User>();
+    }
+
+    @Override
     public List<Team> getTeams(DataObjectBean parameter) {
         Query q;
         if (parameter instanceof Organization) {
@@ -141,7 +146,12 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         }
 
         if (entityClass == User.class) {
-            return (List<E>) getUsers(session.getOrganization());
+            Object parameter;
+            if(extraParameters.length > 1 && (parameter = extraParameters[0]) instanceof User) {
+                return (List<E>) getPossibleManagers((User) parameter);
+            } else {
+                return (List<E>) getUsers(session.getOrganization());
+            }
         } else if (entityClass == Team.class) {
             if (extraParameters.length == 0) {
                 return (List<E>) getTeams(session.getOrganization());
