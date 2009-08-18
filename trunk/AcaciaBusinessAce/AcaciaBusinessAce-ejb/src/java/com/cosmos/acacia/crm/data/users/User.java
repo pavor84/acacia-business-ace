@@ -38,6 +38,7 @@ import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
 import com.cosmos.swingb.JBButton;
+import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -273,7 +274,7 @@ public class User extends DataObjectBean implements Serializable {
                 text="Job Title:"
             ),
             secondComponent=@Component(
-                componentClass=JBComboList.class
+                componentClass=JBComboBox.class
             )
         )
     )
@@ -296,7 +297,7 @@ public class User extends DataObjectBean implements Serializable {
                 text="Manager:"
             ),
             secondComponent=@Component(
-                componentClass=JBComboList.class
+                componentClass=JBComboBox.class
             )
         )
     )
