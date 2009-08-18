@@ -346,9 +346,10 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
     }
 
     @Override
-    public void refresh() {
+    public Task refresh() {
         RefreshTask refreshTask = new RefreshTask(getApplication());
         refreshTask.run();
+        return refreshTask;
     }
 
     public class RefreshTask extends Task<Object, Void> {

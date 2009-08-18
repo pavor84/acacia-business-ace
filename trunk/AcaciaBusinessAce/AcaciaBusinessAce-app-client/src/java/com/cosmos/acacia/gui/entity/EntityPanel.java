@@ -12,6 +12,7 @@ import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
@@ -175,14 +176,26 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
                             entity, propertyDetails);
                 }
             } else if (jComponent instanceof EnumerationBinder) {
-                List listData = getResources(getSelectableListDialogClass(propertyDetails),
-                        getParameters(propertyDetails));
-                if(updateStrategy != null) {
-                    ((EnumerationBinder) jComponent).bind(bg, listData,
-                            entity, propertyDetails, updateStrategy);
+                if(DbResource.class == propertyDetails.getPropertyClass()) {
+                    Object[] params = getParameters(propertyDetails);
+                    Class selectableListDialogClass = getSelectableListDialogClass(propertyDetails);
+                    List listData = getResources(selectableListDialogClass, params);
+                    if(updateStrategy != null) {
+                        ((EnumerationBinder) jComponent).bind(bg, listData,
+                                entity, propertyDetails, updateStrategy);
+                    } else {
+                        ((EnumerationBinder) jComponent).bind(bg, listData,
+                                entity, propertyDetails);
+                    }
                 } else {
-                    ((EnumerationBinder) jComponent).bind(bg, listData,
-                            entity, propertyDetails);
+                    SelectableListDialog selectableListDialog = getSelectableListDialog(propertyDetails, entityProps, jComponent);
+                    if(updateStrategy != null) {
+                        ((EnumerationBinder) jComponent).bind(bg, selectableListDialog,
+                                entity, propertyDetails, updateStrategy);
+                    } else {
+                        ((EnumerationBinder) jComponent).bind(bg, selectableListDialog,
+                                entity, propertyDetails);
+                    }
                 }
             } else {
                 if(!(jComponent instanceof JScrollPane || jComponent instanceof JButton)) {
@@ -429,8 +442,14 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
             JComponent jComponent = getJComponent(propertyName);
             jComponent.setEnabled(ready);
-            if(!ready && jComponent instanceof Clearable) {
-                ((Clearable) jComponent).clear();
+            if(ready) {
+                if(jComponent instanceof Refreshable) {
+                    ((Refreshable) jComponent).refresh();
+                }
+            } else {
+                if(jComponent instanceof Clearable) {
+                    ((Clearable) jComponent).clear();
+                }
             }
         }
 
