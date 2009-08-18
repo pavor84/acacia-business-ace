@@ -23,19 +23,35 @@ import com.cosmos.acacia.annotation.Property;
 
 @Entity
 @Table(name = "users_organizations")
-@NamedQueries( {
-    @NamedQuery (
-            name = "UserOrganization.findByUser",
-            query = "select uo from UserOrganization uo where uo.user=:user"
+@NamedQueries({
+    @NamedQuery(
+        name = UserOrganization.NQ_FIND_BY_USER,
+        query = "select uo from UserOrganization uo where uo.user=:user"
     ),
-    @NamedQuery (
-            name = "UserOrganization.findByOrganization",
-            query = "select uo from UserOrganization uo where uo.organization=:organization"
+    @NamedQuery(
+        name = UserOrganization.NQ_FIND_BY_ORGANIZATION,
+        query = "select uo from UserOrganization uo where uo.organization=:organization"
+    ),
+    @NamedQuery(
+        name = UserOrganization.NQ_FIND_BY_BUSINESS_UNITS_AND_FUNCTIONAL_HIERARCHY,
+        query = "select t1 from UserOrganization t1" +
+                " WHERE" +
+                "  t1.organization = :organization" +
+                "  and t1.user.businessUnit in (:businessUnits)" +
+                "  and t1.user.jobTitle.functionalHierarchy in (:functionalHierarchies)"
     )
 })
 public class UserOrganization implements Serializable {
 
     private static final long serialVersionUID = 5301950611457351180L;
+    //
+    protected static final String CLASS_NAME = "UserOrganization";
+    public static final String NQ_FIND_BY_USER =
+            CLASS_NAME + ".findByUser";
+    public static final String NQ_FIND_BY_ORGANIZATION =
+            CLASS_NAME + ".findByOrganization";
+    public static final String NQ_FIND_BY_BUSINESS_UNITS_AND_FUNCTIONAL_HIERARCHY =
+            CLASS_NAME + ".findByBusinessUnitsAndFunctionalHierarchy";
 
     @EmbeddedId
     protected UserOrganizationPK userOrganizationPK;

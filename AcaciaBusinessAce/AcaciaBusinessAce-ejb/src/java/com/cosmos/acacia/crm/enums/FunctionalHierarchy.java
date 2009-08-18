@@ -5,6 +5,8 @@
 package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -66,5 +68,19 @@ public enum FunctionalHierarchy implements DatabaseResource {
     @Override
     public String toText() {
         return name();
+    }
+
+    public List<FunctionalHierarchy> getParentalHierarchy() {
+        return getParentalHierarchy(this);
+    }
+
+    public static List<FunctionalHierarchy> getParentalHierarchy(FunctionalHierarchy currentFunctionalHierarchy) {
+        List<FunctionalHierarchy> parentHierarchy = new ArrayList<FunctionalHierarchy>();
+        while(currentFunctionalHierarchy != null) {
+            parentHierarchy.add(currentFunctionalHierarchy);
+            currentFunctionalHierarchy = currentFunctionalHierarchy.getParent();
+        }
+
+        return parentHierarchy;
     }
 }
