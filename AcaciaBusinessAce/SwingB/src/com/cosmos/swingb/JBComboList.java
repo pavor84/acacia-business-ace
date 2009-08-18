@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.SwingConstants;
 
@@ -25,16 +23,10 @@ import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.beansbinding.Validator;
-import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingbinding.JComboBoxBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
@@ -42,32 +34,19 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.swingb.validation.Validatable;
-import org.apache.commons.beanutils.PropertyUtils;
+import org.jdesktop.application.Task;
 
 /**
  *
  * @author Miro
  */
-public class JBComboList
-        extends JXPanel
+public class JBComboList extends JXPanel
         implements ItemSelectable, ActionListener, Validatable, EntityListBinder {
 
-    private Application application;
-    private ApplicationContext applicationContext;
-    private ApplicationActionMap applicationActionMap;
-    private ResourceMap resourceMap;
     private JXButton unselectButton;
     private JXButton lookupButton;
     private JBComboBox comboBox;
     private JBPanel buttonPanel;
-    //edit-able by default
-    private boolean editable = true;
-    private ObservableList observableData;
-    private String propertyName;
-    private Object beanEntity;
-    private JComboBoxBinding comboBoxBinding;
-    private SelectableListDialog selectableListDialog;
-    private Binding binding;
 
     public JBComboList() {
         initComponents();
@@ -76,7 +55,7 @@ public class JBComboList
     private void initComponents() {
         unselectButton = new JXButton();
         lookupButton = new JXButton();
-        comboBox = new JBComboBox();
+        comboBox = new ComboBox();
 
         setName("JBComboList"); // NOI18N
         setLayout(new BorderLayout());
@@ -133,16 +112,17 @@ public class JBComboList
 
     @Action
     public void lookupButtonAction() {
-        if (selectableListDialog != null) {
+        SelectableListDialog selectableListDialog;
+        if ((selectableListDialog = comboBox.getSelectableListDialog()) != null) {
             selectableListDialog.setEditable(isEditable());
             Object selectedItem = comboBox.getSelectedItem();
             selectableListDialog.setSelectedRowObject(selectedItem);
             DialogResponse response = selectableListDialog.showDialog(this);
 
             if (isEditable()) {
-                List listData = selectableListDialog.getListData();
+                ObservableList observableData = comboBox.getData();
                 observableData.clear();
-                observableData.addAll(listData);
+                observableData.addAll(selectableListDialog.getListData());
 
                 if (DialogResponse.SELECT.equals(response)) {
                     Object result = selectableListDialog.getSelectedRowObject();
@@ -156,20 +136,11 @@ public class JBComboList
     }
 
     protected Object getPropertyValue() {
-        try {
-            return PropertyUtils.getProperty(beanEntity, propertyName);
-        } catch(Exception ex) {
-            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
-        }
+        return comboBox.getPropertyValue();
     }
 
     protected void setPropertyValue(Object value) {
-        try {
-            PropertyUtils.setProperty(beanEntity, propertyName, value);
-        } catch(Exception ex) {
-            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName +
-                    ", value=" + value, ex);
-        }
+        comboBox.setPropertyValue(value);
     }
 
     @Action
@@ -235,64 +206,28 @@ public class JBComboList
             PropertyDetails propertyDetails,
             ObjectToStringConverter converter,
             AutoBinding.UpdateStrategy updateStrategy) {
-        if (propertyDetails == null || propertyDetails.isHiden()) {
-            setEditable(false);
-            setEnabled(false);
+        if(converter != null) {
+            comboBox.setConverter(converter);
+        }
+
+        ComboListBindingValidationListener bindingValidationListener =
+                new ComboListBindingValidationListener(this, propertyDetails);
+        JComboBoxBinding binding;
+        if((binding = comboBox.bind(
+                bindingGroup,
+                selectableListDialog,
+                beanEntity,
+                propertyDetails,
+                updateStrategy,
+                getName(),
+                bindingValidationListener)) == null) {
             return null;
         }
 
-        if(converter != null) {
-            setConverter(converter);
-        }
-
-        this.selectableListDialog = selectableListDialog;
-
-        List data = new ArrayList(selectableListDialog.getListData());
-        observableData = ObservableCollections.observableList(data);
-        this.propertyName = propertyDetails.getPropertyName();
-        this.beanEntity = beanEntity;
-
-        String name;
-        if((name = getName()) != null) {
-            name = name + ".ComboBox";
-        }
-        comboBoxBinding = SwingBindings.createJComboBoxBinding(
-                updateStrategy,
-                observableData,
-                comboBox,
-                name);
-        bindingGroup.addBinding(comboBoxBinding);
-
-        name = getName();
-        ELProperty displayELProperty = ELProperty.create("${" + propertyName + "}");
-        BeanProperty beanProperty = BeanProperty.create("selectedItem");
-        binding = Bindings.createAutoBinding(
-                updateStrategy,
-                beanEntity,
-                displayELProperty,
-                comboBox,
-                beanProperty,
-                name);
-        Validator validator = propertyDetails.getValidator();
-        if (validator != null) {
-            binding.setValidator(validator);
-        }
-        binding.addBindingListener(new ComboListBindingValidationListener(this, propertyDetails));
-
-        bindingGroup.addBinding(binding);
-
-        return comboBoxBinding;
-    }
-
-    public boolean isEditable() {
-        return editable;
+        return binding;
     }
 
     protected void setEnabledUnselectButton(boolean enabled) {
-        if("businessUnitJBComboList".equals(getName())) {
-            System.out.println("setEnabledUnselectButton(" + enabled + ").selectedItem=" + comboBox.getSelectedItem());
-            //new Throwable().printStackTrace();
-        }
         if (comboBox.getSelectedItem() == null) {
             unselectButton.setEnabled(false);
         } else {
@@ -302,41 +237,42 @@ public class JBComboList
 
     @Override
     public void setEnabled(boolean enabled) {
-        if("businessUnitJBComboList".equals(getName())) {
-            System.out.println("setEnabled(" + enabled + ")");
-        }
         super.setEnabled(enabled);
         comboBox.setEnabled(enabled);
         setEnabledUnselectButton(enabled);
         lookupButton.setEnabled(enabled);
     }
 
+    public boolean isEditable() {
+        return comboBox.isEditable();
+    }
+
     public void setEditable(boolean editable) {
-        this.editable = editable;
         comboBox.setEditable(editable);
         setEnabledUnselectButton(editable);
         lookupButton.setEnabled(editable);
 
-        if (selectableListDialog != null) {
+        SelectableListDialog selectableListDialog;
+        if ((selectableListDialog = comboBox.getSelectableListDialog()) != null) {
             selectableListDialog.setEditable(editable);
             selectableListDialog.setVisibleSelectButtons(editable);
         }
     }
 
     public ObservableList getData() {
-        return observableData;
+        return comboBox.getData();
     }
 
     public String getPropertyName() {
-        return propertyName;
+        return comboBox.getPropertyName();
     }
 
     public Object getBeanEntity() {
-        return beanEntity;
+        return comboBox.getBeanEntity();
     }
 
     public JComboBoxBinding getComboBoxBinding() {
-        return comboBoxBinding;
+        return comboBox.getComboBoxBinding();
     }
 
     @Override
@@ -384,25 +320,11 @@ public class JBComboList
     }
 
     public ApplicationContext getContext() {
-        if (applicationContext == null) {
-            Application app = getApplication();
-            if (app != null) {
-                applicationContext = app.getContext();
-            }
-        }
-
-        return applicationContext;
+        return comboBox.getContext();
     }
 
     public ApplicationActionMap getApplicationActionMap() {
-        if (applicationActionMap == null) {
-            ApplicationContext context = getContext();
-            if (context != null) {
-                applicationActionMap = context.getActionMap(getActionsClass(), getActionsObject());
-            }
-        }
-
-        return applicationActionMap;
+        return comboBox.getApplicationActionMap();
     }
 
     protected Class getResourceStartClass() {
@@ -423,78 +345,56 @@ public class JBComboList
 
     @Override
     public ResourceMap getResourceMap() {
-        if (resourceMap == null) {
-            ApplicationContext context = getContext();
-            if (context != null) {
-                resourceMap = context.getResourceMap(getResourceStartClass(), getResourceStopClass());
-            }
-        }
-
-        return resourceMap;
+        return comboBox.getResourceMap();
     }
 
     public void setResourceMap(ResourceMap resourceMap) {
-        this.resourceMap = resourceMap;
+        comboBox.setResourceMap(resourceMap);
     }
 
     public Application getApplication() {
-        if (application == null) {
-            application = Application.getInstance();
-        }
-
-        return application;
+        return comboBox.getApplication();
     }
 
     public void setApplication(Application application) {
-        this.application = application;
+        comboBox.setApplication(application);
     }
 
     @Override
     public void setStyleRequired(String tooltip) {
-        comboBox.setToolTipText(tooltip);
-        Color color = getResourceMap().getColor("validation.field.required.background");
-        comboBox.getEditor().getEditorComponent().setBackground(color);
+        comboBox.setStyleRequired(tooltip);
     }
 
     public void setStyleInvalid() {
-        setStyleInvalid(null);
+        comboBox.setStyleInvalid();
     }
 
     @Override
     public void setStyleInvalid(String tooltip) {
-        comboBox.setToolTipText(tooltip);
-        Color color = getResourceMap().getColor("validation.field.invalid.background");
-        comboBox.getEditor().getEditorComponent().setBackground(color);
+        comboBox.setStyleInvalid(tooltip);
     }
 
     @Override
     public void setStyleValid() {
-        comboBox.setToolTipText(null);
-        Color color = getResourceMap().getColor("validation.field.valid.background");
-        comboBox.getEditor().getEditorComponent().setBackground(color);
+        comboBox.setStyleValid();
     }
 
     @Override
     public void setStyleNormal() {
-        comboBox.setToolTipText(null);
-        Color color = getResourceMap().getColor("validation.field.normal.background");
-        comboBox.getEditor().getEditorComponent().setBackground(color);
+        comboBox.setStyleNormal();
     }
 
     public void initUnbound(
             SelectableListDialog selectableListDialog,
             ObjectToStringConverter converter) {
+        ObservableList observableData = comboBox.getData();
         comboBox.removeAllItems();
-        setConverter(converter);
-        this.selectableListDialog = selectableListDialog;
+        observableData.clear();
+        comboBox.setConverter(converter);
+        comboBox.setSelectableListDialog(selectableListDialog);
+        observableData.addAll(selectableListDialog.getListData());
 
-        List data = new ArrayList(selectableListDialog.getListData());
-        observableData = ObservableCollections.observableList(data);
-
-        for (Object obj : observableData) {
-            comboBox.addItem(obj);
-        }
-        comboBox.setSelectedIndex(-1);
+        comboBox.setSelectedItem(null);
     }
 
     public void initUnbound(SelectableListDialog selectableListDialog) {
@@ -510,22 +410,12 @@ public class JBComboList
     }
 
     public Binding getBinding() {
-        return binding;
+        return comboBox.getBinding();
     }
 
     @Override
-    public void refresh() {
-        if (selectableListDialog != null) {
-            Object selectedItem = comboBox.getSelectedItem();
-
-            List listData = selectableListDialog.getListData();
-            observableData.clear();
-            observableData.addAll(listData);
-
-            if(selectedItem != null && listData.contains(selectedItem)) {
-                comboBox.setSelectedItem(selectedItem);
-            }
-        }
+    public Task refresh() {
+        return comboBox.refresh();
     }
 
     @Override
@@ -542,6 +432,29 @@ public class JBComboList
             } else {
                 setEnabledUnselectButton(false);
             }
+        }
+    }
+
+    protected class ComboBox extends JBComboBox {
+
+        @Override
+        protected Class getResourceStartClass() {
+            return JBComboList.this.getResourceStartClass();
+        }
+
+        @Override
+        protected Class getResourceStopClass() {
+            return JBComboList.this.getResourceStopClass();
+        }
+
+        @Override
+        protected Class getActionsClass() {
+            return JBComboList.this.getActionsClass();
+        }
+
+        @Override
+        protected Object getActionsObject() {
+            return JBComboList.this.getActionsObject();
         }
     }
 }

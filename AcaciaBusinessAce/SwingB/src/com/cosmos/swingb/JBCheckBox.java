@@ -8,13 +8,13 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import com.cosmos.util.BooleanUtils;
-import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -100,11 +100,6 @@ public class JBCheckBox extends JCheckBox implements Validatable, EntityBinder {
     @Override
     public Binding getBinding() {
         return binding;
-    }
-
-    @Override
-    public void refresh() {
-        setSelected(getPropertyValue());
     }
 
     protected boolean getPropertyValue() {
@@ -202,7 +197,28 @@ public class JBCheckBox extends JCheckBox implements Validatable, EntityBinder {
     }
 
     @Override
+    public Task refresh() {
+        RefreshTask task = new RefreshTask();
+        task.run();
+        return task;
+    }
+
+    @Override
     public void clear() {
         setSelected(false);
+    }
+
+    private class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask() {
+            super(Application.getInstance());
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            boolean value = getPropertyValue();
+            setSelected(value);
+            return value;
+        }
     }
 }

@@ -20,6 +20,7 @@ import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -34,10 +35,12 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.binding.EnumerationBinder;
+import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.swingb.listeners.ComboListEventListener;
 import com.cosmos.swingb.menus.JBContextMenuCreaetor;
 import com.cosmos.swingb.validation.Validatable;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jdesktop.application.Task;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -55,6 +58,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
     private String propertyName;
     private Object beanEntity;
     private JComboBoxBinding comboBoxBinding;
+    private SelectableListDialog selectableListDialog;
 
     public JBComboBox() {
         super();
@@ -75,6 +79,41 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
     @Override
     public JComboBoxBinding bind(
             BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
+            PropertyDetails propertyDetails) {
+        this.selectableListDialog = selectableListDialog;
+        return bind(bindingGroup, selectableListDialog.getListData(), beanEntity, propertyDetails);
+    }
+
+    @Override
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            UpdateStrategy updateStrategy) {
+        this.selectableListDialog = selectableListDialog;
+        return bind(bindingGroup, selectableListDialog.getListData(), beanEntity, propertyDetails, updateStrategy);
+    }
+
+    JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            SelectableListDialog selectableListDialog,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            UpdateStrategy updateStrategy,
+            String componentName,
+            BindingValidationListener bindingValidationListener) {
+        this.selectableListDialog = selectableListDialog;
+        return bind(bindingGroup, selectableListDialog.getListData(),
+                beanEntity, propertyDetails, updateStrategy,
+                componentName, bindingValidationListener);
+    }
+
+    @Override
+    public JComboBoxBinding bind(
+            BindingGroup bindingGroup,
             List data,
             Object beanEntity,
             PropertyDetails propertyDetails) {
@@ -88,6 +127,21 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             Object beanEntity,
             PropertyDetails propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
+        ComboBoxBindingValidationListener bindingValidationListener =
+                new ComboBoxBindingValidationListener(this, propertyDetails);
+        String componentName = getName();
+        return bind(bindingGroup, data, beanEntity, propertyDetails, updateStrategy,
+                componentName, bindingValidationListener);
+    }
+
+    private JComboBoxBinding bind(
+            BindingGroup bindingGroup,
+            List data,
+            Object beanEntity,
+            PropertyDetails propertyDetails,
+            AutoBinding.UpdateStrategy updateStrategy,
+            String componentName,
+            BindingValidationListener bindingValidationListener) {
         if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);
             setEnabled(false);
@@ -108,8 +162,10 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
         this.beanEntity = beanEntity;
 
         String name;
-        if((name = getName()) != null) {
-            name = name + ".ComboBox";
+        if(componentName != null) {
+            name = componentName + ".ComboBox";
+        } else {
+            name = null;
         }
         comboBoxBinding = SwingBindings.createJComboBoxBinding(
                 updateStrategy,
@@ -118,7 +174,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
                 name);
         bindingGroup.addBinding(comboBoxBinding);
 
-        name = getName();
+        name = componentName;
         ELProperty elProperty = ELProperty.create("${" + propertyName + "}");
         BeanProperty beanProperty = BeanProperty.create("selectedItem");
         binding = Bindings.createAutoBinding(
@@ -133,12 +189,9 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             binding.setValidator(validator);
         }
 
-        binding.addBindingListener(new BindingValidationListener(this));
+        binding.addBindingListener(bindingValidationListener);
 
         bindingGroup.addBinding(binding);
-
-        setEditable(propertyDetails.isEditable());
-        setEnabled(!propertyDetails.isReadOnly());
 
         return comboBoxBinding;
     }
@@ -159,6 +212,14 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
         return comboBoxBinding;
     }
 
+    public SelectableListDialog getSelectableListDialog() {
+        return selectableListDialog;
+    }
+
+    public void setSelectableListDialog(SelectableListDialog selectableListDialog) {
+        this.selectableListDialog = selectableListDialog;
+    }
+
     public ApplicationContext getContext() {
         if (applicationContext == null) {
             Application app = getApplication();
@@ -174,11 +235,27 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
         if (applicationActionMap == null) {
             ApplicationContext context = getContext();
             if (context != null) {
-                applicationActionMap = context.getActionMap(this);
+                applicationActionMap = context.getActionMap(getActionsClass(), getActionsObject());
             }
         }
 
         return applicationActionMap;
+    }
+
+    protected Class getResourceStartClass() {
+        return this.getClass();
+    }
+
+    protected Class getResourceStopClass() {
+        return this.getClass();
+    }
+
+    protected Class getActionsClass() {
+        return JBComboList.class;
+    }
+
+    protected Object getActionsObject() {
+        return this;
     }
 
     @Override
@@ -186,7 +263,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
         if (resourceMap == null) {
             ApplicationContext context = getContext();
             if (context != null) {
-                resourceMap = context.getResourceMap(this.getClass());
+                resourceMap = context.getResourceMap(getResourceStartClass(), getResourceStopClass());
             }
         }
 
@@ -345,13 +422,47 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
     }
 
     @Override
-    public void refresh() {
-        setSelectedItem(getPropertyValue());
+    public Task refresh() {
+        RefreshTask task = new RefreshTask();
+        task.run();
+        return task;
     }
 
     @Override
     public void clear() {
         setSelectedItem(null);
+    }
+
+    private class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask() {
+            super(Application.getInstance());
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            if (selectableListDialog != null) {
+                Object selectedItem = getSelectedItem();
+
+                List listData;
+                if(selectableListDialog instanceof Refreshable) {
+                    Task task = ((Refreshable) selectableListDialog).refresh();
+                    listData = (List)task.get();
+                } else {
+                    listData = selectableListDialog.getListData();
+                }
+                observableData.clear();
+                observableData.addAll(listData);
+
+                if(selectedItem != null && listData.contains(selectedItem)) {
+                    setSelectedItem(selectedItem);
+                }
+            }
+
+            setSelectedItem(getPropertyValue());
+
+            return getData();
+        }
     }
 
     private class JBComboBoxEditor extends BasicComboBoxEditor {
