@@ -4,11 +4,13 @@
  */
 package com.cosmos.swingb.binding;
 
+import org.jdesktop.application.Task;
+
 /**
  *
  * @author Miro
  */
 public interface Refreshable {
 
-    void refresh();
+    Task refresh();
 }

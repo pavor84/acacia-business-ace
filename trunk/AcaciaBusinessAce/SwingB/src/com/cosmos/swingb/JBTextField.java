@@ -19,6 +19,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -60,6 +61,7 @@ public class JBTextField extends JTextField
         return "${" + propertyDetails.getPropertyName() + "}";
     }
 
+    @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
             PropertyDetails propertyDetails,
@@ -136,11 +138,6 @@ public class JBTextField extends JTextField
     @Override
     public Binding getBinding() {
         return binding;
-    }
-
-    @Override
-    public void refresh() {
-        setText(getPropertyValue());
     }
 
     protected String getPropertyValue() {
@@ -260,7 +257,28 @@ public class JBTextField extends JTextField
     }
 
     @Override
+    public Task refresh() {
+        RefreshTask task = new RefreshTask();
+        task.run();
+        return task;
+    }
+
+    @Override
     public void clear() {
         setText(null);
+    }
+
+    private class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask() {
+            super(Application.getInstance());
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            String value = getPropertyValue();
+            setText(value);
+            return value;
+        }
     }
 }

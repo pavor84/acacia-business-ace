@@ -16,6 +16,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -149,12 +150,6 @@ public class JBDecimalField extends JXDecimalField
         return binding;
     }
 
-    @Override
-    public void refresh() {
-        Number newValue = getPropertyValue();
-        setValue(newValue);
-    }
-
     protected Number getPropertyValue() {
         return getPropertyValue(beanEntity);
     }
@@ -253,7 +248,28 @@ public class JBDecimalField extends JXDecimalField
     }
 
     @Override
+    public Task refresh() {
+        RefreshTask task = new RefreshTask();
+        task.run();
+        return task;
+    }
+
+    @Override
     public void clear() {
         setValue(null);
+    }
+
+    private class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask() {
+            super(Application.getInstance());
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            Number newValue = getPropertyValue();
+            setValue(newValue);
+            return newValue;
+        }
     }
 }

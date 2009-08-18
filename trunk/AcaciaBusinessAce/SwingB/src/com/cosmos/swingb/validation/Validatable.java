@@ -26,5 +26,4 @@ public interface Validatable {
     void setStyleNormal();
     
     ResourceMap getResourceMap();
-        
 }

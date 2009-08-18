@@ -18,6 +18,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -151,11 +152,6 @@ public class JBDatePicker extends JXDatePicker implements Validatable, EntityBin
         return binding;
     }
 
-    @Override
-    public void refresh() {
-        setDate(getPropertyValue());
-    }
-
     protected Date getPropertyValue() {
         try {
             return (Date)PropertyUtils.getProperty(beanEntity, propertyName);
@@ -246,7 +242,28 @@ public class JBDatePicker extends JXDatePicker implements Validatable, EntityBin
     }
 
     @Override
+    public Task refresh() {
+        RefreshTask task = new RefreshTask();
+        task.run();
+        return task;
+    }
+
+    @Override
     public void clear() {
         setDate(null);
+    }
+
+    private class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask() {
+            super(Application.getInstance());
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            Date date = getPropertyValue();
+            setDate(date);
+            return date;
+        }
     }
 }
