@@ -19,8 +19,7 @@ public class MessageParameters {
     private String messageText;
     private String subject;
     //
-    private InternetAddress from;
-    InternetAddress replyTo;
+    private InternetAddress replyTo;
     /**
      * Files can File, String or URI instance.
      */
@@ -37,15 +36,14 @@ public class MessageParameters {
         this(to, messageText, subject, null);
     }
 
-    public MessageParameters(Collection<Address> to, String messageText, String subject, InternetAddress from) {
-        this(to, messageText, subject, from, null, null, null, null, null);
+    public MessageParameters(Collection<Address> to, String messageText, String subject, InternetAddress replyTo) {
+        this(to, messageText, subject, replyTo, null, null, null, null);
     }
 
     public MessageParameters(
             Collection<Address> to,
             String messageText,
             String subject,
-            InternetAddress from,
             InternetAddress replyTo,
             Collection files,
             Collection<Address> cc,
@@ -54,20 +52,11 @@ public class MessageParameters {
         this.to = to;
         this.messageText = messageText;
         this.subject = subject;
-        this.from = from;
         this.replyTo = replyTo;
         this.files = files;
         this.cc = cc;
         this.bcc = bcc;
         this.uuid = uuid;
-    }
-
-    public InternetAddress getFrom() {
-        return from;
-    }
-
-    public void setFrom(InternetAddress from) {
-        this.from = from;
     }
 
     public InternetAddress getReplyTo() {

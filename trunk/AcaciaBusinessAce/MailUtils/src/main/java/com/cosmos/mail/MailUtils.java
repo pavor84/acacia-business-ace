@@ -5,8 +5,6 @@
 package com.cosmos.mail;
 
 import com.sun.mail.smtp.SMTPMessage;
-import java.beans.XMLEncoder;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -266,11 +264,6 @@ public class MailUtils {
     }
 
     protected InternetAddress getFrom(MessageParameters messageParameters) {
-        InternetAddress from;
-        if ((from = messageParameters.getFrom()) != null) {
-            return from;
-        }
-
         return getMailProperties().getFrom();
     }
 
@@ -330,27 +323,5 @@ public class MailUtils {
         }
 
         return false;
-    }
-
-    public static void main(String[] args) throws Exception {
-        MailAuthentication authentication = new MailAuthentication("mnachev@gmail.com", "Caps%Logic");
-        MailSecurity security = new MailSecurity(SecureConnection.Tls);
-        MailServer outgoingServer = new MailServer(
-                MailProtocol.SMTP, "smtp.gmail.com", 587, authentication, security);
-        InternetAddress from = new InternetAddress("mnachev@gmail.com", "Miroslav Nachev");
-        MailUtils mailUtils = new MailUtils(outgoingServer, from);
-        mailUtils.setDebug(true);
-
-        XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(System.out));
-//        encoder.writeObject(authentication);
-//        encoder.flush();
-//
-//        encoder = new XMLEncoder(new BufferedOutputStream(System.out));
-//        encoder.writeObject(security);
-//        encoder.flush();
-
-        encoder = new XMLEncoder(new BufferedOutputStream(System.out));
-        encoder.writeObject(outgoingServer);
-        encoder.flush();
     }
 }
