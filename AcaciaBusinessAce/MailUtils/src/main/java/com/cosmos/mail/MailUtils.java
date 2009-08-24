@@ -7,6 +7,7 @@ package com.cosmos.mail;
 import com.sun.mail.smtp.SMTPMessage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
@@ -58,9 +59,11 @@ Use secure authentication
  *
  * @author Miro
  */
-public class MailUtils {
+public class MailUtils implements Serializable {
 
     public static String DEFAULT_CHARSET = "UTF-8";
+    //
+    private static InheritableThreadLocal<MailUtils> instance = new InheritableThreadLocal<MailUtils>();
     //
     private MailProperties mailProperties;
     //
@@ -70,16 +73,32 @@ public class MailUtils {
     private Transport receiveTransport;
     private String charset = DEFAULT_CHARSET;
 
-    public MailUtils(MailProperties mailProperties) {
+    public static MailUtils getInstance(MailProperties mailProperties) {
+//        MailUtils utils;
+//        if ((utils = instance.get()) == null) {
+//            utils = new MailUtils(mailProperties);
+//            instance.set(utils);
+//        }
+//
+//        return utils;
+
+        return new MailUtils(mailProperties);
+    }
+
+    public static MailUtils getInstance(MailServer outgoingServer, InternetAddress from) {
+        return getInstance(new MailProperties(outgoingServer, from));
+    }
+
+    public static MailUtils getInstance(MailServer outgoingServer, MailServer incomingServer, InternetAddress from) {
+        return getInstance(new MailProperties(outgoingServer, incomingServer, from));
+    }
+
+    public static void removeInstance() {
+        instance.remove();
+    }
+
+    protected MailUtils(MailProperties mailProperties) {
         this.mailProperties = mailProperties;
-    }
-
-    public MailUtils(MailServer outgoingServer, InternetAddress from) {
-        this(new MailProperties(outgoingServer, from));
-    }
-
-    public MailUtils(MailServer outgoingServer, MailServer incomingServer, InternetAddress from) {
-        this(new MailProperties(outgoingServer, incomingServer, from));
     }
 
     public MailProperties getMailProperties() {
@@ -323,5 +342,117 @@ public class MailUtils {
         }
 
         return false;
+    }
+
+    private static final String PK_OUTGOING = "outgoing.";
+    private static final String PK_PROPERTIES = "properties.";
+    private static final String PK_AUTHENTICATION = "authentication.";
+    private static final String PK_SECURITY = "security.";
+    private static final String PK_PROTOCOL = "protocol";
+    private static final String PK_SERVER_NAME = "serverName";
+    private static final String PK_SERVER_PORT = "serverPort";
+    //
+    private static final String PK_USERNAME = "username";
+    private static final String PK_PASSWORD = "password";
+    private static final String PK_NAME_AND_PASS_AUTH = "nameAndPasswordAuthentication";
+    //
+    private static final String PK_SECURE_CONNECTION = "secureConnection";
+    private static final String PK_SECURE_AUTHENTICATION = "secureAuthentication";
+
+    //
+    private static final String PK_FROM_ADDRESS = "fromAddress.";
+    private static final String PK_ADDRESS = "address";
+    private static final String PK_PERSONAL = "personal";
+
+    public static MailUtils load(Properties properties) {
+        MailServer outgoingServer = loadMailServer(getPropertiesWithPrefix(properties, PK_OUTGOING));
+        InternetAddress fromAddress = loadInternetAddress(getPropertiesWithPrefix(properties, PK_FROM_ADDRESS));
+
+        return getInstance(outgoingServer, fromAddress);
+    }
+
+//# MailServer
+//outgoing.protocol=SMTP
+//outgoing.serverName=smtp.gmail.com
+//outgoing.serverPort=587
+//# Properties
+//outgoing.properties.mail.smtp.allow8bitmime=true
+//outgoing.properties.mail.smtp.connectiontimeout=60000
+//outgoing.properties.mail.smtp.timeout=true
+    private static MailServer loadMailServer(Properties properties) {
+        MailAuthentication authentication = loadMailAuthentication(getPropertiesWithPrefix(properties, PK_AUTHENTICATION));
+        MailSecurity security = loadMailSecurity(getPropertiesWithPrefix(properties, PK_SECURITY));
+
+        MailProtocol protocol = MailProtocol.valueOf(properties.getProperty(PK_PROTOCOL));
+        String serverName = properties.getProperty(PK_SERVER_NAME);
+        int serverPort = Integer.parseInt(properties.getProperty(PK_SERVER_PORT));
+
+        MailServer server = new MailServer(protocol, serverName, serverPort, authentication, security);
+
+        Properties props = getPropertiesWithPrefix(properties, PK_PROPERTIES);
+        for(String key : props.stringPropertyNames()) {
+            server.setProperty(key, props.getProperty(key));
+        }
+
+        return server;
+    }
+
+//# MailAuthentication
+//outgoing.authentication.password=Acac1aBusiness@ce
+//outgoing.authentication.username=acacia-mail@space-comm.com
+//outgoing.authentication.nameAndPasswordAuthentication=true
+    private static MailAuthentication loadMailAuthentication(Properties properties) {
+        MailAuthentication authentication = new MailAuthentication(
+                properties.getProperty(PK_USERNAME),
+                properties.getProperty(PK_PASSWORD));
+        String value;
+        if((value = properties.getProperty(PK_NAME_AND_PASS_AUTH)) != null) {
+            authentication.setNameAndPasswordAuthentication(Boolean.valueOf(value));
+        }
+
+        return authentication;
+    }
+
+//# MailSecurity
+//outgoing.security.secureConnection=Tls
+//#outgoing.security.secureAuthentication=false
+    private static MailSecurity loadMailSecurity(Properties properties) {
+        MailSecurity security = new MailSecurity(SecureConnection.valueOf(properties.getProperty(PK_SECURE_CONNECTION)));
+        String value;
+        if((value = properties.getProperty(PK_SECURE_AUTHENTICATION)) != null) {
+            security.setSecureAuthentication(Boolean.valueOf(value));
+        }
+
+        return security;
+    }
+
+//# InternetAddress
+//fromAddress.address=acacia-mail@space-comm.com
+//fromAddress.personal=Acacia Business Ace
+    private static InternetAddress loadInternetAddress(Properties properties) {
+        String address = properties.getProperty(PK_ADDRESS);
+        String personal;
+        try {
+            if((personal = properties.getProperty(PK_PERSONAL)) != null) {
+                return new InternetAddress(address, personal);
+            } else {
+                return new InternetAddress(address);
+            }
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private static Properties getPropertiesWithPrefix(Properties source, String prefix) {
+        int beginIndex = prefix.length();
+        Properties properties = new Properties();
+        for(String key : source.stringPropertyNames()) {
+            if(key.startsWith(prefix)) {
+                String newKey = key.substring(beginIndex);
+                properties.setProperty(newKey, source.getProperty(key));
+            }
+        }
+
+        return properties;
     }
 }

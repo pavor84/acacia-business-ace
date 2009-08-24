@@ -4,6 +4,7 @@
  */
 package com.cosmos.mail;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 import javax.mail.Address;
@@ -13,7 +14,7 @@ import javax.mail.internet.InternetAddress;
  *
  * @author Miro
  */
-public class MessageParameters {
+public class MessageParameters implements Serializable {
 
     private Collection<Address> to;
     private String messageText;

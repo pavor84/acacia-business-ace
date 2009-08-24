@@ -4,11 +4,13 @@
  */
 package com.cosmos.mail;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Miro
  */
-public class MailAuthentication {
+public class MailAuthentication implements Serializable {
 
     private Boolean nameAndPasswordAuthentication;
     private String username;
