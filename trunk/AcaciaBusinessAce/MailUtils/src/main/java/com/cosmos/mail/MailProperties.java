@@ -4,6 +4,7 @@
  */
 package com.cosmos.mail;
 
+import java.io.Serializable;
 import java.util.Properties;
 import javax.mail.internet.InternetAddress;
 
@@ -11,7 +12,7 @@ import javax.mail.internet.InternetAddress;
  *
  * @author Miro
  */
-public class MailProperties extends Properties {
+public class MailProperties extends Properties implements Serializable {
 
     public static final String MH_MAIL_DEBUG = "mail.debug";
     private static final String MAILER_NAME = "Cosmopolitan Mailer - COSMOS Software Enterprises, Ltd.";
@@ -35,6 +36,10 @@ public class MailProperties extends Properties {
 
 
     protected void setProperties(MailServer mailServer) {
+        if(mailServer == null) {
+            return;
+        }
+
         Properties props;
         if((props = mailServer.getMessageHeaders()) != null && props.size() > 0) {
             for(String key : props.stringPropertyNames()) {

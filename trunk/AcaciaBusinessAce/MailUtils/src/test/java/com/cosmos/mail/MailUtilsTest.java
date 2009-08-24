@@ -12,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Properties;
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import org.junit.After;
@@ -42,8 +43,13 @@ public class MailUtilsTest {
         decoder = new XMLDecoder(new BufferedInputStream(inStream));
         InternetAddress fromAddress = (InternetAddress) decoder.readObject();
         decoder.close();
-        
-        mailUtils = new MailUtils(outgoingServer, fromAddress);
+
+        mailUtils = MailUtils.getInstance(outgoingServer, fromAddress);
+
+//        Properties props = new Properties();
+//        InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/mail_config.properties");
+//        props.load(inStream);
+//        mailUtils = MailUtils.load(props);
     }
 
     @AfterClass

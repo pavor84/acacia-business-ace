@@ -5,13 +5,14 @@
 
 package com.cosmos.mail;
 
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
  *
  * @author Miro
  */
-public class MailServer {
+public class MailServer implements Serializable {
 
     public static final Integer DEFAULT_CONNECTION_TIMEOUT = 60000;
     public static final Integer DEFAULT_TIMEOUT = 60000;
