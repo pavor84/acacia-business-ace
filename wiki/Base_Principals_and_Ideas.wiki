@@ -75,3 +75,4 @@ The reference implementation will be hosted in [http://kenai.com/projects/acacia
 8. Useful links:
  * [http://www.orangehrm.com/ OrangeHRM - Open Source HR Management]
  * [http://www.xtuple.org/ xTuple ERP - open source ERP, accounting, CRM package for small to midsized businesses.]
+ * [https://www.jfire.org/modules/content/ JFire... ...the new, powerful and free ERP, CRM, eBusiness and SCM/SRM solution for business enterprises. JFire is entirely free/open-source software, uses the latest technologies (EJB 3, JDO 2, Eclipse RCP 3.3) and is designed to be highly customizable.]
